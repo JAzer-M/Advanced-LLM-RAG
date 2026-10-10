@@ -82,14 +82,21 @@ def main():
         top_k=5
     )
 
-    # 7. 输出检索结果
-    for rank, result in enumerate(results, start=1):
+    # 7. 构建RAG context
+    context_parts = []
 
-        print(f"\n--- Result {rank} ---")
-        print("Score:", result["score"])
-        print("Source:", result["source"])
-        print("Page:", result["page"])
-        print("Text:", result["text"])
+    for i, result in enumerate(results, start = 1):
+        chunk_text = (
+            f"[{i}]Source: {result['source']} | Page: {result['page']}\n"
+            f"{result['text']}"
+        )
+
+        context_parts.append(chunk_text)
+
+    context = "\n\n".join(context_parts)
+
+    print("\n=== Retrieved Context ===")
+    print(context)
 
 
 if __name__ == "__main__":
