@@ -6,7 +6,7 @@ from src.embedding import load_embedding_model, embed_chunks
 from src.vector_store import build_index, save_index, load_index
 from src.chunk_storage import save_chunks, load_chunks
 from src.retriever import retrieve
-
+from llm import generate_answer
 
 def main():
 
@@ -71,7 +71,7 @@ def main():
     print("Total Chunks:", len(chunks))
 
     # 5. 用户提问
-    query = "Why does VGG use small 3×3 convolutional filters?"
+    query = input("Please enter your question:")
 
     # 6. Dense Retrieval
     results = retrieve(
@@ -98,6 +98,35 @@ def main():
     print("\n=== Retrieved Context ===")
     print(context)
 
+    # 8. prompt construction
+    prompt = f"""
+    you are an AI research assistant.
+    
+    Answer the user's question based on the provided context.
+    
+    Rules:
+    1. Use the provided context as your source of evidence.
+    2. Do not invent information.
+    3. Cite relevant evidence using [1], [2], etc.
+    4. If the context does not contain enough information,
+       clearly state that the evidence is insufficient.
+    
+    Context:
+    {context}
+    
+    Question:
+    {query}
+    
+    Answer:
+    """
+
+    print("\n=== RAG Prompt ===")
+    print(prompt)
+
+    # 9. LLM Generation
+    answer = generate_answer(prompt)
+    print("\n=== Generated Answer ===")
+    print(answer)
 
 if __name__ == "__main__":
     main()
