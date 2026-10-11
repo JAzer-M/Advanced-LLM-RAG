@@ -27,6 +27,7 @@ def retrieve(model, index, chunks, query, top_k = 5):
         chunk = chunks[int(idx)]
 
         results.append({
+            "chunk_id": int(idx),
             "score": float(score),
             "source": chunk["source"],
             "page": chunk["page"],

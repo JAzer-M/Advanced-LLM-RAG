@@ -6,6 +6,8 @@ from src.embedding import load_embedding_model, embed_chunks
 from src.vector_store import build_index, save_index, load_index
 from src.chunk_storage import save_chunks, load_chunks
 from src.retriever import retrieve
+from src.bm25_retriever import build_bm25_index, retrieve_bm25
+from src.hybrid_retriever import reciprocal_rank_fusion
 from llm import generate_answer
 
 def main():
@@ -73,13 +75,34 @@ def main():
     # 5. 用户提问
     query = input("Please enter your question:")
 
-    # 6. Dense Retrieval
-    results = retrieve(
-        model=model,
-        index=index,
-        chunks=chunks,
-        query=query,
-        top_k=5
+    # 6. Hybrid Retrieval
+
+    # 构建bm25 index
+    bm25 = build_bm25_index(chunks)
+
+    # Dense retrieval
+    dense_results = retrieve(
+        model = model,
+        index = index,
+        chunks = chunks,
+        query = query,
+        top_k = 5
+    )
+
+    #BM25 retrieval
+    bm25_results = retrieve_bm25(
+        bm25 = bm25,
+        chunks = chunks,
+        query = query,
+        top_k = 5
+    )
+
+    # RRF Fusion
+    results = reciprocal_rank_fusion(
+        dense_results = dense_results,
+        bm25_results = bm25_results,
+        k = 60,
+        top_k = 5
     )
 
     # 7. 构建RAG context
