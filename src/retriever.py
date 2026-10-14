@@ -31,6 +31,8 @@ def retrieve(model, index, chunks, query, top_k = 5):
             "score": float(score),
             "source": chunk["source"],
             "page": chunk["page"],
+            "title": chunk["title"],
+            "section": chunk["section"],
             "text": chunk["text"]
         })
 

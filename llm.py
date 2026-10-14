@@ -1,17 +1,16 @@
 import torch
 from transformers import AutoProcessor, AutoModelForMultimodalLM
+from functools import lru_cache
 
-def generate_answer(prompt):
-    # 指定模型
+@lru_cache(maxsize = 1)
+def load_llm():
     model_name = "Qwen/Qwen3.5-2B"
 
-    #加载processor
     processor = AutoProcessor.from_pretrained(
         model_name,
         local_files_only=True
     )
 
-    # 加载预训练模型
     model = AutoModelForMultimodalLM.from_pretrained(
         model_name,
         dtype = torch.bfloat16,
@@ -19,8 +18,13 @@ def generate_answer(prompt):
         local_files_only=True
     )
 
-    # 设置推理模式
     model.eval()
+
+    return processor, model
+
+def generate_answer(prompt):
+    # 指定模型
+    processor, model = load_llm()
 
     # 构建对话信息
     message = [

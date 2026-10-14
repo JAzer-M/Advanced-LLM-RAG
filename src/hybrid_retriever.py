@@ -39,6 +39,8 @@ def reciprocal_rank_fusion(dense_results, bm25_results, k = 60, top_k = 5):
             "score": rrf_scores[chunk_id],
             "source": chunk["source"],
             "page": chunk["page"],
+            "title": chunk["title"],
+            "section": chunk["section"],
             "text": chunk["text"]
         })
 

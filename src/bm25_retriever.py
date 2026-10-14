@@ -17,7 +17,7 @@ def tokenize(text):
     text = re.sub(r"(\d)\s*x\s*(\d)", r"\1x\2", text)
 
     # 提取英文和数字词项 去除标点
-    tokens = re.findall(r"[a-z0-0]+", text)
+    tokens = re.findall(r"[a-z0-9]+", text)
 
     return tokens
 
@@ -58,6 +58,8 @@ def retrieve_bm25(bm25, chunks, query, top_k = 5):
             "score": float(scores[idx]),
             "source": chunk["source"],
             "page": chunk["page"],
+            "title": chunk["title"],
+            "section": chunk["section"],
             "text": chunk["text"]
         })
 

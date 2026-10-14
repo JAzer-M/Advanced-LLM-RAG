@@ -1,0 +1,157 @@
+[
+    {
+        "id": "q1",
+        "question": "Why does VGG use small 3x3 convolutional filters?",
+        "type": "single_document",
+        "reference_answer": "VGG uses small 3x3 convolutional filters to increase network depth while controlling the number of parameters. Stacking multiple 3x3 filters produces larger effective receptive fields, such as 5x5 or 7x7. Compared with a single large filter, multiple small filters introduce additional nonlinear transformations and reduce the number of parameters, making the decision function more discriminative.",
+        "gold_evidence": [
+            {
+                "source": "VGG.pdf",
+                "page": 1,
+                "quote": "small (3 × 3) convolution filters in all layers"
+            },
+            {
+                "source": "VGG.pdf",
+                "page": 3,
+                "quote": "which makes the decision function more discriminative"
+            },
+            {
+                "source": "VGG.pdf",
+                "page": 3,
+                "quote": "Second, we decrease the number of parameters"
+            },
+            {
+                "source": "VGG.pdf",
+                "page": 3,
+                "quote": "have a decomposition through the 3 × 3 filters"
+            },
+            {
+    "source": "VGG.pdf",
+    "page": 2,
+    "quote": "which is the smallest size to capture the notion of left/right"
+},
+{
+    "source": "VGG.pdf",
+    "page": 2,
+    "quote": "a stack of two 3 × 3 conv. layers (without spatial pooling in between) has an effective receptive field of 5 × 5"
+},
+{
+    "source": "VGG.pdf",
+    "page": 6,
+    "quote": "it is also important to capture spatial context by using conv. filters with non-trivial receptive fields"
+}
+        ]
+    },
+    {
+        "id": "q2",
+        "question": "Why does the Transformer use positional encoding?",
+        "type": "single_document",
+        "reference_answer": "The Transformer uses positional encoding because it contains neither recurrence nor convolution. Therefore, positional information must be added to the token embeddings so that the model can use the relative or absolute positions of tokens in a sequence. The original Transformer uses sine and cosine functions of different frequencies to construct positional encodings.",
+        "gold_evidence": [
+            {
+                "source": "Attention is all you need.pdf",
+                "page": 5,
+                "quote": "Since our model contains no recurrence and no convolution"
+            },
+            {
+                "source": "Attention is all you need.pdf",
+                "page": 5,
+                "quote": "we must inject some information about the relative or absolute position"
+            }
+        ]
+    },
+    {
+        "id": "q3",
+        "question": "Why does the Transformer use scaled dot-product attention?",
+        "type": "single_document",
+        "reference_answer": "The Transformer uses scaled dot-product attention because dot-product attention is computationally efficient and can be implemented using optimized matrix multiplication. However, when the dimension of the keys becomes large, the dot products can have large magnitudes, pushing the softmax function into regions with extremely small gradients. Dividing the dot products by the square root of the key dimension helps prevent this problem.",
+        "gold_evidence": [
+            {
+                "source": "Attention is all you need.pdf",
+                "page": 4,
+                "quote": "much faster and more space-efficient in practice"
+            },
+            {
+                "source": "Attention is all you need.pdf",
+                "page": 4,
+                "quote": "the dot products grow large in magnitude"
+            },
+            {
+                "source": "Attention is all you need.pdf",
+                "page": 4,
+                "quote": "extremely small gradients"
+            }
+        ]
+    },
+    {
+        "id": "q4",
+        "question": "How does the DCNN paper use data augmentation to reduce overfitting?",
+        "type": "single_document",
+        "reference_answer": "The DCNN paper uses two main forms of data augmentation to reduce overfitting. First, it generates image translations and horizontal reflections by extracting random 224x224 patches from 256x256 images and applying horizontal flipping. Second, it modifies the RGB channel intensities using principal component analysis (PCA), introducing variations in image color and illumination. These transformations artificially increase the diversity of the training data and help reduce overfitting.",
+        "gold_evidence": [
+            {
+                "source": "DCNN.pdf",
+                "page": 4,
+                "quote": "image translations and horizontal reflections"
+            },
+            {
+                "source": "DCNN.pdf",
+                "page": 4,
+                "quote": "random 224 × 224 patches"
+            },
+            {
+                "source": "DCNN.pdf",
+                "page": 5,
+                "quote": "altering the intensities of the RGB channels in training images"
+            },
+            {
+                "source": "DCNN.pdf",
+                "page": 5,
+                "quote": "perform PCA on the set of RGB pixel values"
+            },
+            {
+    "source": "DCNN.pdf",
+    "page": 4,
+    "quote": "artificially enlarge the dataset"
+}
+        ]
+    },
+    {
+        "id": "q5",
+        "question": "How do VGG and DCNN differ in their use of convolutional filter sizes?",
+        "type": "multi_document",
+        "reference_answer": "VGG primarily uses small 3x3 convolutional filters throughout its architecture, with some configurations also using 1x1 filters. Stacking multiple 3x3 filters allows VGG to increase network depth, introduce additional nonlinearities, and reduce parameters compared with using single larger filters. In contrast, the DCNN architecture uses larger filters in its early layers, including 11x11 filters in the first convolutional layer and 5x5 filters in the second layer, followed by 3x3 filters in the last three convolutional layers. Therefore, VGG emphasizes consistently small filters and greater depth, while DCNN uses a mixture of large and small filter sizes.",
+        "gold_evidence": [
+            {
+                "source": "VGG.pdf",
+                "page": 2,
+                "quote": "we use very small 3 × 3 receptive fields throughout the whole net"
+            },
+            {
+                "source": "VGG.pdf",
+                "page": 3,
+                "quote": "we decrease the number of parameters"
+            },
+            {
+                "source": "DCNN.pdf",
+                "page": 4,
+                "quote": "96 kernels of size 11 × 11 × 3"
+            },
+            {
+                "source": "DCNN.pdf",
+                "page": 4,
+                "quote": "256 kernels of size 5 × 5 × 48"
+            },
+            {
+                "source": "DCNN.pdf",
+                "page": 4,
+                "quote": "384 kernels of size 3 × 3 × 256"
+            }
+        ]
+    },
+    {
+        "id": "q6",
+        "question": "What was NVIDIA's stock price on October 10, 2026?",
+        "type": "unanswerable"
+    }
+]

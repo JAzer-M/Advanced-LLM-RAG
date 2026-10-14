@@ -9,6 +9,9 @@ from src.retriever import retrieve
 from src.bm25_retriever import build_bm25_index, retrieve_bm25
 from src.hybrid_retriever import reciprocal_rank_fusion
 from llm import generate_answer
+from sentence_transformers import CrossEncoder
+from src.reranker import rerank_results
+
 
 def main():
 
@@ -37,7 +40,10 @@ def main():
         print("Building new FAISS Index...")
 
         # 加载 PDF
-        documents = load_pdfs(raw_dir)
+        documents = load_pdfs(
+            raw_dir,
+            two_columns_files={"DCNN.pdf"}
+        )
 
         print("Total pages:", len(documents))
 
@@ -71,7 +77,8 @@ def main():
     print("Total Vectors:", index.ntotal)
     print("Vector Dimensions:", index.d)
     print("Total Chunks:", len(chunks))
-
+    for chunk in chunks[:20]:
+        print(chunk["page"], chunk["section"])
     # 5. 用户提问
     query = input("Please enter your question:")
 
@@ -86,7 +93,7 @@ def main():
         index = index,
         chunks = chunks,
         query = query,
-        top_k = 5
+        top_k = 20
     )
 
     #BM25 retrieval
@@ -94,23 +101,63 @@ def main():
         bm25 = bm25,
         chunks = chunks,
         query = query,
-        top_k = 5
+        top_k = 20
     )
 
     # RRF Fusion
-    results = reciprocal_rank_fusion(
+    rrf_results = reciprocal_rank_fusion(
         dense_results = dense_results,
         bm25_results = bm25_results,
         k = 60,
+        top_k = 20
+    )
+
+    # 加载cross-encoder
+    reranker_model = CrossEncoder(
+        "cross-encoder/ms-marco-MiniLM-L6-v2",
+    )
+
+    # Cross-Encoder Reranking
+    results = rerank_results(
+        query = query,
+        candidates = rrf_results,
+        model = reranker_model,
         top_k = 5
     )
+
+    print("\n === Metadata Check ===")
+    print(results[0])
+
+    # 对比 RRF 与 Cross-Encoder 的排序结果
+
+    print("\n=== RRF Top-5 (Before Reranking) ===")
+
+    for i, result in enumerate(rrf_results[:5], start=1):
+        print(f"Rank: {i}")
+        print(f"Source: {result['source']}")
+        print(f"Page: {result['page']}")
+        print(f"Text: {result['text'][:200]}")
+        print()
+
+    print("\n=== Cross-Encoder Top-5 (After Reranking) ===")
+
+    for i, result in enumerate(results, start=1):
+        print(f"Rank: {i}")
+        print(f"Source: {result['source']}")
+        print(f"Page: {result['page']}")
+        print(f"Rerank Score: {result['rerank_score']:.4f}")
+        print(f"Text: {result['text'][:200]}")
+        print()
 
     # 7. 构建RAG context
     context_parts = []
 
     for i, result in enumerate(results, start = 1):
         chunk_text = (
-            f"[{i}]Source: {result['source']} | Page: {result['page']}\n"
+            f"[{i}]"
+            f"Source: {result['source']} | "
+            f"Page: {result['page']} | "
+            f"Section: {result['section']}\n"
             f"{result['text']}"
         )
 

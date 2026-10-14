@@ -25,7 +25,9 @@ def split_documents(documents, chunk_size = 500, chunk_overlap = 100):
             chunk = {
                 "text": chunk_text,
                 "source": document["source"],
-                "page": document["page"]
+                "page": document["page"],
+                "title": document["title"],
+                "section": document["section"],
             }
 
 
