@@ -12,28 +12,25 @@ from src.hybrid_retriever import reciprocal_rank_fusion
 from src.reranker import rerank_results
 from src.query_rewriter import rewrite_query
 
-
-# 实验配置：先默认关闭 Multi-Query，恢复可比较的 Original-Query Baseline。
+# 检索配置，默认关闭 Multi-Query。
 USE_MULTI_QUERY = False
 RETRIEVAL_TOP_K = 20
 RRF_TOP_K = 20
 RERANK_TOP_K = 5
 RRF_K = 60
 
-
 def main():
-    # 1. 加载已经构建好的 Semantic FAISS Index 和 Chunks
+    # 1. 加载 Semantic FAISS Index 和 Chunks
     project_dir = Path(__file__).resolve().parent
     processed_dir = project_dir / "data" / "processed"
     index_path = processed_dir / "faiss_semantic.index"
     chunks_path = processed_dir / "chunks_semantic.json"
 
-    # 不允许在缺少 Semantic Index 时误用 Fixed Chunking 进行重建。
+    # 缺少索引时先运行 build_semantic_index.py。
     if not index_path.is_file() or not chunks_path.is_file():
         raise FileNotFoundError(
             "Semantic Index 或 Chunks 文件不存在。"
-            "请先运行之前用于生成 faiss_semantic.index 和 "
-            "chunks_semantic.json 的 Semantic Index 构建脚本。"
+            "请先运行 build_semantic_index.py。"
         )
 
     print("Loading existing Semantic FAISS Index...")
@@ -112,7 +109,7 @@ def main():
         extra_results=extra_results,
     )
 
-    # 6. BGE Reranking：不再对 VGG 等特定论文硬编码筛选
+    # 6. BGE Reranking
     reranker_model = CrossEncoder("BAAI/bge-reranker-base", device="cpu")
     results = rerank_results(
         query=query,
@@ -129,7 +126,7 @@ def main():
         print(f"Section: {result['section']}")
         print(f"Text: {result['text']}")
 
-    # 7. Context：严格使用 Reranker 的最终结果，不做实验性扩展
+    # 7. 使用最终检索结果构建 Context
     context_parts = []
     for i, result in enumerate(results, start=1):
         context_parts.append(
@@ -141,7 +138,7 @@ def main():
 
     context = "\n\n".join(context_parts)
 
-    # 8. Prompt：保留当前实验使用的引用规则
+    # 8. 构建带引用规则的 Prompt
     prompt = f"""
 You are an AI research assistant.
 
@@ -170,7 +167,6 @@ Answer:
     answer = generate_answer(prompt)
     print("\n=== Generated Answer ===")
     print(answer)
-
 
 if __name__ == "__main__":
     main()

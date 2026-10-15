@@ -30,7 +30,6 @@ def split_documents(documents, chunk_size = 500, chunk_overlap = 100):
                 "section": document["section"],
             }
 
-
             chunks.append(chunk)
 
             if end == len(text):

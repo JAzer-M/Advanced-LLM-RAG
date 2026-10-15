@@ -1,7 +1,6 @@
-from llm import generate_answer
-
-
 def rewrite_query(query):
+    from llm import generate_answer
+
     prompt = f"""
     You are a retrieval query optimization assistant
     for academic research papers.

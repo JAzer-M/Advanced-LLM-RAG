@@ -1,5 +1,3 @@
-from tkinter import font
-
 import pymupdf
 import re
 from pathlib import Path
@@ -134,37 +132,6 @@ def extract_lines(page, two_columns = False):
         )
 
     return lines
-
-def merge_headings(lines):
-
-    headings = []
-
-    pattern = r"\d+(?:\.\d+)+\.?"
-
-    for i in range(len(lines) - 1):
-        current = lines[i]
-        next_line = lines[i + 1]
-
-        current_bold = any(
-            "Bold" in font or "Medi" in font
-            for font in current["fonts"]
-        )
-
-        next_bold = any(
-            "Bold" in font or "Medi" in font
-            for font in next_line["fonts"]
-        )
-
-        if(
-            re.fullmatch(pattern, current["text"])
-            and current_bold
-            and next_bold
-            and len(next_line["text"]) < 80
-        ):
-            heading = current["text"] + " " + next_line["text"]
-            headings.append(heading)
-
-    return headings
 
 def detect_sections(lines):
 
@@ -337,102 +304,3 @@ def clean_text(text):
         cleaned_lines.append(line)
 
     return "\n".join(cleaned_lines)
-
-if __name__ == "__main__":
-    folder_path = Path(__file__).resolve().parent.parent / "data" / "raw"
-
-    documents = load_pdfs(folder_path)
-
-    print("总页数:", len(documents))
-
-    print("\n=== VGG Raw Document Inspection ===")
-
-    for document in documents:
-
-        if (
-                document["source"] == "VGG.pdf"
-                and document["page"] in [2, 3]
-                and document["section"] == "2.3 DISCUSSION"
-        ):
-
-            print("\nPage:", document["page"])
-
-            text = document["text"]
-
-            if document["page"] == 2:
-                print(repr(text[-700:]))
-
-            else:
-                print(repr(text[:2500]))
-
-    for document in documents:
-        if document["section"] is not None:
-            print(
-                document["source"],
-                "Page:",
-                document["page"],
-                "Section:",
-                document["section"]
-            )
-
-    pdf_path = folder_path / "VGG.pdf"
-
-    with pymupdf.open(pdf_path) as pdf:
-
-        page = pdf[2]  # 第三页，Python 索引从 0 开始
-
-        print("\n=== VGG Page 3 Layout ===")
-        print("Page Size:", page.rect)
-
-        lines = extract_lines(page)
-
-        keywords = [
-            "Table 1:",
-            "Table 2:",
-            "such layers",
-            "Second, we decrease"
-        ]
-
-        for line in lines:
-
-            if any(word in line["text"] for word in keywords):
-                print("BBox:", line["bbox"])
-                print("Text:", line["text"])
-                print()
-
-    with pymupdf.open(folder_path / "VGG.pdf") as pdf:
-
-        page = pdf[2]
-
-        tables = page.find_tables()
-
-        print("\n=== Detected Tables ===")
-        print("Total Tables:", len(tables.tables))
-
-        for i, table in enumerate(tables.tables, start=1):
-            print(f"\nTable {i}")
-            print("BBox:", table.bbox)
-
-    with pymupdf.open(folder_path / "VGG.pdf") as pdf:
-
-        page = pdf[2]
-
-        blocks = page.get_text("blocks")
-
-        print("\n=== VGG Page 3 Text Blocks ===")
-
-        for block in blocks:
-
-            # 只检查文本块
-            if block[6] != 0:
-                continue
-
-            x0, y0, x1, y1 = block[:4]
-            text = block[4]
-
-            # 重点检查 Table 2 及其后面的正文
-            if y0 < 430:
-                continue
-
-            print(f"\nBBox: ({x0:.1f}, {y0:.1f}, {x1:.1f}, {y1:.1f})")
-            print("Text:", " ".join(text.split())[:300])

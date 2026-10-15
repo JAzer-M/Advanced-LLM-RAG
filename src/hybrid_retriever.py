@@ -8,10 +8,10 @@ def reciprocal_rank_fusion(
     # 存储每一个chunk的rrf分数
     rrf_scores = {}
 
-    # 存储每隔chunk的原始信息
+    # 存储每个chunk的原始信息
     chunk_lookup = {}
 
-    # 便利两个retriever的结果
+    # 遍历各个retriever的结果
     for results in [dense_results, bm25_results, *(extra_results or [])]:
         for rank, result in enumerate(results, start=1):
 

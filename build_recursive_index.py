@@ -1,4 +1,4 @@
-from pathlib import  Path
+from pathlib import Path
 
 from src.pdf_loader import load_pdfs
 from src.chunking_recursive import split_documents_recursive

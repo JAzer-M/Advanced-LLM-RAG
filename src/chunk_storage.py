@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 
 def save_chunks(chunks, file_path):
-    file = Path(file_path)
+    file_path = Path(file_path)
 
     file_path.parent.mkdir(
         parents=True,

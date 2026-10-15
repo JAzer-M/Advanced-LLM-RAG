@@ -1,8 +1,6 @@
 import re
 import numpy as np
 
-from src.embedding import load_embedding_model
-
 def split_sentences(text):
 
     # 标准化空白字符
@@ -104,7 +102,7 @@ def group_sentences_by_boundaries(
 
             continue
 
-        # 尝试假如新句子
+        # 尝试加入新句子
         candidate = (
             f"{current} {sentence}"
             if current
@@ -200,69 +198,3 @@ def split_documents_semantic(
             })
 
     return chunks
-
-
-if __name__ == "__main__":
-
-    from pathlib import Path
-    from src.pdf_loader import load_pdfs
-    from src.embedding import load_embedding_model
-
-    project_dir = Path(__file__).resolve().parent.parent
-    raw_dir = project_dir / "data" / "raw"
-
-    # 加载三篇论文
-    documents = load_pdfs(raw_dir)
-
-    # 加载 Embedding Model
-    model = load_embedding_model()
-
-    # 执行 Semantic Chunking
-    chunks = split_documents_semantic(
-        documents,
-        model,
-        max_chunk_size=500,
-        percentile=20
-    )
-
-    lengths = [len(chunk["text"]) for chunk in chunks]
-
-    print("\n=== Semantic Chunking Statistics ===")
-    print("Total Pages:", len(documents))
-    print("Total Chunks:", len(chunks))
-
-    if lengths:
-        print("Average Length:", sum(lengths) / len(lengths))
-        print("Min Length:", min(lengths))
-        print("Max Length:", max(lengths))
-        print("Empty Chunks:", sum(x == 0 for x in lengths))
-        print("Oversized Chunks:", sum(x > 500 for x in lengths))
-
-    for chunk in chunks[:3]:
-        print("\n=== Chunk ===")
-        print("ID:", chunk["chunk_id"])
-        print("Source:", chunk["source"])
-        print("Page:", chunk["page"])
-        print("Text:", repr(chunk["text"][:300]))
-
-    # 统计过短的 Chunk
-    short_50 = [c for c in chunks if len(c["text"]) < 50]
-    short_100 = [c for c in chunks if len(c["text"]) < 100]
-
-    print("\n=== Short Chunk Analysis ===")
-    print("Chunks shorter than 50:", len(short_50))
-    print("Chunks shorter than 100:", len(short_100))
-
-    # 查看最短的 5 个 Chunk
-    sorted_chunks = sorted(
-        chunks,
-        key=lambda c: len(c["text"])
-    )
-
-    for chunk in sorted_chunks[:5]:
-        print("\nChunk ID:", chunk["chunk_id"])
-        print("Source:", chunk["source"])
-        print("Page:", chunk["page"])
-        print("Length:", len(chunk["text"]))
-        print("Text:", repr(chunk["text"]))
-

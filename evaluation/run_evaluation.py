@@ -22,10 +22,7 @@ from src.reranker import rerank_results
 from src.retriever import retrieve
 from src.vector_store import load_index
 
-
-# ============================================================
 # 1. Experiment configuration
-# ============================================================
 PROJECT_DIR = Path(__file__).resolve().parent.parent
 QUESTIONS_PATH = PROJECT_DIR / "evaluation" / "questions.json"
 INDEX_PATH = PROJECT_DIR / "data" / "processed" / "faiss_semantic.index"
@@ -39,14 +36,10 @@ ENABLE_REWRITING = True
 RERANKER_NAME = "BAAI/bge-reranker-base"
 RERANKER_DEVICE = "cpu"
 
-
-# ============================================================
 # 2. Gold evidence and result ID utilities
-# ============================================================
 def normalize_text(text):
     text = unicodedata.normalize("NFKC", text)
     return re.sub(r"\s+", " ", text).lower().strip()
-
 
 def get_gold_chunk_ids(question, chunks):
     """Map each (source, page, exact quote) to matching chunk IDs."""
@@ -72,7 +65,6 @@ def get_gold_chunk_ids(question, chunks):
 
     return gold_ids, unmatched_quotes
 
-
 def get_result_ids(results, candidates=None):
     """Preserve ranking; recover IDs if the reranker dropped chunk_id."""
     ids = []
@@ -97,10 +89,7 @@ def get_result_ids(results, candidates=None):
 
     return ids
 
-
-# ============================================================
 # 3. Retrieval helpers (original and rewritten queries share them)
-# ============================================================
 def retrieve_two_ways(query, embedding_model, index, chunks, bm25):
     dense = retrieve(
         model=embedding_model,
@@ -116,7 +105,6 @@ def retrieve_two_ways(query, embedding_model, index, chunks, bm25):
         top_k=CANDIDATE_K,
     )
     return dense, sparse
-
 
 def fuse_and_rerank(query, dense, sparse, reranker_model, extra_results=None):
     """RRF first; rerank against the user's ORIGINAL question."""
@@ -135,10 +123,7 @@ def fuse_and_rerank(query, dense, sparse, reranker_model, extra_results=None):
     )
     return fused, reranked
 
-
-# ============================================================
 # 4. Metrics and reporting
-# ============================================================
 def evaluate_retrieval(retrieved_ids, gold_ids):
     return {
         "precision": precision_at_k(retrieved_ids, gold_ids, FINAL_K),
@@ -146,7 +131,6 @@ def evaluate_retrieval(retrieved_ids, gold_ids):
         "ap": average_precision_at_k(retrieved_ids, gold_ids, FINAL_K),
         "rr": reciprocal_rank_at_k(retrieved_ids, gold_ids, FINAL_K),
     }
-
 
 def print_overall_metrics(name, cases):
     if not cases:
@@ -168,7 +152,6 @@ def print_overall_metrics(name, cases):
     print(f"MAP@{FINAL_K}: {mean_average_precision_at_k(cases, FINAL_K):.4f}")
     print(f"MRR@{FINAL_K}: {mean_reciprocal_rank_at_k(cases, FINAL_K):.4f}")
 
-
 def record_results(methods, gold_ids, test_cases):
     for name, retrieved_ids in methods.items():
         scores = evaluate_retrieval(retrieved_ids, gold_ids)
@@ -181,10 +164,7 @@ def record_results(methods, gold_ids, test_cases):
         print(f"AP@{FINAL_K}: {scores['ap']:.4f}")
         print(f"RR@{FINAL_K}: {scores['rr']:.4f}")
 
-
-# ============================================================
 # 5. Main evaluation
-# ============================================================
 def main():
     with QUESTIONS_PATH.open("r", encoding="utf-8") as file:
         questions = json.load(file)
@@ -294,7 +274,6 @@ def main():
     print("=" * 60)
     for name, cases in test_cases.items():
         print_overall_metrics(name, cases)
-
 
 if __name__ == "__main__":
     main()
