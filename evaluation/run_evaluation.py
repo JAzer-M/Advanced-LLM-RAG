@@ -1,4 +1,3 @@
-
 import json
 import re
 import unicodedata
@@ -6,290 +5,296 @@ from pathlib import Path
 
 from sentence_transformers import CrossEncoder
 
-from src.embedding import load_embedding_model
-from src.vector_store import load_index
-from src.chunk_storage import load_chunks
-from src.retriever import retrieve
-from src.bm25_retriever import build_bm25_index, retrieve_bm25
-from src.hybrid_retriever import reciprocal_rank_fusion
-from src.reranker import rerank_results
-
 from evaluation.metrics import (
+    average_precision_at_k,
+    mean_average_precision_at_k,
+    mean_reciprocal_rank_at_k,
     precision_at_k,
     recall_at_k,
-    average_precision_at_k,
     reciprocal_rank_at_k,
-    mean_average_precision_at_k,
-    mean_reciprocal_rank_at_k
 )
+from src.bm25_retriever import build_bm25_index, retrieve_bm25
+from src.chunk_storage import load_chunks
+from src.embedding import load_embedding_model
+from src.hybrid_retriever import reciprocal_rank_fusion
+from src.query_rewriter import rewrite_query
+from src.reranker import rerank_results
+from src.retriever import retrieve
+from src.vector_store import load_index
 
 
-# 1. 设置路径
+# ============================================================
+# 1. Experiment configuration
+# ============================================================
 PROJECT_DIR = Path(__file__).resolve().parent.parent
+QUESTIONS_PATH = PROJECT_DIR / "evaluation" / "questions.json"
+INDEX_PATH = PROJECT_DIR / "data" / "processed" / "faiss_semantic.index"
+CHUNKS_PATH = PROJECT_DIR / "data" / "processed" / "chunks_semantic.json"
 
-questions_path = PROJECT_DIR / "evaluation" / "questions.json"
-index_path = PROJECT_DIR / "data" / "processed" / "faiss_semantic.index"
-chunks_path = PROJECT_DIR / "data" / "processed" / "chunks_semantic.json"
+FINAL_K = 5
+CANDIDATE_K = 20       # Each Dense / BM25 search returns up to 20 chunks
+RRF_K = 60
+RRF_TOP_K = 20         # Same candidate budget for every reranker
+ENABLE_REWRITING = True
+RERANKER_NAME = "BAAI/bge-reranker-base"
+RERANKER_DEVICE = "cpu"
 
 
-# 2. 文本标准化
+# ============================================================
+# 2. Gold evidence and result ID utilities
+# ============================================================
 def normalize_text(text):
     text = unicodedata.normalize("NFKC", text)
-    text = re.sub(r"\s+", " ", text)
-    return text.lower().strip()
+    return re.sub(r"\s+", " ", text).lower().strip()
 
 
-# 3. Gold Evidence 映射到 Chunk ID
 def get_gold_chunk_ids(question, chunks):
-
+    """Map each (source, page, exact quote) to matching chunk IDs."""
     gold_ids = set()
-    unmatched = []
+    unmatched_quotes = []
 
     for evidence in question["gold_evidence"]:
+        matches = []
 
-        matched = []
-
-        for i, chunk in enumerate(chunks):
-
-            same_source = chunk["source"] == evidence["source"]
-            same_page = chunk["page"] == evidence["page"]
-
-            quote_match = (
-                normalize_text(evidence["quote"])
+        for index, chunk in enumerate(chunks):
+            if (
+                chunk["source"] == evidence["source"]
+                and chunk["page"] == evidence["page"]
+                and normalize_text(evidence["quote"])
                 in normalize_text(chunk["text"])
-            )
+            ):
+                matches.append(chunk.get("chunk_id", index))
 
-            if same_source and same_page and quote_match:
-                matched.append(chunk.get("chunk_id", i))
+        if matches:
+            gold_ids.update(matches)
+        else:
+            unmatched_quotes.append(evidence["quote"])
 
-        if not matched:
-            unmatched.append(evidence["quote"])
-
-        gold_ids.update(matched)
-
-    return gold_ids, unmatched
+    return gold_ids, unmatched_quotes
 
 
-# 4. 获取检索结果的 Chunk IDs
 def get_result_ids(results, candidates=None):
-
+    """Preserve ranking; recover IDs if the reranker dropped chunk_id."""
     ids = []
 
     for result in results:
-
         if "chunk_id" in result:
             ids.append(result["chunk_id"])
             continue
 
-        # 如果 Reranker 没有保留 ID，
-        # 则从原始候选结果中恢复
         matches = [
-            c["chunk_id"]
-            for c in (candidates or [])
-            if c["source"] == result["source"]
-            and c["page"] == result["page"]
-            and c["text"] == result["text"]
+            candidate["chunk_id"]
+            for candidate in (candidates or [])
+            if candidate["source"] == result["source"]
+            and candidate["page"] == result["page"]
+            and candidate["text"] == result["text"]
         ]
 
         if len(matches) != 1:
-            raise ValueError(
-                "Cannot uniquely identify reranked chunk"
-            )
+            raise ValueError("Cannot uniquely identify reranked chunk")
 
         ids.append(matches[0])
 
     return ids
 
 
-# 5. 计算单道问题指标
-def evaluate_retrieval(retrieved_ids, gold_ids, k):
+# ============================================================
+# 3. Retrieval helpers (original and rewritten queries share them)
+# ============================================================
+def retrieve_two_ways(query, embedding_model, index, chunks, bm25):
+    dense = retrieve(
+        model=embedding_model,
+        index=index,
+        chunks=chunks,
+        query=query,
+        top_k=CANDIDATE_K,
+    )
+    sparse = retrieve_bm25(
+        bm25=bm25,
+        chunks=chunks,
+        query=query,
+        top_k=CANDIDATE_K,
+    )
+    return dense, sparse
 
+
+def fuse_and_rerank(query, dense, sparse, reranker_model, extra_results=None):
+    """RRF first; rerank against the user's ORIGINAL question."""
+    fused = reciprocal_rank_fusion(
+        dense_results=dense,
+        bm25_results=sparse,
+        k=RRF_K,
+        top_k=RRF_TOP_K,
+        extra_results=extra_results,
+    )
+    reranked = rerank_results(
+        query=query,
+        candidates=fused,
+        model=reranker_model,
+        top_k=FINAL_K,
+    )
+    return fused, reranked
+
+
+# ============================================================
+# 4. Metrics and reporting
+# ============================================================
+def evaluate_retrieval(retrieved_ids, gold_ids):
     return {
-        "precision": precision_at_k(
-            retrieved_ids, gold_ids, k
-        ),
-        "recall": recall_at_k(
-            retrieved_ids, gold_ids, k
-        ),
-        "ap": average_precision_at_k(
-            retrieved_ids, gold_ids, k
-        ),
-        "rr": reciprocal_rank_at_k(
-            retrieved_ids, gold_ids, k
-        )
+        "precision": precision_at_k(retrieved_ids, gold_ids, FINAL_K),
+        "recall": recall_at_k(retrieved_ids, gold_ids, FINAL_K),
+        "ap": average_precision_at_k(retrieved_ids, gold_ids, FINAL_K),
+        "rr": reciprocal_rank_at_k(retrieved_ids, gold_ids, FINAL_K),
     }
 
 
-# 6. 整体评估
-def print_overall_metrics(name, test_cases, k):
-
-    if not test_cases:
-        print(f"No valid test cases for {name}")
+def print_overall_metrics(name, cases):
+    if not cases:
+        print(f"\n=== Overall {name} Evaluation ===")
+        print("No valid test cases")
         return
 
     mean_precision = sum(
-        precision_at_k(retrieved, gold, k)
-        for retrieved, gold in test_cases
-    ) / len(test_cases)
-
+        precision_at_k(retrieved, gold, FINAL_K) for retrieved, gold in cases
+    ) / len(cases)
     mean_recall = sum(
-        recall_at_k(retrieved, gold, k)
-        for retrieved, gold in test_cases
-    ) / len(test_cases)
-
-    map_score = mean_average_precision_at_k(
-        test_cases, k
-    )
-
-    mrr_score = mean_reciprocal_rank_at_k(
-        test_cases, k
-    )
+        recall_at_k(retrieved, gold, FINAL_K) for retrieved, gold in cases
+    ) / len(cases)
 
     print(f"\n=== Overall {name} Evaluation ===")
-    print("Evaluated Questions:", len(test_cases))
-    print(f"Mean Precision@{k}: {mean_precision:.4f}")
-    print(f"Mean Recall@{k}: {mean_recall:.4f}")
-    print(f"MAP@{k}: {map_score:.4f}")
-    print(f"MRR@{k}: {mrr_score:.4f}")
+    print("Evaluated Questions:", len(cases))
+    print(f"Mean Precision@{FINAL_K}: {mean_precision:.4f}")
+    print(f"Mean Recall@{FINAL_K}: {mean_recall:.4f}")
+    print(f"MAP@{FINAL_K}: {mean_average_precision_at_k(cases, FINAL_K):.4f}")
+    print(f"MRR@{FINAL_K}: {mean_reciprocal_rank_at_k(cases, FINAL_K):.4f}")
 
 
-# 7. 主程序
+def record_results(methods, gold_ids, test_cases):
+    for name, retrieved_ids in methods.items():
+        scores = evaluate_retrieval(retrieved_ids, gold_ids)
+        test_cases[name].append((retrieved_ids, gold_ids))
+
+        print(f"\n=== {name} ===")
+        print("Retrieved IDs:", retrieved_ids)
+        print(f"Precision@{FINAL_K}: {scores['precision']:.4f}")
+        print(f"Recall@{FINAL_K}: {scores['recall']:.4f}")
+        print(f"AP@{FINAL_K}: {scores['ap']:.4f}")
+        print(f"RR@{FINAL_K}: {scores['rr']:.4f}")
+
+
+# ============================================================
+# 5. Main evaluation
+# ============================================================
 def main():
-
-    k = 5
-    candidate_k = 20
-
-    # 加载问题
-    with open(questions_path, "r", encoding="utf-8") as f:
-        questions = json.load(f)
+    with QUESTIONS_PATH.open("r", encoding="utf-8") as file:
+        questions = json.load(file)
 
     print("Total Questions:", len(questions))
+    print("Query Rewriting Enabled:", ENABLE_REWRITING)
+    print(f"RRF candidates: Top-{RRF_TOP_K}; final results: Top-{FINAL_K}")
 
-    # 加载检索资源
-    model = load_embedding_model()
-    index = load_index(index_path)
-    chunks = load_chunks(chunks_path)
+    embedding_model = load_embedding_model()
+    index = load_index(INDEX_PATH)
+    chunks = load_chunks(CHUNKS_PATH)
 
     if index.ntotal != len(chunks):
-        raise ValueError("Index and Chunks count mismatch!")
+        raise ValueError("FAISS index and chunk count mismatch")
 
-    # 构建 BM25 索引
     bm25 = build_bm25_index(chunks)
+    reranker_model = CrossEncoder(RERANKER_NAME, device=RERANKER_DEVICE)
 
-    # Cross-Encoder 只加载一次
-    reranker_model = CrossEncoder(
-        "cross-encoder/ms-marco-MiniLM-L6-v2"
-    )
-
-    # 存储四种方法的结果
     test_cases = {
         "Dense": [],
         "BM25": [],
         "Hybrid": [],
         "Hybrid + Reranker": [],
     }
+    if ENABLE_REWRITING:
+        test_cases["Rewritten Hybrid + Reranker"] = []
+        test_cases["Multi-Query + Reranker"] = []
 
-    # 8. 遍历 Evaluation Dataset
     for question in questions:
-
         query = question["question"]
-
-        print(f"\n{'=' * 50}")
+        print("\n" + "=" * 60)
         print("Question ID:", question["id"])
         print("Question:", query)
 
-        # Out-of-Scope 单独处理
         if not question.get("gold_evidence"):
-            print("Out-of-Scope: Skipped")
+            print("Out-of-scope / no gold evidence: skipped")
             continue
 
-        # Ground Truth
-        gold_ids, unmatched = get_gold_chunk_ids(
-            question, chunks
-        )
-
+        gold_ids, unmatched = get_gold_chunk_ids(question, chunks)
         if unmatched or not gold_ids:
-            print("WARNING: Incomplete Ground Truth")
+            print("WARNING: Incomplete ground truth; question skipped")
             for quote in unmatched:
-                print("Unmatched:", quote)
+                print("Unmatched quote:", quote)
             continue
 
         print("Gold IDs:", sorted(gold_ids))
 
-        # 9. Dense Retrieval
-        dense_results = retrieve(
-            model=model,
-            index=index,
-            chunks=chunks,
-            query=query,
-            top_k=candidate_k
+        # A. Original-query baseline: NEVER replace query with rewritten_query.
+        original_dense, original_bm25 = retrieve_two_ways(
+            query, embedding_model, index, chunks, bm25
+        )
+        original_fused, original_reranked = fuse_and_rerank(
+            query, original_dense, original_bm25, reranker_model
         )
 
-        # 10. BM25 Retrieval
-        bm25_results = retrieve_bm25(
-            bm25=bm25,
-            chunks=chunks,
-            query=query,
-            top_k=candidate_k
-        )
-
-        # 11. Hybrid Retrieval: RRF Top-20
-        hybrid_results = reciprocal_rank_fusion(
-            dense_results=dense_results,
-            bm25_results=bm25_results,
-            k=60,
-            top_k=candidate_k
-        )
-
-        # 12. Cross-Encoder Reranking
-        reranked_results = rerank_results(
-            query=query,
-            candidates=hybrid_results,
-            model=reranker_model,
-            top_k=k
-        )
-
-        # 13. 四种检索方法的 Top-5 IDs
         methods = {
-            "Dense": get_result_ids(dense_results[:k]),
-            "BM25": get_result_ids(bm25_results[:k]),
-            "Hybrid": get_result_ids(hybrid_results[:k]),
+            "Dense": get_result_ids(original_dense[:FINAL_K]),
+            "BM25": get_result_ids(original_bm25[:FINAL_K]),
+            "Hybrid": get_result_ids(original_fused[:FINAL_K]),
             "Hybrid + Reranker": get_result_ids(
-                reranked_results,
-                candidates=hybrid_results
-            )
+                original_reranked, candidates=original_fused
+            ),
         }
 
-        # 14. 自动计算指标
-        for name, retrieved_ids in methods.items():
+        # B. One Qwen rewrite, reused for BOTH alternative strategies.
+        if ENABLE_REWRITING:
+            rewritten_query = rewrite_query(query).strip() or query
+            print("Original Query:", query)
+            print("Rewritten Query:", rewritten_query)
 
-            scores = evaluate_retrieval(
-                retrieved_ids, gold_ids, k
+            if rewritten_query == query:
+                # The two queries are identical: avoid needless retrieval/reranking.
+                rewritten_fused = original_fused
+                rewritten_reranked = original_reranked
+                multi_fused = original_fused
+                multi_reranked = original_reranked
+            else:
+                rewritten_dense, rewritten_bm25 = retrieve_two_ways(
+                    rewritten_query, embedding_model, index, chunks, bm25
+                )
+
+                # Rewritten-only hybrid: same RRF and BGE candidate budget.
+                rewritten_fused, rewritten_reranked = fuse_and_rerank(
+                    query, rewritten_dense, rewritten_bm25, reranker_model
+                )
+
+                # Four lists: Original Dense/BM25 + Rewritten Dense/BM25.
+                multi_fused, multi_reranked = fuse_and_rerank(
+                    query,
+                    original_dense,
+                    original_bm25,
+                    reranker_model,
+                    extra_results=[rewritten_dense, rewritten_bm25],
+                )
+
+            methods["Rewritten Hybrid + Reranker"] = get_result_ids(
+                rewritten_reranked, candidates=rewritten_fused
+            )
+            methods["Multi-Query + Reranker"] = get_result_ids(
+                multi_reranked, candidates=multi_fused
             )
 
-            test_cases[name].append(
-                (retrieved_ids, gold_ids)
-            )
+        record_results(methods, gold_ids, test_cases)
 
-            print(f"\n=== {name} Evaluation ===")
-            print("Retrieved IDs:", retrieved_ids)
-
-            print(f"Precision@{k}: {scores['precision']:.4f}")
-            print(f"Recall@{k}: {scores['recall']:.4f}")
-            print(f"AP@{k}: {scores['ap']:.4f}")
-            print(f"RR@{k}: {scores['rr']:.4f}")
-
-    # 15. 汇总最终结果
-    print("\n" + "=" * 50)
+    print("\n" + "=" * 60)
     print("FINAL EVALUATION COMPARISON")
-    print("=" * 50)
-
+    print("=" * 60)
     for name, cases in test_cases.items():
-        print_overall_metrics(
-            name=name,
-            test_cases=cases,
-            k=k
-        )
+        print_overall_metrics(name, cases)
+
 
 if __name__ == "__main__":
     main()

@@ -52,12 +52,13 @@ def generate_answer(prompt):
     with torch.inference_mode():
         outputs = model.generate(
             **inputs,
-            max_new_tokens = 128,
+            max_new_tokens = 512,
             do_sample = False
         )
 
     # 提取新生成的token
     generated_ids = outputs[0][inputs["input_ids"].shape[-1]:]
+    print("Generated Token Count:", generated_ids.shape[0])
 
     # Decode
     answer = processor.decode(

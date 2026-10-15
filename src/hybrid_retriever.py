@@ -1,4 +1,10 @@
-def reciprocal_rank_fusion(dense_results, bm25_results, k = 60, top_k = 5):
+def reciprocal_rank_fusion(
+    dense_results,
+    bm25_results,
+    k=60,
+    top_k=5,
+    extra_results=None
+):
     # 存储每一个chunk的rrf分数
     rrf_scores = {}
 
@@ -6,7 +12,7 @@ def reciprocal_rank_fusion(dense_results, bm25_results, k = 60, top_k = 5):
     chunk_lookup = {}
 
     # 便利两个retriever的结果
-    for results in [dense_results, bm25_results]:
+    for results in [dense_results, bm25_results, *(extra_results or [])]:
         for rank, result in enumerate(results, start=1):
 
             chunk_id = result["chunk_id"]
