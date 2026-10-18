@@ -1,0 +1,803 @@
+{
+  "question_id": "n2",
+  "query": "How do overlapping pooling windows differ from non-overlapping pooling in the DCNN paper, and what effects did the authors report?",
+  "condition": "both",
+  "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\nContext:\nOriginal passages:\n[1] Source: DCNN.pdf | Page: 4 | Section: 4.4. Overlapping pooling\nThis is what we use throughout our network, with s = 2 and z = 3. This scheme reduces the top-1 and top-5 error rates by 0.4% and 0.3%, respectively, as compared with the non overlapping scheme s = 2, z = 2, which produces output of equivalent dimensions. We generally observe during training that models with overlapping pooling find it slightly more dif- ficult to overfit.\n\n[2] Source: DCNN.pdf | Page: 3 | Section: 4.4. Overlapping pooling\n4.4. Overlapping pooling Pooling layers in CNNs summarize the outputs of neighbor- ing groups of neurons in the same kernel map. Traditionally, the neighborhoods summarized by adjacent pooling units do not overlap (e.g., Refs.5, 13, 20). To be more precise, a pooling layer can be thought of as consisting of a grid of pooling units spaced s pixels apart, each summarizing a neighborhood of size z × z centered at the location of the pooling unit.\n\n[3] Source: DCNN.pdf | Page: 3 | Section: 4.1. Rectified Linear Unit nonlinearity\nThe magnitude of the effect demonstrated here varies with network architecture, but networks with ReLUs consistently learn several times faster than equivalents with saturating neurons. 0.75 Training error rate 0.5 0.25 0 0 5 10 15 20 25 30 35 Epochs average pooling on the Caltech-101 dataset. However, on this dataset the primary concern is preventing overfitting, so the effect they are observing is different from the accelerated ability to fit the training set which we report when using ReLUs.\n\n[4] Source: DCNN.pdf | Page: 6 | Section: 7. RESULTS\nSince there is no established test set, our split necessarily differs from the splits used by previous authors, but this does not affect the results appreciably. Our top-1 and top-5 error rates on this dataset are 67.4% and 40.9%, attained by the net described above but with an additional, sixth convolutional layer over the last pooling layer. The best published results on this dataset are 78.1% and 60.9%.23\n\n[5] Source: DCNN.pdf | Page: 3 | Section: 4.4. Overlapping pooling\nIf we set s = z, we obtain traditional local pooling as commonly employed in CNNs. If we set s < z, we obtain overlapping b The one-GPU net actually has the same number of kernels as the two-GPU net in the final convolutional layer. This is because most of the net’s param- eters are in the first fully connected layer, which takes the last convolutional layer as input.\n\n[6] Source: DCNN.pdf | Page: 4 | Section: 4.4. Overlapping pooling\nThe network’s input is 150,528-dimensional, and the number of neurons in the network’s remaining layers is given by 290,400–186,624– 64,896–64,896–43,264–4096–4096–1000. 3 5 3 5 3 11 48 11 128 27 55 13 3 5 3 224 5 13 27 3 11 3 55 11 Max Max 224 Stride 128 pooling pooling of 4 3 48 pooling.\n\n[7] Source: DCNN.pdf | Page: 1 | Section: 1. PROLOGUE\n1. PROLOGUE Four years ago, a paper by Yann LeCun and his collaborators was rejected by the leading computer vision conference on the grounds that it used neural networks and therefore pro- vided no insight into how to design a vision system. At the time, most computer vision researchers believed that a vision system needed to be carefully hand-designed using a detailed understanding of the nature of the task.\n\n[8] Source: DCNN.pdf | Page: 6 | Section: 7. RESULTS\nerror rates for all the models that we tried. In the remainder of this paragraph, we use validation and test error rates inter- changeably because in our experience they do not differ by more than 0.1% (see Table 2). The CNN described in this paper achieves a top-5 error rate of 18.2%. Averaging the pre- dictions of five similar CNNs gives an error rate of 16.4%.\n\n[9] Source: DCNN.pdf | Page: 4 | Section: 4.5. Overall architecture\nThe third convolutional layer has 384 kernels of size 3 × 3 × 256 connected to the (normalized, pooled) outputs 3 3 3 3 dense 2048 2048 192 192 128 13 13 3 3 3 dense dense 13 13 3 1000 Max 192 192 128 2048 2048 pooling of the second convolutional layer. The fourth convolu- tional layer has 384 kernels of size 3 × 3 × 192, and the fifth convolutional layer has 256 kernels of size 3 × 3 × 192. The fully connected layers have 4096 neurons each.\n\n[10] Source: DCNN.pdf | Page: 1 | Section: None\nOn the test data, we achieved top-1 and top-5 error rates of 37.5% and 17.0%, respectively, which is considerably better than the previous state-of-the-art. The neural network, which has 60 million parameters and 650,000 neurons, con- sists of five convolutional layers, some of which are followed by max-pooling layers, and three fully connected layers with a final 1000-way softmax.\n\n[11] Source: DCNN.pdf | Page: 4 | Section: 4.4. Overlapping pooling\nFigure 2. An illustration of the architecture of our CNN, explicitly showing the delineation of responsibilities between the two GPUs. One GPU runs the layer-parts at the top of the figure while the other runs the layer-parts at the bottom. The GPUs communicate only at certain layers.\n\n[12] Source: DCNN.pdf | Page: 4 | Section: 4.5. Overall architecture\nOur net- work maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.\n\nEvidence guidance:\n- DCNN: convolutional layer 3; spatial kernel size 3×3; 384 kernels; 256 channels per kernel. [9][12]\n- DCNN: convolutional layer 4; spatial kernel size 3×3; 384 kernels; 192 channels per kernel. [9][12]\n- DCNN: convolutional layer 5; spatial kernel size 3×3; 256 kernels; 192 channels per kernel. [9][12]\n\nQuestion:\nHow do overlapping pooling windows differ from non-overlapping pooling in the DCNN paper, and what effects did the authors report?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages.\n\nAnswer:",
+  "context": "Original passages:\n[1] Source: DCNN.pdf | Page: 4 | Section: 4.4. Overlapping pooling\nThis is what we use throughout our network, with s = 2 and z = 3. This scheme reduces the top-1 and top-5 error rates by 0.4% and 0.3%, respectively, as compared with the non overlapping scheme s = 2, z = 2, which produces output of equivalent dimensions. We generally observe during training that models with overlapping pooling find it slightly more dif- ficult to overfit.\n\n[2] Source: DCNN.pdf | Page: 3 | Section: 4.4. Overlapping pooling\n4.4. Overlapping pooling Pooling layers in CNNs summarize the outputs of neighbor- ing groups of neurons in the same kernel map. Traditionally, the neighborhoods summarized by adjacent pooling units do not overlap (e.g., Refs.5, 13, 20). To be more precise, a pooling layer can be thought of as consisting of a grid of pooling units spaced s pixels apart, each summarizing a neighborhood of size z × z centered at the location of the pooling unit.\n\n[3] Source: DCNN.pdf | Page: 3 | Section: 4.1. Rectified Linear Unit nonlinearity\nThe magnitude of the effect demonstrated here varies with network architecture, but networks with ReLUs consistently learn several times faster than equivalents with saturating neurons. 0.75 Training error rate 0.5 0.25 0 0 5 10 15 20 25 30 35 Epochs average pooling on the Caltech-101 dataset. However, on this dataset the primary concern is preventing overfitting, so the effect they are observing is different from the accelerated ability to fit the training set which we report when using ReLUs.\n\n[4] Source: DCNN.pdf | Page: 6 | Section: 7. RESULTS\nSince there is no established test set, our split necessarily differs from the splits used by previous authors, but this does not affect the results appreciably. Our top-1 and top-5 error rates on this dataset are 67.4% and 40.9%, attained by the net described above but with an additional, sixth convolutional layer over the last pooling layer. The best published results on this dataset are 78.1% and 60.9%.23\n\n[5] Source: DCNN.pdf | Page: 3 | Section: 4.4. Overlapping pooling\nIf we set s = z, we obtain traditional local pooling as commonly employed in CNNs. If we set s < z, we obtain overlapping b The one-GPU net actually has the same number of kernels as the two-GPU net in the final convolutional layer. This is because most of the net’s param- eters are in the first fully connected layer, which takes the last convolutional layer as input.\n\n[6] Source: DCNN.pdf | Page: 4 | Section: 4.4. Overlapping pooling\nThe network’s input is 150,528-dimensional, and the number of neurons in the network’s remaining layers is given by 290,400–186,624– 64,896–64,896–43,264–4096–4096–1000. 3 5 3 5 3 11 48 11 128 27 55 13 3 5 3 224 5 13 27 3 11 3 55 11 Max Max 224 Stride 128 pooling pooling of 4 3 48 pooling.\n\n[7] Source: DCNN.pdf | Page: 1 | Section: 1. PROLOGUE\n1. PROLOGUE Four years ago, a paper by Yann LeCun and his collaborators was rejected by the leading computer vision conference on the grounds that it used neural networks and therefore pro- vided no insight into how to design a vision system. At the time, most computer vision researchers believed that a vision system needed to be carefully hand-designed using a detailed understanding of the nature of the task.\n\n[8] Source: DCNN.pdf | Page: 6 | Section: 7. RESULTS\nerror rates for all the models that we tried. In the remainder of this paragraph, we use validation and test error rates inter- changeably because in our experience they do not differ by more than 0.1% (see Table 2). The CNN described in this paper achieves a top-5 error rate of 18.2%. Averaging the pre- dictions of five similar CNNs gives an error rate of 16.4%.\n\n[9] Source: DCNN.pdf | Page: 4 | Section: 4.5. Overall architecture\nThe third convolutional layer has 384 kernels of size 3 × 3 × 256 connected to the (normalized, pooled) outputs 3 3 3 3 dense 2048 2048 192 192 128 13 13 3 3 3 dense dense 13 13 3 1000 Max 192 192 128 2048 2048 pooling of the second convolutional layer. The fourth convolu- tional layer has 384 kernels of size 3 × 3 × 192, and the fifth convolutional layer has 256 kernels of size 3 × 3 × 192. The fully connected layers have 4096 neurons each.\n\n[10] Source: DCNN.pdf | Page: 1 | Section: None\nOn the test data, we achieved top-1 and top-5 error rates of 37.5% and 17.0%, respectively, which is considerably better than the previous state-of-the-art. The neural network, which has 60 million parameters and 650,000 neurons, con- sists of five convolutional layers, some of which are followed by max-pooling layers, and three fully connected layers with a final 1000-way softmax.\n\n[11] Source: DCNN.pdf | Page: 4 | Section: 4.4. Overlapping pooling\nFigure 2. An illustration of the architecture of our CNN, explicitly showing the delineation of responsibilities between the two GPUs. One GPU runs the layer-parts at the top of the figure while the other runs the layer-parts at the bottom. The GPUs communicate only at certain layers.\n\n[12] Source: DCNN.pdf | Page: 4 | Section: 4.5. Overall architecture\nOur net- work maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.\n\nEvidence guidance:\n- DCNN: convolutional layer 3; spatial kernel size 3×3; 384 kernels; 256 channels per kernel. [9][12]\n- DCNN: convolutional layer 4; spatial kernel size 3×3; 384 kernels; 192 channels per kernel. [9][12]\n- DCNN: convolutional layer 5; spatial kernel size 3×3; 256 kernels; 192 channels per kernel. [9][12]",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": "This is what we use throughout our network, with s = 2 and z = 3.",
+        "evidence_start": 0,
+        "evidence_end": 65,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            153
+          ],
+          "identity_quote": "This is what we use throughout our network, with s = 2 and z = 3. This scheme reduces the top-1 and top-5 error rates by 0.4% and 0.3%, respectively, as compared with the non overlapping scheme s = 2, z = 2, which produces output of equivalent dimensions. We generally observe during training that models with overlapping pooling find it slightly more dif- ficult to overfit.",
+          "identity_chunk_id": 153
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 153,
+        "page": 4,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "3%, respectively, as compared with the non overlapping scheme s = 2, z = 2, which produces output of equivalent dimensions.",
+        "evidence_start": 132,
+        "evidence_end": 255,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            153
+          ],
+          "identity_quote": "This is what we use throughout our network, with s = 2 and z = 3. This scheme reduces the top-1 and top-5 error rates by 0.4% and 0.",
+          "identity_chunk_id": 153
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 153,
+        "page": 4,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We generally observe during training that models with overlapping pooling find it slightly more dif- ficult to overfit.",
+        "evidence_start": 255,
+        "evidence_end": 375,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            153
+          ],
+          "identity_quote": "This is what we use throughout our network, with s = 2 and z = 3. This scheme reduces the top-1 and top-5 error rates by 0.4% and 0.3%, respectively, as compared with the non overlapping scheme s = 2, z = 2, which produces output of equivalent dimensions.",
+          "identity_chunk_id": 153
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 153,
+        "page": 4,
+        "citations": [
+          1
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Overlapping pooling Pooling layers in CNNs summarize the outputs of neighbor- ing groups of neurons in the same kernel map.",
+        "evidence_start": 4,
+        "evidence_end": 128,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            147
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 147,
+        "page": 3,
+        "citations": [
+          2
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " To be more precise, a pooling layer can be thought of as consisting of a grid of pooling units spaced s pixels apart, each summarizing a neighborhood of size z × z centered at the location of the pooling unit.",
+        "evidence_start": 237,
+        "evidence_end": 447,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            147
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 147,
+        "page": 3,
+        "citations": [
+          2
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "The magnitude of the effect demonstrated here varies with network architecture, but networks with ReLUs consistently learn several times faster than equivalents with saturating neurons.",
+        "evidence_start": 0,
+        "evidence_end": 185,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            136,
+            135
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 136,
+        "page": 3,
+        "citations": [
+          3
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "25 0 0 5 10 15 20 25 30 35 Epochs average pooling on the Caltech-101 dataset.",
+        "evidence_start": 217,
+        "evidence_end": 294,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            136,
+            135
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 136,
+        "page": 3,
+        "citations": [
+          3
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " However, on this dataset the primary concern is preventing overfitting, so the effect they are observing is different from the accelerated ability to fit the training set which we report when using ReLUs.",
+        "evidence_start": 294,
+        "evidence_end": 499,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            136,
+            135
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 136,
+        "page": 3,
+        "citations": [
+          3
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Since there is no established test set, our split necessarily differs from the splits used by previous authors, but this does not affect the results appreciably.",
+        "evidence_start": 0,
+        "evidence_end": 161,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            186,
+            185,
+            184
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 186,
+        "page": 6,
+        "citations": [
+          4
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "9%, attained by the net described above but with an additional, sixth convolutional layer over the last pooling layer.",
+        "evidence_start": 227,
+        "evidence_end": 345,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            186,
+            185,
+            184
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 186,
+        "page": 6,
+        "citations": [
+          4
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "If we set s = z, we obtain traditional local pooling as commonly employed in CNNs.",
+        "evidence_start": 0,
+        "evidence_end": 82,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            148,
+            147
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 148,
+        "page": 3,
+        "citations": [
+          5
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " If we set s < z, we obtain overlapping b The one-GPU net actually has the same number of kernels as the two-GPU net in the final convolutional layer.",
+        "evidence_start": 82,
+        "evidence_end": 232,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            148,
+            147
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 148,
+        "page": 3,
+        "citations": [
+          5
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " This is because most of the net’s param- eters are in the first fully connected layer, which takes the last convolutional layer as input.",
+        "evidence_start": 232,
+        "evidence_end": 370,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            148,
+            147
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 148,
+        "page": 3,
+        "citations": [
+          5
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "The network’s input is 150,528-dimensional, and the number of neurons in the network’s remaining layers is given by 290,400–186,624– 64,896–64,896–43,264–4096–4096–1000.",
+        "evidence_start": 0,
+        "evidence_end": 169,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            152,
+            151
+          ],
+          "identity_quote": "Figure 2. An illustration of the architecture of our CNN, explicitly showing the delineation of responsibilities between the two GPUs. One GPU runs the layer-parts at the top of the figure while the other runs the layer-parts at the bottom. The GPUs communicate only at certain layers.",
+          "identity_chunk_id": 151
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 152,
+        "page": 4,
+        "citations": [
+          6,
+          11
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " 3 5 3 5 3 11 48 11 128 27 55 13 3 5 3 224 5 13 27 3 11 3 55 11 Max Max 224 Stride 128 pooling pooling of 4 3 48 pooling.",
+        "evidence_start": 169,
+        "evidence_end": 290,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            152,
+            151
+          ],
+          "identity_quote": "Figure 2. An illustration of the architecture of our CNN, explicitly showing the delineation of responsibilities between the two GPUs. One GPU runs the layer-parts at the top of the figure while the other runs the layer-parts at the bottom. The GPUs communicate only at certain layers.",
+          "identity_chunk_id": 151
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 152,
+        "page": 4,
+        "citations": [
+          6,
+          11
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " PROLOGUE Four years ago, a paper by Yann LeCun and his collaborators was rejected by the leading computer vision conference on the grounds that it used neural networks and therefore pro- vided no insight into how to design a vision system.",
+        "evidence_start": 2,
+        "evidence_end": 242,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            104
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 104,
+        "page": 1,
+        "citations": [
+          7
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " At the time, most computer vision researchers believed that a vision system needed to be carefully hand-designed using a detailed understanding of the nature of the task.",
+        "evidence_start": 242,
+        "evidence_end": 413,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            104
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 104,
+        "page": 1,
+        "citations": [
+          7
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "error rates for all the models that we tried.",
+        "evidence_start": 0,
+        "evidence_end": 45,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            183,
+            182,
+            181
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 183,
+        "page": 6,
+        "citations": [
+          8
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "convolution_specification",
+        "layer": 3,
+        "kernel_count": 384,
+        "spatial_kernel_size": [
+          3,
+          3
+        ],
+        "channels_per_kernel": 256,
+        "evidence_quote": "The third convolutional layer has 384 kernels of size 3 × 3 × 256",
+        "evidence_start": 0,
+        "evidence_end": 65,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            159,
+            158,
+            157,
+            156,
+            155
+          ],
+          "identity_quote": "Our net- work maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.",
+          "identity_chunk_id": 155
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 159,
+        "page": 4,
+        "citations": [
+          9,
+          12
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "convolution_specification",
+        "layer": 4,
+        "kernel_count": 384,
+        "spatial_kernel_size": [
+          3,
+          3
+        ],
+        "channels_per_kernel": 192,
+        "evidence_quote": "The fourth convolu- tional layer has 384 kernels of size 3 × 3 × 192",
+        "evidence_start": 254,
+        "evidence_end": 322,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            159,
+            158,
+            157,
+            156,
+            155
+          ],
+          "identity_quote": "Our net- work maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.",
+          "identity_chunk_id": 155
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 159,
+        "page": 4,
+        "citations": [
+          9,
+          12
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "convolution_specification",
+        "layer": 5,
+        "kernel_count": 256,
+        "spatial_kernel_size": [
+          3,
+          3
+        ],
+        "channels_per_kernel": 192,
+        "evidence_quote": ", and the fifth convolutional layer has 256 kernels of size 3 × 3 × 192",
+        "evidence_start": 322,
+        "evidence_end": 393,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            159,
+            158,
+            157,
+            156,
+            155
+          ],
+          "identity_quote": "Our net- work maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.",
+          "identity_chunk_id": 155
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 159,
+        "page": 4,
+        "citations": [
+          9,
+          12
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "0%, respectively, which is considerably better than the previous state-of-the-art.",
+        "evidence_start": 74,
+        "evidence_end": 156,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            102,
+            101
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 102,
+        "page": 1,
+        "citations": [
+          10
+        ],
+        "record_id": "E22"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The neural network, which has 60 million parameters and 650,000 neurons, con- sists of five convolutional layers, some of which are followed by max-pooling layers, and three fully connected layers with a final 1000-way softmax.",
+        "evidence_start": 156,
+        "evidence_end": 384,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            102,
+            101
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 102,
+        "page": 1,
+        "citations": [
+          10
+        ],
+        "record_id": "E23"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 153,
+        "text": "This is what we use throughout our network, with s = 2 and z = 3. This scheme reduces the top-1 and top-5 error rates by 0.4% and 0.3%, respectively, as compared with the non overlapping scheme s = 2, z = 2, which produces output of equivalent dimensions. We generally observe during training that models with overlapping pooling find it slightly more dif- ficult to overfit.",
+        "source": "DCNN.pdf",
+        "page": 4,
+        "title": "DCNN",
+        "section": "4.4. Overlapping pooling"
+      },
+      {
+        "chunk_id": 147,
+        "text": "4.4. Overlapping pooling Pooling layers in CNNs summarize the outputs of neighbor- ing groups of neurons in the same kernel map. Traditionally, the neighborhoods summarized by adjacent pooling units do not overlap (e.g., Refs.5, 13, 20). To be more precise, a pooling layer can be thought of as consisting of a grid of pooling units spaced s pixels apart, each summarizing a neighborhood of size z × z centered at the location of the pooling unit.",
+        "source": "DCNN.pdf",
+        "page": 3,
+        "title": "DCNN",
+        "section": "4.4. Overlapping pooling"
+      },
+      {
+        "chunk_id": 136,
+        "text": "The magnitude of the effect demonstrated here varies with network architecture, but networks with ReLUs consistently learn several times faster than equivalents with saturating neurons. 0.75 Training error rate 0.5 0.25 0 0 5 10 15 20 25 30 35 Epochs average pooling on the Caltech-101 dataset. However, on this dataset the primary concern is preventing overfitting, so the effect they are observing is different from the accelerated ability to fit the training set which we report when using ReLUs.",
+        "source": "DCNN.pdf",
+        "page": 3,
+        "title": "DCNN",
+        "section": "4.1. Rectified Linear Unit nonlinearity"
+      },
+      {
+        "chunk_id": 186,
+        "text": "Since there is no established test set, our split necessarily differs from the splits used by previous authors, but this does not affect the results appreciably. Our top-1 and top-5 error rates on this dataset are 67.4% and 40.9%, attained by the net described above but with an additional, sixth convolutional layer over the last pooling layer. The best published results on this dataset are 78.1% and 60.9%.23",
+        "source": "DCNN.pdf",
+        "page": 6,
+        "title": "DCNN",
+        "section": "7. RESULTS"
+      },
+      {
+        "chunk_id": 148,
+        "text": "If we set s = z, we obtain traditional local pooling as commonly employed in CNNs. If we set s < z, we obtain overlapping b The one-GPU net actually has the same number of kernels as the two-GPU net in the final convolutional layer. This is because most of the net’s param- eters are in the first fully connected layer, which takes the last convolutional layer as input.",
+        "source": "DCNN.pdf",
+        "page": 3,
+        "title": "DCNN",
+        "section": "4.4. Overlapping pooling"
+      },
+      {
+        "chunk_id": 152,
+        "text": "The network’s input is 150,528-dimensional, and the number of neurons in the network’s remaining layers is given by 290,400–186,624– 64,896–64,896–43,264–4096–4096–1000. 3 5 3 5 3 11 48 11 128 27 55 13 3 5 3 224 5 13 27 3 11 3 55 11 Max Max 224 Stride 128 pooling pooling of 4 3 48 pooling.",
+        "source": "DCNN.pdf",
+        "page": 4,
+        "title": "DCNN",
+        "section": "4.4. Overlapping pooling"
+      },
+      {
+        "chunk_id": 104,
+        "text": "1. PROLOGUE Four years ago, a paper by Yann LeCun and his collaborators was rejected by the leading computer vision conference on the grounds that it used neural networks and therefore pro- vided no insight into how to design a vision system. At the time, most computer vision researchers believed that a vision system needed to be carefully hand-designed using a detailed understanding of the nature of the task.",
+        "source": "DCNN.pdf",
+        "page": 1,
+        "title": "DCNN",
+        "section": "1. PROLOGUE"
+      },
+      {
+        "chunk_id": 183,
+        "text": "error rates for all the models that we tried. In the remainder of this paragraph, we use validation and test error rates inter- changeably because in our experience they do not differ by more than 0.1% (see Table 2). The CNN described in this paper achieves a top-5 error rate of 18.2%. Averaging the pre- dictions of five similar CNNs gives an error rate of 16.4%.",
+        "source": "DCNN.pdf",
+        "page": 6,
+        "title": "DCNN",
+        "section": "7. RESULTS"
+      },
+      {
+        "chunk_id": 159,
+        "text": "The third convolutional layer has 384 kernels of size 3 × 3 × 256 connected to the (normalized, pooled) outputs 3 3 3 3 dense 2048 2048 192 192 128 13 13 3 3 3 dense dense 13 13 3 1000 Max 192 192 128 2048 2048 pooling of the second convolutional layer. The fourth convolu- tional layer has 384 kernels of size 3 × 3 × 192, and the fifth convolutional layer has 256 kernels of size 3 × 3 × 192. The fully connected layers have 4096 neurons each.",
+        "source": "DCNN.pdf",
+        "page": 4,
+        "title": "DCNN",
+        "section": "4.5. Overall architecture"
+      },
+      {
+        "chunk_id": 102,
+        "text": "On the test data, we achieved top-1 and top-5 error rates of 37.5% and 17.0%, respectively, which is considerably better than the previous state-of-the-art. The neural network, which has 60 million parameters and 650,000 neurons, con- sists of five convolutional layers, some of which are followed by max-pooling layers, and three fully connected layers with a final 1000-way softmax.",
+        "source": "DCNN.pdf",
+        "page": 1,
+        "title": "DCNN",
+        "section": null
+      },
+      {
+        "chunk_id": 151,
+        "text": "Figure 2. An illustration of the architecture of our CNN, explicitly showing the delineation of responsibilities between the two GPUs. One GPU runs the layer-parts at the top of the figure while the other runs the layer-parts at the bottom. The GPUs communicate only at certain layers.",
+        "source": "DCNN.pdf",
+        "page": 4,
+        "title": "DCNN",
+        "section": "4.4. Overlapping pooling"
+      },
+      {
+        "chunk_id": 155,
+        "text": "Our net- work maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.",
+        "source": "DCNN.pdf",
+        "page": 4,
+        "title": "DCNN",
+        "section": "4.5. Overall architecture"
+      }
+    ],
+    "selected_ids": [
+      153,
+      147,
+      136,
+      186,
+      148,
+      152,
+      104,
+      183,
+      159,
+      102
+    ]
+  },
+  "selected_ids": [
+    153,
+    147,
+    136,
+    186,
+    148,
+    152,
+    104,
+    183,
+    159,
+    102
+  ],
+  "model": "Qwen/Qwen3.5-2B",
+  "max_new_tokens": 512,
+  "do_sample": false,
+  "comparison": "generation only; same exact API-built prompt and evidence",
+  "baseline_source_sha256": "518e3127193ceee63032948bfb83fdb6646e91da0cc3fe97bcca6750a75ce95c",
+  "source_sha256": {
+    "main.py": "89831b9e3fa1ddf76fe7c20e8e58deedc0d0cd139b022eba8b4be97151a3877b",
+    "llm.py": "4a8ec8528b0662cd86a8fdc01feacfd361a276f04ae7b11c0e7574383a27eacc",
+    "src/api_llm.py": "11aa14f5435a079e83671b031d1159fbbc0ee8c760c61c9c0cc7afd0db6ae0a7",
+    "src/bm25_retriever.py": "7d2a046a4449cd6fdc371984db329534cedc7351d6196b9c218114ff0476906b",
+    "src/chunk_storage.py": "35d2b9b6c4d5a91d40ff242b85fbaa578bb75ed89501b1435a94dd8b0b5405b5",
+    "src/chunking_recursive.py": "f2fea89cace280329804cfe18d59a3663d21e3611129e0432518a37e4f691e72",
+    "src/chunking_semantic.py": "0f4947702f359a3967e2160ec098bf0cb1254eb2f7f77806ba874bb6955b0000",
+    "src/citation_validation.py": "c7e21d3070a454f08cf7944dd764a8e93dc7a3d83078863acd92db03e264b79c",
+    "src/embedding.py": "894fac2090929129e1883c858838e2255d69a6048a2e76d2387235321f2adade",
+    "src/grounded_evidence.py": "78a7e63512970492f4e52050cb8b2312e2658281acfe979eb4476516ff8c2663",
+    "src/hybrid_retriever.py": "ddd2315a558a062ac31fedb0e7a8d28af6a3df783450792825ff252d596de63c",
+    "src/hyde.py": "b575a07b016e4803de33d151eb90cdff1950b970763d69ba4e2f23b1352d3e31",
+    "src/numeric_evidence.py": "492fb546e6bc89b881843ece4b4582e533aec5aabbc58d61cd1cf158c4bac3d0",
+    "src/pdf_loader.py": "691f97e547936bcbda1ccb9837a1e91b47c34672ce33b227eaa5d18501519d1e",
+    "src/query_decomposer.py": "7a089ea7330049da1828d4dcec4bc67ad17d3505ce9017d6168cccc239326de9",
+    "src/query_rewriter.py": "bb762f7e77596a7f228d985b0c3a1699ec60bc87eba87b754c418a30cc7cdf62",
+    "src/reranker.py": "028e22aa105551bdf0845d215ba0604407a960c57d7e4e32a65c33e52dd7ffeb",
+    "src/retriever.py": "ad82c4301a81fefb3c205b5c0834d9ddcf67cc616d9b736bb265a6e9eb637e82",
+    "src/vector_store.py": "605ffa3761629f4f58b37663a23fff4020f895464917d600325ae2e1fccc0222",
+    "evaluation/questions.json": "6311c5293604f2c6f7258b53f47899b3fdf41ed8edcafed929655f2892157ade",
+    "api.local.json": "dc9ecb491bb9a50c059a68c215649f3f4ef448903a1f5c3a1e6b4e1d6cde41b6",
+    "data/processed/chunks.json": "614c077a5e9b9e6129b04706d447f7efd30363950ef3fa6f3ae6803f30608d8a",
+    "data/processed/chunks_recursive.json": "2bcf54f64a37b2ff24272f370f5eddfb0468c873c51c24167a9759c829e4b6d7",
+    "data/processed/chunks_semantic.json": "6bf158ec8cf2df07c438a7f3ff14806b2db6c6d7af4ce4fcb9fcf13a60603277",
+    "data/processed/faiss.index": "ff5ad6b97cbd2e1484e5b0eaf57172ca3781b5355294f34763baf207eb3cffd6",
+    "data/processed/faiss_recursive.index": "548633a7c56f8918fdd06d6a1ee70cedf2138786f37b4ddd8db7a87c970216a0",
+    "data/processed/faiss_semantic.index": "dd79e7f8afcc4daa09fbbdc1f85fb27c1d9641eff1003c1965a42343b8ad8b0b",
+    "data/raw/Attention is all you need.pdf": "d87d482d5ae7960e2e43d7dd6d21377e60e73e8fce1bf2a01aff7aca8a08c537",
+    "data/raw/DCNN.pdf": "434376057dbe6fc3e44d0fdb7268b56126e9b47ca9d6aa9e05cf2e738f72e81d",
+    "data/raw/VGG.pdf": "83728f9efc21081792902b4c17a4657022d1e4a92ec81655c2427f4ef0755e50"
+  },
+  "answer": "Based on the provided context, the differences and effects of overlapping versus non-overlapping pooling in the DCNN paper are as follows:\n\n**Configuration Differences**\nThe authors define the standard non-overlapping scheme with a stride $s$ and a window size $z$ where $s = 2$ and $z = 3$ [1]. In this configuration, the neighborhoods summarized by adjacent pooling units do not overlap [2].\n*   **Main Pattern:** The authors generally observe that models with overlapping pooling find it slightly more difficult to overfit [1].\n*   **Exception:** If the stride $s$ is set equal to the window size $z$ (i.e., $s = z$), the scheme transitions to traditional local pooling, which is commonly employed in CNNs [5].\n\n**Reported Effects**\nThe authors report that the overlapping pooling scheme reduces top-1 and top-5 error rates by 0.4% and 0.3%, respectively, compared to the non-overlapping scheme [1].\n*   **Mechanism:** The reduction in error rates is attributed to the overlapping nature of the pooling windows, which allows the network to capture more context from neighboring groups of neurons [2].\n*   **Training Dynamics:** During training, models utilizing overlapping pooling tend to find it slightly more difficult to overfit compared to those using non-overlapping pooling [1].\n*   **Performance Context:** The authors note that while the primary concern with their dataset is preventing overfitting, the effect observed here differs from the accelerated ability to fit the training set typically reported when using ReLUs [3].\n",
+  "generated_tokens": 339,
+  "reached_output_cap": false,
+  "citation_structure": {
+    "cited_numbers": [
+      1,
+      2,
+      3,
+      5
+    ],
+    "invalid_numbers": [],
+    "malformed_markers": [],
+    "has_citations": true,
+    "require_citations": true,
+    "structure_passed": true,
+    "cited_sources": [
+      {
+        "citation": 1,
+        "chunk_id": 153,
+        "source": "DCNN.pdf",
+        "page": 4,
+        "text": "This is what we use throughout our network, with s = 2 and z = 3. This scheme reduces the top-1 and top-5 error rates by 0.4% and 0.3%, respectively, as compared with the non overlapping scheme s = 2, z = 2, which produces output of equivalent dimensions. We generally observe during training that models with overlapping pooling find it slightly more dif- ficult to overfit."
+      },
+      {
+        "citation": 2,
+        "chunk_id": 147,
+        "source": "DCNN.pdf",
+        "page": 3,
+        "text": "4.4. Overlapping pooling Pooling layers in CNNs summarize the outputs of neighbor- ing groups of neurons in the same kernel map. Traditionally, the neighborhoods summarized by adjacent pooling units do not overlap (e.g., Refs.5, 13, 20). To be more precise, a pooling layer can be thought of as consisting of a grid of pooling units spaced s pixels apart, each summarizing a neighborhood of size z × z centered at the location of the pooling unit."
+      },
+      {
+        "citation": 3,
+        "chunk_id": 136,
+        "source": "DCNN.pdf",
+        "page": 3,
+        "text": "The magnitude of the effect demonstrated here varies with network architecture, but networks with ReLUs consistently learn several times faster than equivalents with saturating neurons. 0.75 Training error rate 0.5 0.25 0 0 5 10 15 20 25 30 35 Epochs average pooling on the Caltech-101 dataset. However, on this dataset the primary concern is preventing overfitting, so the effect they are observing is different from the accelerated ability to fit the training set which we report when using ReLUs."
+      },
+      {
+        "citation": 5,
+        "chunk_id": 148,
+        "source": "DCNN.pdf",
+        "page": 3,
+        "text": "If we set s = z, we obtain traditional local pooling as commonly employed in CNNs. If we set s < z, we obtain overlapping b The one-GPU net actually has the same number of kernels as the two-GPU net in the final convolutional layer. This is because most of the net’s param- eters are in the first fully connected layer, which takes the last convolutional layer as input."
+      }
+    ],
+    "semantic_support": "requires_manual_review"
+  },
+  "status": "completed",
+  "elapsed_seconds": 14.64
+}

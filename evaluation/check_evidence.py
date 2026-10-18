@@ -14,7 +14,7 @@ def main():
     project_dir = Path(__file__).resolve().parent.parent
 
     question_path = project_dir/"evaluation"/"questions.json"
-    chunks_path = project_dir/"data"/"processed"/"chunks.json"
+    chunks_path = project_dir/"data"/"processed"/"chunks_semantic.json"
 
     # 加载数据
     with open(question_path, "r", encoding="utf-8") as f:
@@ -32,15 +32,15 @@ def main():
             quote = normalize_text(evidence["quote"])
 
             matched_chunks = []
-            for i, chunk in enumerate(chunks):
-                if(
-                    chunk["source"] == evidence["source"]
-                    and chunk["page"] == evidence["page"]
+            for chunk in chunks:
+                if (
+                        chunk["source"] == evidence["source"]
+                        and chunk["page"] == evidence["page"]
                 ):
                     chunk_text = normalize_text(chunk["text"])
 
                     if quote in chunk_text:
-                        matched_chunks.append(i)
+                        matched_chunks.append(chunk["chunk_id"])
 
             print(f"Source: {evidence['source']}")
             print(f"Page: {evidence['page']}")

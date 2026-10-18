@@ -1,0 +1,1110 @@
+{
+  "question_id": "q5",
+  "query": "How do VGG and DCNN differ in their use of convolutional filter sizes?",
+  "run_provenance": "fresh full main pipeline",
+  "decomposition": {
+    "needs_decomposition": true,
+    "sub_queries": [
+      "According to the VGG paper, what convolutional filter sizes are used?",
+      "According to the DCNN paper, what convolutional filter sizes are used?"
+    ]
+  },
+  "selected_ids": [
+    238,
+    250,
+    158,
+    233,
+    224,
+    159,
+    248,
+    219,
+    157,
+    232
+  ],
+  "context": "Original passages:\n[1] Source: VGG.pdf | Page: 2 | Section: 2.2 CONFIGURATIONS\n2.1, and differ only in the depth: from 11 weight layers in the network A (8 conv. and 3 FC layers) to 19 weight layers in the network E (16 conv. and 3 FC layers). The width of conv. layers (the number of channels) is rather small, starting from 64 in the ﬁrst layer and then increasing by a factor of 2 after each max-pooling layer, until it reaches 512. In Table 2 we report the number of parameters for each conﬁguration.\n\n[2] Source: VGG.pdf | Page: 4 | Section: 2.3 DISCUSSION\nPublished as a conference paper at ICLR 2015 (22 weight layers) and small convolution ﬁlters (apart from 3 × 3, they also use 1 × 1 and 5 × 5 convolutions). Their network topology is, however, more complex than ours, and the spatial reso- lution of the feature maps is reduced more aggressively in the ﬁrst layers to decrease the amount of computation.\n\n[3] Source: DCNN.pdf | Page: 4 | Section: 4.5. Overall architecture\nThe sec- ond convolutional layer takes as input the (response-nor- malized and pooled) output of the first convolutional layer and filters it with 256 kernels of size 5 × 5 × 48. The third, fourth, and fifth convolutional layers are connected to one another without any intervening pooling or normalization layers.\n\n[4] Source: VGG.pdf | Page: 2 | Section: 2.1 ARCHITECTURE\nIn one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.\n\n[5] Source: VGG.pdf | Page: 1 | Section: 1 INTRODUCTION\nAnother line of improvements dealt with training and testing the networks densely over the whole image and over multiple scales (Sermanet et al., 2014; Howard, 2014). In this paper, we address another important aspect of ConvNet architecture design – its depth. To this end, we ﬁx other parameters of the architecture, and steadily increase the depth of the network by adding more convolutional layers, which is feasible due to the use of very small (3 × 3) convolution ﬁlters in all layers.\n\n[6] Source: DCNN.pdf | Page: 4 | Section: 4.5. Overall architecture\nThe third convolutional layer has 384 kernels of size 3 × 3 × 256 connected to the (normalized, pooled) outputs 3 3 3 3 dense 2048 2048 192 192 128 13 13 3 3 3 dense dense 13 13 3 1000 Max 192 192 128 2048 2048 pooling of the second convolutional layer. The fourth convolu- tional layer has 384 kernels of size 3 × 3 × 192, and the fifth convolutional layer has 256 kernels of size 3 × 3 × 192. The fully connected layers have 4096 neurons each.\n\n[7] Source: VGG.pdf | Page: 3 | Section: 2.3 DISCUSSION\nlayers have recently been utilised in the “Network in Network” architecture of Lin et al. Small-size convolution ﬁlters have been previously used by Ciresan et al. (2011), but their nets are signiﬁcantly less deep than ours, and they did not evaluate on the large-scale ILSVRC dataset.\n\n[8] Source: VGG.pdf | Page: 1 | Section: None\nOur main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3 × 3) convolution ﬁlters, which shows that a signiﬁcant improvement on the prior-art conﬁgurations can be achieved by pushing the depth to 16–19 weight layers. These ﬁndings were the basis of our ImageNet Challenge 2014 submission, where our team secured the ﬁrst and the second places in the localisa- tion and classiﬁcation tracks respectively.\n\n[9] Source: DCNN.pdf | Page: 4 | Section: 4.5. Overall architecture\nMax-pooling layers, of the kind described in Section 4.4, follow both response-normal- ization layers as well as the fifth convolutional layer. The ReLU non linearity is applied to the output of every convolu- tional and fully connected layer. The first convolutional layer filters the 224 × 224 × 3 input image with 96 kernels of size 11 × 11 × 3 with a stride of 4 pixels (this is the distance between the receptive field centers of neighboring neurons in a kernel map).\n\n[10] Source: VGG.pdf | Page: 2 | Section: 2.1 ARCHITECTURE\n2.1 ARCHITECTURE During training, the input to our ConvNets is a ﬁxed-size 224 × 224 RGB image. The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel. The image is passed through a stack of convolutional (conv.) layers, where we use ﬁlters with a very small receptive ﬁeld: 3 × 3 (which is the smallest size to capture the notion of left/right, up/down, center).\n\n[11] Source: VGG.pdf | Page: 3 | Section: 2.3 DISCUSSION\n(2014) applied deep ConvNets (11 weight layers) to the task of street number recognition, and showed that the increased depth led to better performance. GoogLeNet (Szegedy et al., 2014), a top-performing entry of the ILSVRC-2014 classiﬁcation task, was developed independently of our work, but is similar in that it is based on very deep ConvNets\n\n[12] Source: DCNN.pdf | Page: 4 | Section: 4.5. Overall architecture\nOur net- work maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.\n\nEvidence guidance:\n- Rule-based subject attribution: GoogLeNet; passage: “Published as a conference paper at ICLR 2015 (22 weight layers) and small convolution ﬁlters (apart from 3 × 3, they also use 1 × 1 and 5 × 5 convolutions).” [2][11]\n- Rule-based subject attribution: GoogLeNet; passage: “Their network topology is, however, more complex than ours, and the spatial reso- lution of the feature maps is reduced more aggressively in the ﬁrst layers to decrease the amount of computation.” [2][11]\n- DCNN: convolutional layer 2; spatial kernel size 5×5; 256 kernels; 48 channels per kernel. [3][12]\n- DCNN: convolutional layer 3; spatial kernel size 3×3; 384 kernels; 256 channels per kernel. [6][12]\n- DCNN: convolutional layer 4; spatial kernel size 3×3; 384 kernels; 192 channels per kernel. [6][12]\n- DCNN: convolutional layer 5; spatial kernel size 3×3; 256 kernels; 192 channels per kernel. [6][12]\n- DCNN: convolutional layer 1; spatial kernel size 11×11; 96 kernels; 3 channels per kernel. [9][12]",
+  "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\nContext:\nOriginal passages:\n[1] Source: VGG.pdf | Page: 2 | Section: 2.2 CONFIGURATIONS\n2.1, and differ only in the depth: from 11 weight layers in the network A (8 conv. and 3 FC layers) to 19 weight layers in the network E (16 conv. and 3 FC layers). The width of conv. layers (the number of channels) is rather small, starting from 64 in the ﬁrst layer and then increasing by a factor of 2 after each max-pooling layer, until it reaches 512. In Table 2 we report the number of parameters for each conﬁguration.\n\n[2] Source: VGG.pdf | Page: 4 | Section: 2.3 DISCUSSION\nPublished as a conference paper at ICLR 2015 (22 weight layers) and small convolution ﬁlters (apart from 3 × 3, they also use 1 × 1 and 5 × 5 convolutions). Their network topology is, however, more complex than ours, and the spatial reso- lution of the feature maps is reduced more aggressively in the ﬁrst layers to decrease the amount of computation.\n\n[3] Source: DCNN.pdf | Page: 4 | Section: 4.5. Overall architecture\nThe sec- ond convolutional layer takes as input the (response-nor- malized and pooled) output of the first convolutional layer and filters it with 256 kernels of size 5 × 5 × 48. The third, fourth, and fifth convolutional layers are connected to one another without any intervening pooling or normalization layers.\n\n[4] Source: VGG.pdf | Page: 2 | Section: 2.1 ARCHITECTURE\nIn one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.\n\n[5] Source: VGG.pdf | Page: 1 | Section: 1 INTRODUCTION\nAnother line of improvements dealt with training and testing the networks densely over the whole image and over multiple scales (Sermanet et al., 2014; Howard, 2014). In this paper, we address another important aspect of ConvNet architecture design – its depth. To this end, we ﬁx other parameters of the architecture, and steadily increase the depth of the network by adding more convolutional layers, which is feasible due to the use of very small (3 × 3) convolution ﬁlters in all layers.\n\n[6] Source: DCNN.pdf | Page: 4 | Section: 4.5. Overall architecture\nThe third convolutional layer has 384 kernels of size 3 × 3 × 256 connected to the (normalized, pooled) outputs 3 3 3 3 dense 2048 2048 192 192 128 13 13 3 3 3 dense dense 13 13 3 1000 Max 192 192 128 2048 2048 pooling of the second convolutional layer. The fourth convolu- tional layer has 384 kernels of size 3 × 3 × 192, and the fifth convolutional layer has 256 kernels of size 3 × 3 × 192. The fully connected layers have 4096 neurons each.\n\n[7] Source: VGG.pdf | Page: 3 | Section: 2.3 DISCUSSION\nlayers have recently been utilised in the “Network in Network” architecture of Lin et al. Small-size convolution ﬁlters have been previously used by Ciresan et al. (2011), but their nets are signiﬁcantly less deep than ours, and they did not evaluate on the large-scale ILSVRC dataset.\n\n[8] Source: VGG.pdf | Page: 1 | Section: None\nOur main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3 × 3) convolution ﬁlters, which shows that a signiﬁcant improvement on the prior-art conﬁgurations can be achieved by pushing the depth to 16–19 weight layers. These ﬁndings were the basis of our ImageNet Challenge 2014 submission, where our team secured the ﬁrst and the second places in the localisa- tion and classiﬁcation tracks respectively.\n\n[9] Source: DCNN.pdf | Page: 4 | Section: 4.5. Overall architecture\nMax-pooling layers, of the kind described in Section 4.4, follow both response-normal- ization layers as well as the fifth convolutional layer. The ReLU non linearity is applied to the output of every convolu- tional and fully connected layer. The first convolutional layer filters the 224 × 224 × 3 input image with 96 kernels of size 11 × 11 × 3 with a stride of 4 pixels (this is the distance between the receptive field centers of neighboring neurons in a kernel map).\n\n[10] Source: VGG.pdf | Page: 2 | Section: 2.1 ARCHITECTURE\n2.1 ARCHITECTURE During training, the input to our ConvNets is a ﬁxed-size 224 × 224 RGB image. The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel. The image is passed through a stack of convolutional (conv.) layers, where we use ﬁlters with a very small receptive ﬁeld: 3 × 3 (which is the smallest size to capture the notion of left/right, up/down, center).\n\n[11] Source: VGG.pdf | Page: 3 | Section: 2.3 DISCUSSION\n(2014) applied deep ConvNets (11 weight layers) to the task of street number recognition, and showed that the increased depth led to better performance. GoogLeNet (Szegedy et al., 2014), a top-performing entry of the ILSVRC-2014 classiﬁcation task, was developed independently of our work, but is similar in that it is based on very deep ConvNets\n\n[12] Source: DCNN.pdf | Page: 4 | Section: 4.5. Overall architecture\nOur net- work maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.\n\nEvidence guidance:\n- Rule-based subject attribution: GoogLeNet; passage: “Published as a conference paper at ICLR 2015 (22 weight layers) and small convolution ﬁlters (apart from 3 × 3, they also use 1 × 1 and 5 × 5 convolutions).” [2][11]\n- Rule-based subject attribution: GoogLeNet; passage: “Their network topology is, however, more complex than ours, and the spatial reso- lution of the feature maps is reduced more aggressively in the ﬁrst layers to decrease the amount of computation.” [2][11]\n- DCNN: convolutional layer 2; spatial kernel size 5×5; 256 kernels; 48 channels per kernel. [3][12]\n- DCNN: convolutional layer 3; spatial kernel size 3×3; 384 kernels; 256 channels per kernel. [6][12]\n- DCNN: convolutional layer 4; spatial kernel size 3×3; 384 kernels; 192 channels per kernel. [6][12]\n- DCNN: convolutional layer 5; spatial kernel size 3×3; 256 kernels; 192 channels per kernel. [6][12]\n- DCNN: convolutional layer 1; spatial kernel size 11×11; 96 kernels; 3 channels per kernel. [9][12]\n\nQuestion:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages.\n\nAnswer:",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": "1, and differ only in the depth: from 11 weight layers in the network A (8 conv.",
+        "evidence_start": 2,
+        "evidence_end": 82,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            238,
+            237
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 238,
+        "page": 2,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " and 3 FC layers) to 19 weight layers in the network E (16 conv.",
+        "evidence_start": 82,
+        "evidence_end": 146,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            238,
+            237
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 238,
+        "page": 2,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " layers (the number of channels) is rather small, starting from 64 in the ﬁrst layer and then increasing by a factor of 2 after each max-pooling layer, until it reaches 512.",
+        "evidence_start": 183,
+        "evidence_end": 356,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            238,
+            237
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 238,
+        "page": 2,
+        "citations": [
+          1
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In Table 2 we report the number of parameters for each conﬁguration.",
+        "evidence_start": 356,
+        "evidence_end": 425,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            238,
+            237
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 238,
+        "page": 2,
+        "citations": [
+          1
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Published as a conference paper at ICLR 2015 (22 weight layers) and small convolution ﬁlters (apart from 3 × 3, they also use 1 × 1 and 5 × 5 convolutions).",
+        "evidence_start": 0,
+        "evidence_end": 156,
+        "subject": "GoogLeNet",
+        "identity": {
+          "subject": "GoogLeNet",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            250,
+            249
+          ],
+          "identity_quote": "(2014) applied deep ConvNets (11 weight layers) to the task of street number recognition, and showed that the increased depth led to better performance. GoogLeNet (Szegedy et al., 2014), a top-performing entry of the ILSVRC-2014 classiﬁcation task, was developed independently of our work, but is similar in that it is based on very deep ConvNets",
+          "identity_chunk_id": 249
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 250,
+        "page": 4,
+        "citations": [
+          2,
+          11
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Their network topology is, however, more complex than ours, and the spatial reso- lution of the feature maps is reduced more aggressively in the ﬁrst layers to decrease the amount of computation.",
+        "evidence_start": 156,
+        "evidence_end": 352,
+        "subject": "GoogLeNet",
+        "identity": {
+          "subject": "GoogLeNet",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            250,
+            249
+          ],
+          "identity_quote": "(2014) applied deep ConvNets (11 weight layers) to the task of street number recognition, and showed that the increased depth led to better performance. GoogLeNet (Szegedy et al., 2014), a top-performing entry of the ILSVRC-2014 classiﬁcation task, was developed independently of our work, but is similar in that it is based on very deep ConvNets",
+          "identity_chunk_id": 249
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 250,
+        "page": 4,
+        "citations": [
+          2,
+          11
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "convolution_specification",
+        "layer": 2,
+        "kernel_count": 256,
+        "spatial_kernel_size": [
+          5,
+          5
+        ],
+        "channels_per_kernel": 48,
+        "evidence_quote": "The sec- ond convolutional layer takes as input the (response-nor- malized and pooled) output of the first convolutional layer and filters it with 256 kernels of size 5 × 5 × 48",
+        "evidence_start": 0,
+        "evidence_end": 177,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            158,
+            157,
+            156,
+            155
+          ],
+          "identity_quote": "Our net- work maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.",
+          "identity_chunk_id": 155
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 158,
+        "page": 4,
+        "citations": [
+          3,
+          12
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity).",
+        "evidence_start": 0,
+        "evidence_end": 165,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            233
+          ],
+          "identity_quote": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.",
+          "identity_chunk_id": 233
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 233,
+        "page": 2,
+        "citations": [
+          4
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv.",
+        "evidence_start": 165,
+        "evidence_end": 237,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            233
+          ],
+          "identity_quote": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity).",
+          "identity_chunk_id": 233
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 233,
+        "page": 2,
+        "citations": [
+          4
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " the padding is 1 pixel for 3 × 3 conv.",
+        "evidence_start": 322,
+        "evidence_end": 361,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            233
+          ],
+          "identity_quote": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e.",
+          "identity_chunk_id": 233
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 233,
+        "page": 2,
+        "citations": [
+          4
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv.",
+        "evidence_start": 361,
+        "evidence_end": 450,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            233
+          ],
+          "identity_quote": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv.",
+          "identity_chunk_id": 233
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 233,
+        "page": 2,
+        "citations": [
+          4
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In this paper, we address another important aspect of ConvNet architecture design – its depth.",
+        "evidence_start": 166,
+        "evidence_end": 261,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            224
+          ],
+          "identity_quote": "Another line of improvements dealt with training and testing the networks densely over the whole image and over multiple scales (Sermanet et al., 2014; Howard, 2014). In this paper, we address another important aspect of ConvNet architecture design – its depth. To this end, we ﬁx other parameters of the architecture, and steadily increase the depth of the network by adding more convolutional layers, which is feasible due to the use of very small (3 × 3) convolution ﬁlters in all layers.",
+          "identity_chunk_id": 224
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 224,
+        "page": 1,
+        "citations": [
+          5
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " To this end, we ﬁx other parameters of the architecture, and steadily increase the depth of the network by adding more convolutional layers, which is feasible due to the use of very small (3 × 3) convolution ﬁlters in all layers.",
+        "evidence_start": 261,
+        "evidence_end": 491,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            224
+          ],
+          "identity_quote": "Another line of improvements dealt with training and testing the networks densely over the whole image and over multiple scales (Sermanet et al., 2014; Howard, 2014). In this paper, we address another important aspect of ConvNet architecture design – its depth. To this end, we ﬁx other parameters of the architecture, and steadily increase the depth of the network by adding more convolutional layers, which is feasible due to the use of very small (3 × 3) convolution ﬁlters in all layers.",
+          "identity_chunk_id": 224
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 224,
+        "page": 1,
+        "citations": [
+          5
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "convolution_specification",
+        "layer": 3,
+        "kernel_count": 384,
+        "spatial_kernel_size": [
+          3,
+          3
+        ],
+        "channels_per_kernel": 256,
+        "evidence_quote": "The third convolutional layer has 384 kernels of size 3 × 3 × 256",
+        "evidence_start": 0,
+        "evidence_end": 65,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            159,
+            158,
+            157,
+            156,
+            155
+          ],
+          "identity_quote": "Our net- work maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.",
+          "identity_chunk_id": 155
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 159,
+        "page": 4,
+        "citations": [
+          6,
+          12
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "convolution_specification",
+        "layer": 4,
+        "kernel_count": 384,
+        "spatial_kernel_size": [
+          3,
+          3
+        ],
+        "channels_per_kernel": 192,
+        "evidence_quote": "The fourth convolu- tional layer has 384 kernels of size 3 × 3 × 192",
+        "evidence_start": 254,
+        "evidence_end": 322,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            159,
+            158,
+            157,
+            156,
+            155
+          ],
+          "identity_quote": "Our net- work maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.",
+          "identity_chunk_id": 155
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 159,
+        "page": 4,
+        "citations": [
+          6,
+          12
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "convolution_specification",
+        "layer": 5,
+        "kernel_count": 256,
+        "spatial_kernel_size": [
+          3,
+          3
+        ],
+        "channels_per_kernel": 192,
+        "evidence_quote": ", and the fifth convolutional layer has 256 kernels of size 3 × 3 × 192",
+        "evidence_start": 322,
+        "evidence_end": 393,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            159,
+            158,
+            157,
+            156,
+            155
+          ],
+          "identity_quote": "Our net- work maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.",
+          "identity_chunk_id": 155
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 159,
+        "page": 4,
+        "citations": [
+          6,
+          12
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "layers have recently been utilised in the “Network in Network” architecture of Lin et al.",
+        "evidence_start": 0,
+        "evidence_end": 89,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            248,
+            247,
+            246,
+            245,
+            244
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 248,
+        "page": 3,
+        "citations": [
+          7
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Small-size convolution ﬁlters have been previously used by Ciresan et al.",
+        "evidence_start": 89,
+        "evidence_end": 163,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            248,
+            247,
+            246,
+            245,
+            244
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 248,
+        "page": 3,
+        "citations": [
+          7
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " (2011), but their nets are signiﬁcantly less deep than ours, and they did not evaluate on the large-scale ILSVRC dataset.",
+        "evidence_start": 163,
+        "evidence_end": 285,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            248,
+            247,
+            246,
+            245,
+            244
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 248,
+        "page": 3,
+        "citations": [
+          7
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Our main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3 × 3) convolution ﬁlters, which shows that a signiﬁcant improvement on the prior-art conﬁgurations can be achieved by pushing the depth to 16–19 weight layers.",
+        "evidence_start": 0,
+        "evidence_end": 278,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            219
+          ],
+          "identity_quote": "Our main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3 × 3) convolution ﬁlters, which shows that a signiﬁcant improvement on the prior-art conﬁgurations can be achieved by pushing the depth to 16–19 weight layers. These ﬁndings were the basis of our ImageNet Challenge 2014 submission, where our team secured the ﬁrst and the second places in the localisa- tion and classiﬁcation tracks respectively.",
+          "identity_chunk_id": 219
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 219,
+        "page": 1,
+        "citations": [
+          8
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " These ﬁndings were the basis of our ImageNet Challenge 2014 submission, where our team secured the ﬁrst and the second places in the localisa- tion and classiﬁcation tracks respectively.",
+        "evidence_start": 278,
+        "evidence_end": 465,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            219
+          ],
+          "identity_quote": "Our main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3 × 3) convolution ﬁlters, which shows that a signiﬁcant improvement on the prior-art conﬁgurations can be achieved by pushing the depth to 16–19 weight layers.",
+          "identity_chunk_id": 219
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 219,
+        "page": 1,
+        "citations": [
+          8
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "convolution_specification",
+        "layer": 1,
+        "kernel_count": 96,
+        "spatial_kernel_size": [
+          11,
+          11
+        ],
+        "channels_per_kernel": 3,
+        "evidence_quote": "The first convolutional layer filters the 224 × 224 × 3 input image with 96 kernels of size 11 × 11 × 3",
+        "evidence_start": 244,
+        "evidence_end": 347,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            157,
+            156,
+            155
+          ],
+          "identity_quote": "Our net- work maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.",
+          "identity_chunk_id": 155
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 157,
+        "page": 4,
+        "citations": [
+          9,
+          12
+        ],
+        "record_id": "E22"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "1 ARCHITECTURE During training, the input to our ConvNets is a ﬁxed-size 224 × 224 RGB image.",
+        "evidence_start": 2,
+        "evidence_end": 95,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            232
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 232,
+        "page": 2,
+        "citations": [
+          10
+        ],
+        "record_id": "E23"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel.",
+        "evidence_start": 95,
+        "evidence_end": 208,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            232
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 232,
+        "page": 2,
+        "citations": [
+          10
+        ],
+        "record_id": "E24"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": ") layers, where we use ﬁlters with a very small receptive ﬁeld: 3 × 3 (which is the smallest size to capture the notion of left/right, up/down, center).",
+        "evidence_start": 268,
+        "evidence_end": 420,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            232
+          ],
+          "identity_quote": "2.1 ARCHITECTURE During training, the input to our ConvNets is a ﬁxed-size 224 × 224 RGB image. The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel. The image is passed through a stack of convolutional (conv.) layers, where we use ﬁlters with a very small receptive ﬁeld: 3 × 3 (which is the smallest size to capture the notion of left/right, up/down, center).",
+          "identity_chunk_id": 232
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 232,
+        "page": 2,
+        "citations": [
+          10
+        ],
+        "record_id": "E25"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 238,
+        "text": "2.1, and differ only in the depth: from 11 weight layers in the network A (8 conv. and 3 FC layers) to 19 weight layers in the network E (16 conv. and 3 FC layers). The width of conv. layers (the number of channels) is rather small, starting from 64 in the ﬁrst layer and then increasing by a factor of 2 after each max-pooling layer, until it reaches 512. In Table 2 we report the number of parameters for each conﬁguration.",
+        "source": "VGG.pdf",
+        "page": 2,
+        "title": "VGG",
+        "section": "2.2 CONFIGURATIONS"
+      },
+      {
+        "chunk_id": 250,
+        "text": "Published as a conference paper at ICLR 2015 (22 weight layers) and small convolution ﬁlters (apart from 3 × 3, they also use 1 × 1 and 5 × 5 convolutions). Their network topology is, however, more complex than ours, and the spatial reso- lution of the feature maps is reduced more aggressively in the ﬁrst layers to decrease the amount of computation.",
+        "source": "VGG.pdf",
+        "page": 4,
+        "title": "VGG",
+        "section": "2.3 DISCUSSION"
+      },
+      {
+        "chunk_id": 158,
+        "text": "The sec- ond convolutional layer takes as input the (response-nor- malized and pooled) output of the first convolutional layer and filters it with 256 kernels of size 5 × 5 × 48. The third, fourth, and fifth convolutional layers are connected to one another without any intervening pooling or normalization layers.",
+        "source": "DCNN.pdf",
+        "page": 4,
+        "title": "DCNN",
+        "section": "4.5. Overall architecture"
+      },
+      {
+        "chunk_id": 233,
+        "text": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.",
+        "source": "VGG.pdf",
+        "page": 2,
+        "title": "VGG",
+        "section": "2.1 ARCHITECTURE"
+      },
+      {
+        "chunk_id": 224,
+        "text": "Another line of improvements dealt with training and testing the networks densely over the whole image and over multiple scales (Sermanet et al., 2014; Howard, 2014). In this paper, we address another important aspect of ConvNet architecture design – its depth. To this end, we ﬁx other parameters of the architecture, and steadily increase the depth of the network by adding more convolutional layers, which is feasible due to the use of very small (3 × 3) convolution ﬁlters in all layers.",
+        "source": "VGG.pdf",
+        "page": 1,
+        "title": "VGG",
+        "section": "1 INTRODUCTION"
+      },
+      {
+        "chunk_id": 159,
+        "text": "The third convolutional layer has 384 kernels of size 3 × 3 × 256 connected to the (normalized, pooled) outputs 3 3 3 3 dense 2048 2048 192 192 128 13 13 3 3 3 dense dense 13 13 3 1000 Max 192 192 128 2048 2048 pooling of the second convolutional layer. The fourth convolu- tional layer has 384 kernels of size 3 × 3 × 192, and the fifth convolutional layer has 256 kernels of size 3 × 3 × 192. The fully connected layers have 4096 neurons each.",
+        "source": "DCNN.pdf",
+        "page": 4,
+        "title": "DCNN",
+        "section": "4.5. Overall architecture"
+      },
+      {
+        "chunk_id": 248,
+        "text": "layers have recently been utilised in the “Network in Network” architecture of Lin et al. Small-size convolution ﬁlters have been previously used by Ciresan et al. (2011), but their nets are signiﬁcantly less deep than ours, and they did not evaluate on the large-scale ILSVRC dataset.",
+        "source": "VGG.pdf",
+        "page": 3,
+        "title": "VGG",
+        "section": "2.3 DISCUSSION"
+      },
+      {
+        "chunk_id": 219,
+        "text": "Our main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3 × 3) convolution ﬁlters, which shows that a signiﬁcant improvement on the prior-art conﬁgurations can be achieved by pushing the depth to 16–19 weight layers. These ﬁndings were the basis of our ImageNet Challenge 2014 submission, where our team secured the ﬁrst and the second places in the localisa- tion and classiﬁcation tracks respectively.",
+        "source": "VGG.pdf",
+        "page": 1,
+        "title": "VGG",
+        "section": null
+      },
+      {
+        "chunk_id": 157,
+        "text": "Max-pooling layers, of the kind described in Section 4.4, follow both response-normal- ization layers as well as the fifth convolutional layer. The ReLU non linearity is applied to the output of every convolu- tional and fully connected layer. The first convolutional layer filters the 224 × 224 × 3 input image with 96 kernels of size 11 × 11 × 3 with a stride of 4 pixels (this is the distance between the receptive field centers of neighboring neurons in a kernel map).",
+        "source": "DCNN.pdf",
+        "page": 4,
+        "title": "DCNN",
+        "section": "4.5. Overall architecture"
+      },
+      {
+        "chunk_id": 232,
+        "text": "2.1 ARCHITECTURE During training, the input to our ConvNets is a ﬁxed-size 224 × 224 RGB image. The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel. The image is passed through a stack of convolutional (conv.) layers, where we use ﬁlters with a very small receptive ﬁeld: 3 × 3 (which is the smallest size to capture the notion of left/right, up/down, center).",
+        "source": "VGG.pdf",
+        "page": 2,
+        "title": "VGG",
+        "section": "2.1 ARCHITECTURE"
+      },
+      {
+        "chunk_id": 249,
+        "text": "(2014) applied deep ConvNets (11 weight layers) to the task of street number recognition, and showed that the increased depth led to better performance. GoogLeNet (Szegedy et al., 2014), a top-performing entry of the ILSVRC-2014 classiﬁcation task, was developed independently of our work, but is similar in that it is based on very deep ConvNets",
+        "source": "VGG.pdf",
+        "page": 3,
+        "title": "VGG",
+        "section": "2.3 DISCUSSION"
+      },
+      {
+        "chunk_id": 155,
+        "text": "Our net- work maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.",
+        "source": "DCNN.pdf",
+        "page": 4,
+        "title": "DCNN",
+        "section": "4.5. Overall architecture"
+      }
+    ],
+    "selected_ids": [
+      238,
+      250,
+      158,
+      233,
+      224,
+      159,
+      248,
+      219,
+      157,
+      232
+    ]
+  },
+  "answer": "VGG predominantly uses very small 3 × 3 convolution filters across its layers, a design choice it says is feasible because of those small filters [5][10]; however, one of its configurations also utilizes 1 × 1 convolution filters, which can be seen as a linear transformation of the input channels [4]. By contrast, the DCNN uses larger and more varied filter sizes: its first convolutional layer filters the 224 × 224 × 3 input with 96 kernels of size 11 × 11 × 3 [9]; its second convolutional layer uses 256 kernels of size 5 × 5 × 48 [3]; its third convolutional layer has 384 kernels of size 3 × 3 × 256 [6]; its fourth convolutional layer has 384 kernels of size 3 × 3 × 192 [6]; and its fifth convolutional layer has 256 kernels of size 3 × 3 × 192 [6].",
+  "original_answer": "VGG predominantly uses very small 3 × 3 convolution filters across its layers, a design choice it says is feasible because of those small filters [5][10]; however, one of its configurations also utilizes 1 × 1 convolution filters, which can be seen as a linear transformation of the input channels [4]. By contrast, the DCNN uses larger and more varied filter sizes: its first convolutional layer filters the 224 × 224 × 3 input with 96 kernels of size 11 × 11 × 3 [9]; its second convolutional layer uses 256 kernels of size 5 × 5 × 48 [3]; its third convolutional layer has 384 kernels of size 3 × 3 × 256 [6]; its fourth convolutional layer has 384 kernels of size 3 × 3 × 192 [6]; and its fifth convolutional layer has 256 kernels of size 3 × 3 × 192 [6].",
+  "citation_validation": {
+    "answer": "VGG predominantly uses very small 3 × 3 convolution filters across its layers, a design choice it says is feasible because of those small filters [5][10]; however, one of its configurations also utilizes 1 × 1 convolution filters, which can be seen as a linear transformation of the input channels [4]. By contrast, the DCNN uses larger and more varied filter sizes: its first convolutional layer filters the 224 × 224 × 3 input with 96 kernels of size 11 × 11 × 3 [9]; its second convolutional layer uses 256 kernels of size 5 × 5 × 48 [3]; its third convolutional layer has 384 kernels of size 3 × 3 × 256 [6]; its fourth convolutional layer has 384 kernels of size 3 × 3 × 192 [6]; and its fifth convolutional layer has 256 kernels of size 3 × 3 × 192 [6].",
+    "original_answer": "VGG predominantly uses very small 3 × 3 convolution filters across its layers, a design choice it says is feasible because of those small filters [5][10]; however, one of its configurations also utilizes 1 × 1 convolution filters, which can be seen as a linear transformation of the input channels [4]. By contrast, the DCNN uses larger and more varied filter sizes: its first convolutional layer filters the 224 × 224 × 3 input with 96 kernels of size 11 × 11 × 3 [9]; its second convolutional layer uses 256 kernels of size 5 × 5 × 48 [3]; its third convolutional layer has 384 kernels of size 3 × 3 × 256 [6]; its fourth convolutional layer has 384 kernels of size 3 × 3 × 192 [6]; and its fifth convolutional layer has 256 kernels of size 3 × 3 × 192 [6].",
+    "repair_candidate": null,
+    "initial_check": {
+      "cited_numbers": [
+        3,
+        4,
+        5,
+        6,
+        9,
+        10
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 3,
+          "chunk_id": 158,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "text": "The sec- ond convolutional layer takes as input the (response-nor- malized and pooled) output of the first convolutional layer and filters it with 256 kernels of size 5 × 5 × 48. The third, fourth, and fifth convolutional layers are connected to one another without any intervening pooling or normalization layers."
+        },
+        {
+          "citation": 4,
+          "chunk_id": 233,
+          "source": "VGG.pdf",
+          "page": 2,
+          "text": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv."
+        },
+        {
+          "citation": 5,
+          "chunk_id": 224,
+          "source": "VGG.pdf",
+          "page": 1,
+          "text": "Another line of improvements dealt with training and testing the networks densely over the whole image and over multiple scales (Sermanet et al., 2014; Howard, 2014). In this paper, we address another important aspect of ConvNet architecture design – its depth. To this end, we ﬁx other parameters of the architecture, and steadily increase the depth of the network by adding more convolutional layers, which is feasible due to the use of very small (3 × 3) convolution ﬁlters in all layers."
+        },
+        {
+          "citation": 6,
+          "chunk_id": 159,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "text": "The third convolutional layer has 384 kernels of size 3 × 3 × 256 connected to the (normalized, pooled) outputs 3 3 3 3 dense 2048 2048 192 192 128 13 13 3 3 3 dense dense 13 13 3 1000 Max 192 192 128 2048 2048 pooling of the second convolutional layer. The fourth convolu- tional layer has 384 kernels of size 3 × 3 × 192, and the fifth convolutional layer has 256 kernels of size 3 × 3 × 192. The fully connected layers have 4096 neurons each."
+        },
+        {
+          "citation": 9,
+          "chunk_id": 157,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "text": "Max-pooling layers, of the kind described in Section 4.4, follow both response-normal- ization layers as well as the fifth convolutional layer. The ReLU non linearity is applied to the output of every convolu- tional and fully connected layer. The first convolutional layer filters the 224 × 224 × 3 input image with 96 kernels of size 11 × 11 × 3 with a stride of 4 pixels (this is the distance between the receptive field centers of neighboring neurons in a kernel map)."
+        },
+        {
+          "citation": 10,
+          "chunk_id": 232,
+          "source": "VGG.pdf",
+          "page": 2,
+          "text": "2.1 ARCHITECTURE During training, the input to our ConvNets is a ﬁxed-size 224 × 224 RGB image. The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel. The image is passed through a stack of convolutional (conv.) layers, where we use ﬁlters with a very small receptive ﬁeld: 3 × 3 (which is the smallest size to capture the notion of left/right, up/down, center)."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "final_check": {
+      "cited_numbers": [
+        3,
+        4,
+        5,
+        6,
+        9,
+        10
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 3,
+          "chunk_id": 158,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "text": "The sec- ond convolutional layer takes as input the (response-nor- malized and pooled) output of the first convolutional layer and filters it with 256 kernels of size 5 × 5 × 48. The third, fourth, and fifth convolutional layers are connected to one another without any intervening pooling or normalization layers."
+        },
+        {
+          "citation": 4,
+          "chunk_id": 233,
+          "source": "VGG.pdf",
+          "page": 2,
+          "text": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv."
+        },
+        {
+          "citation": 5,
+          "chunk_id": 224,
+          "source": "VGG.pdf",
+          "page": 1,
+          "text": "Another line of improvements dealt with training and testing the networks densely over the whole image and over multiple scales (Sermanet et al., 2014; Howard, 2014). In this paper, we address another important aspect of ConvNet architecture design – its depth. To this end, we ﬁx other parameters of the architecture, and steadily increase the depth of the network by adding more convolutional layers, which is feasible due to the use of very small (3 × 3) convolution ﬁlters in all layers."
+        },
+        {
+          "citation": 6,
+          "chunk_id": 159,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "text": "The third convolutional layer has 384 kernels of size 3 × 3 × 256 connected to the (normalized, pooled) outputs 3 3 3 3 dense 2048 2048 192 192 128 13 13 3 3 3 dense dense 13 13 3 1000 Max 192 192 128 2048 2048 pooling of the second convolutional layer. The fourth convolu- tional layer has 384 kernels of size 3 × 3 × 192, and the fifth convolutional layer has 256 kernels of size 3 × 3 × 192. The fully connected layers have 4096 neurons each."
+        },
+        {
+          "citation": 9,
+          "chunk_id": 157,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "text": "Max-pooling layers, of the kind described in Section 4.4, follow both response-normal- ization layers as well as the fifth convolutional layer. The ReLU non linearity is applied to the output of every convolu- tional and fully connected layer. The first convolutional layer filters the 224 × 224 × 3 input image with 96 kernels of size 11 × 11 × 3 with a stride of 4 pixels (this is the distance between the receptive field centers of neighboring neurons in a kernel map)."
+        },
+        {
+          "citation": 10,
+          "chunk_id": 232,
+          "source": "VGG.pdf",
+          "page": 2,
+          "text": "2.1 ARCHITECTURE During training, the input to our ConvNets is a ﬁxed-size 224 × 224 RGB image. The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel. The image is passed through a stack of convolutional (conv.) layers, where we use ﬁlters with a very small receptive ﬁeld: 3 × 3 (which is the smallest size to capture the notion of left/right, up/down, center)."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "repair_attempted": false,
+    "repair_applied": false,
+    "repair_response": null,
+    "repair_prompt": null,
+    "unresolved_blocks": [],
+    "status": "not_needed",
+    "note": "Citation structure only; source relevance and claim meaning are not automatically verified."
+  },
+  "citation_structure": {
+    "cited_numbers": [
+      3,
+      4,
+      5,
+      6,
+      9,
+      10
+    ],
+    "invalid_numbers": [],
+    "malformed_markers": [],
+    "has_citations": true,
+    "require_citations": true,
+    "structure_passed": true,
+    "cited_sources": [
+      {
+        "citation": 3,
+        "chunk_id": 158,
+        "source": "DCNN.pdf",
+        "page": 4,
+        "text": "The sec- ond convolutional layer takes as input the (response-nor- malized and pooled) output of the first convolutional layer and filters it with 256 kernels of size 5 × 5 × 48. The third, fourth, and fifth convolutional layers are connected to one another without any intervening pooling or normalization layers."
+      },
+      {
+        "citation": 4,
+        "chunk_id": 233,
+        "source": "VGG.pdf",
+        "page": 2,
+        "text": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv."
+      },
+      {
+        "citation": 5,
+        "chunk_id": 224,
+        "source": "VGG.pdf",
+        "page": 1,
+        "text": "Another line of improvements dealt with training and testing the networks densely over the whole image and over multiple scales (Sermanet et al., 2014; Howard, 2014). In this paper, we address another important aspect of ConvNet architecture design – its depth. To this end, we ﬁx other parameters of the architecture, and steadily increase the depth of the network by adding more convolutional layers, which is feasible due to the use of very small (3 × 3) convolution ﬁlters in all layers."
+      },
+      {
+        "citation": 6,
+        "chunk_id": 159,
+        "source": "DCNN.pdf",
+        "page": 4,
+        "text": "The third convolutional layer has 384 kernels of size 3 × 3 × 256 connected to the (normalized, pooled) outputs 3 3 3 3 dense 2048 2048 192 192 128 13 13 3 3 3 dense dense 13 13 3 1000 Max 192 192 128 2048 2048 pooling of the second convolutional layer. The fourth convolu- tional layer has 384 kernels of size 3 × 3 × 192, and the fifth convolutional layer has 256 kernels of size 3 × 3 × 192. The fully connected layers have 4096 neurons each."
+      },
+      {
+        "citation": 9,
+        "chunk_id": 157,
+        "source": "DCNN.pdf",
+        "page": 4,
+        "text": "Max-pooling layers, of the kind described in Section 4.4, follow both response-normal- ization layers as well as the fifth convolutional layer. The ReLU non linearity is applied to the output of every convolu- tional and fully connected layer. The first convolutional layer filters the 224 × 224 × 3 input image with 96 kernels of size 11 × 11 × 3 with a stride of 4 pixels (this is the distance between the receptive field centers of neighboring neurons in a kernel map)."
+      },
+      {
+        "citation": 10,
+        "chunk_id": 232,
+        "source": "VGG.pdf",
+        "page": 2,
+        "text": "2.1 ARCHITECTURE During training, the input to our ConvNets is a ﬁxed-size 224 × 224 RGB image. The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel. The image is passed through a stack of convolutional (conv.) layers, where we use ﬁlters with a very small receptive ﬁeld: 3 × 3 (which is the smallest size to capture the notion of left/right, up/down, center)."
+      }
+    ],
+    "semantic_support": "requires_manual_review"
+  },
+  "status": "completed",
+  "api_calls": [
+    {
+      "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate exactly 2 or 3 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n",
+      "response": {
+        "answer": "{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}",
+        "requested_model": "cn:deepseek-v4.1-flash",
+        "reported_model": "deepseek-v4.1-flash",
+        "usage": {
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 380,
+          "cached_tokens": 380,
+          "completion_thinking_tokens": 0,
+          "completion_tokens": 54,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "credit": 0.01,
+          "prompt_cache_hit_tokens": 380,
+          "prompt_cache_miss_tokens": 134,
+          "prompt_cache_write_tokens": 0,
+          "prompt_tokens": 514,
+          "prompt_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 380,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "total_tokens": 568
+        },
+        "finish_reason": "stop",
+        "request_parameters": {
+          "model": "cn:deepseek-v4.1-flash",
+          "stream": false,
+          "thinking": {
+            "type": "disabled"
+          },
+          "temperature": 0,
+          "max_tokens": 4096
+        }
+      },
+      "elapsed_seconds": 1.65
+    },
+    {
+      "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\nContext:\nOriginal passages:\n[1] Source: VGG.pdf | Page: 2 | Section: 2.2 CONFIGURATIONS\n2.1, and differ only in the depth: from 11 weight layers in the network A (8 conv. and 3 FC layers) to 19 weight layers in the network E (16 conv. and 3 FC layers). The width of conv. layers (the number of channels) is rather small, starting from 64 in the ﬁrst layer and then increasing by a factor of 2 after each max-pooling layer, until it reaches 512. In Table 2 we report the number of parameters for each conﬁguration.\n\n[2] Source: VGG.pdf | Page: 4 | Section: 2.3 DISCUSSION\nPublished as a conference paper at ICLR 2015 (22 weight layers) and small convolution ﬁlters (apart from 3 × 3, they also use 1 × 1 and 5 × 5 convolutions). Their network topology is, however, more complex than ours, and the spatial reso- lution of the feature maps is reduced more aggressively in the ﬁrst layers to decrease the amount of computation.\n\n[3] Source: DCNN.pdf | Page: 4 | Section: 4.5. Overall architecture\nThe sec- ond convolutional layer takes as input the (response-nor- malized and pooled) output of the first convolutional layer and filters it with 256 kernels of size 5 × 5 × 48. The third, fourth, and fifth convolutional layers are connected to one another without any intervening pooling or normalization layers.\n\n[4] Source: VGG.pdf | Page: 2 | Section: 2.1 ARCHITECTURE\nIn one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.\n\n[5] Source: VGG.pdf | Page: 1 | Section: 1 INTRODUCTION\nAnother line of improvements dealt with training and testing the networks densely over the whole image and over multiple scales (Sermanet et al., 2014; Howard, 2014). In this paper, we address another important aspect of ConvNet architecture design – its depth. To this end, we ﬁx other parameters of the architecture, and steadily increase the depth of the network by adding more convolutional layers, which is feasible due to the use of very small (3 × 3) convolution ﬁlters in all layers.\n\n[6] Source: DCNN.pdf | Page: 4 | Section: 4.5. Overall architecture\nThe third convolutional layer has 384 kernels of size 3 × 3 × 256 connected to the (normalized, pooled) outputs 3 3 3 3 dense 2048 2048 192 192 128 13 13 3 3 3 dense dense 13 13 3 1000 Max 192 192 128 2048 2048 pooling of the second convolutional layer. The fourth convolu- tional layer has 384 kernels of size 3 × 3 × 192, and the fifth convolutional layer has 256 kernels of size 3 × 3 × 192. The fully connected layers have 4096 neurons each.\n\n[7] Source: VGG.pdf | Page: 3 | Section: 2.3 DISCUSSION\nlayers have recently been utilised in the “Network in Network” architecture of Lin et al. Small-size convolution ﬁlters have been previously used by Ciresan et al. (2011), but their nets are signiﬁcantly less deep than ours, and they did not evaluate on the large-scale ILSVRC dataset.\n\n[8] Source: VGG.pdf | Page: 1 | Section: None\nOur main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3 × 3) convolution ﬁlters, which shows that a signiﬁcant improvement on the prior-art conﬁgurations can be achieved by pushing the depth to 16–19 weight layers. These ﬁndings were the basis of our ImageNet Challenge 2014 submission, where our team secured the ﬁrst and the second places in the localisa- tion and classiﬁcation tracks respectively.\n\n[9] Source: DCNN.pdf | Page: 4 | Section: 4.5. Overall architecture\nMax-pooling layers, of the kind described in Section 4.4, follow both response-normal- ization layers as well as the fifth convolutional layer. The ReLU non linearity is applied to the output of every convolu- tional and fully connected layer. The first convolutional layer filters the 224 × 224 × 3 input image with 96 kernels of size 11 × 11 × 3 with a stride of 4 pixels (this is the distance between the receptive field centers of neighboring neurons in a kernel map).\n\n[10] Source: VGG.pdf | Page: 2 | Section: 2.1 ARCHITECTURE\n2.1 ARCHITECTURE During training, the input to our ConvNets is a ﬁxed-size 224 × 224 RGB image. The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel. The image is passed through a stack of convolutional (conv.) layers, where we use ﬁlters with a very small receptive ﬁeld: 3 × 3 (which is the smallest size to capture the notion of left/right, up/down, center).\n\n[11] Source: VGG.pdf | Page: 3 | Section: 2.3 DISCUSSION\n(2014) applied deep ConvNets (11 weight layers) to the task of street number recognition, and showed that the increased depth led to better performance. GoogLeNet (Szegedy et al., 2014), a top-performing entry of the ILSVRC-2014 classiﬁcation task, was developed independently of our work, but is similar in that it is based on very deep ConvNets\n\n[12] Source: DCNN.pdf | Page: 4 | Section: 4.5. Overall architecture\nOur net- work maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.\n\nEvidence guidance:\n- Rule-based subject attribution: GoogLeNet; passage: “Published as a conference paper at ICLR 2015 (22 weight layers) and small convolution ﬁlters (apart from 3 × 3, they also use 1 × 1 and 5 × 5 convolutions).” [2][11]\n- Rule-based subject attribution: GoogLeNet; passage: “Their network topology is, however, more complex than ours, and the spatial reso- lution of the feature maps is reduced more aggressively in the ﬁrst layers to decrease the amount of computation.” [2][11]\n- DCNN: convolutional layer 2; spatial kernel size 5×5; 256 kernels; 48 channels per kernel. [3][12]\n- DCNN: convolutional layer 3; spatial kernel size 3×3; 384 kernels; 256 channels per kernel. [6][12]\n- DCNN: convolutional layer 4; spatial kernel size 3×3; 384 kernels; 192 channels per kernel. [6][12]\n- DCNN: convolutional layer 5; spatial kernel size 3×3; 256 kernels; 192 channels per kernel. [6][12]\n- DCNN: convolutional layer 1; spatial kernel size 11×11; 96 kernels; 3 channels per kernel. [9][12]\n\nQuestion:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages.\n\nAnswer:",
+      "response": {
+        "answer": "VGG predominantly uses very small 3 × 3 convolution filters across its layers, a design choice it says is feasible because of those small filters [5][10]; however, one of its configurations also utilizes 1 × 1 convolution filters, which can be seen as a linear transformation of the input channels [4]. By contrast, the DCNN uses larger and more varied filter sizes: its first convolutional layer filters the 224 × 224 × 3 input with 96 kernels of size 11 × 11 × 3 [9]; its second convolutional layer uses 256 kernels of size 5 × 5 × 48 [3]; its third convolutional layer has 384 kernels of size 3 × 3 × 256 [6]; its fourth convolutional layer has 384 kernels of size 3 × 3 × 192 [6]; and its fifth convolutional layer has 256 kernels of size 3 × 3 × 192 [6].",
+        "requested_model": "cn:deepseek-v4.1-flash",
+        "reported_model": "deepseek-v4.1-flash",
+        "usage": {
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 1920,
+          "cached_tokens": 1920,
+          "completion_thinking_tokens": 0,
+          "completion_tokens": 196,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "credit": 0.01,
+          "prompt_cache_hit_tokens": 1920,
+          "prompt_cache_miss_tokens": 144,
+          "prompt_cache_write_tokens": 0,
+          "prompt_tokens": 2064,
+          "prompt_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 1920,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "total_tokens": 2260
+        },
+        "finish_reason": "stop",
+        "request_parameters": {
+          "model": "cn:deepseek-v4.1-flash",
+          "stream": false,
+          "thinking": {
+            "type": "disabled"
+          },
+          "temperature": 0,
+          "max_tokens": 4096
+        }
+      },
+      "elapsed_seconds": 2.2
+    }
+  ],
+  "model_calls": 2,
+  "evaluation_code_sha256": {
+    "main.py": "89831b9e3fa1ddf76fe7c20e8e58deedc0d0cd139b022eba8b4be97151a3877b",
+    "llm.py": "4a8ec8528b0662cd86a8fdc01feacfd361a276f04ae7b11c0e7574383a27eacc",
+    "evaluation/run_answer_evaluation.py": "29c3362af51597133214a9ba4d4d14831fdb5a3715c3a0a5d1197f9b4082cee5",
+    "src/api_llm.py": "11aa14f5435a079e83671b031d1159fbbc0ee8c760c61c9c0cc7afd0db6ae0a7",
+    "src/bm25_retriever.py": "7d2a046a4449cd6fdc371984db329534cedc7351d6196b9c218114ff0476906b",
+    "src/chunk_storage.py": "35d2b9b6c4d5a91d40ff242b85fbaa578bb75ed89501b1435a94dd8b0b5405b5",
+    "src/chunking_recursive.py": "f2fea89cace280329804cfe18d59a3663d21e3611129e0432518a37e4f691e72",
+    "src/chunking_semantic.py": "0f4947702f359a3967e2160ec098bf0cb1254eb2f7f77806ba874bb6955b0000",
+    "src/citation_validation.py": "c7e21d3070a454f08cf7944dd764a8e93dc7a3d83078863acd92db03e264b79c",
+    "src/embedding.py": "894fac2090929129e1883c858838e2255d69a6048a2e76d2387235321f2adade",
+    "src/grounded_evidence.py": "78a7e63512970492f4e52050cb8b2312e2658281acfe979eb4476516ff8c2663",
+    "src/hybrid_retriever.py": "ddd2315a558a062ac31fedb0e7a8d28af6a3df783450792825ff252d596de63c",
+    "src/hyde.py": "b575a07b016e4803de33d151eb90cdff1950b970763d69ba4e2f23b1352d3e31",
+    "src/numeric_evidence.py": "492fb546e6bc89b881843ece4b4582e533aec5aabbc58d61cd1cf158c4bac3d0",
+    "src/pdf_loader.py": "691f97e547936bcbda1ccb9837a1e91b47c34672ce33b227eaa5d18501519d1e",
+    "src/query_decomposer.py": "7a089ea7330049da1828d4dcec4bc67ad17d3505ce9017d6168cccc239326de9",
+    "src/query_rewriter.py": "bb762f7e77596a7f228d985b0c3a1699ec60bc87eba87b754c418a30cc7cdf62",
+    "src/reranker.py": "028e22aa105551bdf0845d215ba0604407a960c57d7e4e32a65c33e52dd7ffeb",
+    "src/retriever.py": "ad82c4301a81fefb3c205b5c0834d9ddcf67cc616d9b736bb265a6e9eb637e82",
+    "src/vector_store.py": "605ffa3761629f4f58b37663a23fff4020f895464917d600325ae2e1fccc0222",
+    "evaluation/questions.json": "6311c5293604f2c6f7258b53f47899b3fdf41ed8edcafed929655f2892157ade",
+    "evaluation/answer_review_protocol.md": "614a18fe1babb3cffc96aa7aaa8956c3d84b94a1ca10f37234fd8cd00ed3bf27",
+    "data/processed/chunks_semantic.json": "6bf158ec8cf2df07c438a7f3ff14806b2db6c6d7af4ce4fcb9fcf13a60603277",
+    "data/processed/faiss_semantic.index": "dd79e7f8afcc4daa09fbbdc1f85fb27c1d9641eff1003c1965a42343b8ad8b0b"
+  },
+  "elapsed_seconds": 20.64
+}

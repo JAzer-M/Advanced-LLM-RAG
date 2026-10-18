@@ -1,11 +1,22 @@
-def rerank_results(query, candidates, model, top_k = 5):
+def rerank_results(
+    query,
+    candidates,
+    model,
+    top_k=5,
+    include_source=True,
+):
     # 检查候选文档是否为空
     if not candidates:
         return []
 
     # 构建query-document pairs
     pairs = [
-        (query, candidate["text"])
+        (
+            query,
+            f"Source: {candidate['source']}\n{candidate['text']}"
+            if include_source
+            else candidate["text"],
+        )
         for candidate in candidates
     ]
 

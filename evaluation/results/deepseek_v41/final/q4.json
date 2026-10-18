@@ -1,0 +1,940 @@
+{
+  "question_id": "q4",
+  "query": "How does the DCNN paper use data augmentation to reduce overfitting?",
+  "run_provenance": "fresh full main pipeline",
+  "decomposition": {
+    "needs_decomposition": false,
+    "sub_queries": []
+  },
+  "selected_ids": [
+    162,
+    103,
+    163,
+    167,
+    153,
+    164,
+    121,
+    174,
+    114,
+    197
+  ],
+  "context": "[1] Source: DCNN.pdf | Page: 4 | Section: 5.1. Data augmentation\n5.1. Data augmentation The easiest and most common method to reduce overfitting on image data is to artificially enlarge the dataset using label- preserving transformations (e.g., Refs.4, 5, 30). We employ two distinct forms of data augmentation, both of which allow transformed images to be produced from the original images with very little computation, so the transformed images do not need to be stored on disk.\n\n[2] Source: DCNN.pdf | Page: 1 | Section: None\nTo make training faster, we used non- saturating neurons and a very efficient GPU implementation of the convolution operation. To reduce overfitting in the fully connected layers we employed a recently developed reg- ularization method called “dropout” that proved to be very effective. We also entered a variant of this model in the ILSVRC-2012 competition and achieved a winning top-5 test error rate of 15.3%, compared to 26.2% achieved by the sec- ond-best entry.\n\n[3] Source: DCNN.pdf | Page: 4 | Section: 5.1. Data augmentation\nIn our implementation, the transformed images are generated in Python code on the CPU while the GPU is training on the previous batch of images. So these data augmentation schemes are, in effect, computa- tionally free. The first form of data augmentation consists of generating image translations and horizontal reflections.\n\n[4] Source: DCNN.pdf | Page: 5 | Section: 5.1. Data augmentation\nresearch highlights The second form of data augmentation consists of altering the intensities of the RGB channels in training images. Specifically, we perform PCA on the set of RGB pixel values throughout the ImageNet training set.\n\n[5] Source: DCNN.pdf | Page: 4 | Section: 4.4. Overlapping pooling\nThis is what we use throughout our network, with s = 2 and z = 3. This scheme reduces the top-1 and top-5 error rates by 0.4% and 0.3%, respectively, as compared with the non overlapping scheme s = 2, z = 2, which produces output of equivalent dimensions. We generally observe during training that models with overlapping pooling find it slightly more dif- ficult to overfit.\n\n[6] Source: DCNN.pdf | Page: 4 | Section: 5.1. Data augmentation\nWe do this by extracting random 224 × 224 patches (and their horizontal reflections) from the 256 × 256 images and training our net- work on these extracted patches.d This increases the size of our training set by a factor of 2048, though the resulting train- ing examples are, of course, highly inter dependent. Without this scheme, our network suffers from substantial overfit- ting, which would have forced us to use much smaller net- works.\n\n[7] Source: DCNN.pdf | Page: 2 | Section: 2. INTRODUCTION\nWe wrote a highly optimized GPU implementation of 2D convolution and all the other opera- tions inherent in training CNNs, which we make available publicly.a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4. The size of our network made overfitting a significant problem, even with 1.2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 5. Our final network contains five convo- lutional and three fully connected layers, and this depth seems to be important: we found that removing any convolu- tional layer (each of which contains no more than 1% of the model’s parameters) resulted in inferior performance.\n\n[8] Source: DCNN.pdf | Page: 5 | Section: 5.2. Dropout\nWe use dropout in the first two fully connected layers of Figure 2. Without dropout, our network exhibits substantial overfitting. Dropout roughly doubles the number of itera- tions required to converge.\n\n[9] Source: DCNN.pdf | Page: 1 | Section: 2. INTRODUCTION\nAnd indeed, the shortcomings of small image datasets have been widely recognized (e.g., Ref.25), but it has only recently become possible to collect labeled datasets with millions of The original version of this paper was published in the Proceedings of the 25th International Conference on Neu- ral Information Processing Systems (Lake Tahoe, NV, Dec.\n\n[10] Source: DCNN.pdf | Page: 7 | Section: 8. DISCUSSION\nSo the depth really is important for achieving our results. To simplify our experiments, we did not use any unsuper- vised pre-training even though we expect that it will help, espe- cially if we obtain enough computational power to significantly increase the size of the network without obtaining a corre- sponding increase in the amount of labeled data.",
+  "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\nContext:\n[1] Source: DCNN.pdf | Page: 4 | Section: 5.1. Data augmentation\n5.1. Data augmentation The easiest and most common method to reduce overfitting on image data is to artificially enlarge the dataset using label- preserving transformations (e.g., Refs.4, 5, 30). We employ two distinct forms of data augmentation, both of which allow transformed images to be produced from the original images with very little computation, so the transformed images do not need to be stored on disk.\n\n[2] Source: DCNN.pdf | Page: 1 | Section: None\nTo make training faster, we used non- saturating neurons and a very efficient GPU implementation of the convolution operation. To reduce overfitting in the fully connected layers we employed a recently developed reg- ularization method called “dropout” that proved to be very effective. We also entered a variant of this model in the ILSVRC-2012 competition and achieved a winning top-5 test error rate of 15.3%, compared to 26.2% achieved by the sec- ond-best entry.\n\n[3] Source: DCNN.pdf | Page: 4 | Section: 5.1. Data augmentation\nIn our implementation, the transformed images are generated in Python code on the CPU while the GPU is training on the previous batch of images. So these data augmentation schemes are, in effect, computa- tionally free. The first form of data augmentation consists of generating image translations and horizontal reflections.\n\n[4] Source: DCNN.pdf | Page: 5 | Section: 5.1. Data augmentation\nresearch highlights The second form of data augmentation consists of altering the intensities of the RGB channels in training images. Specifically, we perform PCA on the set of RGB pixel values throughout the ImageNet training set.\n\n[5] Source: DCNN.pdf | Page: 4 | Section: 4.4. Overlapping pooling\nThis is what we use throughout our network, with s = 2 and z = 3. This scheme reduces the top-1 and top-5 error rates by 0.4% and 0.3%, respectively, as compared with the non overlapping scheme s = 2, z = 2, which produces output of equivalent dimensions. We generally observe during training that models with overlapping pooling find it slightly more dif- ficult to overfit.\n\n[6] Source: DCNN.pdf | Page: 4 | Section: 5.1. Data augmentation\nWe do this by extracting random 224 × 224 patches (and their horizontal reflections) from the 256 × 256 images and training our net- work on these extracted patches.d This increases the size of our training set by a factor of 2048, though the resulting train- ing examples are, of course, highly inter dependent. Without this scheme, our network suffers from substantial overfit- ting, which would have forced us to use much smaller net- works.\n\n[7] Source: DCNN.pdf | Page: 2 | Section: 2. INTRODUCTION\nWe wrote a highly optimized GPU implementation of 2D convolution and all the other opera- tions inherent in training CNNs, which we make available publicly.a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4. The size of our network made overfitting a significant problem, even with 1.2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 5. Our final network contains five convo- lutional and three fully connected layers, and this depth seems to be important: we found that removing any convolu- tional layer (each of which contains no more than 1% of the model’s parameters) resulted in inferior performance.\n\n[8] Source: DCNN.pdf | Page: 5 | Section: 5.2. Dropout\nWe use dropout in the first two fully connected layers of Figure 2. Without dropout, our network exhibits substantial overfitting. Dropout roughly doubles the number of itera- tions required to converge.\n\n[9] Source: DCNN.pdf | Page: 1 | Section: 2. INTRODUCTION\nAnd indeed, the shortcomings of small image datasets have been widely recognized (e.g., Ref.25), but it has only recently become possible to collect labeled datasets with millions of The original version of this paper was published in the Proceedings of the 25th International Conference on Neu- ral Information Processing Systems (Lake Tahoe, NV, Dec.\n\n[10] Source: DCNN.pdf | Page: 7 | Section: 8. DISCUSSION\nSo the depth really is important for achieving our results. To simplify our experiments, we did not use any unsuper- vised pre-training even though we expect that it will help, espe- cially if we obtain enough computational power to significantly increase the size of the network without obtaining a corre- sponding increase in the amount of labeled data.\n\nQuestion:\nHow does the DCNN paper use data augmentation to reduce overfitting?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages.\n\nAnswer:",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": " We employ two distinct forms of data augmentation, both of which allow transformed images to be produced from the original images with very little computation, so the transformed images do not need to be stored on disk.",
+        "evidence_start": 195,
+        "evidence_end": 415,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            162
+          ],
+          "identity_quote": "5.1. Data augmentation The easiest and most common method to reduce overfitting on image data is to artificially enlarge the dataset using label- preserving transformations (e.g., Refs.4, 5, 30). We employ two distinct forms of data augmentation, both of which allow transformed images to be produced from the original images with very little computation, so the transformed images do not need to be stored on disk.",
+          "identity_chunk_id": 162
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 162,
+        "page": 4,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "To make training faster, we used non- saturating neurons and a very efficient GPU implementation of the convolution operation.",
+        "evidence_start": 0,
+        "evidence_end": 126,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            103,
+            102,
+            101
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 103,
+        "page": 1,
+        "citations": [
+          2
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " To reduce overfitting in the fully connected layers we employed a recently developed reg- ularization method called “dropout” that proved to be very effective.",
+        "evidence_start": 126,
+        "evidence_end": 286,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            103,
+            102,
+            101
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 103,
+        "page": 1,
+        "citations": [
+          2
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "2% achieved by the sec- ond-best entry.",
+        "evidence_start": 428,
+        "evidence_end": 467,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            103,
+            102,
+            101
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 103,
+        "page": 1,
+        "citations": [
+          2
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "In our implementation, the transformed images are generated in Python code on the CPU while the GPU is training on the previous batch of images.",
+        "evidence_start": 0,
+        "evidence_end": 144,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            163,
+            162
+          ],
+          "identity_quote": "5.1. Data augmentation The easiest and most common method to reduce overfitting on image data is to artificially enlarge the dataset using label- preserving transformations (e.g., Refs.4, 5, 30). We employ two distinct forms of data augmentation, both of which allow transformed images to be produced from the original images with very little computation, so the transformed images do not need to be stored on disk.",
+          "identity_chunk_id": 162
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 163,
+        "page": 4,
+        "citations": [
+          3,
+          1
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " So these data augmentation schemes are, in effect, computa- tionally free.",
+        "evidence_start": 144,
+        "evidence_end": 219,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            163,
+            162
+          ],
+          "identity_quote": "5.1. Data augmentation The easiest and most common method to reduce overfitting on image data is to artificially enlarge the dataset using label- preserving transformations (e.g., Refs.4, 5, 30). We employ two distinct forms of data augmentation, both of which allow transformed images to be produced from the original images with very little computation, so the transformed images do not need to be stored on disk.",
+          "identity_chunk_id": 162
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 163,
+        "page": 4,
+        "citations": [
+          3,
+          1
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The first form of data augmentation consists of generating image translations and horizontal reflections.",
+        "evidence_start": 219,
+        "evidence_end": 325,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            163,
+            162
+          ],
+          "identity_quote": "5.1. Data augmentation The easiest and most common method to reduce overfitting on image data is to artificially enlarge the dataset using label- preserving transformations (e.g., Refs.4, 5, 30). We employ two distinct forms of data augmentation, both of which allow transformed images to be produced from the original images with very little computation, so the transformed images do not need to be stored on disk.",
+          "identity_chunk_id": 162
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 163,
+        "page": 4,
+        "citations": [
+          3,
+          1
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "research highlights The second form of data augmentation consists of altering the intensities of the RGB channels in training images.",
+        "evidence_start": 0,
+        "evidence_end": 133,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            167,
+            166,
+            165,
+            164
+          ],
+          "identity_quote": "We do this by extracting random 224 × 224 patches (and their horizontal reflections) from the 256 × 256 images and training our net- work on these extracted patches.d This increases the size of our training set by a factor of 2048, though the resulting train- ing examples are, of course, highly inter dependent. Without this scheme, our network suffers from substantial overfit- ting, which would have forced us to use much smaller net- works.",
+          "identity_chunk_id": 164
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 167,
+        "page": 5,
+        "citations": [
+          4,
+          6
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Specifically, we perform PCA on the set of RGB pixel values throughout the ImageNet training set.",
+        "evidence_start": 133,
+        "evidence_end": 231,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            167
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 167,
+        "page": 5,
+        "citations": [
+          4
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "This is what we use throughout our network, with s = 2 and z = 3.",
+        "evidence_start": 0,
+        "evidence_end": 65,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            153
+          ],
+          "identity_quote": "This is what we use throughout our network, with s = 2 and z = 3. This scheme reduces the top-1 and top-5 error rates by 0.4% and 0.3%, respectively, as compared with the non overlapping scheme s = 2, z = 2, which produces output of equivalent dimensions. We generally observe during training that models with overlapping pooling find it slightly more dif- ficult to overfit.",
+          "identity_chunk_id": 153
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 153,
+        "page": 4,
+        "citations": [
+          5
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "3%, respectively, as compared with the non overlapping scheme s = 2, z = 2, which produces output of equivalent dimensions.",
+        "evidence_start": 132,
+        "evidence_end": 255,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            153
+          ],
+          "identity_quote": "This is what we use throughout our network, with s = 2 and z = 3. This scheme reduces the top-1 and top-5 error rates by 0.4% and 0.",
+          "identity_chunk_id": 153
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 153,
+        "page": 4,
+        "citations": [
+          5
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We generally observe during training that models with overlapping pooling find it slightly more dif- ficult to overfit.",
+        "evidence_start": 255,
+        "evidence_end": 375,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            153
+          ],
+          "identity_quote": "This is what we use throughout our network, with s = 2 and z = 3. This scheme reduces the top-1 and top-5 error rates by 0.4% and 0.3%, respectively, as compared with the non overlapping scheme s = 2, z = 2, which produces output of equivalent dimensions.",
+          "identity_chunk_id": 153
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 153,
+        "page": 4,
+        "citations": [
+          5
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "d This increases the size of our training set by a factor of 2048, though the resulting train- ing examples are, of course, highly inter dependent.",
+        "evidence_start": 165,
+        "evidence_end": 312,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            164
+          ],
+          "identity_quote": "We do this by extracting random 224 × 224 patches (and their horizontal reflections) from the 256 × 256 images and training our net- work on these extracted patches.",
+          "identity_chunk_id": 164
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 164,
+        "page": 4,
+        "citations": [
+          6
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Without this scheme, our network suffers from substantial overfit- ting, which would have forced us to use much smaller net- works.",
+        "evidence_start": 312,
+        "evidence_end": 444,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            164
+          ],
+          "identity_quote": "We do this by extracting random 224 × 224 patches (and their horizontal reflections) from the 256 × 256 images and training our net- work on these extracted patches.d This increases the size of our training set by a factor of 2048, though the resulting train- ing examples are, of course, highly inter dependent. Without this scheme, our network suffers from substantial overfit- ting, which would have forced us to use much smaller net- works.",
+          "identity_chunk_id": 164
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 164,
+        "page": 4,
+        "citations": [
+          6
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4.",
+        "evidence_start": 156,
+        "evidence_end": 308,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            121
+          ],
+          "identity_quote": "We wrote a highly optimized GPU implementation of 2D convolution and all the other opera- tions inherent in training CNNs, which we make available publicly.a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4. The size of our network made overfitting a significant problem, even with 1.2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 5. Our final network contains five convo- lutional and three fully connected layers, and this depth seems to be important: we found that removing any convolu- tional layer (each of which contains no more than 1% of the model’s parameters) resulted in inferior performance.",
+          "identity_chunk_id": 121
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 121,
+        "page": 2,
+        "citations": [
+          7
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 5.",
+        "evidence_start": 385,
+        "evidence_end": 523,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            121
+          ],
+          "identity_quote": "We wrote a highly optimized GPU implementation of 2D convolution and all the other opera- tions inherent in training CNNs, which we make available publicly.a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4. The size of our network made overfitting a significant problem, even with 1.",
+          "identity_chunk_id": 121
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 121,
+        "page": 2,
+        "citations": [
+          7
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Our final network contains five convo- lutional and three fully connected layers, and this depth seems to be important: we found that removing any convolu- tional layer (each of which contains no more than 1% of the model’s parameters) resulted in inferior performance.",
+        "evidence_start": 523,
+        "evidence_end": 793,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            121
+          ],
+          "identity_quote": "We wrote a highly optimized GPU implementation of 2D convolution and all the other opera- tions inherent in training CNNs, which we make available publicly.a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4. The size of our network made overfitting a significant problem, even with 1.2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 5.",
+          "identity_chunk_id": 121
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 121,
+        "page": 2,
+        "citations": [
+          7
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "We use dropout in the first two fully connected layers of Figure 2.",
+        "evidence_start": 0,
+        "evidence_end": 67,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            174
+          ],
+          "identity_quote": "We use dropout in the first two fully connected layers of Figure 2. Without dropout, our network exhibits substantial overfitting. Dropout roughly doubles the number of itera- tions required to converge.",
+          "identity_chunk_id": 174
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 174,
+        "page": 5,
+        "citations": [
+          8
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Without dropout, our network exhibits substantial overfitting.",
+        "evidence_start": 67,
+        "evidence_end": 130,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            174
+          ],
+          "identity_quote": "We use dropout in the first two fully connected layers of Figure 2. Without dropout, our network exhibits substantial overfitting. Dropout roughly doubles the number of itera- tions required to converge.",
+          "identity_chunk_id": 174
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 174,
+        "page": 5,
+        "citations": [
+          8
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Dropout roughly doubles the number of itera- tions required to converge.",
+        "evidence_start": 130,
+        "evidence_end": 203,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            174
+          ],
+          "identity_quote": "We use dropout in the first two fully connected layers of Figure 2. Without dropout, our network exhibits substantial overfitting.",
+          "identity_chunk_id": 174
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 174,
+        "page": 5,
+        "citations": [
+          8
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "25), but it has only recently become possible to collect labeled datasets with millions of The original version of this paper was published in the Proceedings of the 25th International Conference on Neu- ral Information Processing Systems (Lake Tahoe, NV, Dec.",
+        "evidence_start": 92,
+        "evidence_end": 352,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            114,
+            113,
+            112
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 114,
+        "page": 1,
+        "citations": [
+          9
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "So the depth really is important for achieving our results.",
+        "evidence_start": 0,
+        "evidence_end": 59,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            197,
+            196
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 197,
+        "page": 7,
+        "citations": [
+          10
+        ],
+        "record_id": "E22"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " To simplify our experiments, we did not use any unsuper- vised pre-training even though we expect that it will help, espe- cially if we obtain enough computational power to significantly increase the size of the network without obtaining a corre- sponding increase in the amount of labeled data.",
+        "evidence_start": 59,
+        "evidence_end": 355,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            197,
+            196
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 197,
+        "page": 7,
+        "citations": [
+          10
+        ],
+        "record_id": "E23"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 162,
+        "text": "5.1. Data augmentation The easiest and most common method to reduce overfitting on image data is to artificially enlarge the dataset using label- preserving transformations (e.g., Refs.4, 5, 30). We employ two distinct forms of data augmentation, both of which allow transformed images to be produced from the original images with very little computation, so the transformed images do not need to be stored on disk.",
+        "source": "DCNN.pdf",
+        "page": 4,
+        "title": "DCNN",
+        "section": "5.1. Data augmentation"
+      },
+      {
+        "chunk_id": 103,
+        "text": "To make training faster, we used non- saturating neurons and a very efficient GPU implementation of the convolution operation. To reduce overfitting in the fully connected layers we employed a recently developed reg- ularization method called “dropout” that proved to be very effective. We also entered a variant of this model in the ILSVRC-2012 competition and achieved a winning top-5 test error rate of 15.3%, compared to 26.2% achieved by the sec- ond-best entry.",
+        "source": "DCNN.pdf",
+        "page": 1,
+        "title": "DCNN",
+        "section": null
+      },
+      {
+        "chunk_id": 163,
+        "text": "In our implementation, the transformed images are generated in Python code on the CPU while the GPU is training on the previous batch of images. So these data augmentation schemes are, in effect, computa- tionally free. The first form of data augmentation consists of generating image translations and horizontal reflections.",
+        "source": "DCNN.pdf",
+        "page": 4,
+        "title": "DCNN",
+        "section": "5.1. Data augmentation"
+      },
+      {
+        "chunk_id": 167,
+        "text": "research highlights The second form of data augmentation consists of altering the intensities of the RGB channels in training images. Specifically, we perform PCA on the set of RGB pixel values throughout the ImageNet training set.",
+        "source": "DCNN.pdf",
+        "page": 5,
+        "title": "DCNN",
+        "section": "5.1. Data augmentation"
+      },
+      {
+        "chunk_id": 153,
+        "text": "This is what we use throughout our network, with s = 2 and z = 3. This scheme reduces the top-1 and top-5 error rates by 0.4% and 0.3%, respectively, as compared with the non overlapping scheme s = 2, z = 2, which produces output of equivalent dimensions. We generally observe during training that models with overlapping pooling find it slightly more dif- ficult to overfit.",
+        "source": "DCNN.pdf",
+        "page": 4,
+        "title": "DCNN",
+        "section": "4.4. Overlapping pooling"
+      },
+      {
+        "chunk_id": 164,
+        "text": "We do this by extracting random 224 × 224 patches (and their horizontal reflections) from the 256 × 256 images and training our net- work on these extracted patches.d This increases the size of our training set by a factor of 2048, though the resulting train- ing examples are, of course, highly inter dependent. Without this scheme, our network suffers from substantial overfit- ting, which would have forced us to use much smaller net- works.",
+        "source": "DCNN.pdf",
+        "page": 4,
+        "title": "DCNN",
+        "section": "5.1. Data augmentation"
+      },
+      {
+        "chunk_id": 121,
+        "text": "We wrote a highly optimized GPU implementation of 2D convolution and all the other opera- tions inherent in training CNNs, which we make available publicly.a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4. The size of our network made overfitting a significant problem, even with 1.2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 5. Our final network contains five convo- lutional and three fully connected layers, and this depth seems to be important: we found that removing any convolu- tional layer (each of which contains no more than 1% of the model’s parameters) resulted in inferior performance.",
+        "source": "DCNN.pdf",
+        "page": 2,
+        "title": "DCNN",
+        "section": "2. INTRODUCTION"
+      },
+      {
+        "chunk_id": 174,
+        "text": "We use dropout in the first two fully connected layers of Figure 2. Without dropout, our network exhibits substantial overfitting. Dropout roughly doubles the number of itera- tions required to converge.",
+        "source": "DCNN.pdf",
+        "page": 5,
+        "title": "DCNN",
+        "section": "5.2. Dropout"
+      },
+      {
+        "chunk_id": 114,
+        "text": "And indeed, the shortcomings of small image datasets have been widely recognized (e.g., Ref.25), but it has only recently become possible to collect labeled datasets with millions of The original version of this paper was published in the Proceedings of the 25th International Conference on Neu- ral Information Processing Systems (Lake Tahoe, NV, Dec.",
+        "source": "DCNN.pdf",
+        "page": 1,
+        "title": "DCNN",
+        "section": "2. INTRODUCTION"
+      },
+      {
+        "chunk_id": 197,
+        "text": "So the depth really is important for achieving our results. To simplify our experiments, we did not use any unsuper- vised pre-training even though we expect that it will help, espe- cially if we obtain enough computational power to significantly increase the size of the network without obtaining a corre- sponding increase in the amount of labeled data.",
+        "source": "DCNN.pdf",
+        "page": 7,
+        "title": "DCNN",
+        "section": "8. DISCUSSION"
+      }
+    ],
+    "selected_ids": [
+      162,
+      103,
+      163,
+      167,
+      153,
+      164,
+      121,
+      174,
+      114,
+      197
+    ]
+  },
+  "answer": "The DCNN paper uses data augmentation as a method to artificially enlarge the dataset through label-preserving transformations, which is described as the easiest and most common way to reduce overfitting on image data [1]. The paper employs two distinct forms of data augmentation, both of which produce transformed images from the original images with very little computation, so the transformed images do not need to be stored on disk [1]. In their implementation, the transformed images are generated in Python code on the CPU while the GPU is training on the previous batch of images, making these data augmentation schemes, in effect, computationally free [3].\n\nThe first form of data augmentation consists of generating image translations and horizontal reflections [3]. Specifically, they extract random 224 × 224 patches (and their horizontal reflections) from the 256 × 256 images and train the network on these extracted patches, which increases the size of the training set by a factor of 2048, though the resulting training examples are highly interdependent [6]. Without this scheme, the network suffers from substantial overfitting, which would have forced them to use much smaller networks [6].\n\nThe second form of data augmentation consists of altering the intensities of the RGB channels in training images; specifically, they perform PCA on the set of RGB pixel values throughout the ImageNet training set [4].",
+  "original_answer": "The DCNN paper uses data augmentation as a method to artificially enlarge the dataset through label-preserving transformations, which is described as the easiest and most common way to reduce overfitting on image data [1]. The paper employs two distinct forms of data augmentation, both of which produce transformed images from the original images with very little computation, so the transformed images do not need to be stored on disk [1]. In their implementation, the transformed images are generated in Python code on the CPU while the GPU is training on the previous batch of images, making these data augmentation schemes, in effect, computationally free [3].\n\nThe first form of data augmentation consists of generating image translations and horizontal reflections [3]. Specifically, they extract random 224 × 224 patches (and their horizontal reflections) from the 256 × 256 images and train the network on these extracted patches, which increases the size of the training set by a factor of 2048, though the resulting training examples are highly interdependent [6]. Without this scheme, the network suffers from substantial overfitting, which would have forced them to use much smaller networks [6].\n\nThe second form of data augmentation consists of altering the intensities of the RGB channels in training images; specifically, they perform PCA on the set of RGB pixel values throughout the ImageNet training set [4].",
+  "citation_validation": {
+    "answer": "The DCNN paper uses data augmentation as a method to artificially enlarge the dataset through label-preserving transformations, which is described as the easiest and most common way to reduce overfitting on image data [1]. The paper employs two distinct forms of data augmentation, both of which produce transformed images from the original images with very little computation, so the transformed images do not need to be stored on disk [1]. In their implementation, the transformed images are generated in Python code on the CPU while the GPU is training on the previous batch of images, making these data augmentation schemes, in effect, computationally free [3].\n\nThe first form of data augmentation consists of generating image translations and horizontal reflections [3]. Specifically, they extract random 224 × 224 patches (and their horizontal reflections) from the 256 × 256 images and train the network on these extracted patches, which increases the size of the training set by a factor of 2048, though the resulting training examples are highly interdependent [6]. Without this scheme, the network suffers from substantial overfitting, which would have forced them to use much smaller networks [6].\n\nThe second form of data augmentation consists of altering the intensities of the RGB channels in training images; specifically, they perform PCA on the set of RGB pixel values throughout the ImageNet training set [4].",
+    "original_answer": "The DCNN paper uses data augmentation as a method to artificially enlarge the dataset through label-preserving transformations, which is described as the easiest and most common way to reduce overfitting on image data [1]. The paper employs two distinct forms of data augmentation, both of which produce transformed images from the original images with very little computation, so the transformed images do not need to be stored on disk [1]. In their implementation, the transformed images are generated in Python code on the CPU while the GPU is training on the previous batch of images, making these data augmentation schemes, in effect, computationally free [3].\n\nThe first form of data augmentation consists of generating image translations and horizontal reflections [3]. Specifically, they extract random 224 × 224 patches (and their horizontal reflections) from the 256 × 256 images and train the network on these extracted patches, which increases the size of the training set by a factor of 2048, though the resulting training examples are highly interdependent [6]. Without this scheme, the network suffers from substantial overfitting, which would have forced them to use much smaller networks [6].\n\nThe second form of data augmentation consists of altering the intensities of the RGB channels in training images; specifically, they perform PCA on the set of RGB pixel values throughout the ImageNet training set [4].",
+    "repair_candidate": null,
+    "initial_check": {
+      "cited_numbers": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 162,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "text": "5.1. Data augmentation The easiest and most common method to reduce overfitting on image data is to artificially enlarge the dataset using label- preserving transformations (e.g., Refs.4, 5, 30). We employ two distinct forms of data augmentation, both of which allow transformed images to be produced from the original images with very little computation, so the transformed images do not need to be stored on disk."
+        },
+        {
+          "citation": 3,
+          "chunk_id": 163,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "text": "In our implementation, the transformed images are generated in Python code on the CPU while the GPU is training on the previous batch of images. So these data augmentation schemes are, in effect, computa- tionally free. The first form of data augmentation consists of generating image translations and horizontal reflections."
+        },
+        {
+          "citation": 4,
+          "chunk_id": 167,
+          "source": "DCNN.pdf",
+          "page": 5,
+          "text": "research highlights The second form of data augmentation consists of altering the intensities of the RGB channels in training images. Specifically, we perform PCA on the set of RGB pixel values throughout the ImageNet training set."
+        },
+        {
+          "citation": 6,
+          "chunk_id": 164,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "text": "We do this by extracting random 224 × 224 patches (and their horizontal reflections) from the 256 × 256 images and training our net- work on these extracted patches.d This increases the size of our training set by a factor of 2048, though the resulting train- ing examples are, of course, highly inter dependent. Without this scheme, our network suffers from substantial overfit- ting, which would have forced us to use much smaller net- works."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "final_check": {
+      "cited_numbers": [
+        1,
+        3,
+        4,
+        6
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 162,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "text": "5.1. Data augmentation The easiest and most common method to reduce overfitting on image data is to artificially enlarge the dataset using label- preserving transformations (e.g., Refs.4, 5, 30). We employ two distinct forms of data augmentation, both of which allow transformed images to be produced from the original images with very little computation, so the transformed images do not need to be stored on disk."
+        },
+        {
+          "citation": 3,
+          "chunk_id": 163,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "text": "In our implementation, the transformed images are generated in Python code on the CPU while the GPU is training on the previous batch of images. So these data augmentation schemes are, in effect, computa- tionally free. The first form of data augmentation consists of generating image translations and horizontal reflections."
+        },
+        {
+          "citation": 4,
+          "chunk_id": 167,
+          "source": "DCNN.pdf",
+          "page": 5,
+          "text": "research highlights The second form of data augmentation consists of altering the intensities of the RGB channels in training images. Specifically, we perform PCA on the set of RGB pixel values throughout the ImageNet training set."
+        },
+        {
+          "citation": 6,
+          "chunk_id": 164,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "text": "We do this by extracting random 224 × 224 patches (and their horizontal reflections) from the 256 × 256 images and training our net- work on these extracted patches.d This increases the size of our training set by a factor of 2048, though the resulting train- ing examples are, of course, highly inter dependent. Without this scheme, our network suffers from substantial overfit- ting, which would have forced us to use much smaller net- works."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "repair_attempted": false,
+    "repair_applied": false,
+    "repair_response": null,
+    "repair_prompt": null,
+    "unresolved_blocks": [],
+    "status": "not_needed",
+    "note": "Citation structure only; source relevance and claim meaning are not automatically verified."
+  },
+  "citation_structure": {
+    "cited_numbers": [
+      1,
+      3,
+      4,
+      6
+    ],
+    "invalid_numbers": [],
+    "malformed_markers": [],
+    "has_citations": true,
+    "require_citations": true,
+    "structure_passed": true,
+    "cited_sources": [
+      {
+        "citation": 1,
+        "chunk_id": 162,
+        "source": "DCNN.pdf",
+        "page": 4,
+        "text": "5.1. Data augmentation The easiest and most common method to reduce overfitting on image data is to artificially enlarge the dataset using label- preserving transformations (e.g., Refs.4, 5, 30). We employ two distinct forms of data augmentation, both of which allow transformed images to be produced from the original images with very little computation, so the transformed images do not need to be stored on disk."
+      },
+      {
+        "citation": 3,
+        "chunk_id": 163,
+        "source": "DCNN.pdf",
+        "page": 4,
+        "text": "In our implementation, the transformed images are generated in Python code on the CPU while the GPU is training on the previous batch of images. So these data augmentation schemes are, in effect, computa- tionally free. The first form of data augmentation consists of generating image translations and horizontal reflections."
+      },
+      {
+        "citation": 4,
+        "chunk_id": 167,
+        "source": "DCNN.pdf",
+        "page": 5,
+        "text": "research highlights The second form of data augmentation consists of altering the intensities of the RGB channels in training images. Specifically, we perform PCA on the set of RGB pixel values throughout the ImageNet training set."
+      },
+      {
+        "citation": 6,
+        "chunk_id": 164,
+        "source": "DCNN.pdf",
+        "page": 4,
+        "text": "We do this by extracting random 224 × 224 patches (and their horizontal reflections) from the 256 × 256 images and training our net- work on these extracted patches.d This increases the size of our training set by a factor of 2048, though the resulting train- ing examples are, of course, highly inter dependent. Without this scheme, our network suffers from substantial overfit- ting, which would have forced us to use much smaller net- works."
+      }
+    ],
+    "semantic_support": "requires_manual_review"
+  },
+  "status": "completed",
+  "api_calls": [
+    {
+      "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate exactly 2 or 3 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nHow does the DCNN paper use data augmentation to reduce overfitting?\n",
+      "response": {
+        "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+        "requested_model": "cn:deepseek-v4.1-flash",
+        "reported_model": "deepseek-v4.1-flash",
+        "usage": {
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 256,
+          "cached_tokens": 256,
+          "completion_thinking_tokens": 0,
+          "completion_tokens": 19,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "credit": 0,
+          "prompt_cache_hit_tokens": 256,
+          "prompt_cache_miss_tokens": 256,
+          "prompt_cache_write_tokens": 0,
+          "prompt_tokens": 512,
+          "prompt_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 256,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "total_tokens": 531
+        },
+        "finish_reason": "stop",
+        "request_parameters": {
+          "model": "cn:deepseek-v4.1-flash",
+          "stream": false,
+          "thinking": {
+            "type": "disabled"
+          },
+          "temperature": 0,
+          "max_tokens": 4096
+        }
+      },
+      "elapsed_seconds": 1.62
+    },
+    {
+      "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\nContext:\n[1] Source: DCNN.pdf | Page: 4 | Section: 5.1. Data augmentation\n5.1. Data augmentation The easiest and most common method to reduce overfitting on image data is to artificially enlarge the dataset using label- preserving transformations (e.g., Refs.4, 5, 30). We employ two distinct forms of data augmentation, both of which allow transformed images to be produced from the original images with very little computation, so the transformed images do not need to be stored on disk.\n\n[2] Source: DCNN.pdf | Page: 1 | Section: None\nTo make training faster, we used non- saturating neurons and a very efficient GPU implementation of the convolution operation. To reduce overfitting in the fully connected layers we employed a recently developed reg- ularization method called “dropout” that proved to be very effective. We also entered a variant of this model in the ILSVRC-2012 competition and achieved a winning top-5 test error rate of 15.3%, compared to 26.2% achieved by the sec- ond-best entry.\n\n[3] Source: DCNN.pdf | Page: 4 | Section: 5.1. Data augmentation\nIn our implementation, the transformed images are generated in Python code on the CPU while the GPU is training on the previous batch of images. So these data augmentation schemes are, in effect, computa- tionally free. The first form of data augmentation consists of generating image translations and horizontal reflections.\n\n[4] Source: DCNN.pdf | Page: 5 | Section: 5.1. Data augmentation\nresearch highlights The second form of data augmentation consists of altering the intensities of the RGB channels in training images. Specifically, we perform PCA on the set of RGB pixel values throughout the ImageNet training set.\n\n[5] Source: DCNN.pdf | Page: 4 | Section: 4.4. Overlapping pooling\nThis is what we use throughout our network, with s = 2 and z = 3. This scheme reduces the top-1 and top-5 error rates by 0.4% and 0.3%, respectively, as compared with the non overlapping scheme s = 2, z = 2, which produces output of equivalent dimensions. We generally observe during training that models with overlapping pooling find it slightly more dif- ficult to overfit.\n\n[6] Source: DCNN.pdf | Page: 4 | Section: 5.1. Data augmentation\nWe do this by extracting random 224 × 224 patches (and their horizontal reflections) from the 256 × 256 images and training our net- work on these extracted patches.d This increases the size of our training set by a factor of 2048, though the resulting train- ing examples are, of course, highly inter dependent. Without this scheme, our network suffers from substantial overfit- ting, which would have forced us to use much smaller net- works.\n\n[7] Source: DCNN.pdf | Page: 2 | Section: 2. INTRODUCTION\nWe wrote a highly optimized GPU implementation of 2D convolution and all the other opera- tions inherent in training CNNs, which we make available publicly.a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4. The size of our network made overfitting a significant problem, even with 1.2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 5. Our final network contains five convo- lutional and three fully connected layers, and this depth seems to be important: we found that removing any convolu- tional layer (each of which contains no more than 1% of the model’s parameters) resulted in inferior performance.\n\n[8] Source: DCNN.pdf | Page: 5 | Section: 5.2. Dropout\nWe use dropout in the first two fully connected layers of Figure 2. Without dropout, our network exhibits substantial overfitting. Dropout roughly doubles the number of itera- tions required to converge.\n\n[9] Source: DCNN.pdf | Page: 1 | Section: 2. INTRODUCTION\nAnd indeed, the shortcomings of small image datasets have been widely recognized (e.g., Ref.25), but it has only recently become possible to collect labeled datasets with millions of The original version of this paper was published in the Proceedings of the 25th International Conference on Neu- ral Information Processing Systems (Lake Tahoe, NV, Dec.\n\n[10] Source: DCNN.pdf | Page: 7 | Section: 8. DISCUSSION\nSo the depth really is important for achieving our results. To simplify our experiments, we did not use any unsuper- vised pre-training even though we expect that it will help, espe- cially if we obtain enough computational power to significantly increase the size of the network without obtaining a corre- sponding increase in the amount of labeled data.\n\nQuestion:\nHow does the DCNN paper use data augmentation to reduce overfitting?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages.\n\nAnswer:",
+      "response": {
+        "answer": "The DCNN paper uses data augmentation as a method to artificially enlarge the dataset through label-preserving transformations, which is described as the easiest and most common way to reduce overfitting on image data [1]. The paper employs two distinct forms of data augmentation, both of which produce transformed images from the original images with very little computation, so the transformed images do not need to be stored on disk [1]. In their implementation, the transformed images are generated in Python code on the CPU while the GPU is training on the previous batch of images, making these data augmentation schemes, in effect, computationally free [3].\n\nThe first form of data augmentation consists of generating image translations and horizontal reflections [3]. Specifically, they extract random 224 × 224 patches (and their horizontal reflections) from the 256 × 256 images and train the network on these extracted patches, which increases the size of the training set by a factor of 2048, though the resulting training examples are highly interdependent [6]. Without this scheme, the network suffers from substantial overfitting, which would have forced them to use much smaller networks [6].\n\nThe second form of data augmentation consists of altering the intensities of the RGB channels in training images; specifically, they perform PCA on the set of RGB pixel values throughout the ImageNet training set [4].",
+        "requested_model": "cn:deepseek-v4.1-flash",
+        "reported_model": "deepseek-v4.1-flash",
+        "usage": {
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 1152,
+          "cached_tokens": 1152,
+          "completion_thinking_tokens": 0,
+          "completion_tokens": 265,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "credit": 0.02,
+          "prompt_cache_hit_tokens": 1152,
+          "prompt_cache_miss_tokens": 253,
+          "prompt_cache_write_tokens": 0,
+          "prompt_tokens": 1405,
+          "prompt_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 1152,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "total_tokens": 1670
+        },
+        "finish_reason": "stop",
+        "request_parameters": {
+          "model": "cn:deepseek-v4.1-flash",
+          "stream": false,
+          "thinking": {
+            "type": "disabled"
+          },
+          "temperature": 0,
+          "max_tokens": 4096
+        }
+      },
+      "elapsed_seconds": 2.41
+    }
+  ],
+  "model_calls": 2,
+  "evaluation_code_sha256": {
+    "main.py": "89831b9e3fa1ddf76fe7c20e8e58deedc0d0cd139b022eba8b4be97151a3877b",
+    "llm.py": "4a8ec8528b0662cd86a8fdc01feacfd361a276f04ae7b11c0e7574383a27eacc",
+    "evaluation/run_answer_evaluation.py": "29c3362af51597133214a9ba4d4d14831fdb5a3715c3a0a5d1197f9b4082cee5",
+    "src/api_llm.py": "11aa14f5435a079e83671b031d1159fbbc0ee8c760c61c9c0cc7afd0db6ae0a7",
+    "src/bm25_retriever.py": "7d2a046a4449cd6fdc371984db329534cedc7351d6196b9c218114ff0476906b",
+    "src/chunk_storage.py": "35d2b9b6c4d5a91d40ff242b85fbaa578bb75ed89501b1435a94dd8b0b5405b5",
+    "src/chunking_recursive.py": "f2fea89cace280329804cfe18d59a3663d21e3611129e0432518a37e4f691e72",
+    "src/chunking_semantic.py": "0f4947702f359a3967e2160ec098bf0cb1254eb2f7f77806ba874bb6955b0000",
+    "src/citation_validation.py": "c7e21d3070a454f08cf7944dd764a8e93dc7a3d83078863acd92db03e264b79c",
+    "src/embedding.py": "894fac2090929129e1883c858838e2255d69a6048a2e76d2387235321f2adade",
+    "src/grounded_evidence.py": "78a7e63512970492f4e52050cb8b2312e2658281acfe979eb4476516ff8c2663",
+    "src/hybrid_retriever.py": "ddd2315a558a062ac31fedb0e7a8d28af6a3df783450792825ff252d596de63c",
+    "src/hyde.py": "b575a07b016e4803de33d151eb90cdff1950b970763d69ba4e2f23b1352d3e31",
+    "src/numeric_evidence.py": "492fb546e6bc89b881843ece4b4582e533aec5aabbc58d61cd1cf158c4bac3d0",
+    "src/pdf_loader.py": "691f97e547936bcbda1ccb9837a1e91b47c34672ce33b227eaa5d18501519d1e",
+    "src/query_decomposer.py": "7a089ea7330049da1828d4dcec4bc67ad17d3505ce9017d6168cccc239326de9",
+    "src/query_rewriter.py": "bb762f7e77596a7f228d985b0c3a1699ec60bc87eba87b754c418a30cc7cdf62",
+    "src/reranker.py": "028e22aa105551bdf0845d215ba0604407a960c57d7e4e32a65c33e52dd7ffeb",
+    "src/retriever.py": "ad82c4301a81fefb3c205b5c0834d9ddcf67cc616d9b736bb265a6e9eb637e82",
+    "src/vector_store.py": "605ffa3761629f4f58b37663a23fff4020f895464917d600325ae2e1fccc0222",
+    "evaluation/questions.json": "6311c5293604f2c6f7258b53f47899b3fdf41ed8edcafed929655f2892157ade",
+    "evaluation/answer_review_protocol.md": "614a18fe1babb3cffc96aa7aaa8956c3d84b94a1ca10f37234fd8cd00ed3bf27",
+    "data/processed/chunks_semantic.json": "6bf158ec8cf2df07c438a7f3ff14806b2db6c6d7af4ce4fcb9fcf13a60603277",
+    "data/processed/faiss_semantic.index": "dd79e7f8afcc4daa09fbbdc1f85fb27c1d9641eff1003c1965a42343b8ad8b0b"
+  },
+  "elapsed_seconds": 14.17
+}

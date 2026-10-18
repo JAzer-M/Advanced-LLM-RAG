@@ -1,0 +1,966 @@
+{
+  "question_id": "q3",
+  "query": "Why does the Transformer use scaled dot-product attention?",
+  "run_provenance": "fresh full main pipeline",
+  "decomposition": {
+    "needs_decomposition": false,
+    "sub_queries": []
+  },
+  "selected_ids": [
+    6,
+    32,
+    40,
+    31,
+    12,
+    29,
+    15,
+    38,
+    82,
+    17
+  ],
+  "context": "[1] Source: Attention is all you need.pdf | Page: 1 | Section: 1 Introduction\nJakob proposed replacing RNNs with self-attention and started the effort to evaluate this idea. Ashish, with Illia, designed and implemented the ﬁrst Transformer models and has been crucially involved in every aspect of this work. Noam proposed scaled dot-product attention, multi-head attention and the parameter-free position representation and became the other person involved in nearly every detail.\n\n[2] Source: Attention is all you need.pdf | Page: 4 | Section: 3.2.1 Scaled Dot-Product Attention\nWhile for small values of dk the two mechanisms perform similarly, additive attention outperforms dot product attention without scaling for larger values of dk [3]. We suspect that for large values of dk, the dot products grow large in magnitude, pushing the softmax function into regions where it has extremely small gradients 4. To counteract this effect, we scale the dot products by 1 √dk .\n\n[3] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\nWe need to prevent leftward information ﬂow in the decoder to preserve the auto-regressive property. We implement this inside of scaled dot-product attention by masking out (setting to −∞) all values in the input of the softmax which correspond to illegal connections.\n\n[4] Source: Attention is all you need.pdf | Page: 4 | Section: 3.2.1 Scaled Dot-Product Attention\nDot-product attention is identical to our algorithm, except for the scaling factor of 1 √dk . Additive attention computes the compatibility function using a feed-forward network with a single hidden layer. While the two are similar in theoretical complexity, dot-product attention is much faster and more space-efﬁcient in practice, since it can be implemented using highly optimized matrix multiplication code.\n\n[5] Source: Attention is all you need.pdf | Page: 2 | Section: 1 Introduction\nIn this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output. The Transformer allows for signiﬁcantly more parallelization and can reach a new state of the art in translation quality after being trained for as little as twelve hours on eight P100 GPUs.\n\n[6] Source: Attention is all you need.pdf | Page: 4 | Section: 3.2.1 Scaled Dot-Product Attention\nScaled Dot-Product Attention Multi-Head Attention Figure 2: (left) Scaled Dot-Product Attention. (right) Multi-Head Attention consists of several attention layers running in parallel.\n\n[7] Source: Attention is all you need.pdf | Page: 2 | Section: 2 Background\nIn the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as described in section 3.2. Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.\n\n[8] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\n3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].\n\n[9] Source: Attention is all you need.pdf | Page: 9 | Section: 7 Conclusion\nIn the former task our best model outperforms even all previously reported ensembles. We are excited about the future of attention-based models and plan to apply them to other tasks. We plan to extend the Transformer to problems involving input and output modalities other than text and to investigate local, restricted attention mechanisms to efﬁciently handle large inputs and outputs such as images, audio and video. Making generation less sequential is another research goals of ours.\n\n[10] Source: Attention is all you need.pdf | Page: 2 | Section: 2 Background\nTo the best of our knowledge, however, the Transformer is the ﬁrst transduction model relying entirely on self-attention to compute representations of its input and output without using sequence- aligned RNNs or convolution. In the following sections, we will describe the Transformer, motivate self-attention and discuss its advantages over models such as [14, 15] and [8].",
+  "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\nContext:\n[1] Source: Attention is all you need.pdf | Page: 1 | Section: 1 Introduction\nJakob proposed replacing RNNs with self-attention and started the effort to evaluate this idea. Ashish, with Illia, designed and implemented the ﬁrst Transformer models and has been crucially involved in every aspect of this work. Noam proposed scaled dot-product attention, multi-head attention and the parameter-free position representation and became the other person involved in nearly every detail.\n\n[2] Source: Attention is all you need.pdf | Page: 4 | Section: 3.2.1 Scaled Dot-Product Attention\nWhile for small values of dk the two mechanisms perform similarly, additive attention outperforms dot product attention without scaling for larger values of dk [3]. We suspect that for large values of dk, the dot products grow large in magnitude, pushing the softmax function into regions where it has extremely small gradients 4. To counteract this effect, we scale the dot products by 1 √dk .\n\n[3] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\nWe need to prevent leftward information ﬂow in the decoder to preserve the auto-regressive property. We implement this inside of scaled dot-product attention by masking out (setting to −∞) all values in the input of the softmax which correspond to illegal connections.\n\n[4] Source: Attention is all you need.pdf | Page: 4 | Section: 3.2.1 Scaled Dot-Product Attention\nDot-product attention is identical to our algorithm, except for the scaling factor of 1 √dk . Additive attention computes the compatibility function using a feed-forward network with a single hidden layer. While the two are similar in theoretical complexity, dot-product attention is much faster and more space-efﬁcient in practice, since it can be implemented using highly optimized matrix multiplication code.\n\n[5] Source: Attention is all you need.pdf | Page: 2 | Section: 1 Introduction\nIn this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output. The Transformer allows for signiﬁcantly more parallelization and can reach a new state of the art in translation quality after being trained for as little as twelve hours on eight P100 GPUs.\n\n[6] Source: Attention is all you need.pdf | Page: 4 | Section: 3.2.1 Scaled Dot-Product Attention\nScaled Dot-Product Attention Multi-Head Attention Figure 2: (left) Scaled Dot-Product Attention. (right) Multi-Head Attention consists of several attention layers running in parallel.\n\n[7] Source: Attention is all you need.pdf | Page: 2 | Section: 2 Background\nIn the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as described in section 3.2. Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.\n\n[8] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\n3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].\n\n[9] Source: Attention is all you need.pdf | Page: 9 | Section: 7 Conclusion\nIn the former task our best model outperforms even all previously reported ensembles. We are excited about the future of attention-based models and plan to apply them to other tasks. We plan to extend the Transformer to problems involving input and output modalities other than text and to investigate local, restricted attention mechanisms to efﬁciently handle large inputs and outputs such as images, audio and video. Making generation less sequential is another research goals of ours.\n\n[10] Source: Attention is all you need.pdf | Page: 2 | Section: 2 Background\nTo the best of our knowledge, however, the Transformer is the ﬁrst transduction model relying entirely on self-attention to compute representations of its input and output without using sequence- aligned RNNs or convolution. In the following sections, we will describe the Transformer, motivate self-attention and discuss its advantages over models such as [14, 15] and [8].\n\nQuestion:\nWhy does the Transformer use scaled dot-product attention?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages.\n\nAnswer:",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": "Jakob proposed replacing RNNs with self-attention and started the effort to evaluate this idea.",
+        "evidence_start": 0,
+        "evidence_end": 95,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            6,
+            5
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 6,
+        "page": 1,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Ashish, with Illia, designed and implemented the ﬁrst Transformer models and has been crucially involved in every aspect of this work.",
+        "evidence_start": 95,
+        "evidence_end": 230,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            6,
+            5
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 6,
+        "page": 1,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Noam proposed scaled dot-product attention, multi-head attention and the parameter-free position representation and became the other person involved in nearly every detail.",
+        "evidence_start": 230,
+        "evidence_end": 403,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            6,
+            5
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 6,
+        "page": 1,
+        "citations": [
+          1
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "While for small values of dk the two mechanisms perform similarly, additive attention outperforms dot product attention without scaling for larger values of dk [3].",
+        "evidence_start": 0,
+        "evidence_end": 164,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            32,
+            31,
+            30,
+            29,
+            28
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 32,
+        "page": 4,
+        "citations": [
+          2
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We suspect that for large values of dk, the dot products grow large in magnitude, pushing the softmax function into regions where it has extremely small gradients 4.",
+        "evidence_start": 164,
+        "evidence_end": 330,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            32,
+            31,
+            30,
+            29,
+            28
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 32,
+        "page": 4,
+        "citations": [
+          2
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " To counteract this effect, we scale the dot products by 1 √dk .",
+        "evidence_start": 330,
+        "evidence_end": 394,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            32,
+            31,
+            30,
+            29,
+            28
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 32,
+        "page": 4,
+        "citations": [
+          2
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "We need to prevent leftward information ﬂow in the decoder to preserve the auto-regressive property.",
+        "evidence_start": 0,
+        "evidence_end": 100,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            40,
+            39,
+            38
+          ],
+          "identity_quote": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+          "identity_chunk_id": 38
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 40,
+        "page": 5,
+        "citations": [
+          3,
+          8
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We implement this inside of scaled dot-product attention by masking out (setting to −∞) all values in the input of the softmax which correspond to illegal connections.",
+        "evidence_start": 100,
+        "evidence_end": 268,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            40,
+            39,
+            38
+          ],
+          "identity_quote": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+          "identity_chunk_id": 38
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 40,
+        "page": 5,
+        "citations": [
+          3,
+          8
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Dot-product attention is identical to our algorithm, except for the scaling factor of 1 √dk .",
+        "evidence_start": 0,
+        "evidence_end": 93,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            31,
+            30,
+            29,
+            28,
+            27
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 31,
+        "page": 4,
+        "citations": [
+          4
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Additive attention computes the compatibility function using a feed-forward network with a single hidden layer.",
+        "evidence_start": 93,
+        "evidence_end": 205,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            31,
+            30,
+            29,
+            28,
+            27
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 31,
+        "page": 4,
+        "citations": [
+          4
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " While the two are similar in theoretical complexity, dot-product attention is much faster and more space-efﬁcient in practice, since it can be implemented using highly optimized matrix multiplication code.",
+        "evidence_start": 205,
+        "evidence_end": 411,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            31,
+            30,
+            29,
+            28,
+            27
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 31,
+        "page": 4,
+        "citations": [
+          4
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "In this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output.",
+        "evidence_start": 0,
+        "evidence_end": 191,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            12
+          ],
+          "identity_quote": "In this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output. The Transformer allows for signiﬁcantly more parallelization and can reach a new state of the art in translation quality after being trained for as little as twelve hours on eight P100 GPUs.",
+          "identity_chunk_id": 12
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 12,
+        "page": 2,
+        "citations": [
+          5
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The Transformer allows for signiﬁcantly more parallelization and can reach a new state of the art in translation quality after being trained for as little as twelve hours on eight P100 GPUs.",
+        "evidence_start": 191,
+        "evidence_end": 382,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            12
+          ],
+          "identity_quote": "In this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output.",
+          "identity_chunk_id": 12
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 12,
+        "page": 2,
+        "citations": [
+          5
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Scaled Dot-Product Attention Multi-Head Attention Figure 2: (left) Scaled Dot-Product Attention.",
+        "evidence_start": 0,
+        "evidence_end": 96,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            29,
+            28,
+            27
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 29,
+        "page": 4,
+        "citations": [
+          6
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " (right) Multi-Head Attention consists of several attention layers running in parallel.",
+        "evidence_start": 96,
+        "evidence_end": 183,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            29,
+            28,
+            27
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 29,
+        "page": 4,
+        "citations": [
+          6
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.",
+        "evidence_start": 247,
+        "evidence_end": 426,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            15,
+            14
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 15,
+        "page": 2,
+        "citations": [
+          7
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder.",
+        "evidence_start": 4,
+        "evidence_end": 270,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            38
+          ],
+          "identity_quote": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+          "identity_chunk_id": 38
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 38,
+        "page": 5,
+        "citations": [
+          8
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " This allows every position in the decoder to attend over all positions in the input sequence.",
+        "evidence_start": 270,
+        "evidence_end": 364,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            38
+          ],
+          "identity_quote": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder.",
+          "identity_chunk_id": 38
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 38,
+        "page": 5,
+        "citations": [
+          8
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+        "evidence_start": 364,
+        "evidence_end": 476,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            38
+          ],
+          "identity_quote": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence.",
+          "identity_chunk_id": 38
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 38,
+        "page": 5,
+        "citations": [
+          8
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "In the former task our best model outperforms even all previously reported ensembles.",
+        "evidence_start": 0,
+        "evidence_end": 85,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            82,
+            81
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 82,
+        "page": 9,
+        "citations": [
+          9
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We are excited about the future of attention-based models and plan to apply them to other tasks.",
+        "evidence_start": 85,
+        "evidence_end": 182,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            82,
+            81
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 82,
+        "page": 9,
+        "citations": [
+          9
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We plan to extend the Transformer to problems involving input and output modalities other than text and to investigate local, restricted attention mechanisms to efﬁciently handle large inputs and outputs such as images, audio and video.",
+        "evidence_start": 182,
+        "evidence_end": 419,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            82,
+            81
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 82,
+        "page": 9,
+        "citations": [
+          9
+        ],
+        "record_id": "E22"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Making generation less sequential is another research goals of ours.",
+        "evidence_start": 419,
+        "evidence_end": 488,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            82,
+            81
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 82,
+        "page": 9,
+        "citations": [
+          9
+        ],
+        "record_id": "E23"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "To the best of our knowledge, however, the Transformer is the ﬁrst transduction model relying entirely on self-attention to compute representations of its input and output without using sequence- aligned RNNs or convolution.",
+        "evidence_start": 0,
+        "evidence_end": 224,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            17,
+            16,
+            15,
+            14
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 17,
+        "page": 2,
+        "citations": [
+          10
+        ],
+        "record_id": "E24"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In the following sections, we will describe the Transformer, motivate self-attention and discuss its advantages over models such as [14, 15] and [8].",
+        "evidence_start": 224,
+        "evidence_end": 374,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            17,
+            16,
+            15,
+            14
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 17,
+        "page": 2,
+        "citations": [
+          10
+        ],
+        "record_id": "E25"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 6,
+        "text": "Jakob proposed replacing RNNs with self-attention and started the effort to evaluate this idea. Ashish, with Illia, designed and implemented the ﬁrst Transformer models and has been crucially involved in every aspect of this work. Noam proposed scaled dot-product attention, multi-head attention and the parameter-free position representation and became the other person involved in nearly every detail.",
+        "source": "Attention is all you need.pdf",
+        "page": 1,
+        "title": "Attention is All you Need",
+        "section": "1 Introduction"
+      },
+      {
+        "chunk_id": 32,
+        "text": "While for small values of dk the two mechanisms perform similarly, additive attention outperforms dot product attention without scaling for larger values of dk [3]. We suspect that for large values of dk, the dot products grow large in magnitude, pushing the softmax function into regions where it has extremely small gradients 4. To counteract this effect, we scale the dot products by 1 √dk .",
+        "source": "Attention is all you need.pdf",
+        "page": 4,
+        "title": "Attention is All you Need",
+        "section": "3.2.1 Scaled Dot-Product Attention"
+      },
+      {
+        "chunk_id": 40,
+        "text": "We need to prevent leftward information ﬂow in the decoder to preserve the auto-regressive property. We implement this inside of scaled dot-product attention by masking out (setting to −∞) all values in the input of the softmax which correspond to illegal connections.",
+        "source": "Attention is all you need.pdf",
+        "page": 5,
+        "title": "Attention is All you Need",
+        "section": "3.2.3 Applications of Attention in our Model"
+      },
+      {
+        "chunk_id": 31,
+        "text": "Dot-product attention is identical to our algorithm, except for the scaling factor of 1 √dk . Additive attention computes the compatibility function using a feed-forward network with a single hidden layer. While the two are similar in theoretical complexity, dot-product attention is much faster and more space-efﬁcient in practice, since it can be implemented using highly optimized matrix multiplication code.",
+        "source": "Attention is all you need.pdf",
+        "page": 4,
+        "title": "Attention is All you Need",
+        "section": "3.2.1 Scaled Dot-Product Attention"
+      },
+      {
+        "chunk_id": 12,
+        "text": "In this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output. The Transformer allows for signiﬁcantly more parallelization and can reach a new state of the art in translation quality after being trained for as little as twelve hours on eight P100 GPUs.",
+        "source": "Attention is all you need.pdf",
+        "page": 2,
+        "title": "Attention is All you Need",
+        "section": "1 Introduction"
+      },
+      {
+        "chunk_id": 29,
+        "text": "Scaled Dot-Product Attention Multi-Head Attention Figure 2: (left) Scaled Dot-Product Attention. (right) Multi-Head Attention consists of several attention layers running in parallel.",
+        "source": "Attention is all you need.pdf",
+        "page": 4,
+        "title": "Attention is All you Need",
+        "section": "3.2.1 Scaled Dot-Product Attention"
+      },
+      {
+        "chunk_id": 15,
+        "text": "In the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as described in section 3.2. Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.",
+        "source": "Attention is all you need.pdf",
+        "page": 2,
+        "title": "Attention is All you Need",
+        "section": "2 Background"
+      },
+      {
+        "chunk_id": 38,
+        "text": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+        "source": "Attention is all you need.pdf",
+        "page": 5,
+        "title": "Attention is All you Need",
+        "section": "3.2.3 Applications of Attention in our Model"
+      },
+      {
+        "chunk_id": 82,
+        "text": "In the former task our best model outperforms even all previously reported ensembles. We are excited about the future of attention-based models and plan to apply them to other tasks. We plan to extend the Transformer to problems involving input and output modalities other than text and to investigate local, restricted attention mechanisms to efﬁciently handle large inputs and outputs such as images, audio and video. Making generation less sequential is another research goals of ours.",
+        "source": "Attention is all you need.pdf",
+        "page": 9,
+        "title": "Attention is All you Need",
+        "section": "7 Conclusion"
+      },
+      {
+        "chunk_id": 17,
+        "text": "To the best of our knowledge, however, the Transformer is the ﬁrst transduction model relying entirely on self-attention to compute representations of its input and output without using sequence- aligned RNNs or convolution. In the following sections, we will describe the Transformer, motivate self-attention and discuss its advantages over models such as [14, 15] and [8].",
+        "source": "Attention is all you need.pdf",
+        "page": 2,
+        "title": "Attention is All you Need",
+        "section": "2 Background"
+      }
+    ],
+    "selected_ids": [
+      6,
+      32,
+      40,
+      31,
+      12,
+      29,
+      15,
+      38,
+      82,
+      17
+    ]
+  },
+  "answer": "The Transformer uses scaled dot-product attention because, for large values of dk, the dot products grow large in magnitude, pushing the softmax function into regions with extremely small gradients, so the dot products are scaled by 1/√dk to counteract this effect [2]. Among attention mechanisms, dot-product attention is much faster and more space-efficient in practice than additive attention—despite the two being similar in theoretical complexity—because it can be implemented using highly optimized matrix multiplication code; dot-product attention is identical to their algorithm except for the scaling factor of 1/√dk, whereas additive attention computes the compatibility function using a feed-forward network with a single hidden layer [4]. The sources do not further justify why scaling is preferred beyond these stated mechanisms.",
+  "original_answer": "The Transformer uses scaled dot-product attention because, for large values of dk, the dot products grow large in magnitude, pushing the softmax function into regions with extremely small gradients, so the dot products are scaled by 1/√dk to counteract this effect [2]. Among attention mechanisms, dot-product attention is much faster and more space-efficient in practice than additive attention—despite the two being similar in theoretical complexity—because it can be implemented using highly optimized matrix multiplication code; dot-product attention is identical to their algorithm except for the scaling factor of 1/√dk, whereas additive attention computes the compatibility function using a feed-forward network with a single hidden layer [4]. The sources do not further justify why scaling is preferred beyond these stated mechanisms.",
+  "citation_validation": {
+    "answer": "The Transformer uses scaled dot-product attention because, for large values of dk, the dot products grow large in magnitude, pushing the softmax function into regions with extremely small gradients, so the dot products are scaled by 1/√dk to counteract this effect [2]. Among attention mechanisms, dot-product attention is much faster and more space-efficient in practice than additive attention—despite the two being similar in theoretical complexity—because it can be implemented using highly optimized matrix multiplication code; dot-product attention is identical to their algorithm except for the scaling factor of 1/√dk, whereas additive attention computes the compatibility function using a feed-forward network with a single hidden layer [4]. The sources do not further justify why scaling is preferred beyond these stated mechanisms.",
+    "original_answer": "The Transformer uses scaled dot-product attention because, for large values of dk, the dot products grow large in magnitude, pushing the softmax function into regions with extremely small gradients, so the dot products are scaled by 1/√dk to counteract this effect [2]. Among attention mechanisms, dot-product attention is much faster and more space-efficient in practice than additive attention—despite the two being similar in theoretical complexity—because it can be implemented using highly optimized matrix multiplication code; dot-product attention is identical to their algorithm except for the scaling factor of 1/√dk, whereas additive attention computes the compatibility function using a feed-forward network with a single hidden layer [4]. The sources do not further justify why scaling is preferred beyond these stated mechanisms.",
+    "repair_candidate": null,
+    "initial_check": {
+      "cited_numbers": [
+        2,
+        4
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 2,
+          "chunk_id": 32,
+          "source": "Attention is all you need.pdf",
+          "page": 4,
+          "text": "While for small values of dk the two mechanisms perform similarly, additive attention outperforms dot product attention without scaling for larger values of dk [3]. We suspect that for large values of dk, the dot products grow large in magnitude, pushing the softmax function into regions where it has extremely small gradients 4. To counteract this effect, we scale the dot products by 1 √dk ."
+        },
+        {
+          "citation": 4,
+          "chunk_id": 31,
+          "source": "Attention is all you need.pdf",
+          "page": 4,
+          "text": "Dot-product attention is identical to our algorithm, except for the scaling factor of 1 √dk . Additive attention computes the compatibility function using a feed-forward network with a single hidden layer. While the two are similar in theoretical complexity, dot-product attention is much faster and more space-efﬁcient in practice, since it can be implemented using highly optimized matrix multiplication code."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "final_check": {
+      "cited_numbers": [
+        2,
+        4
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 2,
+          "chunk_id": 32,
+          "source": "Attention is all you need.pdf",
+          "page": 4,
+          "text": "While for small values of dk the two mechanisms perform similarly, additive attention outperforms dot product attention without scaling for larger values of dk [3]. We suspect that for large values of dk, the dot products grow large in magnitude, pushing the softmax function into regions where it has extremely small gradients 4. To counteract this effect, we scale the dot products by 1 √dk ."
+        },
+        {
+          "citation": 4,
+          "chunk_id": 31,
+          "source": "Attention is all you need.pdf",
+          "page": 4,
+          "text": "Dot-product attention is identical to our algorithm, except for the scaling factor of 1 √dk . Additive attention computes the compatibility function using a feed-forward network with a single hidden layer. While the two are similar in theoretical complexity, dot-product attention is much faster and more space-efﬁcient in practice, since it can be implemented using highly optimized matrix multiplication code."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "repair_attempted": false,
+    "repair_applied": false,
+    "repair_response": null,
+    "repair_prompt": null,
+    "unresolved_blocks": [],
+    "status": "not_needed",
+    "note": "Citation structure only; source relevance and claim meaning are not automatically verified."
+  },
+  "citation_structure": {
+    "cited_numbers": [
+      2,
+      4
+    ],
+    "invalid_numbers": [],
+    "malformed_markers": [],
+    "has_citations": true,
+    "require_citations": true,
+    "structure_passed": true,
+    "cited_sources": [
+      {
+        "citation": 2,
+        "chunk_id": 32,
+        "source": "Attention is all you need.pdf",
+        "page": 4,
+        "text": "While for small values of dk the two mechanisms perform similarly, additive attention outperforms dot product attention without scaling for larger values of dk [3]. We suspect that for large values of dk, the dot products grow large in magnitude, pushing the softmax function into regions where it has extremely small gradients 4. To counteract this effect, we scale the dot products by 1 √dk ."
+      },
+      {
+        "citation": 4,
+        "chunk_id": 31,
+        "source": "Attention is all you need.pdf",
+        "page": 4,
+        "text": "Dot-product attention is identical to our algorithm, except for the scaling factor of 1 √dk . Additive attention computes the compatibility function using a feed-forward network with a single hidden layer. While the two are similar in theoretical complexity, dot-product attention is much faster and more space-efﬁcient in practice, since it can be implemented using highly optimized matrix multiplication code."
+      }
+    ],
+    "semantic_support": "requires_manual_review"
+  },
+  "status": "completed",
+  "api_calls": [
+    {
+      "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate exactly 2 or 3 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nWhy does the Transformer use scaled dot-product attention?\n",
+      "response": {
+        "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+        "requested_model": "cn:deepseek-v4.1-flash",
+        "reported_model": "deepseek-v4.1-flash",
+        "usage": {
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 256,
+          "cached_tokens": 256,
+          "completion_thinking_tokens": 0,
+          "completion_tokens": 19,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "credit": 0,
+          "prompt_cache_hit_tokens": 256,
+          "prompt_cache_miss_tokens": 252,
+          "prompt_cache_write_tokens": 0,
+          "prompt_tokens": 508,
+          "prompt_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 256,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "total_tokens": 527
+        },
+        "finish_reason": "stop",
+        "request_parameters": {
+          "model": "cn:deepseek-v4.1-flash",
+          "stream": false,
+          "thinking": {
+            "type": "disabled"
+          },
+          "temperature": 0,
+          "max_tokens": 4096
+        }
+      },
+      "elapsed_seconds": 1.45
+    },
+    {
+      "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\nContext:\n[1] Source: Attention is all you need.pdf | Page: 1 | Section: 1 Introduction\nJakob proposed replacing RNNs with self-attention and started the effort to evaluate this idea. Ashish, with Illia, designed and implemented the ﬁrst Transformer models and has been crucially involved in every aspect of this work. Noam proposed scaled dot-product attention, multi-head attention and the parameter-free position representation and became the other person involved in nearly every detail.\n\n[2] Source: Attention is all you need.pdf | Page: 4 | Section: 3.2.1 Scaled Dot-Product Attention\nWhile for small values of dk the two mechanisms perform similarly, additive attention outperforms dot product attention without scaling for larger values of dk [3]. We suspect that for large values of dk, the dot products grow large in magnitude, pushing the softmax function into regions where it has extremely small gradients 4. To counteract this effect, we scale the dot products by 1 √dk .\n\n[3] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\nWe need to prevent leftward information ﬂow in the decoder to preserve the auto-regressive property. We implement this inside of scaled dot-product attention by masking out (setting to −∞) all values in the input of the softmax which correspond to illegal connections.\n\n[4] Source: Attention is all you need.pdf | Page: 4 | Section: 3.2.1 Scaled Dot-Product Attention\nDot-product attention is identical to our algorithm, except for the scaling factor of 1 √dk . Additive attention computes the compatibility function using a feed-forward network with a single hidden layer. While the two are similar in theoretical complexity, dot-product attention is much faster and more space-efﬁcient in practice, since it can be implemented using highly optimized matrix multiplication code.\n\n[5] Source: Attention is all you need.pdf | Page: 2 | Section: 1 Introduction\nIn this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output. The Transformer allows for signiﬁcantly more parallelization and can reach a new state of the art in translation quality after being trained for as little as twelve hours on eight P100 GPUs.\n\n[6] Source: Attention is all you need.pdf | Page: 4 | Section: 3.2.1 Scaled Dot-Product Attention\nScaled Dot-Product Attention Multi-Head Attention Figure 2: (left) Scaled Dot-Product Attention. (right) Multi-Head Attention consists of several attention layers running in parallel.\n\n[7] Source: Attention is all you need.pdf | Page: 2 | Section: 2 Background\nIn the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as described in section 3.2. Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.\n\n[8] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\n3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].\n\n[9] Source: Attention is all you need.pdf | Page: 9 | Section: 7 Conclusion\nIn the former task our best model outperforms even all previously reported ensembles. We are excited about the future of attention-based models and plan to apply them to other tasks. We plan to extend the Transformer to problems involving input and output modalities other than text and to investigate local, restricted attention mechanisms to efﬁciently handle large inputs and outputs such as images, audio and video. Making generation less sequential is another research goals of ours.\n\n[10] Source: Attention is all you need.pdf | Page: 2 | Section: 2 Background\nTo the best of our knowledge, however, the Transformer is the ﬁrst transduction model relying entirely on self-attention to compute representations of its input and output without using sequence- aligned RNNs or convolution. In the following sections, we will describe the Transformer, motivate self-attention and discuss its advantages over models such as [14, 15] and [8].\n\nQuestion:\nWhy does the Transformer use scaled dot-product attention?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages.\n\nAnswer:",
+      "response": {
+        "answer": "The Transformer uses scaled dot-product attention because, for large values of dk, the dot products grow large in magnitude, pushing the softmax function into regions with extremely small gradients, so the dot products are scaled by 1/√dk to counteract this effect [2]. Among attention mechanisms, dot-product attention is much faster and more space-efficient in practice than additive attention—despite the two being similar in theoretical complexity—because it can be implemented using highly optimized matrix multiplication code; dot-product attention is identical to their algorithm except for the scaling factor of 1/√dk, whereas additive attention computes the compatibility function using a feed-forward network with a single hidden layer [4]. The sources do not further justify why scaling is preferred beyond these stated mechanisms.",
+        "requested_model": "cn:deepseek-v4.1-flash",
+        "reported_model": "deepseek-v4.1-flash",
+        "usage": {
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 1152,
+          "cached_tokens": 1152,
+          "completion_thinking_tokens": 0,
+          "completion_tokens": 152,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "credit": 0.01,
+          "prompt_cache_hit_tokens": 1152,
+          "prompt_cache_miss_tokens": 204,
+          "prompt_cache_write_tokens": 0,
+          "prompt_tokens": 1356,
+          "prompt_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 1152,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "total_tokens": 1508
+        },
+        "finish_reason": "stop",
+        "request_parameters": {
+          "model": "cn:deepseek-v4.1-flash",
+          "stream": false,
+          "thinking": {
+            "type": "disabled"
+          },
+          "temperature": 0,
+          "max_tokens": 4096
+        }
+      },
+      "elapsed_seconds": 2.22
+    }
+  ],
+  "model_calls": 2,
+  "evaluation_code_sha256": {
+    "main.py": "89831b9e3fa1ddf76fe7c20e8e58deedc0d0cd139b022eba8b4be97151a3877b",
+    "llm.py": "4a8ec8528b0662cd86a8fdc01feacfd361a276f04ae7b11c0e7574383a27eacc",
+    "evaluation/run_answer_evaluation.py": "29c3362af51597133214a9ba4d4d14831fdb5a3715c3a0a5d1197f9b4082cee5",
+    "src/api_llm.py": "11aa14f5435a079e83671b031d1159fbbc0ee8c760c61c9c0cc7afd0db6ae0a7",
+    "src/bm25_retriever.py": "7d2a046a4449cd6fdc371984db329534cedc7351d6196b9c218114ff0476906b",
+    "src/chunk_storage.py": "35d2b9b6c4d5a91d40ff242b85fbaa578bb75ed89501b1435a94dd8b0b5405b5",
+    "src/chunking_recursive.py": "f2fea89cace280329804cfe18d59a3663d21e3611129e0432518a37e4f691e72",
+    "src/chunking_semantic.py": "0f4947702f359a3967e2160ec098bf0cb1254eb2f7f77806ba874bb6955b0000",
+    "src/citation_validation.py": "c7e21d3070a454f08cf7944dd764a8e93dc7a3d83078863acd92db03e264b79c",
+    "src/embedding.py": "894fac2090929129e1883c858838e2255d69a6048a2e76d2387235321f2adade",
+    "src/grounded_evidence.py": "78a7e63512970492f4e52050cb8b2312e2658281acfe979eb4476516ff8c2663",
+    "src/hybrid_retriever.py": "ddd2315a558a062ac31fedb0e7a8d28af6a3df783450792825ff252d596de63c",
+    "src/hyde.py": "b575a07b016e4803de33d151eb90cdff1950b970763d69ba4e2f23b1352d3e31",
+    "src/numeric_evidence.py": "492fb546e6bc89b881843ece4b4582e533aec5aabbc58d61cd1cf158c4bac3d0",
+    "src/pdf_loader.py": "691f97e547936bcbda1ccb9837a1e91b47c34672ce33b227eaa5d18501519d1e",
+    "src/query_decomposer.py": "7a089ea7330049da1828d4dcec4bc67ad17d3505ce9017d6168cccc239326de9",
+    "src/query_rewriter.py": "bb762f7e77596a7f228d985b0c3a1699ec60bc87eba87b754c418a30cc7cdf62",
+    "src/reranker.py": "028e22aa105551bdf0845d215ba0604407a960c57d7e4e32a65c33e52dd7ffeb",
+    "src/retriever.py": "ad82c4301a81fefb3c205b5c0834d9ddcf67cc616d9b736bb265a6e9eb637e82",
+    "src/vector_store.py": "605ffa3761629f4f58b37663a23fff4020f895464917d600325ae2e1fccc0222",
+    "evaluation/questions.json": "6311c5293604f2c6f7258b53f47899b3fdf41ed8edcafed929655f2892157ade",
+    "evaluation/answer_review_protocol.md": "614a18fe1babb3cffc96aa7aaa8956c3d84b94a1ca10f37234fd8cd00ed3bf27",
+    "data/processed/chunks_semantic.json": "6bf158ec8cf2df07c438a7f3ff14806b2db6c6d7af4ce4fcb9fcf13a60603277",
+    "data/processed/faiss_semantic.index": "dd79e7f8afcc4daa09fbbdc1f85fb27c1d9641eff1003c1965a42343b8ad8b0b"
+  },
+  "elapsed_seconds": 12.94
+}

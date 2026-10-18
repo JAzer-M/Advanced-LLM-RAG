@@ -1,0 +1,1032 @@
+{
+  "question_id": "n1",
+  "query": "In the Transformer decoder, how do the shifted target embeddings and masked self-attention prevent access to future target tokens during training?",
+  "condition": "both",
+  "retrieval_options": {
+    "rewrite": true,
+    "hyde": true
+  },
+  "decomposition": {
+    "needs_decomposition": true,
+    "sub_queries": [
+      "In the Transformer decoder, how do the shifted target embeddings prevent access to future target tokens during training?",
+      "In the Transformer decoder, how does masked self-attention prevent access to future target tokens during training?"
+    ]
+  },
+  "selected_ids": [
+    25,
+    81,
+    20,
+    15,
+    17,
+    39,
+    38,
+    40,
+    43,
+    67
+  ],
+  "context": "[1] Source: Attention is all you need.pdf | Page: 3 | Section: 3.1 Encoder and Decoder Stacks\nSimilar to the encoder, we employ residual connections around each of the sub-layers, followed by layer normalization. We also modify the self-attention sub-layer in the decoder stack to prevent positions from attending to subsequent positions. This masking, combined with fact that the output embeddings are offset by one position, ensures that the predictions for position i can depend only on the known outputs at positions less than i.\n\n[2] Source: Attention is all you need.pdf | Page: 9 | Section: 7 Conclusion\n7 Conclusion In this work, we presented the Transformer, the ﬁrst sequence transduction model based entirely on attention, replacing the recurrent layers most commonly used in encoder-decoder architectures with multi-headed self-attention. For translation tasks, the Transformer can be trained signiﬁcantly faster than architectures based on recurrent or convolutional layers. On both WMT 2014 English-to-German and WMT 2014 English-to-French translation tasks, we achieve a new state of the art.\n\n[3] Source: Attention is all you need.pdf | Page: 2 | Section: 3 Model Architecture\nThe Transformer follows this overall architecture using stacked self-attention and point-wise, fully connected layers for both the encoder and decoder, shown in the left and right halves of Figure 1, respectively.\n\n[4] Source: Attention is all you need.pdf | Page: 2 | Section: 2 Background\nIn the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as described in section 3.2. Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.\n\n[5] Source: Attention is all you need.pdf | Page: 2 | Section: 2 Background\nTo the best of our knowledge, however, the Transformer is the ﬁrst transduction model relying entirely on self-attention to compute representations of its input and output without using sequence- aligned RNNs or convolution. In the following sections, we will describe the Transformer, motivate self-attention and discuss its advantages over models such as [14, 15] and [8].\n\n[6] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\n• The encoder contains self-attention layers. In a self-attention layer all of the keys, values and queries come from the same place, in this case, the output of the previous layer in the encoder. Each position in the encoder can attend to all positions in the previous layer of the encoder. • Similarly, self-attention layers in the decoder allow each position in the decoder to attend to all positions in the decoder up to and including that position.\n\n[7] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\n3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].\n\n[8] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\nWe need to prevent leftward information ﬂow in the decoder to preserve the auto-regressive property. We implement this inside of scaled dot-product attention by masking out (setting to −∞) all values in the input of the softmax which correspond to illegal connections.\n\n[9] Source: Attention is all you need.pdf | Page: 5 | Section: 3.4 Embeddings and Softmax\n3.4 Embeddings and Softmax Similarly to other sequence transduction models, we use learned embeddings to convert the input tokens and output tokens to vectors of dimension dmodel. We also use the usual learned linear transfor- mation and softmax function to convert the decoder output to predicted next-token probabilities.\n\n[10] Source: Attention is all you need.pdf | Page: 7 | Section: 5.4 Regularization\n5.4 Regularization We employ three types of regularization during training: Residual Dropout We apply dropout [27] to the output of each sub-layer, before it is added to the sub-layer input and normalized. In addition, we apply dropout to the sums of the embeddings and the positional encodings in both the encoder and decoder stacks.",
+  "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\nContext:\n[1] Source: Attention is all you need.pdf | Page: 3 | Section: 3.1 Encoder and Decoder Stacks\nSimilar to the encoder, we employ residual connections around each of the sub-layers, followed by layer normalization. We also modify the self-attention sub-layer in the decoder stack to prevent positions from attending to subsequent positions. This masking, combined with fact that the output embeddings are offset by one position, ensures that the predictions for position i can depend only on the known outputs at positions less than i.\n\n[2] Source: Attention is all you need.pdf | Page: 9 | Section: 7 Conclusion\n7 Conclusion In this work, we presented the Transformer, the ﬁrst sequence transduction model based entirely on attention, replacing the recurrent layers most commonly used in encoder-decoder architectures with multi-headed self-attention. For translation tasks, the Transformer can be trained signiﬁcantly faster than architectures based on recurrent or convolutional layers. On both WMT 2014 English-to-German and WMT 2014 English-to-French translation tasks, we achieve a new state of the art.\n\n[3] Source: Attention is all you need.pdf | Page: 2 | Section: 3 Model Architecture\nThe Transformer follows this overall architecture using stacked self-attention and point-wise, fully connected layers for both the encoder and decoder, shown in the left and right halves of Figure 1, respectively.\n\n[4] Source: Attention is all you need.pdf | Page: 2 | Section: 2 Background\nIn the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as described in section 3.2. Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.\n\n[5] Source: Attention is all you need.pdf | Page: 2 | Section: 2 Background\nTo the best of our knowledge, however, the Transformer is the ﬁrst transduction model relying entirely on self-attention to compute representations of its input and output without using sequence- aligned RNNs or convolution. In the following sections, we will describe the Transformer, motivate self-attention and discuss its advantages over models such as [14, 15] and [8].\n\n[6] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\n• The encoder contains self-attention layers. In a self-attention layer all of the keys, values and queries come from the same place, in this case, the output of the previous layer in the encoder. Each position in the encoder can attend to all positions in the previous layer of the encoder. • Similarly, self-attention layers in the decoder allow each position in the decoder to attend to all positions in the decoder up to and including that position.\n\n[7] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\n3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].\n\n[8] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\nWe need to prevent leftward information ﬂow in the decoder to preserve the auto-regressive property. We implement this inside of scaled dot-product attention by masking out (setting to −∞) all values in the input of the softmax which correspond to illegal connections.\n\n[9] Source: Attention is all you need.pdf | Page: 5 | Section: 3.4 Embeddings and Softmax\n3.4 Embeddings and Softmax Similarly to other sequence transduction models, we use learned embeddings to convert the input tokens and output tokens to vectors of dimension dmodel. We also use the usual learned linear transfor- mation and softmax function to convert the decoder output to predicted next-token probabilities.\n\n[10] Source: Attention is all you need.pdf | Page: 7 | Section: 5.4 Regularization\n5.4 Regularization We employ three types of regularization during training: Residual Dropout We apply dropout [27] to the output of each sub-layer, before it is added to the sub-layer input and normalized. In addition, we apply dropout to the sums of the embeddings and the positional encodings in both the encoder and decoder stacks.\n\nQuestion:\nIn the Transformer decoder, how do the shifted target embeddings and masked self-attention prevent access to future target tokens during training?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages.\n\nAnswer:",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": "Similar to the encoder, we employ residual connections around each of the sub-layers, followed by layer normalization.",
+        "evidence_start": 0,
+        "evidence_end": 118,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            25
+          ],
+          "identity_quote": "Similar to the encoder, we employ residual connections around each of the sub-layers, followed by layer normalization. We also modify the self-attention sub-layer in the decoder stack to prevent positions from attending to subsequent positions. This masking, combined with fact that the output embeddings are offset by one position, ensures that the predictions for position i can depend only on the known outputs at positions less than i.",
+          "identity_chunk_id": 25
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 25,
+        "page": 3,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We also modify the self-attention sub-layer in the decoder stack to prevent positions from attending to subsequent positions.",
+        "evidence_start": 118,
+        "evidence_end": 244,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            25
+          ],
+          "identity_quote": "Similar to the encoder, we employ residual connections around each of the sub-layers, followed by layer normalization.",
+          "identity_chunk_id": 25
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 25,
+        "page": 3,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " This masking, combined with fact that the output embeddings are offset by one position, ensures that the predictions for position i can depend only on the known outputs at positions less than i.",
+        "evidence_start": 244,
+        "evidence_end": 439,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            25
+          ],
+          "identity_quote": "Similar to the encoder, we employ residual connections around each of the sub-layers, followed by layer normalization. We also modify the self-attention sub-layer in the decoder stack to prevent positions from attending to subsequent positions.",
+          "identity_chunk_id": 25
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 25,
+        "page": 3,
+        "citations": [
+          1
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "7 Conclusion In this work, we presented the Transformer, the ﬁrst sequence transduction model based entirely on attention, replacing the recurrent layers most commonly used in encoder-decoder architectures with multi-headed self-attention.",
+        "evidence_start": 0,
+        "evidence_end": 239,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            81
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 81,
+        "page": 9,
+        "citations": [
+          2
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " For translation tasks, the Transformer can be trained signiﬁcantly faster than architectures based on recurrent or convolutional layers.",
+        "evidence_start": 239,
+        "evidence_end": 376,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            81
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 81,
+        "page": 9,
+        "citations": [
+          2
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " On both WMT 2014 English-to-German and WMT 2014 English-to-French translation tasks, we achieve a new state of the art.",
+        "evidence_start": 376,
+        "evidence_end": 496,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            81
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 81,
+        "page": 9,
+        "citations": [
+          2
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "The Transformer follows this overall architecture using stacked self-attention and point-wise, fully connected layers for both the encoder and decoder, shown in the left and right halves of Figure 1, respectively.",
+        "evidence_start": 0,
+        "evidence_end": 213,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            20,
+            19,
+            18
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 20,
+        "page": 2,
+        "citations": [
+          3
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.",
+        "evidence_start": 247,
+        "evidence_end": 426,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            15,
+            14
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 15,
+        "page": 2,
+        "citations": [
+          4
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "To the best of our knowledge, however, the Transformer is the ﬁrst transduction model relying entirely on self-attention to compute representations of its input and output without using sequence- aligned RNNs or convolution.",
+        "evidence_start": 0,
+        "evidence_end": 224,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            17,
+            16,
+            15,
+            14
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 17,
+        "page": 2,
+        "citations": [
+          5
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In the following sections, we will describe the Transformer, motivate self-attention and discuss its advantages over models such as [14, 15] and [8].",
+        "evidence_start": 224,
+        "evidence_end": 374,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            17,
+            16,
+            15,
+            14
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 17,
+        "page": 2,
+        "citations": [
+          5
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "• The encoder contains self-attention layers.",
+        "evidence_start": 0,
+        "evidence_end": 45,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            39,
+            38
+          ],
+          "identity_quote": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+          "identity_chunk_id": 38
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 39,
+        "page": 5,
+        "citations": [
+          6,
+          7
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In a self-attention layer all of the keys, values and queries come from the same place, in this case, the output of the previous layer in the encoder.",
+        "evidence_start": 45,
+        "evidence_end": 196,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            39,
+            38
+          ],
+          "identity_quote": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+          "identity_chunk_id": 38
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 39,
+        "page": 5,
+        "citations": [
+          6,
+          7
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Each position in the encoder can attend to all positions in the previous layer of the encoder.",
+        "evidence_start": 196,
+        "evidence_end": 291,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            39,
+            38
+          ],
+          "identity_quote": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+          "identity_chunk_id": 38
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 39,
+        "page": 5,
+        "citations": [
+          6,
+          7
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " • Similarly, self-attention layers in the decoder allow each position in the decoder to attend to all positions in the decoder up to and including that position.",
+        "evidence_start": 291,
+        "evidence_end": 453,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            39,
+            38
+          ],
+          "identity_quote": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+          "identity_chunk_id": 38
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 39,
+        "page": 5,
+        "citations": [
+          6,
+          7
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder.",
+        "evidence_start": 4,
+        "evidence_end": 270,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            38
+          ],
+          "identity_quote": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+          "identity_chunk_id": 38
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 38,
+        "page": 5,
+        "citations": [
+          7
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " This allows every position in the decoder to attend over all positions in the input sequence.",
+        "evidence_start": 270,
+        "evidence_end": 364,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            38
+          ],
+          "identity_quote": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder.",
+          "identity_chunk_id": 38
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 38,
+        "page": 5,
+        "citations": [
+          7
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+        "evidence_start": 364,
+        "evidence_end": 476,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            38
+          ],
+          "identity_quote": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence.",
+          "identity_chunk_id": 38
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 38,
+        "page": 5,
+        "citations": [
+          7
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "We need to prevent leftward information ﬂow in the decoder to preserve the auto-regressive property.",
+        "evidence_start": 0,
+        "evidence_end": 100,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            40,
+            39,
+            38
+          ],
+          "identity_quote": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+          "identity_chunk_id": 38
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 40,
+        "page": 5,
+        "citations": [
+          8,
+          7
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We implement this inside of scaled dot-product attention by masking out (setting to −∞) all values in the input of the softmax which correspond to illegal connections.",
+        "evidence_start": 100,
+        "evidence_end": 268,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            40,
+            39,
+            38
+          ],
+          "identity_quote": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+          "identity_chunk_id": 38
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 40,
+        "page": 5,
+        "citations": [
+          8,
+          7
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "4 Embeddings and Softmax Similarly to other sequence transduction models, we use learned embeddings to convert the input tokens and output tokens to vectors of dimension dmodel.",
+        "evidence_start": 2,
+        "evidence_end": 179,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            43
+          ],
+          "identity_quote": "3.4 Embeddings and Softmax Similarly to other sequence transduction models, we use learned embeddings to convert the input tokens and output tokens to vectors of dimension dmodel. We also use the usual learned linear transfor- mation and softmax function to convert the decoder output to predicted next-token probabilities.",
+          "identity_chunk_id": 43
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 43,
+        "page": 5,
+        "citations": [
+          9
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We also use the usual learned linear transfor- mation and softmax function to convert the decoder output to predicted next-token probabilities.",
+        "evidence_start": 179,
+        "evidence_end": 323,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            43
+          ],
+          "identity_quote": "3.4 Embeddings and Softmax Similarly to other sequence transduction models, we use learned embeddings to convert the input tokens and output tokens to vectors of dimension dmodel. We also use the usual learned linear transfor- mation and softmax function to convert the decoder output to predicted next-token probabilities.",
+          "identity_chunk_id": 43
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 43,
+        "page": 5,
+        "citations": [
+          9
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "4 Regularization We employ three types of regularization during training: Residual Dropout We apply dropout [27] to the output of each sub-layer, before it is added to the sub-layer input and normalized.",
+        "evidence_start": 2,
+        "evidence_end": 205,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            67
+          ],
+          "identity_quote": "5.4 Regularization We employ three types of regularization during training: Residual Dropout We apply dropout [27] to the output of each sub-layer, before it is added to the sub-layer input and normalized. In addition, we apply dropout to the sums of the embeddings and the positional encodings in both the encoder and decoder stacks.",
+          "identity_chunk_id": 67
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 67,
+        "page": 7,
+        "citations": [
+          10
+        ],
+        "record_id": "E22"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In addition, we apply dropout to the sums of the embeddings and the positional encodings in both the encoder and decoder stacks.",
+        "evidence_start": 205,
+        "evidence_end": 334,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            67
+          ],
+          "identity_quote": "5.4 Regularization We employ three types of regularization during training: Residual Dropout We apply dropout [27] to the output of each sub-layer, before it is added to the sub-layer input and normalized.",
+          "identity_chunk_id": 67
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 67,
+        "page": 7,
+        "citations": [
+          10
+        ],
+        "record_id": "E23"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 25,
+        "text": "Similar to the encoder, we employ residual connections around each of the sub-layers, followed by layer normalization. We also modify the self-attention sub-layer in the decoder stack to prevent positions from attending to subsequent positions. This masking, combined with fact that the output embeddings are offset by one position, ensures that the predictions for position i can depend only on the known outputs at positions less than i.",
+        "source": "Attention is all you need.pdf",
+        "page": 3,
+        "title": "Attention is All you Need",
+        "section": "3.1 Encoder and Decoder Stacks"
+      },
+      {
+        "chunk_id": 81,
+        "text": "7 Conclusion In this work, we presented the Transformer, the ﬁrst sequence transduction model based entirely on attention, replacing the recurrent layers most commonly used in encoder-decoder architectures with multi-headed self-attention. For translation tasks, the Transformer can be trained signiﬁcantly faster than architectures based on recurrent or convolutional layers. On both WMT 2014 English-to-German and WMT 2014 English-to-French translation tasks, we achieve a new state of the art.",
+        "source": "Attention is all you need.pdf",
+        "page": 9,
+        "title": "Attention is All you Need",
+        "section": "7 Conclusion"
+      },
+      {
+        "chunk_id": 20,
+        "text": "The Transformer follows this overall architecture using stacked self-attention and point-wise, fully connected layers for both the encoder and decoder, shown in the left and right halves of Figure 1, respectively.",
+        "source": "Attention is all you need.pdf",
+        "page": 2,
+        "title": "Attention is All you Need",
+        "section": "3 Model Architecture"
+      },
+      {
+        "chunk_id": 15,
+        "text": "In the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as described in section 3.2. Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.",
+        "source": "Attention is all you need.pdf",
+        "page": 2,
+        "title": "Attention is All you Need",
+        "section": "2 Background"
+      },
+      {
+        "chunk_id": 17,
+        "text": "To the best of our knowledge, however, the Transformer is the ﬁrst transduction model relying entirely on self-attention to compute representations of its input and output without using sequence- aligned RNNs or convolution. In the following sections, we will describe the Transformer, motivate self-attention and discuss its advantages over models such as [14, 15] and [8].",
+        "source": "Attention is all you need.pdf",
+        "page": 2,
+        "title": "Attention is All you Need",
+        "section": "2 Background"
+      },
+      {
+        "chunk_id": 39,
+        "text": "• The encoder contains self-attention layers. In a self-attention layer all of the keys, values and queries come from the same place, in this case, the output of the previous layer in the encoder. Each position in the encoder can attend to all positions in the previous layer of the encoder. • Similarly, self-attention layers in the decoder allow each position in the decoder to attend to all positions in the decoder up to and including that position.",
+        "source": "Attention is all you need.pdf",
+        "page": 5,
+        "title": "Attention is All you Need",
+        "section": "3.2.3 Applications of Attention in our Model"
+      },
+      {
+        "chunk_id": 38,
+        "text": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+        "source": "Attention is all you need.pdf",
+        "page": 5,
+        "title": "Attention is All you Need",
+        "section": "3.2.3 Applications of Attention in our Model"
+      },
+      {
+        "chunk_id": 40,
+        "text": "We need to prevent leftward information ﬂow in the decoder to preserve the auto-regressive property. We implement this inside of scaled dot-product attention by masking out (setting to −∞) all values in the input of the softmax which correspond to illegal connections.",
+        "source": "Attention is all you need.pdf",
+        "page": 5,
+        "title": "Attention is All you Need",
+        "section": "3.2.3 Applications of Attention in our Model"
+      },
+      {
+        "chunk_id": 43,
+        "text": "3.4 Embeddings and Softmax Similarly to other sequence transduction models, we use learned embeddings to convert the input tokens and output tokens to vectors of dimension dmodel. We also use the usual learned linear transfor- mation and softmax function to convert the decoder output to predicted next-token probabilities.",
+        "source": "Attention is all you need.pdf",
+        "page": 5,
+        "title": "Attention is All you Need",
+        "section": "3.4 Embeddings and Softmax"
+      },
+      {
+        "chunk_id": 67,
+        "text": "5.4 Regularization We employ three types of regularization during training: Residual Dropout We apply dropout [27] to the output of each sub-layer, before it is added to the sub-layer input and normalized. In addition, we apply dropout to the sums of the embeddings and the positional encodings in both the encoder and decoder stacks.",
+        "source": "Attention is all you need.pdf",
+        "page": 7,
+        "title": "Attention is All you Need",
+        "section": "5.4 Regularization"
+      }
+    ],
+    "selected_ids": [
+      25,
+      81,
+      20,
+      15,
+      17,
+      39,
+      38,
+      40,
+      43,
+      67
+    ]
+  },
+  "answer": "The decoder's self-attention sub-layer is modified to prevent positions from attending to subsequent positions, and this masking, combined with the output embeddings being offset by one position, ensures that predictions for position i can depend only on known outputs at positions less than i [1]. In the decoder, self-attention layers allow each position to attend to all positions in the decoder up to and including that position [6]. To prevent leftward information flow in the decoder and preserve the auto-regressive property, all values in the input of the softmax corresponding to illegal connections are masked out by setting them to −∞ inside scaled dot-product attention [8].",
+  "original_answer": "The decoder's self-attention sub-layer is modified to prevent positions from attending to subsequent positions, and this masking, combined with the output embeddings being offset by one position, ensures that predictions for position i can depend only on known outputs at positions less than i [1]. In the decoder, self-attention layers allow each position to attend to all positions in the decoder up to and including that position [6]. To prevent leftward information flow in the decoder and preserve the auto-regressive property, all values in the input of the softmax corresponding to illegal connections are masked out by setting them to −∞ inside scaled dot-product attention [8].",
+  "citation_validation": {
+    "answer": "The decoder's self-attention sub-layer is modified to prevent positions from attending to subsequent positions, and this masking, combined with the output embeddings being offset by one position, ensures that predictions for position i can depend only on known outputs at positions less than i [1]. In the decoder, self-attention layers allow each position to attend to all positions in the decoder up to and including that position [6]. To prevent leftward information flow in the decoder and preserve the auto-regressive property, all values in the input of the softmax corresponding to illegal connections are masked out by setting them to −∞ inside scaled dot-product attention [8].",
+    "original_answer": "The decoder's self-attention sub-layer is modified to prevent positions from attending to subsequent positions, and this masking, combined with the output embeddings being offset by one position, ensures that predictions for position i can depend only on known outputs at positions less than i [1]. In the decoder, self-attention layers allow each position to attend to all positions in the decoder up to and including that position [6]. To prevent leftward information flow in the decoder and preserve the auto-regressive property, all values in the input of the softmax corresponding to illegal connections are masked out by setting them to −∞ inside scaled dot-product attention [8].",
+    "repair_candidate": null,
+    "initial_check": {
+      "cited_numbers": [
+        1,
+        6,
+        8
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 25,
+          "source": "Attention is all you need.pdf",
+          "page": 3,
+          "text": "Similar to the encoder, we employ residual connections around each of the sub-layers, followed by layer normalization. We also modify the self-attention sub-layer in the decoder stack to prevent positions from attending to subsequent positions. This masking, combined with fact that the output embeddings are offset by one position, ensures that the predictions for position i can depend only on the known outputs at positions less than i."
+        },
+        {
+          "citation": 6,
+          "chunk_id": 39,
+          "source": "Attention is all you need.pdf",
+          "page": 5,
+          "text": "• The encoder contains self-attention layers. In a self-attention layer all of the keys, values and queries come from the same place, in this case, the output of the previous layer in the encoder. Each position in the encoder can attend to all positions in the previous layer of the encoder. • Similarly, self-attention layers in the decoder allow each position in the decoder to attend to all positions in the decoder up to and including that position."
+        },
+        {
+          "citation": 8,
+          "chunk_id": 40,
+          "source": "Attention is all you need.pdf",
+          "page": 5,
+          "text": "We need to prevent leftward information ﬂow in the decoder to preserve the auto-regressive property. We implement this inside of scaled dot-product attention by masking out (setting to −∞) all values in the input of the softmax which correspond to illegal connections."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "final_check": {
+      "cited_numbers": [
+        1,
+        6,
+        8
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 25,
+          "source": "Attention is all you need.pdf",
+          "page": 3,
+          "text": "Similar to the encoder, we employ residual connections around each of the sub-layers, followed by layer normalization. We also modify the self-attention sub-layer in the decoder stack to prevent positions from attending to subsequent positions. This masking, combined with fact that the output embeddings are offset by one position, ensures that the predictions for position i can depend only on the known outputs at positions less than i."
+        },
+        {
+          "citation": 6,
+          "chunk_id": 39,
+          "source": "Attention is all you need.pdf",
+          "page": 5,
+          "text": "• The encoder contains self-attention layers. In a self-attention layer all of the keys, values and queries come from the same place, in this case, the output of the previous layer in the encoder. Each position in the encoder can attend to all positions in the previous layer of the encoder. • Similarly, self-attention layers in the decoder allow each position in the decoder to attend to all positions in the decoder up to and including that position."
+        },
+        {
+          "citation": 8,
+          "chunk_id": 40,
+          "source": "Attention is all you need.pdf",
+          "page": 5,
+          "text": "We need to prevent leftward information ﬂow in the decoder to preserve the auto-regressive property. We implement this inside of scaled dot-product attention by masking out (setting to −∞) all values in the input of the softmax which correspond to illegal connections."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "repair_attempted": false,
+    "repair_applied": false,
+    "repair_response": null,
+    "repair_prompt": null,
+    "unresolved_blocks": [],
+    "status": "not_needed",
+    "note": "Citation structure only; source relevance and claim meaning are not automatically verified."
+  },
+  "citation_structure": {
+    "cited_numbers": [
+      1,
+      6,
+      8
+    ],
+    "invalid_numbers": [],
+    "malformed_markers": [],
+    "has_citations": true,
+    "require_citations": true,
+    "structure_passed": true,
+    "cited_sources": [
+      {
+        "citation": 1,
+        "chunk_id": 25,
+        "source": "Attention is all you need.pdf",
+        "page": 3,
+        "text": "Similar to the encoder, we employ residual connections around each of the sub-layers, followed by layer normalization. We also modify the self-attention sub-layer in the decoder stack to prevent positions from attending to subsequent positions. This masking, combined with fact that the output embeddings are offset by one position, ensures that the predictions for position i can depend only on the known outputs at positions less than i."
+      },
+      {
+        "citation": 6,
+        "chunk_id": 39,
+        "source": "Attention is all you need.pdf",
+        "page": 5,
+        "text": "• The encoder contains self-attention layers. In a self-attention layer all of the keys, values and queries come from the same place, in this case, the output of the previous layer in the encoder. Each position in the encoder can attend to all positions in the previous layer of the encoder. • Similarly, self-attention layers in the decoder allow each position in the decoder to attend to all positions in the decoder up to and including that position."
+      },
+      {
+        "citation": 8,
+        "chunk_id": 40,
+        "source": "Attention is all you need.pdf",
+        "page": 5,
+        "text": "We need to prevent leftward information ﬂow in the decoder to preserve the auto-regressive property. We implement this inside of scaled dot-product attention by masking out (setting to −∞) all values in the input of the softmax which correspond to illegal connections."
+      }
+    ],
+    "semantic_support": "requires_manual_review"
+  },
+  "status": "completed",
+  "api_calls": [
+    {
+      "phase": "decomposition",
+      "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate exactly 2 or 3 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nIn the Transformer decoder, how do the shifted target embeddings and masked self-attention prevent access to future target tokens during training?\n",
+      "reused_auxiliary": true,
+      "response": {
+        "answer": "{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"In the Transformer decoder, how do the shifted target embeddings prevent access to future target tokens during training?\",\n        \"In the Transformer decoder, how does masked self-attention prevent access to future target tokens during training?\"\n    ]\n}",
+        "requested_model": "cn:deepseek-v4.1-flash",
+        "reported_model": "deepseek-v4.1-flash",
+        "usage": {
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 384,
+          "cached_tokens": 384,
+          "completion_thinking_tokens": 0,
+          "completion_tokens": 66,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "credit": 0.01,
+          "prompt_cache_hit_tokens": 384,
+          "prompt_cache_miss_tokens": 139,
+          "prompt_cache_write_tokens": 0,
+          "prompt_tokens": 523,
+          "prompt_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 384,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "total_tokens": 589
+        },
+        "finish_reason": "stop",
+        "request_parameters": {
+          "model": "cn:deepseek-v4.1-flash",
+          "stream": false,
+          "thinking": {
+            "type": "disabled"
+          },
+          "temperature": 0,
+          "max_tokens": 4096
+        }
+      },
+      "elapsed_seconds": 0.0
+    },
+    {
+      "phase": "rewrite",
+      "prompt": "\n    You are a retrieval query optimization assistant\n    for an academic research paper RAG system.\n\n    Your task is to rewrite the user's question into\n    a retrieval-optimized query for Dense and BM25 retrieval.\n\n    The goal is NOT to make the question sound more formal.\n    The goal is to improve the chance of matching relevant\n    technical terminology in academic papers.\n\n    Rules:\n    1. Preserve the original information need and intent.\n    2. Preserve all important entities, model names, paper names,\n       abbreviations, and technical concepts from the original question.\n    3. Keep the original important keywords whenever possible.\n    4. When a technical concept may be expressed using different\n       standard terminology in academic papers, add a concise\n       synonym or closely related terminology that preserves the\n       original meaning.\n    5. Prefer terminology that is likely to appear in scientific\n       papers, but do not invent specific facts, values, methods,\n       or conclusions.\n    6. Do not remove important technical terms from the original query.\n    7. Do not broaden or narrow the information need.\n    8. Do not answer the question.\n    9. Do not add explanations.\n    10. Return only ONE retrieval-optimized query.\n    11. Keep the rewritten query concise.\n\n    Example:\n\n    Original Question:\n    How do VGG and DCNN differ in their use of convolutional filter sizes?\n\n    Optimized Search Query:\n    VGG and DCNN convolutional filter sizes receptive field sizes\n\n    Incorrect:\n    VGG and DCNN architecture differences\n\n    Incorrect:\n    Why does VGG use small convolutional filters while DCNN uses large filters?\n\n    Original Question:\n    In the Transformer decoder, how do the shifted target embeddings and masked self-attention prevent access to future target tokens during training?\n\n    Optimized Search Query:\n    ",
+      "reused_auxiliary": true,
+      "response": {
+        "answer": "Transformer decoder shifted target embeddings masked self-attention prevent future token access causal masking autoregressive training",
+        "requested_model": "cn:deepseek-v4.1-flash",
+        "reported_model": "deepseek-v4.1-flash",
+        "usage": {
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 128,
+          "cached_tokens": 128,
+          "completion_thinking_tokens": 0,
+          "completion_tokens": 18,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "credit": 0,
+          "prompt_cache_hit_tokens": 128,
+          "prompt_cache_miss_tokens": 254,
+          "prompt_cache_write_tokens": 0,
+          "prompt_tokens": 382,
+          "prompt_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 128,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "total_tokens": 400
+        },
+        "finish_reason": "stop",
+        "request_parameters": {
+          "model": "cn:deepseek-v4.1-flash",
+          "stream": false,
+          "thinking": {
+            "type": "disabled"
+          },
+          "temperature": 0,
+          "max_tokens": 4096
+        }
+      },
+      "elapsed_seconds": 0.0
+    },
+    {
+      "phase": "hyde",
+      "prompt": "\n    You are generating a short hypothetical passage to help\n    retrieve evidence from scientific research papers.\n\n    Question:\n    In the Transformer decoder, how do the shifted target embeddings and masked self-attention prevent access to future target tokens during training?\n\n    Write only 2-3 sentences, around 40-60 words.\n\n    Requirements:\n    - Stay tightly focused on the exact topic in the question.\n    - Preserve the key terms and relationships in the question.\n    - Describe only the general concepts needed to locate\n      relevant evidence.\n    - Do not name specific methods, transformations, algorithms,\n      or experimental details unless they appear in the question.\n    - Do not invent examples or speculate about what the authors\n      actually did.\n    - Avoid generic discussion of model architecture,\n      feature learning, or generalization unless directly needed.\n    - Prefer a concise, focused passage over a comprehensive answer.\n    ",
+      "reused_auxiliary": true,
+      "response": {
+        "answer": "In the Transformer decoder, shifted target embeddings ensure each position receives the previous token as input during training. Masked self-attention then restricts each position from attending to future target tokens, preventing access to subsequent tokens and preserving autoregressive causality.",
+        "requested_model": "cn:deepseek-v4.1-flash",
+        "reported_model": "deepseek-v4.1-flash",
+        "usage": {
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "cached_tokens": 0,
+          "completion_thinking_tokens": 0,
+          "completion_tokens": 47,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "credit": 0.01,
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 187,
+          "prompt_cache_write_tokens": 0,
+          "prompt_tokens": 187,
+          "prompt_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "total_tokens": 234
+        },
+        "finish_reason": "stop",
+        "request_parameters": {
+          "model": "cn:deepseek-v4.1-flash",
+          "stream": false,
+          "thinking": {
+            "type": "disabled"
+          },
+          "temperature": 0,
+          "max_tokens": 4096
+        }
+      },
+      "elapsed_seconds": 0.0
+    },
+    {
+      "phase": "answer",
+      "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\nContext:\n[1] Source: Attention is all you need.pdf | Page: 3 | Section: 3.1 Encoder and Decoder Stacks\nSimilar to the encoder, we employ residual connections around each of the sub-layers, followed by layer normalization. We also modify the self-attention sub-layer in the decoder stack to prevent positions from attending to subsequent positions. This masking, combined with fact that the output embeddings are offset by one position, ensures that the predictions for position i can depend only on the known outputs at positions less than i.\n\n[2] Source: Attention is all you need.pdf | Page: 9 | Section: 7 Conclusion\n7 Conclusion In this work, we presented the Transformer, the ﬁrst sequence transduction model based entirely on attention, replacing the recurrent layers most commonly used in encoder-decoder architectures with multi-headed self-attention. For translation tasks, the Transformer can be trained signiﬁcantly faster than architectures based on recurrent or convolutional layers. On both WMT 2014 English-to-German and WMT 2014 English-to-French translation tasks, we achieve a new state of the art.\n\n[3] Source: Attention is all you need.pdf | Page: 2 | Section: 3 Model Architecture\nThe Transformer follows this overall architecture using stacked self-attention and point-wise, fully connected layers for both the encoder and decoder, shown in the left and right halves of Figure 1, respectively.\n\n[4] Source: Attention is all you need.pdf | Page: 2 | Section: 2 Background\nIn the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as described in section 3.2. Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.\n\n[5] Source: Attention is all you need.pdf | Page: 2 | Section: 2 Background\nTo the best of our knowledge, however, the Transformer is the ﬁrst transduction model relying entirely on self-attention to compute representations of its input and output without using sequence- aligned RNNs or convolution. In the following sections, we will describe the Transformer, motivate self-attention and discuss its advantages over models such as [14, 15] and [8].\n\n[6] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\n• The encoder contains self-attention layers. In a self-attention layer all of the keys, values and queries come from the same place, in this case, the output of the previous layer in the encoder. Each position in the encoder can attend to all positions in the previous layer of the encoder. • Similarly, self-attention layers in the decoder allow each position in the decoder to attend to all positions in the decoder up to and including that position.\n\n[7] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\n3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].\n\n[8] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\nWe need to prevent leftward information ﬂow in the decoder to preserve the auto-regressive property. We implement this inside of scaled dot-product attention by masking out (setting to −∞) all values in the input of the softmax which correspond to illegal connections.\n\n[9] Source: Attention is all you need.pdf | Page: 5 | Section: 3.4 Embeddings and Softmax\n3.4 Embeddings and Softmax Similarly to other sequence transduction models, we use learned embeddings to convert the input tokens and output tokens to vectors of dimension dmodel. We also use the usual learned linear transfor- mation and softmax function to convert the decoder output to predicted next-token probabilities.\n\n[10] Source: Attention is all you need.pdf | Page: 7 | Section: 5.4 Regularization\n5.4 Regularization We employ three types of regularization during training: Residual Dropout We apply dropout [27] to the output of each sub-layer, before it is added to the sub-layer input and normalized. In addition, we apply dropout to the sums of the embeddings and the positional encodings in both the encoder and decoder stacks.\n\nQuestion:\nIn the Transformer decoder, how do the shifted target embeddings and masked self-attention prevent access to future target tokens during training?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages.\n\nAnswer:",
+      "reused_auxiliary": false,
+      "response": {
+        "answer": "The decoder's self-attention sub-layer is modified to prevent positions from attending to subsequent positions, and this masking, combined with the output embeddings being offset by one position, ensures that predictions for position i can depend only on known outputs at positions less than i [1]. In the decoder, self-attention layers allow each position to attend to all positions in the decoder up to and including that position [6]. To prevent leftward information flow in the decoder and preserve the auto-regressive property, all values in the input of the softmax corresponding to illegal connections are masked out by setting them to −∞ inside scaled dot-product attention [8].",
+        "requested_model": "cn:deepseek-v4.1-flash",
+        "reported_model": "deepseek-v4.1-flash",
+        "usage": {
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 1152,
+          "cached_tokens": 1152,
+          "completion_thinking_tokens": 0,
+          "completion_tokens": 129,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "credit": 0.01,
+          "prompt_cache_hit_tokens": 1152,
+          "prompt_cache_miss_tokens": 227,
+          "prompt_cache_write_tokens": 0,
+          "prompt_tokens": 1379,
+          "prompt_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 1152,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "total_tokens": 1508
+        },
+        "finish_reason": "stop",
+        "request_parameters": {
+          "model": "cn:deepseek-v4.1-flash",
+          "stream": false,
+          "thinking": {
+            "type": "disabled"
+          },
+          "temperature": 0,
+          "max_tokens": 4096
+        }
+      },
+      "elapsed_seconds": 2.03
+    }
+  ],
+  "elapsed_seconds": 10.5,
+  "source_sha256": {
+    "main.py": "89831b9e3fa1ddf76fe7c20e8e58deedc0d0cd139b022eba8b4be97151a3877b",
+    "llm.py": "4a8ec8528b0662cd86a8fdc01feacfd361a276f04ae7b11c0e7574383a27eacc",
+    "src/api_llm.py": "11aa14f5435a079e83671b031d1159fbbc0ee8c760c61c9c0cc7afd0db6ae0a7",
+    "src/bm25_retriever.py": "7d2a046a4449cd6fdc371984db329534cedc7351d6196b9c218114ff0476906b",
+    "src/chunk_storage.py": "35d2b9b6c4d5a91d40ff242b85fbaa578bb75ed89501b1435a94dd8b0b5405b5",
+    "src/chunking_recursive.py": "f2fea89cace280329804cfe18d59a3663d21e3611129e0432518a37e4f691e72",
+    "src/chunking_semantic.py": "0f4947702f359a3967e2160ec098bf0cb1254eb2f7f77806ba874bb6955b0000",
+    "src/citation_validation.py": "c7e21d3070a454f08cf7944dd764a8e93dc7a3d83078863acd92db03e264b79c",
+    "src/embedding.py": "894fac2090929129e1883c858838e2255d69a6048a2e76d2387235321f2adade",
+    "src/grounded_evidence.py": "78a7e63512970492f4e52050cb8b2312e2658281acfe979eb4476516ff8c2663",
+    "src/hybrid_retriever.py": "ddd2315a558a062ac31fedb0e7a8d28af6a3df783450792825ff252d596de63c",
+    "src/hyde.py": "b575a07b016e4803de33d151eb90cdff1950b970763d69ba4e2f23b1352d3e31",
+    "src/numeric_evidence.py": "492fb546e6bc89b881843ece4b4582e533aec5aabbc58d61cd1cf158c4bac3d0",
+    "src/pdf_loader.py": "691f97e547936bcbda1ccb9837a1e91b47c34672ce33b227eaa5d18501519d1e",
+    "src/query_decomposer.py": "7a089ea7330049da1828d4dcec4bc67ad17d3505ce9017d6168cccc239326de9",
+    "src/query_rewriter.py": "bb762f7e77596a7f228d985b0c3a1699ec60bc87eba87b754c418a30cc7cdf62",
+    "src/reranker.py": "028e22aa105551bdf0845d215ba0604407a960c57d7e4e32a65c33e52dd7ffeb",
+    "src/retriever.py": "ad82c4301a81fefb3c205b5c0834d9ddcf67cc616d9b736bb265a6e9eb637e82",
+    "src/vector_store.py": "605ffa3761629f4f58b37663a23fff4020f895464917d600325ae2e1fccc0222",
+    "evaluation/questions.json": "6311c5293604f2c6f7258b53f47899b3fdf41ed8edcafed929655f2892157ade",
+    "api.local.json": "dc9ecb491bb9a50c059a68c215649f3f4ef448903a1f5c3a1e6b4e1d6cde41b6",
+    "data/processed/chunks.json": "614c077a5e9b9e6129b04706d447f7efd30363950ef3fa6f3ae6803f30608d8a",
+    "data/processed/chunks_recursive.json": "2bcf54f64a37b2ff24272f370f5eddfb0468c873c51c24167a9759c829e4b6d7",
+    "data/processed/chunks_semantic.json": "6bf158ec8cf2df07c438a7f3ff14806b2db6c6d7af4ce4fcb9fcf13a60603277",
+    "data/processed/faiss.index": "ff5ad6b97cbd2e1484e5b0eaf57172ca3781b5355294f34763baf207eb3cffd6",
+    "data/processed/faiss_recursive.index": "548633a7c56f8918fdd06d6a1ee70cedf2138786f37b4ddd8db7a87c970216a0",
+    "data/processed/faiss_semantic.index": "dd79e7f8afcc4daa09fbbdc1f85fb27c1d9641eff1003c1965a42343b8ad8b0b",
+    "data/raw/Attention is all you need.pdf": "d87d482d5ae7960e2e43d7dd6d21377e60e73e8fce1bf2a01aff7aca8a08c537",
+    "data/raw/DCNN.pdf": "434376057dbe6fc3e44d0fdb7268b56126e9b47ca9d6aa9e05cf2e738f72e81d",
+    "data/raw/VGG.pdf": "83728f9efc21081792902b4c17a4657022d1e4a92ec81655c2427f4ef0755e50"
+  },
+  "shared_cpu_models": true
+}

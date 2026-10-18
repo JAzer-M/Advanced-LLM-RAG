@@ -1,0 +1,140 @@
+LLM: proxy API | Model: cn:deepseek-v4.1-flash
+Loading existing Semantic FAISS Index...
+Total Vectors: 378
+Vector Dimensions: 384
+Total Chunks: 378
+
+Original Query: How does the VGG paper distinguish scale jittering during training from multi-scale evaluation at test time?
+Decomposition: {'needs_decomposition': False, 'sub_queries': []}
+Rewritten Query: VGG scale jittering training multi-scale evaluation test time data augmentation
+Additional Retrieval Lists: 2
+HyDE Enabled: False
+
+Candidate Pool Before Deduplication: 60
+Candidate Pool After Deduplication: 60
+Selected Chunk IDs: [288, 283, 289, 284, 262, 287, 264, 376, 354, 286]
+
+=== Retrieved Top-10 ===
+
+Rank: 1
+Source: VGG.pdf
+Page: 6
+Section: 4.2 MULTI-SCALE EVALUATION
+Text: At the same time, scale jittering at training time allows the network to be applied to a wider range of scales at test time, so the model trained with variable S ∈[Smin; Smax] was evaluated over a larger range of sizes Q = {Smin, 0.5(Smin + Smax), Smax}.
+
+Rank: 2
+Source: VGG.pdf
+Page: 6
+Section: 4.1 SINGLE SCALE EVALUATION
+Text: The top-1 error of the shallow net was measured to be 7% higher than that of B (on a center crop), which conﬁrms that a deep net with small ﬁlters outperforms a shallow net with larger ﬁlters. Finally, scale jittering at training time (S ∈[256; 512]) leads to signiﬁcantly better results than training on images with ﬁxed smallest side (S = 256 or S = 384), even though a single scale is used at test time.
+
+Rank: 3
+Source: VGG.pdf
+Page: 7
+Section: 4.2 MULTI-SCALE EVALUATION
+Text: Published as a conference paper at ICLR 2015 The results, presented in Table 4, indicate that scale jittering at test time leads to better performance (as compared to evaluating the same model at a single scale, shown in Table 3). As before, the deepest conﬁgurations (D and E) perform the best, and scale jittering is better than training with a ﬁxed smallest side S. Our best single-network performance on the validation set is 24.8%/7.5% top-1/top-5 error (highlighted in bold in Table 4).
+
+Rank: 4
+Source: VGG.pdf
+Page: 6
+Section: 4.1 SINGLE SCALE EVALUATION
+Text: This conﬁrms that training set augmentation by scale jittering is indeed helpful for capturing multi-scale image statistics. Table 3: ConvNet performance at a single test scale. ConvNet conﬁg.
+
+Rank: 5
+Source: VGG.pdf
+Page: 4
+Section: 3.1 TRAINING
+Text: In our experiments, we evaluated models trained at two ﬁxed scales: S = 256 (which has been widely used in the prior art (Krizhevsky et al., 2012; Zeiler & Fergus, 2013; Sermanet et al., 2014)) and S = 384. Given a ConvNet conﬁguration, we ﬁrst trained the network using S = 256. To speed-up training of the S = 384 network, it was initialised with the weights pre-trained with S = 256, and we used a smaller initial learning rate of 10−3. The second approach to setting S is multi-scale training, where each training image is individually rescaled by randomly sampling S from a certain range [Smin, Smax] (we used Smin = 256 and Smax = 512).
+
+Rank: 6
+Source: VGG.pdf
+Page: 6
+Section: 4.2 MULTI-SCALE EVALUATION
+Text: It consists of running a model over several rescaled versions of a test image (corresponding to different values of Q), followed by averaging the resulting class posteriors. Considering that a large discrepancy between training and testing scales leads to a drop in performance, the models trained with ﬁxed S were evaluated over three test image sizes, close to the training one: Q = {S −32, S, S + 32}.
+
+Rank: 7
+Source: VGG.pdf
+Page: 5
+Section: 3.1 TRAINING
+Text: Published as a conference paper at ICLR 2015 model is trained to recognise objects over a wide range of scales. For speed reasons, we trained multi-scale models by ﬁne-tuning all layers of a single-scale model with the same conﬁguration, pre-trained with ﬁxed S = 384.
+
+Rank: 8
+Source: VGG.pdf
+Page: 14
+Section: 5 CONCLUSION
+Text: v1 Initial version. Presents the experiments carried out before the ILSVRC submission. v2 Adds post-submission ILSVRC experiments with training set augmentation using scale jittering, which improves the performance. v3 Adds generalisation experiments (Appendix B) on PASCAL VOC and Caltech image classiﬁca- tion datasets. The models used for these experiments are publicly available. v4 The paper is converted to ICLR-2015 submission format.
+
+Rank: 9
+Source: VGG.pdf
+Page: 12
+Section: 5 CONCLUSION
+Text: 4.2, evaluation over multiple scales is beneﬁcial, so we extract features over several scales Q. The resulting multi-scale features can be either stacked or pooled across scales. Stacking allows a subsequent classiﬁer to learn how to optimally combine image statistics over a range of scales; this, however, comes at the cost of the increased descriptor dimensionality. We return to the discussion of this design choice in the experiments below.
+
+Rank: 10
+Source: VGG.pdf
+Page: 6
+Section: 4.2 MULTI-SCALE EVALUATION
+Text: 4.2 MULTI-SCALE EVALUATION Having evaluated the ConvNet models at a single scale, we now assess the effect of scale jittering at test time.
+
+=== Evidence: parsed facts and source quotations ===
+- Source quotation (VGG.pdf, p.6): “The top-1 error of the shallow net was measured to be 7% higher than that of B (on a center crop), which conﬁrms that a deep net with small ﬁlters outperforms a shallow net with larger ﬁlters.” [2][11]
+- Source quotation (VGG.pdf, p.6): “Finally, scale jittering at training time (S ∈[256; 512]) leads to signiﬁcantly better results than training on images with ﬁxed smallest side (S = 256 or S = 384), even though a single scale is used at test time.” [2][11]
+- Source quotation (VGG.pdf, p.7): “Published as a conference paper at ICLR 2015 The results, presented in Table 4, indicate that scale jittering at test time leads to better performance (as compared to evaluating the same model at a single scale, shown in Table 3).” [3]
+- Source quotation (VGG.pdf, p.7): “As before, the deepest conﬁgurations (D and E) perform the best, and scale jittering is better than training with a ﬁxed smallest side S.” [3]
+- Source quotation (VGG.pdf, p.7): “5% top-1/top-5 error (highlighted in bold in Table 4).” [3]
+- Source quotation (VGG.pdf, p.6): “This conﬁrms that training set augmentation by scale jittering is indeed helpful for capturing multi-scale image statistics.” [4][11]
+- Source quotation (VGG.pdf, p.6): “Table 3: ConvNet performance at a single test scale.” [4][11]
+- Source quotation (VGG.pdf, p.4): “Given a ConvNet conﬁguration, we ﬁrst trained the network using S = 256.” [5]
+- Source quotation (VGG.pdf, p.4): “To speed-up training of the S = 384 network, it was initialised with the weights pre-trained with S = 256, and we used a smaller initial learning rate of 10−3.” [5]
+- Source quotation (VGG.pdf, p.4): “The second approach to setting S is multi-scale training, where each training image is individually rescaled by randomly sampling S from a certain range [Smin, Smax] (we used Smin = 256 and Smax = 512).” [5]
+- Source quotation (VGG.pdf, p.6): “It consists of running a model over several rescaled versions of a test image (corresponding to different values of Q), followed by averaging the resulting class posteriors.” [6]
+- Source quotation (VGG.pdf, p.6): “Considering that a large discrepancy between training and testing scales leads to a drop in performance, the models trained with ﬁxed S were evaluated over three test image sizes, close to the training one: Q = {S −32, S, S + 32}.” [6]
+- Source quotation (VGG.pdf, p.5): “Published as a conference paper at ICLR 2015 model is trained to recognise objects over a wide range of scales.” [7]
+- Source quotation (VGG.pdf, p.5): “For speed reasons, we trained multi-scale models by ﬁne-tuning all layers of a single-scale model with the same conﬁguration, pre-trained with ﬁxed S = 384.” [7]
+- Source quotation (VGG.pdf, p.14): “Presents the experiments carried out before the ILSVRC submission.” [8]
+- Source quotation (VGG.pdf, p.14): “v2 Adds post-submission ILSVRC experiments with training set augmentation using scale jittering, which improves the performance.” [8]
+- Source quotation (VGG.pdf, p.14): “v3 Adds generalisation experiments (Appendix B) on PASCAL VOC and Caltech image classiﬁca- tion datasets.” [8]
+- Source quotation (VGG.pdf, p.14): “The models used for these experiments are publicly available.” [8]
+- Source quotation (VGG.pdf, p.14): “v4 The paper is converted to ICLR-2015 submission format.” [8]
+- Source quotation (VGG.pdf, p.12): “2, evaluation over multiple scales is beneﬁcial, so we extract features over several scales Q.” [9]
+- Source quotation (VGG.pdf, p.12): “The resulting multi-scale features can be either stacked or pooled across scales.” [9]
+- Source quotation (VGG.pdf, p.12): “Stacking allows a subsequent classiﬁer to learn how to optimally combine image statistics over a range of scales; this, however, comes at the cost of the increased descriptor dimensionality.” [9]
+- Source quotation (VGG.pdf, p.12): “We return to the discussion of this design choice in the experiments below.” [9]
+- Source quotation (VGG.pdf, p.6): “2 MULTI-SCALE EVALUATION Having evaluated the ConvNet models at a single scale, we now assess the effect of scale jittering at test time.” [10]
+
+=== Citation Sources ===
+[1] VGG.pdf, p.6 (chunk 288)
+[2] VGG.pdf, p.6 (chunk 283)
+[3] VGG.pdf, p.7 (chunk 289)
+[4] VGG.pdf, p.6 (chunk 284)
+[5] VGG.pdf, p.4 (chunk 262)
+[6] VGG.pdf, p.6 (chunk 287)
+[7] VGG.pdf, p.5 (chunk 264)
+[8] VGG.pdf, p.14 (chunk 376)
+[9] VGG.pdf, p.12 (chunk 354)
+[10] VGG.pdf, p.6 (chunk 286)
+[11] VGG.pdf, p.6 (chunk 282)
+
+=== Citation Structure Check (semantic support not verified) ===
+Status: incomplete_support
+Initial: {'has_citations': True, 'invalid_numbers': [], 'malformed_markers': ['256; 512']}
+
+=== Original Answer Before Citation Repair ===
+The VGG paper distinguishes the two by where jittering happens and how test scales are chosen:
+
+- **Training-time scale jittering** means each training image is individually rescaled by randomly sampling S from a range [Smin, Smax], using Smin = 256 and Smax = 512 [5]. Scale jittering at training time (S ∈ [256; 512]) led to significantly better results than training on images with a fixed smallest side (S = 256 or S = 384), even though a single scale is used at test time [2]. Scale jittering at training time also allows the network to be applied to a wider range of scales at test time [1].
+
+- **Test-time multi-scale evaluation** consists of running a model over several rescaled versions of a test image (corresponding to different values of Q), followed by averaging the resulting class posteriors [6]. For models trained with fixed S, evaluation used three test image sizes close to the training one: Q = {S − 32, S, S + 32}, since a large discrepancy between training and testing scales leads to a drop in performance [6]. For the model trained with variable S ∈ [Smin; Smax], it was evaluated over a larger range of sizes Q = {Smin, 0.5(Smin + Smax), Smax} [1].
+
+The paper reports that scale jittering at test time leads to better performance compared to evaluating the same model at a single scale [3].
+Unresolved blocks: [1]
+Final structure passed: False
+
+=== Generated Answer (model draft; check against evidence) ===
+The VGG paper distinguishes the two by where jittering happens and how test scales are chosen:
+
+- **Training-time scale jittering** means each training image is individually rescaled by randomly sampling S from a range [Smin, Smax], using Smin = 256 and Smax = 512 [5]. Scale jittering at training time (S ∈ [256; 512]) led to significantly better results than training on images with a fixed smallest side (S = 256 or S = 384), even though a single scale is used at test time [2]. Scale jittering at training time also allows the network to be applied to a wider range of scales at test time [1].
+
+- **Test-time multi-scale evaluation** consists of running a model over several rescaled versions of a test image (corresponding to different values of Q), followed by averaging the resulting class posteriors [6]. For models trained with fixed S, evaluation used three test image sizes close to the training one: Q = {S − 32, S, S + 32}, since a large discrepancy between training and testing scales leads to a drop in performance [6]. For the model trained with variable S ∈ [Smin; Smax], it was evaluated over a larger range of sizes Q = {Smin, 0.5(Smin + Smax), Smax} [1].
+
+The paper reports that scale jittering at test time leads to better performance compared to evaluating the same model at a single scale [3].

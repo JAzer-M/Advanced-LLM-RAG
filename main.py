@@ -1,36 +1,174 @@
+"""Main entry point for the Advanced-LLM-RAG pipeline.
+
+Current pipeline:
+PDF chunks -> Dense + BM25 -> RRF -> optional query rewrite / HyDE /
+query-decomposition retrieval -> deduplication -> Cross-Encoder reranking
+-> evidence ledger + original context -> API answer generation.
+
+Note:
+- USE_HYDE is disabled based on the latest ON/OFF evaluation.
+- Sub-query candidates are still globally reranked using the original query.
+  The unused experimental context selector has been removed.
+"""
+
 from pathlib import Path
 
 from sentence_transformers import CrossEncoder
 
-from llm import generate_answer
-from src.embedding import load_embedding_model
-from src.vector_store import load_index
-from src.chunk_storage import load_chunks
-from src.retriever import retrieve
+from src.api_llm import generate_final_answer, load_settings
 from src.bm25_retriever import build_bm25_index, retrieve_bm25
+from src.chunk_storage import load_chunks
+from src.citation_validation import repair_citations_once
+from src.embedding import load_embedding_model
 from src.hybrid_retriever import reciprocal_rank_fusion
-from src.reranker import rerank_results
+from src.hyde import generate_hypothetical_document
+from src.grounded_evidence import build_ledger, render_complete, render_guidance
+from src.query_decomposer import decompose_query
 from src.query_rewriter import rewrite_query
+from src.reranker import rerank_results
+from src.retriever import retrieve
+from src.vector_store import load_index
 
-# 检索配置，默认关闭 Multi-Query。
+
+# ---------------------------------------------------------------------------
+# Configuration
+# ---------------------------------------------------------------------------
+
+# This branch generates one rewritten query, then runs Dense + BM25 retrieval.
+# The name is retained to avoid breaking evaluation scripts that import it.
 USE_MULTI_QUERY = False
-RETRIEVAL_TOP_K = 20
-RRF_TOP_K = 20
-RERANK_TOP_K = 5
+
+# Disabled because the latest production-aligned ON/OFF evaluation showed
+# no meaningful overall retrieval improvement.
+USE_HYDE = False
+
+RETRIEVAL_TOP_K = 60
+RRF_TOP_K = 60
+RERANK_TOP_K = 10
 RRF_K = 60
 
-def main():
-    # 1. 加载 Semantic FAISS Index 和 Chunks
+RERANKER_MODEL_NAME = "BAAI/bge-reranker-base"
+RERANKER_DEVICE = "cpu"
+
+
+# ---------------------------------------------------------------------------
+# Small helpers
+# ---------------------------------------------------------------------------
+
+def print_ranked_results(results, title, limit=None):
+    """Print retrieved chunks in rank order."""
+    displayed_results = results if limit is None else results[:limit]
+    print(f"\n=== {title} ===")
+
+    for rank, result in enumerate(displayed_results, start=1):
+        print(f"\nRank: {rank}")
+        print(f"Source: {result.get('source', 'Unknown')}")
+        print(f"Page: {result.get('page', 'Unknown')}")
+        print(f"Section: {result.get('section', 'None')}")
+        print(f"Text: {result.get('text', '')}")
+
+
+def deduplicate_candidates(candidates):
+    """Deduplicate chunks while preserving their first-seen order."""
+    unique_candidates = []
+    seen = set()
+
+    for result in candidates:
+        key = (
+            result["source"],
+            result["page"],
+            result["text"],
+        )
+
+        if key in seen:
+            continue
+
+        seen.add(key)
+        unique_candidates.append(result)
+
+    return unique_candidates
+
+def build_context(results):
+    """Build a numbered context so the LLM can cite retrieved chunks."""
+    context_parts = []
+
+    for rank, result in enumerate(results, start=1):
+        context_parts.append(
+            f"[{rank}] Source: {result['source']} | "
+            f"Page: {result['page']} | "
+            f"Section: {result.get('section', 'None')}\n"
+            f"{result['text']}"
+        )
+
+    return "\n\n".join(context_parts)
+
+
+def build_prompt(query, context):
+    """Create the grounded-answer prompt with citation requirements."""
+    return (
+        "You are an AI research assistant.\n\n"
+        "Answer the user's question based only on the provided context.\n\n"
+        "Rules:\n"
+        "1. Do not invent information or introduce unsupported claims.\n"
+        "2. Place citations immediately after the claims they support.\n"
+        "3. Cite only context chunks that directly support each claim.\n"
+        "4. Every citation must directly support the exact claim it follows. "
+        "Mentioning the same topic is not sufficient evidence.\n"
+        "5. Do not combine separate statements into a causal relationship "
+        "unless the source explicitly establishes that relationship.\n"
+        "6. Do not attribute technical claims to a paper unless the context "
+        "directly supports those claims.\n"
+        "7. If a claim cannot be directly supported, omit it or clearly state "
+        "that the evidence is insufficient.\n"
+        "8. Keep the answer focused on the question.\n\n"
+        "9. A source filename identifies the document, not necessarily the model "
+        "described in a passage. Check named subjects and the cited surrounding text.\n"
+        "10. Evidence guidance supplements the original passages. Subject hints "
+        "are rule-based; check them against the sources. For kernel H x W x C, "
+        "H x W is the spatial size and C is channels per kernel; a kernel count "
+        "is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n"
+        f"Context:\n{context}\n\n"
+        f"Question:\n{query}\n\n"
+        # 放在原文之后，避免模型照抄原文中的概括而漏掉另一段的限定。
+        "Before writing the final answer:\n"
+        "- Synthesize the passages. Where a configuration exception is stated, "
+        "describe the main pattern as mainly or predominantly and include the "
+        "exception in the same sentence. Do not repeat an all/only statement "
+        "that conflicts with that exception.\n"
+        "- For why questions, explain each supported mechanism. When comparing "
+        "alternatives, explicitly state their supported equivalent property "
+        "and quantities, rather than leaving the equivalence implicit in "
+        "the phrase instead of.\n"
+        "- Omit unnecessary background and names absent from the passages.\n\n"
+        "Answer:"
+    )
+
+
+def build_evidence_context(chunks, results):
+    """Preserve ranked raw passages and number any identity anchors consistently."""
+    ledger = build_ledger(chunks, [r['chunk_id'] for r in results])
+    raw_context = build_context(ledger['citation_registry'])
+    guidance = render_guidance(ledger)
+    context = f"Original passages:\n{raw_context}\n\nEvidence guidance:\n{guidance}" if guidance else raw_context
+    return context, ledger
+
+
+# ---------------------------------------------------------------------------
+# Main pipeline
+# ---------------------------------------------------------------------------
+
+def main(query=None):
+    # 1. Load the Semantic FAISS index and its corresponding chunks.
     project_dir = Path(__file__).resolve().parent
+    print("LLM: proxy API | Model:", load_settings().get('model', 'not configured'))
     processed_dir = project_dir / "data" / "processed"
     index_path = processed_dir / "faiss_semantic.index"
     chunks_path = processed_dir / "chunks_semantic.json"
 
-    # 缺少索引时先运行 build_semantic_index.py。
     if not index_path.is_file() or not chunks_path.is_file():
         raise FileNotFoundError(
-            "Semantic Index 或 Chunks 文件不存在。"
-            "请先运行 build_semantic_index.py。"
+            "Semantic Index or Chunks file is missing. "
+            "Run build_semantic_index.py first."
         )
 
     print("Loading existing Semantic FAISS Index...")
@@ -39,23 +177,35 @@ def main():
     chunks = load_chunks(chunks_path)
 
     if index.ntotal != len(chunks):
-        raise ValueError("Index and Chunks count mismatch!")
+        raise ValueError(
+            f"Index and Chunks count mismatch: "
+            f"{index.ntotal} vectors vs {len(chunks)} chunks."
+        )
 
     print("Total Vectors:", index.ntotal)
     print("Vector Dimensions:", index.d)
     print("Total Chunks:", len(chunks))
 
-    # 2. 用户问题：原始问题始终用于 Reranking 和最终生成
-    query = input("Please enter your question: ").strip()
+    # 2. Read the user's question and decide whether to decompose it.
+    query = input("Please enter your question: ").strip() if query is None else query.strip()
     if not query:
         print("Question cannot be empty.")
         return
 
-    print("Original Query:", query)
+    print("\nOriginal Query:", query)
 
-    # 3. 原始问题的两路检索
+    decomposition = decompose_query(query)
+    print("Decomposition:", decomposition)
+
+    if decomposition["needs_decomposition"]:
+        print("Sub-Queries:")
+        for sub_query in decomposition["sub_queries"]:
+            print("-", sub_query)
+
+    # Build BM25 once and reuse it for the original and sub-queries.
     bm25 = build_bm25_index(chunks)
 
+    # 3. Retrieve candidates for the original query using Dense + BM25.
     dense_results = retrieve(
         model=embedding_model,
         index=index,
@@ -71,7 +221,8 @@ def main():
         top_k=RETRIEVAL_TOP_K,
     )
 
-    # 4. 可选 Multi-Query：保留原始问题，再增加改写问题的两路检索
+    # 4. Collect optional additional retrieval lists.
+    # RRF will fuse these lists with the original Dense + BM25 results.
     extra_results = []
 
     if USE_MULTI_QUERY:
@@ -94,13 +245,80 @@ def main():
                 top_k=RETRIEVAL_TOP_K,
             )
 
-            extra_results = [rewritten_dense_results, rewritten_bm25_results]
+            extra_results.extend(
+                [rewritten_dense_results, rewritten_bm25_results]
+            )
         else:
-            print("Rewritten Query is empty or unchanged; using original only.")
+            print(
+                "Rewritten query is empty or unchanged; "
+                "using the original query only."
+            )
 
-    print("Multi-Query Active:", bool(extra_results))
+    if USE_HYDE:
+        hypothetical_document = generate_hypothetical_document(query).strip()
 
-    # 5. RRF 融合：可以处理两路或四路结果
+        if not hypothetical_document:
+            raise ValueError("HyDE generated an empty hypothetical document.")
+
+        print("\n=== Hypothetical Document ===")
+        print(hypothetical_document)
+
+        hyde_results = retrieve(
+            model=embedding_model,
+            index=index,
+            chunks=chunks,
+            query=hypothetical_document,
+            top_k=RETRIEVAL_TOP_K,
+        )
+
+        extra_results.append(hyde_results)
+        print("HyDE Retrieved Chunks:", len(hyde_results))
+
+    print("Additional Retrieval Lists:", len(extra_results))
+    print("HyDE Enabled:", USE_HYDE)
+
+    # 5. Retrieve and fuse results for each decomposed sub-query.
+    # 子问题只负责补充候选，最后统一按原始问题重排。
+    sub_query_results = []
+
+    if decomposition["needs_decomposition"]:
+        for sub_query in decomposition["sub_queries"]:
+            sub_dense_results = retrieve(
+                model=embedding_model,
+                index=index,
+                chunks=chunks,
+                query=sub_query,
+                top_k=RETRIEVAL_TOP_K,
+            )
+
+            sub_bm25_results = retrieve_bm25(
+                bm25=bm25,
+                chunks=chunks,
+                query=sub_query,
+                top_k=RETRIEVAL_TOP_K,
+            )
+
+            sub_rrf_results = reciprocal_rank_fusion(
+                dense_results=sub_dense_results,
+                bm25_results=sub_bm25_results,
+                k=RRF_K,
+                top_k=RRF_TOP_K,
+            )
+
+            sub_query_results.append(
+                {
+                    "query": sub_query,
+                    "results": sub_rrf_results,
+                }
+            )
+
+            print_ranked_results(
+                sub_rrf_results,
+                title=f"Sub-Query: {sub_query} (RRF Top-5)",
+                limit=5,
+            )
+
+    # 6. Fuse original-query Dense + BM25 with optional additional lists.
     rrf_results = reciprocal_rank_fusion(
         dense_results=dense_results,
         bm25_results=bm25_results,
@@ -109,64 +327,73 @@ def main():
         extra_results=extra_results,
     )
 
-    # 6. BGE Reranking
-    reranker_model = CrossEncoder("BAAI/bge-reranker-base", device="cpu")
-    results = rerank_results(
-        query=query,
-        candidates=rrf_results,
-        model=reranker_model,
-        top_k=RERANK_TOP_K,
-    )
+    # Add sub-query RRF results to the original-query candidate list.
+    candidate_pool = list(rrf_results)
+    for sub_query_result in sub_query_results:
+        candidate_pool.extend(sub_query_result["results"])
 
-    print("\n=== Retrieved Top-5 ===")
-    for i, result in enumerate(results, start=1):
-        print(f"\nRank: {i}")
-        print(f"Source: {result['source']}")
-        print(f"Page: {result['page']}")
-        print(f"Section: {result['section']}")
-        print(f"Text: {result['text']}")
+    print("\nCandidate Pool Before Deduplication:", len(candidate_pool))
 
-    # 7. 使用最终检索结果构建 Context
-    context_parts = []
-    for i, result in enumerate(results, start=1):
-        context_parts.append(
-            f"[{i}] Source: {result['source']} | "
-            f"Page: {result['page']} | "
-            f"Section: {result['section']}\n"
-            f"{result['text']}"
+    unique_candidates = deduplicate_candidates(candidate_pool)
+    print("Candidate Pool After Deduplication:", len(unique_candidates))
+
+    if not unique_candidates:
+        raise RuntimeError(
+            "Retrieval returned no candidates. "
+            "Check the index, chunks, and retriever configuration."
         )
 
-    context = "\n\n".join(context_parts)
+    # 7. Rerank the complete candidate pool against the original query.
+    reranker_model = CrossEncoder(
+        RERANKER_MODEL_NAME,
+        device=RERANKER_DEVICE,
+    )
 
-    # 8. 构建带引用规则的 Prompt
-    prompt = f"""
-You are an AI research assistant.
+    results = rerank_results(
+        query=query,
+        candidates=unique_candidates,
+        model=reranker_model,
+        top_k=RERANK_TOP_K,
+        include_source=True,
+    )
 
-Answer the user's question based on the provided context.
+    print("Selected Chunk IDs:", [r["chunk_id"] for r in results])
+    print_ranked_results(
+        results,
+        title=f"Retrieved Top-{RERANK_TOP_K}",
+    )
 
-Rules:
-1. Answer the user's question using only the provided context.
-2. Do not invent information or introduce unsupported claims.
-3. Place citations immediately after the claims they support.
-4. Cite only the context chunks that directly support each claim.
-5. Do not list all citation numbers at the end of the answer.
-6. Prioritize evidence that directly answers the question.
-7. Avoid unrelated technical details.
-8. If the evidence is insufficient, clearly state the limitation.
+    # 8. Add evidence guidance without dropping the original ranked passages.
+    context, ledger = build_evidence_context(chunks, results)
+    prompt = build_prompt(query=query, context=context)
 
-Context:
-{context}
+    print("\n=== Evidence: parsed facts and source quotations ===")
+    print(render_complete(ledger)['answer'])
+    print("\n=== Citation Sources ===")
+    for number, chunk in enumerate(ledger['citation_registry'], 1):
+        print(f"[{number}] {chunk['source']}, p.{chunk['page']} (chunk {chunk['chunk_id']})")
 
-Question:
-{query}
-
-Answer:
-"""
-
-    # 9. 本地 Qwen 生成
-    answer = generate_answer(prompt)
-    print("\n=== Generated Answer ===")
+    # 9. Answer and any citation repair use the same configured API as decomposition.
+    original_answer = generate_final_answer(prompt)
+    citation_validation = repair_citations_once(
+        query, context, original_answer, ledger['citation_registry'], generate_final_answer)
+    answer = citation_validation['answer']
+    print("\n=== Citation Structure Check (semantic support not verified) ===")
+    print("Status:", citation_validation['status'])
+    print("Initial:", {k: citation_validation['initial_check'][k]
+                       for k in ('has_citations', 'invalid_numbers', 'malformed_markers')})
+    if citation_validation['repair_attempted']:
+        print("\n=== Original Answer Before Citation Repair ===")
+        print(original_answer)
+        print("Unresolved blocks:", citation_validation['unresolved_blocks'])
+    print("Final structure passed:", citation_validation['final_check']['structure_passed'])
+    print("\n=== Generated Answer (model draft; check against evidence) ===")
     print(answer)
+    return {'query': query, 'decomposition': decomposition,
+            'selected_ids': [r['chunk_id'] for r in results],
+            'context': context, 'prompt': prompt, 'ledger': ledger, 'answer': answer,
+            'original_answer': original_answer, 'citation_validation': citation_validation}
+
 
 if __name__ == "__main__":
     main()

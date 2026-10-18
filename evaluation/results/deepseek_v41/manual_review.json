@@ -1,0 +1,172 @@
+{
+  "reviewer": "assistant manual review; not independent or blind",
+  "protocol": "evaluation/answer_review_protocol.md",
+  "scope": "existing six development questions; no aggregate accuracy claim",
+  "questions": {
+    "q1": {
+      "core_or_refusal_passed": true,
+      "strict_source_only_passed": true,
+      "semantic_status": "supported",
+      "review": "[10] 明确三层 3×3 的 7×7 有效感受野及更多非线性；[6] 支撑 27C² 对 49C²，前提已写出；[8] 补充 1×1 例外。首段较长，throughout 的范围需结合随后例外理解。",
+      "answer_sha256": "1b9f597c31d07404bc771371d246180d8d6bae7db0e545011450c2826961364b",
+      "checked_sources": [
+        {
+          "citation": 10,
+          "chunk_id": 245,
+          "source": "VGG.pdf",
+          "page": 3,
+          "evidence_quote": "Network A,A-LRN B C D E Number of parameters 133 133 134 138 144 such layers have a 7 × 7 effective receptive ﬁeld. So what have we gained by using, for instance, a stack of three 3×3 conv. layers instead of a single 7×7 layer? First, we incorporate three non-linear rectiﬁcation layers instead of a single one, which makes the decision function more discriminative."
+        },
+        {
+          "citation": 6,
+          "chunk_id": 246,
+          "source": "VGG.pdf",
+          "page": 3,
+          "evidence_quote": "Second, we decrease the number of parameters: assuming that both the input and the output of a three-layer 3 × 3 convolution stack has C channels, the stack is parametrised by 3 \u0000 32C2\u0001 = 27C2 weights; at the same time, a single 7 × 7 conv. layer would require 72C2 = 49C2 parameters, i.e. 81% more. This can be seen as imposing a regularisation on the 7 × 7 conv. ﬁlters, forcing them to have a decomposition through the 3 × 3 ﬁlters (with non-linearity injected in between)."
+        },
+        {
+          "citation": 8,
+          "chunk_id": 233,
+          "source": "VGG.pdf",
+          "page": 2,
+          "evidence_quote": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv."
+        }
+      ]
+    },
+    "q2": {
+      "core_or_refusal_passed": true,
+      "strict_source_only_passed": true,
+      "semantic_status": "supported",
+      "review": "[1] 支撑无 recurrence/convolution 与注入位置；[10] 支撑同维度相加；[4] 正弦与波长，[6] learned embeddings 对照均在上下文内，补充细节偏多。",
+      "answer_sha256": "4b64f3a2e1331319d020cdf451155c94a1d70f527698c512960d52979a6777cf",
+      "checked_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 45,
+          "source": "Attention is all you need.pdf",
+          "page": 5,
+          "evidence_quote": "3.5 Positional Encoding Since our model contains no recurrence and no convolution, in order for the model to make use of the order of the sequence, we must inject some information about the relative or absolute position of the tokens in the sequence. To this end, we add \"positional encodings\" to the input embeddings at the"
+        },
+        {
+          "citation": 10,
+          "chunk_id": 47,
+          "source": "Attention is all you need.pdf",
+          "page": 6,
+          "evidence_quote": "Layer Type Complexity per Layer Sequential Maximum Path Length Operations Self-Attention O(n2 · d) O(1) O(1) Recurrent O(n · d2) O(n) O(n) Convolutional O(k · n · d2) O(1) O(logk(n)) Self-Attention (restricted) O(r · n · d) O(1) O(n/r) bottoms of the encoder and decoder stacks. The positional encodings have the same dimension dmodel as the embeddings, so that the two can be summed. There are many choices of positional encodings, learned and ﬁxed [8]."
+        },
+        {
+          "citation": 4,
+          "chunk_id": 48,
+          "source": "Attention is all you need.pdf",
+          "page": 6,
+          "evidence_quote": "In this work, we use sine and cosine functions of different frequencies: PE(pos,2i) = sin(pos/100002i/dmodel) PE(pos,2i+1) = cos(pos/100002i/dmodel) where pos is the position and i is the dimension. That is, each dimension of the positional encoding corresponds to a sinusoid. The wavelengths form a geometric progression from 2π to 10000 · 2π."
+        },
+        {
+          "citation": 6,
+          "chunk_id": 80,
+          "source": "Attention is all you need.pdf",
+          "page": 9,
+          "evidence_quote": "This suggests that determining compatibility is not easy and that a more sophisticated compatibility function than dot product may be beneﬁcial. We further observe in rows (C) and (D) that, as expected, bigger models are better, and dropout is very helpful in avoiding over-ﬁtting. In row (E) we replace our sinusoidal positional encoding with learned positional embeddings [8], and observe nearly identical results to the base model."
+        }
+      ]
+    },
+    "q3": {
+      "core_or_refusal_passed": true,
+      "strict_source_only_passed": true,
+      "semantic_status": "supported",
+      "review": "[2] 支撑大键维度、点积幅度、softmax 小梯度及缩放；[4] 支撑矩阵乘法效率和 additive 区别，没有把缩放与 decoder masking 混淆。",
+      "answer_sha256": "e6df50253a398b89dead5c3098d1b4bd9ce6a4a6f4e4baa0d2ffd43aa8b26675",
+      "checked_sources": [
+        {
+          "citation": 2,
+          "chunk_id": 32,
+          "source": "Attention is all you need.pdf",
+          "page": 4,
+          "evidence_quote": "While for small values of dk the two mechanisms perform similarly, additive attention outperforms dot product attention without scaling for larger values of dk [3]. We suspect that for large values of dk, the dot products grow large in magnitude, pushing the softmax function into regions where it has extremely small gradients 4. To counteract this effect, we scale the dot products by 1 √dk ."
+        },
+        {
+          "citation": 4,
+          "chunk_id": 31,
+          "source": "Attention is all you need.pdf",
+          "page": 4,
+          "evidence_quote": "Dot-product attention is identical to our algorithm, except for the scaling factor of 1 √dk . Additive attention computes the compatibility function using a feed-forward network with a single hidden layer. While the two are similar in theoretical complexity, dot-product attention is much faster and more space-efﬁcient in practice, since it can be implemented using highly optimized matrix multiplication code."
+        }
+      ]
+    },
+    "q4": {
+      "core_or_refusal_passed": true,
+      "strict_source_only_passed": true,
+      "semantic_status": "supported",
+      "review": "[1] 标签保持与人工扩充；[3]/[6] 平移、翻转和 224/256 裁剪；[4] RGB PCA；没有新增深度导致过拟合的因果。",
+      "answer_sha256": "91b0a0feb3cd6695a1c94e0d210c2b5aeb9175dc543be328d65bdfe58023ee37",
+      "checked_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 162,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "evidence_quote": "5.1. Data augmentation The easiest and most common method to reduce overfitting on image data is to artificially enlarge the dataset using label- preserving transformations (e.g., Refs.4, 5, 30). We employ two distinct forms of data augmentation, both of which allow transformed images to be produced from the original images with very little computation, so the transformed images do not need to be stored on disk."
+        },
+        {
+          "citation": 6,
+          "chunk_id": 164,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "evidence_quote": "We do this by extracting random 224 × 224 patches (and their horizontal reflections) from the 256 × 256 images and training our net- work on these extracted patches.d This increases the size of our training set by a factor of 2048, though the resulting train- ing examples are, of course, highly inter dependent. Without this scheme, our network suffers from substantial overfit- ting, which would have forced us to use much smaller net- works."
+        },
+        {
+          "citation": 4,
+          "chunk_id": 167,
+          "source": "DCNN.pdf",
+          "page": 5,
+          "evidence_quote": "research highlights The second form of data augmentation consists of altering the intensities of the RGB channels in training images. Specifically, we perform PCA on the set of RGB pixel values throughout the ImageNet training set."
+        }
+      ]
+    },
+    "q5": {
+      "core_or_refusal_passed": true,
+      "strict_source_only_passed": false,
+      "semantic_status": "partial_wording",
+      "review": "五层数值、主体和 1×1 例外正确，predominantly 已修正所有层的概括。但 a design choice it says is feasible because of those small filters 指代含糊：[5] 说可行的是增加深度，并非卷积核选择本身。严格审阅保守记为措辞瑕疵，未认定全部语义通过。相同 prompt_v3/证据的前次仍输出 in all layers。",
+      "answer_sha256": "0e8fb4bd4336f49bb97292b45e4abe4e37a9e4f5341d988c32e992d8f637942e",
+      "checked_sources": [
+        {
+          "citation": 4,
+          "chunk_id": 233,
+          "source": "VGG.pdf",
+          "page": 2,
+          "evidence_quote": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv."
+        },
+        {
+          "citation": 9,
+          "chunk_id": 157,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "evidence_quote": "Max-pooling layers, of the kind described in Section 4.4, follow both response-normal- ization layers as well as the fifth convolutional layer. The ReLU non linearity is applied to the output of every convolu- tional and fully connected layer. The first convolutional layer filters the 224 × 224 × 3 input image with 96 kernels of size 11 × 11 × 3 with a stride of 4 pixels (this is the distance between the receptive field centers of neighboring neurons in a kernel map)."
+        },
+        {
+          "citation": 3,
+          "chunk_id": 158,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "evidence_quote": "The sec- ond convolutional layer takes as input the (response-nor- malized and pooled) output of the first convolutional layer and filters it with 256 kernels of size 5 × 5 × 48. The third, fourth, and fifth convolutional layers are connected to one another without any intervening pooling or normalization layers."
+        },
+        {
+          "citation": 6,
+          "chunk_id": 159,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "evidence_quote": "The third convolutional layer has 384 kernels of size 3 × 3 × 256 connected to the (normalized, pooled) outputs 3 3 3 3 dense 2048 2048 192 192 128 13 13 3 3 3 dense dense 13 13 3 1000 Max 192 192 128 2048 2048 pooling of the second convolutional layer. The fourth convolu- tional layer has 384 kernels of size 3 × 3 × 192, and the fifth convolutional layer has 256 kernels of size 3 × 3 × 192. The fully connected layers have 4096 neurons each."
+        }
+      ]
+    },
+    "q6": {
+      "core_or_refusal_passed": true,
+      "strict_source_only_passed": true,
+      "semantic_status": "supported_refusal",
+      "review": "明确说现有上下文没有指定日期 NVIDIA 股价，不生成价格。[1][2][3][5] 仅引用 GPU/硬件相关提及；分解不改写日期。",
+      "answer_sha256": "3bd1a051f66393fe3f1d9b551d033d4c6e61f74b868da604801ded5f52a06ce2",
+      "checked_sources": []
+    }
+  }
+}

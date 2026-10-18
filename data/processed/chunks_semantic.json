@@ -1,0 +1,3026 @@
+[
+  {
+    "chunk_id": 0,
+    "text": "Attention Is All You Need Ashish Vaswani∗ Google Brain avaswani@google.com Noam Shazeer∗ Google Brain noam@google.com Niki Parmar∗ Google Research nikip@google.com Jakob Uszkoreit∗ Google Research usz@google.com Llion Jones∗ Google Research llion@google.com Aidan N.",
+    "source": "Attention is all you need.pdf",
+    "page": 1,
+    "title": "Attention is All you Need",
+    "section": null
+  },
+  {
+    "chunk_id": 1,
+    "text": "Gomez∗† University of Toronto aidan@cs.toronto.edu Łukasz Kaiser∗ Google Brain lukaszkaiser@google.com Illia Polosukhin∗‡ illia.polosukhin@gmail.com Abstract The dominant sequence transduction models are based on complex recurrent or convolutional neural networks that include an encoder and a decoder. The best performing models also connect the encoder and decoder through an attention mechanism.",
+    "source": "Attention is all you need.pdf",
+    "page": 1,
+    "title": "Attention is All you Need",
+    "section": null
+  },
+  {
+    "chunk_id": 2,
+    "text": "We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely.",
+    "source": "Attention is all you need.pdf",
+    "page": 1,
+    "title": "Attention is All you Need",
+    "section": null
+  },
+  {
+    "chunk_id": 3,
+    "text": "Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring signiﬁcantly less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English- to-German translation task, improving over the existing best results, including ensembles, by over 2 BLEU.",
+    "source": "Attention is all you need.pdf",
+    "page": 1,
+    "title": "Attention is All you Need",
+    "section": null
+  },
+  {
+    "chunk_id": 4,
+    "text": "On the WMT 2014 English-to-French translation task, our model establishes a new single-model state-of-the-art BLEU score of 41.0 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature.",
+    "source": "Attention is all you need.pdf",
+    "page": 1,
+    "title": "Attention is All you Need",
+    "section": null
+  },
+  {
+    "chunk_id": 5,
+    "text": "1 Introduction Recurrent neural networks, long short-term memory [12] and gated recurrent [7] neural networks in particular, have been ﬁrmly established as state of the art approaches in sequence modeling and transduction problems such as language modeling and machine translation [29, 2, 5]. Numerous efforts have since continued to push the boundaries of recurrent language models and encoder-decoder architectures [31, 21, 13]. ∗Equal contribution.",
+    "source": "Attention is all you need.pdf",
+    "page": 1,
+    "title": "Attention is All you Need",
+    "section": "1 Introduction"
+  },
+  {
+    "chunk_id": 6,
+    "text": "Jakob proposed replacing RNNs with self-attention and started the effort to evaluate this idea. Ashish, with Illia, designed and implemented the ﬁrst Transformer models and has been crucially involved in every aspect of this work. Noam proposed scaled dot-product attention, multi-head attention and the parameter-free position representation and became the other person involved in nearly every detail.",
+    "source": "Attention is all you need.pdf",
+    "page": 1,
+    "title": "Attention is All you Need",
+    "section": "1 Introduction"
+  },
+  {
+    "chunk_id": 7,
+    "text": "Niki designed, implemented, tuned and evaluated countless model variants in our original codebase and tensor2tensor. Llion also experimented with novel model variants, was responsible for our initial codebase, and efﬁcient inference and visualizations. Lukasz and Aidan spent countless long days designing various parts of and implementing tensor2tensor, replacing our earlier codebase, greatly improving results and massively accelerating our research. †Work performed while at Google Brain.",
+    "source": "Attention is all you need.pdf",
+    "page": 1,
+    "title": "Attention is All you Need",
+    "section": "1 Introduction"
+  },
+  {
+    "chunk_id": 8,
+    "text": "‡Work performed while at Google Research. 31st Conference on Neural Information Processing Systems (NIPS 2017), Long Beach, CA, USA.",
+    "source": "Attention is all you need.pdf",
+    "page": 1,
+    "title": "Attention is All you Need",
+    "section": "1 Introduction"
+  },
+  {
+    "chunk_id": 9,
+    "text": "Recurrent models typically factor computation along the symbol positions of the input and output sequences. Aligning the positions to steps in computation time, they generate a sequence of hidden states ht, as a function of the previous hidden state ht−1 and the input for position t. This inherently sequential nature precludes parallelization within training examples, which becomes critical at longer sequence lengths, as memory constraints limit batching across examples.",
+    "source": "Attention is all you need.pdf",
+    "page": 2,
+    "title": "Attention is All you Need",
+    "section": "1 Introduction"
+  },
+  {
+    "chunk_id": 10,
+    "text": "Recent work has achieved signiﬁcant improvements in computational efﬁciency through factorization tricks [18] and conditional computation [26], while also improving model performance in case of the latter. The fundamental constraint of sequential computation, however, remains.",
+    "source": "Attention is all you need.pdf",
+    "page": 2,
+    "title": "Attention is All you Need",
+    "section": "1 Introduction"
+  },
+  {
+    "chunk_id": 11,
+    "text": "Attention mechanisms have become an integral part of compelling sequence modeling and transduc- tion models in various tasks, allowing modeling of dependencies without regard to their distance in the input or output sequences [2, 16]. In all but a few cases [22], however, such attention mechanisms are used in conjunction with a recurrent network.",
+    "source": "Attention is all you need.pdf",
+    "page": 2,
+    "title": "Attention is All you Need",
+    "section": "1 Introduction"
+  },
+  {
+    "chunk_id": 12,
+    "text": "In this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output. The Transformer allows for signiﬁcantly more parallelization and can reach a new state of the art in translation quality after being trained for as little as twelve hours on eight P100 GPUs.",
+    "source": "Attention is all you need.pdf",
+    "page": 2,
+    "title": "Attention is All you Need",
+    "section": "1 Introduction"
+  },
+  {
+    "chunk_id": 13,
+    "text": "2 Background The goal of reducing sequential computation also forms the foundation of the Extended Neural GPU [20], ByteNet [15] and ConvS2S [8], all of which use convolutional neural networks as basic building block, computing hidden representations in parallel for all input and output positions.",
+    "source": "Attention is all you need.pdf",
+    "page": 2,
+    "title": "Attention is All you Need",
+    "section": "2 Background"
+  },
+  {
+    "chunk_id": 14,
+    "text": "In these models, the number of operations required to relate signals from two arbitrary input or output positions grows in the distance between positions, linearly for ConvS2S and logarithmically for ByteNet. This makes it more difﬁcult to learn dependencies between distant positions [11].",
+    "source": "Attention is all you need.pdf",
+    "page": 2,
+    "title": "Attention is All you Need",
+    "section": "2 Background"
+  },
+  {
+    "chunk_id": 15,
+    "text": "In the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as described in section 3.2. Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.",
+    "source": "Attention is all you need.pdf",
+    "page": 2,
+    "title": "Attention is All you Need",
+    "section": "2 Background"
+  },
+  {
+    "chunk_id": 16,
+    "text": "Self-attention has been used successfully in a variety of tasks including reading comprehension, abstractive summarization, textual entailment and learning task-independent sentence representations [4, 22, 23, 19]. End-to-end memory networks are based on a recurrent attention mechanism instead of sequence- aligned recurrence and have been shown to perform well on simple-language question answering and language modeling tasks [28].",
+    "source": "Attention is all you need.pdf",
+    "page": 2,
+    "title": "Attention is All you Need",
+    "section": "2 Background"
+  },
+  {
+    "chunk_id": 17,
+    "text": "To the best of our knowledge, however, the Transformer is the ﬁrst transduction model relying entirely on self-attention to compute representations of its input and output without using sequence- aligned RNNs or convolution. In the following sections, we will describe the Transformer, motivate self-attention and discuss its advantages over models such as [14, 15] and [8].",
+    "source": "Attention is all you need.pdf",
+    "page": 2,
+    "title": "Attention is All you Need",
+    "section": "2 Background"
+  },
+  {
+    "chunk_id": 18,
+    "text": "3 Model Architecture Most competitive neural sequence transduction models have an encoder-decoder structure [5, 2, 29]. Here, the encoder maps an input sequence of symbol representations (x1, ..., xn) to a sequence of continuous representations z = (z1, ..., zn). Given z, the decoder then generates an output sequence (y1, ..., ym) of symbols one element at a time.",
+    "source": "Attention is all you need.pdf",
+    "page": 2,
+    "title": "Attention is All you Need",
+    "section": "3 Model Architecture"
+  },
+  {
+    "chunk_id": 19,
+    "text": "At each step the model is auto-regressive [9], consuming the previously generated symbols as additional input when generating the next.",
+    "source": "Attention is all you need.pdf",
+    "page": 2,
+    "title": "Attention is All you Need",
+    "section": "3 Model Architecture"
+  },
+  {
+    "chunk_id": 20,
+    "text": "The Transformer follows this overall architecture using stacked self-attention and point-wise, fully connected layers for both the encoder and decoder, shown in the left and right halves of Figure 1, respectively.",
+    "source": "Attention is all you need.pdf",
+    "page": 2,
+    "title": "Attention is All you Need",
+    "section": "3 Model Architecture"
+  },
+  {
+    "chunk_id": 21,
+    "text": "3.1 Encoder and Decoder Stacks Encoder: The encoder is composed of a stack of N = 6 identical layers. Each layer has two sub-layers.",
+    "source": "Attention is all you need.pdf",
+    "page": 2,
+    "title": "Attention is All you Need",
+    "section": "3.1 Encoder and Decoder Stacks"
+  },
+  {
+    "chunk_id": 22,
+    "text": "The ﬁrst is a multi-head self-attention mechanism, and the second is a simple, position-",
+    "source": "Attention is all you need.pdf",
+    "page": 2,
+    "title": "Attention is All you Need",
+    "section": "3.1 Encoder and Decoder Stacks"
+  },
+  {
+    "chunk_id": 23,
+    "text": "wise fully connected feed-forward network. We employ a residual connection [10] around each of the two sub-layers, followed by layer normalization [1]. That is, the output of each sub-layer is LayerNorm(x + Sublayer(x)), where Sublayer(x) is the function implemented by the sub-layer itself.",
+    "source": "Attention is all you need.pdf",
+    "page": 3,
+    "title": "Attention is All you Need",
+    "section": "3.1 Encoder and Decoder Stacks"
+  },
+  {
+    "chunk_id": 24,
+    "text": "To facilitate these residual connections, all sub-layers in the model, as well as the embedding layers, produce outputs of dimension dmodel = 512. Decoder: The decoder is also composed of a stack of N = 6 identical layers. In addition to the two sub-layers in each encoder layer, the decoder inserts a third sub-layer, which performs multi-head attention over the output of the encoder stack.",
+    "source": "Attention is all you need.pdf",
+    "page": 3,
+    "title": "Attention is All you Need",
+    "section": "3.1 Encoder and Decoder Stacks"
+  },
+  {
+    "chunk_id": 25,
+    "text": "Similar to the encoder, we employ residual connections around each of the sub-layers, followed by layer normalization. We also modify the self-attention sub-layer in the decoder stack to prevent positions from attending to subsequent positions. This masking, combined with fact that the output embeddings are offset by one position, ensures that the predictions for position i can depend only on the known outputs at positions less than i.",
+    "source": "Attention is all you need.pdf",
+    "page": 3,
+    "title": "Attention is All you Need",
+    "section": "3.1 Encoder and Decoder Stacks"
+  },
+  {
+    "chunk_id": 26,
+    "text": "3.2 Attention An attention function can be described as mapping a query and a set of key-value pairs to an output, where the query, keys, values, and output are all vectors. The output is computed as a weighted sum of the values, where the weight assigned to each value is computed by a compatibility function of the query with the corresponding key.",
+    "source": "Attention is all you need.pdf",
+    "page": 3,
+    "title": "Attention is All you Need",
+    "section": "3.2 Attention"
+  },
+  {
+    "chunk_id": 27,
+    "text": "3.2.1 Scaled Dot-Product Attention We call our particular attention \"Scaled Dot-Product Attention\" (Figure 2).",
+    "source": "Attention is all you need.pdf",
+    "page": 3,
+    "title": "Attention is All you Need",
+    "section": "3.2.1 Scaled Dot-Product Attention"
+  },
+  {
+    "chunk_id": 28,
+    "text": "The input consists of queries and keys of dimension dk, and values of dimension dv. We compute the dot products of the",
+    "source": "Attention is all you need.pdf",
+    "page": 3,
+    "title": "Attention is All you Need",
+    "section": "3.2.1 Scaled Dot-Product Attention"
+  },
+  {
+    "chunk_id": 29,
+    "text": "Scaled Dot-Product Attention Multi-Head Attention Figure 2: (left) Scaled Dot-Product Attention. (right) Multi-Head Attention consists of several attention layers running in parallel.",
+    "source": "Attention is all you need.pdf",
+    "page": 4,
+    "title": "Attention is All you Need",
+    "section": "3.2.1 Scaled Dot-Product Attention"
+  },
+  {
+    "chunk_id": 30,
+    "text": "query with all keys, divide each by √dk, and apply a softmax function to obtain the weights on the values. In practice, we compute the attention function on a set of queries simultaneously, packed together into a matrix Q. The keys and values are also packed together into matrices K and V . We compute the matrix of outputs as: Attention(Q, K, V ) = softmax(QKT √dk )V (1) The two most commonly used attention functions are additive attention [2], and dot-product (multi- plicative) attention.",
+    "source": "Attention is all you need.pdf",
+    "page": 4,
+    "title": "Attention is All you Need",
+    "section": "3.2.1 Scaled Dot-Product Attention"
+  },
+  {
+    "chunk_id": 31,
+    "text": "Dot-product attention is identical to our algorithm, except for the scaling factor of 1 √dk . Additive attention computes the compatibility function using a feed-forward network with a single hidden layer. While the two are similar in theoretical complexity, dot-product attention is much faster and more space-efﬁcient in practice, since it can be implemented using highly optimized matrix multiplication code.",
+    "source": "Attention is all you need.pdf",
+    "page": 4,
+    "title": "Attention is All you Need",
+    "section": "3.2.1 Scaled Dot-Product Attention"
+  },
+  {
+    "chunk_id": 32,
+    "text": "While for small values of dk the two mechanisms perform similarly, additive attention outperforms dot product attention without scaling for larger values of dk [3]. We suspect that for large values of dk, the dot products grow large in magnitude, pushing the softmax function into regions where it has extremely small gradients 4. To counteract this effect, we scale the dot products by 1 √dk .",
+    "source": "Attention is all you need.pdf",
+    "page": 4,
+    "title": "Attention is All you Need",
+    "section": "3.2.1 Scaled Dot-Product Attention"
+  },
+  {
+    "chunk_id": 33,
+    "text": "3.2.2 Multi-Head Attention Instead of performing a single attention function with dmodel-dimensional keys, values and queries, we found it beneﬁcial to linearly project the queries, keys and values h times with different, learned linear projections to dk, dk and dv dimensions, respectively. On each of these projected versions of queries, keys and values we then perform the attention function in parallel, yielding dv-dimensional output values.",
+    "source": "Attention is all you need.pdf",
+    "page": 4,
+    "title": "Attention is All you Need",
+    "section": "3.2.2 Multi-Head Attention"
+  },
+  {
+    "chunk_id": 34,
+    "text": "These are concatenated and once again projected, resulting in the ﬁnal values, as depicted in Figure 2. Multi-head attention allows the model to jointly attend to information from different representation subspaces at different positions. With a single attention head, averaging inhibits this.",
+    "source": "Attention is all you need.pdf",
+    "page": 4,
+    "title": "Attention is All you Need",
+    "section": "3.2.2 Multi-Head Attention"
+  },
+  {
+    "chunk_id": 35,
+    "text": "4To illustrate why the dot products get large, assume that the components of q and k are independent random variables with mean 0 and variance 1. Then their dot product, q · k = Pdk i=1 qiki, has mean 0 and variance dk.",
+    "source": "Attention is all you need.pdf",
+    "page": 4,
+    "title": "Attention is All you Need",
+    "section": "3.2.2 Multi-Head Attention"
+  },
+  {
+    "chunk_id": 36,
+    "text": "MultiHead(Q, K, V ) = Concat(head1, ..., headh)W O where headi = Attention(QW Q i , KW K i , V W V i ) Where the projections are parameter matrices W Q i ∈Rdmodel×dk, W K i ∈Rdmodel×dk, W V i ∈Rdmodel×dv and W O ∈Rhdv×dmodel.",
+    "source": "Attention is all you need.pdf",
+    "page": 5,
+    "title": "Attention is All you Need",
+    "section": "3.2.2 Multi-Head Attention"
+  },
+  {
+    "chunk_id": 37,
+    "text": "In this work we employ h = 8 parallel attention layers, or heads. For each of these we use dk = dv = dmodel/h = 64. Due to the reduced dimension of each head, the total computational cost is similar to that of single-head attention with full dimensionality.",
+    "source": "Attention is all you need.pdf",
+    "page": 5,
+    "title": "Attention is All you Need",
+    "section": "3.2.2 Multi-Head Attention"
+  },
+  {
+    "chunk_id": 38,
+    "text": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+    "source": "Attention is all you need.pdf",
+    "page": 5,
+    "title": "Attention is All you Need",
+    "section": "3.2.3 Applications of Attention in our Model"
+  },
+  {
+    "chunk_id": 39,
+    "text": "• The encoder contains self-attention layers. In a self-attention layer all of the keys, values and queries come from the same place, in this case, the output of the previous layer in the encoder. Each position in the encoder can attend to all positions in the previous layer of the encoder. • Similarly, self-attention layers in the decoder allow each position in the decoder to attend to all positions in the decoder up to and including that position.",
+    "source": "Attention is all you need.pdf",
+    "page": 5,
+    "title": "Attention is All you Need",
+    "section": "3.2.3 Applications of Attention in our Model"
+  },
+  {
+    "chunk_id": 40,
+    "text": "We need to prevent leftward information ﬂow in the decoder to preserve the auto-regressive property. We implement this inside of scaled dot-product attention by masking out (setting to −∞) all values in the input of the softmax which correspond to illegal connections.",
+    "source": "Attention is all you need.pdf",
+    "page": 5,
+    "title": "Attention is All you Need",
+    "section": "3.2.3 Applications of Attention in our Model"
+  },
+  {
+    "chunk_id": 41,
+    "text": "3.3 Position-wise Feed-Forward Networks In addition to attention sub-layers, each of the layers in our encoder and decoder contains a fully connected feed-forward network, which is applied to each position separately and identically.",
+    "source": "Attention is all you need.pdf",
+    "page": 5,
+    "title": "Attention is All you Need",
+    "section": "3.3 Position-wise Feed-Forward Networks"
+  },
+  {
+    "chunk_id": 42,
+    "text": "This consists of two linear transformations with a ReLU activation in between. FFN(x) = max(0, xW1 + b1)W2 + b2 (2) While the linear transformations are the same across different positions, they use different parameters from layer to layer. Another way of describing this is as two convolutions with kernel size 1. The dimensionality of input and output is dmodel = 512, and the inner-layer has dimensionality dff = 2048.",
+    "source": "Attention is all you need.pdf",
+    "page": 5,
+    "title": "Attention is All you Need",
+    "section": "3.3 Position-wise Feed-Forward Networks"
+  },
+  {
+    "chunk_id": 43,
+    "text": "3.4 Embeddings and Softmax Similarly to other sequence transduction models, we use learned embeddings to convert the input tokens and output tokens to vectors of dimension dmodel. We also use the usual learned linear transfor- mation and softmax function to convert the decoder output to predicted next-token probabilities.",
+    "source": "Attention is all you need.pdf",
+    "page": 5,
+    "title": "Attention is All you Need",
+    "section": "3.4 Embeddings and Softmax"
+  },
+  {
+    "chunk_id": 44,
+    "text": "In our model, we share the same weight matrix between the two embedding layers and the pre-softmax linear transformation, similar to [24]. In the embedding layers, we multiply those weights by √dmodel.",
+    "source": "Attention is all you need.pdf",
+    "page": 5,
+    "title": "Attention is All you Need",
+    "section": "3.4 Embeddings and Softmax"
+  },
+  {
+    "chunk_id": 45,
+    "text": "3.5 Positional Encoding Since our model contains no recurrence and no convolution, in order for the model to make use of the order of the sequence, we must inject some information about the relative or absolute position of the tokens in the sequence. To this end, we add \"positional encodings\" to the input embeddings at the",
+    "source": "Attention is all you need.pdf",
+    "page": 5,
+    "title": "Attention is All you Need",
+    "section": "3.5 Positional Encoding"
+  },
+  {
+    "chunk_id": 46,
+    "text": "Table 1: Maximum path lengths, per-layer complexity and minimum number of sequential operations for different layer types. n is the sequence length, d is the representation dimension, k is the kernel size of convolutions and r the size of the neighborhood in restricted self-attention.",
+    "source": "Attention is all you need.pdf",
+    "page": 6,
+    "title": "Attention is All you Need",
+    "section": "3.5 Positional Encoding"
+  },
+  {
+    "chunk_id": 47,
+    "text": "Layer Type Complexity per Layer Sequential Maximum Path Length Operations Self-Attention O(n2 · d) O(1) O(1) Recurrent O(n · d2) O(n) O(n) Convolutional O(k · n · d2) O(1) O(logk(n)) Self-Attention (restricted) O(r · n · d) O(1) O(n/r) bottoms of the encoder and decoder stacks. The positional encodings have the same dimension dmodel as the embeddings, so that the two can be summed. There are many choices of positional encodings, learned and ﬁxed [8].",
+    "source": "Attention is all you need.pdf",
+    "page": 6,
+    "title": "Attention is All you Need",
+    "section": "3.5 Positional Encoding"
+  },
+  {
+    "chunk_id": 48,
+    "text": "In this work, we use sine and cosine functions of different frequencies: PE(pos,2i) = sin(pos/100002i/dmodel) PE(pos,2i+1) = cos(pos/100002i/dmodel) where pos is the position and i is the dimension. That is, each dimension of the positional encoding corresponds to a sinusoid. The wavelengths form a geometric progression from 2π to 10000 · 2π.",
+    "source": "Attention is all you need.pdf",
+    "page": 6,
+    "title": "Attention is All you Need",
+    "section": "3.5 Positional Encoding"
+  },
+  {
+    "chunk_id": 49,
+    "text": "We chose this function because we hypothesized it would allow the model to easily learn to attend by relative positions, since for any ﬁxed offset k, PEpos+k can be represented as a linear function of PEpos. We also experimented with using learned positional embeddings [8] instead, and found that the two versions produced nearly identical results (see Table 3 row (E)).",
+    "source": "Attention is all you need.pdf",
+    "page": 6,
+    "title": "Attention is All you Need",
+    "section": "3.5 Positional Encoding"
+  },
+  {
+    "chunk_id": 50,
+    "text": "We chose the sinusoidal version because it may allow the model to extrapolate to sequence lengths longer than the ones encountered during training.",
+    "source": "Attention is all you need.pdf",
+    "page": 6,
+    "title": "Attention is All you Need",
+    "section": "3.5 Positional Encoding"
+  },
+  {
+    "chunk_id": 51,
+    "text": "4 Why Self-Attention In this section we compare various aspects of self-attention layers to the recurrent and convolu- tional layers commonly used for mapping one variable-length sequence of symbol representations (x1, ..., xn) to another sequence of equal length (z1, ..., zn), with xi, zi ∈Rd, such as a hidden layer in a typical sequence transduction encoder or decoder. Motivating our use of self-attention we consider three desiderata.",
+    "source": "Attention is all you need.pdf",
+    "page": 6,
+    "title": "Attention is All you Need",
+    "section": "4 Why Self-Attention"
+  },
+  {
+    "chunk_id": 52,
+    "text": "One is the total computational complexity per layer. Another is the amount of computation that can be parallelized, as measured by the minimum number of sequential operations required. The third is the path length between long-range dependencies in the network. Learning long-range dependencies is a key challenge in many sequence transduction tasks.",
+    "source": "Attention is all you need.pdf",
+    "page": 6,
+    "title": "Attention is All you Need",
+    "section": "4 Why Self-Attention"
+  },
+  {
+    "chunk_id": 53,
+    "text": "One key factor affecting the ability to learn such dependencies is the length of the paths forward and backward signals have to traverse in the network. The shorter these paths between any combination of positions in the input and output sequences, the easier it is to learn long-range dependencies [11]. Hence we also compare the maximum path length between any two input and output positions in networks composed of the different layer types.",
+    "source": "Attention is all you need.pdf",
+    "page": 6,
+    "title": "Attention is All you Need",
+    "section": "4 Why Self-Attention"
+  },
+  {
+    "chunk_id": 54,
+    "text": "As noted in Table 1, a self-attention layer connects all positions with a constant number of sequentially executed operations, whereas a recurrent layer requires O(n) sequential operations.",
+    "source": "Attention is all you need.pdf",
+    "page": 6,
+    "title": "Attention is All you Need",
+    "section": "4 Why Self-Attention"
+  },
+  {
+    "chunk_id": 55,
+    "text": "In terms of computational complexity, self-attention layers are faster than recurrent layers when the sequence length n is smaller than the representation dimensionality d, which is most often the case with sentence representations used by state-of-the-art models in machine translations, such as word-piece [31] and byte-pair [25] representations.",
+    "source": "Attention is all you need.pdf",
+    "page": 6,
+    "title": "Attention is All you Need",
+    "section": "4 Why Self-Attention"
+  },
+  {
+    "chunk_id": 56,
+    "text": "To improve computational performance for tasks involving very long sequences, self-attention could be restricted to considering only a neighborhood of size r in",
+    "source": "Attention is all you need.pdf",
+    "page": 6,
+    "title": "Attention is All you Need",
+    "section": "4 Why Self-Attention"
+  },
+  {
+    "chunk_id": 57,
+    "text": "the input sequence centered around the respective output position. This would increase the maximum path length to O(n/r). We plan to investigate this approach further in future work.",
+    "source": "Attention is all you need.pdf",
+    "page": 7,
+    "title": "Attention is All you Need",
+    "section": "4 Why Self-Attention"
+  },
+  {
+    "chunk_id": 58,
+    "text": "A single convolutional layer with kernel width k < n does not connect all pairs of input and output positions. Doing so requires a stack of O(n/k) convolutional layers in the case of contiguous kernels, or O(logk(n)) in the case of dilated convolutions [15], increasing the length of the longest paths between any two positions in the network. Convolutional layers are generally more expensive than recurrent layers, by a factor of k.",
+    "source": "Attention is all you need.pdf",
+    "page": 7,
+    "title": "Attention is All you Need",
+    "section": "4 Why Self-Attention"
+  },
+  {
+    "chunk_id": 59,
+    "text": "Separable convolutions [6], however, decrease the complexity considerably, to O(k · n · d + n · d2). Even with k = n, however, the complexity of a separable convolution is equal to the combination of a self-attention layer and a point-wise feed-forward layer, the approach we take in our model. As side beneﬁt, self-attention could yield more interpretable models. We inspect attention distributions from our models and present and discuss examples in the appendix.",
+    "source": "Attention is all you need.pdf",
+    "page": 7,
+    "title": "Attention is All you Need",
+    "section": "4 Why Self-Attention"
+  },
+  {
+    "chunk_id": 60,
+    "text": "Not only do individual attention heads clearly learn to perform different tasks, many appear to exhibit behavior related to the syntactic and semantic structure of the sentences.",
+    "source": "Attention is all you need.pdf",
+    "page": 7,
+    "title": "Attention is All you Need",
+    "section": "4 Why Self-Attention"
+  },
+  {
+    "chunk_id": 61,
+    "text": "5 Training This section describes the training regime for our models.",
+    "source": "Attention is all you need.pdf",
+    "page": 7,
+    "title": "Attention is All you Need",
+    "section": "5 Training"
+  },
+  {
+    "chunk_id": 62,
+    "text": "5.1 Training Data and Batching We trained on the standard WMT 2014 English-German dataset consisting of about 4.5 million sentence pairs.",
+    "source": "Attention is all you need.pdf",
+    "page": 7,
+    "title": "Attention is All you Need",
+    "section": "5.1 Training Data and Batching"
+  },
+  {
+    "chunk_id": 63,
+    "text": "Sentences were encoded using byte-pair encoding [3], which has a shared source- target vocabulary of about 37000 tokens. For English-French, we used the signiﬁcantly larger WMT 2014 English-French dataset consisting of 36M sentences and split tokens into a 32000 word-piece vocabulary [31]. Sentence pairs were batched together by approximate sequence length. Each training batch contained a set of sentence pairs containing approximately 25000 source tokens and 25000 target tokens.",
+    "source": "Attention is all you need.pdf",
+    "page": 7,
+    "title": "Attention is All you Need",
+    "section": "5.1 Training Data and Batching"
+  },
+  {
+    "chunk_id": 64,
+    "text": "5.2 Hardware and Schedule We trained our models on one machine with 8 NVIDIA P100 GPUs.",
+    "source": "Attention is all you need.pdf",
+    "page": 7,
+    "title": "Attention is All you Need",
+    "section": "5.2 Hardware and Schedule"
+  },
+  {
+    "chunk_id": 65,
+    "text": "For our base models using the hyperparameters described throughout the paper, each training step took about 0.4 seconds. We trained the base models for a total of 100,000 steps or 12 hours. For our big models,(described on the bottom line of table 3), step time was 1.0 seconds. The big models were trained for 300,000 steps (3.5 days).",
+    "source": "Attention is all you need.pdf",
+    "page": 7,
+    "title": "Attention is All you Need",
+    "section": "5.2 Hardware and Schedule"
+  },
+  {
+    "chunk_id": 66,
+    "text": "5.3 Optimizer We used the Adam optimizer [17] with β1 = 0.9, β2 = 0.98 and ϵ = 10−9. We varied the learning rate over the course of training, according to the formula: lrate = d−0.5 model · min(step_num−0.5, step_num · warmup_steps−1.5) (3) This corresponds to increasing the learning rate linearly for the ﬁrst warmup_steps training steps, and decreasing it thereafter proportionally to the inverse square root of the step number. We used warmup_steps = 4000.",
+    "source": "Attention is all you need.pdf",
+    "page": 7,
+    "title": "Attention is All you Need",
+    "section": "5.3 Optimizer"
+  },
+  {
+    "chunk_id": 67,
+    "text": "5.4 Regularization We employ three types of regularization during training: Residual Dropout We apply dropout [27] to the output of each sub-layer, before it is added to the sub-layer input and normalized. In addition, we apply dropout to the sums of the embeddings and the positional encodings in both the encoder and decoder stacks.",
+    "source": "Attention is all you need.pdf",
+    "page": 7,
+    "title": "Attention is All you Need",
+    "section": "5.4 Regularization"
+  },
+  {
+    "chunk_id": 68,
+    "text": "Table 2: The Transformer achieves better BLEU scores than previous state-of-the-art models on the English-to-German and English-to-French newstest2014 tests at a fraction of the training cost.",
+    "source": "Attention is all you need.pdf",
+    "page": 8,
+    "title": "Attention is All you Need",
+    "section": "5.4 Regularization"
+  },
+  {
+    "chunk_id": 69,
+    "text": "Model BLEU Training Cost (FLOPs) EN-DE EN-FR EN-DE EN-FR ByteNet [15] 23.75 Deep-Att + PosUnk [32] 39.2 1.0 · 1020 GNMT + RL [31] 24.6 39.92 2.3 · 1019 1.4 · 1020 ConvS2S [8] 25.16 40.46 9.6 · 1018 1.5 · 1020 MoE [26] 26.03 40.56 2.0 · 1019 1.2 · 1020 Deep-Att + PosUnk Ensemble [32] 40.4 8.0 · 1020 GNMT + RL Ensemble [31] 26.30 41.16 1.8 · 1020 1.1 · 1021 ConvS2S Ensemble [8] 26.36 41.29 7.7 · 1019 1.2 · 1021 Transformer (base model) 27.3 38.1 3.3 · 1018 Transformer (big) 28.4 41.0 2.3 · 1019 Label Smoothing During training, we employed label smoothing of value ϵls = 0.1 [30].",
+    "source": "Attention is all you need.pdf",
+    "page": 8,
+    "title": "Attention is All you Need",
+    "section": "5.4 Regularization"
+  },
+  {
+    "chunk_id": 70,
+    "text": "This hurts perplexity, as the model learns to be more unsure, but improves accuracy and BLEU score.",
+    "source": "Attention is all you need.pdf",
+    "page": 8,
+    "title": "Attention is All you Need",
+    "section": "5.4 Regularization"
+  },
+  {
+    "chunk_id": 71,
+    "text": "6.1 Machine Translation On the WMT 2014 English-to-German translation task, the big transformer model (Transformer (big) in Table 2) outperforms the best previously reported models (including ensembles) by more than 2.0 BLEU, establishing a new state-of-the-art BLEU score of 28.4. The conﬁguration of this model is listed in the bottom line of Table 3. Training took 3.5 days on 8 P100 GPUs.",
+    "source": "Attention is all you need.pdf",
+    "page": 8,
+    "title": "Attention is All you Need",
+    "section": "6.1 Machine Translation"
+  },
+  {
+    "chunk_id": 72,
+    "text": "Even our base model surpasses all previously published models and ensembles, at a fraction of the training cost of any of the competitive models. On the WMT 2014 English-to-French translation task, our big model achieves a BLEU score of 41.0, outperforming all of the previously published single models, at less than 1/4 the training cost of the previous state-of-the-art model.",
+    "source": "Attention is all you need.pdf",
+    "page": 8,
+    "title": "Attention is All you Need",
+    "section": "6.1 Machine Translation"
+  },
+  {
+    "chunk_id": 73,
+    "text": "The Transformer (big) model trained for English-to-French used dropout rate Pdrop = 0.1, instead of 0.3. For the base models, we used a single model obtained by averaging the last 5 checkpoints, which were written at 10-minute intervals. For the big models, we averaged the last 20 checkpoints. We used beam search with a beam size of 4 and length penalty α = 0.6 [31]. These hyperparameters were chosen after experimentation on the development set.",
+    "source": "Attention is all you need.pdf",
+    "page": 8,
+    "title": "Attention is All you Need",
+    "section": "6.1 Machine Translation"
+  },
+  {
+    "chunk_id": 74,
+    "text": "We set the maximum output length during inference to input length + 50, but terminate early when possible [31]. Table 2 summarizes our results and compares our translation quality and training costs to other model architectures from the literature. We estimate the number of ﬂoating point operations used to train a model by multiplying the training time, the number of GPUs used, and an estimate of the sustained single-precision ﬂoating-point capacity of each GPU 5.",
+    "source": "Attention is all you need.pdf",
+    "page": 8,
+    "title": "Attention is All you Need",
+    "section": "6.1 Machine Translation"
+  },
+  {
+    "chunk_id": 75,
+    "text": "6.2 Model Variations To evaluate the importance of different components of the Transformer, we varied our base model in different ways, measuring the change in performance on English-to-German translation on the development set, newstest2013. We used beam search as described in the previous section, but no checkpoint averaging.",
+    "source": "Attention is all you need.pdf",
+    "page": 8,
+    "title": "Attention is All you Need",
+    "section": "6.2 Model Variations"
+  },
+  {
+    "chunk_id": 76,
+    "text": "We present these results in Table 3. In Table 3 rows (A), we vary the number of attention heads and the attention key and value dimensions, keeping the amount of computation constant, as described in Section 3.2.2. While single-head attention is 0.9 BLEU worse than the best setting, quality also drops off with too many heads.",
+    "source": "Attention is all you need.pdf",
+    "page": 8,
+    "title": "Attention is All you Need",
+    "section": "6.2 Model Variations"
+  },
+  {
+    "chunk_id": 77,
+    "text": "5We used values of 2.8, 3.7, 6.0 and 9.5 TFLOPS for K80, K40, M40 and P100, respectively.",
+    "source": "Attention is all you need.pdf",
+    "page": 8,
+    "title": "Attention is All you Need",
+    "section": "6.2 Model Variations"
+  },
+  {
+    "chunk_id": 78,
+    "text": "Table 3: Variations on the Transformer architecture. Unlisted values are identical to those of the base model. All metrics are on the English-to-German translation development set, newstest2013. Listed perplexities are per-wordpiece, according to our byte-pair encoding, and should not be compared to per-word perplexities.",
+    "source": "Attention is all you need.pdf",
+    "page": 9,
+    "title": "Attention is All you Need",
+    "section": "6.2 Model Variations"
+  },
+  {
+    "chunk_id": 79,
+    "text": "N dmodel dff h dk dv Pdrop ϵls train PPL BLEU params steps (dev) (dev) ×106 base 6 512 2048 8 64 64 0.1 0.1 100K 4.92 25.8 65 (A) 1 512 512 5.29 24.9 4 128 128 5.00 25.5 16 32 32 4.91 25.8 32 16 16 5.01 25.4 (B) 16 5.16 25.1 58 32 5.01 25.4 60 (C) 2 6.11 23.7 36 4 5.19 25.3 50 8 4.88 25.5 80 256 32 32 5.75 24.5 28 1024 128 128 4.66 26.0 168 1024 5.12 25.4 53 4096 4.75 26.2 90 (D) 0.0 5.77 24.6 0.2 4.95 25.5 0.0 4.67 25.3 0.2 5.47 25.7 (E) positional embedding instead of sinusoids 4.92 25.7 big 6 1024 4096 16 0.3 300K 4.33 26.4 213 In Table 3 rows (B), we observe that reducing the attention key size dk hurts model quality.",
+    "source": "Attention is all you need.pdf",
+    "page": 9,
+    "title": "Attention is All you Need",
+    "section": "6.2 Model Variations"
+  },
+  {
+    "chunk_id": 80,
+    "text": "This suggests that determining compatibility is not easy and that a more sophisticated compatibility function than dot product may be beneﬁcial. We further observe in rows (C) and (D) that, as expected, bigger models are better, and dropout is very helpful in avoiding over-ﬁtting. In row (E) we replace our sinusoidal positional encoding with learned positional embeddings [8], and observe nearly identical results to the base model.",
+    "source": "Attention is all you need.pdf",
+    "page": 9,
+    "title": "Attention is All you Need",
+    "section": "6.2 Model Variations"
+  },
+  {
+    "chunk_id": 81,
+    "text": "7 Conclusion In this work, we presented the Transformer, the ﬁrst sequence transduction model based entirely on attention, replacing the recurrent layers most commonly used in encoder-decoder architectures with multi-headed self-attention. For translation tasks, the Transformer can be trained signiﬁcantly faster than architectures based on recurrent or convolutional layers. On both WMT 2014 English-to-German and WMT 2014 English-to-French translation tasks, we achieve a new state of the art.",
+    "source": "Attention is all you need.pdf",
+    "page": 9,
+    "title": "Attention is All you Need",
+    "section": "7 Conclusion"
+  },
+  {
+    "chunk_id": 82,
+    "text": "In the former task our best model outperforms even all previously reported ensembles. We are excited about the future of attention-based models and plan to apply them to other tasks. We plan to extend the Transformer to problems involving input and output modalities other than text and to investigate local, restricted attention mechanisms to efﬁciently handle large inputs and outputs such as images, audio and video. Making generation less sequential is another research goals of ours.",
+    "source": "Attention is all you need.pdf",
+    "page": 9,
+    "title": "Attention is All you Need",
+    "section": "7 Conclusion"
+  },
+  {
+    "chunk_id": 83,
+    "text": "The code we used to train and evaluate our models is available at https://github.com/ tensorflow/tensor2tensor.",
+    "source": "Attention is all you need.pdf",
+    "page": 9,
+    "title": "Attention is All you Need",
+    "section": "7 Conclusion"
+  },
+  {
+    "chunk_id": 84,
+    "text": "Acknowledgements We are grateful to Nal Kalchbrenner and Stephan Gouws for their fruitful comments, corrections and inspiration.",
+    "source": "Attention is all you need.pdf",
+    "page": 9,
+    "title": "Attention is All you Need",
+    "section": "7 Conclusion"
+  },
+  {
+    "chunk_id": 85,
+    "text": "References [1] Jimmy Lei Ba, Jamie Ryan Kiros, and Geoffrey E Hinton. Layer normalization.",
+    "source": "Attention is all you need.pdf",
+    "page": 10,
+    "title": "Attention is All you Need",
+    "section": "7 Conclusion"
+  },
+  {
+    "chunk_id": 86,
+    "text": "arXiv preprint arXiv:1607.06450, 2016. [2] Dzmitry Bahdanau, Kyunghyun Cho, and Yoshua Bengio. Neural machine translation by jointly learning to align and translate. CoRR, abs/1409.0473, 2014. [3] Denny Britz, Anna Goldie, Minh-Thang Luong, and Quoc V. Massive exploration of neural machine translation architectures. CoRR, abs/1703.03906, 2017. [4] Jianpeng Cheng, Li Dong, and Mirella Lapata. Long short-term memory-networks for machine reading.",
+    "source": "Attention is all you need.pdf",
+    "page": 10,
+    "title": "Attention is All you Need",
+    "section": "7 Conclusion"
+  },
+  {
+    "chunk_id": 87,
+    "text": "arXiv preprint arXiv:1601.06733, 2016. [5] Kyunghyun Cho, Bart van Merrienboer, Caglar Gulcehre, Fethi Bougares, Holger Schwenk, and Yoshua Bengio. Learning phrase representations using rnn encoder-decoder for statistical machine translation.",
+    "source": "Attention is all you need.pdf",
+    "page": 10,
+    "title": "Attention is All you Need",
+    "section": "7 Conclusion"
+  },
+  {
+    "chunk_id": 88,
+    "text": "CoRR, abs/1406.1078, 2014. [6] Francois Chollet. Xception: Deep learning with depthwise separable convolutions. arXiv preprint arXiv:1610.02357, 2016. [7] Junyoung Chung, Çaglar Gülçehre, Kyunghyun Cho, and Yoshua Bengio. Empirical evaluation of gated recurrent neural networks on sequence modeling. CoRR, abs/1412.3555, 2014. [8] Jonas Gehring, Michael Auli, David Grangier, Denis Yarats, and Yann N. Convolu- tional sequence to sequence learning.",
+    "source": "Attention is all you need.pdf",
+    "page": 10,
+    "title": "Attention is All you Need",
+    "section": "7 Conclusion"
+  },
+  {
+    "chunk_id": 89,
+    "text": "arXiv preprint arXiv:1705.03122v2, 2017. [9] Alex Graves. Generating sequences with recurrent neural networks. arXiv preprint arXiv:1308.0850, 2013. [10] Kaiming He, Xiangyu Zhang, Shaoqing Ren, and Jian Sun. Deep residual learning for im- age recognition. In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition, pages 770–778, 2016. [11] Sepp Hochreiter, Yoshua Bengio, Paolo Frasconi, and Jürgen Schmidhuber.",
+    "source": "Attention is all you need.pdf",
+    "page": 10,
+    "title": "Attention is All you Need",
+    "section": "7 Conclusion"
+  },
+  {
+    "chunk_id": 90,
+    "text": "Gradient ﬂow in recurrent nets: the difﬁculty of learning long-term dependencies, 2001. [12] Sepp Hochreiter and Jürgen Schmidhuber. Long short-term memory. Neural computation, 9(8):1735–1780, 1997. [13] Rafal Jozefowicz, Oriol Vinyals, Mike Schuster, Noam Shazeer, and Yonghui Wu. Exploring the limits of language modeling. arXiv preprint arXiv:1602.02410, 2016. [14] Łukasz Kaiser and Ilya Sutskever. Neural GPUs learn algorithms.",
+    "source": "Attention is all you need.pdf",
+    "page": 10,
+    "title": "Attention is All you Need",
+    "section": "7 Conclusion"
+  },
+  {
+    "chunk_id": 91,
+    "text": "In International Conference on Learning Representations (ICLR), 2016. [15] Nal Kalchbrenner, Lasse Espeholt, Karen Simonyan, Aaron van den Oord, Alex Graves, and Ko- ray Kavukcuoglu. Neural machine translation in linear time. arXiv preprint arXiv:1610.10099v2, 2017. [16] Yoon Kim, Carl Denton, Luong Hoang, and Alexander M. Structured attention networks. In International Conference on Learning Representations, 2017. [17] Diederik Kingma and Jimmy Ba. Adam: A method for stochastic optimization.",
+    "source": "Attention is all you need.pdf",
+    "page": 10,
+    "title": "Attention is All you Need",
+    "section": "7 Conclusion"
+  },
+  {
+    "chunk_id": 92,
+    "text": "In ICLR, 2015. [18] Oleksii Kuchaiev and Boris Ginsburg.",
+    "source": "Attention is all you need.pdf",
+    "page": 10,
+    "title": "Attention is All you Need",
+    "section": "7 Conclusion"
+  },
+  {
+    "chunk_id": 93,
+    "text": "Factorization tricks for LSTM networks. arXiv preprint arXiv:1703.10722, 2017. [19] Zhouhan Lin, Minwei Feng, Cicero Nogueira dos Santos, Mo Yu, Bing Xiang, Bowen Zhou, and Yoshua Bengio. A structured self-attentive sentence embedding. arXiv preprint arXiv:1703.03130, 2017. [20] Samy Bengio Łukasz Kaiser.",
+    "source": "Attention is all you need.pdf",
+    "page": 10,
+    "title": "Attention is All you Need",
+    "section": "7 Conclusion"
+  },
+  {
+    "chunk_id": 94,
+    "text": "Can active memory replace attention? In Advances in Neural Information Processing Systems, (NIPS), 2016.",
+    "source": "Attention is all you need.pdf",
+    "page": 10,
+    "title": "Attention is All you Need",
+    "section": "7 Conclusion"
+  },
+  {
+    "chunk_id": 95,
+    "text": "[21] Minh-Thang Luong, Hieu Pham, and Christopher D Manning.",
+    "source": "Attention is all you need.pdf",
+    "page": 11,
+    "title": "Attention is All you Need",
+    "section": "7 Conclusion"
+  },
+  {
+    "chunk_id": 96,
+    "text": "Effective approaches to attention- based neural machine translation. arXiv preprint arXiv:1508.04025, 2015. [22] Ankur Parikh, Oscar Täckström, Dipanjan Das, and Jakob Uszkoreit. A decomposable attention model. In Empirical Methods in Natural Language Processing, 2016. [23] Romain Paulus, Caiming Xiong, and Richard Socher. A deep reinforced model for abstractive summarization. arXiv preprint arXiv:1705.04304, 2017. [24] Oﬁr Press and Lior Wolf.",
+    "source": "Attention is all you need.pdf",
+    "page": 11,
+    "title": "Attention is All you Need",
+    "section": "7 Conclusion"
+  },
+  {
+    "chunk_id": 97,
+    "text": "Using the output embedding to improve language models. arXiv preprint arXiv:1608.05859, 2016. [25] Rico Sennrich, Barry Haddow, and Alexandra Birch. Neural machine translation of rare words with subword units. arXiv preprint arXiv:1508.07909, 2015. [26] Noam Shazeer, Azalia Mirhoseini, Krzysztof Maziarz, Andy Davis, Quoc Le, Geoffrey Hinton, and Jeff Dean. Outrageously large neural networks: The sparsely-gated mixture-of-experts layer.",
+    "source": "Attention is all you need.pdf",
+    "page": 11,
+    "title": "Attention is All you Need",
+    "section": "7 Conclusion"
+  },
+  {
+    "chunk_id": 98,
+    "text": "arXiv preprint arXiv:1701.06538, 2017. [27] Nitish Srivastava, Geoffrey E Hinton, Alex Krizhevsky, Ilya Sutskever, and Ruslan Salakhutdi- nov. Dropout: a simple way to prevent neural networks from overﬁtting. Journal of Machine Learning Research, 15(1):1929–1958, 2014. [28] Sainbayar Sukhbaatar, arthur szlam, Jason Weston, and Rob Fergus. End-to-end memory networks. Lawrence, D. Sugiyama, and R.",
+    "source": "Attention is all you need.pdf",
+    "page": 11,
+    "title": "Attention is All you Need",
+    "section": "7 Conclusion"
+  },
+  {
+    "chunk_id": 99,
+    "text": "Garnett, editors, Advances in Neural Information Processing Systems 28, pages 2440–2448. Curran Associates, Inc., 2015. [29] Ilya Sutskever, Oriol Vinyals, and Quoc VV Le. Sequence to sequence learning with neural networks. In Advances in Neural Information Processing Systems, pages 3104–3112, 2014. [30] Christian Szegedy, Vincent Vanhoucke, Sergey Ioffe, Jonathon Shlens, and Zbigniew Wojna. Rethinking the inception architecture for computer vision.",
+    "source": "Attention is all you need.pdf",
+    "page": 11,
+    "title": "Attention is All you Need",
+    "section": "7 Conclusion"
+  },
+  {
+    "chunk_id": 100,
+    "text": "CoRR, abs/1512.00567, 2015. [31] Yonghui Wu, Mike Schuster, Zhifeng Chen, Quoc V Le, Mohammad Norouzi, Wolfgang Macherey, Maxim Krikun, Yuan Cao, Qin Gao, Klaus Macherey, et al. Google’s neural machine translation system: Bridging the gap between human and machine translation. arXiv preprint arXiv:1609.08144, 2016. [32] Jie Zhou, Ying Cao, Xuguang Wang, Peng Li, and Wei Xu. Deep recurrent models with fast-forward connections for neural machine translation.",
+    "source": "Attention is all you need.pdf",
+    "page": 11,
+    "title": "Attention is All you Need",
+    "section": "7 Conclusion"
+  },
+  {
+    "chunk_id": 101,
+    "text": "research highlights ImageNet Classification with Deep Convolutional Neural Networks By Alex Krizhevsky, Ilya Sutskever, and Geoffrey E. Hinton Abstract We trained a large, deep convolutional neural network to classify the 1.2 million high-resolution images in the ImageNet LSVRC-2010 contest into the 1000 different classes.",
+    "source": "DCNN.pdf",
+    "page": 1,
+    "title": "DCNN",
+    "section": null
+  },
+  {
+    "chunk_id": 102,
+    "text": "On the test data, we achieved top-1 and top-5 error rates of 37.5% and 17.0%, respectively, which is considerably better than the previous state-of-the-art. The neural network, which has 60 million parameters and 650,000 neurons, con- sists of five convolutional layers, some of which are followed by max-pooling layers, and three fully connected layers with a final 1000-way softmax.",
+    "source": "DCNN.pdf",
+    "page": 1,
+    "title": "DCNN",
+    "section": null
+  },
+  {
+    "chunk_id": 103,
+    "text": "To make training faster, we used non- saturating neurons and a very efficient GPU implementation of the convolution operation. To reduce overfitting in the fully connected layers we employed a recently developed reg- ularization method called “dropout” that proved to be very effective. We also entered a variant of this model in the ILSVRC-2012 competition and achieved a winning top-5 test error rate of 15.3%, compared to 26.2% achieved by the sec- ond-best entry.",
+    "source": "DCNN.pdf",
+    "page": 1,
+    "title": "DCNN",
+    "section": null
+  },
+  {
+    "chunk_id": 104,
+    "text": "1. PROLOGUE Four years ago, a paper by Yann LeCun and his collaborators was rejected by the leading computer vision conference on the grounds that it used neural networks and therefore pro- vided no insight into how to design a vision system. At the time, most computer vision researchers believed that a vision system needed to be carefully hand-designed using a detailed understanding of the nature of the task.",
+    "source": "DCNN.pdf",
+    "page": 1,
+    "title": "DCNN",
+    "section": "1. PROLOGUE"
+  },
+  {
+    "chunk_id": 105,
+    "text": "They assumed that the task of classifying objects in natural images would never be solved by simply presenting examples of images and the names of the objects they contained to a neural network that acquired all of its knowledge from this training data.",
+    "source": "DCNN.pdf",
+    "page": 1,
+    "title": "DCNN",
+    "section": "1. PROLOGUE"
+  },
+  {
+    "chunk_id": 106,
+    "text": "What many in the vision research community failed to appreciate was that methods that require careful hand-engi- neering by a programmer who understands the domain do not scale as well as methods that replace the programmer with a powerful general-purpose learning procedure. With enough computation and enough data, learning beats pro- gramming for complicated tasks that require the integration of many different, noisy cues.",
+    "source": "DCNN.pdf",
+    "page": 1,
+    "title": "DCNN",
+    "section": "1. PROLOGUE"
+  },
+  {
+    "chunk_id": 107,
+    "text": "Four years ago, while we were at the University of Toronto, our deep neural network called SuperVision almost halved the error rate for recognizing objects in natural images and triggered an overdue paradigm shift in computer vision. Figure 4 shows some examples of what SuperVision can do. SuperVision evolved from the multilayer neural networks DOI:10.1145/3065386 that were widely investigated in the 1980s.",
+    "source": "DCNN.pdf",
+    "page": 1,
+    "title": "DCNN",
+    "section": "1. PROLOGUE"
+  },
+  {
+    "chunk_id": 108,
+    "text": "These networks used multiple layers of feature detectors that were all learned from the training data. Neuroscientists and psychologists had hypothesized that a hierarchy of such feature detectors would provide a robust way to recognize objects but they had no idea how such a hierarchy could be learned.",
+    "source": "DCNN.pdf",
+    "page": 1,
+    "title": "DCNN",
+    "section": "1. PROLOGUE"
+  },
+  {
+    "chunk_id": 109,
+    "text": "There was great excite- ment in the 1980s because several different research groups discovered that multiple layers of feature detectors could be trained efficiently using a relatively straight-forward algorithm called backpropagation18, 22, 27, 33 to compute, for each image, how the classification performance of the whole network depended on the value of the weight on each connection.",
+    "source": "DCNN.pdf",
+    "page": 1,
+    "title": "DCNN",
+    "section": "1. PROLOGUE"
+  },
+  {
+    "chunk_id": 110,
+    "text": "Backpropagation worked well for a variety of tasks, but in the 1980s it did not live up to the very high expectations of its advocates.",
+    "source": "DCNN.pdf",
+    "page": 1,
+    "title": "DCNN",
+    "section": "1. PROLOGUE"
+  },
+  {
+    "chunk_id": 111,
+    "text": "In particular, it proved to be very difficult to learn networks with many layers and these were precisely the net- works that should have given the most impressive results. Many researchers concluded, incorrectly, that learning a deep neural network from random initial weights was just too difficult. Twenty years later, we know what went wrong: for deep neural networks to shine, they needed far more labeled data and hugely more computation.",
+    "source": "DCNN.pdf",
+    "page": 1,
+    "title": "DCNN",
+    "section": "1. PROLOGUE"
+  },
+  {
+    "chunk_id": 112,
+    "text": "2. INTRODUCTION Current approaches to object recognition make essential use of machine learning methods. To improve their perfor- mance, we can collect larger datasets, learn more powerful models, and use better techniques for preventing overfit- ting. Until recently, datasets of labeled images were rela- tively small—on the order of tens of thousands of images (e.g., NORB,19 Caltech-101/256,8, 10 and CIFAR-10/10014).",
+    "source": "DCNN.pdf",
+    "page": 1,
+    "title": "DCNN",
+    "section": "2. INTRODUCTION"
+  },
+  {
+    "chunk_id": 113,
+    "text": "Simple recognition tasks can be solved quite well with datas- ets of this size, especially if they are augmented with label- preserving transformations. For example, the current-best error rate on the MNIST digit-recognition task (<0.3%) approaches human performance.5 But objects in realistic settings exhibit considerable variability, so to learn to recog- nize them it is necessary to use much larger training sets.",
+    "source": "DCNN.pdf",
+    "page": 1,
+    "title": "DCNN",
+    "section": "2. INTRODUCTION"
+  },
+  {
+    "chunk_id": 114,
+    "text": "And indeed, the shortcomings of small image datasets have been widely recognized (e.g., Ref.25), but it has only recently become possible to collect labeled datasets with millions of The original version of this paper was published in the Proceedings of the 25th International Conference on Neu- ral Information Processing Systems (Lake Tahoe, NV, Dec.",
+    "source": "DCNN.pdf",
+    "page": 1,
+    "title": "DCNN",
+    "section": "2. INTRODUCTION"
+  },
+  {
+    "chunk_id": 115,
+    "text": "The new larger datasets include LabelMe,28 which consists of hundreds of thousands of fully segmented images, and ImageNet,7 which consists of over 15 million labeled high-resolution images in over 22,000 categories. To learn about thousands of objects from millions of images, we need a model with a large learning capacity.",
+    "source": "DCNN.pdf",
+    "page": 2,
+    "title": "DCNN",
+    "section": "2. INTRODUCTION"
+  },
+  {
+    "chunk_id": 116,
+    "text": "However, the immense complexity of the object recogni- tion task means that this problem cannot be specified even by a dataset as large as ImageNet, so our model should also have lots of prior knowledge to compensate for all the data we do not have.",
+    "source": "DCNN.pdf",
+    "page": 2,
+    "title": "DCNN",
+    "section": "2. INTRODUCTION"
+  },
+  {
+    "chunk_id": 117,
+    "text": "Convolutional neural networks (CNNs) con- stitute one such class of models.9, 15, 17, 19, 21, 26, 32 Their capacity can be controlled by varying their depth and breadth, and they also make strong and mostly correct assumptions about the nature of images (namely, stationarity of statis- tics and locality of pixel dependencies).",
+    "source": "DCNN.pdf",
+    "page": 2,
+    "title": "DCNN",
+    "section": "2. INTRODUCTION"
+  },
+  {
+    "chunk_id": 118,
+    "text": "Thus, compared to standard feedforward neural networks with similarly sized layers, CNNs have much fewer connections and parameters and so they are easier to train, while their theoretically best performance is likely to be only slightly worse. Despite the attractive qualities of CNNs, and despite the relative efficiency of their local architecture, they have still been prohibitively expensive to apply in large scale to high-­ resolution images.",
+    "source": "DCNN.pdf",
+    "page": 2,
+    "title": "DCNN",
+    "section": "2. INTRODUCTION"
+  },
+  {
+    "chunk_id": 119,
+    "text": "Luckily, current GPUs, paired with a highly optimized implementation of 2D convolution, are powerful enough to facilitate the training of interestingly- large CNNs, and recent datasets such as ImageNet contain enough labeled examples to train such models without severe overfitting.",
+    "source": "DCNN.pdf",
+    "page": 2,
+    "title": "DCNN",
+    "section": "2. INTRODUCTION"
+  },
+  {
+    "chunk_id": 120,
+    "text": "The specific contributions of this paper are as follows: we trained one of the largest CNNs to date on the subsets of ImageNet used in the ImageNet Large-Scale Visual Recognition Challenge (ILSVRC)-2010 and ILSVRC-2012 competitions2 and achieved by far the best results ever reported on these datasets.",
+    "source": "DCNN.pdf",
+    "page": 2,
+    "title": "DCNN",
+    "section": "2. INTRODUCTION"
+  },
+  {
+    "chunk_id": 121,
+    "text": "We wrote a highly optimized GPU implementation of 2D convolution and all the other opera- tions inherent in training CNNs, which we make available publicly.a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4. The size of our network made overfitting a significant problem, even with 1.2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 5. Our final network contains five convo- lutional and three fully connected layers, and this depth seems to be important: we found that removing any convolu- tional layer (each of which contains no more than 1% of the model’s parameters) resulted in inferior performance.",
+    "source": "DCNN.pdf",
+    "page": 2,
+    "title": "DCNN",
+    "section": "2. INTRODUCTION"
+  },
+  {
+    "chunk_id": 122,
+    "text": "In the end, the network’s size is limited mainly by the amount of memory available on current GPUs and by the amount of training time that we are willing to tolerate. Our network takes between 5 and 6 days to train on two GTX 580 3GB GPUs.",
+    "source": "DCNN.pdf",
+    "page": 2,
+    "title": "DCNN",
+    "section": "2. INTRODUCTION"
+  },
+  {
+    "chunk_id": 123,
+    "text": "All of our experiments suggest that our results can be improved simply by waiting for faster GPUs and bigger datasets to become available.",
+    "source": "DCNN.pdf",
+    "page": 2,
+    "title": "DCNN",
+    "section": "2. INTRODUCTION"
+  },
+  {
+    "chunk_id": 124,
+    "text": "3. THE DATASET ImageNet is a dataset of over 15 million labeled high-­resolution images belonging to roughly 22,000 categories. The images were collected from the web and labeled by human labelers using Amazon’s Mechanical Turk crowd-sourcing tool. Starting in 2010, as part of the Pascal Visual Object Challenge, an annual competition called the ImageNet Large-­Scale Visual Recognition Challenge (ILSVRC) has been held.",
+    "source": "DCNN.pdf",
+    "page": 2,
+    "title": "DCNN",
+    "section": "3. THE DATASET"
+  },
+  {
+    "chunk_id": 125,
+    "text": "ILSVRC uses a subset of ImageNet with roughly 1000 images in each of 1000 categories. In all, there are roughly 1.2 million training images, 50,000 validation images, and 150,000 testing images.",
+    "source": "DCNN.pdf",
+    "page": 2,
+    "title": "DCNN",
+    "section": "3. THE DATASET"
+  },
+  {
+    "chunk_id": 126,
+    "text": "ILSVRC-2010 is the only version of ILSVRC for which the test set labels are available, so this is the version on which we performed most of our experiments. Since we also entered our model in the ILSVRC-2012 competition, in Section 7 we report our results on this version of the dataset as well, for which test set labels are unavailable.",
+    "source": "DCNN.pdf",
+    "page": 2,
+    "title": "DCNN",
+    "section": "3. THE DATASET"
+  },
+  {
+    "chunk_id": 127,
+    "text": "On ImageNet, it is cus- tomary to report two error rates: top-1 and top-5, where the top-5 error rate is the fraction of test images for which the correct label is not among the five labels considered most probable by the model. ImageNet consists of variable-resolution images, while our system requires a constant input dimensionality.",
+    "source": "DCNN.pdf",
+    "page": 2,
+    "title": "DCNN",
+    "section": "3. THE DATASET"
+  },
+  {
+    "chunk_id": 128,
+    "text": "Therefore, we down-sampled the images to a fixed resolution of 256 × 256. Given a rectangular image, we first rescaled the image such that the shorter side was of length 256, and then cropped out the central 256 × 256 patch from the resulting image. We did not pre process the images in any other way, except for subtracting the mean activity over the training set from each pixel. So we trained our network on the (centered) raw RGB values of the pixels.",
+    "source": "DCNN.pdf",
+    "page": 2,
+    "title": "DCNN",
+    "section": "3. THE DATASET"
+  },
+  {
+    "chunk_id": 129,
+    "text": "4. THE ARCHITECTURE The architecture of our network is summarized in Figure 2. It contains eight learned layers—five convolutional and three fully connected. Below, we describe some of the novel or unusual features of our network’s architecture.",
+    "source": "DCNN.pdf",
+    "page": 2,
+    "title": "DCNN",
+    "section": "4. THE ARCHITECTURE"
+  },
+  {
+    "chunk_id": 130,
+    "text": "Sections 4.1– 4.4 are sorted according to our estimation of their impor- tance, with the most important first.",
+    "source": "DCNN.pdf",
+    "page": 2,
+    "title": "DCNN",
+    "section": "4. THE ARCHITECTURE"
+  },
+  {
+    "chunk_id": 131,
+    "text": "4.1. Rectified Linear Unit nonlinearity The standard way to model a neuron’s output f as a function of its input x is with f(x) = tanh(x) or f(x) = (1 + e−x)−1. In terms of training time with gradient descent, these saturating nonlinearities are much slower than the non-saturating nonlinearity f(x) = max(0, x). Following Nair and Hinton,24 we refer to neurons with this non linearity as Rectified Linear Units (ReLUs).",
+    "source": "DCNN.pdf",
+    "page": 2,
+    "title": "DCNN",
+    "section": "4.1. Rectified Linear Unit nonlinearity"
+  },
+  {
+    "chunk_id": 132,
+    "text": "Deep CNNs with ReLUs train several times faster than their equivalents with tanh units. This is demonstrated in Figure 1, which shows the number of itera- tions required to reach 25% training error on the CIFAR-10 dataset for a particular four-layer convolutional network. This plot shows that we would not have been able to experi- ment with such large neural networks for this work if we had used traditional saturating neuron models.",
+    "source": "DCNN.pdf",
+    "page": 2,
+    "title": "DCNN",
+    "section": "4.1. Rectified Linear Unit nonlinearity"
+  },
+  {
+    "chunk_id": 133,
+    "text": "We are not the first to consider alternatives to traditional neuron models in CNNs.",
+    "source": "DCNN.pdf",
+    "page": 2,
+    "title": "DCNN",
+    "section": "4.1. Rectified Linear Unit nonlinearity"
+  },
+  {
+    "chunk_id": 134,
+    "text": "For example, Jarrett et al.13 claim that the nonlinearity f(x) = |tanh(x)| works particularly well with their type of contrast normalization followed by local",
+    "source": "DCNN.pdf",
+    "page": 2,
+    "title": "DCNN",
+    "section": "4.1. Rectified Linear Unit nonlinearity"
+  },
+  {
+    "chunk_id": 135,
+    "text": "research highlights Figure 1. A four-layer convolutional neural network with ReLUs (solid line) reaches a 25% training error rate on CIFAR-10 six times faster than an equivalent network with tanh neurons (dashed line). The learning rates for each network were chosen independently to make training as fast as possible. No regularization of any kind was employed.",
+    "source": "DCNN.pdf",
+    "page": 3,
+    "title": "DCNN",
+    "section": "4.1. Rectified Linear Unit nonlinearity"
+  },
+  {
+    "chunk_id": 136,
+    "text": "The magnitude of the effect demonstrated here varies with network architecture, but networks with ReLUs consistently learn several times faster than equivalents with saturating neurons. 0.75 Training error rate 0.5 0.25 0 0 5 10 15 20 25 30 35 Epochs average pooling on the Caltech-101 dataset. However, on this dataset the primary concern is preventing overfitting, so the effect they are observing is different from the accelerated ability to fit the training set which we report when using ReLUs.",
+    "source": "DCNN.pdf",
+    "page": 3,
+    "title": "DCNN",
+    "section": "4.1. Rectified Linear Unit nonlinearity"
+  },
+  {
+    "chunk_id": 137,
+    "text": "Faster learning has a great influence on the perfor- mance of large models trained on large datasets.",
+    "source": "DCNN.pdf",
+    "page": 3,
+    "title": "DCNN",
+    "section": "4.1. Rectified Linear Unit nonlinearity"
+  },
+  {
+    "chunk_id": 138,
+    "text": "4.2. Training on multiple GPUs A single GTX 580 GPU has only 3GB of memory, which limits the maximum size of the networks that can be trained on it. It turns out that 1.2 million training examples are enough to train networks which are too big to fit on one GPU. Therefore we spread the net across two GPUs. Current GPUs are particularly well-suited to cross-GPU parallelization, as they are able to read from and write to one another’s mem- ory directly, without going through host machine memory.",
+    "source": "DCNN.pdf",
+    "page": 3,
+    "title": "DCNN",
+    "section": "4.2. Training on multiple GPUs"
+  },
+  {
+    "chunk_id": 139,
+    "text": "The parallelization scheme that we employ essentially puts half of the kernels (or neurons) on each GPU, with one addi- tional trick: the GPUs communicate only in certain layers. This means that, for example, the kernels of layer 3 take input from all kernel maps in layer 2. However, kernels in layer 4 take input only from those kernel maps in layer 3 which reside on the same GPU.",
+    "source": "DCNN.pdf",
+    "page": 3,
+    "title": "DCNN",
+    "section": "4.2. Training on multiple GPUs"
+  },
+  {
+    "chunk_id": 140,
+    "text": "Choosing the pattern of con- nectivity is a problem for cross-validation, but this allows us to precisely tune the amount of communication until it is an acceptable fraction of the amount of computation. The resultant architecture is somewhat similar to that of the “columnar” CNN employed by Cires¸an et al.,4 except that our columns are not independent (see Figure 2).",
+    "source": "DCNN.pdf",
+    "page": 3,
+    "title": "DCNN",
+    "section": "4.2. Training on multiple GPUs"
+  },
+  {
+    "chunk_id": 141,
+    "text": "This scheme reduces our top-1 and top-5 error rates by 1.7% and 1.2%, respectively, as compared with a net with half as many kernels in each convolutional layer trained on one GPU. The two-GPU net takes slightly less time to train than the one-GPU net.b",
+    "source": "DCNN.pdf",
+    "page": 3,
+    "title": "DCNN",
+    "section": "4.2. Training on multiple GPUs"
+  },
+  {
+    "chunk_id": 142,
+    "text": "4.3. Local response normalization ReLUs have the desirable property that they do not require input normalization to prevent them from saturating. If at least some training examples produce a positive input to a ReLU, learning will happen in that neuron. However, we still find that the following local normalization scheme aids gen- x, y the activity of a neuron com- eralization.",
+    "source": "DCNN.pdf",
+    "page": 3,
+    "title": "DCNN",
+    "section": "4.3. Local response normalization"
+  },
+  {
+    "chunk_id": 143,
+    "text": "Denoting by ai puted by applying kernel i at position (x, y) and then applying x, y the ReLU nonlinearity, the response-normalized activity bi is given by the expression where the sum runs over n “adjacent” kernel maps at the same spatial position, and N is the total number of kernels in the layer. The ordering of the kernel maps is of course arbi- trary and determined before training begins.",
+    "source": "DCNN.pdf",
+    "page": 3,
+    "title": "DCNN",
+    "section": "4.3. Local response normalization"
+  },
+  {
+    "chunk_id": 144,
+    "text": "This sort of response normalization implements a form of lateral inhibi- tion inspired by the type found in real neurons, creating com- petition for big activities among neuron outputs computed 40 using different kernels.",
+    "source": "DCNN.pdf",
+    "page": 3,
+    "title": "DCNN",
+    "section": "4.3. Local response normalization"
+  },
+  {
+    "chunk_id": 145,
+    "text": "The constants k, n, α, and β are hyper- parameters whose values are determined using a validation set; we used k = 2, n = 5, α = 10−4, and β = 0.75. We applied this normalization after applying the ReLU nonlinearity in cer- tain layers (see Section 4.5). This scheme bears some resemblance to the local contrast normalization scheme of Jarrett et al.,13 but ours would be more correctly termed “brightness normalization,” since we do not subtract the mean activity.",
+    "source": "DCNN.pdf",
+    "page": 3,
+    "title": "DCNN",
+    "section": "4.3. Local response normalization"
+  },
+  {
+    "chunk_id": 146,
+    "text": "Response normalization reduces our top-1 and top-5 error rates by 1.4% and 1.2%, respectively. We also verified the effectiveness of this scheme on the CIFAR-10 dataset: a four-layer CNN achieved a 13% test error rate without normalization and 11% with normalization.c",
+    "source": "DCNN.pdf",
+    "page": 3,
+    "title": "DCNN",
+    "section": "4.3. Local response normalization"
+  },
+  {
+    "chunk_id": 147,
+    "text": "4.4. Overlapping pooling Pooling layers in CNNs summarize the outputs of neighbor- ing groups of neurons in the same kernel map. Traditionally, the neighborhoods summarized by adjacent pooling units do not overlap (e.g., Refs.5, 13, 20). To be more precise, a pooling layer can be thought of as consisting of a grid of pooling units spaced s pixels apart, each summarizing a neighborhood of size z × z centered at the location of the pooling unit.",
+    "source": "DCNN.pdf",
+    "page": 3,
+    "title": "DCNN",
+    "section": "4.4. Overlapping pooling"
+  },
+  {
+    "chunk_id": 148,
+    "text": "If we set s = z, we obtain traditional local pooling as commonly employed in CNNs. If we set s < z, we obtain overlapping b The one-GPU net actually has the same number of kernels as the two-GPU net in the final convolutional layer. This is because most of the net’s param- eters are in the first fully connected layer, which takes the last convolutional layer as input.",
+    "source": "DCNN.pdf",
+    "page": 3,
+    "title": "DCNN",
+    "section": "4.4. Overlapping pooling"
+  },
+  {
+    "chunk_id": 149,
+    "text": "So to make the two nets have approximately the same num- ber of parameters, we did not halve the size of the final convolutional layer (nor the fully connected layers which follow). Therefore this comparison is biased in favor of the one-GPU net, since it is bigger than “half the size” of the two-GPU net.",
+    "source": "DCNN.pdf",
+    "page": 3,
+    "title": "DCNN",
+    "section": "4.4. Overlapping pooling"
+  },
+  {
+    "chunk_id": 150,
+    "text": "c We cannot describe this network in detail due to space constraints, but it is specified precisely by the code and parameter files provided here: http:// code.google.com/p/cuda-convnet/.",
+    "source": "DCNN.pdf",
+    "page": 3,
+    "title": "DCNN",
+    "section": "4.4. Overlapping pooling"
+  },
+  {
+    "chunk_id": 151,
+    "text": "Figure 2. An illustration of the architecture of our CNN, explicitly showing the delineation of responsibilities between the two GPUs. One GPU runs the layer-parts at the top of the figure while the other runs the layer-parts at the bottom. The GPUs communicate only at certain layers.",
+    "source": "DCNN.pdf",
+    "page": 4,
+    "title": "DCNN",
+    "section": "4.4. Overlapping pooling"
+  },
+  {
+    "chunk_id": 152,
+    "text": "The network’s input is 150,528-dimensional, and the number of neurons in the network’s remaining layers is given by 290,400–186,624– 64,896–64,896–43,264–4096–4096–1000. 3 5 3 5 3 11 48 11 128 27 55 13 3 5 3 224 5 13 27 3 11 3 55 11 Max Max 224 Stride 128 pooling pooling of 4 3 48 pooling.",
+    "source": "DCNN.pdf",
+    "page": 4,
+    "title": "DCNN",
+    "section": "4.4. Overlapping pooling"
+  },
+  {
+    "chunk_id": 153,
+    "text": "This is what we use throughout our network, with s = 2 and z = 3. This scheme reduces the top-1 and top-5 error rates by 0.4% and 0.3%, respectively, as compared with the non overlapping scheme s = 2, z = 2, which produces output of equivalent dimensions. We generally observe during training that models with overlapping pooling find it slightly more dif- ficult to overfit.",
+    "source": "DCNN.pdf",
+    "page": 4,
+    "title": "DCNN",
+    "section": "4.4. Overlapping pooling"
+  },
+  {
+    "chunk_id": 154,
+    "text": "4.5. Overall architecture Now we are ready to describe the overall architecture of our CNN. As depicted in Figure 2, the net contains eight layers with weights; the first five are convolutional and the remaining three are fully connected. The output of the last fully connected layer is fed to a 1000-way softmax which produces a distribution over the 1000 class labels.",
+    "source": "DCNN.pdf",
+    "page": 4,
+    "title": "DCNN",
+    "section": "4.5. Overall architecture"
+  },
+  {
+    "chunk_id": 155,
+    "text": "Our net- work maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.",
+    "source": "DCNN.pdf",
+    "page": 4,
+    "title": "DCNN",
+    "section": "4.5. Overall architecture"
+  },
+  {
+    "chunk_id": 156,
+    "text": "The kernels of the second, fourth, and fifth convolutional layers are connected only to those kernel maps in the previous layer which reside on the same GPU (see Figure 2). The ker- nels of the third convolutional layer are connected to all ker- nel maps in the second layer. The neurons in the fully-connected layers are connected to all neurons in the previous layer. Response-normalization layers follow the first and second convolutional layers.",
+    "source": "DCNN.pdf",
+    "page": 4,
+    "title": "DCNN",
+    "section": "4.5. Overall architecture"
+  },
+  {
+    "chunk_id": 157,
+    "text": "Max-pooling layers, of the kind described in Section 4.4, follow both response-normal- ization layers as well as the fifth convolutional layer. The ReLU non linearity is applied to the output of every convolu- tional and fully connected layer. The first convolutional layer filters the 224 × 224 × 3 input image with 96 kernels of size 11 × 11 × 3 with a stride of 4 pixels (this is the distance between the receptive field centers of neighboring neurons in a kernel map).",
+    "source": "DCNN.pdf",
+    "page": 4,
+    "title": "DCNN",
+    "section": "4.5. Overall architecture"
+  },
+  {
+    "chunk_id": 158,
+    "text": "The sec- ond convolutional layer takes as input the (response-nor- malized and pooled) output of the first convolutional layer and filters it with 256 kernels of size 5 × 5 × 48. The third, fourth, and fifth convolutional layers are connected to one another without any intervening pooling or normalization layers.",
+    "source": "DCNN.pdf",
+    "page": 4,
+    "title": "DCNN",
+    "section": "4.5. Overall architecture"
+  },
+  {
+    "chunk_id": 159,
+    "text": "The third convolutional layer has 384 kernels of size 3 × 3 × 256 connected to the (normalized, pooled) outputs 3 3 3 3 dense 2048 2048 192 192 128 13 13 3 3 3 dense dense 13 13 3 1000 Max 192 192 128 2048 2048 pooling of the second convolutional layer. The fourth convolu- tional layer has 384 kernels of size 3 × 3 × 192, and the fifth convolutional layer has 256 kernels of size 3 × 3 × 192. The fully connected layers have 4096 neurons each.",
+    "source": "DCNN.pdf",
+    "page": 4,
+    "title": "DCNN",
+    "section": "4.5. Overall architecture"
+  },
+  {
+    "chunk_id": 160,
+    "text": "5. REDUCING OVERFITTING Our neural network architecture has 60 million parameters. Although the 1000 classes of ILSVRC make each training example impose 10 bits of constraint on the mapping from image to label, this turns out to be insufficient to learn so many parameters without considerable overfitting.",
+    "source": "DCNN.pdf",
+    "page": 4,
+    "title": "DCNN",
+    "section": "5. REDUCING OVERFITTING"
+  },
+  {
+    "chunk_id": 161,
+    "text": "Below, we describe the two primary ways in which we combat overfitting.",
+    "source": "DCNN.pdf",
+    "page": 4,
+    "title": "DCNN",
+    "section": "5. REDUCING OVERFITTING"
+  },
+  {
+    "chunk_id": 162,
+    "text": "5.1. Data augmentation The easiest and most common method to reduce overfitting on image data is to artificially enlarge the dataset using label- preserving transformations (e.g., Refs.4, 5, 30). We employ two distinct forms of data augmentation, both of which allow transformed images to be produced from the original images with very little computation, so the transformed images do not need to be stored on disk.",
+    "source": "DCNN.pdf",
+    "page": 4,
+    "title": "DCNN",
+    "section": "5.1. Data augmentation"
+  },
+  {
+    "chunk_id": 163,
+    "text": "In our implementation, the transformed images are generated in Python code on the CPU while the GPU is training on the previous batch of images. So these data augmentation schemes are, in effect, computa- tionally free. The first form of data augmentation consists of generating image translations and horizontal reflections.",
+    "source": "DCNN.pdf",
+    "page": 4,
+    "title": "DCNN",
+    "section": "5.1. Data augmentation"
+  },
+  {
+    "chunk_id": 164,
+    "text": "We do this by extracting random 224 × 224 patches (and their horizontal reflections) from the 256 × 256 images and training our net- work on these extracted patches.d This increases the size of our training set by a factor of 2048, though the resulting train- ing examples are, of course, highly inter dependent. Without this scheme, our network suffers from substantial overfit- ting, which would have forced us to use much smaller net- works.",
+    "source": "DCNN.pdf",
+    "page": 4,
+    "title": "DCNN",
+    "section": "5.1. Data augmentation"
+  },
+  {
+    "chunk_id": 165,
+    "text": "At test time, the network makes a prediction by extracting five 224 × 224 patches (the four corner patches and the center patch) as well as their horizontal reflections (hence 10 patches in all), and averaging the predictions made by the network’s softmax layer on the ten patches.",
+    "source": "DCNN.pdf",
+    "page": 4,
+    "title": "DCNN",
+    "section": "5.1. Data augmentation"
+  },
+  {
+    "chunk_id": 166,
+    "text": "d This is the reason why the input images in Figure 2 are 224 × 224 × 3 dimensional.",
+    "source": "DCNN.pdf",
+    "page": 4,
+    "title": "DCNN",
+    "section": "5.1. Data augmentation"
+  },
+  {
+    "chunk_id": 167,
+    "text": "research highlights The second form of data augmentation consists of altering the intensities of the RGB channels in training images. Specifically, we perform PCA on the set of RGB pixel values throughout the ImageNet training set.",
+    "source": "DCNN.pdf",
+    "page": 5,
+    "title": "DCNN",
+    "section": "5.1. Data augmentation"
+  },
+  {
+    "chunk_id": 168,
+    "text": "To each training image, we add multiples of the found principal components, with magnitudes proportional to the corresponding eigen values times a random variable drawn from a Gaussian with mean 0 and standard deviation 0.1. Therefore to each RGB image pixel Ixy = [IR xy, IG xy, IB xy]T we add the following quantity: [p1, p2, p3] [α1λ1, α2λ2, α3λ3]T, where pi and λi are ith eigenvector and eigenvalue of the 3 × 3 covariance matrix of RGB pixel values, respectively, and αi is the aforementioned random variable.",
+    "source": "DCNN.pdf",
+    "page": 5,
+    "title": "DCNN",
+    "section": "5.1. Data augmentation"
+  },
+  {
+    "chunk_id": 169,
+    "text": "Each αi is drawn only once for all the pixels of a particular training image until that image is used for training again, at which point it is re drawn. This scheme approximately captures an important property of natural images, namely, that object identity is invariant to changes in the intensity and color of the illumination.",
+    "source": "DCNN.pdf",
+    "page": 5,
+    "title": "DCNN",
+    "section": "5.1. Data augmentation"
+  },
+  {
+    "chunk_id": 170,
+    "text": "This scheme reduces the top-1 error rate by over 1%.",
+    "source": "DCNN.pdf",
+    "page": 5,
+    "title": "DCNN",
+    "section": "5.1. Data augmentation"
+  },
+  {
+    "chunk_id": 171,
+    "text": "5.2. Dropout Combining the predictions of many different models is a very successful way to reduce test errors,1, 3 but it appears to be too expensive for big neural networks that already take several days to train. There is, however, a very efficient version of model combination that only costs about a factor of two dur- ing training.",
+    "source": "DCNN.pdf",
+    "page": 5,
+    "title": "DCNN",
+    "section": "5.2. Dropout"
+  },
+  {
+    "chunk_id": 172,
+    "text": "The recently introduced technique, called “dropout”,12 consists of setting to zero the output of each hid- den neuron with probability 0.5. The neurons which are “dropped out” in this way do not contribute to the forward pass and do not participate in back propagation. So every time an input is presented, the neural network samples a dif- ferent architecture, but all these architectures share weights.",
+    "source": "DCNN.pdf",
+    "page": 5,
+    "title": "DCNN",
+    "section": "5.2. Dropout"
+  },
+  {
+    "chunk_id": 173,
+    "text": "This technique reduces complex co adaptations of neurons, since a neuron cannot rely on the presence of particular other neurons. It is, therefore, forced to learn more robust features that are useful in conjunction with many different random subsets of the other neurons. At test time, we use all the neu- rons but multiply their outputs by 0.5, which is a reasonable approximation to taking the geometric mean of the predic- tive distributions produced by the exponentially-many drop- out networks.",
+    "source": "DCNN.pdf",
+    "page": 5,
+    "title": "DCNN",
+    "section": "5.2. Dropout"
+  },
+  {
+    "chunk_id": 174,
+    "text": "We use dropout in the first two fully connected layers of Figure 2. Without dropout, our network exhibits substantial overfitting. Dropout roughly doubles the number of itera- tions required to converge.",
+    "source": "DCNN.pdf",
+    "page": 5,
+    "title": "DCNN",
+    "section": "5.2. Dropout"
+  },
+  {
+    "chunk_id": 175,
+    "text": "6. DETAILS OF LEARNING We trained our models using stochastic gradient descent with a batch size of 128 examples, momentum of 0.9, and weight decay of 0.0005. We found that this small amount of weight decay was important for the model to learn. In other words, weight decay here is not merely a regularizer: it reduces the model’s training error.",
+    "source": "DCNN.pdf",
+    "page": 5,
+    "title": "DCNN",
+    "section": "6. DETAILS OF LEARNING"
+  },
+  {
+    "chunk_id": 176,
+    "text": "The update rule for weight w was where i is the iteration index, u is the momentum variable, ε is wi〉Di is the average over the ith batch the learning rate, and 〈 Di of the derivative of the objective with respect to w, evaluated at wi.",
+    "source": "DCNN.pdf",
+    "page": 5,
+    "title": "DCNN",
+    "section": "6. DETAILS OF LEARNING"
+  },
+  {
+    "chunk_id": 177,
+    "text": "We initialized the weights in each layer from a zero-mean Gaussian distribution with standard deviation 0.01. We ini- tialized the neuron biases in the second, fourth, and fifth convolutional layers, as well as in the fully connected hidden layers, with the constant 1. This initialization accelerates the early stages of learning by providing the ReLUs with positive inputs.",
+    "source": "DCNN.pdf",
+    "page": 5,
+    "title": "DCNN",
+    "section": "6. DETAILS OF LEARNING"
+  },
+  {
+    "chunk_id": 178,
+    "text": "We initialized the neuron biases in the remaining lay- ers with the constant 0. We used an equal learning rate for all layers, which we adjusted manually throughout training. The heuristic which we followed was to divide the learning rate by 10 when the vali- dation error rate stopped improving with the current learning rate. The learning rate was initialized at 0.01 and reduced three times prior to termination.",
+    "source": "DCNN.pdf",
+    "page": 5,
+    "title": "DCNN",
+    "section": "6. DETAILS OF LEARNING"
+  },
+  {
+    "chunk_id": 179,
+    "text": "We trained the network for roughly 90 cycles through the training set of 1.2 million images, which took 5–6 days on two NVIDIA GTX 580 3GB GPUs.",
+    "source": "DCNN.pdf",
+    "page": 5,
+    "title": "DCNN",
+    "section": "6. DETAILS OF LEARNING"
+  },
+  {
+    "chunk_id": 180,
+    "text": "7. RESULTS Our results on ILSVRC-2010 are summarized in Table 1. Our network achieves top-1 and top-5 test set error rates of 37.5% and 17.0%, respectively.e The best performance achieved dur- ing the ILSVRC-2010 competition was 47.1% and 28.2% with an approach that averages the predictions produced from six sparse-coding models trained on different features,2 and since then the best published results are 45.7% and 25.7% with an approach that averages the predictions of two classi- fiers trained on Fisher Vectors (FVs) computed from two types of densely sampled features.29 We also entered our model in the ILSVRC-2012 competi- tion and report our results in Table 2. Since the ILSVRC-2012 test set labels are not publicly available, we cannot report test e The error rates without averaging predictions over 10 patches as described in Section 5.1 are 39.0% and 18.3%.",
+    "source": "DCNN.pdf",
+    "page": 5,
+    "title": "DCNN",
+    "section": "7. RESULTS"
+  },
+  {
+    "chunk_id": 181,
+    "text": "Table 1. Comparison of results on ILSVRC-2010 test set. Model Top-1 (%) Top-5 (%) Sparse coding2 47.1 28.2 45.7 25.7 SIFT + FVs29 37.5 17.0 CNN In italics are best results achieved by others. Table 2. Comparison of error rates on ILSVRC-2012 validation and test sets. Model Top-1 (val, %) Top-5 (val, %) Top-5 (test, %) SIFT + FVs6 26.2 – – 1 CNN 40.7 18.2 – 16.4 5 CNNs 38.1 16.4 1 CNN* 39.0 16.6 – 15.3 7 CNNs* 36.7 15.4 In italics are best results achieved by others.",
+    "source": "DCNN.pdf",
+    "page": 5,
+    "title": "DCNN",
+    "section": "7. RESULTS"
+  },
+  {
+    "chunk_id": 182,
+    "text": "Models with an “*” were “pre-trained” to classify the entire ImageNet 2011 Fall release (see Section 7 for details).",
+    "source": "DCNN.pdf",
+    "page": 5,
+    "title": "DCNN",
+    "section": "7. RESULTS"
+  },
+  {
+    "chunk_id": 183,
+    "text": "error rates for all the models that we tried. In the remainder of this paragraph, we use validation and test error rates inter- changeably because in our experience they do not differ by more than 0.1% (see Table 2). The CNN described in this paper achieves a top-5 error rate of 18.2%. Averaging the pre- dictions of five similar CNNs gives an error rate of 16.4%.",
+    "source": "DCNN.pdf",
+    "page": 6,
+    "title": "DCNN",
+    "section": "7. RESULTS"
+  },
+  {
+    "chunk_id": 184,
+    "text": "Training one CNN, with an extra sixth convolutional layer over the last pooling layer, to classify the entire ImageNet Fall 2011 release (15M images, 22K categories), and then “fine- tuning” it on ILSVRC-2012 gives an error rate of 16.6%. Averaging the predictions of two CNNs that were pre-trained on the entire Fall 2011 release with the afore mentioned five CNNs gives an error rate of 15.3%.",
+    "source": "DCNN.pdf",
+    "page": 6,
+    "title": "DCNN",
+    "section": "7. RESULTS"
+  },
+  {
+    "chunk_id": 185,
+    "text": "The second-best contest entry achieved an error rate of 26.2% with an approach that averages the predictions of several classifiers trained on FVs computed from different types of densely sampled features.6 Finally, we also report our error rates on the Fall 2009 ver- sion of ImageNet with 10,184 categories and 8.9 million images. On this dataset we follow the convention in the litera- ture of using half of the images for training and half for test- ing.",
+    "source": "DCNN.pdf",
+    "page": 6,
+    "title": "DCNN",
+    "section": "7. RESULTS"
+  },
+  {
+    "chunk_id": 186,
+    "text": "Since there is no established test set, our split necessarily differs from the splits used by previous authors, but this does not affect the results appreciably. Our top-1 and top-5 error rates on this dataset are 67.4% and 40.9%, attained by the net described above but with an additional, sixth convolutional layer over the last pooling layer. The best published results on this dataset are 78.1% and 60.9%.23",
+    "source": "DCNN.pdf",
+    "page": 6,
+    "title": "DCNN",
+    "section": "7. RESULTS"
+  },
+  {
+    "chunk_id": 187,
+    "text": "7.1. Qualitative evaluations Figure 3 shows the convolutional kernels learned by the net- work’s two data-connected layers. The network has learned a variety of frequency- and orientation-selective kernels, as well as various colored blobs.",
+    "source": "DCNN.pdf",
+    "page": 6,
+    "title": "DCNN",
+    "section": "7.1. Qualitative evaluations"
+  },
+  {
+    "chunk_id": 188,
+    "text": "Notice the specialization exhibited by the two GPUs, a result of the restricted connectivity described in Section 4.5. The kernels on GPU 1 are largely color-agnostic, while the kernels on on GPU 2 are largely Figure 4. (Left) Eight ILSVRC-2010 test images and the five labels considered most probable by our model. The correct label is written under each image, and the probability assigned to the correct label is also shown with a red bar (if it happens to be in the top 5).",
+    "source": "DCNN.pdf",
+    "page": 6,
+    "title": "DCNN",
+    "section": "7.1. Qualitative evaluations"
+  },
+  {
+    "chunk_id": 189,
+    "text": "(Right) Five ILSVRC-2010 test images in the first column. The remaining columns show the six training images that produce feature vectors in the last hidden layer with the smallest Euclidean distance from the feature vector for the test image.",
+    "source": "DCNN.pdf",
+    "page": 6,
+    "title": "DCNN",
+    "section": "7.1. Qualitative evaluations"
+  },
+  {
+    "chunk_id": 190,
+    "text": "color-specific. This kind of specialization occurs during every run and is independent of any particular random weight ini- tialization (modulo a renumbering of the GPUs).",
+    "source": "DCNN.pdf",
+    "page": 6,
+    "title": "DCNN",
+    "section": "7.1. Qualitative evaluations"
+  },
+  {
+    "chunk_id": 191,
+    "text": "In the left panel of Figure 4 we qualitatively assess what the network has learned by computing its top-5 predictions on eight test images. Notice that even off-center objects, such as the mite in the top-left, can be recognized by the net. Most of the top-5 labels appear reasonable. For example, only other types of cat are considered plausible labels for the leopard. In some cases (grille, cherry) there is genuine ambiguity about the intended focus of the photograph.",
+    "source": "DCNN.pdf",
+    "page": 6,
+    "title": "DCNN",
+    "section": "7.1. Qualitative evaluations"
+  },
+  {
+    "chunk_id": 192,
+    "text": "Another way to probe the network’s visual knowledge is to consider the feature activations induced by an image at the last, 4096-dimensional hidden layer. If two images produce feature activation vectors with a small Euclidean separation, we can say that the higher levels of the neural network con- sider them to be similar. Figure 4 shows five images from the test set and the six images from the training set that are most similar to each of them according to this measure.",
+    "source": "DCNN.pdf",
+    "page": 6,
+    "title": "DCNN",
+    "section": "7.1. Qualitative evaluations"
+  },
+  {
+    "chunk_id": 193,
+    "text": "Notice that at the pixel level, the retrieved training images are generally not close in L2 to the query images in the first column. For example, the retrieved dogs and elephants appear in a variety Figure 3. Ninety-six convolutional kernels of size 11 × 11 × 3 learned by the first convolutional layer on the 224 × 224 × 3 input images. The top 48 kernels were learned on GPU 1 while the bottom 48 kernels were learned on GPU 2 (see Section 7.1 for details).",
+    "source": "DCNN.pdf",
+    "page": 6,
+    "title": "DCNN",
+    "section": "7.1. Qualitative evaluations"
+  },
+  {
+    "chunk_id": 194,
+    "text": "research highlights of poses. We present the results for many more test images in the supplementary material.",
+    "source": "DCNN.pdf",
+    "page": 7,
+    "title": "DCNN",
+    "section": "7.1. Qualitative evaluations"
+  },
+  {
+    "chunk_id": 195,
+    "text": "Computing similarity by using Euclidean distance between two 4096-dimensional, real-valued vectors is ineffi- cient, but it could be made efficient by training an auto encoder to compress these vectors to short binary codes. This should produce a much better image retrieval method than applying auto encoders to the raw pixels,16 which does not make use of image labels and hence has a tendency to retrieve images with similar patterns of edges, whether or not they are semantically similar.",
+    "source": "DCNN.pdf",
+    "page": 7,
+    "title": "DCNN",
+    "section": "7.1. Qualitative evaluations"
+  },
+  {
+    "chunk_id": 196,
+    "text": "8. DISCUSSION Our results show that a large, deep CNN is capable of achieving record-breaking results on a highly challenging dataset using purely supervised learning. It is notable that our network’s per- formance degrades if a single convolutional layer is removed. For example, removing any of the middle layers results in a loss of about 2% for the top-1 performance of the network.",
+    "source": "DCNN.pdf",
+    "page": 7,
+    "title": "DCNN",
+    "section": "8. DISCUSSION"
+  },
+  {
+    "chunk_id": 197,
+    "text": "So the depth really is important for achieving our results. To simplify our experiments, we did not use any unsuper- vised pre-training even though we expect that it will help, espe- cially if we obtain enough computational power to significantly increase the size of the network without obtaining a corre- sponding increase in the amount of labeled data.",
+    "source": "DCNN.pdf",
+    "page": 7,
+    "title": "DCNN",
+    "section": "8. DISCUSSION"
+  },
+  {
+    "chunk_id": 198,
+    "text": "Thus far, our results have improved as we have made our network larger and trained it longer but we still have many orders of magnitude to go in order to match the infero temporal pathway of the human visual system. Ultimately we would like to use very large and deep convolutional nets on video sequences where the tempo- ral structure provides very helpful information, that is, missing or far less obvious in static images.",
+    "source": "DCNN.pdf",
+    "page": 7,
+    "title": "DCNN",
+    "section": "8. DISCUSSION"
+  },
+  {
+    "chunk_id": 199,
+    "text": "9. EPILOGUE The response of the computer vision community to the suc- cess of SuperVision was impressive. Over the next year or two, they switched to using deep neural networks and these are now widely deployed by Google, Facebook, Microsoft, Baidu and many other companies.",
+    "source": "DCNN.pdf",
+    "page": 7,
+    "title": "DCNN",
+    "section": "9. EPILOGUE"
+  },
+  {
+    "chunk_id": 200,
+    "text": "By 2015, better hardware, more hidden layers, and a host of technical advances reduced the error rate of deep convolutional neural nets by a further factor of three so that they are now quite close to human perfor- mance for static images.11, 31 Much of the credit for this revolu- tion should go to the pioneers who spent many years developing the technology of CNNs, but the essential missing ingredient was supplied by FeiFei et al.7 who put a huge effort into producing a labeled dataset that was finally large enough to show what neural networks could really do.\b References visual object classification.",
+    "source": "DCNN.pdf",
+    "page": 7,
+    "title": "DCNN",
+    "section": "9. EPILOGUE"
+  },
+  {
+    "chunk_id": 201,
+    "text": "Arxiv preprint arXiv:1102.0183, 2011. 1. Bell, R., Koren, Y.",
+    "source": "DCNN.pdf",
+    "page": 7,
+    "title": "DCNN",
+    "section": "9. EPILOGUE"
+  },
+  {
+    "chunk_id": 202,
+    "text": "ACM SIGKDD 5. Cires¸an, D., Meier, U., Schmidhuber, J. 9, 2 (2007), 75–79. Multi-column deep neural networks for image classification. Arxiv preprint 2. Berg, A., Deng, J., Fei-Fei, L. Large arXiv:1202.2745, 2012. scale visual recognition challenge 2010. www.image-net.org/challenges. 6. Deng, J., Berg, A., Satheesh, S., Su, H., Khosla, A., Fei-Fei, L. In ILSVRC-2012 2010. 3. Breiman, L. Random forests.",
+    "source": "DCNN.pdf",
+    "page": 7,
+    "title": "DCNN",
+    "section": "9. EPILOGUE"
+  },
+  {
+    "chunk_id": 203,
+    "text": "45, 1 (2001), 5–32. 7. Deng, J., Dong, W., Socher, R., Li, L.-J., 4. Cires¸an, D., Meier, U., Masci, J., Li, K., Fei-Fei, L. ImageNet: A Gambardella, L., Schmidhuber, J. large-scale hierarchical image database. In CVPR09 (2009). High-performance neural networks for 8. Fei-Fei, L., Fergus, R., Perona, P. learning of hierarchical Learning generative visual models representations.",
+    "source": "DCNN.pdf",
+    "page": 7,
+    "title": "DCNN",
+    "section": "9. EPILOGUE"
+  },
+  {
+    "chunk_id": 204,
+    "text": "In Proceedings of from few training examples: the 26th Annual International An incremental Bayesian approach Conference on Machine Learning tested on 101 object categories. ACM, 609–616. Comput. Vision Image Understanding 22. Linnainmaa, S. Taylor expansion of the 106, 1 (2007), 59–70. accumulated rounding error. BIT 9. Fukushima, K. Neocognitron: A Numer.",
+    "source": "DCNN.pdf",
+    "page": 7,
+    "title": "DCNN",
+    "section": "9. EPILOGUE"
+  },
+  {
+    "chunk_id": 205,
+    "text": "16, 2 (1976), 146–160. self-organizing neural network model 23. Mensink, T., Verbeek, J., Perronnin, F., for a mechanism of pattern recognition Csurka, G. Metric learning for large unaffected by shift in position. scale image classification: Cybern.",
+    "source": "DCNN.pdf",
+    "page": 7,
+    "title": "DCNN",
+    "section": "9. EPILOGUE"
+  },
+  {
+    "chunk_id": 206,
+    "text": "36, 4 (1980), 193–202. Generalizing to new classes at 10. Griffin, G., Holub, A., Perona, P.",
+    "source": "DCNN.pdf",
+    "page": 7,
+    "title": "DCNN",
+    "section": "9. EPILOGUE"
+  },
+  {
+    "chunk_id": 207,
+    "text": "In ECCV – European Caltech-256 object category dataset. Conference on Computer Vision Technical Report 7694, California (Florence, Italy, Oct. Institute of Technology, 2007. 24. Nair, V., Hinton, G.E. Rectified linear 11. He, K., Zhang, X., Ren, S., Sun, J. Deep units improve restricted Boltzmann residual learning for image recognition. In Proceedings of the 27th arXiv preprint arXiv:1512.03385, 2015. International Conference on Machine 12. Hinton, G., Srivastava, N., Learning (2010).",
+    "source": "DCNN.pdf",
+    "page": 7,
+    "title": "DCNN",
+    "section": "9. EPILOGUE"
+  },
+  {
+    "chunk_id": 208,
+    "text": "Krizhevsky, A., Sutskever, I., 25. Pinto, N., Cox, D., DiCarlo, J. Why is Salakhutdinov, R.",
+    "source": "DCNN.pdf",
+    "page": 7,
+    "title": "DCNN",
+    "section": "9. EPILOGUE"
+  },
+  {
+    "chunk_id": 209,
+    "text": "Improving neural real-world visual object recognition networks by preventing co-adaptation hard? PLoS Comput. 4, 1 (2008), of feature detectors. arXiv preprint e27. arXiv:1207.0580 (2012). 26. Pinto, N., Doukhan, D., DiCarlo, J., Cox, 13. Jarrett, K., Kavukcuoglu, K., D. A high-throughput screening Ranzato, M.A., LeCun, Y. What is the approach to discovering good forms of best multi-stage architecture for biologically inspired visual object recognition?",
+    "source": "DCNN.pdf",
+    "page": 7,
+    "title": "DCNN",
+    "section": "9. EPILOGUE"
+  },
+  {
+    "chunk_id": 210,
+    "text": "In International representation. PLoS Comput. 5, Conference on Computer Vision 11 (2009), e1000579. (2009). IEEE, 2146–2153. 27. Rumelhart, D.E., Hinton, G.E., Williams, 14. Krizhevsky, A. Learning multiple layers R.J. Learning internal representations of features from tiny images. Master’s by error propagation. Technical report, thesis, Department of Computer DTIC Document, 1985. Science, University of Toronto, 2009. 28. Russell, BC, Torralba, A., Murphy, K., 15. Krizhevsky, A.",
+    "source": "DCNN.pdf",
+    "page": 7,
+    "title": "DCNN",
+    "section": "9. EPILOGUE"
+  },
+  {
+    "chunk_id": 211,
+    "text": "Convolutional deep Freeman, W. Labelme: A database and belief networks on cifar-10. web-based tool for image annotation. Unpublished manuscript, 2010. Int. Comput Vis.",
+    "source": "DCNN.pdf",
+    "page": 7,
+    "title": "DCNN",
+    "section": "9. EPILOGUE"
+  },
+  {
+    "chunk_id": 212,
+    "text": "77, 1 (2008), 16. Krizhevsky, A., Hinton, G. Using very 157–173. deep autoencoders for content-based 29. Sánchez, J., Perronnin, F. High- image retrieval. In ESANN (2011). dimensional signature compression for 17. LeCun, Y., Boser, B., Denker, J., large-scale image classification. In Henderson, D., Howard, R., Hubbard, W., IEEE Conference on Computer Vision Jackel, L., et al. Handwritten digit and Pattern Recognition (CVPR), 2011 recognition with a back-propagation (2011).",
+    "source": "DCNN.pdf",
+    "page": 7,
+    "title": "DCNN",
+    "section": "9. EPILOGUE"
+  },
+  {
+    "chunk_id": 213,
+    "text": "IEEE, 1665–1672. network. In Advances in Neural 30. Simard, P., Steinkraus, D., Platt, J. Best Information Processing Systems (1990). practices for convolutional neural 18. LeCun, Y. Une procedure networks applied to visual document d’apprentissage pour reseau a seuil analysis. In Proceedings of the asymmetrique (a learning scheme for Seventh International Conference on asymmetric threshold networks). 1985. Document Analysis and Recognition. 19. LeCun, Y., Huang, F., Bottou, L.",
+    "source": "DCNN.pdf",
+    "page": 7,
+    "title": "DCNN",
+    "section": "9. EPILOGUE"
+  },
+  {
+    "chunk_id": 214,
+    "text": "Volume 2 (2003), 958–962. Learning methods for generic object 31. Szegedy, C., Liu, W., Jia, Y., Sermanet, recognition with invariance to pose and P., Reed, S., Anguelov, D., Erhan, D., lighting. In Proceedings of the 2004 Vanhoucke, V., Rabinovich, A. IEEE Computer Society Conference on Going deeper with convolutions. Computer Vision and Pattern In Proceedings of the IEEE Conference Recognition, 2004, CVPR 2004. on Computer Vision and Pattern Volume 2 (2004).",
+    "source": "DCNN.pdf",
+    "page": 7,
+    "title": "DCNN",
+    "section": "9. EPILOGUE"
+  },
+  {
+    "chunk_id": 215,
+    "text": "IEEE, II–97. Recognition (2015), 1–9. 20. LeCun, Y., Kavukcuoglu, K., Farabet, C. 32. Turaga, S., Murray, J., Jain, V., Roth, F., Convolutional networks and Helmstaedter, M., Briggman, K., Denk, applications in vision. In Proceedings W., Seung, H.",
+    "source": "DCNN.pdf",
+    "page": 7,
+    "title": "DCNN",
+    "section": "9. EPILOGUE"
+  },
+  {
+    "chunk_id": 216,
+    "text": "Convolutional networks of 2010 IEEE International can learn to generate affinity graphs Symposium on Circuits and Systems for image segmentation. Neural (ISCAS) (2010). IEEE, 253–256. Comput. 22, 2 (2010), 511–538. 21. Lee, H., Grosse, R., Ranganath, R., Ng, 33. Werbos, P. Beyond regression: New A. Convolutional deep belief tools for prediction and analysis in networks for scalable unsupervised the behavioral sciences, 1974. Alex Krizhevsky and Geoffrey E.",
+    "source": "DCNN.pdf",
+    "page": 7,
+    "title": "DCNN",
+    "section": "9. EPILOGUE"
+  },
+  {
+    "chunk_id": 217,
+    "text": "Hinton Ilya Sutskever (ilyasu@openai.com), ({akrizhevsky, geoffhinton}@google.com), OpenAI. Google Inc. Copyright held by Authors/Owners.",
+    "source": "DCNN.pdf",
+    "page": 7,
+    "title": "DCNN",
+    "section": "9. EPILOGUE"
+  },
+  {
+    "chunk_id": 218,
+    "text": "arXiv:1409.1556v6 [cs.CV] 10 Apr 2015 Published as a conference paper at ICLR 2015 VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION Karen Simonyan∗& Andrew Zisserman+ Visual Geometry Group, Department of Engineering Science, University of Oxford {karen,az}@robots.ox.ac.uk ABSTRACT In this work we investigate the effect of the convolutional network depth on its accuracy in the large-scale image recognition setting.",
+    "source": "VGG.pdf",
+    "page": 1,
+    "title": "VGG",
+    "section": null
+  },
+  {
+    "chunk_id": 219,
+    "text": "Our main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3 × 3) convolution ﬁlters, which shows that a signiﬁcant improvement on the prior-art conﬁgurations can be achieved by pushing the depth to 16–19 weight layers. These ﬁndings were the basis of our ImageNet Challenge 2014 submission, where our team secured the ﬁrst and the second places in the localisa- tion and classiﬁcation tracks respectively.",
+    "source": "VGG.pdf",
+    "page": 1,
+    "title": "VGG",
+    "section": null
+  },
+  {
+    "chunk_id": 220,
+    "text": "We also show that our representations generalise well to other datasets, where they achieve state-of-the-art results. We have made our two best-performing ConvNet models publicly available to facili- tate further research on the use of deep visual representations in computer vision.",
+    "source": "VGG.pdf",
+    "page": 1,
+    "title": "VGG",
+    "section": null
+  },
+  {
+    "chunk_id": 221,
+    "text": "1 INTRODUCTION Convolutional networks (ConvNets) have recently enjoyed a great success in large-scale im- age and video recognition (Krizhevsky et al., 2012; Zeiler & Fergus, 2013; Sermanet et al., 2014; Simonyan & Zisserman, 2014) which has become possible due to the large public image reposito- ries, such as ImageNet (Deng et al., 2009), and high-performance computing systems, such as GPUs or large-scale distributed clusters (Dean et al., 2012).",
+    "source": "VGG.pdf",
+    "page": 1,
+    "title": "VGG",
+    "section": "1 INTRODUCTION"
+  },
+  {
+    "chunk_id": 222,
+    "text": "In particular, an important role in the advance of deep visual recognition architectures has been played by the ImageNet Large-Scale Visual Recog- nition Challenge (ILSVRC) (Russakovsky et al., 2014), which has served as a testbed for a few generations of large-scale image classiﬁcation systems, from high-dimensional shallow feature en- codings (Perronnin et al., 2010) (the winner of ILSVRC-2011) to deep ConvNets (Krizhevsky et al., 2012) (the winner of ILSVRC-2012).",
+    "source": "VGG.pdf",
+    "page": 1,
+    "title": "VGG",
+    "section": "1 INTRODUCTION"
+  },
+  {
+    "chunk_id": 223,
+    "text": "With ConvNets becoming more of a commodity in the computer vision ﬁeld, a number of at- tempts have been made to improve the original architecture of Krizhevsky et al. (2012) in a bid to achieve better accuracy. For instance, the best-performing submissions to the ILSVRC- 2013 (Zeiler & Fergus, 2013; Sermanet et al., 2014) utilised smaller receptive window size and smaller stride of the ﬁrst convolutional layer.",
+    "source": "VGG.pdf",
+    "page": 1,
+    "title": "VGG",
+    "section": "1 INTRODUCTION"
+  },
+  {
+    "chunk_id": 224,
+    "text": "Another line of improvements dealt with training and testing the networks densely over the whole image and over multiple scales (Sermanet et al., 2014; Howard, 2014). In this paper, we address another important aspect of ConvNet architecture design – its depth. To this end, we ﬁx other parameters of the architecture, and steadily increase the depth of the network by adding more convolutional layers, which is feasible due to the use of very small (3 × 3) convolution ﬁlters in all layers.",
+    "source": "VGG.pdf",
+    "page": 1,
+    "title": "VGG",
+    "section": "1 INTRODUCTION"
+  },
+  {
+    "chunk_id": 225,
+    "text": "As a result, we come up with signiﬁcantly more accurate ConvNet architectures, which not only achieve the state-of-the-art accuracy on ILSVRC classiﬁcation and localisation tasks, but are also applicable to other image recognition datasets, where they achieve excellent performance even when used as a part of a relatively simple pipelines (e.g. deep features classiﬁed by a linear SVM without ﬁne-tuning). We have released our two best-performing models1 to facilitate further research.",
+    "source": "VGG.pdf",
+    "page": 1,
+    "title": "VGG",
+    "section": "1 INTRODUCTION"
+  },
+  {
+    "chunk_id": 226,
+    "text": "2, we describe our ConvNet conﬁgurations. The details of the image classiﬁcation training and evaluation are then presented in Sect.",
+    "source": "VGG.pdf",
+    "page": 1,
+    "title": "VGG",
+    "section": "1 INTRODUCTION"
+  },
+  {
+    "chunk_id": 227,
+    "text": "3, and the ∗current afﬁliation: Google DeepMind +current afﬁliation: University of Oxford and Google DeepMind 1http://www.robots.ox.ac.uk/˜vgg/research/very_deep/",
+    "source": "VGG.pdf",
+    "page": 1,
+    "title": "VGG",
+    "section": "1 INTRODUCTION"
+  },
+  {
+    "chunk_id": 228,
+    "text": "Published as a conference paper at ICLR 2015 conﬁgurations are compared on the ILSVRC classiﬁcation task in Sect.",
+    "source": "VGG.pdf",
+    "page": 2,
+    "title": "VGG",
+    "section": "1 INTRODUCTION"
+  },
+  {
+    "chunk_id": 229,
+    "text": "5 concludes the paper. For completeness, we also describe and assess our ILSVRC-2014 object localisation system in Appendix A, and discuss the generalisation of very deep features to other datasets in Appendix B. Finally, Appendix C contains the list of major paper revisions.",
+    "source": "VGG.pdf",
+    "page": 2,
+    "title": "VGG",
+    "section": "1 INTRODUCTION"
+  },
+  {
+    "chunk_id": 230,
+    "text": "2 CONVNET CONFIGURATIONS To measure the improvement brought by the increased ConvNet depth in a fair setting, all our ConvNet layer conﬁgurations are designed using the same principles, inspired by Ciresan et al. (2011); Krizhevsky et al.",
+    "source": "VGG.pdf",
+    "page": 2,
+    "title": "VGG",
+    "section": "2 CONVNET CONFIGURATIONS"
+  },
+  {
+    "chunk_id": 231,
+    "text": "In this section, we ﬁrst describe a generic layout of our ConvNet conﬁgurations (Sect. 2.1) and then detail the speciﬁc conﬁgurations used in the evaluation (Sect. Our design choices are then discussed and compared to the prior art in Sect.",
+    "source": "VGG.pdf",
+    "page": 2,
+    "title": "VGG",
+    "section": "2 CONVNET CONFIGURATIONS"
+  },
+  {
+    "chunk_id": 232,
+    "text": "2.1 ARCHITECTURE During training, the input to our ConvNets is a ﬁxed-size 224 × 224 RGB image. The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel. The image is passed through a stack of convolutional (conv.) layers, where we use ﬁlters with a very small receptive ﬁeld: 3 × 3 (which is the smallest size to capture the notion of left/right, up/down, center).",
+    "source": "VGG.pdf",
+    "page": 2,
+    "title": "VGG",
+    "section": "2.1 ARCHITECTURE"
+  },
+  {
+    "chunk_id": 233,
+    "text": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.",
+    "source": "VGG.pdf",
+    "page": 2,
+    "title": "VGG",
+    "section": "2.1 ARCHITECTURE"
+  },
+  {
+    "chunk_id": 234,
+    "text": "layers are followed by max-pooling). Max-pooling is performed over a 2 × 2 pixel window, with stride 2. A stack of convolutional layers (which has a different depth in different architectures) is followed by three Fully-Connected (FC) layers: the ﬁrst two have 4096 channels each, the third performs 1000- way ILSVRC classiﬁcation and thus contains 1000 channels (one for each class). The ﬁnal layer is the soft-max layer.",
+    "source": "VGG.pdf",
+    "page": 2,
+    "title": "VGG",
+    "section": "2.1 ARCHITECTURE"
+  },
+  {
+    "chunk_id": 235,
+    "text": "The conﬁguration of the fully connected layers is the same in all networks. All hidden layers are equipped with the rectiﬁcation (ReLU (Krizhevsky et al., 2012)) non-linearity. We note that none of our networks (except for one) contain Local Response Normalisation (LRN) normalisation (Krizhevsky et al., 2012): as will be shown in Sect. 4, such normalisation does not improve the performance on the ILSVRC dataset, but leads to increased memory con- sumption and computation time.",
+    "source": "VGG.pdf",
+    "page": 2,
+    "title": "VGG",
+    "section": "2.1 ARCHITECTURE"
+  },
+  {
+    "chunk_id": 236,
+    "text": "Where applicable, the parameters for the LRN layer are those of (Krizhevsky et al., 2012).",
+    "source": "VGG.pdf",
+    "page": 2,
+    "title": "VGG",
+    "section": "2.1 ARCHITECTURE"
+  },
+  {
+    "chunk_id": 237,
+    "text": "2.2 CONFIGURATIONS The ConvNet conﬁgurations, evaluated in this paper, are outlined in Table 1, one per column. In the following we will refer to the nets by their names (A–E). All conﬁgurations follow the generic design presented in Sect.",
+    "source": "VGG.pdf",
+    "page": 2,
+    "title": "VGG",
+    "section": "2.2 CONFIGURATIONS"
+  },
+  {
+    "chunk_id": 238,
+    "text": "2.1, and differ only in the depth: from 11 weight layers in the network A (8 conv. and 3 FC layers) to 19 weight layers in the network E (16 conv. and 3 FC layers). The width of conv. layers (the number of channels) is rather small, starting from 64 in the ﬁrst layer and then increasing by a factor of 2 after each max-pooling layer, until it reaches 512. In Table 2 we report the number of parameters for each conﬁguration.",
+    "source": "VGG.pdf",
+    "page": 2,
+    "title": "VGG",
+    "section": "2.2 CONFIGURATIONS"
+  },
+  {
+    "chunk_id": 239,
+    "text": "In spite of a large depth, the number of weights in our nets is not greater than the number of weights in a more shallow net with larger conv. layer widths and receptive ﬁelds (144M weights in (Sermanet et al., 2014)).",
+    "source": "VGG.pdf",
+    "page": 2,
+    "title": "VGG",
+    "section": "2.2 CONFIGURATIONS"
+  },
+  {
+    "chunk_id": 240,
+    "text": "2.3 DISCUSSION Our ConvNet conﬁgurations are quite different from the ones used in the top-performing entries of the ILSVRC-2012 (Krizhevsky et al., 2012) and ILSVRC-2013 competitions (Zeiler & Fergus, 2013; Sermanet et al., 2014). Rather than using relatively large receptive ﬁelds in the ﬁrst conv.",
+    "source": "VGG.pdf",
+    "page": 2,
+    "title": "VGG",
+    "section": "2.3 DISCUSSION"
+  },
+  {
+    "chunk_id": 241,
+    "text": "lay- ers (e.g. 11 × 11 with stride 4 in (Krizhevsky et al., 2012), or 7 × 7 with stride 2 in (Zeiler & Fergus, 2013; Sermanet et al., 2014)), we use very small 3 × 3 receptive ﬁelds throughout the whole net, which are convolved with the input at every pixel (with stride 1).",
+    "source": "VGG.pdf",
+    "page": 2,
+    "title": "VGG",
+    "section": "2.3 DISCUSSION"
+  },
+  {
+    "chunk_id": 242,
+    "text": "It is easy to see that a stack of two 3 × 3 conv. layers (without spatial pooling in between) has an effective receptive ﬁeld of 5 × 5; three",
+    "source": "VGG.pdf",
+    "page": 2,
+    "title": "VGG",
+    "section": "2.3 DISCUSSION"
+  },
+  {
+    "chunk_id": 243,
+    "text": "Published as a conference paper at ICLR 2015 Table 1: ConvNet conﬁgurations (shown in columns). The depth of the conﬁgurations increases from the left (A) to the right (E), as more layers are added (the added layers are shown in bold). The convolutional layer parameters are denoted as “conv⟨receptive ﬁeld size⟩-⟨number of channels⟩”. The ReLU activation function is not shown for brevity.",
+    "source": "VGG.pdf",
+    "page": 3,
+    "title": "VGG",
+    "section": "2.3 DISCUSSION"
+  },
+  {
+    "chunk_id": 244,
+    "text": "ConvNet Conﬁguration A A-LRN B C D E 11 weight 11 weight 13 weight 16 weight 16 weight 19 weight layers layers layers layers layers layers input (224 × 224 RGB image) conv3-64 conv3-64 conv3-64 conv3-64 conv3-64 conv3-64 LRN conv3-64 conv3-64 conv3-64 conv3-64 maxpool conv3-128 conv3-128 conv3-128 conv3-128 conv3-128 conv3-128 conv3-128 conv3-128 conv3-128 conv3-128 maxpool conv3-256 conv3-256 conv3-256 conv3-256 conv3-256 conv3-256 conv3-256 conv3-256 conv3-256 conv3-256 conv3-256 conv3-256 conv1-256 conv3-256 conv3-256 conv3-256 maxpool conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv1-512 conv3-512 conv3-512 conv3-512 maxpool conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv1-512 conv3-512 conv3-512 conv3-512 maxpool FC-4096 FC-4096 FC-1000 soft-max Table 2: Number of parameters (in millions).",
+    "source": "VGG.pdf",
+    "page": 3,
+    "title": "VGG",
+    "section": "2.3 DISCUSSION"
+  },
+  {
+    "chunk_id": 245,
+    "text": "Network A,A-LRN B C D E Number of parameters 133 133 134 138 144 such layers have a 7 × 7 effective receptive ﬁeld. So what have we gained by using, for instance, a stack of three 3×3 conv. layers instead of a single 7×7 layer? First, we incorporate three non-linear rectiﬁcation layers instead of a single one, which makes the decision function more discriminative.",
+    "source": "VGG.pdf",
+    "page": 3,
+    "title": "VGG",
+    "section": "2.3 DISCUSSION"
+  },
+  {
+    "chunk_id": 246,
+    "text": "Second, we decrease the number of parameters: assuming that both the input and the output of a three-layer 3 × 3 convolution stack has C channels, the stack is parametrised by 3 \u0000 32C2\u0001 = 27C2 weights; at the same time, a single 7 × 7 conv. layer would require 72C2 = 49C2 parameters, i.e. 81% more. This can be seen as imposing a regularisation on the 7 × 7 conv. ﬁlters, forcing them to have a decomposition through the 3 × 3 ﬁlters (with non-linearity injected in between).",
+    "source": "VGG.pdf",
+    "page": 3,
+    "title": "VGG",
+    "section": "2.3 DISCUSSION"
+  },
+  {
+    "chunk_id": 247,
+    "text": "The incorporation of 1 × 1 conv. layers (conﬁguration C, Table 1) is a way to increase the non- linearity of the decision function without affecting the receptive ﬁelds of the conv. Even though in our case the 1 × 1 convolution is essentially a linear projection onto the space of the same dimensionality (the number of input and output channels is the same), an additional non-linearity is introduced by the rectiﬁcation function. It should be noted that 1×1 conv.",
+    "source": "VGG.pdf",
+    "page": 3,
+    "title": "VGG",
+    "section": "2.3 DISCUSSION"
+  },
+  {
+    "chunk_id": 248,
+    "text": "layers have recently been utilised in the “Network in Network” architecture of Lin et al. Small-size convolution ﬁlters have been previously used by Ciresan et al. (2011), but their nets are signiﬁcantly less deep than ours, and they did not evaluate on the large-scale ILSVRC dataset.",
+    "source": "VGG.pdf",
+    "page": 3,
+    "title": "VGG",
+    "section": "2.3 DISCUSSION"
+  },
+  {
+    "chunk_id": 249,
+    "text": "(2014) applied deep ConvNets (11 weight layers) to the task of street number recognition, and showed that the increased depth led to better performance. GoogLeNet (Szegedy et al., 2014), a top-performing entry of the ILSVRC-2014 classiﬁcation task, was developed independently of our work, but is similar in that it is based on very deep ConvNets",
+    "source": "VGG.pdf",
+    "page": 3,
+    "title": "VGG",
+    "section": "2.3 DISCUSSION"
+  },
+  {
+    "chunk_id": 250,
+    "text": "Published as a conference paper at ICLR 2015 (22 weight layers) and small convolution ﬁlters (apart from 3 × 3, they also use 1 × 1 and 5 × 5 convolutions). Their network topology is, however, more complex than ours, and the spatial reso- lution of the feature maps is reduced more aggressively in the ﬁrst layers to decrease the amount of computation.",
+    "source": "VGG.pdf",
+    "page": 4,
+    "title": "VGG",
+    "section": "2.3 DISCUSSION"
+  },
+  {
+    "chunk_id": 251,
+    "text": "As will be shown in Sect. 4.5, our model is outperforming that of Szegedy et al. (2014) in terms of the single-network classiﬁcation accuracy.",
+    "source": "VGG.pdf",
+    "page": 4,
+    "title": "VGG",
+    "section": "2.3 DISCUSSION"
+  },
+  {
+    "chunk_id": 252,
+    "text": "3 CLASSIFICATION FRAMEWORK In the previous section we presented the details of our network conﬁgurations. In this section, we describe the details of classiﬁcation ConvNet training and evaluation.",
+    "source": "VGG.pdf",
+    "page": 4,
+    "title": "VGG",
+    "section": "3 CLASSIFICATION FRAMEWORK"
+  },
+  {
+    "chunk_id": 253,
+    "text": "3.1 TRAINING The ConvNet training procedure generally follows Krizhevsky et al. (2012) (except for sampling the input crops from multi-scale training images, as explained later). Namely, the training is carried out by optimising the multinomial logistic regression objective using mini-batch gradient descent (based on back-propagation (LeCun et al., 1989)) with momentum.",
+    "source": "VGG.pdf",
+    "page": 4,
+    "title": "VGG",
+    "section": "3.1 TRAINING"
+  },
+  {
+    "chunk_id": 254,
+    "text": "The batch size was set to 256, momentum to 0.9. The training was regularised by weight decay (the L2 penalty multiplier set to 5·10−4) and dropout regularisation for the ﬁrst two fully-connected layers (dropout ratio set to 0.5). The learning rate was initially set to 10−2, and then decreased by a factor of 10 when the validation set accuracy stopped improving. In total, the learning rate was decreased 3 times, and the learning was stopped after 370K iterations (74 epochs).",
+    "source": "VGG.pdf",
+    "page": 4,
+    "title": "VGG",
+    "section": "3.1 TRAINING"
+  },
+  {
+    "chunk_id": 255,
+    "text": "We conjecture that in spite of the larger number of parameters and the greater depth of our nets compared to (Krizhevsky et al., 2012), the nets required less epochs to converge due to (a) implicit regularisation imposed by greater depth and smaller conv. ﬁlter sizes; (b) pre-initialisation of certain layers. The initialisation of the network weights is important, since bad initialisation can stall learning due to the instability of gradient in deep nets.",
+    "source": "VGG.pdf",
+    "page": 4,
+    "title": "VGG",
+    "section": "3.1 TRAINING"
+  },
+  {
+    "chunk_id": 256,
+    "text": "To circumvent this problem, we began with training the conﬁguration A (Table 1), shallow enough to be trained with random initialisation. Then, when training deeper architectures, we initialised the ﬁrst four convolutional layers and the last three fully- connected layers with the layers of net A (the intermediate layers were initialised randomly). We did not decrease the learning rate for the pre-initialised layers, allowing them to change during learning.",
+    "source": "VGG.pdf",
+    "page": 4,
+    "title": "VGG",
+    "section": "3.1 TRAINING"
+  },
+  {
+    "chunk_id": 257,
+    "text": "For random initialisation (where applicable), we sampled the weights from a normal distribution with the zero mean and 10−2 variance. The biases were initialised with zero.",
+    "source": "VGG.pdf",
+    "page": 4,
+    "title": "VGG",
+    "section": "3.1 TRAINING"
+  },
+  {
+    "chunk_id": 258,
+    "text": "It is worth noting that after the paper submission we found that it is possible to initialise the weights without pre-training by using the random initialisation procedure of Glorot & Bengio (2010).",
+    "source": "VGG.pdf",
+    "page": 4,
+    "title": "VGG",
+    "section": "3.1 TRAINING"
+  },
+  {
+    "chunk_id": 259,
+    "text": "To obtain the ﬁxed-size 224×224 ConvNet input images, they were randomly cropped from rescaled training images (one crop per image per SGD iteration). To further augment the training set, the crops underwent random horizontal ﬂipping and random RGB colour shift (Krizhevsky et al., 2012). Training image rescaling is explained below. Training image size.",
+    "source": "VGG.pdf",
+    "page": 4,
+    "title": "VGG",
+    "section": "3.1 TRAINING"
+  },
+  {
+    "chunk_id": 260,
+    "text": "Let S be the smallest side of an isotropically-rescaled training image, from which the ConvNet input is cropped (we also refer to S as the training scale). While the crop size is ﬁxed to 224 × 224, in principle S can take on any value not less than 224: for S = 224 the crop will capture whole-image statistics, completely spanning the smallest side of a training image; for S ≫224 the crop will correspond to a small part of the image, containing a small object or an object part.",
+    "source": "VGG.pdf",
+    "page": 4,
+    "title": "VGG",
+    "section": "3.1 TRAINING"
+  },
+  {
+    "chunk_id": 261,
+    "text": "We consider two approaches for setting the training scale S. The ﬁrst is to ﬁx S, which corresponds to single-scale training (note that image content within the sampled crops can still represent multi- scale image statistics).",
+    "source": "VGG.pdf",
+    "page": 4,
+    "title": "VGG",
+    "section": "3.1 TRAINING"
+  },
+  {
+    "chunk_id": 262,
+    "text": "In our experiments, we evaluated models trained at two ﬁxed scales: S = 256 (which has been widely used in the prior art (Krizhevsky et al., 2012; Zeiler & Fergus, 2013; Sermanet et al., 2014)) and S = 384. Given a ConvNet conﬁguration, we ﬁrst trained the network using S = 256. To speed-up training of the S = 384 network, it was initialised with the weights pre-trained with S = 256, and we used a smaller initial learning rate of 10−3. The second approach to setting S is multi-scale training, where each training image is individually rescaled by randomly sampling S from a certain range [Smin, Smax] (we used Smin = 256 and Smax = 512).",
+    "source": "VGG.pdf",
+    "page": 4,
+    "title": "VGG",
+    "section": "3.1 TRAINING"
+  },
+  {
+    "chunk_id": 263,
+    "text": "Since objects in images can be of different size, it is beneﬁcial to take this into account during training. This can also be seen as training set augmentation by scale jittering, where a single",
+    "source": "VGG.pdf",
+    "page": 4,
+    "title": "VGG",
+    "section": "3.1 TRAINING"
+  },
+  {
+    "chunk_id": 264,
+    "text": "Published as a conference paper at ICLR 2015 model is trained to recognise objects over a wide range of scales. For speed reasons, we trained multi-scale models by ﬁne-tuning all layers of a single-scale model with the same conﬁguration, pre-trained with ﬁxed S = 384.",
+    "source": "VGG.pdf",
+    "page": 5,
+    "title": "VGG",
+    "section": "3.1 TRAINING"
+  },
+  {
+    "chunk_id": 265,
+    "text": "3.2 TESTING At test time, given a trained ConvNet and an input image, it is classiﬁed in the following way. First, it is isotropically rescaled to a pre-deﬁned smallest image side, denoted as Q (we also refer to it as the test scale). We note that Q is not necessarily equal to the training scale S (as we will show in Sect. 4, using several values of Q for each S leads to improved performance).",
+    "source": "VGG.pdf",
+    "page": 5,
+    "title": "VGG",
+    "section": "3.2 TESTING"
+  },
+  {
+    "chunk_id": 266,
+    "text": "Then, the network is applied densely over the rescaled test image in a way similar to (Sermanet et al., 2014). Namely, the fully-connected layers are ﬁrst converted to convolutional layers (the ﬁrst FC layer to a 7 × 7 conv. layer, the last two FC layers to 1 × 1 conv. The resulting fully-convolutional net is then applied to the whole (uncropped) image.",
+    "source": "VGG.pdf",
+    "page": 5,
+    "title": "VGG",
+    "section": "3.2 TESTING"
+  },
+  {
+    "chunk_id": 267,
+    "text": "The result is a class score map with the number of channels equal to the number of classes, and a variable spatial resolution, dependent on the input image size. Finally, to obtain a ﬁxed-size vector of class scores for the image, the class score map is spatially averaged (sum-pooled). We also augment the test set by horizontal ﬂipping of the images; the soft-max class posteriors of the original and ﬂipped images are averaged to obtain the ﬁnal scores for the image.",
+    "source": "VGG.pdf",
+    "page": 5,
+    "title": "VGG",
+    "section": "3.2 TESTING"
+  },
+  {
+    "chunk_id": 268,
+    "text": "Since the fully-convolutional network is applied over the whole image, there is no need to sample multiple crops at test time (Krizhevsky et al., 2012), which is less efﬁcient as it requires network re-computation for each crop. At the same time, using a large set of crops, as done by Szegedy et al.",
+    "source": "VGG.pdf",
+    "page": 5,
+    "title": "VGG",
+    "section": "3.2 TESTING"
+  },
+  {
+    "chunk_id": 269,
+    "text": "(2014), can lead to improved accuracy, as it results in a ﬁner sampling of the input image compared to the fully-convolutional net.",
+    "source": "VGG.pdf",
+    "page": 5,
+    "title": "VGG",
+    "section": "3.2 TESTING"
+  },
+  {
+    "chunk_id": 270,
+    "text": "Also, multi-crop evaluation is complementary to dense evaluation due to different convolution boundary conditions: when applying a ConvNet to a crop, the convolved feature maps are padded with zeros, while in the case of dense evaluation the padding for the same crop naturally comes from the neighbouring parts of an image (due to both the convolutions and spatial pooling), which substantially increases the overall network receptive ﬁeld, so more context is captured.",
+    "source": "VGG.pdf",
+    "page": 5,
+    "title": "VGG",
+    "section": "3.2 TESTING"
+  },
+  {
+    "chunk_id": 271,
+    "text": "While we believe that in practice the increased computation time of multiple crops does not justify the potential gains in accuracy, for reference we also evaluate our networks using 50 crops per scale (5 × 5 regular grid with 2 ﬂips), for a total of 150 crops over 3 scales, which is comparable to 144 crops over 4 scales used by Szegedy et al.",
+    "source": "VGG.pdf",
+    "page": 5,
+    "title": "VGG",
+    "section": "3.2 TESTING"
+  },
+  {
+    "chunk_id": 272,
+    "text": "3.3 IMPLEMENTATION DETAILS Our implementation is derived from the publicly available C++ Caffe toolbox (Jia, 2013) (branched out in December 2013), but contains a number of signiﬁcant modiﬁcations, allowing us to perform training and evaluation on multiple GPUs installed in a single system, as well as train and evaluate on full-size (uncropped) images at multiple scales (as described above).",
+    "source": "VGG.pdf",
+    "page": 5,
+    "title": "VGG",
+    "section": "3.3 IMPLEMENTATION DETAILS"
+  },
+  {
+    "chunk_id": 273,
+    "text": "Multi-GPU training exploits data parallelism, and is carried out by splitting each batch of training images into several GPU batches, processed in parallel on each GPU. After the GPU batch gradients are computed, they are averaged to obtain the gradient of the full batch. Gradient computation is synchronous across the GPUs, so the result is exactly the same as when training on a single GPU.",
+    "source": "VGG.pdf",
+    "page": 5,
+    "title": "VGG",
+    "section": "3.3 IMPLEMENTATION DETAILS"
+  },
+  {
+    "chunk_id": 274,
+    "text": "While more sophisticated methods of speeding up ConvNet training have been recently pro- posed (Krizhevsky, 2014), which employ model and data parallelism for different layers of the net, we have found that our conceptually much simpler scheme already provides a speedup of 3.75 times on an off-the-shelf 4-GPU system, as compared to using a single GPU. On a system equipped with four NVIDIA Titan Black GPUs, training a single net took 2–3 weeks depending on the architecture.",
+    "source": "VGG.pdf",
+    "page": 5,
+    "title": "VGG",
+    "section": "3.3 IMPLEMENTATION DETAILS"
+  },
+  {
+    "chunk_id": 275,
+    "text": "4 CLASSIFICATION EXPERIMENTS Dataset. In this section, we present the image classiﬁcation results achieved by the described ConvNet architectures on the ILSVRC-2012 dataset (which was used for ILSVRC 2012–2014 chal- lenges). The dataset includes images of 1000 classes, and is split into three sets: training (1.3M images), validation (50K images), and testing (100K images with held-out class labels).",
+    "source": "VGG.pdf",
+    "page": 5,
+    "title": "VGG",
+    "section": "4 CLASSIFICATION EXPERIMENTS"
+  },
+  {
+    "chunk_id": 276,
+    "text": "The clas- siﬁcation performance is evaluated using two measures: the top-1 and top-5 error. The former is a multi-class classiﬁcation error, i.e. the proportion of incorrectly classiﬁed images; the latter is the",
+    "source": "VGG.pdf",
+    "page": 5,
+    "title": "VGG",
+    "section": "4 CLASSIFICATION EXPERIMENTS"
+  },
+  {
+    "chunk_id": 277,
+    "text": "Published as a conference paper at ICLR 2015 main evaluation criterion used in ILSVRC, and is computed as the proportion of images such that the ground-truth category is outside the top-5 predicted categories.",
+    "source": "VGG.pdf",
+    "page": 6,
+    "title": "VGG",
+    "section": "4 CLASSIFICATION EXPERIMENTS"
+  },
+  {
+    "chunk_id": 278,
+    "text": "For the majority of experiments, we used the validation set as the test set. Certain experiments were also carried out on the test set and submitted to the ofﬁcial ILSVRC server as a “VGG” team entry to the ILSVRC-2014 competition (Russakovsky et al., 2014).",
+    "source": "VGG.pdf",
+    "page": 6,
+    "title": "VGG",
+    "section": "4 CLASSIFICATION EXPERIMENTS"
+  },
+  {
+    "chunk_id": 279,
+    "text": "4.1 SINGLE SCALE EVALUATION We begin with evaluating the performance of individual ConvNet models at a single scale with the layer conﬁgurations described in Sect. 2.2. The test image size was set as follows: Q = S for ﬁxed S, and Q = 0.5(Smin + Smax) for jittered S ∈[Smin, Smax]. The results of are shown in Table 3. First, we note that using local response normalisation (A-LRN network) does not improve on the model A without any normalisation layers.",
+    "source": "VGG.pdf",
+    "page": 6,
+    "title": "VGG",
+    "section": "4.1 SINGLE SCALE EVALUATION"
+  },
+  {
+    "chunk_id": 280,
+    "text": "We thus do not employ normalisation in the deeper architectures (B–E). Second, we observe that the classiﬁcation error decreases with the increased ConvNet depth: from 11 layers in A to 19 layers in E. Notably, in spite of the same depth, the conﬁguration C (which contains three 1 × 1 conv. layers), performs worse than the conﬁguration D, which uses 3 × 3 conv. layers throughout the network.",
+    "source": "VGG.pdf",
+    "page": 6,
+    "title": "VGG",
+    "section": "4.1 SINGLE SCALE EVALUATION"
+  },
+  {
+    "chunk_id": 281,
+    "text": "This indicates that while the additional non-linearity does help (C is better than B), it is also important to capture spatial context by using conv. ﬁlters with non-trivial receptive ﬁelds (D is better than C).",
+    "source": "VGG.pdf",
+    "page": 6,
+    "title": "VGG",
+    "section": "4.1 SINGLE SCALE EVALUATION"
+  },
+  {
+    "chunk_id": 282,
+    "text": "The error rate of our architecture saturates when the depth reaches 19 layers, but even deeper models might be beneﬁcial for larger datasets. We also compared the net B with a shallow net with ﬁve 5 × 5 conv. layers, which was derived from B by replacing each pair of 3 × 3 conv. layers with a single 5 × 5 conv. layer (which has the same receptive ﬁeld as explained in Sect.",
+    "source": "VGG.pdf",
+    "page": 6,
+    "title": "VGG",
+    "section": "4.1 SINGLE SCALE EVALUATION"
+  },
+  {
+    "chunk_id": 283,
+    "text": "The top-1 error of the shallow net was measured to be 7% higher than that of B (on a center crop), which conﬁrms that a deep net with small ﬁlters outperforms a shallow net with larger ﬁlters. Finally, scale jittering at training time (S ∈[256; 512]) leads to signiﬁcantly better results than training on images with ﬁxed smallest side (S = 256 or S = 384), even though a single scale is used at test time.",
+    "source": "VGG.pdf",
+    "page": 6,
+    "title": "VGG",
+    "section": "4.1 SINGLE SCALE EVALUATION"
+  },
+  {
+    "chunk_id": 284,
+    "text": "This conﬁrms that training set augmentation by scale jittering is indeed helpful for capturing multi-scale image statistics. Table 3: ConvNet performance at a single test scale. ConvNet conﬁg.",
+    "source": "VGG.pdf",
+    "page": 6,
+    "title": "VGG",
+    "section": "4.1 SINGLE SCALE EVALUATION"
+  },
+  {
+    "chunk_id": 285,
+    "text": "(Table 1) smallest image side top-1 val. error (%) top-5 val. error (%) train (S) test (Q) A 256 256 29.6 10.4 A-LRN 256 256 29.7 10.5 B 256 256 28.7 9.9 C 256 256 28.1 9.4 384 384 28.1 9.3 [256;512] 384 27.3 8.8 D 256 256 27.0 8.8 384 384 26.8 8.7 [256;512] 384 25.6 8.1 E 256 256 27.3 9.0 384 384 26.9 8.7 [256;512] 384 25.5 8.0",
+    "source": "VGG.pdf",
+    "page": 6,
+    "title": "VGG",
+    "section": "4.1 SINGLE SCALE EVALUATION"
+  },
+  {
+    "chunk_id": 286,
+    "text": "4.2 MULTI-SCALE EVALUATION Having evaluated the ConvNet models at a single scale, we now assess the effect of scale jittering at test time.",
+    "source": "VGG.pdf",
+    "page": 6,
+    "title": "VGG",
+    "section": "4.2 MULTI-SCALE EVALUATION"
+  },
+  {
+    "chunk_id": 287,
+    "text": "It consists of running a model over several rescaled versions of a test image (corresponding to different values of Q), followed by averaging the resulting class posteriors. Considering that a large discrepancy between training and testing scales leads to a drop in performance, the models trained with ﬁxed S were evaluated over three test image sizes, close to the training one: Q = {S −32, S, S + 32}.",
+    "source": "VGG.pdf",
+    "page": 6,
+    "title": "VGG",
+    "section": "4.2 MULTI-SCALE EVALUATION"
+  },
+  {
+    "chunk_id": 288,
+    "text": "At the same time, scale jittering at training time allows the network to be applied to a wider range of scales at test time, so the model trained with variable S ∈[Smin; Smax] was evaluated over a larger range of sizes Q = {Smin, 0.5(Smin + Smax), Smax}.",
+    "source": "VGG.pdf",
+    "page": 6,
+    "title": "VGG",
+    "section": "4.2 MULTI-SCALE EVALUATION"
+  },
+  {
+    "chunk_id": 289,
+    "text": "Published as a conference paper at ICLR 2015 The results, presented in Table 4, indicate that scale jittering at test time leads to better performance (as compared to evaluating the same model at a single scale, shown in Table 3). As before, the deepest conﬁgurations (D and E) perform the best, and scale jittering is better than training with a ﬁxed smallest side S. Our best single-network performance on the validation set is 24.8%/7.5% top-1/top-5 error (highlighted in bold in Table 4).",
+    "source": "VGG.pdf",
+    "page": 7,
+    "title": "VGG",
+    "section": "4.2 MULTI-SCALE EVALUATION"
+  },
+  {
+    "chunk_id": 290,
+    "text": "On the test set, the conﬁguration E achieves 7.3% top-5 error. Table 4: ConvNet performance at multiple test scales. ConvNet conﬁg.",
+    "source": "VGG.pdf",
+    "page": 7,
+    "title": "VGG",
+    "section": "4.2 MULTI-SCALE EVALUATION"
+  },
+  {
+    "chunk_id": 291,
+    "text": "(Table 1) smallest image side top-1 val. error (%) top-5 val. error (%) train (S) test (Q) B 256 224,256,288 28.2 9.6 C 256 224,256,288 27.7 9.2 384 352,384,416 27.8 9.2 [256; 512] 256,384,512 26.3 8.2 D 256 224,256,288 26.6 8.6 384 352,384,416 26.5 8.6 [256; 512] 256,384,512 24.8 7.5 E 256 224,256,288 26.9 8.7 384 352,384,416 26.7 8.6 [256; 512] 256,384,512 24.8 7.5",
+    "source": "VGG.pdf",
+    "page": 7,
+    "title": "VGG",
+    "section": "4.2 MULTI-SCALE EVALUATION"
+  },
+  {
+    "chunk_id": 292,
+    "text": "4.3 MULTI-CROP EVALUATION In Table 5 we compare dense ConvNet evaluation with mult-crop evaluation (see Sect. 3.2 for de- tails). We also assess the complementarity of the two evaluation techniques by averaging their soft- max outputs. As can be seen, using multiple crops performs slightly better than dense evaluation, and the two approaches are indeed complementary, as their combination outperforms each of them.",
+    "source": "VGG.pdf",
+    "page": 7,
+    "title": "VGG",
+    "section": "4.3 MULTI-CROP EVALUATION"
+  },
+  {
+    "chunk_id": 293,
+    "text": "As noted above, we hypothesize that this is due to a different treatment of convolution boundary conditions. Table 5: ConvNet evaluation techniques comparison. In all experiments the training scale S was sampled from [256; 512], and three test scales Q were considered: {256, 384, 512}.",
+    "source": "VGG.pdf",
+    "page": 7,
+    "title": "VGG",
+    "section": "4.3 MULTI-CROP EVALUATION"
+  },
+  {
+    "chunk_id": 294,
+    "text": "ConvNet conﬁg. (Table 1) Evaluation method top-1 val. error (%) top-5 val. error (%) D dense 24.8 7.5 multi-crop 24.6 7.5 multi-crop & dense 24.4 7.2 E dense 24.8 7.5 multi-crop 24.6 7.4 multi-crop & dense 24.4 7.1",
+    "source": "VGG.pdf",
+    "page": 7,
+    "title": "VGG",
+    "section": "4.3 MULTI-CROP EVALUATION"
+  },
+  {
+    "chunk_id": 295,
+    "text": "4.4 CONVNET FUSION Up until now, we evaluated the performance of individual ConvNet models.",
+    "source": "VGG.pdf",
+    "page": 7,
+    "title": "VGG",
+    "section": "4.4 CONVNET FUSION"
+  },
+  {
+    "chunk_id": 296,
+    "text": "In this part of the exper- iments, we combine the outputs of several models by averaging their soft-max class posteriors. This improves the performance due to complementarity of the models, and was used in the top ILSVRC submissions in 2012 (Krizhevsky et al., 2012) and 2013 (Zeiler & Fergus, 2013; Sermanet et al., 2014).",
+    "source": "VGG.pdf",
+    "page": 7,
+    "title": "VGG",
+    "section": "4.4 CONVNET FUSION"
+  },
+  {
+    "chunk_id": 297,
+    "text": "The results are shown in Table 6. By the time of ILSVRC submission we had only trained the single-scale networks, as well as a multi-scale model D (by ﬁne-tuning only the fully-connected layers rather than all layers). The resulting ensemble of 7 networks has 7.3% ILSVRC test error.",
+    "source": "VGG.pdf",
+    "page": 7,
+    "title": "VGG",
+    "section": "4.4 CONVNET FUSION"
+  },
+  {
+    "chunk_id": 298,
+    "text": "After the submission, we considered an ensemble of only two best-performing multi-scale models (conﬁgurations D and E), which reduced the test error to 7.0% using dense evaluation and 6.8% using combined dense and multi-crop evaluation. For reference, our best-performing single model achieves 7.1% error (model E, Table 5).",
+    "source": "VGG.pdf",
+    "page": 7,
+    "title": "VGG",
+    "section": "4.4 CONVNET FUSION"
+  },
+  {
+    "chunk_id": 299,
+    "text": "4.5 COMPARISON WITH THE STATE OF THE ART Finally, we compare our results with the state of the art in Table 7. In the classiﬁcation task of ILSVRC-2014 challenge (Russakovsky et al., 2014), our “VGG” team secured the 2nd place with",
+    "source": "VGG.pdf",
+    "page": 7,
+    "title": "VGG",
+    "section": "4.5 COMPARISON WITH THE STATE OF THE ART"
+  },
+  {
+    "chunk_id": 300,
+    "text": "Published as a conference paper at ICLR 2015 Table 6: Multiple ConvNet fusion results. Combined ConvNet models Error top-1 val top-5 val top-5 test ILSVRC submission (D/256/224,256,288), (D/384/352,384,416), (D/[256;512]/256,384,512) (C/256/224,256,288), (C/384/352,384,416) (E/256/224,256,288), (E/384/352,384,416) 24.7 7.5 7.3 post-submission (D/[256;512]/256,384,512), (E/[256;512]/256,384,512), dense eval.",
+    "source": "VGG.pdf",
+    "page": 8,
+    "title": "VGG",
+    "section": "4.5 COMPARISON WITH THE STATE OF THE ART"
+  },
+  {
+    "chunk_id": 301,
+    "text": "24.0 7.1 7.0 (D/[256;512]/256,384,512), (E/[256;512]/256,384,512), multi-crop 23.9 7.2 - (D/[256;512]/256,384,512), (E/[256;512]/256,384,512), multi-crop & dense eval. 23.7 6.8 6.8 7.3% test error using an ensemble of 7 models. After the submission, we decreased the error rate to 6.8% using an ensemble of 2 models.",
+    "source": "VGG.pdf",
+    "page": 8,
+    "title": "VGG",
+    "section": "4.5 COMPARISON WITH THE STATE OF THE ART"
+  },
+  {
+    "chunk_id": 302,
+    "text": "As can be seen from Table 7, our very deep ConvNets signiﬁcantly outperform the previous gener- ation of models, which achieved the best results in the ILSVRC-2012 and ILSVRC-2013 competi- tions. Our result is also competitive with respect to the classiﬁcation task winner (GoogLeNet with 6.7% error) and substantially outperforms the ILSVRC-2013 winning submission Clarifai, which achieved 11.2% with outside training data and 11.7% without it.",
+    "source": "VGG.pdf",
+    "page": 8,
+    "title": "VGG",
+    "section": "4.5 COMPARISON WITH THE STATE OF THE ART"
+  },
+  {
+    "chunk_id": 303,
+    "text": "This is remarkable, considering that our best result is achieved by combining just two models – signiﬁcantly less than used in most ILSVRC submissions. In terms of the single-net performance, our architecture achieves the best result (7.0% test error), outperforming a single GoogLeNet by 0.9%. Notably, we did not depart from the classical ConvNet architecture of LeCun et al. (1989), but improved it by substantially increasing the depth.",
+    "source": "VGG.pdf",
+    "page": 8,
+    "title": "VGG",
+    "section": "4.5 COMPARISON WITH THE STATE OF THE ART"
+  },
+  {
+    "chunk_id": 304,
+    "text": "Table 7: Comparison with the state of the art in ILSVRC classiﬁcation. Our method is denoted as “VGG”.",
+    "source": "VGG.pdf",
+    "page": 8,
+    "title": "VGG",
+    "section": "4.5 COMPARISON WITH THE STATE OF THE ART"
+  },
+  {
+    "chunk_id": 305,
+    "text": "Only the results obtained without outside training data are reported. Method top-1 val. error (%) top-5 val.",
+    "source": "VGG.pdf",
+    "page": 8,
+    "title": "VGG",
+    "section": "4.5 COMPARISON WITH THE STATE OF THE ART"
+  },
+  {
+    "chunk_id": 306,
+    "text": "error (%) top-5 test error (%) VGG (2 nets, multi-crop & dense eval.) 23.7 6.8 6.8 VGG (1 net, multi-crop & dense eval.) 24.4 7.1 7.0 VGG (ILSVRC submission, 7 nets, dense eval.) 24.7 7.5 7.3 GoogLeNet (Szegedy et al., 2014) (1 net) - 7.9 GoogLeNet (Szegedy et al., 2014) (7 nets) - 6.7 MSRA (He et al., 2014) (11 nets) - - 8.1 MSRA (He et al., 2014) (1 net) 27.9 9.1 9.1 Clarifai (Russakovsky et al., 2014) (multiple nets) - - 11.7 Clarifai (Russakovsky et al., 2014) (1 net) - - 12.5 Zeiler & Fergus (Zeiler & Fergus, 2013) (6 nets) 36.0 14.7 14.8 Zeiler & Fergus (Zeiler & Fergus, 2013) (1 net) 37.5 16.0 16.1 OverFeat (Sermanet et al., 2014) (7 nets) 34.0 13.2 13.6 OverFeat (Sermanet et al., 2014) (1 net) 35.7 14.2 - Krizhevsky et al.",
+    "source": "VGG.pdf",
+    "page": 8,
+    "title": "VGG",
+    "section": "4.5 COMPARISON WITH THE STATE OF THE ART"
+  },
+  {
+    "chunk_id": 307,
+    "text": "(Krizhevsky et al., 2012) (5 nets) 38.1 16.4 16.4 Krizhevsky et al. (Krizhevsky et al., 2012) (1 net) 40.7 18.2 -",
+    "source": "VGG.pdf",
+    "page": 8,
+    "title": "VGG",
+    "section": "4.5 COMPARISON WITH THE STATE OF THE ART"
+  },
+  {
+    "chunk_id": 308,
+    "text": "5 CONCLUSION In this work we evaluated very deep convolutional networks (up to 19 weight layers) for large- scale image classiﬁcation. It was demonstrated that the representation depth is beneﬁcial for the classiﬁcation accuracy, and that state-of-the-art performance on the ImageNet challenge dataset can be achieved using a conventional ConvNet architecture (LeCun et al., 1989; Krizhevsky et al., 2012) with substantially increased depth.",
+    "source": "VGG.pdf",
+    "page": 8,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 309,
+    "text": "In the appendix, we also show that our models generalise well to a wide range of tasks and datasets, matching or outperforming more complex recognition pipelines built around less deep image representations. Our results yet again conﬁrm the importance of depth in visual representations.",
+    "source": "VGG.pdf",
+    "page": 8,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 310,
+    "text": "ACKNOWLEDGEMENTS This work was supported by ERC grant VisRec no. 228180. We gratefully acknowledge the support of NVIDIA Corporation with the donation of the GPUs used for this research.",
+    "source": "VGG.pdf",
+    "page": 8,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 311,
+    "text": "Published as a conference paper at ICLR 2015 REFERENCES Bell, S., Upchurch, P., Snavely, N., and Bala, K. Material recognition in the wild with the materials in context database. CoRR, abs/1412.0623, 2014. Chatﬁeld, K., Simonyan, K., Vedaldi, A., and Zisserman, A. Return of the devil in the details: Delving deep into convolutional nets. BMVC., 2014. Cimpoi, M., Maji, S., and Vedaldi, A. Deep convolutional ﬁlter banks for texture recognition and segmentation.",
+    "source": "VGG.pdf",
+    "page": 9,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 312,
+    "text": "CoRR, abs/1411.6836, 2014. Ciresan, D. C., Meier, U., Masci, J., Gambardella, L. M., and Schmidhuber, J.",
+    "source": "VGG.pdf",
+    "page": 9,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 313,
+    "text": "Flexible, high performance convolutional neural networks for image classiﬁcation.",
+    "source": "VGG.pdf",
+    "page": 9,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 314,
+    "text": "In IJCAI, pp. 1237–1242, 2011. Dean, J., Corrado, G., Monga, R., Chen, K., Devin, M., Mao, M., Ranzato, M., Senior, A., Tucker, P., Yang, K., Le, Q. V., and Ng, A. Large scale distributed deep networks. In NIPS, pp. 1232–1240, 2012. Deng, J., Dong, W., Socher, R., Li, L.-J., Li, K., and Fei-Fei, L.",
+    "source": "VGG.pdf",
+    "page": 9,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 315,
+    "text": "Imagenet: A large-scale hierarchical image database. CVPR, 2009. Donahue, J., Jia, Y., Vinyals, O., Hoffman, J., Zhang, N., Tzeng, E., and Darrell, T. Decaf: A deep convolutional activation feature for generic visual recognition. CoRR, abs/1310.1531, 2013. Everingham, M., Eslami, S. A., Van Gool, L., Williams, C., Winn, J., and Zisserman, A. The Pascal visual object classes challenge: A retrospective. IJCV, 111(1):98–136, 2015. Fei-Fei, L., Fergus, R., and Perona, P.",
+    "source": "VGG.pdf",
+    "page": 9,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 316,
+    "text": "Learning generative visual models from few training examples: An incremental bayesian approach tested on 101 object categories. In IEEE CVPR Workshop of Generative Model Based Vision, 2004. Girshick, R. B., Donahue, J., Darrell, T., and Malik, J. Rich feature hierarchies for accurate object detection and semantic segmentation. CoRR, abs/1311.2524v5, 2014. Published in Proc. CVPR, 2014. Gkioxari, G., Girshick, R., and Malik, J. Actions and attributes from wholes and parts.",
+    "source": "VGG.pdf",
+    "page": 9,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 317,
+    "text": "CoRR, abs/1412.2604, 2014. Glorot, X. and Bengio, Y.",
+    "source": "VGG.pdf",
+    "page": 9,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 318,
+    "text": "Understanding the difﬁculty of training deep feedforward neural networks. AISTATS, volume 9, pp. 249–256, 2010. Goodfellow, I. J., Bulatov, Y., Ibarz, J., Arnoud, S., and Shet, V. Multi-digit number recognition from street view imagery using deep convolutional neural networks. ICLR, 2014. Grifﬁn, G., Holub, A., and Perona, P. Caltech-256 object category dataset. Technical Report 7694, California Institute of Technology, 2007. He, K., Zhang, X., Ren, S., and Sun, J.",
+    "source": "VGG.pdf",
+    "page": 9,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 319,
+    "text": "Spatial pyramid pooling in deep convolutional networks for visual recognition. CoRR, abs/1406.4729v2, 2014. Hoai, M. Regularized max pooling for image categorization. BMVC., 2014. Howard, A. Some improvements on deep convolutional neural network based image classiﬁcation. ICLR, 2014. Jia, Y. Caffe: An open source convolutional architecture for fast feature embedding. http://caffe.berkeleyvision.org/, 2013. Karpathy, A. and Fei-Fei, L.",
+    "source": "VGG.pdf",
+    "page": 9,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 320,
+    "text": "Deep visual-semantic alignments for generating image descriptions. CoRR, abs/1412.2306, 2014. Kiros, R., Salakhutdinov, R., and Zemel, R. Unifying visual-semantic embeddings with multimodal neural language models. CoRR, abs/1411.2539, 2014. Krizhevsky, A. One weird trick for parallelizing convolutional neural networks. CoRR, abs/1404.5997, 2014. Krizhevsky, A., Sutskever, I., and Hinton, G. ImageNet classiﬁcation with deep convolutional neural net- works. In NIPS, pp.",
+    "source": "VGG.pdf",
+    "page": 9,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 321,
+    "text": "1106–1114, 2012. LeCun, Y., Boser, B., Denker, J. S., Henderson, D., Howard, R. E., Hubbard, W., and Jackel, L.",
+    "source": "VGG.pdf",
+    "page": 9,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 322,
+    "text": "Backpropa- gation applied to handwritten zip code recognition. Neural Computation, 1(4):541–551, 1989. Lin, M., Chen, Q., and Yan, S. Network in network. ICLR, 2014. Long, J., Shelhamer, E., and Darrell, T. Fully convolutional networks for semantic segmentation. CoRR, abs/1411.4038, 2014. Oquab, M., Bottou, L., Laptev, I., and Sivic, J. Learning and Transferring Mid-Level Image Representations using Convolutional Neural Networks.",
+    "source": "VGG.pdf",
+    "page": 9,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 323,
+    "text": "CVPR, 2014. Perronnin, F., S´anchez, J., and Mensink, T. Improving the Fisher kernel for large-scale image classiﬁcation. ECCV, 2010. Razavian, A., Azizpour, H., Sullivan, J., and Carlsson, S. CNN Features off-the-shelf: an Astounding Baseline for Recognition. CoRR, abs/1403.6382, 2014.",
+    "source": "VGG.pdf",
+    "page": 9,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 324,
+    "text": "Published as a conference paper at ICLR 2015 Russakovsky, O., Deng, J., Su, H., Krause, J., Satheesh, S., Ma, S., Huang, Z., Karpathy, A., Khosla, A., Bernstein, M., Berg, A. C., and Fei-Fei, L.",
+    "source": "VGG.pdf",
+    "page": 10,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 325,
+    "text": "ImageNet large scale visual recognition challenge.",
+    "source": "VGG.pdf",
+    "page": 10,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 326,
+    "text": "CoRR, abs/1409.0575, 2014. Sermanet, P., Eigen, D., Zhang, X., Mathieu, M., Fergus, R., and LeCun, Y. OverFeat: Integrated Recognition, Localization and Detection using Convolutional Networks. ICLR, 2014. Simonyan, K. and Zisserman, A.",
+    "source": "VGG.pdf",
+    "page": 10,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 327,
+    "text": "Two-stream convolutional networks for action recognition in videos.",
+    "source": "VGG.pdf",
+    "page": 10,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 328,
+    "text": "CoRR, abs/1406.2199, 2014. Published in Proc. NIPS, 2014. Szegedy, C., Liu, W., Jia, Y., Sermanet, P., Reed, S., Anguelov, D., Erhan, D., Vanhoucke, V., and Rabinovich, A. Going deeper with convolutions. CoRR, abs/1409.4842, 2014. Wei, Y., Xia, W., Huang, J., Ni, B., Dong, J., Zhao, Y., and Yan, S. CNN: Single-label to multi-label. CoRR, abs/1406.5726, 2014. Zeiler, M. and Fergus, R. Visualizing and understanding convolutional networks. CoRR, abs/1311.2901, 2013. Published in Proc.",
+    "source": "VGG.pdf",
+    "page": 10,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 329,
+    "text": "ECCV, 2014. A LOCALISATION In the main body of the paper we have considered the classiﬁcation task of the ILSVRC challenge, and performed a thorough evaluation of ConvNet architectures of different depth. In this section, we turn to the localisation task of the challenge, which we have won in 2014 with 25.3% error.",
+    "source": "VGG.pdf",
+    "page": 10,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 330,
+    "text": "It can be seen as a special case of object detection, where a single object bounding box should be predicted for each of the top-5 classes, irrespective of the actual number of objects of the class. For this we adopt the approach of Sermanet et al. (2014), the winners of the ILSVRC-2013 localisation challenge, with a few modiﬁcations.",
+    "source": "VGG.pdf",
+    "page": 10,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 331,
+    "text": "Our method is described in Sect. A.1 and evaluated in Sect. A.2. A.1 LOCALISATION CONVNET To perform object localisation, we use a very deep ConvNet, where the last fully connected layer predicts the bounding box location instead of the class scores. A bounding box is represented by a 4-D vector storing its center coordinates, width, and height.",
+    "source": "VGG.pdf",
+    "page": 10,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 332,
+    "text": "There is a choice of whether the bounding box prediction is shared across all classes (single-class regression, SCR (Sermanet et al., 2014)) or is class-speciﬁc (per-class regression, PCR). In the former case, the last layer is 4-D, while in the latter it is 4000-D (since there are 1000 classes in the dataset).",
+    "source": "VGG.pdf",
+    "page": 10,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 333,
+    "text": "Apart from the last bounding box prediction layer, we use the ConvNet architecture D (Table 1), which contains 16 weight layers and was found to be the best-performing in the classiﬁcation task (Sect. Training of localisation ConvNets is similar to that of the classiﬁcation ConvNets (Sect. The main difference is that we replace the logistic regression objective with a Euclidean loss, which penalises the deviation of the predicted bounding box parameters from the ground-truth.",
+    "source": "VGG.pdf",
+    "page": 10,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 334,
+    "text": "We trained two localisation models, each on a single scale: S = 256 and S = 384 (due to the time constraints, we did not use training scale jittering for our ILSVRC-2014 submission). Training was initialised with the corresponding classiﬁcation models (trained on the same scales), and the initial learning rate was set to 10−3. We explored both ﬁne-tuning all layers and ﬁne-tuning only the ﬁrst two fully-connected layers, as done in (Sermanet et al., 2014).",
+    "source": "VGG.pdf",
+    "page": 10,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 335,
+    "text": "The last fully-connected layer was initialised randomly and trained from scratch. We consider two testing protocols. The ﬁrst is used for comparing different network modiﬁcations on the validation set, and considers only the bounding box prediction for the ground truth class (to factor out the classiﬁcation errors). The bounding box is obtained by applying the network only to the central crop of the image.",
+    "source": "VGG.pdf",
+    "page": 10,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 336,
+    "text": "The second, fully-ﬂedged, testing procedure is based on the dense application of the localisation ConvNet to the whole image, similarly to the classiﬁcation task (Sect. The difference is that instead of the class score map, the output of the last fully-connected layer is a set of bounding box predictions. To come up with the ﬁnal prediction, we utilise the greedy merging procedure of Sermanet et al.",
+    "source": "VGG.pdf",
+    "page": 10,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 337,
+    "text": "(2014), which ﬁrst merges spatially close predictions (by averaging their coor- dinates), and then rates them based on the class scores, obtained from the classiﬁcation ConvNet. When several localisation ConvNets are used, we ﬁrst take the union of their sets of bounding box predictions, and then run the merging procedure on the union. We did not use the multiple pooling",
+    "source": "VGG.pdf",
+    "page": 10,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 338,
+    "text": "Published as a conference paper at ICLR 2015 offsets technique of Sermanet et al. (2014), which increases the spatial resolution of the bounding box predictions and can further improve the results. A.2 LOCALISATION EXPERIMENTS In this section we ﬁrst determine the best-performing localisation setting (using the ﬁrst test proto- col), and then evaluate it in a fully-ﬂedged scenario (the second protocol).",
+    "source": "VGG.pdf",
+    "page": 11,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 339,
+    "text": "The localisation error is measured according to the ILSVRC criterion (Russakovsky et al., 2014), i.e. the bounding box prediction is deemed correct if its intersection over union ratio with the ground-truth bounding box is above 0.5. Settings comparison. As can be seen from Table 8, per-class regression (PCR) outperforms the class-agnostic single-class regression (SCR), which differs from the ﬁndings of Sermanet et al. (2014), where PCR was outperformed by SCR.",
+    "source": "VGG.pdf",
+    "page": 11,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 340,
+    "text": "We also note that ﬁne-tuning all layers for the lo- calisation task leads to noticeably better results than ﬁne-tuning only the fully-connected layers (as done in (Sermanet et al., 2014)). In these experiments, the smallest images side was set to S = 384; the results with S = 256 exhibit the same behaviour and are not shown for brevity.",
+    "source": "VGG.pdf",
+    "page": 11,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 341,
+    "text": "Table 8: Localisation error for different modiﬁcations with the simpliﬁed testing protocol: the bounding box is predicted from a single central image crop, and the ground-truth class is used. All ConvNet layers (except for the last one) have the conﬁguration D (Table 1), while the last layer performs either single-class regression (SCR) or per-class regression (PCR).",
+    "source": "VGG.pdf",
+    "page": 11,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 342,
+    "text": "Fine-tuned layers regression type GT class localisation error 1st and 2nd FC SCR 36.4 PCR 34.3 all PCR 33.1 Fully-ﬂedged evaluation. Having determined the best localisation setting (PCR, ﬁne-tuning of all layers), we now apply it in the fully-ﬂedged scenario, where the top-5 class labels are predicted us- ing our best-performing classiﬁcation system (Sect. 4.5), and multiple densely-computed bounding box predictions are merged using the method of Sermanet et al.",
+    "source": "VGG.pdf",
+    "page": 11,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 343,
+    "text": "As can be seen from Ta- ble 9, application of the localisation ConvNet to the whole image substantially improves the results compared to using a center crop (Table 8), despite using the top-5 predicted class labels instead of the ground truth. Similarly to the classiﬁcation task (Sect. 4), testing at several scales and combining the predictions of multiple networks further improves the performance.",
+    "source": "VGG.pdf",
+    "page": 11,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 344,
+    "text": "Table 9: Localisation error smallest image side top-5 localisation error (%) train (S) test (Q) val.",
+    "source": "VGG.pdf",
+    "page": 11,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 345,
+    "text": "256 256 29.5 - 384 384 28.2 26.7 384 352,384 27.5 - fusion: 256/256 and 384/352,384 26.9 25.3 Comparison with the state of the art.",
+    "source": "VGG.pdf",
+    "page": 11,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 346,
+    "text": "We compare our best localisation result with the state of the art in Table 10. With 25.3% test error, our “VGG” team won the localisation challenge of ILSVRC-2014 (Russakovsky et al., 2014). Notably, our results are considerably better than those of the ILSVRC-2013 winner Overfeat (Sermanet et al., 2014), even though we used less scales and did not employ their resolution enhancement technique.",
+    "source": "VGG.pdf",
+    "page": 11,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 347,
+    "text": "We envisage that better localisation per- formance can be achieved if this technique is incorporated into our method. This indicates the performance advancement brought by our very deep ConvNets – we got better results with a simpler localisation method, but a more powerful representation. B GENERALISATION OF VERY DEEP FEATURES In the previous sections we have discussed training and evaluation of very deep ConvNets on the ILSVRC dataset.",
+    "source": "VGG.pdf",
+    "page": 11,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 348,
+    "text": "In this section, we evaluate our ConvNets, pre-trained on ILSVRC, as feature",
+    "source": "VGG.pdf",
+    "page": 11,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 349,
+    "text": "Published as a conference paper at ICLR 2015 Table 10: Comparison with the state of the art in ILSVRC localisation. Our method is denoted as “VGG”. Method top-5 val. error (%) top-5 test error (%) VGG 26.9 25.3 GoogLeNet (Szegedy et al., 2014) - 26.7 OverFeat (Sermanet et al., 2014) 30.0 29.9 Krizhevsky et al. (Krizhevsky et al., 2012) - 34.2 extractors on other, smaller, datasets, where training large models from scratch is not feasible due to over-ﬁtting.",
+    "source": "VGG.pdf",
+    "page": 12,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 350,
+    "text": "Recently, there has been a lot of interest in such a use case (Zeiler & Fergus, 2013; Donahue et al., 2013; Razavian et al., 2014; Chatﬁeld et al., 2014), as it turns out that deep image representations, learnt on ILSVRC, generalise well to other datasets, where they have outperformed hand-crafted representations by a large margin. Following that line of work, we investigate if our models lead to better performance than more shallow models utilised in the state-of-the-art methods.",
+    "source": "VGG.pdf",
+    "page": 12,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 351,
+    "text": "In this evaluation, we consider two models with the best classiﬁcation performance on ILSVRC (Sect. 4) – conﬁgurations “Net-D” and “Net-E” (which we made publicly available). To utilise the ConvNets, pre-trained on ILSVRC, for image classiﬁcation on other datasets, we remove the last fully-connected layer (which performs 1000-way ILSVRC classiﬁcation), and use 4096-D activations of the penultimate layer as image features, which are aggregated across multiple locations and scales.",
+    "source": "VGG.pdf",
+    "page": 12,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 352,
+    "text": "The resulting image descriptor is L2-normalised and combined with a linear SVM classiﬁer, trained on the target dataset. For simplicity, pre-trained ConvNet weights are kept ﬁxed (no ﬁne-tuning is performed). Aggregation of features is carried out in a similar manner to our ILSVRC evaluation procedure (Sect.",
+    "source": "VGG.pdf",
+    "page": 12,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 353,
+    "text": "Namely, an image is ﬁrst rescaled so that its smallest side equals Q, and then the net- work is densely applied over the image plane (which is possible when all weight layers are treated as convolutional). We then perform global average pooling on the resulting feature map, which produces a 4096-D image descriptor. The descriptor is then averaged with the descriptor of a hori- zontally ﬂipped image.",
+    "source": "VGG.pdf",
+    "page": 12,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 354,
+    "text": "4.2, evaluation over multiple scales is beneﬁcial, so we extract features over several scales Q. The resulting multi-scale features can be either stacked or pooled across scales. Stacking allows a subsequent classiﬁer to learn how to optimally combine image statistics over a range of scales; this, however, comes at the cost of the increased descriptor dimensionality. We return to the discussion of this design choice in the experiments below.",
+    "source": "VGG.pdf",
+    "page": 12,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 355,
+    "text": "We also assess late fusion of features, computed using two networks, which is performed by stacking their respective image descriptors. Table 11: Comparison with the state of the art in image classiﬁcation on VOC-2007, VOC-2012, Caltech-101, and Caltech-256. Our models are denoted as “VGG”. Results marked with * were achieved using ConvNets pre-trained on the extended ILSVRC dataset (2000 classes).",
+    "source": "VGG.pdf",
+    "page": 12,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 356,
+    "text": "Method VOC-2007 VOC-2012 Caltech-101 Caltech-256 (mean AP) (mean AP) (mean class recall) (mean class recall) Zeiler & Fergus (Zeiler & Fergus, 2013) - 79.0 86.5 ± 0.5 74.2 ± 0.3 Chatﬁeld et al. (Chatﬁeld et al., 2014) 82.4 83.2 88.4 ± 0.6 77.6 ± 0.1 He et al. (He et al., 2014) 82.4 - 93.4 ± 0.5 - Wei et al.",
+    "source": "VGG.pdf",
+    "page": 12,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 357,
+    "text": "(Wei et al., 2014) 81.5 (85.2∗) 81.7 (90.3∗) - - VGG Net-D (16 layers) 89.3 89.0 91.8 ± 1.0 85.0 ± 0.2 VGG Net-E (19 layers) 89.3 89.0 92.3 ± 0.5 85.1 ± 0.3 VGG Net-D & Net-E 89.7 89.3 92.7 ± 0.5 86.2 ± 0.3 Image Classiﬁcation on VOC-2007 and VOC-2012. We begin with the evaluation on the image classiﬁcation task of PASCAL VOC-2007 and VOC-2012 benchmarks (Everingham et al., 2015).",
+    "source": "VGG.pdf",
+    "page": 12,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 358,
+    "text": "These datasets contain 10K and 22.5K images respectively, and each image is annotated with one or several labels, corresponding to 20 object categories.",
+    "source": "VGG.pdf",
+    "page": 12,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 359,
+    "text": "The VOC organisers provide a pre-deﬁned split into training, validation, and test data (the test data for VOC-2012 is not publicly available; instead, an ofﬁcial evaluation server is provided). Recognition performance is measured using mean average precision (mAP) across classes. Notably, by examining the performance on the validation sets of VOC-2007 and VOC-2012, we found that aggregating image descriptors, computed at multiple scales, by averaging performs sim-",
+    "source": "VGG.pdf",
+    "page": 12,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 360,
+    "text": "Published as a conference paper at ICLR 2015 ilarly to the aggregation by stacking. We hypothesize that this is due to the fact that in the VOC dataset the objects appear over a variety of scales, so there is no particular scale-speciﬁc seman- tics which a classiﬁer could exploit. Since averaging has a beneﬁt of not inﬂating the descrip- tor dimensionality, we were able to aggregated image descriptors over a wide range of scales: Q ∈{256, 384, 512, 640, 768}.",
+    "source": "VGG.pdf",
+    "page": 13,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 361,
+    "text": "It is worth noting though that the improvement over a smaller range of {256, 384, 512} was rather marginal (0.3%). The test set performance is reported and compared with other approaches in Table 11. Our networks “Net-D” and “Net-E” exhibit identical performance on VOC datasets, and their combination slightly improves the results. Our methods set the new state of the art across image representations, pre- trained on the ILSVRC dataset, outperforming the previous best result of Chatﬁeld et al.",
+    "source": "VGG.pdf",
+    "page": 13,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 362,
+    "text": "(2014) by more than 6%. It should be noted that the method of Wei et al.",
+    "source": "VGG.pdf",
+    "page": 13,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 363,
+    "text": "(2014), which achieves 1% better mAP on VOC-2012, is pre-trained on an extended 2000-class ILSVRC dataset, which includes additional 1000 categories, semantically close to those in VOC datasets. It also beneﬁts from the fusion with an object detection-assisted classiﬁcation pipeline. Image Classiﬁcation on Caltech-101 and Caltech-256. In this section we evaluate very deep fea- tures on Caltech-101 (Fei-Fei et al., 2004) and Caltech-256 (Grifﬁn et al., 2007) image classiﬁcation benchmarks.",
+    "source": "VGG.pdf",
+    "page": 13,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 364,
+    "text": "Caltech-101 contains 9K images labelled into 102 classes (101 object categories and a background class), while Caltech-256 is larger with 31K images and 257 classes. A standard eval- uation protocol on these datasets is to generate several random splits into training and test data and report the average recognition performance across the splits, which is measured by the mean class recall (which compensates for a different number of test images per class).",
+    "source": "VGG.pdf",
+    "page": 13,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 365,
+    "text": "Following Chatﬁeld et al. (2014); Zeiler & Fergus (2013); He et al.",
+    "source": "VGG.pdf",
+    "page": 13,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 366,
+    "text": "(2014), on Caltech-101 we generated 3 random splits into training and test data, so that each split contains 30 training images per class, and up to 50 test images per class. On Caltech-256 we also generated 3 splits, each of which contains 60 training images per class (and the rest is used for testing). In each split, 20% of training images were used as a validation set for hyper-parameter selection.",
+    "source": "VGG.pdf",
+    "page": 13,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 367,
+    "text": "We found that unlike VOC, on Caltech datasets the stacking of descriptors, computed over multi- ple scales, performs better than averaging or max-pooling. This can be explained by the fact that in Caltech images objects typically occupy the whole image, so multi-scale image features are se- mantically different (capturing the whole object vs. object parts), and stacking allows a classiﬁer to exploit such scale-speciﬁc representations. We used three scales Q ∈{256, 384, 512}.",
+    "source": "VGG.pdf",
+    "page": 13,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 368,
+    "text": "Our models are compared to each other and the state of the art in Table 11. As can be seen, the deeper 19-layer Net-E performs better than the 16-layer Net-D, and their combination further improves the performance. On Caltech-101, our representations are competitive with the approach of He et al. (2014), which, however, performs signiﬁcantly worse than our nets on VOC-2007. On Caltech-256, our features outperform the state of the art (Chatﬁeld et al., 2014) by a large margin (8.6%).",
+    "source": "VGG.pdf",
+    "page": 13,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 369,
+    "text": "Action Classiﬁcation on VOC-2012. We also evaluated our best-performing image representa- tion (the stacking of Net-D and Net-E features) on the PASCAL VOC-2012 action classiﬁcation task (Everingham et al., 2015), which consists in predicting an action class from a single image, given a bounding box of the person performing the action. The dataset contains 4.6K training im- ages, labelled into 11 classes.",
+    "source": "VGG.pdf",
+    "page": 13,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 370,
+    "text": "Similarly to the VOC-2012 object classiﬁcation task, the performance is measured using the mAP. We considered two training settings: (i) computing the ConvNet fea- tures on the whole image and ignoring the provided bounding box; (ii) computing the features on the whole image and on the provided bounding box, and stacking them to obtain the ﬁnal representation.",
+    "source": "VGG.pdf",
+    "page": 13,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 371,
+    "text": "The results are compared to other approaches in Table 12. Our representation achieves the state of art on the VOC action classiﬁcation task even without using the provided bounding boxes, and the results are further improved when using both images and bounding boxes. Unlike other approaches, we did not incorporate any task-speciﬁc heuristics, but relied on the representation power of very deep convolutional features. Other Recognition Tasks.",
+    "source": "VGG.pdf",
+    "page": 13,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 372,
+    "text": "Since the public release of our models, they have been actively used by the research community for a wide range of image recognition tasks, consistently outperform- ing more shallow representations. For instance, Girshick et al. (2014) achieve the state of the object detection results by replacing the ConvNet of Krizhevsky et al. (2012) with our 16-layer model. Similar gains over a more shallow architecture of Krizhevsky et al.",
+    "source": "VGG.pdf",
+    "page": 13,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 373,
+    "text": "Published as a conference paper at ICLR 2015 Table 12: Comparison with the state of the art in single-image action classiﬁcation on VOC- 2012. Our models are denoted as “VGG”. Results marked with * were achieved using ConvNets pre-trained on the extended ILSVRC dataset (1512 classes).",
+    "source": "VGG.pdf",
+    "page": 14,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 374,
+    "text": "Method VOC-2012 (mean AP) (Oquab et al., 2014) 70.2∗ (Gkioxari et al., 2014) 73.6 (Hoai, 2014) 76.3 VGG Net-D & Net-E, image-only 79.2 VGG Net-D & Net-E, image and bounding box 84.0 served in semantic segmentation (Long et al., 2014), image caption generation (Kiros et al., 2014; Karpathy & Fei-Fei, 2014), texture and material recognition (Cimpoi et al., 2014; Bell et al., 2014).",
+    "source": "VGG.pdf",
+    "page": 14,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 375,
+    "text": "C PAPER REVISIONS Here we present the list of major paper revisions, outlining the substantial changes for the conve- nience of the reader.",
+    "source": "VGG.pdf",
+    "page": 14,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 376,
+    "text": "v1 Initial version. Presents the experiments carried out before the ILSVRC submission. v2 Adds post-submission ILSVRC experiments with training set augmentation using scale jittering, which improves the performance. v3 Adds generalisation experiments (Appendix B) on PASCAL VOC and Caltech image classiﬁca- tion datasets. The models used for these experiments are publicly available. v4 The paper is converted to ICLR-2015 submission format.",
+    "source": "VGG.pdf",
+    "page": 14,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  },
+  {
+    "chunk_id": 377,
+    "text": "Also adds experiments with multiple crops for classiﬁcation. v6 Camera-ready ICLR-2015 conference paper. Adds a comparison of the net B with a shallow net and the results on PASCAL VOC action classiﬁcation benchmark.",
+    "source": "VGG.pdf",
+    "page": 14,
+    "title": "VGG",
+    "section": "5 CONCLUSION"
+  }
+]

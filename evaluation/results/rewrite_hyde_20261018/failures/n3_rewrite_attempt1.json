@@ -1,0 +1,198 @@
+{
+  "question_id": "n3",
+  "query": "How does the VGG paper distinguish scale jittering during training from multi-scale evaluation at test time?",
+  "condition": "rewrite",
+  "retrieval_options": {
+    "rewrite": true,
+    "hyde": false
+  },
+  "status": "failed",
+  "error": "RuntimeError: 反代 API 请求失败：HTTP 503。未自动重试。",
+  "api_calls": [
+    {
+      "phase": "decomposition",
+      "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate exactly 2 or 3 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nHow does the VGG paper distinguish scale jittering during training from multi-scale evaluation at test time?\n",
+      "reused_auxiliary": true,
+      "response": {
+        "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+        "requested_model": "cn:deepseek-v4.1-flash",
+        "reported_model": "deepseek-v4.1-flash",
+        "usage": {
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 384,
+          "cached_tokens": 384,
+          "completion_thinking_tokens": 0,
+          "completion_tokens": 19,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "credit": 0,
+          "prompt_cache_hit_tokens": 384,
+          "prompt_cache_miss_tokens": 135,
+          "prompt_cache_write_tokens": 0,
+          "prompt_tokens": 519,
+          "prompt_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 384,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "total_tokens": 538
+        },
+        "finish_reason": "stop",
+        "request_parameters": {
+          "model": "cn:deepseek-v4.1-flash",
+          "stream": false,
+          "thinking": {
+            "type": "disabled"
+          },
+          "temperature": 0,
+          "max_tokens": 4096
+        }
+      },
+      "elapsed_seconds": 0.0
+    },
+    {
+      "phase": "rewrite",
+      "prompt": "\n    You are a retrieval query optimization assistant\n    for an academic research paper RAG system.\n\n    Your task is to rewrite the user's question into\n    a retrieval-optimized query for Dense and BM25 retrieval.\n\n    The goal is NOT to make the question sound more formal.\n    The goal is to improve the chance of matching relevant\n    technical terminology in academic papers.\n\n    Rules:\n    1. Preserve the original information need and intent.\n    2. Preserve all important entities, model names, paper names,\n       abbreviations, and technical concepts from the original question.\n    3. Keep the original important keywords whenever possible.\n    4. When a technical concept may be expressed using different\n       standard terminology in academic papers, add a concise\n       synonym or closely related terminology that preserves the\n       original meaning.\n    5. Prefer terminology that is likely to appear in scientific\n       papers, but do not invent specific facts, values, methods,\n       or conclusions.\n    6. Do not remove important technical terms from the original query.\n    7. Do not broaden or narrow the information need.\n    8. Do not answer the question.\n    9. Do not add explanations.\n    10. Return only ONE retrieval-optimized query.\n    11. Keep the rewritten query concise.\n\n    Example:\n\n    Original Question:\n    How do VGG and DCNN differ in their use of convolutional filter sizes?\n\n    Optimized Search Query:\n    VGG and DCNN convolutional filter sizes receptive field sizes\n\n    Incorrect:\n    VGG and DCNN architecture differences\n\n    Incorrect:\n    Why does VGG use small convolutional filters while DCNN uses large filters?\n\n    Original Question:\n    How does the VGG paper distinguish scale jittering during training from multi-scale evaluation at test time?\n\n    Optimized Search Query:\n    ",
+      "reused_auxiliary": false,
+      "response": {
+        "answer": "VGG scale jittering training multi-scale evaluation test time data augmentation",
+        "requested_model": "cn:deepseek-v4.1-flash",
+        "reported_model": "deepseek-v4.1-flash",
+        "usage": {
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 128,
+          "cached_tokens": 128,
+          "completion_thinking_tokens": 0,
+          "completion_tokens": 14,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "credit": 0,
+          "prompt_cache_hit_tokens": 128,
+          "prompt_cache_miss_tokens": 250,
+          "prompt_cache_write_tokens": 0,
+          "prompt_tokens": 378,
+          "prompt_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 128,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "total_tokens": 392
+        },
+        "finish_reason": "stop",
+        "request_parameters": {
+          "model": "cn:deepseek-v4.1-flash",
+          "stream": false,
+          "thinking": {
+            "type": "disabled"
+          },
+          "temperature": 0,
+          "max_tokens": 4096
+        }
+      },
+      "elapsed_seconds": 1.39
+    },
+    {
+      "phase": "answer",
+      "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\nContext:\n[1] Source: VGG.pdf | Page: 6 | Section: 4.2 MULTI-SCALE EVALUATION\nAt the same time, scale jittering at training time allows the network to be applied to a wider range of scales at test time, so the model trained with variable S ∈[Smin; Smax] was evaluated over a larger range of sizes Q = {Smin, 0.5(Smin + Smax), Smax}.\n\n[2] Source: VGG.pdf | Page: 6 | Section: 4.1 SINGLE SCALE EVALUATION\nThe top-1 error of the shallow net was measured to be 7% higher than that of B (on a center crop), which conﬁrms that a deep net with small ﬁlters outperforms a shallow net with larger ﬁlters. Finally, scale jittering at training time (S ∈[256; 512]) leads to signiﬁcantly better results than training on images with ﬁxed smallest side (S = 256 or S = 384), even though a single scale is used at test time.\n\n[3] Source: VGG.pdf | Page: 7 | Section: 4.2 MULTI-SCALE EVALUATION\nPublished as a conference paper at ICLR 2015 The results, presented in Table 4, indicate that scale jittering at test time leads to better performance (as compared to evaluating the same model at a single scale, shown in Table 3). As before, the deepest conﬁgurations (D and E) perform the best, and scale jittering is better than training with a ﬁxed smallest side S. Our best single-network performance on the validation set is 24.8%/7.5% top-1/top-5 error (highlighted in bold in Table 4).\n\n[4] Source: VGG.pdf | Page: 6 | Section: 4.1 SINGLE SCALE EVALUATION\nThis conﬁrms that training set augmentation by scale jittering is indeed helpful for capturing multi-scale image statistics. Table 3: ConvNet performance at a single test scale. ConvNet conﬁg.\n\n[5] Source: VGG.pdf | Page: 4 | Section: 3.1 TRAINING\nIn our experiments, we evaluated models trained at two ﬁxed scales: S = 256 (which has been widely used in the prior art (Krizhevsky et al., 2012; Zeiler & Fergus, 2013; Sermanet et al., 2014)) and S = 384. Given a ConvNet conﬁguration, we ﬁrst trained the network using S = 256. To speed-up training of the S = 384 network, it was initialised with the weights pre-trained with S = 256, and we used a smaller initial learning rate of 10−3. The second approach to setting S is multi-scale training, where each training image is individually rescaled by randomly sampling S from a certain range [Smin, Smax] (we used Smin = 256 and Smax = 512).\n\n[6] Source: VGG.pdf | Page: 6 | Section: 4.2 MULTI-SCALE EVALUATION\nIt consists of running a model over several rescaled versions of a test image (corresponding to different values of Q), followed by averaging the resulting class posteriors. Considering that a large discrepancy between training and testing scales leads to a drop in performance, the models trained with ﬁxed S were evaluated over three test image sizes, close to the training one: Q = {S −32, S, S + 32}.\n\n[7] Source: VGG.pdf | Page: 5 | Section: 3.1 TRAINING\nPublished as a conference paper at ICLR 2015 model is trained to recognise objects over a wide range of scales. For speed reasons, we trained multi-scale models by ﬁne-tuning all layers of a single-scale model with the same conﬁguration, pre-trained with ﬁxed S = 384.\n\n[8] Source: VGG.pdf | Page: 14 | Section: 5 CONCLUSION\nv1 Initial version. Presents the experiments carried out before the ILSVRC submission. v2 Adds post-submission ILSVRC experiments with training set augmentation using scale jittering, which improves the performance. v3 Adds generalisation experiments (Appendix B) on PASCAL VOC and Caltech image classiﬁca- tion datasets. The models used for these experiments are publicly available. v4 The paper is converted to ICLR-2015 submission format.\n\n[9] Source: VGG.pdf | Page: 12 | Section: 5 CONCLUSION\n4.2, evaluation over multiple scales is beneﬁcial, so we extract features over several scales Q. The resulting multi-scale features can be either stacked or pooled across scales. Stacking allows a subsequent classiﬁer to learn how to optimally combine image statistics over a range of scales; this, however, comes at the cost of the increased descriptor dimensionality. We return to the discussion of this design choice in the experiments below.\n\n[10] Source: VGG.pdf | Page: 6 | Section: 4.2 MULTI-SCALE EVALUATION\n4.2 MULTI-SCALE EVALUATION Having evaluated the ConvNet models at a single scale, we now assess the effect of scale jittering at test time.\n\n[11] Source: VGG.pdf | Page: 6 | Section: 4.1 SINGLE SCALE EVALUATION\nThe error rate of our architecture saturates when the depth reaches 19 layers, but even deeper models might be beneﬁcial for larger datasets. We also compared the net B with a shallow net with ﬁve 5 × 5 conv. layers, which was derived from B by replacing each pair of 3 × 3 conv. layers with a single 5 × 5 conv. layer (which has the same receptive ﬁeld as explained in Sect.\n\nQuestion:\nHow does the VGG paper distinguish scale jittering during training from multi-scale evaluation at test time?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages.\n\nAnswer:",
+      "reused_auxiliary": false,
+      "response": {
+        "answer": "The VGG paper distinguishes the two as follows:\n\n**Training-time scale jittering** is a multi-scale training approach in which each training image is individually rescaled by randomly sampling S from a range [Smin, Smax], using Smin = 256 and Smax = 512 [5]. This augmentation was reported to be helpful for capturing multi-scale image statistics [4], and training with variable S ∈ [256; 512] led to significantly better results than training on images with a fixed smallest side (S = 256 or S = 384), even though a single scale is used at test time [2]. For speed reasons, multi-scale models were trained by fine-tuning all layers of a single-scale model with the same configuration, pre-trained with fixed S = 384 [7].\n\n**Test-time multi-scale evaluation** is a separate procedure: running a model over several rescaled versions of a test image (corresponding to different values of Q), followed by averaging the resulting class posteriors [6]. Models trained with fixed S were evaluated over three test image sizes close to the training one: Q = {S − 32, S, S + 32} [6]. Because scale jittering at training time allows the network to be applied to a wider range of scales at test time, the model trained with variable S ∈ [Smin; Smax] was evaluated over a larger range of sizes Q = {Smin, 0.5(Smin + Smax), Smax} [1]. Scale jittering at test time led to better performance compared to evaluating the same model at a single scale, with the deepest configurations (D and E) performing best, and scale jittering was better than training with a fixed smallest side S [3].",
+        "requested_model": "cn:deepseek-v4.1-flash",
+        "reported_model": "deepseek-v4.1-flash",
+        "usage": {
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 1408,
+          "cached_tokens": 1408,
+          "completion_thinking_tokens": 0,
+          "completion_tokens": 365,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "credit": 0.02,
+          "prompt_cache_hit_tokens": 1408,
+          "prompt_cache_miss_tokens": 227,
+          "prompt_cache_write_tokens": 0,
+          "prompt_tokens": 1635,
+          "prompt_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 1408,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "total_tokens": 2000
+        },
+        "finish_reason": "stop",
+        "request_parameters": {
+          "model": "cn:deepseek-v4.1-flash",
+          "stream": false,
+          "thinking": {
+            "type": "disabled"
+          },
+          "temperature": 0,
+          "max_tokens": 4096
+        }
+      },
+      "elapsed_seconds": 2.83
+    },
+    {
+      "phase": "citation_repair",
+      "prompt": "Assign source citations to the existing answer blocks. Do not rewrite the answer. Use only sources that directly support the factual statements in each block. If a block is not supported, assign an empty list; do not guess citations. There are exactly 3 answer blocks. The JSON keys must be exactly B1, B2, B3. Map these answer block IDs to lists of integer source numbers, for example {\"B1\": [2], \"B2\": []}. Source numbers are values, not keys. Do not include explanations or markdown fences.\n\nQuestion: How does the VGG paper distinguish scale jittering during training from multi-scale evaluation at test time?\n\nSources:\n[1] Source: VGG.pdf | Page: 6 | Section: 4.2 MULTI-SCALE EVALUATION\nAt the same time, scale jittering at training time allows the network to be applied to a wider range of scales at test time, so the model trained with variable S ∈[Smin; Smax] was evaluated over a larger range of sizes Q = {Smin, 0.5(Smin + Smax), Smax}.\n\n[2] Source: VGG.pdf | Page: 6 | Section: 4.1 SINGLE SCALE EVALUATION\nThe top-1 error of the shallow net was measured to be 7% higher than that of B (on a center crop), which conﬁrms that a deep net with small ﬁlters outperforms a shallow net with larger ﬁlters. Finally, scale jittering at training time (S ∈[256; 512]) leads to signiﬁcantly better results than training on images with ﬁxed smallest side (S = 256 or S = 384), even though a single scale is used at test time.\n\n[3] Source: VGG.pdf | Page: 7 | Section: 4.2 MULTI-SCALE EVALUATION\nPublished as a conference paper at ICLR 2015 The results, presented in Table 4, indicate that scale jittering at test time leads to better performance (as compared to evaluating the same model at a single scale, shown in Table 3). As before, the deepest conﬁgurations (D and E) perform the best, and scale jittering is better than training with a ﬁxed smallest side S. Our best single-network performance on the validation set is 24.8%/7.5% top-1/top-5 error (highlighted in bold in Table 4).\n\n[4] Source: VGG.pdf | Page: 6 | Section: 4.1 SINGLE SCALE EVALUATION\nThis conﬁrms that training set augmentation by scale jittering is indeed helpful for capturing multi-scale image statistics. Table 3: ConvNet performance at a single test scale. ConvNet conﬁg.\n\n[5] Source: VGG.pdf | Page: 4 | Section: 3.1 TRAINING\nIn our experiments, we evaluated models trained at two ﬁxed scales: S = 256 (which has been widely used in the prior art (Krizhevsky et al., 2012; Zeiler & Fergus, 2013; Sermanet et al., 2014)) and S = 384. Given a ConvNet conﬁguration, we ﬁrst trained the network using S = 256. To speed-up training of the S = 384 network, it was initialised with the weights pre-trained with S = 256, and we used a smaller initial learning rate of 10−3. The second approach to setting S is multi-scale training, where each training image is individually rescaled by randomly sampling S from a certain range [Smin, Smax] (we used Smin = 256 and Smax = 512).\n\n[6] Source: VGG.pdf | Page: 6 | Section: 4.2 MULTI-SCALE EVALUATION\nIt consists of running a model over several rescaled versions of a test image (corresponding to different values of Q), followed by averaging the resulting class posteriors. Considering that a large discrepancy between training and testing scales leads to a drop in performance, the models trained with ﬁxed S were evaluated over three test image sizes, close to the training one: Q = {S −32, S, S + 32}.\n\n[7] Source: VGG.pdf | Page: 5 | Section: 3.1 TRAINING\nPublished as a conference paper at ICLR 2015 model is trained to recognise objects over a wide range of scales. For speed reasons, we trained multi-scale models by ﬁne-tuning all layers of a single-scale model with the same conﬁguration, pre-trained with ﬁxed S = 384.\n\n[8] Source: VGG.pdf | Page: 14 | Section: 5 CONCLUSION\nv1 Initial version. Presents the experiments carried out before the ILSVRC submission. v2 Adds post-submission ILSVRC experiments with training set augmentation using scale jittering, which improves the performance. v3 Adds generalisation experiments (Appendix B) on PASCAL VOC and Caltech image classiﬁca- tion datasets. The models used for these experiments are publicly available. v4 The paper is converted to ICLR-2015 submission format.\n\n[9] Source: VGG.pdf | Page: 12 | Section: 5 CONCLUSION\n4.2, evaluation over multiple scales is beneﬁcial, so we extract features over several scales Q. The resulting multi-scale features can be either stacked or pooled across scales. Stacking allows a subsequent classiﬁer to learn how to optimally combine image statistics over a range of scales; this, however, comes at the cost of the increased descriptor dimensionality. We return to the discussion of this design choice in the experiments below.\n\n[10] Source: VGG.pdf | Page: 6 | Section: 4.2 MULTI-SCALE EVALUATION\n4.2 MULTI-SCALE EVALUATION Having evaluated the ConvNet models at a single scale, we now assess the effect of scale jittering at test time.\n\n[11] Source: VGG.pdf | Page: 6 | Section: 4.1 SINGLE SCALE EVALUATION\nThe error rate of our architecture saturates when the depth reaches 19 layers, but even deeper models might be beneﬁcial for larger datasets. We also compared the net B with a shallow net with ﬁve 5 × 5 conv. layers, which was derived from B by replacing each pair of 3 × 3 conv. layers with a single 5 × 5 conv. layer (which has the same receptive ﬁeld as explained in Sect.\n\nAnswer blocks:\nB1: The VGG paper distinguishes the two as follows:\n\nB2: **Training-time scale jittering** is a multi-scale training approach in which each training image is individually rescaled by randomly sampling S from a range [Smin, Smax], using Smin = 256 and Smax = 512 . This augmentation was reported to be helpful for capturing multi-scale image statistics , and training with variable S ∈ [256; 512] led to significantly better results than training on images with a fixed smallest side (S = 256 or S = 384), even though a single scale is used at test time . For speed reasons, multi-scale models were trained by fine-tuning all layers of a single-scale model with the same configuration, pre-trained with fixed S = 384 .\n\nB3: **Test-time multi-scale evaluation** is a separate procedure: running a model over several rescaled versions of a test image (corresponding to different values of Q), followed by averaging the resulting class posteriors . Models trained with fixed S were evaluated over three test image sizes close to the training one: Q = {S − 32, S, S + 32} . Because scale jittering at training time allows the network to be applied to a wider range of scales at test time, the model trained with variable S ∈ [Smin; Smax] was evaluated over a larger range of sizes Q = {Smin, 0.5(Smin + Smax), Smax} . Scale jittering at test time led to better performance compared to evaluating the same model at a single scale, with the deepest configurations (D and E) performing best, and scale jittering was better than training with a fixed smallest side S .\n\nJSON:",
+      "reused_auxiliary": false,
+      "error": "RuntimeError: 反代 API 请求失败：HTTP 503。未自动重试。",
+      "elapsed_seconds": 10.01
+    }
+  ],
+  "elapsed_seconds": 22.3,
+  "source_sha256": {
+    "main.py": "89831b9e3fa1ddf76fe7c20e8e58deedc0d0cd139b022eba8b4be97151a3877b",
+    "llm.py": "4a8ec8528b0662cd86a8fdc01feacfd361a276f04ae7b11c0e7574383a27eacc",
+    "src/api_llm.py": "11aa14f5435a079e83671b031d1159fbbc0ee8c760c61c9c0cc7afd0db6ae0a7",
+    "src/bm25_retriever.py": "7d2a046a4449cd6fdc371984db329534cedc7351d6196b9c218114ff0476906b",
+    "src/chunk_storage.py": "35d2b9b6c4d5a91d40ff242b85fbaa578bb75ed89501b1435a94dd8b0b5405b5",
+    "src/chunking_recursive.py": "f2fea89cace280329804cfe18d59a3663d21e3611129e0432518a37e4f691e72",
+    "src/chunking_semantic.py": "0f4947702f359a3967e2160ec098bf0cb1254eb2f7f77806ba874bb6955b0000",
+    "src/citation_validation.py": "c7e21d3070a454f08cf7944dd764a8e93dc7a3d83078863acd92db03e264b79c",
+    "src/embedding.py": "894fac2090929129e1883c858838e2255d69a6048a2e76d2387235321f2adade",
+    "src/grounded_evidence.py": "78a7e63512970492f4e52050cb8b2312e2658281acfe979eb4476516ff8c2663",
+    "src/hybrid_retriever.py": "ddd2315a558a062ac31fedb0e7a8d28af6a3df783450792825ff252d596de63c",
+    "src/hyde.py": "b575a07b016e4803de33d151eb90cdff1950b970763d69ba4e2f23b1352d3e31",
+    "src/numeric_evidence.py": "492fb546e6bc89b881843ece4b4582e533aec5aabbc58d61cd1cf158c4bac3d0",
+    "src/pdf_loader.py": "691f97e547936bcbda1ccb9837a1e91b47c34672ce33b227eaa5d18501519d1e",
+    "src/query_decomposer.py": "7a089ea7330049da1828d4dcec4bc67ad17d3505ce9017d6168cccc239326de9",
+    "src/query_rewriter.py": "bb762f7e77596a7f228d985b0c3a1699ec60bc87eba87b754c418a30cc7cdf62",
+    "src/reranker.py": "028e22aa105551bdf0845d215ba0604407a960c57d7e4e32a65c33e52dd7ffeb",
+    "src/retriever.py": "ad82c4301a81fefb3c205b5c0834d9ddcf67cc616d9b736bb265a6e9eb637e82",
+    "src/vector_store.py": "605ffa3761629f4f58b37663a23fff4020f895464917d600325ae2e1fccc0222",
+    "evaluation/questions.json": "6311c5293604f2c6f7258b53f47899b3fdf41ed8edcafed929655f2892157ade",
+    "api.local.json": "dc9ecb491bb9a50c059a68c215649f3f4ef448903a1f5c3a1e6b4e1d6cde41b6",
+    "data/processed/chunks.json": "614c077a5e9b9e6129b04706d447f7efd30363950ef3fa6f3ae6803f30608d8a",
+    "data/processed/chunks_recursive.json": "2bcf54f64a37b2ff24272f370f5eddfb0468c873c51c24167a9759c829e4b6d7",
+    "data/processed/chunks_semantic.json": "6bf158ec8cf2df07c438a7f3ff14806b2db6c6d7af4ce4fcb9fcf13a60603277",
+    "data/processed/faiss.index": "ff5ad6b97cbd2e1484e5b0eaf57172ca3781b5355294f34763baf207eb3cffd6",
+    "data/processed/faiss_recursive.index": "548633a7c56f8918fdd06d6a1ee70cedf2138786f37b4ddd8db7a87c970216a0",
+    "data/processed/faiss_semantic.index": "dd79e7f8afcc4daa09fbbdc1f85fb27c1d9641eff1003c1965a42343b8ad8b0b",
+    "data/raw/Attention is all you need.pdf": "d87d482d5ae7960e2e43d7dd6d21377e60e73e8fce1bf2a01aff7aca8a08c537",
+    "data/raw/DCNN.pdf": "434376057dbe6fc3e44d0fdb7268b56126e9b47ca9d6aa9e05cf2e738f72e81d",
+    "data/raw/VGG.pdf": "83728f9efc21081792902b4c17a4657022d1e4a92ec81655c2427f4ef0755e50"
+  },
+  "shared_cpu_models": true
+}

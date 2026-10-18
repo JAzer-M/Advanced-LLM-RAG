@@ -1,0 +1,1003 @@
+{
+  "question_id": "q1",
+  "query": "Why does VGG use small 3x3 convolutional filters?",
+  "run_provenance": "fixed evidence; generation only",
+  "context": "Original passages:\n[1] Source: VGG.pdf | Page: 1 | Section: 1 INTRODUCTION\nAnother line of improvements dealt with training and testing the networks densely over the whole image and over multiple scales (Sermanet et al., 2014; Howard, 2014). In this paper, we address another important aspect of ConvNet architecture design – its depth. To this end, we ﬁx other parameters of the architecture, and steadily increase the depth of the network by adding more convolutional layers, which is feasible due to the use of very small (3 × 3) convolution ﬁlters in all layers.\n\n[2] Source: VGG.pdf | Page: 1 | Section: None\nOur main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3 × 3) convolution ﬁlters, which shows that a signiﬁcant improvement on the prior-art conﬁgurations can be achieved by pushing the depth to 16–19 weight layers. These ﬁndings were the basis of our ImageNet Challenge 2014 submission, where our team secured the ﬁrst and the second places in the localisa- tion and classiﬁcation tracks respectively.\n\n[3] Source: VGG.pdf | Page: 4 | Section: 2.3 DISCUSSION\nPublished as a conference paper at ICLR 2015 (22 weight layers) and small convolution ﬁlters (apart from 3 × 3, they also use 1 × 1 and 5 × 5 convolutions). Their network topology is, however, more complex than ours, and the spatial reso- lution of the feature maps is reduced more aggressively in the ﬁrst layers to decrease the amount of computation.\n\n[4] Source: VGG.pdf | Page: 2 | Section: 2.1 ARCHITECTURE\n2.1 ARCHITECTURE During training, the input to our ConvNets is a ﬁxed-size 224 × 224 RGB image. The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel. The image is passed through a stack of convolutional (conv.) layers, where we use ﬁlters with a very small receptive ﬁeld: 3 × 3 (which is the smallest size to capture the notion of left/right, up/down, center).\n\n[5] Source: VGG.pdf | Page: 2 | Section: 2.3 DISCUSSION\nlay- ers (e.g. 11 × 11 with stride 4 in (Krizhevsky et al., 2012), or 7 × 7 with stride 2 in (Zeiler & Fergus, 2013; Sermanet et al., 2014)), we use very small 3 × 3 receptive ﬁelds throughout the whole net, which are convolved with the input at every pixel (with stride 1).\n\n[6] Source: VGG.pdf | Page: 3 | Section: 2.3 DISCUSSION\nSecond, we decrease the number of parameters: assuming that both the input and the output of a three-layer 3 × 3 convolution stack has C channels, the stack is parametrised by 3 \u0000 32C2\u0001 = 27C2 weights; at the same time, a single 7 × 7 conv. layer would require 72C2 = 49C2 parameters, i.e. 81% more. This can be seen as imposing a regularisation on the 7 × 7 conv. ﬁlters, forcing them to have a decomposition through the 3 × 3 ﬁlters (with non-linearity injected in between).\n\n[7] Source: VGG.pdf | Page: 3 | Section: 2.3 DISCUSSION\nlayers have recently been utilised in the “Network in Network” architecture of Lin et al. Small-size convolution ﬁlters have been previously used by Ciresan et al. (2011), but their nets are signiﬁcantly less deep than ours, and they did not evaluate on the large-scale ILSVRC dataset.\n\n[8] Source: VGG.pdf | Page: 2 | Section: 2.1 ARCHITECTURE\nIn one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.\n\n[9] Source: VGG.pdf | Page: 6 | Section: 4.1 SINGLE SCALE EVALUATION\nThis indicates that while the additional non-linearity does help (C is better than B), it is also important to capture spatial context by using conv. ﬁlters with non-trivial receptive ﬁelds (D is better than C).\n\n[10] Source: VGG.pdf | Page: 3 | Section: 2.3 DISCUSSION\nNetwork A,A-LRN B C D E Number of parameters 133 133 134 138 144 such layers have a 7 × 7 effective receptive ﬁeld. So what have we gained by using, for instance, a stack of three 3×3 conv. layers instead of a single 7×7 layer? First, we incorporate three non-linear rectiﬁcation layers instead of a single one, which makes the decision function more discriminative.\n\n[11] Source: VGG.pdf | Page: 3 | Section: 2.3 DISCUSSION\n(2014) applied deep ConvNets (11 weight layers) to the task of street number recognition, and showed that the increased depth led to better performance. GoogLeNet (Szegedy et al., 2014), a top-performing entry of the ILSVRC-2014 classiﬁcation task, was developed independently of our work, but is similar in that it is based on very deep ConvNets\n\nEvidence guidance:\n- Rule-based subject attribution: GoogLeNet; passage: “Published as a conference paper at ICLR 2015 (22 weight layers) and small convolution ﬁlters (apart from 3 × 3, they also use 1 × 1 and 5 × 5 convolutions).” [3][11]\n- Rule-based subject attribution: GoogLeNet; passage: “Their network topology is, however, more complex than ours, and the spatial reso- lution of the feature maps is reduced more aggressively in the ﬁrst layers to decrease the amount of computation.” [3][11]",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": " In this paper, we address another important aspect of ConvNet architecture design – its depth.",
+        "evidence_start": 166,
+        "evidence_end": 261,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            224
+          ],
+          "identity_quote": "Another line of improvements dealt with training and testing the networks densely over the whole image and over multiple scales (Sermanet et al., 2014; Howard, 2014). In this paper, we address another important aspect of ConvNet architecture design – its depth. To this end, we ﬁx other parameters of the architecture, and steadily increase the depth of the network by adding more convolutional layers, which is feasible due to the use of very small (3 × 3) convolution ﬁlters in all layers.",
+          "identity_chunk_id": 224
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 224,
+        "page": 1,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " To this end, we ﬁx other parameters of the architecture, and steadily increase the depth of the network by adding more convolutional layers, which is feasible due to the use of very small (3 × 3) convolution ﬁlters in all layers.",
+        "evidence_start": 261,
+        "evidence_end": 491,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            224
+          ],
+          "identity_quote": "Another line of improvements dealt with training and testing the networks densely over the whole image and over multiple scales (Sermanet et al., 2014; Howard, 2014). In this paper, we address another important aspect of ConvNet architecture design – its depth. To this end, we ﬁx other parameters of the architecture, and steadily increase the depth of the network by adding more convolutional layers, which is feasible due to the use of very small (3 × 3) convolution ﬁlters in all layers.",
+          "identity_chunk_id": 224
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 224,
+        "page": 1,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Our main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3 × 3) convolution ﬁlters, which shows that a signiﬁcant improvement on the prior-art conﬁgurations can be achieved by pushing the depth to 16–19 weight layers.",
+        "evidence_start": 0,
+        "evidence_end": 278,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            219
+          ],
+          "identity_quote": "Our main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3 × 3) convolution ﬁlters, which shows that a signiﬁcant improvement on the prior-art conﬁgurations can be achieved by pushing the depth to 16–19 weight layers. These ﬁndings were the basis of our ImageNet Challenge 2014 submission, where our team secured the ﬁrst and the second places in the localisa- tion and classiﬁcation tracks respectively.",
+          "identity_chunk_id": 219
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 219,
+        "page": 1,
+        "citations": [
+          2
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " These ﬁndings were the basis of our ImageNet Challenge 2014 submission, where our team secured the ﬁrst and the second places in the localisa- tion and classiﬁcation tracks respectively.",
+        "evidence_start": 278,
+        "evidence_end": 465,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            219
+          ],
+          "identity_quote": "Our main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3 × 3) convolution ﬁlters, which shows that a signiﬁcant improvement on the prior-art conﬁgurations can be achieved by pushing the depth to 16–19 weight layers.",
+          "identity_chunk_id": 219
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 219,
+        "page": 1,
+        "citations": [
+          2
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Published as a conference paper at ICLR 2015 (22 weight layers) and small convolution ﬁlters (apart from 3 × 3, they also use 1 × 1 and 5 × 5 convolutions).",
+        "evidence_start": 0,
+        "evidence_end": 156,
+        "subject": "GoogLeNet",
+        "identity": {
+          "subject": "GoogLeNet",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            250,
+            249
+          ],
+          "identity_quote": "(2014) applied deep ConvNets (11 weight layers) to the task of street number recognition, and showed that the increased depth led to better performance. GoogLeNet (Szegedy et al., 2014), a top-performing entry of the ILSVRC-2014 classiﬁcation task, was developed independently of our work, but is similar in that it is based on very deep ConvNets",
+          "identity_chunk_id": 249
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 250,
+        "page": 4,
+        "citations": [
+          3,
+          11
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Their network topology is, however, more complex than ours, and the spatial reso- lution of the feature maps is reduced more aggressively in the ﬁrst layers to decrease the amount of computation.",
+        "evidence_start": 156,
+        "evidence_end": 352,
+        "subject": "GoogLeNet",
+        "identity": {
+          "subject": "GoogLeNet",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            250,
+            249
+          ],
+          "identity_quote": "(2014) applied deep ConvNets (11 weight layers) to the task of street number recognition, and showed that the increased depth led to better performance. GoogLeNet (Szegedy et al., 2014), a top-performing entry of the ILSVRC-2014 classiﬁcation task, was developed independently of our work, but is similar in that it is based on very deep ConvNets",
+          "identity_chunk_id": 249
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 250,
+        "page": 4,
+        "citations": [
+          3,
+          11
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "1 ARCHITECTURE During training, the input to our ConvNets is a ﬁxed-size 224 × 224 RGB image.",
+        "evidence_start": 2,
+        "evidence_end": 95,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            232
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 232,
+        "page": 2,
+        "citations": [
+          4
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel.",
+        "evidence_start": 95,
+        "evidence_end": 208,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            232
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 232,
+        "page": 2,
+        "citations": [
+          4
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": ") layers, where we use ﬁlters with a very small receptive ﬁeld: 3 × 3 (which is the smallest size to capture the notion of left/right, up/down, center).",
+        "evidence_start": 268,
+        "evidence_end": 420,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            232
+          ],
+          "identity_quote": "2.1 ARCHITECTURE During training, the input to our ConvNets is a ﬁxed-size 224 × 224 RGB image. The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel. The image is passed through a stack of convolutional (conv.) layers, where we use ﬁlters with a very small receptive ﬁeld: 3 × 3 (which is the smallest size to capture the notion of left/right, up/down, center).",
+          "identity_chunk_id": 232
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 232,
+        "page": 2,
+        "citations": [
+          4
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": ", 2014)), we use very small 3 × 3 receptive ﬁelds throughout the whole net, which are convolved with the input at every pixel (with stride 1).",
+        "evidence_start": 132,
+        "evidence_end": 274,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            241
+          ],
+          "identity_quote": "lay- ers (e.g. 11 × 11 with stride 4 in (Krizhevsky et al., 2012), or 7 × 7 with stride 2 in (Zeiler & Fergus, 2013; Sermanet et al., 2014)), we use very small 3 × 3 receptive ﬁelds throughout the whole net, which are convolved with the input at every pixel (with stride 1).",
+          "identity_chunk_id": 241
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 241,
+        "page": 2,
+        "citations": [
+          5
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Second, we decrease the number of parameters: assuming that both the input and the output of a three-layer 3 × 3 convolution stack has C channels, the stack is parametrised by 3 \u0000 32C2\u0001 = 27C2 weights; at the same time, a single 7 × 7 conv.",
+        "evidence_start": 0,
+        "evidence_end": 240,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            246,
+            245,
+            244
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 246,
+        "page": 3,
+        "citations": [
+          6
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " This can be seen as imposing a regularisation on the 7 × 7 conv.",
+        "evidence_start": 299,
+        "evidence_end": 364,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            246,
+            245,
+            244
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 246,
+        "page": 3,
+        "citations": [
+          6
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " ﬁlters, forcing them to have a decomposition through the 3 × 3 ﬁlters (with non-linearity injected in between).",
+        "evidence_start": 364,
+        "evidence_end": 476,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            246,
+            245,
+            244
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 246,
+        "page": 3,
+        "citations": [
+          6
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "layers have recently been utilised in the “Network in Network” architecture of Lin et al.",
+        "evidence_start": 0,
+        "evidence_end": 89,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            248,
+            247,
+            246,
+            245,
+            244
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 248,
+        "page": 3,
+        "citations": [
+          7
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Small-size convolution ﬁlters have been previously used by Ciresan et al.",
+        "evidence_start": 89,
+        "evidence_end": 163,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            248,
+            247,
+            246,
+            245,
+            244
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 248,
+        "page": 3,
+        "citations": [
+          7
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " (2011), but their nets are signiﬁcantly less deep than ours, and they did not evaluate on the large-scale ILSVRC dataset.",
+        "evidence_start": 163,
+        "evidence_end": 285,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            248,
+            247,
+            246,
+            245,
+            244
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 248,
+        "page": 3,
+        "citations": [
+          7
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity).",
+        "evidence_start": 0,
+        "evidence_end": 165,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            233
+          ],
+          "identity_quote": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.",
+          "identity_chunk_id": 233
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 233,
+        "page": 2,
+        "citations": [
+          8
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv.",
+        "evidence_start": 165,
+        "evidence_end": 237,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            233
+          ],
+          "identity_quote": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity).",
+          "identity_chunk_id": 233
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 233,
+        "page": 2,
+        "citations": [
+          8
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " the padding is 1 pixel for 3 × 3 conv.",
+        "evidence_start": 322,
+        "evidence_end": 361,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            233
+          ],
+          "identity_quote": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e.",
+          "identity_chunk_id": 233
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 233,
+        "page": 2,
+        "citations": [
+          8
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv.",
+        "evidence_start": 361,
+        "evidence_end": 450,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            233
+          ],
+          "identity_quote": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv.",
+          "identity_chunk_id": 233
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 233,
+        "page": 2,
+        "citations": [
+          8
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "This indicates that while the additional non-linearity does help (C is better than B), it is also important to capture spatial context by using conv.",
+        "evidence_start": 0,
+        "evidence_end": 149,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            281,
+            280,
+            279
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 281,
+        "page": 6,
+        "citations": [
+          9
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " ﬁlters with non-trivial receptive ﬁelds (D is better than C).",
+        "evidence_start": 149,
+        "evidence_end": 211,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            281,
+            280,
+            279
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 281,
+        "page": 6,
+        "citations": [
+          9
+        ],
+        "record_id": "E22"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Network A,A-LRN B C D E Number of parameters 133 133 134 138 144 such layers have a 7 × 7 effective receptive ﬁeld.",
+        "evidence_start": 0,
+        "evidence_end": 115,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            245,
+            244
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 245,
+        "page": 3,
+        "citations": [
+          10
+        ],
+        "record_id": "E23"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " So what have we gained by using, for instance, a stack of three 3×3 conv.",
+        "evidence_start": 115,
+        "evidence_end": 189,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            245,
+            244
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 245,
+        "page": 3,
+        "citations": [
+          10
+        ],
+        "record_id": "E24"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " layers instead of a single 7×7 layer?",
+        "evidence_start": 189,
+        "evidence_end": 227,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            245,
+            244
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 245,
+        "page": 3,
+        "citations": [
+          10
+        ],
+        "record_id": "E25"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " First, we incorporate three non-linear rectiﬁcation layers instead of a single one, which makes the decision function more discriminative.",
+        "evidence_start": 227,
+        "evidence_end": 366,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            245,
+            244
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 245,
+        "page": 3,
+        "citations": [
+          10
+        ],
+        "record_id": "E26"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 224,
+        "text": "Another line of improvements dealt with training and testing the networks densely over the whole image and over multiple scales (Sermanet et al., 2014; Howard, 2014). In this paper, we address another important aspect of ConvNet architecture design – its depth. To this end, we ﬁx other parameters of the architecture, and steadily increase the depth of the network by adding more convolutional layers, which is feasible due to the use of very small (3 × 3) convolution ﬁlters in all layers.",
+        "source": "VGG.pdf",
+        "page": 1,
+        "title": "VGG",
+        "section": "1 INTRODUCTION"
+      },
+      {
+        "chunk_id": 219,
+        "text": "Our main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3 × 3) convolution ﬁlters, which shows that a signiﬁcant improvement on the prior-art conﬁgurations can be achieved by pushing the depth to 16–19 weight layers. These ﬁndings were the basis of our ImageNet Challenge 2014 submission, where our team secured the ﬁrst and the second places in the localisa- tion and classiﬁcation tracks respectively.",
+        "source": "VGG.pdf",
+        "page": 1,
+        "title": "VGG",
+        "section": null
+      },
+      {
+        "chunk_id": 250,
+        "text": "Published as a conference paper at ICLR 2015 (22 weight layers) and small convolution ﬁlters (apart from 3 × 3, they also use 1 × 1 and 5 × 5 convolutions). Their network topology is, however, more complex than ours, and the spatial reso- lution of the feature maps is reduced more aggressively in the ﬁrst layers to decrease the amount of computation.",
+        "source": "VGG.pdf",
+        "page": 4,
+        "title": "VGG",
+        "section": "2.3 DISCUSSION"
+      },
+      {
+        "chunk_id": 232,
+        "text": "2.1 ARCHITECTURE During training, the input to our ConvNets is a ﬁxed-size 224 × 224 RGB image. The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel. The image is passed through a stack of convolutional (conv.) layers, where we use ﬁlters with a very small receptive ﬁeld: 3 × 3 (which is the smallest size to capture the notion of left/right, up/down, center).",
+        "source": "VGG.pdf",
+        "page": 2,
+        "title": "VGG",
+        "section": "2.1 ARCHITECTURE"
+      },
+      {
+        "chunk_id": 241,
+        "text": "lay- ers (e.g. 11 × 11 with stride 4 in (Krizhevsky et al., 2012), or 7 × 7 with stride 2 in (Zeiler & Fergus, 2013; Sermanet et al., 2014)), we use very small 3 × 3 receptive ﬁelds throughout the whole net, which are convolved with the input at every pixel (with stride 1).",
+        "source": "VGG.pdf",
+        "page": 2,
+        "title": "VGG",
+        "section": "2.3 DISCUSSION"
+      },
+      {
+        "chunk_id": 246,
+        "text": "Second, we decrease the number of parameters: assuming that both the input and the output of a three-layer 3 × 3 convolution stack has C channels, the stack is parametrised by 3 \u0000 32C2\u0001 = 27C2 weights; at the same time, a single 7 × 7 conv. layer would require 72C2 = 49C2 parameters, i.e. 81% more. This can be seen as imposing a regularisation on the 7 × 7 conv. ﬁlters, forcing them to have a decomposition through the 3 × 3 ﬁlters (with non-linearity injected in between).",
+        "source": "VGG.pdf",
+        "page": 3,
+        "title": "VGG",
+        "section": "2.3 DISCUSSION"
+      },
+      {
+        "chunk_id": 248,
+        "text": "layers have recently been utilised in the “Network in Network” architecture of Lin et al. Small-size convolution ﬁlters have been previously used by Ciresan et al. (2011), but their nets are signiﬁcantly less deep than ours, and they did not evaluate on the large-scale ILSVRC dataset.",
+        "source": "VGG.pdf",
+        "page": 3,
+        "title": "VGG",
+        "section": "2.3 DISCUSSION"
+      },
+      {
+        "chunk_id": 233,
+        "text": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.",
+        "source": "VGG.pdf",
+        "page": 2,
+        "title": "VGG",
+        "section": "2.1 ARCHITECTURE"
+      },
+      {
+        "chunk_id": 281,
+        "text": "This indicates that while the additional non-linearity does help (C is better than B), it is also important to capture spatial context by using conv. ﬁlters with non-trivial receptive ﬁelds (D is better than C).",
+        "source": "VGG.pdf",
+        "page": 6,
+        "title": "VGG",
+        "section": "4.1 SINGLE SCALE EVALUATION"
+      },
+      {
+        "chunk_id": 245,
+        "text": "Network A,A-LRN B C D E Number of parameters 133 133 134 138 144 such layers have a 7 × 7 effective receptive ﬁeld. So what have we gained by using, for instance, a stack of three 3×3 conv. layers instead of a single 7×7 layer? First, we incorporate three non-linear rectiﬁcation layers instead of a single one, which makes the decision function more discriminative.",
+        "source": "VGG.pdf",
+        "page": 3,
+        "title": "VGG",
+        "section": "2.3 DISCUSSION"
+      },
+      {
+        "chunk_id": 249,
+        "text": "(2014) applied deep ConvNets (11 weight layers) to the task of street number recognition, and showed that the increased depth led to better performance. GoogLeNet (Szegedy et al., 2014), a top-performing entry of the ILSVRC-2014 classiﬁcation task, was developed independently of our work, but is similar in that it is based on very deep ConvNets",
+        "source": "VGG.pdf",
+        "page": 3,
+        "title": "VGG",
+        "section": "2.3 DISCUSSION"
+      }
+    ],
+    "selected_ids": [
+      224,
+      219,
+      250,
+      232,
+      241,
+      246,
+      248,
+      233,
+      281,
+      245
+    ]
+  },
+  "selected_ids": [
+    224,
+    219,
+    250,
+    232,
+    241,
+    246,
+    248,
+    233,
+    281,
+    245
+  ],
+  "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. For explanation questions, cover the distinct reasons supported by the passages. State each supported equivalence explicitly, including the property and the compared quantities; saying X instead of Y alone does not explain why they are comparable. State the main mechanism before optional background details.\n12. Resolve scope and exceptions together: if the passages describe a configuration exception, combine the main pattern and its exception in one qualified statement. Do not repeat absolute all/only wording from one passage when another passage qualifies it, even when quoting a source. Use only entity names found in the supplied passages.\n\nContext:\nOriginal passages:\n[1] Source: VGG.pdf | Page: 1 | Section: 1 INTRODUCTION\nAnother line of improvements dealt with training and testing the networks densely over the whole image and over multiple scales (Sermanet et al., 2014; Howard, 2014). In this paper, we address another important aspect of ConvNet architecture design – its depth. To this end, we ﬁx other parameters of the architecture, and steadily increase the depth of the network by adding more convolutional layers, which is feasible due to the use of very small (3 × 3) convolution ﬁlters in all layers.\n\n[2] Source: VGG.pdf | Page: 1 | Section: None\nOur main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3 × 3) convolution ﬁlters, which shows that a signiﬁcant improvement on the prior-art conﬁgurations can be achieved by pushing the depth to 16–19 weight layers. These ﬁndings were the basis of our ImageNet Challenge 2014 submission, where our team secured the ﬁrst and the second places in the localisa- tion and classiﬁcation tracks respectively.\n\n[3] Source: VGG.pdf | Page: 4 | Section: 2.3 DISCUSSION\nPublished as a conference paper at ICLR 2015 (22 weight layers) and small convolution ﬁlters (apart from 3 × 3, they also use 1 × 1 and 5 × 5 convolutions). Their network topology is, however, more complex than ours, and the spatial reso- lution of the feature maps is reduced more aggressively in the ﬁrst layers to decrease the amount of computation.\n\n[4] Source: VGG.pdf | Page: 2 | Section: 2.1 ARCHITECTURE\n2.1 ARCHITECTURE During training, the input to our ConvNets is a ﬁxed-size 224 × 224 RGB image. The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel. The image is passed through a stack of convolutional (conv.) layers, where we use ﬁlters with a very small receptive ﬁeld: 3 × 3 (which is the smallest size to capture the notion of left/right, up/down, center).\n\n[5] Source: VGG.pdf | Page: 2 | Section: 2.3 DISCUSSION\nlay- ers (e.g. 11 × 11 with stride 4 in (Krizhevsky et al., 2012), or 7 × 7 with stride 2 in (Zeiler & Fergus, 2013; Sermanet et al., 2014)), we use very small 3 × 3 receptive ﬁelds throughout the whole net, which are convolved with the input at every pixel (with stride 1).\n\n[6] Source: VGG.pdf | Page: 3 | Section: 2.3 DISCUSSION\nSecond, we decrease the number of parameters: assuming that both the input and the output of a three-layer 3 × 3 convolution stack has C channels, the stack is parametrised by 3 \u0000 32C2\u0001 = 27C2 weights; at the same time, a single 7 × 7 conv. layer would require 72C2 = 49C2 parameters, i.e. 81% more. This can be seen as imposing a regularisation on the 7 × 7 conv. ﬁlters, forcing them to have a decomposition through the 3 × 3 ﬁlters (with non-linearity injected in between).\n\n[7] Source: VGG.pdf | Page: 3 | Section: 2.3 DISCUSSION\nlayers have recently been utilised in the “Network in Network” architecture of Lin et al. Small-size convolution ﬁlters have been previously used by Ciresan et al. (2011), but their nets are signiﬁcantly less deep than ours, and they did not evaluate on the large-scale ILSVRC dataset.\n\n[8] Source: VGG.pdf | Page: 2 | Section: 2.1 ARCHITECTURE\nIn one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.\n\n[9] Source: VGG.pdf | Page: 6 | Section: 4.1 SINGLE SCALE EVALUATION\nThis indicates that while the additional non-linearity does help (C is better than B), it is also important to capture spatial context by using conv. ﬁlters with non-trivial receptive ﬁelds (D is better than C).\n\n[10] Source: VGG.pdf | Page: 3 | Section: 2.3 DISCUSSION\nNetwork A,A-LRN B C D E Number of parameters 133 133 134 138 144 such layers have a 7 × 7 effective receptive ﬁeld. So what have we gained by using, for instance, a stack of three 3×3 conv. layers instead of a single 7×7 layer? First, we incorporate three non-linear rectiﬁcation layers instead of a single one, which makes the decision function more discriminative.\n\n[11] Source: VGG.pdf | Page: 3 | Section: 2.3 DISCUSSION\n(2014) applied deep ConvNets (11 weight layers) to the task of street number recognition, and showed that the increased depth led to better performance. GoogLeNet (Szegedy et al., 2014), a top-performing entry of the ILSVRC-2014 classiﬁcation task, was developed independently of our work, but is similar in that it is based on very deep ConvNets\n\nEvidence guidance:\n- Rule-based subject attribution: GoogLeNet; passage: “Published as a conference paper at ICLR 2015 (22 weight layers) and small convolution ﬁlters (apart from 3 × 3, they also use 1 × 1 and 5 × 5 convolutions).” [3][11]\n- Rule-based subject attribution: GoogLeNet; passage: “Their network topology is, however, more complex than ours, and the spatial reso- lution of the feature maps is reduced more aggressively in the ﬁrst layers to decrease the amount of computation.” [3][11]\n\nQuestion:\nWhy does VGG use small 3x3 convolutional filters?\n\nAnswer:",
+  "answer": "VGG uses very small 3×3 convolution filters in all layers, which makes it feasible to increase network depth by adding more convolutional layers [1]. The paper's main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3×3) convolution filters, which shows a significant improvement over prior-art configurations by pushing depth to 16–19 weight layers [2]. The 3×3 size is described as the smallest size to capture the notion of left/right, up/down, and center [4]. Using a stack of three 3×3 conv. layers instead of a single 7×7 layer incorporates three non-linear rectification layers instead of a single one, making the decision function more discriminative [10]. It also decreases the number of parameters: a three-layer 3×3 stack with C channels is parametrised by 27C² weights, whereas a single 7×7 conv. layer would require 49C² parameters, i.e. 81% more [6]. This can be seen as imposing a regularisation on the 7×7 conv. filters, forcing them to have a decomposition through the 3×3 filters with non-linearity injected in between [6].",
+  "original_answer": "VGG uses very small 3×3 convolution filters in all layers, which makes it feasible to increase network depth by adding more convolutional layers [1]. The paper's main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3×3) convolution filters, which shows a significant improvement over prior-art configurations by pushing depth to 16–19 weight layers [2]. The 3×3 size is described as the smallest size to capture the notion of left/right, up/down, and center [4]. Using a stack of three 3×3 conv. layers instead of a single 7×7 layer incorporates three non-linear rectification layers instead of a single one, making the decision function more discriminative [10]. It also decreases the number of parameters: a three-layer 3×3 stack with C channels is parametrised by 27C² weights, whereas a single 7×7 conv. layer would require 49C² parameters, i.e. 81% more [6]. This can be seen as imposing a regularisation on the 7×7 conv. filters, forcing them to have a decomposition through the 3×3 filters with non-linearity injected in between [6].",
+  "citation_validation": {
+    "answer": "VGG uses very small 3×3 convolution filters in all layers, which makes it feasible to increase network depth by adding more convolutional layers [1]. The paper's main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3×3) convolution filters, which shows a significant improvement over prior-art configurations by pushing depth to 16–19 weight layers [2]. The 3×3 size is described as the smallest size to capture the notion of left/right, up/down, and center [4]. Using a stack of three 3×3 conv. layers instead of a single 7×7 layer incorporates three non-linear rectification layers instead of a single one, making the decision function more discriminative [10]. It also decreases the number of parameters: a three-layer 3×3 stack with C channels is parametrised by 27C² weights, whereas a single 7×7 conv. layer would require 49C² parameters, i.e. 81% more [6]. This can be seen as imposing a regularisation on the 7×7 conv. filters, forcing them to have a decomposition through the 3×3 filters with non-linearity injected in between [6].",
+    "original_answer": "VGG uses very small 3×3 convolution filters in all layers, which makes it feasible to increase network depth by adding more convolutional layers [1]. The paper's main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3×3) convolution filters, which shows a significant improvement over prior-art configurations by pushing depth to 16–19 weight layers [2]. The 3×3 size is described as the smallest size to capture the notion of left/right, up/down, and center [4]. Using a stack of three 3×3 conv. layers instead of a single 7×7 layer incorporates three non-linear rectification layers instead of a single one, making the decision function more discriminative [10]. It also decreases the number of parameters: a three-layer 3×3 stack with C channels is parametrised by 27C² weights, whereas a single 7×7 conv. layer would require 49C² parameters, i.e. 81% more [6]. This can be seen as imposing a regularisation on the 7×7 conv. filters, forcing them to have a decomposition through the 3×3 filters with non-linearity injected in between [6].",
+    "repair_candidate": null,
+    "initial_check": {
+      "cited_numbers": [
+        1,
+        2,
+        4,
+        6,
+        10
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 224,
+          "source": "VGG.pdf",
+          "page": 1,
+          "text": "Another line of improvements dealt with training and testing the networks densely over the whole image and over multiple scales (Sermanet et al., 2014; Howard, 2014). In this paper, we address another important aspect of ConvNet architecture design – its depth. To this end, we ﬁx other parameters of the architecture, and steadily increase the depth of the network by adding more convolutional layers, which is feasible due to the use of very small (3 × 3) convolution ﬁlters in all layers."
+        },
+        {
+          "citation": 2,
+          "chunk_id": 219,
+          "source": "VGG.pdf",
+          "page": 1,
+          "text": "Our main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3 × 3) convolution ﬁlters, which shows that a signiﬁcant improvement on the prior-art conﬁgurations can be achieved by pushing the depth to 16–19 weight layers. These ﬁndings were the basis of our ImageNet Challenge 2014 submission, where our team secured the ﬁrst and the second places in the localisa- tion and classiﬁcation tracks respectively."
+        },
+        {
+          "citation": 4,
+          "chunk_id": 232,
+          "source": "VGG.pdf",
+          "page": 2,
+          "text": "2.1 ARCHITECTURE During training, the input to our ConvNets is a ﬁxed-size 224 × 224 RGB image. The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel. The image is passed through a stack of convolutional (conv.) layers, where we use ﬁlters with a very small receptive ﬁeld: 3 × 3 (which is the smallest size to capture the notion of left/right, up/down, center)."
+        },
+        {
+          "citation": 6,
+          "chunk_id": 246,
+          "source": "VGG.pdf",
+          "page": 3,
+          "text": "Second, we decrease the number of parameters: assuming that both the input and the output of a three-layer 3 × 3 convolution stack has C channels, the stack is parametrised by 3 \u0000 32C2\u0001 = 27C2 weights; at the same time, a single 7 × 7 conv. layer would require 72C2 = 49C2 parameters, i.e. 81% more. This can be seen as imposing a regularisation on the 7 × 7 conv. ﬁlters, forcing them to have a decomposition through the 3 × 3 ﬁlters (with non-linearity injected in between)."
+        },
+        {
+          "citation": 10,
+          "chunk_id": 245,
+          "source": "VGG.pdf",
+          "page": 3,
+          "text": "Network A,A-LRN B C D E Number of parameters 133 133 134 138 144 such layers have a 7 × 7 effective receptive ﬁeld. So what have we gained by using, for instance, a stack of three 3×3 conv. layers instead of a single 7×7 layer? First, we incorporate three non-linear rectiﬁcation layers instead of a single one, which makes the decision function more discriminative."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "final_check": {
+      "cited_numbers": [
+        1,
+        2,
+        4,
+        6,
+        10
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 224,
+          "source": "VGG.pdf",
+          "page": 1,
+          "text": "Another line of improvements dealt with training and testing the networks densely over the whole image and over multiple scales (Sermanet et al., 2014; Howard, 2014). In this paper, we address another important aspect of ConvNet architecture design – its depth. To this end, we ﬁx other parameters of the architecture, and steadily increase the depth of the network by adding more convolutional layers, which is feasible due to the use of very small (3 × 3) convolution ﬁlters in all layers."
+        },
+        {
+          "citation": 2,
+          "chunk_id": 219,
+          "source": "VGG.pdf",
+          "page": 1,
+          "text": "Our main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3 × 3) convolution ﬁlters, which shows that a signiﬁcant improvement on the prior-art conﬁgurations can be achieved by pushing the depth to 16–19 weight layers. These ﬁndings were the basis of our ImageNet Challenge 2014 submission, where our team secured the ﬁrst and the second places in the localisa- tion and classiﬁcation tracks respectively."
+        },
+        {
+          "citation": 4,
+          "chunk_id": 232,
+          "source": "VGG.pdf",
+          "page": 2,
+          "text": "2.1 ARCHITECTURE During training, the input to our ConvNets is a ﬁxed-size 224 × 224 RGB image. The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel. The image is passed through a stack of convolutional (conv.) layers, where we use ﬁlters with a very small receptive ﬁeld: 3 × 3 (which is the smallest size to capture the notion of left/right, up/down, center)."
+        },
+        {
+          "citation": 6,
+          "chunk_id": 246,
+          "source": "VGG.pdf",
+          "page": 3,
+          "text": "Second, we decrease the number of parameters: assuming that both the input and the output of a three-layer 3 × 3 convolution stack has C channels, the stack is parametrised by 3 \u0000 32C2\u0001 = 27C2 weights; at the same time, a single 7 × 7 conv. layer would require 72C2 = 49C2 parameters, i.e. 81% more. This can be seen as imposing a regularisation on the 7 × 7 conv. ﬁlters, forcing them to have a decomposition through the 3 × 3 ﬁlters (with non-linearity injected in between)."
+        },
+        {
+          "citation": 10,
+          "chunk_id": 245,
+          "source": "VGG.pdf",
+          "page": 3,
+          "text": "Network A,A-LRN B C D E Number of parameters 133 133 134 138 144 such layers have a 7 × 7 effective receptive ﬁeld. So what have we gained by using, for instance, a stack of three 3×3 conv. layers instead of a single 7×7 layer? First, we incorporate three non-linear rectiﬁcation layers instead of a single one, which makes the decision function more discriminative."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "repair_attempted": false,
+    "repair_applied": false,
+    "repair_response": null,
+    "repair_prompt": null,
+    "unresolved_blocks": [],
+    "status": "not_needed",
+    "note": "Citation structure only; source relevance and claim meaning are not automatically verified."
+  },
+  "citation_structure": {
+    "cited_numbers": [
+      1,
+      2,
+      4,
+      6,
+      10
+    ],
+    "invalid_numbers": [],
+    "malformed_markers": [],
+    "has_citations": true,
+    "require_citations": true,
+    "structure_passed": true,
+    "cited_sources": [
+      {
+        "citation": 1,
+        "chunk_id": 224,
+        "source": "VGG.pdf",
+        "page": 1,
+        "text": "Another line of improvements dealt with training and testing the networks densely over the whole image and over multiple scales (Sermanet et al., 2014; Howard, 2014). In this paper, we address another important aspect of ConvNet architecture design – its depth. To this end, we ﬁx other parameters of the architecture, and steadily increase the depth of the network by adding more convolutional layers, which is feasible due to the use of very small (3 × 3) convolution ﬁlters in all layers."
+      },
+      {
+        "citation": 2,
+        "chunk_id": 219,
+        "source": "VGG.pdf",
+        "page": 1,
+        "text": "Our main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3 × 3) convolution ﬁlters, which shows that a signiﬁcant improvement on the prior-art conﬁgurations can be achieved by pushing the depth to 16–19 weight layers. These ﬁndings were the basis of our ImageNet Challenge 2014 submission, where our team secured the ﬁrst and the second places in the localisa- tion and classiﬁcation tracks respectively."
+      },
+      {
+        "citation": 4,
+        "chunk_id": 232,
+        "source": "VGG.pdf",
+        "page": 2,
+        "text": "2.1 ARCHITECTURE During training, the input to our ConvNets is a ﬁxed-size 224 × 224 RGB image. The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel. The image is passed through a stack of convolutional (conv.) layers, where we use ﬁlters with a very small receptive ﬁeld: 3 × 3 (which is the smallest size to capture the notion of left/right, up/down, center)."
+      },
+      {
+        "citation": 6,
+        "chunk_id": 246,
+        "source": "VGG.pdf",
+        "page": 3,
+        "text": "Second, we decrease the number of parameters: assuming that both the input and the output of a three-layer 3 × 3 convolution stack has C channels, the stack is parametrised by 3 \u0000 32C2\u0001 = 27C2 weights; at the same time, a single 7 × 7 conv. layer would require 72C2 = 49C2 parameters, i.e. 81% more. This can be seen as imposing a regularisation on the 7 × 7 conv. ﬁlters, forcing them to have a decomposition through the 3 × 3 ﬁlters (with non-linearity injected in between)."
+      },
+      {
+        "citation": 10,
+        "chunk_id": 245,
+        "source": "VGG.pdf",
+        "page": 3,
+        "text": "Network A,A-LRN B C D E Number of parameters 133 133 134 138 144 such layers have a 7 × 7 effective receptive ﬁeld. So what have we gained by using, for instance, a stack of three 3×3 conv. layers instead of a single 7×7 layer? First, we incorporate three non-linear rectiﬁcation layers instead of a single one, which makes the decision function more discriminative."
+      }
+    ],
+    "semantic_support": "requires_manual_review"
+  },
+  "status": "completed",
+  "api_calls": [
+    {
+      "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. For explanation questions, cover the distinct reasons supported by the passages. State each supported equivalence explicitly, including the property and the compared quantities; saying X instead of Y alone does not explain why they are comparable. State the main mechanism before optional background details.\n12. Resolve scope and exceptions together: if the passages describe a configuration exception, combine the main pattern and its exception in one qualified statement. Do not repeat absolute all/only wording from one passage when another passage qualifies it, even when quoting a source. Use only entity names found in the supplied passages.\n\nContext:\nOriginal passages:\n[1] Source: VGG.pdf | Page: 1 | Section: 1 INTRODUCTION\nAnother line of improvements dealt with training and testing the networks densely over the whole image and over multiple scales (Sermanet et al., 2014; Howard, 2014). In this paper, we address another important aspect of ConvNet architecture design – its depth. To this end, we ﬁx other parameters of the architecture, and steadily increase the depth of the network by adding more convolutional layers, which is feasible due to the use of very small (3 × 3) convolution ﬁlters in all layers.\n\n[2] Source: VGG.pdf | Page: 1 | Section: None\nOur main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3 × 3) convolution ﬁlters, which shows that a signiﬁcant improvement on the prior-art conﬁgurations can be achieved by pushing the depth to 16–19 weight layers. These ﬁndings were the basis of our ImageNet Challenge 2014 submission, where our team secured the ﬁrst and the second places in the localisa- tion and classiﬁcation tracks respectively.\n\n[3] Source: VGG.pdf | Page: 4 | Section: 2.3 DISCUSSION\nPublished as a conference paper at ICLR 2015 (22 weight layers) and small convolution ﬁlters (apart from 3 × 3, they also use 1 × 1 and 5 × 5 convolutions). Their network topology is, however, more complex than ours, and the spatial reso- lution of the feature maps is reduced more aggressively in the ﬁrst layers to decrease the amount of computation.\n\n[4] Source: VGG.pdf | Page: 2 | Section: 2.1 ARCHITECTURE\n2.1 ARCHITECTURE During training, the input to our ConvNets is a ﬁxed-size 224 × 224 RGB image. The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel. The image is passed through a stack of convolutional (conv.) layers, where we use ﬁlters with a very small receptive ﬁeld: 3 × 3 (which is the smallest size to capture the notion of left/right, up/down, center).\n\n[5] Source: VGG.pdf | Page: 2 | Section: 2.3 DISCUSSION\nlay- ers (e.g. 11 × 11 with stride 4 in (Krizhevsky et al., 2012), or 7 × 7 with stride 2 in (Zeiler & Fergus, 2013; Sermanet et al., 2014)), we use very small 3 × 3 receptive ﬁelds throughout the whole net, which are convolved with the input at every pixel (with stride 1).\n\n[6] Source: VGG.pdf | Page: 3 | Section: 2.3 DISCUSSION\nSecond, we decrease the number of parameters: assuming that both the input and the output of a three-layer 3 × 3 convolution stack has C channels, the stack is parametrised by 3 \u0000 32C2\u0001 = 27C2 weights; at the same time, a single 7 × 7 conv. layer would require 72C2 = 49C2 parameters, i.e. 81% more. This can be seen as imposing a regularisation on the 7 × 7 conv. ﬁlters, forcing them to have a decomposition through the 3 × 3 ﬁlters (with non-linearity injected in between).\n\n[7] Source: VGG.pdf | Page: 3 | Section: 2.3 DISCUSSION\nlayers have recently been utilised in the “Network in Network” architecture of Lin et al. Small-size convolution ﬁlters have been previously used by Ciresan et al. (2011), but their nets are signiﬁcantly less deep than ours, and they did not evaluate on the large-scale ILSVRC dataset.\n\n[8] Source: VGG.pdf | Page: 2 | Section: 2.1 ARCHITECTURE\nIn one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.\n\n[9] Source: VGG.pdf | Page: 6 | Section: 4.1 SINGLE SCALE EVALUATION\nThis indicates that while the additional non-linearity does help (C is better than B), it is also important to capture spatial context by using conv. ﬁlters with non-trivial receptive ﬁelds (D is better than C).\n\n[10] Source: VGG.pdf | Page: 3 | Section: 2.3 DISCUSSION\nNetwork A,A-LRN B C D E Number of parameters 133 133 134 138 144 such layers have a 7 × 7 effective receptive ﬁeld. So what have we gained by using, for instance, a stack of three 3×3 conv. layers instead of a single 7×7 layer? First, we incorporate three non-linear rectiﬁcation layers instead of a single one, which makes the decision function more discriminative.\n\n[11] Source: VGG.pdf | Page: 3 | Section: 2.3 DISCUSSION\n(2014) applied deep ConvNets (11 weight layers) to the task of street number recognition, and showed that the increased depth led to better performance. GoogLeNet (Szegedy et al., 2014), a top-performing entry of the ILSVRC-2014 classiﬁcation task, was developed independently of our work, but is similar in that it is based on very deep ConvNets\n\nEvidence guidance:\n- Rule-based subject attribution: GoogLeNet; passage: “Published as a conference paper at ICLR 2015 (22 weight layers) and small convolution ﬁlters (apart from 3 × 3, they also use 1 × 1 and 5 × 5 convolutions).” [3][11]\n- Rule-based subject attribution: GoogLeNet; passage: “Their network topology is, however, more complex than ours, and the spatial reso- lution of the feature maps is reduced more aggressively in the ﬁrst layers to decrease the amount of computation.” [3][11]\n\nQuestion:\nWhy does VGG use small 3x3 convolutional filters?\n\nAnswer:",
+      "response": {
+        "answer": "VGG uses very small 3×3 convolution filters in all layers, which makes it feasible to increase network depth by adding more convolutional layers [1]. The paper's main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3×3) convolution filters, which shows a significant improvement over prior-art configurations by pushing depth to 16–19 weight layers [2]. The 3×3 size is described as the smallest size to capture the notion of left/right, up/down, and center [4]. Using a stack of three 3×3 conv. layers instead of a single 7×7 layer incorporates three non-linear rectification layers instead of a single one, making the decision function more discriminative [10]. It also decreases the number of parameters: a three-layer 3×3 stack with C channels is parametrised by 27C² weights, whereas a single 7×7 conv. layer would require 49C² parameters, i.e. 81% more [6]. This can be seen as imposing a regularisation on the 7×7 conv. filters, forcing them to have a decomposition through the 3×3 filters with non-linearity injected in between [6].",
+        "requested_model": "cn:deepseek-v4.1-flash",
+        "reported_model": "deepseek-v4.1-flash",
+        "usage": {
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 0,
+          "cached_tokens": 0,
+          "completion_thinking_tokens": 0,
+          "completion_tokens": 255,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "credit": 0.04,
+          "prompt_cache_hit_tokens": 0,
+          "prompt_cache_miss_tokens": 1790,
+          "prompt_cache_write_tokens": 0,
+          "prompt_tokens": 1790,
+          "prompt_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "total_tokens": 2045
+        },
+        "finish_reason": "stop",
+        "request_parameters": {
+          "model": "cn:deepseek-v4.1-flash",
+          "stream": false,
+          "thinking": {
+            "type": "disabled"
+          },
+          "temperature": 0,
+          "max_tokens": 4096
+        }
+      },
+      "elapsed_seconds": 2.67
+    }
+  ],
+  "model_calls": 1,
+  "evaluation_code_sha256": {
+    "main.py": "237e30fadb0496af68e15b36db7f2aa4402b52a09cbe6649b31c2bf17afff554",
+    "llm.py": "27be8ddbb1ecff5453f077ce84e84a5700bb085662c463c4e5c22aa104d78d00",
+    "evaluation/run_answer_evaluation.py": "29c3362af51597133214a9ba4d4d14831fdb5a3715c3a0a5d1197f9b4082cee5",
+    "src/api_llm.py": "11aa14f5435a079e83671b031d1159fbbc0ee8c760c61c9c0cc7afd0db6ae0a7",
+    "src/bm25_retriever.py": "7d2a046a4449cd6fdc371984db329534cedc7351d6196b9c218114ff0476906b",
+    "src/chunk_storage.py": "35d2b9b6c4d5a91d40ff242b85fbaa578bb75ed89501b1435a94dd8b0b5405b5",
+    "src/chunking.py": "259f5c63b67f7105369b7ef3be7bddd18fbb5212198ab64604fe06bd12e27cb4",
+    "src/chunking_recursive.py": "f2fea89cace280329804cfe18d59a3663d21e3611129e0432518a37e4f691e72",
+    "src/chunking_semantic.py": "0f4947702f359a3967e2160ec098bf0cb1254eb2f7f77806ba874bb6955b0000",
+    "src/citation_validation.py": "c7e21d3070a454f08cf7944dd764a8e93dc7a3d83078863acd92db03e264b79c",
+    "src/embedding.py": "894fac2090929129e1883c858838e2255d69a6048a2e76d2387235321f2adade",
+    "src/grounded_evidence.py": "78a7e63512970492f4e52050cb8b2312e2658281acfe979eb4476516ff8c2663",
+    "src/hybrid_retriever.py": "ddd2315a558a062ac31fedb0e7a8d28af6a3df783450792825ff252d596de63c",
+    "src/hyde.py": "2cd8439144854f67c895cbb6321ee847c417ebf9187da66985026433287ae42d",
+    "src/numeric_evidence.py": "492fb546e6bc89b881843ece4b4582e533aec5aabbc58d61cd1cf158c4bac3d0",
+    "src/pdf_loader.py": "691f97e547936bcbda1ccb9837a1e91b47c34672ce33b227eaa5d18501519d1e",
+    "src/pdf_loader_v2.py": "faef72277429484e038c44301e3e03d4ad153ba37108de08848de488e6214636",
+    "src/query_decomposer.py": "e478510383c6f91185f83993a76971b452c9b1bb036b0ea9c7da872605eb3c8a",
+    "src/query_rewriter.py": "bb762f7e77596a7f228d985b0c3a1699ec60bc87eba87b754c418a30cc7cdf62",
+    "src/reranker.py": "028e22aa105551bdf0845d215ba0604407a960c57d7e4e32a65c33e52dd7ffeb",
+    "src/retriever.py": "ad82c4301a81fefb3c205b5c0834d9ddcf67cc616d9b736bb265a6e9eb637e82",
+    "src/vector_store.py": "605ffa3761629f4f58b37663a23fff4020f895464917d600325ae2e1fccc0222",
+    "evaluation/questions.json": "6311c5293604f2c6f7258b53f47899b3fdf41ed8edcafed929655f2892157ade",
+    "evaluation/answer_review_protocol.md": "614a18fe1babb3cffc96aa7aaa8956c3d84b94a1ca10f37234fd8cd00ed3bf27",
+    "data/processed/chunks_semantic.json": "6bf158ec8cf2df07c438a7f3ff14806b2db6c6d7af4ce4fcb9fcf13a60603277",
+    "data/processed/faiss_semantic.index": "dd79e7f8afcc4daa09fbbdc1f85fb27c1d9641eff1003c1965a42343b8ad8b0b"
+  },
+  "elapsed_seconds": 2.67
+}

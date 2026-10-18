@@ -1,0 +1,165 @@
+{
+  "seed": 20261018,
+  "selection": "one pseudorandom question per paper from a predeclared three-question bank; before any model answer",
+  "bank": {
+    "Transformer": [
+      "In the Transformer decoder, how do the shifted target embeddings and masked self-attention prevent access to future target tokens during training?",
+      "How does the original Transformer use multiple attention heads without multiplying the total attention computation by the number of heads?",
+      "In the original Transformer, how do the learning rate warmup and the subsequent decay work, and why is this different from using a constant learning rate?"
+    ],
+    "DCNN": [
+      "In the DCNN paper, how does dropout differ between training and test time, and why does it help reduce overfitting?",
+      "How do overlapping pooling windows differ from non-overlapping pooling in the DCNN paper, and what effects did the authors report?",
+      "In the DCNN paper, how are the two GPUs connected across convolutional layers, and does every layer communicate across GPUs?"
+    ],
+    "VGG": [
+      "How does the VGG paper distinguish scale jittering during training from multi-scale evaluation at test time?",
+      "What does the VGG paper conclude about increasing network depth beyond configuration D, and do the results show that every increase in depth improves accuracy?",
+      "How does VGG perform dense evaluation using a fully convolutional network, and how does this differ from evaluating a fixed set of image crops?"
+    ]
+  },
+  "questions": [
+    {
+      "id": "n1",
+      "question": "In the Transformer decoder, how do the shifted target embeddings and masked self-attention prevent access to future target tokens during training?",
+      "type": "single_document",
+      "paper": "Transformer"
+    },
+    {
+      "id": "n2",
+      "question": "How do overlapping pooling windows differ from non-overlapping pooling in the DCNN paper, and what effects did the authors report?",
+      "type": "single_document",
+      "paper": "DCNN"
+    },
+    {
+      "id": "n3",
+      "question": "How does the VGG paper distinguish scale jittering during training from multi-scale evaluation at test time?",
+      "type": "single_document",
+      "paper": "VGG"
+    }
+  ],
+  "conditions": {
+    "base": {
+      "rewrite": false,
+      "hyde": false
+    },
+    "rewrite": {
+      "rewrite": true,
+      "hyde": false
+    },
+    "hyde": {
+      "rewrite": false,
+      "hyde": true
+    },
+    "both": {
+      "rewrite": true,
+      "hyde": true
+    }
+  },
+  "control": "cache exact decomposition/rewrite/HyDE responses once per question; fresh final generation in every condition",
+  "model_comparison": "DeepSeek vs original cached Qwen3.5-2B; same final prompts/evidence and an additional matched 512-token generation comparison; no Kimi calls",
+  "production_defaults_changed": false,
+  "rubric_locked_before_generation": {
+    "n1": [
+      {
+        "id": "shift",
+        "criterion": "Target/output embeddings are shifted by one position.",
+        "source_chunk_ids": [
+          25
+        ]
+      },
+      {
+        "id": "causal_mask",
+        "criterion": "Decoder self-attention blocks attention to subsequent positions.",
+        "source_chunk_ids": [
+          25
+        ]
+      },
+      {
+        "id": "known_prefix",
+        "criterion": "Together, prediction for position i can use only known outputs at positions less than i; no current target leakage.",
+        "source_chunk_ids": [
+          25
+        ]
+      },
+      {
+        "id": "mask_implementation",
+        "criterion": "Illegal pre-softmax scores are set to negative infinity, giving zero attention probability.",
+        "source_chunk_ids": [
+          40
+        ]
+      }
+    ],
+    "n2": [
+      {
+        "id": "window_relation",
+        "criterion": "s=z is non-overlapping, s<z is overlapping; s is stride and z is window width.",
+        "source_chunk_ids": [
+          147,
+          148
+        ]
+      },
+      {
+        "id": "controlled_settings",
+        "criterion": "Used s=2,z=3; compared with s=2,z=2 non-overlap of equal output dimensions.",
+        "source_chunk_ids": [
+          153
+        ]
+      },
+      {
+        "id": "error_changes",
+        "criterion": "Reported top-1/top-5 error decreases are 0.4/0.3 percentage points respectively; do not swap or claim relative percent.",
+        "source_chunk_ids": [
+          153
+        ]
+      },
+      {
+        "id": "overfitting",
+        "criterion": "Authors observed overlapping-pooling models were slightly harder to overfit; avoid inventing a causal mechanism.",
+        "source_chunk_ids": [
+          153
+        ]
+      }
+    ],
+    "n3": [
+      {
+        "id": "training_sampling",
+        "criterion": "Training rescales each image with randomly sampled S in [256,512] before fixed 224x224 crops; augmentation.",
+        "source_chunk_ids": [
+          259,
+          260,
+          262
+        ]
+      },
+      {
+        "id": "test_averaging",
+        "criterion": "Inference runs a trained model on multiple rescaled versions Q and averages class posteriors; no retraining for each Q.",
+        "source_chunk_ids": [
+          287
+        ]
+      },
+      {
+        "id": "test_scale_policy",
+        "criterion": "For fixed S use Q={S-32,S,S+32}; for variable training [256,512], use Q={256,384,512}; preserve conditions.",
+        "source_chunk_ids": [
+          287,
+          288
+        ]
+      },
+      {
+        "id": "distinct_benefits",
+        "criterion": "Training jitter helps even at a single test scale; multi-scale testing separately improves versus one test scale.",
+        "source_chunk_ids": [
+          283,
+          284,
+          289
+        ]
+      }
+    ]
+  },
+  "score_definition": "Each locked criterion scored manually 1=complete/correct, 0.5=partial, 0=missing/incorrect; extra unsupported claims separately recorded. This small developer review is not independent accuracy.",
+  "driver_path": "C:\\Users\\J\\.codex\\visualizations\\2026\\10\\18\\01a14f0e-47d4-7f62-8fca-0b58c78658d1\\rewrite-hyde-experiment\\runner.py",
+  "driver_sha256": "295c2b9d57da85c019a21df26fade6b0766bf7fcf6a350524c4d362af852698c",
+  "metadata_note": "Driver checksum finalized after adding the metrics wrapper; locked questions, random seed and scoring criteria unchanged.",
+  "generation_scope": "Local baseline replays final generation only; no local-generated rewrite/HyDE/decomposition. Identical DeepSeek-built evidence is used to isolate answering quality."
+}

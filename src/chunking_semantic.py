@@ -9,8 +9,24 @@ def split_sentences(text):
     if not text:
         return []
 
+    # 保护常见缩写，避免被误认为句子结束
+    protected_text = re.sub(
+        r"\b(e\.g\.|i\.e\.|etc\.|vs\.)",
+        lambda m: m.group(0).replace(".", "<DOT>"),
+        text,
+    )
+
     # 按句子结束标点分割
-    sentences = re.split(r"(?<!\d\.)(?<=[.!?])\s+", text)
+    sentences = re.split(
+        r"(?<!\d\.)(?<=[.!?])\s+",
+        protected_text
+    )
+
+    # 恢复缩写中的句号
+    sentences = [
+        sentence.replace("<DOT>", ".")
+        for sentence in sentences
+    ]
 
     # 清理空白句子
     sentences = [
@@ -94,11 +110,8 @@ def group_sentences_by_boundaries(
                 chunks.append(current)
                 current = ""
 
-            # 最后回退到字符切分
-            for j in range(0, len(sentence), max_chunk_size):
-                chunks.append(
-                    sentence[j : j + max_chunk_size]
-                )
+            # 保留完整句子，不进行字符级硬切分
+            chunks.append(sentence)
 
             continue
 
