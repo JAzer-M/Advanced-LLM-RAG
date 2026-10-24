@@ -36,20 +36,23 @@ python3.11 -m venv .venv && .venv/bin/pip install -r requirements.txt
 ## 架构
 
 ```mermaid
-flowchart LR
+flowchart TB
     Q[问题] --> D[问题分解]
-    D --> R1[Dense 检索<br/>MiniLM]
+    D --> R1[Dense 检索 · MiniLM]
     D --> R2[BM25]
     R1 --> F[RRF 融合]
     R2 --> F
-    F --> RR[BGE 重排<br/>+ 局部证据]
-    RR --> C[按来源信号补查<br/>≤2 轮]
+    F --> RR[BGE 重排 + 局部证据]
+    RR --> C[按来源信号补查 ≤2 轮]
     C --> M{模式}
     M -->|RAG| G[生成 + 引用检查]
-    M -->|Agent| P[规划需求] --> T[工具循环<br/>搜索 / 读邻段 / arXiv] --> A[回答 + 复核]
-    M -->|Auto| G2[RAG 草稿] -->|有缺口或引用失败| P
-    G2 -->|无缺口| OUT
+    M -->|Auto| G2[RAG 草稿]
+    M -->|Agent| P[规划需求]
+    G2 -->|有缺口或引用失败| P
+    P --> T[工具循环：搜索 / 读邻段 / arXiv]
+    T --> A[回答 + 复核]
     G --> OUT[答案 + 引用原文 + 成本]
+    G2 -->|无缺口| OUT
     A --> OUT
 ```
 
