@@ -59,7 +59,7 @@ Agent工具最多3行动；规划/状态修正或重复行动改选共用一次�
 
 **Windows 适配（10月24日，验收中）：** 入库/模型准备的`fcntl`锁改为跨平台`try_lock`（Windows用msvcrt）；进程存活检查改为`pid_alive`，避免Windows上`os.kill(pid,0)`实际发送Ctrl+C；冻结版Windows数据目录为`%LOCALAPPDATA%\PaperLens`；新增`webui/start.bat`（UTF-8模式、网页内下载模型）及安装说明第7节；CI的windows-latest已通过（后端与网页测试），现为正式检查。用户已在真实Windows电脑上按源码方式人工验收：模型下载、配置、入库、问答与引用、输入法回车、重复上传、刷新接续和重启均正常；期间一次中文提问未得到答案，重试后正常，原因未定位。
 
-**Windows 安装包（进行中）：** 版本号改为0.2.0；新增`packaging/windows/`（PyInstaller无控制台构建，启用UTF-8模式，构建时在源码目录外自检并核对`utf8_mode=1`）和`build-windows`工作流（手动或推送`v*`标签触发，产物为Actions Artifact）。冻结入口在无标准流时改写到空设备，自检结果同时写入数据目录。尚未实际构建或在Windows电脑上验收。
+**Windows 安装包（10月24日）：** 版本号改为0.2.0；新增`packaging/windows/`（PyInstaller无控制台构建，启用UTF-8模式，构建时在源码目录外自检并核对`utf8_mode=1`）和`build-windows`工作流（手动或推送`v*`标签触发，产物为Actions Artifact）。冻结入口在无标准流时改写到空设备，自检结果同时写入数据目录。GitHub Actions首次构建即成功（自检通过、UTF-8模式生效）；用户在真实Windows电脑上用安装包人工验收通过。待发布为`v0.2.0`。
 
 **接下来交付工作：**
 

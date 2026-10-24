@@ -14,17 +14,20 @@
 - **三种模式**：RAG（通常 2 次模型请求）/ Agent（搜索、读邻段、停止，最多 3 个工具动作）/ Auto（RAG 优先，必要时升级）
 - **可选 arXiv 补证据**：库里没有原论文时，按标题检索并读取 1 篇固定版本 PDF，只用于本次回答
 - **网页界面**：中英文界面、回车发送（兼容中文输入法选词）、刷新后接续运行中的任务、在网页里配置任意兼容 OpenAI Chat Completions 的模型服务
-- **Mac 应用**：自带 Python 运行时，双击启动，首次使用在网页中一键下载检索模型
+- **桌面安装包**：Mac 与 Windows 版都自带 Python 运行时，双击启动，首次使用在网页中一键下载检索模型
 
 ## 下载与使用
 
-**Mac（Apple Silicon）**：从 [Releases](https://github.com/JAzer-M/Advanced-LLM-RAG/releases) 下载 `PaperLens-0.1.0-macos-arm64-preview.zip`，解压后双击 `PaperLens.app`。应用未做 Apple 公证，首次打开请右键 → 打开（或运行 `xattr -dr com.apple.quarantine PaperLens.app`）。
+从 [Releases](https://github.com/JAzer-M/Advanced-LLM-RAG/releases) 下载对应系统的安装包：
+
+- **Windows 10/11（x64）**：`PaperLens-0.2.0-windows-x64-preview.zip`，解压后双击 `PaperLens\PaperLens.exe`。程序未做代码签名，若出现 SmartScreen 提示，点“更多信息 → 仍要运行”。程序在后台运行，用网页右上角的「退出」关闭。
+- **Mac（Apple Silicon）**：`PaperLens-*-macos-arm64-preview.zip`，解压后双击 `PaperLens.app`。应用未做 Apple 公证，首次打开请右键 → 打开（或运行 `xattr -dr com.apple.quarantine PaperLens.app`）。
 
 1. 浏览器自动打开 `http://127.0.0.1:8849`，点击下载本地检索模型（约 1.6 GB，可断点续传）
 2. 在「模型」里填写 API 地址、密钥并选择模型
 3. 在「论文库」上传 PDF，入库完成后即可提问
 
-论文、索引、配置和检索模型都保存在本机 `~/Library/Application Support/PaperLens/`。提问时，问题和选中的原文段落会发送给你配置的模型服务。
+论文、索引、配置和检索模型都保存在本机：Mac 为 `~/Library/Application Support/PaperLens/`，Windows 为 `%LOCALAPPDATA%\PaperLens\`。提问时，问题和选中的原文段落会发送给你配置的模型服务。
 
 **从源码运行**（Python 3.11）：完整步骤（含本地模型准备）见[安装与首次启动](docs/INSTALL_AND_START.md)。**Windows** 用 `webui\start.bat` 启动，见其中的 [Windows 小节](docs/INSTALL_AND_START.md#7-windows源码运行)。
 
@@ -95,7 +98,7 @@ Top-20 的 Recall 只多 4.4 个百分点，没达到事先定的 5 点门槛，
 
 - 扫描件没有 OCR，复杂表格和公式的提取有限
 - 联网补证据目前只支持 arXiv
-- Mac 包仅 Apple Silicon、未公证；Windows 目前从源码运行，安装包在制作中
+- 安装包未做代码签名/公证；Mac 仅 Apple Silicon，Windows 仅 x64
 - 当前版本还没有独立新题上的总体质量评测
 
 ## 开发
