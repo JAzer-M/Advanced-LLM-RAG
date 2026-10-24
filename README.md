@@ -1,78 +1,122 @@
-# Advanced-LLM-RAG
+# PaperLens · Advanced-LLM-RAG
 
-面向科研论文的问答项目：PDF解析、Semantic分块、Dense/BM25混合检索、RRF、BGE重排、问题分解、证据保留和带引用回答。本地Agent按证据缺口选择搜索或读取邻段，Auto先走RAG再按需升级。
+[![tests](https://github.com/JAzer-M/Advanced-LLM-RAG/actions/workflows/tests.yml/badge.svg)](https://github.com/JAzer-M/Advanced-LLM-RAG/actions/workflows/tests.yml)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-**当前：本机PaperLens可使用三模式、引用原文、模型设置和PDF入库。** 中文比较需求绑定、回答语言和JSON代码块兼容已修复；此前345项后端测试通过，本轮独立虚拟环境的31项网页检查通过。Mac安装启动闭环与前端操作已验收，本地模型复用已有缓存。当前版本尚无独立新题总体质量成绩。[当前进度](PROGRESS.md) · [安装与首次启动](docs/INSTALL_AND_START.md) · [质量与成本总览](docs/PROJECT_METRICS.md)
+面向科研论文的本地问答系统：上传 PDF，提问，得到**每句话都能点回原文段落与页码**的回答。检索是 Dense + BM25 混合召回、RRF 融合加 BGE 重排；回答有三种模式：固定 RAG、按证据缺口自主补查的 Agent，以及先走 RAG、发现缺口再升级的 Auto。
 
-## 本机网页
+![PaperLens：回答与引用原文联动](docs/assets/paperlens-answer.png)
 
-Mac可双击桌面的“PaperLens 启动.command”或[项目启动文件](webui/start.command)，也可在项目根目录运行：
+## 功能
+
+- **PDF 入库**：正文提取、基础清理、语义分块、向量化；内容去重，新版本校验通过后原子切换，失败不影响现有库
+- **带引用回答**：引用编号对应原文段落和页码，点击即在右侧高亮；未被引用的检索结果也可展开核对
+- **三种模式**：RAG（通常 2 次模型请求）/ Agent（搜索、读邻段、停止，最多 3 个工具动作）/ Auto（RAG 优先，必要时升级）
+- **可选 arXiv 补证据**：库里没有原论文时，按标题检索并读取 1 篇固定版本 PDF，只用于本次回答
+- **网页界面**：中英文界面、回车发送（兼容中文输入法选词）、刷新后接续运行中的任务、在网页里配置任意兼容 OpenAI Chat Completions 的模型服务
+- **Mac 应用**：自带 Python 运行时，双击启动，首次使用在网页中一键下载检索模型
+
+## 下载与使用
+
+**Mac（Apple Silicon）**：从 [Releases](https://github.com/JAzer-M/Advanced-LLM-RAG/releases) 下载 `PaperLens-0.1.0-macos-arm64-preview.zip`，解压后双击 `PaperLens.app`。应用未做 Apple 公证，首次打开请右键 → 打开（或运行 `xattr -dr com.apple.quarantine PaperLens.app`）。
+
+1. 浏览器自动打开 `http://127.0.0.1:8849`，点击下载本地检索模型（约 1.6 GB，可断点续传）
+2. 在「模型」里填写 API 地址、密钥并选择模型
+3. 在「论文库」上传 PDF，入库完成后即可提问
+
+论文、索引、配置和检索模型都保存在本机 `~/Library/Application Support/PaperLens/`。提问时，问题和选中的原文段落会发送给你配置的模型服务。
+
+**从源码运行**（Python 3.11）：完整步骤（含本地模型准备）见[安装与首次启动](docs/INSTALL_AND_START.md)。
 
 ```bash
-.venv/bin/python -B -u webui/server.py
+python3.11 -m venv .venv && .venv/bin/pip install -r requirements.txt
+.venv/bin/python -B -u webui/server.py      # 打开 http://127.0.0.1:8849
 ```
 
-服务就绪后打开[PaperLens](http://127.0.0.1:8849)，使用期间保持启动终端打开。支持暖白/朱橙阅读布局、答案与原文联动、Enter发送/Shift+Enter换行、中英文界面和已保存案例。打开回放不生成新回答；实时提问使用配置的API。
+## 架构
 
-网页当前是本机9篇/1767段库，包含新增Mamba；由`data/webui/library.json`独立选择。PDF上传后先构建并校验新版本，再切换下一次网页问答。上传数据、指针与新索引被Git忽略，不随本次本地提交迁移。[网页操作及限制](webui/README.md) · [PDF入库验收](docs/WEBUI_PDF_IMPORT_2026-10-24.md)
+```mermaid
+flowchart LR
+    Q[问题] --> D[问题分解]
+    D --> R1[Dense 检索<br/>MiniLM]
+    D --> R2[BM25]
+    R1 --> F[RRF 融合]
+    R2 --> F
+    F --> RR[BGE 重排<br/>+ 局部证据]
+    RR --> C[按来源信号补查<br/>≤2 轮]
+    C --> M{模式}
+    M -->|RAG| G[生成 + 引用检查]
+    M -->|Agent| P[规划需求] --> T[工具循环<br/>搜索 / 读邻段 / arXiv] --> A[回答 + 复核]
+    M -->|Auto| G2[RAG 草稿] -->|有缺口或引用失败| P
+    G2 -->|无缺口| OUT
+    G --> OUT[答案 + 引用原文 + 成本]
+    A --> OUT
+```
 
-旧8848页面和启动文件已删除。`ui_prototype/app.py`仍被新服务复用，保留它的辅助函数；不再单独启动旧服务。[保留原因](ui_prototype/README.md)
+每条路径都有硬预算：Agent 含分解最多 11 次模型请求，Auto 最坏 13 次；失败不自动重试，超时或 429 会标记为「暂时无法获取」，不会当成「论文未报告」。[结果字段约定](docs/BACKEND_RESULT.md)
 
-## CLI与默认值
+## 关键结果
 
-当前Mac环境为`.venv` / Python 3.11.9，Embedding/BGE使用CPU，分解与生成使用兼容Chat Completions的API。已有环境无需重建；首次安装按[安装说明](docs/INSTALL_AND_START.md)创建虚拟环境、安装固定版本依赖并准备本地模型。私有配置可在网页填写，额外选项参照[示例](api.example.json)。新安装从空网页库上传自己的首篇PDF即可建库；本机网关需先运行。[验收记录](docs/maintenance/installation_ui_acceptance_20261024/report.md) · [GitHub本机下载包方案](docs/LOCAL_DISTRIBUTION.md) · [Mac预览包验收](docs/maintenance/macos_package_20261024/report.md)
+**检索消融**（八篇论文库、42 道有标注题、Top-10）：
 
-以下是真实问答入口，会产生API请求。在项目根目录执行：
+| 方法 | Recall | MRR | MAP |
+| --- | --- | --- | --- |
+| Dense | 0.480 | 0.347 | 0.292 |
+| BM25 | 0.581 | 0.386 | 0.342 |
+| Hybrid（RRF） | 0.578 | 0.453 | 0.398 |
+| + BGE 重排 | 0.693 | 0.551 | 0.471 |
+| + 问题分解 | 0.748 | 0.559 | 0.477 |
+| + 证据补查（≤2 轮） | **0.768** | **0.571** | **0.484** |
+
+Top-20 的 Recall 只多 4.4 个百分点，没达到事先定的 5 点门槛，所以默认保留 Top-10。
+
+**回答对照**（同题、同库、同模型，12 题，人工按冻结标准评分）：
+
+| 路径 | 严格通过 | 核心要点 | 模型请求 | token |
+| --- | --- | --- | --- | --- |
+| RAG | 10/12 | 25/27 | 24 | 34,470 |
+| Agent | 7/12 | 16/27 | 49 | 95,440 |
+
+这一轮 Agent 质量更低、成本是 RAG 的 2.8 倍，主要失败在需求规划。这是后来改成 **RAG 优先、按需升级** 的 Auto 的直接原因。arXiv 补证据在两道缺原论文的题上把必答点从 5/10 补到 10/10，但 token 增加到 2.5 倍，反例的正确拒答也从 2/2 降到 1/2。
+
+题量小、出题和审阅都不是第三方，以上不是泛化质量证明。所有数字都链接到原始运行记录：[质量与成本总览](docs/PROJECT_METRICS.md)。
+
+## 设计取舍
+
+- **引用可核对优先于回答流畅**：回答中的每个编号都对应一段保存下来的原文，引用登记与检索结果逐字段校验
+- **预算显式化**：工具动作、复核轮次、原文字数都有上限，运行结果记录实际请求数和 token
+- **失败如实交付**：区分 completed / degraded / failed，降级时说明缺口而不是编造
+- **知识库版本化**：索引、分块与清单成套保存并校验哈希，网页入库生成新版本再切换
+
+## 已知局限
+
+- 扫描件没有 OCR，复杂表格和公式的提取有限
+- 联网补证据目前只支持 arXiv
+- Mac 包仅 Apple Silicon、未公证；Windows 未验收
+- 当前版本还没有独立新题上的总体质量评测
+
+## 开发
 
 ```bash
-.venv/bin/python main.py --mode auto "What batch size does DPR use?"
-.venv/bin/python main.py --mode agent "What batch size does DPR use?"
-.venv/bin/python main.py --mode rag --kb-version all-papers-8-20261020 "What batch size does DPR use?"
+# 离线测试（模型用替身，不调用 API）
+.venv/bin/python -m unittest discover -s tests
+.venv/bin/python -B -m unittest webui.test_server webui.test_config webui.test_library webui.test_model_assets webui.test_runtime
 
-# 显式允许arXiv补证据；最多一次搜索和一次固定版本PDF读取。
+# 命令行问答（会调用 API）
+.venv/bin/python main.py --mode auto "What batch size does DPR use?"
 .venv/bin/python main.py --mode agent --allow-network "According to the Mamba paper, what inference throughput advantage over Transformers is stated in its abstract?"
 ```
 
-不传问题则交互输入。Python函数默认`mode='rag'`，CLI默认`--mode auto`。Windows解释器入口可换为`.venv\Scripts\python.exe`，但网页PDF入库的Windows锁机制尚未验收。[API配置](docs/PYCHARM_API_GUIDE.md) · [Mac环境记录](docs/MAC_HANDOFF.md)
+macOS 应用构建见 [packaging/macos](packaging/macos/README.md)。
 
-| 路径 | 默认知识库 | 模型调用边界 |
-| --- | --- | --- |
-| RAG | 全局激活指针；本机为三篇`semantic-mac-20261019` | 常规完整题通常2次；含原引用检查/有限修复 |
-| Agent | 未指定时八篇`all-papers-8-20261020` | 含分解最多11次，工具最多3行动 |
-| Auto | 未指定时八篇`all-papers-8-20261020` | 直答通常2次，升级最坏13次 |
-| 网页三模式 | 提交时固定网页指针版本；本机当前9篇 | 复用上述模式预算 |
-
-三模式都可用`--kb-version`或`kb_version`显式选择合法配对库。同库比较需显式选同一版本。`--allow-network`默认关闭，只支持Agent/Auto，仅开放arXiv；模型上限分别增为14/16。库中已有明确主论文时不会因为开启开关就必然联网，外部补证据也不自动入库。
-
-Agent/Auto日志写入`logs/agent_runs/`、`logs/auto_runs/`，或指定新的空`--output-dir`。三模式返回答案/说明、证据、行动、停止原因、状态和成本；failed/degraded的CLI退出码为1。429/超时不等于论文未报告，完成或自动复核通过不等于独立事实验收。[返回约定](docs/BACKEND_RESULT.md)
-
-## 模型、知识库与检索
-
-截至2026-10-24，本机请求模型为`cn:glm-5.3`，最近响应报告`glm-5.3`；历史冻结评测主要使用`cn:deepseek-v4.1-flash`。回答跟随提问语言，明确指定语言时优先；界面语言开关只改变界面。模型、语言和知识库变化后的结果不直接混入旧成绩。
-
-本机保留3/5/8篇库及当前9篇网页库；索引、chunks与manifest须成套保存。[版本操作及迁移边界](docs/KNOWLEDGE_BASE_VERSIONS.md)
-
-当前每路/RRF候选120、RRF常数60、最终Top-10、子题局部Top-3、按来源信号最多两轮补查；rewrite/HyDE关闭。Top-10/20检索对照和默认预算依据见[实验总览](docs/PROJECT_METRICS.md)。现有小样本结果没有证明当前Agent/Auto总体优于固定RAG；工程行为、已知题修复和独立质量分开记录。
-
-## 验证与阅读入口
-
-此前完整行为回归保存为345项后端、27项网页通过，见[历史测试汇总](evaluation/results/chinese_comparison_20261024/final_offline_test_summary.json)。本轮修复首次启动和标题提取后，独立环境31项网页检查通过；只新增一次真实RAG问答（2请求/3098 token），没有重跑后端全套或质量评测。[本轮验收](docs/maintenance/installation_ui_acceptance_20261024/report.md)。以后行为变更时可在已具备模型缓存的环境运行：
-
-```bash
-PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
-MKL_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 TOKENIZERS_PARALLELISM=false \
-HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 \
-.venv/bin/python -m unittest discover -s tests -v
-
-.venv/bin/python -B -m unittest webui.test_server webui.test_config webui.test_library webui.test_model_assets webui.test_runtime
-```
-
-测试使用模型替身；网页中的两项检查需允许临时本机HTTP端口。`evaluation.run_evaluation`与`evaluation.run_answer_evaluation`可能调用API，恢复上下文先读保存记录；无需因换对话重跑实验。检索评估的补查须显式启用`--complete-evidence --completion-rounds 2`，各K独立运行。
-
-| 入口 | 用途 |
+| 文档 | 内容 |
 | --- | --- |
-| [PROGRESS](PROGRESS.md) | 当前完成范围、配置与待办 |
-| [PROJECT_METRICS](docs/PROJECT_METRICS.md) | RAG/Agent/Auto质量、成本、检索和失败证据 |
-| [代码阅读](docs/CODE_READING_GUIDE.md) / [Agent操作](docs/AGENT_REPLAY_GUIDE.md) | 文件职责、工具与保存记录 |
-| [实验索引](evaluation/results/README.md) / [历史归档](docs/history/README.md) | 原始报告、问题、Gold、失败和版本快照 |
-| [预期全流程](docs/PROJECT_WORKFLOW.md) | 阶段目标；不作为实际进度表 |
+| [PROGRESS](PROGRESS.md) | 当前进度、配置与待办 |
+| [PROJECT_METRICS](docs/PROJECT_METRICS.md) | 分版本质量、成本、检索指标和失败案例 |
+| [代码阅读指南](docs/CODE_READING_GUIDE.md) | 文件职责与调用关系 |
+| [实验索引](evaluation/results/README.md) | 每轮实验的原始记录 |
+| [网页说明](webui/README.md) | 网页操作与限制 |
+
+## License
+
+[MIT](LICENSE)

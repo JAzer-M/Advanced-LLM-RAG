@@ -59,4 +59,4 @@
 | 早期模型、提示和保持风格清理 | [DeepSeek调试](DEEPSEEK_V41_DEBUG_LOG_2026-10-18.md)、[rewrite/HyDE与本地模型](REWRITE_HYDE_LOCAL_COMPARISON_2026-10-18.md)、[10月18日清理](CLEANUP_LOG_2026-10-18.md) |
 | 全部历史进度、旧清单与恢复 | [完整进度正文](history/PROGRESS_THROUGH_2026-10-22.md)、[历史归档](history/README.md)、[早期实验概览](experiments.md) |
 
-`chat_history/`保留10月19～20日已导出的对话及工具记录；10月21～23日上下文还需结合各轮报告和当前PROGRESS，不把旧导出当作完整最新对话。
+`chat_history/`（10月19～20日导出的对话及工具记录）只保存在作者本机，不随仓库发布；历史报告中指向它的链接在公开仓库中不可用。项目上下文以各轮报告和当前PROGRESS为准。

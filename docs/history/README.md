@@ -14,3 +14,5 @@
 其中 `evaluation/results/kimi_main_evaluation/q1.json` 至 `q6.json` 是本次比较的历史 Kimi 记录；`answer_evaluation_baseline/` 是历史 2B 回答；旧失败案例也保留。
 
 归档不包含废弃 Python 代码。清理前代码快照及恢复位置见 [清理日志](../CLEANUP_LOG_2026-10-18.md)。当前 DeepSeek 原始结果见 `evaluation/results/deepseek_v41/`，不在此归档内。
+
+2026-10-24 首页改为展示页前的 README 全文保存在 [README_BEFORE_SHOWCASE_2026-10-24.md](README_BEFORE_SHOWCASE_2026-10-24.md)，其中的 CLI 默认值、知识库与测试细节仍有效。
