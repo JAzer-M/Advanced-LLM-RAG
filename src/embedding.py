@@ -2,11 +2,12 @@
 # 查询和建库必须使用匹配的模型；标题元数据没有在这里拼入编码文本。
 
 from sentence_transformers import SentenceTransformer
+from src.runtime_paths import model_location
 
 def load_embedding_model():
 
     model = SentenceTransformer(
-        "sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2",
+        model_location("sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2"),
         device = "cpu"
     )
 

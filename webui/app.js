@@ -27,7 +27,13 @@ const STRINGS = {
     'net.label': '联网搜索', 'net.title': '目前只检索 arXiv 论文', 'net.ragOff': 'RAG 只使用本地论文，不能联网',
     'net.note': '联网搜索目前只查 arXiv：本地论文库里没有原论文时，按标题搜索一次、读取 1 篇 PDF。读到的内容只用于这次回答，不会加入论文库。',
     'notConfigured': '还没有设置模型服务。可以先看已保存的回答，或者打开模型设置。', 'notConfigured.action': '打开模型设置',
-    'offline': '无法连接本地服务，请确认启动 PaperLens 的终端窗口仍然开着。', 'offline.action': '重新连接',
+    'emptyLibrary': '论文库还是空的。先添加 PDF，入库完成后即可提问。', 'emptyLibrary.action': '添加论文',
+    'setup.missing': '首次使用需准备本地检索模型，约 {n} GB。完成后即可上传论文。',
+    'setup.action': '下载检索模型', 'setup.retry': '重新准备模型',
+    'setup.queued': '正在启动模型准备…', 'setup.download': '正在下载 {model}：{file}（{done}/{total} MB）',
+    'setup.verify': '下载完成，正在校验和加载本地模型…', 'setup.ready': '本地检索模型已准备完成',
+    'app.quit': '退出', 'app.stopped': 'PaperLens 已退出。重新打开应用即可继续使用。',
+    'offline': '无法连接本地服务。如果 PaperLens 应用或启动它的终端窗口已关闭，请重新打开后点“重新连接”。', 'offline.action': '重新连接',
     'result.edit': '修改问题', 'result.new': '新问题', 'answer.aria': '回答',
     'meta.replay': '已保存的回答，没有调用模型', 'meta.autoDirect': 'Auto 直接回答', 'meta.autoAgent': 'Auto 升级为 Agent',
     'meta.web': '联网读取 {n} 篇 arXiv 论文', 'meta.requests': '{n} 次模型请求', 'meta.requestsFailed': '{n} 次模型请求，{f} 次失败',
@@ -126,7 +132,13 @@ const STRINGS = {
     'net.label': 'Web search', 'net.title': 'Currently searches arXiv papers only', 'net.ragOff': 'RAG uses local papers only',
     'net.note': 'Web search currently covers arXiv only: when the original paper isn’t in your library, it searches by title once and reads one PDF. What it reads is used for this answer only and isn’t added to your library.',
     'notConfigured': 'No model service is set up yet. You can open a saved answer, or set up a model.', 'notConfigured.action': 'Open model settings',
-    'offline': 'Can’t reach the local service. Make sure the terminal window running PaperLens is still open.', 'offline.action': 'Reconnect',
+    'emptyLibrary': 'Your library is empty. Add a PDF and wait for import to finish before asking a question.', 'emptyLibrary.action': 'Add papers',
+    'setup.missing': 'First use needs about {n} GB of local retrieval models. You can upload papers after setup.',
+    'setup.action': 'Download retrieval models', 'setup.retry': 'Retry model setup',
+    'setup.queued': 'Starting model setup…', 'setup.download': 'Downloading {model}: {file} ({done}/{total} MB)',
+    'setup.verify': 'Download finished. Checking and loading local models…', 'setup.ready': 'Local retrieval models are ready',
+    'app.quit': 'Quit', 'app.stopped': 'PaperLens has quit. Open the app again to continue.',
+    'offline': 'Can’t reach the local service. If the PaperLens app or the terminal window running it was closed, reopen it and click Reconnect.', 'offline.action': 'Reconnect',
     'result.edit': 'Edit question', 'result.new': 'New question', 'answer.aria': 'Answer',
     'meta.replay': 'Saved answer, no model call', 'meta.autoDirect': 'Auto, answered directly', 'meta.autoAgent': 'Auto, escalated to Agent',
     'meta.web': 'Read {n} arXiv paper(s)', 'meta.requests': '{n} model requests', 'meta.requestsFailed': '{n} model requests, {f} failed',
@@ -308,7 +320,8 @@ function syncControls() {
   const locked = state.busy || state.loading;
   const configured = !!state.meta?.configured;
   $('question').disabled = locked;
-  $('submitButton').disabled = locked || !configured;
+  const modelsReady = !state.meta?.setup?.enabled || state.meta.setup.status === 'ready';
+  $('submitButton').disabled = locked || !configured || !state.meta?.chunks || !modelsReady;
   $('submitButton').textContent = state.busy ? t('composer.busy') : state.editing ? t('composer.resubmit') : t('composer.submit');
   document.querySelectorAll('[data-mode]').forEach((el) => {
     el.setAttribute('aria-pressed', String(el.dataset.mode === state.mode)); el.disabled = locked;
@@ -332,10 +345,62 @@ function renderMeta() {
   $('modelName').textContent = unset ? t('model.none') : meta.model;
   $('modelButton').classList.toggle('unset', unset);
   $('modelButton').title = unset ? '' : meta.model;
-  if (meta && !meta.configured && !state.offline) {
+  $('quitButton').hidden = !meta?.can_exit;
+  if (renderSetup()) return;
+  if (meta && !meta.chunks && !state.offline) {
+    notice(t('emptyLibrary'), { label: t('emptyLibrary.action'), run: () => showView('library') });
+  } else if (meta && !meta.configured && !state.offline) {
     notice(t('notConfigured'), { label: t('notConfigured.action'), run: openSettings });
   } else if (!state.offline) notice('');
 }
+
+// 首次准备只下载检索模型；回答模型仍由用户配置。进度和失败状态可在刷新后接续。
+let setupTimer = null;
+function renderSetup() {
+  const setup = state.meta?.setup;
+  const blocked = !!setup?.enabled && setup.status !== 'ready';
+  $('paperFiles').disabled = blocked; $('twoColumns').disabled = blocked;
+  if (blocked) $('uploadButton').disabled = true;
+  else if (state.setupBlocked) $('uploadButton').disabled = false;
+  state.setupBlocked = blocked;
+  if (!blocked || state.offline) return false;
+  let text = t('setup.missing', { n: (setup.total_bytes / 1e9).toFixed(2) });
+  if (setup.status === 'running') {
+    text = setup.phase === 'verify' ? t('setup.verify') : setup.phase === 'download'
+      ? t('setup.download', { model:setup.repo, file:setup.file,
+          done:number(Math.floor(setup.completed_bytes / 1e6)), total:number(Math.ceil(setup.total_bytes / 1e6)) })
+      : t('setup.queued');
+    notice(text);
+    if (setupTimer === null) setupTimer = setTimeout(watchSetup, 1200);
+  } else {
+    notice(setup.error || text, { label:t(setup.status === 'failed' ? 'setup.retry' : 'setup.action'), run:prepareModels });
+  }
+  return true;
+}
+async function watchSetup() {
+  clearTimeout(setupTimer); setupTimer = null;
+  try {
+    state.meta.setup = await api('/api/setup');
+    renderMeta(); syncControls();
+    if (state.meta.setup.status === 'ready') { await loadMeta(); toast(t('setup.ready')); }
+  } catch (error) {
+    notice(error.message, { label:t('offline.action'), run:watchSetup });
+  }
+}
+async function prepareModels() {
+  try {
+    state.meta.setup = await postJSON('/api/setup', {});
+    renderMeta(); syncControls();
+  } catch (error) { notice(error.message, { label:t('setup.retry'), run:prepareModels }); }
+}
+$('quitButton').addEventListener('click', async () => {
+  try {
+    await postJSON('/api/quit', {});
+    clearTimeout(setupTimer); clearTimeout(state.timer); clearTimeout(importTimer);
+    notice(t('app.stopped'));
+    document.querySelectorAll('button,input,textarea').forEach((el) => { el.disabled = true; });
+  } catch (error) { notice(error.message); }
+});
 function renderHome() {
   const meta = state.meta; if (!meta) return;
   $('homePaperCount').textContent = t('home.papers', { n: meta.papers.length });
@@ -381,9 +446,10 @@ $('brandButton').addEventListener('click', () => { if (state.view !== 'ask') sho
 
 $('composer').addEventListener('submit', async (event) => {
   event.preventDefault();
-  if (state.busy || state.loading || !state.meta?.configured) return;
+  if (state.busy || state.loading || !state.meta?.configured || !state.meta?.chunks) return;
   const query = $('question').value.trim();
   if (!query) { notice(t('empty')); $('question').focus(); return; }
+  notice('');
   // 请求发出前就锁定，避免双击或回车重复提交。
   state.busy = true; state.editing = false; state.result = null; state.lost = false; state.sel = null;
   placeComposer(); reading(true); renderRunning(0, query);
@@ -715,6 +781,7 @@ async function loadExample(id) {
   try {
     const result = await api('/api/examples/' + encodeURIComponent(id));
     if (request !== state.exampleRequest) return;
+    notice('');
     $('question').value = result.query; renderResult(result); remember({ example: id });
     window.scrollTo({ top: 0 });
   } catch (error) { if (error.offline) offline(); else notice(error.message); }

@@ -9,8 +9,9 @@ import sys
 import time
 from uuid import uuid4
 from wsgiref.simple_server import make_server
+from src.runtime_paths import data_root
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = data_root()
 HERE = Path(__file__).resolve().parent
 PORT = 8848
 KB_VERSION = 'all-papers-8-20261020'

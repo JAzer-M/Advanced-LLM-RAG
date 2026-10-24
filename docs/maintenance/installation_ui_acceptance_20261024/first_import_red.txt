@@ -1,0 +1,32 @@
+E
+======================================================================
+ERROR: test_first_pdf_builds_library_without_experiment_assets (webui.test_library.LibraryTests.test_first_pdf_builds_library_without_experiment_assets)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/j/Desktop/Advanced-LLM-RAG/webui/test_library.py", line 41, in test_first_pdf_builds_library_without_experiment_assets
+    self.build(folder)
+  File "/Users/j/Desktop/Advanced-LLM-RAG/webui/test_library.py", line 35, in build
+    with patch('src.embedding.load_embedding_model',return_value=Model()):library.build(folder)
+                                                                          ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/webui/library.py", line 113, in build
+    index, old_chunks, _ = load_knowledge_base(processed, state['version'])
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/src/knowledge_base.py", line 75, in load_knowledge_base
+    index, chunks, hashes = _read_pair(index_path, chunks_path)
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/src/knowledge_base.py", line 29, in _read_pair
+    index_bytes = index_path.read_bytes()
+                  ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/pathlib.py", line 1050, in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/pathlib.py", line 1044, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/private/var/folders/b0/vfsdntnx7c91x701dyzh193r0000gn/T/tmplguhuu9m/fresh/data/processed/faiss_semantic.index'
+
+----------------------------------------------------------------------
+Ran 1 test in 2.144s
+
+FAILED (errors=1)
+sys:1: DeprecationWarning: builtin type swigvarlink has no __module__ attribute

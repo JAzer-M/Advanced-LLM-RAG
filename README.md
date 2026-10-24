@@ -2,7 +2,7 @@
 
 面向科研论文的问答项目：PDF解析、Semantic分块、Dense/BM25混合检索、RRF、BGE重排、问题分解、证据保留和带引用回答。本地Agent按证据缺口选择搜索或读取邻段，Auto先走RAG再按需升级。
 
-**当前：本机PaperLens可使用三模式、引用原文、模型设置和PDF入库。** 中文比较需求绑定、回答语言和JSON代码块兼容已修复；最新保存的345项后端、27项网页测试通过。当前版本尚无独立新题总体质量成绩。[当前进度](PROGRESS.md) · [质量与成本总览](docs/PROJECT_METRICS.md) · [文档导航](docs/README.md)
+**当前：本机PaperLens可使用三模式、引用原文、模型设置和PDF入库。** 中文比较需求绑定、回答语言和JSON代码块兼容已修复；此前345项后端测试通过，本轮独立虚拟环境的31项网页检查通过。Mac安装启动闭环与前端操作已验收，本地模型复用已有缓存。当前版本尚无独立新题总体质量成绩。[当前进度](PROGRESS.md) · [安装与首次启动](docs/INSTALL_AND_START.md) · [质量与成本总览](docs/PROJECT_METRICS.md)
 
 ## 本机网页
 
@@ -20,7 +20,7 @@ Mac可双击桌面的“PaperLens 启动.command”或[项目启动文件](webui
 
 ## CLI与默认值
 
-当前Mac环境为`.venv` / Python 3.11.9，Embedding/BGE使用CPU，分解与生成使用兼容Chat Completions的API。已有环境无需重建；新环境的依赖在`requirements.txt`，私有配置按[示例](api.example.json)填写为本机`api.local.json`。本机模型网关需要运行。首次建库与全新克隆的完整引导和验收仍待下一阶段完成。
+当前Mac环境为`.venv` / Python 3.11.9，Embedding/BGE使用CPU，分解与生成使用兼容Chat Completions的API。已有环境无需重建；首次安装按[安装说明](docs/INSTALL_AND_START.md)创建虚拟环境、安装固定版本依赖并准备本地模型。私有配置可在网页填写，额外选项参照[示例](api.example.json)。新安装从空网页库上传自己的首篇PDF即可建库；本机网关需先运行。[验收记录](docs/maintenance/installation_ui_acceptance_20261024/report.md) · [GitHub本机下载包方案](docs/LOCAL_DISTRIBUTION.md) · [Mac预览包验收](docs/maintenance/macos_package_20261024/report.md)
 
 以下是真实问答入口，会产生API请求。在项目根目录执行：
 
@@ -56,7 +56,7 @@ Agent/Auto日志写入`logs/agent_runs/`、`logs/auto_runs/`，或指定新的�
 
 ## 验证与阅读入口
 
-最近一次完整行为回归已保存为345项后端、27项网页通过，见[测试汇总](evaluation/results/chinese_comparison_20261024/final_offline_test_summary.json)。本轮文档整理未重复全套测试或付费评测。以后行为变更时可在已具备模型缓存的环境运行：
+此前完整行为回归保存为345项后端、27项网页通过，见[历史测试汇总](evaluation/results/chinese_comparison_20261024/final_offline_test_summary.json)。本轮修复首次启动和标题提取后，独立环境31项网页检查通过；只新增一次真实RAG问答（2请求/3098 token），没有重跑后端全套或质量评测。[本轮验收](docs/maintenance/installation_ui_acceptance_20261024/report.md)。以后行为变更时可在已具备模型缓存的环境运行：
 
 ```bash
 PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \

@@ -7,6 +7,8 @@
 | 需要了解什么 | 入口 |
 | --- | --- |
 | 当前已完成、限制和下一步 | [PROGRESS](../PROGRESS.md) |
+| 首次安装、模型准备、空库入库和启动 | [安装与首次启动](INSTALL_AND_START.md)、[安装及操作验收](maintenance/installation_ui_acceptance_20261024/report.md) |
+| GitHub下载、本机网页和自己的论文库 | [本机分发方案](LOCAL_DISTRIBUTION.md) |
 | 当前PaperLens：8849、暖白/朱橙、引用联动和三模式 | [启动说明](../webui/README.md)、[初版开发记录](WEBUI_REBUILD_2026-10-23.md) |
 | 模型设置与网页PDF入库 | [模型配置记录](WEBUI_MODEL_SETTINGS_2026-10-24.md)、[PDF入库验收](WEBUI_PDF_IMPORT_2026-10-24.md) |
 | 旧8848原型：页面已退役，仅保留共用函数 | [保留原因](../ui_prototype/README.md)、[历史界面验收](../evaluation/results/ui_prototype_20261023/report.md) |
@@ -24,6 +26,7 @@
 
 | 工作 | 报告 |
 | --- | --- |
+| 10月24日独立虚拟环境安装、31项网页检查、空库首篇入库和实际前端验收；2请求/3098 token | [验收记录](maintenance/installation_ui_acceptance_20261024/report.md) |
 | 10月24日中文比较修复；345项后端/27项网页通过，真实Agent核心比较原文核对通过 | [修复报告](../evaluation/results/chinese_comparison_20261024/report.md)、[最终测试](../evaluation/results/chinese_comparison_20261024/final_offline_test_summary.json)、[原文核对](../evaluation/results/chinese_comparison_20261024/manual_review.json) |
 | 10月24日当前文档、历史归档、分版本实验汇总与本地交付 | [本轮整理与核验](maintenance/p4_closeout_20261024/report.md)、[实验总览](PROJECT_METRICS.md) |
 | 10月23日后端故障交付、HTTP诊断和统一返回；当时314项离线通过，真实超时后有明确说明 | [修复报告](../evaluation/results/backend_reliability_20261023/report.md)、[返回字段与优先级](BACKEND_RESULT.md)、[成本与结果](../evaluation/results/backend_reliability_20261023/live/summary.json) |

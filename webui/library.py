@@ -6,8 +6,9 @@ import os
 from pathlib import Path
 import tempfile
 from uuid import uuid4
+from src.runtime_paths import data_root
 
-ROOT = Path(__file__).resolve().parents[1]
+ROOT = data_root()
 BASE_VERSION = 'all-papers-8-20261020'
 EMBEDDING = 'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2'
 MAX_BYTES = 20 * 1024 * 1024
@@ -27,12 +28,17 @@ def atomic_json(path, value):
 
 def current():
     path = ROOT / 'data/webui/library.json'
-    return json.loads(path.read_text()) if path.exists() else {'version': BASE_VERSION}
+    if path.exists(): return json.loads(path.read_text())
+    # 旧工作区沿用八篇基线；新安装从空库开始，不依赖本机实验资产。
+    baseline = ROOT / 'data/processed/versions' / BASE_VERSION / 'manifest.json'
+    return {'version': BASE_VERSION if baseline.is_file() else None}
 
 
 def catalog():
     # 元数据与问答读取同一个网页库版本。完整配对校验在导入/问答时执行。
     state = current()
+    if state['version'] is None:
+        return {'papers':[], 'chunks':0, 'kb_version':None}
     chunks = json.loads((ROOT / 'data/processed/versions' / state['version'] / 'chunks.json').read_text())
     papers = {}
     for chunk in chunks:
@@ -45,12 +51,15 @@ def paper_title(pdf, fallback):
     """缺少元数据时尝试首页顶部大字标题，排除竖排水印；失败用文件名。"""
     title=(pdf.metadata.get('title') or '').strip()
     if title: return title
-    spans=[span for block in pdf[0].get_text('dict')['blocks'] if 'lines' in block
+    lines=[line for block in pdf[0].get_text('dict')['blocks'] if 'lines' in block
            for line in block['lines'] if abs(line['dir'][1])<0.1
-           for span in line['spans'] if span['bbox'][1]<pdf[0].rect.height*0.35 and span['text'].strip()]
+           and line['bbox'][1]<pdf[0].rect.height*0.35 and any(s['text'].strip() for s in line['spans'])]
+    spans=[span for line in lines for span in line['spans'] if span['text'].strip()]
     if spans:
         largest=max(s['size'] for s in spans)
-        title=' '.join(s['text'].strip() for s in spans if s['size']>=largest-0.5)
+        # 标题可能采用大小写混排字号，选中标题行后保留整行，避免只剩大写首字母。
+        title=' '.join(''.join(s['text'] for s in line['spans']).strip() for line in lines
+                       if max(s['size'] for s in line['spans'])>=largest-0.5)
         if largest>=12 and 10<=len(title)<=300: return title
     return fallback
 
@@ -105,11 +114,14 @@ def build(folder):
             except BlockingIOError: raise ValueError('已有导入正在进行，请等待完成后重试。') from None
             state = current()
             processed = ROOT/'data/processed'
-            index, old_chunks, _ = load_knowledge_base(processed, state['version'])
-            manifest = json.loads((processed/'versions'/state['version']/'manifest.json').read_text())
-            if manifest['build'].get('embedding_model') != EMBEDDING:
-                raise ValueError('当前库的向量模型不兼容，未修改知识库。')
-            hashes = dict(manifest['build'].get('source_pdfs', {}))
+            if state['version'] is None:
+                index, old_chunks, hashes = None, [], {}
+            else:
+                index, old_chunks, _ = load_knowledge_base(processed, state['version'])
+                manifest = json.loads((processed/'versions'/state['version']/'manifest.json').read_text())
+                if manifest['build'].get('embedding_model') != EMBEDDING:
+                    raise ValueError('当前库的向量模型不兼容，未修改知识库。')
+                hashes = dict(manifest['build'].get('source_pdfs', {}))
             sources = {c['source'] for c in old_chunks}
             request = json.loads((folder/'request.json').read_text())
             documents, added, skipped = [], [], []
@@ -143,11 +155,13 @@ def build(folder):
             if any(not any(c['source']==source for c in chunks) for source in added):
                 raise ValueError('部分论文未生成有效片段，本批未入库。')
             vectors = embed_chunks(model, chunks)
+            if index is None: index = faiss.IndexFlatIP(vectors.shape[1])
             if vectors.shape[1] != index.d: raise ValueError('向量维度不一致，本批未入库。')
             for i, chunk in enumerate(chunks, len(old_chunks)): chunk['chunk_id']=i
             index.add(vectors)
             update('校验并发布新版本')
             version='webui-'+folder.name
+            processed.mkdir(parents=True, exist_ok=True)
             with tempfile.TemporaryDirectory(dir=processed) as tmp:
                 ip, cp = Path(tmp)/'faiss.index', Path(tmp)/'chunks.json'
                 faiss.write_index(index,str(ip)); atomic_json(cp,old_chunks+chunks)

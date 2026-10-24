@@ -214,7 +214,7 @@ class KnowledgeBaseTests(unittest.TestCase):
         args = ['run_answer_evaluation', '--question-id', 'q2', 'q6', '--output-dir', str(output)]
         with patch('sys.argv', args), redirect_stdout(io.StringIO()), \
                 patch.object(evaluation, 'load_knowledge_base', return_value=initial), \
-                patch.object(pipeline, '__file__', str(self.root / 'main.py')), \
+                patch.object(pipeline, 'data_root', return_value=self.root), \
                 patch.object(pipeline, 'load_embedding_model', return_value=Embedding()), \
                 patch.object(pipeline, 'CrossEncoder', return_value=Reranker()), \
                 patch.object(pipeline, 'decompose_query', side_effect=decompose), \

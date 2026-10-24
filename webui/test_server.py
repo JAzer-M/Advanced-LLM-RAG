@@ -24,6 +24,32 @@ def request(path, payload=None, origin=None, raw=None):
 
 
 class WebUIBehaviour(unittest.TestCase):
+    def test_fresh_checkout_serves_empty_library_without_settings(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            with patch.object(server, 'ROOT', root), patch.object(server.library, 'ROOT', root), \
+                    patch.object(server, 'SETTINGS_PATH', root/'api.local.json'), \
+                    patch('ui_prototype.app.ROOT', root):
+                code, raw = request('/api/meta')
+                self.assertEqual(code, 200)
+                meta = json.loads(raw)
+                self.assertEqual(meta['papers'], [])
+                self.assertEqual(meta['chunks'], 0)
+                self.assertIsNone(meta['kb_version'])
+                self.assertFalse(meta['configured'])
+                self.assertEqual(meta['examples'], [])
+
+    def test_empty_library_rejects_question_before_worker_launch(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            with patch.object(server, 'ROOT', root), patch.object(server.library, 'ROOT', root), \
+                    patch.object(server.subprocess, 'Popen') as launch, patch.dict(server.JOBS, {}, clear=True):
+                code, raw = request('/api/run', {'query':'What does my paper say?', 'mode':'rag'})
+                self.assertEqual(code, 400)
+                self.assertIn('PDF', json.loads(raw)['error'])
+                launch.assert_not_called()
+                self.assertFalse((root/'logs').exists())
+
     def test_idle_connection_does_not_block_page(self):
         # 模拟浏览器先建立连接但暂不发送 HTTP 请求。
         with server.make_server('127.0.0.1', 0, server.app,
@@ -79,12 +105,19 @@ class WebUIBehaviour(unittest.TestCase):
         self.assertEqual(result['answer_status'], 'source_unavailable')
 
     def test_metadata_exposes_no_private_configuration(self):
-        code, raw = request('/api/meta')
-        meta = json.loads(raw)
-        self.assertEqual(code, 200)
-        self.assertGreaterEqual(len(meta['papers']), 8)
-        self.assertGreaterEqual(meta['chunks'], 1397)
-        self.assertFalse({'api_key','base_url','chat_options'} & set(meta))
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            settings = root/'api.local.json'
+            settings.write_text(json.dumps({'model':'fixture-model', 'api_key':'fixture-secret',
+                                           'base_url':'https://example.com/v1', 'chat_options':{'temperature':0}}))
+            with patch.object(server.library, 'ROOT', root), patch.object(server, 'SETTINGS_PATH', settings):
+                code, raw = request('/api/meta')
+                meta = json.loads(raw)
+                self.assertEqual(code, 200)
+                self.assertEqual(meta['model'], 'fixture-model')
+                self.assertTrue(meta['configured'])
+                self.assertFalse({'api_key','base_url','chat_options'} & set(meta))
+                self.assertNotIn(b'fixture-secret', raw)
 
     def test_invalid_requests_never_launch_worker(self):
         with patch.object(server.subprocess, 'Popen') as launch:

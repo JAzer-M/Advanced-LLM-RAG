@@ -7,40 +7,77 @@ import subprocess
 import sys
 import time
 import tempfile
+import hashlib
 from urllib.parse import urlsplit
 from urllib.request import Request, build_opener, HTTPRedirectHandler
 from urllib.error import HTTPError, URLError
 from uuid import uuid4
 from socketserver import ThreadingMixIn
-from threading import Lock
+from threading import Lock, Timer
 from wsgiref.simple_server import make_server, WSGIServer
 
 ROOT = Path(__file__).resolve().parents[1]
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
+from src.runtime_paths import APP_VERSION, data_root, worker_command
+ROOT = data_root()
 # 只复用数据适配/worker，不加载旧 HTML、CSS、JS，不更改检索及回答实现。
-from ui_prototype.app import metadata as baseline_metadata, example_result as saved_example, public_result, EXAMPLES
+from ui_prototype.app import example_result as saved_example, public_result, EXAMPLES
 from webui import library
+from src import model_assets
 
 PORT = 8849
 JOBS = {}
 IMPORTS = {}
 JOB_LOCK = Lock()
 SETTINGS_PATH = ROOT / 'api.local.json'
+MODEL_PROCESS = None
+SHUTDOWN = None
+
+
+def setup_status():
+    if MODEL_PROCESS is not None: MODEL_PROCESS.poll()
+    return model_assets.status()
+
+
+def start_setup():
+    global MODEL_PROCESS
+    state = setup_status()
+    if state['status'] == 'ready': return 200, state
+    if state['status'] == 'running': return 409, {'error':'模型准备正在进行，请等待完成。'}
+    folder = ROOT/'models'; folder.mkdir(parents=True, exist_ok=True)
+    library.atomic_json(folder/'setup.json', {'status':'running','phase':'queued'})
+    env = {**os.environ,'HF_HUB_OFFLINE':'0','TRANSFORMERS_OFFLINE':'0','HF_HUB_DISABLE_XET':'1',
+           'OMP_NUM_THREADS':'1','OPENBLAS_NUM_THREADS':'1','MKL_NUM_THREADS':'1',
+           'VECLIB_MAXIMUM_THREADS':'1','TOKENIZERS_PARALLELISM':'false'}
+    with (folder/'setup-console.log').open('a') as log:
+        MODEL_PROCESS = subprocess.Popen(worker_command('--prepare-models'), stdout=log, stderr=log,
+                                         cwd=ROOT, env=env)
+    library.atomic_json(folder/'process.json', {'pid':MODEL_PROCESS.pid})
+    return 202, setup_status()
 
 
 def metadata():
-    return {**baseline_metadata(), **library.catalog()}
+    _, config = model_config()
+    return {**library.catalog(), 'model':config['model'],
+            'configured':bool(config['model'] and config['has_key']),
+            'application':'PaperLens', 'version':APP_VERSION,
+            'data_id':hashlib.sha256(str(ROOT).encode()).hexdigest()[:16],
+            'can_exit':SHUTDOWN is not None, 'setup':setup_status(),
+            'examples':[{'id':identity, **{key:item[key] for key in ('title','tag','date')}}
+                        for identity, item in EXAMPLES.items() if (ROOT/item['path']).is_file()]}
 
 
 def start_import(payload):
+    if setup_status()['status'] != 'ready':
+        return 400, {'error':'请先准备本地检索模型，再添加论文。'}
     if any(p.poll() is None for p in IMPORTS.values()):
         return 409, {'error':'已有导入正在进行，请稍后再试。'}
     identity, folder = library.prepare(payload)
     env = {**os.environ,'OMP_NUM_THREADS':'1','OPENBLAS_NUM_THREADS':'1','MKL_NUM_THREADS':'1',
            'VECLIB_MAXIMUM_THREADS':'1','TOKENIZERS_PARALLELISM':'false','HF_HUB_OFFLINE':'1','TRANSFORMERS_OFFLINE':'1'}
     with (folder/'console.log').open('w') as log:
-        process = subprocess.Popen([sys.executable,str(HERE/'server.py'),'--import-worker',str(folder)],
+        process = subprocess.Popen(worker_command('--import-worker',str(folder)),
                                    stdout=log,stderr=log,cwd=ROOT,env=env)
     IMPORTS[identity] = process
     library.atomic_json(folder/'process.json',{'pid':process.pid})
@@ -219,6 +256,11 @@ def start_job(payload):
         return 400, {'error': '模式无效；RAG 仅使用本地论文。'}
     if any(job['process'].poll() is None for job in JOBS.values()):
         return 409, {'error': '已有问题正在处理，请等待当前任务结束。'}
+    if setup_status()['status'] != 'ready':
+        return 400, {'error': '请先准备本地检索模型，再提问。'}
+    version = library.current()['version']
+    if version is None:
+        return 400, {'error': '论文库为空，请先添加 PDF 并等待入库完成。'}
     identity = uuid4().hex
     folder = ROOT / 'logs/webui' / (datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ_') + identity[:8])
     folder.mkdir(parents=True)
@@ -227,7 +269,7 @@ def start_job(payload):
            'TOKENIZERS_PARALLELISM': 'false', 'HF_HUB_OFFLINE': '1', 'TRANSFORMERS_OFFLINE': '1'}
     # 父进程立即关闭自己的日志句柄；子进程持有副本，轮询不反复关闭文件。
     with (folder / 'console.log').open('w', encoding='utf-8') as log:
-        process = subprocess.Popen([sys.executable, str(HERE / 'server.py'), '--worker'],
+        process = subprocess.Popen(worker_command('--worker'),
                                    stdin=subprocess.PIPE, stdout=log, stderr=log, cwd=ROOT,
                                    env=env, text=True)
     JOBS[identity] = {'process': process, 'folder': folder, 'query': query.strip(),
@@ -235,7 +277,7 @@ def start_job(payload):
     try:
         process.stdin.write(json.dumps({'query': query.strip(), 'mode': mode,
                                        'allow_network': network, 'folder': str(folder),
-                                       'kb_version':library.current()['version']}, ensure_ascii=False))
+                                       'kb_version':version}, ensure_ascii=False))
     finally:
         process.stdin.close()
     return 202, {'id': identity, 'status': 'running'}
@@ -269,17 +311,19 @@ def app(environ, start_response):
         elif method == 'GET' and path == '/api/config':
             with JOB_LOCK:
                 code, value = model_config()
+        elif method == 'GET' and path == '/api/setup':
+            code, value = 200, setup_status()
         elif method == 'GET' and path.startswith('/api/imports/'):
             code, value = import_status(path.rsplit('/',1)[-1])
         elif method == 'GET' and path.startswith('/api/examples/'):
             identity = path.rsplit('/', 1)[-1]
-            if identity in EXAMPLES:
+            if identity in EXAMPLES and (ROOT/EXAMPLES[identity]['path']).is_file():
                 code, value = 200, example_result(identity)
         elif method == 'GET' and path.startswith('/api/jobs/'):
             identity = path.rsplit('/', 1)[-1]
             if identity in JOBS:
                 code, value = 200, job_status(identity)
-        elif method == 'POST' and path in ('/api/run', '/api/config', '/api/models', '/api/imports'):
+        elif method == 'POST' and path in ('/api/run', '/api/config', '/api/models', '/api/imports', '/api/setup', '/api/quit'):
             origin = environ.get('HTTP_ORIGIN')
             if origin and origin not in (f'http://127.0.0.1:{PORT}', f'http://localhost:{PORT}'):
                 code, value = 403, {'error': '请从本机研究台发送问题。'}
@@ -297,7 +341,17 @@ def app(environ, start_response):
                         code, value = fetch_models(payload)
                     else:
                         with JOB_LOCK:
-                            if path == '/api/imports': code, value = start_import(payload)
+                            if path == '/api/setup': code, value = start_setup()
+                            elif path == '/api/quit':
+                                busy = (any(job['process'].poll() is None for job in JOBS.values())
+                                        or any(p.poll() is None for p in IMPORTS.values())
+                                        or setup_status()['status'] == 'running')
+                                if SHUTDOWN is None or busy:
+                                    code, value = 409, {'error':'当前有任务正在运行，或服务不支持网页退出。请等待任务结束。'}
+                                else:
+                                    code, value = 202, {'status':'stopping'}
+                                    Timer(0.2, SHUTDOWN).start()
+                            elif path == '/api/imports': code, value = start_import(payload)
                             else: code, value = model_config(payload) if path == '/api/config' else start_job(payload)
                 except (ValueError, TypeError):
                     code, value = 400, {'error': '无法读取输入，请检查格式。PDF每批1～5篇，总大小不超过20MB。' if path=='/api/imports' else '无法读取输入，请检查格式。'}
@@ -312,13 +366,29 @@ def app(environ, start_response):
     return [body]
 
 
+def serve(open_browser=False):
+    global SHUTDOWN
+    print(f'PaperLens 研究台：http://127.0.0.1:{PORT}', flush=True)
+    with make_server('127.0.0.1', PORT, app, server_class=ThreadedServer) as httpd:
+        SHUTDOWN = httpd.shutdown
+        if open_browser:
+            import webbrowser
+            Timer(0.2, lambda: webbrowser.open(f'http://127.0.0.1:{PORT}')).start()
+        try: httpd.serve_forever()
+        finally:
+            SHUTDOWN = None
+            processes = [item['process'] for item in JOBS.values()] + list(IMPORTS.values())
+            if MODEL_PROCESS is not None: processes.append(MODEL_PROCESS)
+            for process in processes:
+                if process.poll() is None: process.terminate()
+
+
 if __name__ == '__main__':
     if sys.argv[1:] == ['--worker']:
         worker()
     elif len(sys.argv)==3 and sys.argv[1]=='--import-worker':
         library.build(Path(sys.argv[2]))
+    elif sys.argv[1:] == ['--prepare-models']:
+        model_assets.prepare()
     else:
-        print(f'PaperLens 新版研究台：http://127.0.0.1:{PORT}', flush=True)
-        print('保持终端打开。案例回放不调用模型，发送问题会使用现有 API。', flush=True)
-        with make_server('127.0.0.1', PORT, app, server_class=ThreadedServer) as server:
-            server.serve_forever()
+        serve()

@@ -2,7 +2,6 @@
 # 搜索资源加载一次后可以复用；邻段读取只用其中的 chunks 和 knowledge_base。
 # 工具不规划需求或生成回答，后续由 Agent 执行入口决定何时调用。
 
-from pathlib import Path
 import time
 
 from sentence_transformers import CrossEncoder
@@ -13,6 +12,7 @@ from src.hybrid_retriever import reciprocal_rank_fusion
 from src.knowledge_base import load_knowledge_base
 from src.reranker import rerank_results
 from src.retriever import retrieve
+from src.runtime_paths import data_root, model_location
 
 
 # 固定实验库和预算；加载八篇库不会修改当前仍指向三篇库的激活指针。
@@ -25,7 +25,7 @@ MAX_NEIGHBOR_WINDOW = 2
 
 def load_search_resources(version=SEARCH_KB_VERSION):
     """加载指定的校验配对库和 CPU 模型，供同一进程中的多次搜索复用。"""
-    processed = Path(__file__).resolve().parents[1] / 'data' / 'processed'
+    processed = data_root() / 'data' / 'processed'
     index, chunks, knowledge_base = load_knowledge_base(processed, version)
     return {
         'index': index,
@@ -33,7 +33,7 @@ def load_search_resources(version=SEARCH_KB_VERSION):
         'knowledge_base': knowledge_base,
         'embedding_model': load_embedding_model(),
         'bm25': build_bm25_index(chunks),
-        'reranker_model': CrossEncoder('BAAI/bge-reranker-base', device='cpu'),
+        'reranker_model': CrossEncoder(model_location('BAAI/bge-reranker-base'), device='cpu'),
     }
 
 

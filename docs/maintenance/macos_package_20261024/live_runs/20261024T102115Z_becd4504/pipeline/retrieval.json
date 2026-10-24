@@ -1,0 +1,933 @@
+{
+  "query": "VGG 的 3×3 卷积层使用多大的步长和填充？请用中文回答。",
+  "status": "retrieval_completed",
+  "decomposition": {
+    "needs_decomposition": false,
+    "sub_queries": [],
+    "status": "not_needed"
+  },
+  "knowledge_base": {
+    "version": "webui-573068c25d734b64bbe8f1b66d30cdc3",
+    "chunk_count": 160,
+    "dimension": 384,
+    "index_path": "/private/tmp/paperlens-package-acceptance-20261024/data/data/processed/versions/webui-573068c25d734b64bbe8f1b66d30cdc3/faiss.index",
+    "chunks_path": "/private/tmp/paperlens-package-acceptance-20261024/data/data/processed/versions/webui-573068c25d734b64bbe8f1b66d30cdc3/chunks.json",
+    "manifest_path": "/private/tmp/paperlens-package-acceptance-20261024/data/data/processed/versions/webui-573068c25d734b64bbe8f1b66d30cdc3/manifest.json",
+    "manifest_sha256": "cf5260f3e4ccb2c88031ced19dac0ff4b8db1af60f5ae9b3d738bffde6b3aff8",
+    "files": {
+      "faiss.index": "b71612cd8dffd7792db7379f73899cad572739c152d7f836fd72fa4b0e57ab0f",
+      "chunks.json": "95e5e767af4ca8fb61670b9506f2241d5267228752230e8f9f7cbdd497f673df"
+    }
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 120,
+    "global_top_ids": [
+      23,
+      27,
+      24,
+      28,
+      1,
+      15,
+      64,
+      16,
+      62,
+      32
+    ],
+    "protected_ids": [],
+    "sub_query_evidence": [],
+    "retrieval_anchor_ids": [
+      139
+    ],
+    "evidence_completion": {
+      "requested_sources": [
+        "VGG.pdf"
+      ],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        23,
+        27,
+        24,
+        28,
+        1,
+        15,
+        64,
+        16,
+        62,
+        139
+      ],
+      "retained_local_ids": [],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        23,
+        27,
+        24,
+        28,
+        1,
+        15,
+        64,
+        16,
+        62,
+        139
+      ],
+      "elapsed_seconds": 0.000223
+    }
+  },
+  "selected_ids": [
+    23,
+    27,
+    24,
+    28,
+    1,
+    15,
+    64,
+    16,
+    62,
+    139
+  ],
+  "context": "[1] Source: VGG.pdf | Page: 2 | Section: 2.3 DISCUSSION\nTitle: VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION\nlay- ers (e.g. 11 × 11 with stride 4 in (Krizhevsky et al., 2012), or 7 × 7 with stride 2 in (Zeiler & Fergus, 2013; Sermanet et al., 2014)), we use very small 3 × 3 receptive ﬁelds throughout the whole net, which are convolved with the input at every pixel (with stride 1).\n\n[2] Source: VGG.pdf | Page: 3 | Section: 2.3 DISCUSSION\nTitle: VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION\nNetwork A,A-LRN B C D E Number of parameters 133 133 134 138 144 such layers have a 7 × 7 effective receptive ﬁeld. So what have we gained by using, for instance, a stack of three 3×3 conv. layers instead of a single 7×7 layer? First, we incorporate three non-linear rectiﬁcation layers instead of a single one, which makes the decision function more discriminative.\n\n[3] Source: VGG.pdf | Page: 2 | Section: 2.3 DISCUSSION\nTitle: VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION\nIt is easy to see that a stack of two 3 × 3 conv. layers (without spatial pooling in between) has an effective receptive ﬁeld of 5 × 5; three\n\n[4] Source: VGG.pdf | Page: 3 | Section: 2.3 DISCUSSION\nTitle: VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION\nSecond, we decrease the number of parameters: assuming that both the input and the output of a three-layer 3 × 3 convolution stack has C channels, the stack is parametrised by 3 \u0000 32C2\u0001 = 27C2 weights; at the same time, a single 7 × 7 conv. layer would require 72C2 = 49C2 parameters, i.e. 81% more. This can be seen as imposing a regularisation on the 7 × 7 conv. ﬁlters, forcing them to have a decomposition through the 3 × 3 ﬁlters (with non-linearity injected in between).\n\n[5] Source: VGG.pdf | Page: 1 | Section: None\nTitle: VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION\nOur main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3 × 3) convolution ﬁlters, which shows that a signiﬁcant improvement on the prior-art conﬁgurations can be achieved by pushing the depth to 16–19 weight layers. These ﬁndings were the basis of our ImageNet Challenge 2014 submission, where our team secured the ﬁrst and the second places in the localisa- tion and classiﬁcation tracks respectively.\n\n[6] Source: VGG.pdf | Page: 2 | Section: 2.1 ARCHITECTURE\nTitle: VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION\nIn one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.\n\n[7] Source: VGG.pdf | Page: 6 | Section: 4.1 SINGLE SCALE EVALUATION\nTitle: VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION\nThe error rate of our architecture saturates when the depth reaches 19 layers, but even deeper models might be beneﬁcial for larger datasets. We also compared the net B with a shallow net with ﬁve 5 × 5 conv. layers, which was derived from B by replacing each pair of 3 × 3 conv. layers with a single 5 × 5 conv. layer (which has the same receptive ﬁeld as explained in Sect.\n\n[8] Source: VGG.pdf | Page: 2 | Section: 2.1 ARCHITECTURE\nTitle: VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION\nlayers are followed by max-pooling). Max-pooling is performed over a 2 × 2 pixel window, with stride 2. A stack of convolutional layers (which has a different depth in different architectures) is followed by three Fully-Connected (FC) layers: the ﬁrst two have 4096 channels each, the third performs 1000- way ILSVRC classiﬁcation and thus contains 1000 channels (one for each class). The ﬁnal layer is the soft-max layer.\n\n[9] Source: VGG.pdf | Page: 6 | Section: 4.1 SINGLE SCALE EVALUATION\nTitle: VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION\nWe thus do not employ normalisation in the deeper architectures (B–E). Second, we observe that the classiﬁcation error decreases with the increased ConvNet depth: from 11 layers in A to 19 layers in E. Notably, in spite of the same depth, the conﬁguration C (which contains three 1 × 1 conv. layers), performs worse than the conﬁguration D, which uses 3 × 3 conv. layers throughout the network.\n\n[10] Source: VGG.pdf | Page: 12 | Section: 5 CONCLUSION\nTitle: VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION\n(Wei et al., 2014) 81.5 (85.2∗) 81.7 (90.3∗) - - VGG Net-D (16 layers) 89.3 89.0 91.8 ± 1.0 85.0 ± 0.2 VGG Net-E (19 layers) 89.3 89.0 92.3 ± 0.5 85.1 ± 0.3 VGG Net-D & Net-E 89.7 89.3 92.7 ± 0.5 86.2 ± 0.3 Image Classiﬁcation on VOC-2007 and VOC-2012. We begin with the evaluation on the image classiﬁcation task of PASCAL VOC-2007 and VOC-2012 benchmarks (Everingham et al., 2015).",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": ", 2014)), we use very small 3 × 3 receptive ﬁelds throughout the whole net, which are convolved with the input at every pixel (with stride 1).",
+        "evidence_start": 132,
+        "evidence_end": 274,
+        "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "identity": {
+          "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            23
+          ],
+          "identity_quote": "lay- ers (e.g. 11 × 11 with stride 4 in (Krizhevsky et al., 2012), or 7 × 7 with stride 2 in (Zeiler & Fergus, 2013; Sermanet et al., 2014)), we use very small 3 × 3 receptive ﬁelds throughout the whole net, which are convolved with the input at every pixel (with stride 1).",
+          "identity_chunk_id": 23
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 23,
+        "page": 2,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Network A,A-LRN B C D E Number of parameters 133 133 134 138 144 such layers have a 7 × 7 effective receptive ﬁeld.",
+        "evidence_start": 0,
+        "evidence_end": 115,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            27,
+            26
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 27,
+        "page": 3,
+        "citations": [
+          2
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " So what have we gained by using, for instance, a stack of three 3×3 conv.",
+        "evidence_start": 115,
+        "evidence_end": 189,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            27,
+            26
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 27,
+        "page": 3,
+        "citations": [
+          2
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " layers instead of a single 7×7 layer?",
+        "evidence_start": 189,
+        "evidence_end": 227,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            27,
+            26
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 27,
+        "page": 3,
+        "citations": [
+          2
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " First, we incorporate three non-linear rectiﬁcation layers instead of a single one, which makes the decision function more discriminative.",
+        "evidence_start": 227,
+        "evidence_end": 366,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            27,
+            26
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 27,
+        "page": 3,
+        "citations": [
+          2
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "It is easy to see that a stack of two 3 × 3 conv.",
+        "evidence_start": 0,
+        "evidence_end": 49,
+        "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "identity": {
+          "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            24,
+            23
+          ],
+          "identity_quote": "lay- ers (e.g. 11 × 11 with stride 4 in (Krizhevsky et al., 2012), or 7 × 7 with stride 2 in (Zeiler & Fergus, 2013; Sermanet et al., 2014)), we use very small 3 × 3 receptive ﬁelds throughout the whole net, which are convolved with the input at every pixel (with stride 1).",
+          "identity_chunk_id": 23
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 24,
+        "page": 2,
+        "citations": [
+          3,
+          1
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " layers (without spatial pooling in between) has an effective receptive ﬁeld of 5 × 5; three",
+        "evidence_start": 49,
+        "evidence_end": 141,
+        "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "identity": {
+          "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            24,
+            23
+          ],
+          "identity_quote": "lay- ers (e.g. 11 × 11 with stride 4 in (Krizhevsky et al., 2012), or 7 × 7 with stride 2 in (Zeiler & Fergus, 2013; Sermanet et al., 2014)), we use very small 3 × 3 receptive ﬁelds throughout the whole net, which are convolved with the input at every pixel (with stride 1).",
+          "identity_chunk_id": 23
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 24,
+        "page": 2,
+        "citations": [
+          3,
+          1
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Second, we decrease the number of parameters: assuming that both the input and the output of a three-layer 3 × 3 convolution stack has C channels, the stack is parametrised by 3 \u0000 32C2\u0001 = 27C2 weights; at the same time, a single 7 × 7 conv.",
+        "evidence_start": 0,
+        "evidence_end": 240,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            28,
+            27,
+            26
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 28,
+        "page": 3,
+        "citations": [
+          4
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " This can be seen as imposing a regularisation on the 7 × 7 conv.",
+        "evidence_start": 299,
+        "evidence_end": 364,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            28,
+            27,
+            26
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 28,
+        "page": 3,
+        "citations": [
+          4
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " ﬁlters, forcing them to have a decomposition through the 3 × 3 ﬁlters (with non-linearity injected in between).",
+        "evidence_start": 364,
+        "evidence_end": 476,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            28,
+            27,
+            26
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 28,
+        "page": 3,
+        "citations": [
+          4
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Our main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3 × 3) convolution ﬁlters, which shows that a signiﬁcant improvement on the prior-art conﬁgurations can be achieved by pushing the depth to 16–19 weight layers.",
+        "evidence_start": 0,
+        "evidence_end": 278,
+        "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "identity": {
+          "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            1
+          ],
+          "identity_quote": "Our main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3 × 3) convolution ﬁlters, which shows that a signiﬁcant improvement on the prior-art conﬁgurations can be achieved by pushing the depth to 16–19 weight layers. These ﬁndings were the basis of our ImageNet Challenge 2014 submission, where our team secured the ﬁrst and the second places in the localisa- tion and classiﬁcation tracks respectively.",
+          "identity_chunk_id": 1
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 1,
+        "page": 1,
+        "citations": [
+          5
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " These ﬁndings were the basis of our ImageNet Challenge 2014 submission, where our team secured the ﬁrst and the second places in the localisa- tion and classiﬁcation tracks respectively.",
+        "evidence_start": 278,
+        "evidence_end": 465,
+        "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "identity": {
+          "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            1
+          ],
+          "identity_quote": "Our main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3 × 3) convolution ﬁlters, which shows that a signiﬁcant improvement on the prior-art conﬁgurations can be achieved by pushing the depth to 16–19 weight layers.",
+          "identity_chunk_id": 1
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 1,
+        "page": 1,
+        "citations": [
+          5
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity).",
+        "evidence_start": 0,
+        "evidence_end": 165,
+        "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "identity": {
+          "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            15
+          ],
+          "identity_quote": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.",
+          "identity_chunk_id": 15
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 15,
+        "page": 2,
+        "citations": [
+          6
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv.",
+        "evidence_start": 165,
+        "evidence_end": 237,
+        "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "identity": {
+          "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            15
+          ],
+          "identity_quote": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity).",
+          "identity_chunk_id": 15
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 15,
+        "page": 2,
+        "citations": [
+          6
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " the padding is 1 pixel for 3 × 3 conv.",
+        "evidence_start": 322,
+        "evidence_end": 361,
+        "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "identity": {
+          "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            15
+          ],
+          "identity_quote": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e.",
+          "identity_chunk_id": 15
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 15,
+        "page": 2,
+        "citations": [
+          6
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv.",
+        "evidence_start": 361,
+        "evidence_end": 450,
+        "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "identity": {
+          "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            15
+          ],
+          "identity_quote": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv.",
+          "identity_chunk_id": 15
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 15,
+        "page": 2,
+        "citations": [
+          6
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "The error rate of our architecture saturates when the depth reaches 19 layers, but even deeper models might be beneﬁcial for larger datasets.",
+        "evidence_start": 0,
+        "evidence_end": 141,
+        "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "identity": {
+          "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            64
+          ],
+          "identity_quote": "The error rate of our architecture saturates when the depth reaches 19 layers, but even deeper models might be beneﬁcial for larger datasets. We also compared the net B with a shallow net with ﬁve 5 × 5 conv. layers, which was derived from B by replacing each pair of 3 × 3 conv. layers with a single 5 × 5 conv. layer (which has the same receptive ﬁeld as explained in Sect.",
+          "identity_chunk_id": 64
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 64,
+        "page": 6,
+        "citations": [
+          7
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We also compared the net B with a shallow net with ﬁve 5 × 5 conv.",
+        "evidence_start": 141,
+        "evidence_end": 208,
+        "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "identity": {
+          "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            64
+          ],
+          "identity_quote": "The error rate of our architecture saturates when the depth reaches 19 layers, but even deeper models might be beneﬁcial for larger datasets.",
+          "identity_chunk_id": 64
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 64,
+        "page": 6,
+        "citations": [
+          7
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " layers, which was derived from B by replacing each pair of 3 × 3 conv.",
+        "evidence_start": 208,
+        "evidence_end": 279,
+        "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "identity": {
+          "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            64
+          ],
+          "identity_quote": "The error rate of our architecture saturates when the depth reaches 19 layers, but even deeper models might be beneﬁcial for larger datasets. We also compared the net B with a shallow net with ﬁve 5 × 5 conv.",
+          "identity_chunk_id": 64
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 64,
+        "page": 6,
+        "citations": [
+          7
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " layers with a single 5 × 5 conv.",
+        "evidence_start": 279,
+        "evidence_end": 312,
+        "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "identity": {
+          "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            64
+          ],
+          "identity_quote": "The error rate of our architecture saturates when the depth reaches 19 layers, but even deeper models might be beneﬁcial for larger datasets. We also compared the net B with a shallow net with ﬁve 5 × 5 conv. layers, which was derived from B by replacing each pair of 3 × 3 conv.",
+          "identity_chunk_id": 64
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 64,
+        "page": 6,
+        "citations": [
+          7
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " layer (which has the same receptive ﬁeld as explained in Sect.",
+        "evidence_start": 312,
+        "evidence_end": 375,
+        "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "identity": {
+          "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            64
+          ],
+          "identity_quote": "The error rate of our architecture saturates when the depth reaches 19 layers, but even deeper models might be beneﬁcial for larger datasets. We also compared the net B with a shallow net with ﬁve 5 × 5 conv. layers, which was derived from B by replacing each pair of 3 × 3 conv. layers with a single 5 × 5 conv.",
+          "identity_chunk_id": 64
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 64,
+        "page": 6,
+        "citations": [
+          7
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "layers are followed by max-pooling).",
+        "evidence_start": 0,
+        "evidence_end": 36,
+        "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "identity": {
+          "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            16,
+            15
+          ],
+          "identity_quote": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.",
+          "identity_chunk_id": 15
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 16,
+        "page": 2,
+        "citations": [
+          8,
+          6
+        ],
+        "record_id": "E22"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Max-pooling is performed over a 2 × 2 pixel window, with stride 2.",
+        "evidence_start": 36,
+        "evidence_end": 103,
+        "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "identity": {
+          "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            16,
+            15
+          ],
+          "identity_quote": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.",
+          "identity_chunk_id": 15
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 16,
+        "page": 2,
+        "citations": [
+          8,
+          6
+        ],
+        "record_id": "E23"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " A stack of convolutional layers (which has a different depth in different architectures) is followed by three Fully-Connected (FC) layers: the ﬁrst two have 4096 channels each, the third performs 1000- way ILSVRC classiﬁcation and thus contains 1000 channels (one for each class).",
+        "evidence_start": 103,
+        "evidence_end": 384,
+        "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "identity": {
+          "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            16,
+            15
+          ],
+          "identity_quote": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.",
+          "identity_chunk_id": 15
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 16,
+        "page": 2,
+        "citations": [
+          8,
+          6
+        ],
+        "record_id": "E24"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The ﬁnal layer is the soft-max layer.",
+        "evidence_start": 384,
+        "evidence_end": 422,
+        "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "identity": {
+          "subject": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            16,
+            15
+          ],
+          "identity_quote": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.",
+          "identity_chunk_id": 15
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 16,
+        "page": 2,
+        "citations": [
+          8,
+          6
+        ],
+        "record_id": "E25"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "We thus do not employ normalisation in the deeper architectures (B–E).",
+        "evidence_start": 0,
+        "evidence_end": 70,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            62,
+            61
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 62,
+        "page": 6,
+        "citations": [
+          9
+        ],
+        "record_id": "E26"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Second, we observe that the classiﬁcation error decreases with the increased ConvNet depth: from 11 layers in A to 19 layers in E.",
+        "evidence_start": 70,
+        "evidence_end": 201,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            62,
+            61
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 62,
+        "page": 6,
+        "citations": [
+          9
+        ],
+        "record_id": "E27"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Notably, in spite of the same depth, the conﬁguration C (which contains three 1 × 1 conv.",
+        "evidence_start": 201,
+        "evidence_end": 291,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            62,
+            61
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 62,
+        "page": 6,
+        "citations": [
+          9
+        ],
+        "record_id": "E28"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " layers), performs worse than the conﬁguration D, which uses 3 × 3 conv.",
+        "evidence_start": 291,
+        "evidence_end": 363,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            62,
+            61
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 62,
+        "page": 6,
+        "citations": [
+          9
+        ],
+        "record_id": "E29"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " layers throughout the network.",
+        "evidence_start": 363,
+        "evidence_end": 394,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            62,
+            61
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 62,
+        "page": 6,
+        "citations": [
+          9
+        ],
+        "record_id": "E30"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "3 Image Classiﬁcation on VOC-2007 and VOC-2012.",
+        "evidence_start": 205,
+        "evidence_end": 252,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            139
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 139,
+        "page": 12,
+        "citations": [
+          10
+        ],
+        "record_id": "E31"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 23,
+        "text": "lay- ers (e.g. 11 × 11 with stride 4 in (Krizhevsky et al., 2012), or 7 × 7 with stride 2 in (Zeiler & Fergus, 2013; Sermanet et al., 2014)), we use very small 3 × 3 receptive ﬁelds throughout the whole net, which are convolved with the input at every pixel (with stride 1).",
+        "source": "VGG.pdf",
+        "page": 2,
+        "title": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "section": "2.3 DISCUSSION"
+      },
+      {
+        "chunk_id": 27,
+        "text": "Network A,A-LRN B C D E Number of parameters 133 133 134 138 144 such layers have a 7 × 7 effective receptive ﬁeld. So what have we gained by using, for instance, a stack of three 3×3 conv. layers instead of a single 7×7 layer? First, we incorporate three non-linear rectiﬁcation layers instead of a single one, which makes the decision function more discriminative.",
+        "source": "VGG.pdf",
+        "page": 3,
+        "title": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "section": "2.3 DISCUSSION"
+      },
+      {
+        "chunk_id": 24,
+        "text": "It is easy to see that a stack of two 3 × 3 conv. layers (without spatial pooling in between) has an effective receptive ﬁeld of 5 × 5; three",
+        "source": "VGG.pdf",
+        "page": 2,
+        "title": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "section": "2.3 DISCUSSION"
+      },
+      {
+        "chunk_id": 28,
+        "text": "Second, we decrease the number of parameters: assuming that both the input and the output of a three-layer 3 × 3 convolution stack has C channels, the stack is parametrised by 3 \u0000 32C2\u0001 = 27C2 weights; at the same time, a single 7 × 7 conv. layer would require 72C2 = 49C2 parameters, i.e. 81% more. This can be seen as imposing a regularisation on the 7 × 7 conv. ﬁlters, forcing them to have a decomposition through the 3 × 3 ﬁlters (with non-linearity injected in between).",
+        "source": "VGG.pdf",
+        "page": 3,
+        "title": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "section": "2.3 DISCUSSION"
+      },
+      {
+        "chunk_id": 1,
+        "text": "Our main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3 × 3) convolution ﬁlters, which shows that a signiﬁcant improvement on the prior-art conﬁgurations can be achieved by pushing the depth to 16–19 weight layers. These ﬁndings were the basis of our ImageNet Challenge 2014 submission, where our team secured the ﬁrst and the second places in the localisa- tion and classiﬁcation tracks respectively.",
+        "source": "VGG.pdf",
+        "page": 1,
+        "title": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "section": null
+      },
+      {
+        "chunk_id": 15,
+        "text": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.",
+        "source": "VGG.pdf",
+        "page": 2,
+        "title": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "section": "2.1 ARCHITECTURE"
+      },
+      {
+        "chunk_id": 64,
+        "text": "The error rate of our architecture saturates when the depth reaches 19 layers, but even deeper models might be beneﬁcial for larger datasets. We also compared the net B with a shallow net with ﬁve 5 × 5 conv. layers, which was derived from B by replacing each pair of 3 × 3 conv. layers with a single 5 × 5 conv. layer (which has the same receptive ﬁeld as explained in Sect.",
+        "source": "VGG.pdf",
+        "page": 6,
+        "title": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "section": "4.1 SINGLE SCALE EVALUATION"
+      },
+      {
+        "chunk_id": 16,
+        "text": "layers are followed by max-pooling). Max-pooling is performed over a 2 × 2 pixel window, with stride 2. A stack of convolutional layers (which has a different depth in different architectures) is followed by three Fully-Connected (FC) layers: the ﬁrst two have 4096 channels each, the third performs 1000- way ILSVRC classiﬁcation and thus contains 1000 channels (one for each class). The ﬁnal layer is the soft-max layer.",
+        "source": "VGG.pdf",
+        "page": 2,
+        "title": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "section": "2.1 ARCHITECTURE"
+      },
+      {
+        "chunk_id": 62,
+        "text": "We thus do not employ normalisation in the deeper architectures (B–E). Second, we observe that the classiﬁcation error decreases with the increased ConvNet depth: from 11 layers in A to 19 layers in E. Notably, in spite of the same depth, the conﬁguration C (which contains three 1 × 1 conv. layers), performs worse than the conﬁguration D, which uses 3 × 3 conv. layers throughout the network.",
+        "source": "VGG.pdf",
+        "page": 6,
+        "title": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "section": "4.1 SINGLE SCALE EVALUATION"
+      },
+      {
+        "chunk_id": 139,
+        "text": "(Wei et al., 2014) 81.5 (85.2∗) 81.7 (90.3∗) - - VGG Net-D (16 layers) 89.3 89.0 91.8 ± 1.0 85.0 ± 0.2 VGG Net-E (19 layers) 89.3 89.0 92.3 ± 0.5 85.1 ± 0.3 VGG Net-D & Net-E 89.7 89.3 92.7 ± 0.5 86.2 ± 0.3 Image Classiﬁcation on VOC-2007 and VOC-2012. We begin with the evaluation on the image classiﬁcation task of PASCAL VOC-2007 and VOC-2012 benchmarks (Everingham et al., 2015).",
+        "source": "VGG.pdf",
+        "page": 12,
+        "title": "VERY DEEP CONVOLUTIONAL NETWORKS FOR LARGE-SCALE IMAGE RECOGNITION",
+        "section": "5 CONCLUSION"
+      }
+    ],
+    "selected_ids": [
+      23,
+      27,
+      24,
+      28,
+      1,
+      15,
+      64,
+      16,
+      62,
+      139
+    ]
+  }
+}

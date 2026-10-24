@@ -4,7 +4,7 @@
 
 ## 启动
 
-Mac双击桌面的“PaperLens 启动.command”或[start.command](start.command)，自动启动服务并打开浏览器；使用期间保持启动终端打开。也可在项目根目录运行：
+首次安装先按[安装与首次启动](../docs/INSTALL_AND_START.md)创建环境并准备本地模型。新安装可从空论文库上传首篇PDF，无需本机八篇实验资产。Mac双击桌面的“PaperLens 启动.command”或[start.command](start.command)，自动启动服务并打开浏览器；使用期间保持启动终端打开。也可在项目根目录运行：
 
 ```bash
 .venv/bin/python -B -u webui/server.py
@@ -15,7 +15,7 @@ Mac双击桌面的“PaperLens 启动.command”或[start.command](start.command
 ## 提问与阅读
 
 - Auto先走RAG，必要时升级；RAG固定检索，Agent按缺口选择本地工具。实时提问会调用已配置API，回放已保存案例不生成回答。
-- Enter发送、Shift+Enter换行；输入法选词时不应发送。运行中禁止重复提交；中文输入法在真实设备上的最终体验验收仍需保留记录。
+- Enter发送、Shift+Enter换行；输入法选词时不发送。运行中禁止重复提交；本轮用户用真实键盘确认中文选词Enter没有误发送，自动化另验收换行、发送及刷新接续。
 - “联网搜索”目前仅查arXiv，RAG下不可用。库内已有明确主论文时不会必然发起联网，也不会把补证据自动入库。
 - 点击引用编号，同时标出回答中的句子及右侧原文；右栏默认只列被引用段落，未引用原文可展开。
 - 正常结果只保留一行方式、耗时、请求和token；异常提示区分降级、来源不可用、证据不足、复核失败。运行详情保留实际路径、停止原因、工具、联网和版本。
@@ -34,7 +34,7 @@ Mac双击桌面的“PaperLens 启动.command”或[start.command](start.command
 
 网页从`data/webui/library.json`独立选择版本。当前本机为9篇/1767段，新增Mamba的370段；三种模式都固定使用提交时的网页版本。全局三篇激活库和Agent/Auto默认八篇实验基线未被切换。
 
-导入状态落盘，刷新可接续查看；进程中断的导入显示中断。上传文件、任务记录、网页指针及新配对索引均被Git忽略，不会随本次提交复制到新设备。没有网页删除/回退按钮、OCR或arXiv链接直接导入；Windows锁机制与全新克隆引导仍待补齐。[入库实现与真实验收](../docs/WEBUI_PDF_IMPORT_2026-10-24.md)
+导入状态落盘，刷新可接续查看；进程中断的导入显示中断。上传文件、任务记录、网页指针及新配对索引均被Git忽略，不会随普通Git克隆复制到新设备。没有网页删除/回退按钮、OCR或arXiv链接直接导入；Windows锁机制尚未验收。Mac隔离安装及首次入库已通过，本地模型复用缓存。[原入库记录](../docs/WEBUI_PDF_IMPORT_2026-10-24.md) · [本轮安装与操作验收](../docs/maintenance/installation_ui_acceptance_20261024/report.md)
 
 ## 文件分工
 
@@ -44,13 +44,13 @@ Mac双击桌面的“PaperLens 启动.command”或[start.command](start.command
 | `app.js` | 界面语言、引用联动、任务轮询、模型设置、PDF上传与状态 |
 | `server.py` | 本机HTTP、任务/配置/导入接口及独立worker |
 | `library.py` | 网页指针、PDF去重与解析、配对版本发布和状态文件 |
-| `test_server.py` / `test_config.py` / `test_library.py` | 27项网页行为回归，模型使用替身 |
+| `test_server.py` / `test_config.py` / `test_library.py` | 31项网页行为回归，模型使用替身；新增空库首页、首篇入库、空库拒绝提问和完整标题检查 |
 
 服务仍从`ui_prototype.app`复用公开字段转换、元数据与案例读取函数，不读取旧页面。彻底移除旧目录前需要迁移这些辅助函数；本轮未作该重构。
 
 ## 已验证与剩余边界
 
-最近保存的27项网页测试全部通过；后端345项另外通过。本轮只是文档与版本整理，没有重复付费验证。测试命令：
+本轮31项网页检查在独立虚拟环境通过；后端345项是此前记录，本轮没有重跑。另从实际网页完成首篇VGG入库、重复跳过、无正文失败保留、模型列表/保存、换行/发送、刷新及引用联动，并保留真实键盘选词确认。测试命令：
 
 ```bash
 .venv/bin/python -B -m unittest webui.test_server webui.test_config webui.test_library

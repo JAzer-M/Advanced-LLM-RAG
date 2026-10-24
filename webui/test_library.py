@@ -34,12 +34,32 @@ class LibraryTests(unittest.TestCase):
             def encode(self, texts, **kwargs): return np.array([[0,1,0] for _ in texts],dtype='float32')
         with patch('src.embedding.load_embedding_model',return_value=Model()):library.build(folder)
 
+    def test_first_pdf_builds_library_without_experiment_assets(self):
+        with patch.object(library, 'ROOT', self.root/'fresh'):
+            self.assertEqual(library.catalog()['papers'], [])
+            _, folder = library.prepare(self.payload())
+            self.build(folder)
+            catalog = library.catalog()
+            self.assertEqual([p['source'] for p in catalog['papers']], ['new.pdf'])
+            index, chunks, _ = load_knowledge_base(library.ROOT/'data/processed', catalog['kb_version'])
+            self.assertGreater(len(chunks), 0)
+            self.assertEqual(index.ntotal, len(chunks))
+            self.assertEqual(json.loads((folder/'status.json').read_text())['status'], 'completed')
+            self.assertIsNone(library.current()['previous_version'])
+
     def test_title_uses_large_horizontal_heading_without_metadata(self):
         doc=pymupdf.open();page=doc.new_page()
         page.insert_text((72,72),'Mamba: A test paper title',fontsize=18)
         page.insert_text((72,110),'An author',fontsize=11)
         self.assertEqual(library.paper_title(doc,'file'),'Mamba: A test paper title')
         doc.close()
+
+    def test_title_keeps_smaller_capitals_on_heading_line(self):
+        doc=pymupdf.open();self.addCleanup(doc.close);page=doc.new_page()
+        page.insert_text((72,72),'V',fontsize=18)
+        page.insert_text((84,72),'ERY DEEP NETWORKS',fontsize=14)
+        page.insert_text((72,110),'An author',fontsize=11)
+        self.assertEqual(library.paper_title(doc,'file'),'VERY DEEP NETWORKS')
 
     def test_batch_failure_keeps_all_new_papers_out(self):
         payload=self.payload()

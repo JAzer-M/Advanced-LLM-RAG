@@ -5,12 +5,12 @@
 
 import json
 import os
-from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
+from src.runtime_paths import data_root
 
 
-SETTINGS_PATH = Path(__file__).resolve().parents[1] / 'api.local.json'
+SETTINGS_PATH = data_root() / 'api.local.json'
 
 
 class IncompleteResponseError(RuntimeError):

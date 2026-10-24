@@ -20,6 +20,7 @@ import argparse
 from datetime import datetime, timezone
 import json
 from pathlib import Path
+from src.runtime_paths import data_root, model_location
 import re
 import time
 
@@ -241,7 +242,7 @@ def _run_pipeline(query=None, kb_version=None, complete_evidence=None, completio
     if completion_rounds not in (1, 2, 3):
         raise ValueError('completion_rounds must be 1, 2 or 3')
     # 1. Load the Semantic FAISS index and its corresponding chunks.
-    project_dir = Path(__file__).resolve().parent
+    project_dir = data_root()
     print("LLM: proxy API | Model:", load_settings().get('model', 'not configured'))
     processed_dir = project_dir / "data" / "processed"
     index, chunks, knowledge_base = load_knowledge_base(processed_dir, kb_version)
@@ -419,7 +420,7 @@ def _run_pipeline(query=None, kb_version=None, complete_evidence=None, completio
 
     # 7. Rerank the complete candidate pool against the original query.
     reranker_model = CrossEncoder(
-        RERANKER_MODEL_NAME,
+        model_location(RERANKER_MODEL_NAME),
         device=RERANKER_DEVICE,
     )
 
@@ -621,7 +622,7 @@ def _answer_with_agent(initial, resources, output, call, mode='agent', allow_net
     if allow_network and loop.get('halt_reason') == 'model_stop':
         # 先完成本地缺口判断，再以独立预算补一篇外部原文；无需先付本地答案生成成本。
         from src.arxiv_evidence import run_arxiv_followup
-        network = run_arxiv_followup(Path(__file__).resolve().parent, output / 'loop' / 'question.json',
+        network = run_arxiv_followup(data_root(), output / 'loop' / 'question.json',
                                      output / 'network', resources, call)
         result['network'] = {k: v for k, v in network.items() if k not in {'answer', 'passages', 'assessment'}}
         result['actions'].extend(network['actions'])
@@ -662,7 +663,7 @@ def _answer_with_agent(initial, resources, output, call, mode='agent', allow_net
             result.update(answer_status='source_unavailable', stop_reason=f'external_{kind}')
             if probe and probe['citation_validation']['final_check']['structure_passed']:
                 return preserve_initial_answer()
-    answer = agent.run_answer(Path(__file__).resolve().parent, output / 'loop' / 'question.json',
+    answer = agent.run_answer(data_root(), output / 'loop' / 'question.json',
                               output / 'answer', call=lambda prompt: call(prompt, 'answer'),
                               source_unavailable=bool(network_notice))
     result['agent']['answer_summary'] = answer
@@ -788,7 +789,7 @@ def main(query=None, kb_version=None, complete_evidence=None, completion_rounds=
         print('Question cannot be empty.')
         return
     project = Path(__file__).resolve().parent
-    output = (Path(output_dir) if output_dir is not None else project / 'logs' / f'{mode}_runs' /
+    output = (Path(output_dir) if output_dir is not None else data_root() / 'logs' / f'{mode}_runs' /
               datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S.%fZ')).resolve()
     if output.exists() and any(output.iterdir()):
         raise ValueError('Use a new empty output directory; existing runs are preserved, not rerun.')
