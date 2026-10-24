@@ -64,7 +64,7 @@ MKL_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 TOKENIZERS_PARALLELISM=false \
 HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 \
 .venv/bin/python -m unittest discover -s tests -v
 
-.venv/bin/python -B -m unittest webui.test_server webui.test_config webui.test_library
+.venv/bin/python -B -m unittest webui.test_server webui.test_config webui.test_library webui.test_model_assets webui.test_runtime
 ```
 
 测试使用模型替身；网页中的两项检查需允许临时本机HTTP端口。`evaluation.run_evaluation`与`evaluation.run_answer_evaluation`可能调用API，恢复上下文先读保存记录；无需因换对话重跑实验。检索评估的补查须显式启用`--complete-evidence --completion-rounds 2`，各K独立运行。

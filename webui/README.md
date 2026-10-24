@@ -53,7 +53,7 @@
 本轮31项网页检查在独立虚拟环境通过；后端345项是此前记录，本轮没有重跑。另从实际网页完成首篇VGG入库、重复跳过、无正文失败保留、模型列表/保存、换行/发送、刷新及引用联动，并保留真实键盘选词确认。测试命令：
 
 ```bash
-.venv/bin/python -B -m unittest webui.test_server webui.test_config webui.test_library
+.venv/bin/python -B -m unittest webui.test_server webui.test_config webui.test_library webui.test_model_assets webui.test_runtime
 ```
 
 历史真实记录分别证明：初版8849的RAG 16.28秒/2请求/3054 token；Mamba联网48.89秒/8请求/24836 token；入库后本地Mamba RAG 13.62秒/2请求/2965 token。最新中文Agent修复为102.13秒/9请求/34320 token，核心比较人工核对通过。不同日期、模型、库和加载条件不混成同一次版本验收或提速结论。[分版本实验总览](../docs/PROJECT_METRICS.md)
