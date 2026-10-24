@@ -1,0 +1,1 @@
+The model is a Bidirectional Encoding model (Augenstein et al., 2016): it encodes the entity using a bidirectional LSTM (BiLSTM), which is then used to initialize a BiLSTM that encodes the article and produces a prediction [5]. To reduce the sequence length, the same context window that was presented to annotators is used for training the LSTM [5].

@@ -1,0 +1,1 @@
+LSTM and GRU with Attention is identified as the best model for the offensive language identification task, trained on OGTD, achieving a macro-F1 of 0.89 [1][6]. Among classical machine learning approaches, the linear SVM achieved the best results at 0.80 [6].

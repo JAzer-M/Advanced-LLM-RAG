@@ -1,0 +1,1000 @@
+{
+  "id": "question",
+  "query": "For the paper \"Content-Based Table Retrieval for Web Queries\" (arXiv: 1706.02427), answer this question: Are all the tables in the dataset from the same website?",
+  "kb_version": "qasper-test50-20261024",
+  "status": "completed",
+  "actions_executed": 2,
+  "semantic_correctness": "requires_manual_review",
+  "validation_repairs": [
+    {
+      "phase": "plan",
+      "error": "Requirement question_quote must name its own subject and show its scope."
+    }
+  ],
+  "plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "Content-Based Table Retrieval for Web Queries",
+        "question_quote": "For the paper \"Content-Based Table Retrieval for Web Queries\" (arXiv: 1706.02427), answer this question: Are all the tables in the dataset from the same website?",
+        "need": "For the paper \"Content-Based Table Retrieval for Web Queries\" (arXiv: 1706.02427), answer this question: Are all the tables in the dataset from the same website?"
+      }
+    ]
+  },
+  "assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "partial",
+        "evidence": [
+          {
+            "chunk_id": 197,
+            "quote": "Furthermore, we release an open-domain dataset that includes 21,113 web queries for 273,816 tables."
+          },
+          {
+            "chunk_id": 206,
+            "quote": "log, and 273,816 web tables from Wikipedia."
+          },
+          {
+            "chunk_id": 251,
+            "quote": "Therefore, in order to enlarge the search space of our dataset, we extract 252,703 web tables from Wikipedia and regard them as searchable tables as well."
+          },
+          {
+            "chunk_id": 254,
+            "quote": "It contains 2,108 HTML tables extracted from Wikipedia."
+          }
+        ],
+        "supported_part": "论文发布的 WebQueryTable 数据集中的网络表格来自 Wikipedia（以及从网页查询日志构建），WikiTableQuestions 的 2,108 个表格也来自 Wikipedia。",
+        "reason": "现有片段表明数据集中的表格从 Wikipedia 提取（WebQueryTable 亦涉及网络查询日志），因此并未确立“所有表格都来自同一个网站”这一完整事实：查询日志部分的来源网站未被说明，且无法确认全部表格仅来自单一网站。",
+        "gap": "缺少明确说明 WebQueryTable 中来自查询日志的表格是否也全部来自 Wikipedia（或单一网站），以及是否存在除 Wikipedia 外的其他网站来源。"
+      }
+    ],
+    "next_action": {
+      "type": "read_neighbors",
+      "reason": "在数据集构建/统计相关段落附近寻找是否明确说明表格来源网站（是否全部来自同一网站）。",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": null,
+      "source": "1706.02427.pdf",
+      "chunk_id": 252
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "针对需求检查了数据集表格来源网站的说明，未超出问题范围。"
+    }
+  },
+  "steps": [
+    {
+      "number": 1,
+      "action": {
+        "type": "read_neighbors",
+        "reason": "在数据集构建/统计相关段落附近寻找是否明确说明表格来源网站（是否全部来自同一网站）。",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": null,
+        "source": "1706.02427.pdf",
+        "chunk_id": 252
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "read_neighbors",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "chunk_id": 252,
+          "source": "1706.02427.pdf",
+          "knowledge_base": {
+            "version": "qasper-test50-20261024",
+            "chunk_count": 1612,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/manifest.json",
+            "manifest_sha256": "9974fa3a87051eda09cd42cd585d1501ed257548d187d0321ed8f82f71790f5e",
+            "files": {
+              "faiss.index": "f4c8de7951c30bb0deee445e8d9983d05f7360576c426b58f6f8046d093ef5c7",
+              "chunks.json": "0061d789f2d24144b80e14598fd7509c48803fd6c87d04a78c6960c34d268a4f"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 250,
+              "text": "3We also implemented a ranking based loss function max(0, 1−fnn(ta, q)+fnn(t∗ a, q)), but it performed worse than the negative log-likelihood in our experiment.",
+              "source": "1706.02427.pdf",
+              "page": 5,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "5.1 Dataset and Setting",
+              "kb_version": "qasper-test50-20261024",
+              "offset": -2
+            },
+            {
+              "chunk_id": 251,
+              "text": "Therefore, in order to enlarge the search space of our dataset, we extract 252,703 web tables from Wikipedia and regard them as searchable tables as well.",
+              "source": "1706.02427.pdf",
+              "page": 5,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "5.1 Dataset and Setting",
+              "kb_version": "qasper-test50-20261024",
+              "offset": -1
+            },
+            {
+              "chunk_id": 252,
+              "text": "Data statistics are given in Table 1. WQT dataset WTQ dataset # of tables 273,816 2,108 Avg # of columns 4.55 6.38 Max # of columns 52 25 Min # of columns 1 3 Avg # of rows 9.15 28.50 Max # of rows 1,517 754 Min # of rows 2 5 # of questions 21,113 22,033 4.61 11.25 Avg # of questions Table 1: Statistics of WebQueryTable (WQT) dataset and WikiTableQuestions (WTQ) dataset. We sampled 200 examples to analyze the dis- tribution of the query types in our dataset.",
+              "source": "1706.02427.pdf",
+              "page": 5,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "5.1 Dataset and Setting",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 0
+            },
+            {
+              "chunk_id": 253,
+              "text": "We ob- serve that 69.5% queries are asking about “a list of XXX”, such as “list of countries and capitals” and “major cities in netherlands”, and about 24.5% queries are asking about an attribute of an object, such as “density of liquid water temperature”. We randomly separate the dataset as training, valida- tion, test with a 70:10:20 split.",
+              "source": "1706.02427.pdf",
+              "page": 5,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "5.1 Dataset and Setting",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 1
+            },
+            {
+              "chunk_id": 254,
+              "text": "We also conduct a synthetic experiment for ta- ble retrieval on WikiTableQuestions (Pasupat and Liang, 2015), which is a widely used dataset for table-based question answering. It contains 2,108 HTML tables extracted from Wikipedia.",
+              "source": "1706.02427.pdf",
+              "page": 5,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "5.1 Dataset and Setting",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 2
+            }
+          ],
+          "trace": {
+            "window": 2,
+            "max_window": 2,
+            "selected_ids": [
+              250,
+              251,
+              252,
+              253,
+              254
+            ],
+            "read_chars": 1352,
+            "elapsed_seconds": 0.000187,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        250,
+        253
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          250,
+          253
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "missing",
+            "evidence": [],
+            "supported_part": "",
+            "reason": "现有段落说明了WebQueryTable数据集的规模及表格来源为Wikipedia，但没有任何段落回答“数据集中所有表格是否来自同一网站”这一问题。",
+            "gap": "缺少关于数据集内表格是否全部来自同一网站的明确说明。"
+          }
+        ],
+        "next_action": {
+          "type": "search",
+          "reason": "尚未找到数据集表格是否来自同一网站的说明，使用预计算查询在目标论文中检索该事实。",
+          "requirement_ids": [
+            "r1"
+          ],
+          "query": "Content-Based Table Retrieval for Web Queries: For the paper \"Content-Based Table Retrieval for Web Queries\" (arXiv: 1706.02427), answer this question: Are all the tables in the dataset from the same website? | For the paper \"Content-Based Table Retrieval for Web Queries\" (arXiv: 1706.02427), answer this question: Are all the tables in the dataset from the same website?",
+          "source": "1706.02427.pdf",
+          "chunk_id": null
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "检索查询针对r1的需求（数据集中表格是否来自同一网站），未超出问题范围。"
+        }
+      }
+    },
+    {
+      "number": 2,
+      "action": {
+        "type": "search",
+        "reason": "尚未找到数据集表格是否来自同一网站的说明，使用预计算查询在目标论文中检索该事实。",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": "Content-Based Table Retrieval for Web Queries: For the paper \"Content-Based Table Retrieval for Web Queries\" (arXiv: 1706.02427), answer this question: Are all the tables in the dataset from the same website? | For the paper \"Content-Based Table Retrieval for Web Queries\" (arXiv: 1706.02427), answer this question: Are all the tables in the dataset from the same website?",
+        "source": "1706.02427.pdf",
+        "chunk_id": null
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "search",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "query": "Content-Based Table Retrieval for Web Queries: For the paper \"Content-Based Table Retrieval for Web Queries\" (arXiv: 1706.02427), answer this question: Are all the tables in the dataset from the same website? | For the paper \"Content-Based Table Retrieval for Web Queries\" (arXiv: 1706.02427), answer this question: Are all the tables in the dataset from the same website?",
+          "source": "1706.02427.pdf",
+          "knowledge_base": {
+            "version": "qasper-test50-20261024",
+            "chunk_count": 1612,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/manifest.json",
+            "manifest_sha256": "9974fa3a87051eda09cd42cd585d1501ed257548d187d0321ed8f82f71790f5e",
+            "files": {
+              "faiss.index": "f4c8de7951c30bb0deee445e8d9983d05f7360576c426b58f6f8046d093ef5c7",
+              "chunks.json": "0061d789f2d24144b80e14598fd7509c48803fd6c87d04a78c6960c34d268a4f"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 219,
+              "score": 0.01666782415445517,
+              "source": "1706.02427.pdf",
+              "page": 2,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "3.1 Candidate Table Retrieval",
+              "text": "Given a query q = x1, x2, ..., xn, a table t and the whole table set T, the BM25 score of query q and table t is calculated as follows. n tf(xi, t) · (k1 + 1) X BM25(q, t) = idf(xi) |t| tf(xi, T) + k1(1 −b + b avgtl ) i=1 where tf(xi, t) is the term frequency of word xi in t, idf(xi) is its inverse document frequency, avgtl is the average sequence length in the whole table set T, and k1 and b are hyper-parameters.",
+              "rerank_score": 0.9997981190681458,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 211,
+              "score": 0.015299913068675746,
+              "source": "1706.02427.pdf",
+              "page": 2,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "2 Task Deﬁnition",
+              "text": "A table t is a set of data elements arranged by vertical columns and horizontal rows. Formally, we deﬁne a table as a triple t = {headers, cells, caption} that con- sists of three aspects. A table could have multiple headers, each of which indicates the property of a column and could be used to identify a column. A table could have multiple cells, each of which is a unit where a row and a column intersects. A table could have a caption, which is typically an explanatory text about the table.",
+              "rerank_score": 0.9993458390235901,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 221,
+              "score": 0.016085271317829455,
+              "source": "1706.02427.pdf",
+              "page": 3,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "3.1 Candidate Table Retrieval",
+              "text": "We use each fea- ture to calculate a relevance score, representing the similarity between a query and a table from some perspective. Afterwards, we use LambdaMART (Burges, 2010), a successful algorithm for solv- ing real world ranking problem, to get the ﬁnal ranking score of each table.2 The basic idea of LambdaMART is that it constructs a forest of de- cision trees, and its output is a linear combination of the results of decision trees.",
+              "rerank_score": 0.9992108345031738,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 245,
+              "score": 0.013506261180679786,
+              "source": "1706.02427.pdf",
+              "page": 5,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "4.2 Matching with Neural Networks",
+              "text": "fnn(cell, q) = NN1(Mcel, vq) fnn(column, q) = NN1(Mcol, vq) fnn(row, q) = NN1(Mrow, vq) Since a table caption is typically a descriptive word sequence.",
+              "rerank_score": 0.9989474415779114,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 197,
+              "score": 0.02591362126245847,
+              "source": "1706.02427.pdf",
+              "page": 1,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": null,
+              "text": "Furthermore, we release an open-domain dataset that includes 21,113 web queries for 273,816 tables.",
+              "rerank_score": 0.99893718957901,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 201,
+              "score": 0.03125,
+              "source": "1706.02427.pdf",
+              "page": 1,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "1 Introduction",
+              "text": "On the other hand, the retrieved table could be used as the input for question answering (Pasupat and Liang, 2015). Unlike existing studies in database community (Cafarella et al., 2008; Balakrishnan et al., 2015) that utilize surrounding text of a table or pager- ank score of a web page, we focus on making a thorough exploration of table content in this work. We believe that content-based table retrieval has the following challenges.",
+              "rerank_score": 0.9989311099052429,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 228,
+              "score": 0.0125,
+              "source": "1706.02427.pdf",
+              "page": 3,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "4.1 Matching with Designed Features",
+              "text": "They are also normalized with the length of q and ta, calculated as follows, P w∈ta δ(w, q) · idf(w) fwmt(ta, q) = w′∈ta idf(w′) P P w∈ta δ(w, q) · idf(w) fwmq(ta, q) = w′∈q idf(w′) P where idf(w) denotes the inverse document fre- quency of word w in ta. δ(yj, q) is an indicator function which is equal to 1 if yj occurs in q, and 0 otherwise. Larger values of fwmt(·) and fwmq(·) correspond to larger amount of word overlap be- tween ta and q. (2) Phrase Level.",
+              "rerank_score": 0.9988665580749512,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 206,
+              "score": 0.022616917965755177,
+              "source": "1706.02427.pdf",
+              "page": 2,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "1 Introduction",
+              "text": "log, and 273,816 web tables from Wikipedia. We conduct comprehensive experiments on two datasets, a real world dataset introduced by us, and a synthetic dataset WikiTableQuestions (Pasupat and Liang, 2015) which has been widely used for table-based question answering. Results in vari- ous conditions show that neural network models perform comparably with carefully designed fea- tures, and combining them both could obtain fur- ther improvement.",
+              "rerank_score": 0.9983179569244385,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 244,
+              "score": 0.01767228630582668,
+              "source": "1706.02427.pdf",
+              "page": 5,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "4.2 Matching with Neural Networks",
+              "text": "Mcol from table cells in order to match from cell level, row level and column level. Each memory cell in Mcel represents the embedding of a table cell. Each cell in Mrow represent the vector a row, which is computed with weighted average over the embeddings of cells in the same row. We derive the column memory Mcol in an analogous way. We use the same module NN1() to calculate the relevance scores for these three memories.",
+              "rerank_score": 0.9981037378311157,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 240,
+              "score": 0.02074213049822806,
+              "source": "1706.02427.pdf",
+              "page": 4,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "4.2 Matching with Neural Networks",
+              "text": "A table has different types of information, in- cluding headers, cells and caption. We develop different mechanisms to match the relevance be- tween a query and each aspect of a table. An important property of a table is that randomly exchanging two rows or tow columns will not change the meaning of a table (Vinyals et al., 2015). Therefore, a matching model should en- sure that exchanging rows or columns will result in the same output.",
+              "rerank_score": 0.9977318644523621,
+              "kb_version": "qasper-test50-20261024"
+            }
+          ],
+          "trace": {
+            "retrieval_depth": 1612,
+            "candidate_k": 120,
+            "rrf_k": 60,
+            "result_k": 10,
+            "dense_ids": [
+              249,
+              248,
+              291,
+              201,
+              196,
+              207,
+              284,
+              282,
+              251,
+              197,
+              257,
+              217,
+              254,
+              224,
+              258,
+              195,
+              263,
+              283,
+              292,
+              255,
+              212,
+              240,
+              215,
+              199,
+              218,
+              206,
+              285,
+              256,
+              236,
+              205,
+              306,
+              298,
+              252,
+              227,
+              275,
+              260,
+              234,
+              200,
+              294,
+              277,
+              300,
+              233,
+              279,
+              225,
+              202,
+              208,
+              253,
+              281,
+              209,
+              270,
+              220,
+              301,
+              262,
+              229,
+              264,
+              203,
+              297,
+              237,
+              211,
+              221,
+              219,
+              210,
+              268,
+              261,
+              271,
+              309,
+              307,
+              308,
+              304,
+              245,
+              265,
+              243,
+              230,
+              242,
+              267,
+              204,
+              280,
+              296,
+              278,
+              286,
+              305,
+              266,
+              273,
+              198,
+              295,
+              303,
+              244,
+              235,
+              246,
+              287,
+              232,
+              241,
+              238,
+              288,
+              310,
+              226,
+              302,
+              216,
+              293,
+              228,
+              272,
+              222,
+              213,
+              269,
+              299,
+              231,
+              274,
+              247,
+              259,
+              250,
+              290,
+              214,
+              239,
+              276,
+              223,
+              289
+            ],
+            "bm25_ids": [
+              291,
+              282,
+              195,
+              201,
+              199,
+              248,
+              284,
+              285,
+              249,
+              196,
+              207,
+              212,
+              256,
+              233,
+              215,
+              258,
+              292,
+              306,
+              209,
+              217,
+              257,
+              251,
+              254,
+              300,
+              220,
+              197,
+              229,
+              262,
+              200,
+              268,
+              206,
+              244,
+              279,
+              261,
+              263,
+              271,
+              309,
+              224,
+              202,
+              275,
+              278,
+              277,
+              205,
+              264,
+              252,
+              283,
+              301,
+              298,
+              208,
+              203,
+              234,
+              204,
+              280,
+              253,
+              307,
+              294,
+              240,
+              236,
+              219,
+              260,
+              281,
+              273,
+              270,
+              227,
+              231,
+              225,
+              213,
+              247,
+              221,
+              230,
+              255,
+              242,
+              223,
+              266,
+              265,
+              243,
+              250,
+              218,
+              216,
+              246,
+              222,
+              297,
+              232,
+              214,
+              211,
+              272,
+              241,
+              289,
+              239,
+              198,
+              310,
+              238,
+              308,
+              290,
+              259,
+              295,
+              303,
+              267,
+              304,
+              228,
+              296,
+              237,
+              288,
+              305,
+              276,
+              210,
+              286,
+              226,
+              269,
+              287,
+              235,
+              245
+            ],
+            "candidate_ids": [
+              291,
+              248,
+              201,
+              249,
+              282,
+              284,
+              196,
+              207,
+              195,
+              199,
+              251,
+              258,
+              257,
+              217,
+              212,
+              285,
+              197,
+              254,
+              292,
+              215,
+              256,
+              306,
+              224,
+              263,
+              233,
+              206,
+              283,
+              209,
+              300,
+              200,
+              205,
+              220,
+              240,
+              275,
+              279,
+              252,
+              229,
+              262,
+              255,
+              298,
+              277,
+              236,
+              202,
+              234,
+              268,
+              218,
+              260,
+              294,
+              227,
+              261,
+              208,
+              271,
+              264,
+              301,
+              309,
+              253,
+              203,
+              244,
+              225,
+              281,
+              270,
+              278,
+              219,
+              307,
+              204,
+              280,
+              221,
+              297,
+              211,
+              230,
+              273,
+              265,
+              242,
+              243,
+              237,
+              266,
+              308,
+              210,
+              304,
+              231,
+              213,
+              246,
+              247,
+              267,
+              232,
+              198,
+              216,
+              245,
+              296,
+              241,
+              295,
+              222,
+              223,
+              303,
+              305,
+              250,
+              286,
+              238,
+              310,
+              272,
+              214,
+              288,
+              235,
+              287,
+              228,
+              239,
+              289,
+              259,
+              226,
+              290,
+              269,
+              276,
+              302,
+              293,
+              299,
+              274
+            ],
+            "selected_ids": [
+              219,
+              211,
+              221,
+              245,
+              197,
+              201,
+              228,
+              206,
+              244,
+              240
+            ],
+            "elapsed_seconds": 8.153147,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        219,
+        211,
+        221,
+        245,
+        201,
+        228,
+        244,
+        240
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          219,
+          211,
+          221,
+          245,
+          201,
+          228,
+          244,
+          240
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "missing",
+            "evidence": [],
+            "supported_part": "",
+            "reason": "现有片段只说明数据集规模（如273,816张网络表格、来自Wikipedia的表格数），但没有说明数据集中的表格是否全部来自同一网站。",
+            "gap": "缺少关于数据集内表格来源是否全部为同一网站的直接陈述。"
+          }
+        ],
+        "next_action": {
+          "type": "read_neighbors",
+          "reason": "数据集描述与统计集中在第5页附近；已检索到的片段仅给出数量，未说明表格来源网站的同质性，需读取第5页数据集构建/统计段落邻近内容以查找来源说明。",
+          "requirement_ids": [
+            "r1"
+          ],
+          "query": null,
+          "source": "1706.02427.pdf",
+          "chunk_id": 252
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "每个检查均绑定到r1的问题片段（数据集表格是否全部来自同一网站），未合并其他条件。"
+        }
+      }
+    }
+  ],
+  "evidence_after": [
+    {
+      "chunk_id": 291,
+      "source": "1706.02427.pdf",
+      "page": 8,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "7 Conclusion In this paper, we give an empirical study of content-based table retrieval for web queries. We implement a feature-based approach and a neural network based approach, and release a new dataset consisting of web queries and web tables.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 254,
+      "source": "1706.02427.pdf",
+      "page": 5,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "We also conduct a synthetic experiment for ta- ble retrieval on WikiTableQuestions (Pasupat and Liang, 2015), which is a widely used dataset for table-based question answering. It contains 2,108 HTML tables extracted from Wikipedia.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 309,
+      "source": "1706.02427.pdf",
+      "page": 10,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "In Advances in Neural Information Process- ing Systems (NIPS). pages 2431–2439. Petros Venetis, Alon Halevy, Jayant Madhavan, Mar- ius Pas¸ca, Warren Shen, Fei Wu, Gengxin Miao, and Chung Wu. 2011. Recovering semantics of tables on the web. Proceedings of the VLDB Endowment 4(9):528–538. Oriol Vinyals, Samy Bengio, and Manjunath Kudlur. 2015. Order matters: Sequence to sequence for sets. arXiv preprint arXiv:1511.06391 .",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 197,
+      "source": "1706.02427.pdf",
+      "page": 1,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "Furthermore, we release an open-domain dataset that includes 21,113 web queries for 273,816 tables.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 251,
+      "source": "1706.02427.pdf",
+      "page": 5,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "Therefore, in order to enlarge the search space of our dataset, we extract 252,703 web tables from Wikipedia and regard them as searchable tables as well.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 206,
+      "source": "1706.02427.pdf",
+      "page": 2,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "log, and 273,816 web tables from Wikipedia. We conduct comprehensive experiments on two datasets, a real world dataset introduced by us, and a synthetic dataset WikiTableQuestions (Pasupat and Liang, 2015) which has been widely used for table-based question answering. Results in vari- ous conditions show that neural network models perform comparably with carefully designed fea- tures, and combining them both could obtain fur- ther improvement.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 257,
+      "source": "1706.02427.pdf",
+      "page": 5,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "In the candidate table retrieval phase, we encode a table as bag-of-words to guarantee the efﬁciency of the approach. Speciﬁcally, on WebQueryTable dataset we represent a table with caption and head- ers. On WikiTableQuestions dataset we represent a table with caption, headers and cells.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 195,
+      "source": "1706.02427.pdf",
+      "page": 1,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "Content-Based Table Retrieval for Web Queries Zhao Yan†∗, Duyu Tang‡ , Nan Duan‡ , Junwei Bao+∗, Yuanhua Lv§ , Ming Zhou‡ , Zhoujun Li† †Beihang University +Harbin Institute of Technology §Microsoft AI and Research, Sunnyvale CA, USA †{yanzhao, lizj}@buaa.edu.cn ‡§{dutang, nanduan, yuanhual, mingzhou}@microsoft.com Abstract Understanding the connections between unstructured text and semi-structured table arXiv:1706.02427v1 [cs.CL] 8 Jun 2017 is an important yet neglected problem in natural language processing.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 252,
+      "source": "1706.02427.pdf",
+      "page": 5,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "Data statistics are given in Table 1. WQT dataset WTQ dataset # of tables 273,816 2,108 Avg # of columns 4.55 6.38 Max # of columns 52 25 Min # of columns 1 3 Avg # of rows 9.15 28.50 Max # of rows 1,517 754 Min # of rows 2 5 # of questions 21,113 22,033 4.61 11.25 Avg # of questions Table 1: Statistics of WebQueryTable (WQT) dataset and WikiTableQuestions (WTQ) dataset. We sampled 200 examples to analyze the dis- tribution of the query types in our dataset.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 234,
+      "source": "1706.02427.pdf",
+      "page": 4,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "We use the same model architecture to get query vector and table aspect vector, and calculate their relevance with cosine function. fs1(ta, q) = cosine(cdssm(ta), cdssm(q)) We train model parameters on WikiAnswers dataset (Fader et al., 2013), which contains almost 12M question-similar question pairs.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 250,
+      "source": "1706.02427.pdf",
+      "page": 5,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "3We also implemented a ranking based loss function max(0, 1−fnn(ta, q)+fnn(t∗ a, q)), but it performed worse than the negative log-likelihood in our experiment.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 253,
+      "source": "1706.02427.pdf",
+      "page": 5,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "We ob- serve that 69.5% queries are asking about “a list of XXX”, such as “list of countries and capitals” and “major cities in netherlands”, and about 24.5% queries are asking about an attribute of an object, such as “density of liquid water temperature”. We randomly separate the dataset as training, valida- tion, test with a 70:10:20 split.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 219,
+      "source": "1706.02427.pdf",
+      "page": 2,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "Given a query q = x1, x2, ..., xn, a table t and the whole table set T, the BM25 score of query q and table t is calculated as follows. n tf(xi, t) · (k1 + 1) X BM25(q, t) = idf(xi) |t| tf(xi, T) + k1(1 −b + b avgtl ) i=1 where tf(xi, t) is the term frequency of word xi in t, idf(xi) is its inverse document frequency, avgtl is the average sequence length in the whole table set T, and k1 and b are hyper-parameters.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 211,
+      "source": "1706.02427.pdf",
+      "page": 2,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "A table t is a set of data elements arranged by vertical columns and horizontal rows. Formally, we deﬁne a table as a triple t = {headers, cells, caption} that con- sists of three aspects. A table could have multiple headers, each of which indicates the property of a column and could be used to identify a column. A table could have multiple cells, each of which is a unit where a row and a column intersects. A table could have a caption, which is typically an explanatory text about the table.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 221,
+      "source": "1706.02427.pdf",
+      "page": 3,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "We use each fea- ture to calculate a relevance score, representing the similarity between a query and a table from some perspective. Afterwards, we use LambdaMART (Burges, 2010), a successful algorithm for solv- ing real world ranking problem, to get the ﬁnal ranking score of each table.2 The basic idea of LambdaMART is that it constructs a forest of de- cision trees, and its output is a linear combination of the results of decision trees.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 245,
+      "source": "1706.02427.pdf",
+      "page": 5,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "fnn(cell, q) = NN1(Mcel, vq) fnn(column, q) = NN1(Mcol, vq) fnn(row, q) = NN1(Mrow, vq) Since a table caption is typically a descriptive word sequence.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 201,
+      "source": "1706.02427.pdf",
+      "page": 1,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "On the other hand, the retrieved table could be used as the input for question answering (Pasupat and Liang, 2015). Unlike existing studies in database community (Cafarella et al., 2008; Balakrishnan et al., 2015) that utilize surrounding text of a table or pager- ank score of a web page, we focus on making a thorough exploration of table content in this work. We believe that content-based table retrieval has the following challenges.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 228,
+      "source": "1706.02427.pdf",
+      "page": 3,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "They are also normalized with the length of q and ta, calculated as follows, P w∈ta δ(w, q) · idf(w) fwmt(ta, q) = w′∈ta idf(w′) P P w∈ta δ(w, q) · idf(w) fwmq(ta, q) = w′∈q idf(w′) P where idf(w) denotes the inverse document fre- quency of word w in ta. δ(yj, q) is an indicator function which is equal to 1 if yj occurs in q, and 0 otherwise. Larger values of fwmt(·) and fwmq(·) correspond to larger amount of word overlap be- tween ta and q. (2) Phrase Level.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 244,
+      "source": "1706.02427.pdf",
+      "page": 5,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "Mcol from table cells in order to match from cell level, row level and column level. Each memory cell in Mcel represents the embedding of a table cell. Each cell in Mrow represent the vector a row, which is computed with weighted average over the embeddings of cells in the same row. We derive the column memory Mcol in an analogous way. We use the same module NN1() to calculate the relevance scores for these three memories.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 240,
+      "source": "1706.02427.pdf",
+      "page": 4,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "A table has different types of information, in- cluding headers, cells and caption. We develop different mechanisms to match the relevance be- tween a query and each aspect of a table. An important property of a table is that randomly exchanging two rows or tow columns will not change the meaning of a table (Vinyals et al., 2015). Therefore, a matching model should en- sure that exchanging rows or columns will result in the same output.",
+      "kb_version": "qasper-test50-20261024"
+    }
+  ],
+  "action_attempts": 2,
+  "feedback_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "missing",
+        "evidence": [],
+        "supported_part": "",
+        "reason": "现有片段只说明数据集规模（如273,816张网络表格、来自Wikipedia的表格数），但没有说明数据集中的表格是否全部来自同一网站。",
+        "gap": "缺少关于数据集内表格来源是否全部为同一网站的直接陈述。"
+      }
+    ],
+    "next_action": {
+      "type": "read_neighbors",
+      "reason": "数据集描述与统计集中在第5页附近；已检索到的片段仅给出数量，未说明表格来源网站的同质性，需读取第5页数据集构建/统计段落邻近内容以查找来源说明。",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": null,
+      "source": "1706.02427.pdf",
+      "chunk_id": 252
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "每个检查均绑定到r1的问题片段（数据集表格是否全部来自同一网站），未合并其他条件。"
+    }
+  },
+  "halt_reason": "repeated_action",
+  "final_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "missing",
+        "evidence": [],
+        "supported_part": "",
+        "reason": "现有片段只说明数据集规模（如273,816张网络表格、来自Wikipedia的表格数），但没有说明数据集中的表格是否全部来自同一网站。",
+        "gap": "缺少关于数据集内表格来源是否全部为同一网站的直接陈述。"
+      }
+    ],
+    "next_action": {
+      "type": "read_neighbors",
+      "reason": "数据集描述与统计集中在第5页附近；已检索到的片段仅给出数量，未说明表格来源网站的同质性，需读取第5页数据集构建/统计段落邻近内容以查找来源说明。",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": null,
+      "source": "1706.02427.pdf",
+      "chunk_id": 252
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "每个检查均绑定到r1的问题片段（数据集表格是否全部来自同一网站），未合并其他条件。"
+    }
+  },
+  "elapsed_seconds": 21.529
+}

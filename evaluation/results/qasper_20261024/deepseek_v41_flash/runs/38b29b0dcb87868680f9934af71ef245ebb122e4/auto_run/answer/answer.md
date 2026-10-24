@@ -1,0 +1,1 @@
+Yes. The OGTD is a manually annotated dataset containing 4,779 posts from Twitter annotated as offensive and not offensive [2]. A team of three volunteers classified each tweet using explicit annotation guidelines written in Greek, tagging them as Offensive, Not Offensive, or Spam [1]. The tweets were manually annotated by a team of volunteers through an annotation platform [4].

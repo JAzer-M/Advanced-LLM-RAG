@@ -1,0 +1,1 @@
+They generate input noise using three operations: random dropping (randomly dropping the input tokens of the encoder and decoder respectively with different drop rates), random noising (randomly selecting tokens and replacing their embedding with random noise), and random swapping (randomly reversing the order of adjacent tokens) [2].

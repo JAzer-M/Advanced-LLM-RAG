@@ -1,0 +1,102 @@
+[
+  {
+    "number": 1,
+    "phase": "decompose",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n   For an open-ended \"difference between X and Y\" question, retrieve each\n   entity's purpose and core approach. Do not replace it with comparisons\n   between versions of X or versions of Y, or request unasked benchmark scores.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nFor the paper \"360{\\deg} Stance Detection\" (arXiv: 1804.00982), answer this question: what is the architecture of their model?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-24T14:15:28.987109+00:00",
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 512,
+        "cached_tokens": 512,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 19,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0,
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 193,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 705,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 512,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 724
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.552
+  },
+  {
+    "number": 2,
+    "phase": "probe",
+    "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in the same language as the user's question. If the question explicitly asks for a particular language, use that language instead. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported question, begin with 当前证据不足 when answering in Chinese, or with \"Insufficient evidence\" when answering in English, and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n14. Prioritize explicit subquestions, correct facts and citations, and conditions/units that change the conclusion. Add definitions or steps only when needed for the task. Optional background, stylistic preferences and unasked exceptions are not completeness requirements. Failure to retrieve a paper does not establish that the paper never reported a result.\n\n15. For a comparison, synthesize separately supported facts about the requested objects, citing each side. A literal sentence comparing both papers is NOT required. Different purposes, inputs or mechanisms can be contrasted from their respective descriptions. This does not establish causality or which method performs better. Do not call the comparison unsupported merely because no head-to-head experiment is provided.\n16. Lead with the main difference the user asked about. For a broad comparison, explain what each object does and its supported core approach; do not replace this with differences between versions of each object, benchmark tables or unasked numerical results.\n\nContext:\n[1] Source: 1804.00982.pdf | Page: 4 | Section: 4 Model\nTitle: 360{\\deg} Stance Detection\nThe stance detection model is exposed as a web service and returns for each article-target entity pair a stance label (i.e. one of ‘in favour’, ‘against’ or ‘neutral’) along with a probability.6 The demo then visualizes the collected news ar- ticles as a 2D scatter plot with each (x,y) coordi- nate representing a single news article from a par- ticular outlet that matched the user query. The x- axis shows the stance of the article in the range [−1, 1].\n\n[2] Source: 1804.00982.pdf | Page: 1 | Section: 1 Introduction\nTitle: 360{\\deg} Stance Detection\nStance detection is the task of estimating whether the attitude expressed in a text towards a given topic is ‘in favour’, ‘against’, or ‘neutral’. We collected and annotated a novel dataset, which associates news articles with a stance towards a speciﬁed topic. We then trained a state-of-the-art stance detection model (Augenstein et al., 2016) on this dataset. The stance detection model is integrated into the 360° Stance Detection website as a web service.\n\n[3] Source: 1804.00982.pdf | Page: 4 | Section: 4 Model\nTitle: 360{\\deg} Stance Detection\nFigure 4: Visualization distribution of stance to- wards Donald Trump and number of CNN news articles mentioning Donald Trump from August 2016 to January 2018. ‘AND’ or ‘OR’ as in Figure 2. When these two inputs are provided, the appli- cation retrieves a predeﬁned number of news arti- cles (up to 50) that match the ﬁrst input, and ana- lyzes their stance towards the target (the second in- put) using the stance detection model.\n\n[4] Source: 1804.00982.pdf | Page: 1 | Section: None\nTitle: 360{\\deg} Stance Detection\n360° Stance Detection Sebastian Ruder, John Glover, Afshin Mehrabani, Parsa Ghaffari Aylien Ltd., Dublin, Ireland {sebastian,john,afshin,parsa}@aylien.com Abstract The proliferation of fake news and ﬁlter bub- bles makes it increasingly difﬁcult to form an arXiv:1804.00982v1 [cs.CL] 3 Apr 2018 unbiased, balanced opinion towards a topic. To ameliorate this, we propose 360° Stance Detection, a tool that aggregates news with multiple perspectives on a topic.\n\n[5] Source: 1804.00982.pdf | Page: 3 | Section: 4 Model\nTitle: 360{\\deg} Stance Detection\n4 Model We train a Bidirectional Encoding model (Augen- stein et al., 2016), which has achieved state-of- the-art results for Twitter stance detection on our dataset. The model encodes the entity using a bidi- rectional LSTM (BiLSTM)4, which is then used to initialize a BiLSTM that encodes the article and produces a prediction. To reduce the sequence length, we use the same context window that was presented to annotators for training the LSTM.\n\n[6] Source: 1804.00982.pdf | Page: 4 | Section: 4 Model\nTitle: 360{\\deg} Stance Detection\n360° Stance Detection is particularly useful to gain an overview of complex or controversial top- ics and to highlight differences in their perception across different outlets. We show visualizations for example queries and three controversial top- ics in Figure 3. By extending the tool to enable retrieval of a larger number of news articles and more ﬁne-grained ﬁltering, we can employ it for general news analysis.\n\n[7] Source: 1804.00982.pdf | Page: 4 | Section: 6 Conclusion\nTitle: 360{\\deg} Stance Detection\n6 Conclusion We have introduced 360° Stance Detection, a tool that aims to provide evidence and context in order to assist the user with forming a balanced opinion towards a controversial topic. It aggregates news with multiple perspectives on a topic, annotates them with their stance, and visualizes them on a spectrum ranging from support to opposition, al- lowing the user to skim excerpts of the articles or read the original source.\n\n[8] Source: 1804.00982.pdf | Page: 3 | Section: 3.2 Data collection\nTitle: 360{\\deg} Stance Detection\nNews articles about a query, i.e. ‘Ireland AND brexit’ are visualized based on their stance towards a speciﬁed topic, i.e. ‘ireland’ and the prominence of the source. Additional information is provided in a table on the right, which allows to skim article excerpts or follow a link to the source. cient context to produce a reliable annotation. If the entity is not mentioned explicitly, we provide the ﬁrst paragraph of the article and the headline as context.\n\n[9] Source: 1804.00982.pdf | Page: 3 | Section: 4 Model\nTitle: 360{\\deg} Stance Detection\n5 360° Stance Detection Demo The interactive demo interface of 360° Stance Detection, which can be seen in Figure 2, takes two inputs: a news search query, which is used to retrieve news articles using News API, and a stance target topic, which is used as the target of the stance detection model. For good results, the stance target should also be included as a keyword in the news search query.\n\n[10] Source: 1804.00982.pdf | Page: 4 | Section: 4 Model\nTitle: 360{\\deg} Stance Detection\n(a) Query: Trump AND “gun control”; (b) Query: kneeling AND “national an- topic: gun control them”; topic: kneeling Figure 3: 360° Stance Detection visualizations for example queries and topics.\n\n[11] Source: 1804.00982.pdf | Page: 1 | Section: 1 Introduction\nTitle: 360{\\deg} Stance Detection\nA better alternative would be to provide addi- tional evidence that will allow a user to evaluate multiple viewpoints and decide with which they agree. To this end, we propose 360° Stance De- tection, a tool that provides a wide view of a topic from different perspectives to aid with forming a balanced opinion.\n\nQuestion:\nFor the paper \"360{\\deg} Stance Detection\" (arXiv: 1804.00982), answer this question: what is the architecture of their model?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n- For a broad difference-between question with no requested aspect, use 3-5 sentences: lead with the purposes, then the supported core methods. Prefer primary-paper abstract/introductory definitions. Omit training/test hyperparameters and unasked performance caveats.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-24T14:15:36.136413+00:00",
+    "response": {
+      "answer": "The paper trains a Bidirectional Encoding model (Augenstein et al., 2016), which it describes as having achieved state-of-the-art results for Twitter stance detection on their dataset [5]. The model encodes the entity using a bidirectional LSTM (BiLSTM), which is then used to initialize a BiLSTM that encodes the article and produces a prediction [5]. To reduce the sequence length, they use the same context window that was presented to annotators for training the LSTM [5].",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 2048,
+        "cached_tokens": 2048,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 101,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.01,
+        "prompt_cache_hit_tokens": 2048,
+        "prompt_cache_miss_tokens": 154,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2202,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 2048,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2303
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.104
+  }
+]

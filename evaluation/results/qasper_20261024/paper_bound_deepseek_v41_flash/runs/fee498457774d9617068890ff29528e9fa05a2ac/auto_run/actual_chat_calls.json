@@ -1,0 +1,102 @@
+[
+  {
+    "number": 1,
+    "phase": "decompose",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n   For an open-ended \"difference between X and Y\" question, retrieve each\n   entity's purpose and core approach. Do not replace it with comparisons\n   between versions of X or versions of Y, or request unasked benchmark scores.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nFor the paper \"Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\" (arXiv: 2003.03728), answer this question: Which dataset do they evaluate on?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-24T14:59:42.071869+00:00",
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 512,
+        "cached_tokens": 512,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 19,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0,
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 200,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 712,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 512,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 731
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.483
+  },
+  {
+    "number": 2,
+    "phase": "probe",
+    "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in the same language as the user's question. If the question explicitly asks for a particular language, use that language instead. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported question, begin with 当前证据不足 when answering in Chinese, or with \"Insufficient evidence\" when answering in English, and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n14. Prioritize explicit subquestions, correct facts and citations, and conditions/units that change the conclusion. Add definitions or steps only when needed for the task. Optional background, stylistic preferences and unasked exceptions are not completeness requirements. Failure to retrieve a paper does not establish that the paper never reported a result.\n\n15. For a comparison, synthesize separately supported facts about the requested objects, citing each side. A literal sentence comparing both papers is NOT required. Different purposes, inputs or mechanisms can be contrasted from their respective descriptions. This does not establish causality or which method performs better. Do not call the comparison unsupported merely because no head-to-head experiment is provided.\n16. Lead with the main difference the user asked about. For a broad comparison, explain what each object does and its supported core approach; do not replace this with differences between versions of each object, benchmark tables or unasked numerical results.\n\nContext:\n[1] Source: 2003.03728.pdf | Page: 1 | Section: 1. INTRODUCTION\nTitle: Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\nThis setting corresponds to multi-label positive and unlabeled (PU) learning, where as- signed labels are positive, unassigned labels are not neces- 1A domain is usually deﬁned as an application or functionality than can handle speciﬁc intents [1, 2, 3]. Young-Bum Kim sarily negative, and one or more labels are assigned for an instance [6, 7].2 In this paper, we utilize user log data, which contain triples of an utterance, the predicted domain, and the re- sponse, for the model training.\n\n[2] Source: 2003.03728.pdf | Page: 1 | Section: 1. INTRODUCTION\nTitle: Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\nEvaluating on an annotated dataset from the user logs of a large-scale conversation interaction system, we show that the proposed approach signiﬁcantly improves the domain classi- ﬁcation especially when hypothesis reranking is used [14, 5].\n\n[3] Source: 2003.03728.pdf | Page: 1 | Section: None\nTitle: Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\nPSEUDO LABELING AND NEGATIVE FEEDBACK LEARNING FOR LARGE-SCALE MULTI-LABEL DOMAIN CLASSIFICATION Joo-Kyung Kim Amazon Alexa AI ABSTRACT arXiv:2003.03728v1 [cs.CL] 8 Mar 2020 In large-scale domain classiﬁcation, an utterance can be han- dled by multiple domains with overlapped capabilities. How- ever, only a limited number of ground-truth domains are pro- vided for each training utterance in practice while knowing as many as correct target labels is helpful for improving the model performance.\n\n[4] Source: 2003.03728.pdf | Page: 3 | Section: 4. HYPOTHESIS RERANKING MODEL\nTitle: Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\nFirst, we run intent classiﬁca- tion and slot ﬁlling for the k most conﬁdent domains from the shortlister outputs to obtain additional information for those domains [1].8 Then, we compose k hypotheses, each of which is a vector consists of the shortlister conﬁdence score, (4) intent score, Viterbi score of slot-ﬁlling, domain vector, intent vector, and the summation of the slot vectors.\n\n[5] Source: 2003.03728.pdf | Page: 5 | Section: 7. REFERENCES\nTitle: Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\n391397. [3] Young-Bum Kim, Dongchan Kim, Anjishnu Kumar, and Ruhi Sarikaya, “Efﬁcient Large-Scale Neural Do- main Classiﬁcation with Personalized Attention,” ACL, 2018, pp.\n\n[6] Source: 2003.03728.pdf | Page: 4 | Section: 5.2. Experiment Results\nTitle: Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\nIn addition, recall is increased when self-distillation is used, which achieves the best F1 score (6). Each of utilizing the negative feedback ((1) →(3) and (2) →(5)) and then additional pseudo labels ((3) →(5) and (4) →(6)) show statistically signiﬁcant improvements with McNemar test for p=0.05 for the ﬁnal reranker results. Using self-distillation ((3) →(4) and (5) →(6)) shows increased F-1 score by increasing recall and decreasing pre- cision, but the improvements are not signiﬁcant.\n\n[7] Source: 2003.03728.pdf | Page: 1 | Section: 1. INTRODUCTION\nTitle: Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\n1. INTRODUCTION Domain classiﬁcation is a task that predicts the most rele- vant domain given an input utterance [1].1 It is becoming more challenging since recent conversational interaction sys- tems such as Amazon Alexa, Google Assistant, and Microsoft Cortana support more than thousands of domains developed by external developers [4, 3, 5].\n\n[8] Source: 2003.03728.pdf | Page: 4 | Section: 4. HYPOTHESIS RERANKING MODEL\nTitle: Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\nModel Precision (1) Base 77.27 (2) Base+pseudo 76.77 (3) Base+neg feed 77.90 (4) Base+neg feed+self dist 77.73 78.14 (5) Base+pseudo+neg feed (6) Base+pseudo+neg feed+self dist 77.96 Table 1. Evaluation results on various metrics (%). pseudo, neg feed, and self dist denote using derived pseudo labels, negative feedback, and self-distillation, respectively.\n\n[9] Source: 2003.03728.pdf | Page: 2 | Section: 3.1. Deriving Pseudo Labels\nTitle: Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\nWe derive the pseudo labels when the following condi- tions are met: • Maximally p domains predicted with the highest conﬁ- dences that are higher than the conﬁdence of the known ground-truth. • Domains predicted with the highest conﬁdences for r times consecutively so that consistent top predictions are used as pseudo labels. For the experiments in Section 5, we use p=2 and r=4, which show the best dev set performance.\n\n[10] Source: 2003.03728.pdf | Page: 2 | Section: 3.2. Leveraging Negative Feedback\nTitle: Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\n3.2. Leveraging Negative Feedback During the model training, irrelevant domains could be top predicted, and regarding them as additional target labels re- sults in wrong conﬁrmation bias [20], which causes incorrect model training. To reduce the side effect, we leverage utter- ances with negative responses in order to discourage the utter- ances’ incorrect predictions.\n\n[11] Source: 2003.03728.pdf | Page: 1 | Section: 1. INTRODUCTION\nTitle: Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\nAlso, the approach is related to self- distillation, which leverages the conﬁdence scores of the non- target outputs to improve the model performance [12, 13]. While distillation methods utilize the conﬁdence scores as the soft targets, pseudo labeling regards high conﬁdent out- puts as the hard targets to further boost their conﬁdences. We use both pseudo labeling and self-distillation in our work.\n\nQuestion:\nFor the paper \"Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\" (arXiv: 2003.03728), answer this question: Which dataset do they evaluate on?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n- For a broad difference-between question with no requested aspect, use 3-5 sentences: lead with the purposes, then the supported core methods. Prefer primary-paper abstract/introductory definitions. Omit training/test hyperparameters and unasked performance caveats.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-24T14:59:50.472287+00:00",
+    "response": {
+      "answer": "The paper evaluates on an annotated dataset from the user logs of a large-scale conversation interaction system [2].",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 2176,
+        "cached_tokens": 2176,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 21,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0,
+        "prompt_cache_hit_tokens": 2176,
+        "prompt_cache_miss_tokens": 145,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2321,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 2176,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2342
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.971
+  }
+]

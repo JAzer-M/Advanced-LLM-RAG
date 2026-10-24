@@ -1,0 +1,1 @@
+Using both pseudo labels and negative feedback yields significant improvements in both precision and recall (model (5)), and self-distillation achieves the best F1 score (model (6)); the results table shows F1 rising from 80.71 (baseline) to 81.69, with precision 84.09 and recall 80.50 [13][1].

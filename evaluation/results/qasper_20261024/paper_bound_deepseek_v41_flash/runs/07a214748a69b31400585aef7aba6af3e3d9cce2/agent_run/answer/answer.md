@@ -1,0 +1,1 @@
+The paper considers four target languages—French, Italian, Spanish and German—with English as the source language for lexicon translation, i.e., English→French, English→Italian, English→Spanish, English→German [3][1].

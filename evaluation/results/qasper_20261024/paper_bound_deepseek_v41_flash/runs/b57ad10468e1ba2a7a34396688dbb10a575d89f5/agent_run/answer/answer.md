@@ -1,0 +1,1 @@
+The paper uses negative log-likelihood as the loss function [1]. It notes that a ranking-based loss function, max(0, 1−fnn(ta, q)+fnn(t∗a, q)), was also implemented but performed worse than the negative log-likelihood in their experiment [10].

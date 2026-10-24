@@ -1,0 +1,1 @@
+Yes. Tweets were manually annotated by a team of volunteers through an annotation platform [4], indicating a crowdsourced-style manual annotation. Inter-annotator agreement was subsequently calculated: labels with 100% agreement were deemed acceptable, and in cases of disagreement, labels with majority agreement above 66% were selected as the actual annotations [6].

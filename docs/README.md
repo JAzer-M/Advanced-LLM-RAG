@@ -26,6 +26,7 @@
 
 | 工作 | 报告 |
 | --- | --- |
+| QASPER外部题集15篇52题；三模式及匹配模型判分完成，保留模型轮换、拒答误判与全部成本 | [完整报告](../evaluation/results/qasper_20261024/report.md)、[抽查记录](../evaluation/results/qasper_20261024/manual_review.md) |
 | 10月24日独立虚拟环境安装、31项网页检查、空库首篇入库和实际前端验收；2请求/3098 token | [验收记录](maintenance/installation_ui_acceptance_20261024/report.md) |
 | 10月24日中文比较修复；345项后端/27项网页通过，真实Agent核心比较原文核对通过 | [修复报告](../evaluation/results/chinese_comparison_20261024/report.md)、[最终测试](../evaluation/results/chinese_comparison_20261024/final_offline_test_summary.json)、[原文核对](../evaluation/results/chinese_comparison_20261024/manual_review.json) |
 | 10月24日当前文档、历史归档、分版本实验汇总与本地交付 | [本轮整理与核验](maintenance/p4_closeout_20261024/report.md)、[实验总览](PROJECT_METRICS.md) |

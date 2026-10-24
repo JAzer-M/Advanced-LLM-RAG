@@ -1,0 +1,670 @@
+{
+  "id": "question",
+  "query": "For the paper \"Cross-Lingual Natural Language Generation via Pre-Training\" (arXiv: 1909.10481), answer this question: What is their baseline?",
+  "kb_version": "qasper-test50-20261024",
+  "status": "failed",
+  "actions_executed": 3,
+  "semantic_correctness": "requires_manual_review",
+  "plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "Cross-Lingual Natural Language Generation via Pre-Training",
+        "question_quote": "For the paper \"Cross-Lingual Natural Language Generation via Pre-Training\" (arXiv: 1909.10481), answer this question: What is their baseline?",
+        "need": "For the paper \"Cross-Lingual Natural Language Generation via Pre-Training\" (arXiv: 1909.10481), answer this question: What is their baseline?"
+      }
+    ]
+  },
+  "assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "partial",
+        "evidence": [
+          {
+            "chunk_id": 1195,
+            "quote": "We include the following models as our baselines: • XLM Fine-tuning XLM with the English QG data."
+          },
+          {
+            "chunk_id": 1198,
+            "quote": "we use XLM and PIPELINE (XLM) as our baselines."
+          }
+        ],
+        "supported_part": "论文在英文-中文问题生成实验中以 XLM 和 PIPELINE (XLM) 作为基线，并在中文-中文问题生成实验中列出 XLM Fine-tuning 作为基线之一。",
+        "reason": "现有段落列举了部分任务（零样本中文-中文问题生成、英文-中文问题生成）的基线，但问题询问的“their baseline”是笼统的基线，可能涉及主要实验设置（如 NMT、摘要等任务）的基线，现有证据只覆盖部分任务，不足以完整确立论文的整体基线。",
+        "gap": "缺少论文主要/整体实验（如翻译、摘要等核心任务）所采用基线的说明。"
+      }
+    ],
+    "next_action": {
+      "type": "read_neighbors",
+      "reason": "当前段落位于第5页实验结果讨论处，其前后邻居可能包含完整基线列表或模型对比说明，能补足整体基线的缺失信息。",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": null,
+      "source": "1909.10481.pdf",
+      "chunk_id": 1195
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "需求仅要求论文的基线，引用与缺失均未超出该范围。"
+    }
+  },
+  "steps": [
+    {
+      "number": 1,
+      "action": {
+        "type": "read_neighbors",
+        "reason": "当前段落位于第5页实验结果讨论处，其前后邻居可能包含完整基线列表或模型对比说明，能补足整体基线的缺失信息。",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": null,
+        "source": "1909.10481.pdf",
+        "chunk_id": 1195
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "read_neighbors",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "chunk_id": 1195,
+          "source": "1909.10481.pdf",
+          "knowledge_base": {
+            "version": "qasper-test50-20261024",
+            "chunk_count": 1612,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/manifest.json",
+            "manifest_sha256": "9974fa3a87051eda09cd42cd585d1501ed257548d187d0321ed8f82f71790f5e",
+            "files": {
+              "faiss.index": "f4c8de7951c30bb0deee445e8d9983d05f7360576c426b58f6f8046d093ef5c7",
+              "chunks.json": "0061d789f2d24144b80e14598fd7509c48803fd6c87d04a78c6960c34d268a4f"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 1193,
+              "text": "2018) A sequence-to-sequence model with self-attention and maxout pointer mechanism. • XLM (Lample and Conneau 2019) State-of-the-art cross-lingual pre-trained Transformer. We initialize the sequence-to-sequence model with pre-trained XLM. We evaluate models with BLEU-4 (BL-4), ROUGE (RG) and METEOR (MTR) metrics.",
+              "source": "1909.10481.pdf",
+              "page": 5,
+              "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+              "section": "4.2 Question Generation",
+              "kb_version": "qasper-test50-20261024",
+              "offset": -2
+            },
+            {
+              "chunk_id": 1194,
+              "text": "As shown in Table 1, XNLG Models RG-1 RG-2 RG-L XLM 14.53 1.80 13.43 PIPELINE (XLM) 30.58 12.01 27.44 w/ Google Translator 38.48 18.86 34.98 39.98 20.31 36.31 XNLG Table 7: Evaluation results of zero-shot French abstractive summarization. Same shorthands apply as in Table 1. Models RG-1 RG-2 RG-L XLM 0.71 0.28 0.70 PIPELINE (XLM) 26.39 13.11 23.98 w/ Google Translator 36.96 22.03 33.99 41.66 28.70 38.91 XNLG Table 8: Evaluation results of zero-shot Chinese abstractive summarization.",
+              "source": "1909.10481.pdf",
+              "page": 5,
+              "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+              "section": "4.2 Question Generation",
+              "kb_version": "qasper-test50-20261024",
+              "offset": -1
+            },
+            {
+              "chunk_id": 1195,
+              "text": "Same shorthands apply as in Table 1. outperforms the baselines, which demonstrates that our pre- trained model provides a good initialization for NLG. Chinese-Chinese Question Generation We conduct ex- periments on zero-shot Chinese-Chinese QG to evaluate the cross-lingual transfer ability. In this task, models are trained with English QG data but evaluated with Chinese QG exam- ples. We include the following models as our baselines: • XLM Fine-tuning XLM with the English QG data.",
+              "source": "1909.10481.pdf",
+              "page": 5,
+              "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+              "section": "4.2 Question Generation",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 0
+            },
+            {
+              "chunk_id": 1196,
+              "text": "• PIPELINE (XLM) The pipeline of translating input Chi- nese sentences into English ﬁrst, then performing En-En- QG with the XLM model, and ﬁnally translating back to the Chinese. We use the Transformer as the translator, which is also trained on the MultiUN dataset. • PIPELINE (XLM) with Google Translator Utilizing Google Translator in PIPELINE (XLM) for translation. We evaluate models by both automatic evaluation metrics and human experts.",
+              "source": "1909.10481.pdf",
+              "page": 5,
+              "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+              "section": "4.2 Question Generation",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 1
+            },
+            {
+              "chunk_id": 1197,
+              "text": "The automatic metrics scores are com- puted by regarding each Chinese character as a token. For human evaluation, we consider three metrics: relatedness, ﬂuency, and correctness, which are represented as integers ranged from 1 to 3. We randomly select 100 passage-answer pairs from the English QG test set, and use the models to generate questions. Then we present these examples to three experts to ask for the above scores. In Table 2 and Table 3, we present the results for the zero-shot Zh-Zh-QG.",
+              "source": "1909.10481.pdf",
+              "page": 5,
+              "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+              "section": "4.2 Question Generation",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 2
+            }
+          ],
+          "trace": {
+            "window": 2,
+            "max_window": 2,
+            "selected_ids": [
+              1193,
+              1194,
+              1195,
+              1196,
+              1197
+            ],
+            "read_chars": 2232,
+            "elapsed_seconds": 0.000192,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        1193,
+        1194,
+        1196,
+        1197
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          1193,
+          1194,
+          1196,
+          1197
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "partial",
+            "evidence": [
+              {
+                "chunk_id": 1195,
+                "quote": "We include the following models as our baselines: • XLM Fine-tuning XLM with the English QG data."
+              },
+              {
+                "chunk_id": 1196,
+                "quote": "• PIPELINE (XLM) The pipeline of translating input Chi- nese sentences into English ﬁrst, then performing En-En- QG with the XLM model, and ﬁnally translating back to the Chinese."
+              }
+            ],
+            "supported_part": "该论文在零样本中文-中文问题生成实验中列出了部分基线：XLM 和 PIPELINE (XLM)。",
+            "reason": "引文确立了部分基线模型（XLM、PIPELINE (XLM)），但仅覆盖特定实验设置下的基线，尚未建立论文整体的完整基线集合。",
+            "gap": "尚未建立论文的完整基线集合（例如其他任务/设置下的基线模型）。"
+          }
+        ],
+        "next_action": {
+          "type": "read_neighbors",
+          "reason": "围绕已提供的基线相关段落，读取其邻近段落以寻找更完整或明确的基线陈述。",
+          "requirement_ids": [
+            "r1"
+          ],
+          "query": null,
+          "source": "1909.10481.pdf",
+          "chunk_id": 1195
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "每个需求均已对照其绑定问题片段进行范围检查"
+        }
+      }
+    },
+    {
+      "number": 2,
+      "action": {
+        "type": "read_neighbors",
+        "reason": "此前读取了 chunk_id 1195 的邻居（1193、1194、1196、1197），已获得 XLM/PIPELINE 等部分基线；仍未覆盖其他任务（如摘要）的基线。可读取另一组已提供基线相关段落的邻居以寻找其他实验设置的基线陈述。",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": null,
+        "source": "1909.10481.pdf",
+        "chunk_id": 1198
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "read_neighbors",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "chunk_id": 1198,
+          "source": "1909.10481.pdf",
+          "knowledge_base": {
+            "version": "qasper-test50-20261024",
+            "chunk_count": 1612,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/manifest.json",
+            "manifest_sha256": "9974fa3a87051eda09cd42cd585d1501ed257548d187d0321ed8f82f71790f5e",
+            "files": {
+              "faiss.index": "f4c8de7951c30bb0deee445e8d9983d05f7360576c426b58f6f8046d093ef5c7",
+              "chunks.json": "0061d789f2d24144b80e14598fd7509c48803fd6c87d04a78c6960c34d268a4f"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 1196,
+              "text": "• PIPELINE (XLM) The pipeline of translating input Chi- nese sentences into English ﬁrst, then performing En-En- QG with the XLM model, and ﬁnally translating back to the Chinese. We use the Transformer as the translator, which is also trained on the MultiUN dataset. • PIPELINE (XLM) with Google Translator Utilizing Google Translator in PIPELINE (XLM) for translation. We evaluate models by both automatic evaluation metrics and human experts.",
+              "source": "1909.10481.pdf",
+              "page": 5,
+              "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+              "section": "4.2 Question Generation",
+              "kb_version": "qasper-test50-20261024",
+              "offset": -2
+            },
+            {
+              "chunk_id": 1197,
+              "text": "The automatic metrics scores are com- puted by regarding each Chinese character as a token. For human evaluation, we consider three metrics: relatedness, ﬂuency, and correctness, which are represented as integers ranged from 1 to 3. We randomly select 100 passage-answer pairs from the English QG test set, and use the models to generate questions. Then we present these examples to three experts to ask for the above scores. In Table 2 and Table 3, we present the results for the zero-shot Zh-Zh-QG.",
+              "source": "1909.10481.pdf",
+              "page": 5,
+              "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+              "section": "4.2 Question Generation",
+              "kb_version": "qasper-test50-20261024",
+              "offset": -1
+            },
+            {
+              "chunk_id": 1198,
+              "text": "The re- sults of monolingual supervised models are also reported in Table 1 as reference. In the automatic evaluation, our model consistently performs better than baselines in both zero-shot and monolingual supervised setting. In the human evalu- ation, our model also obtains signiﬁcant improvements in terms of relatedness and correctness. English-Chinese Question Generation In the zero- shot English-Chinese question generation experiments, we use XLM and PIPELINE (XLM) as our baselines.",
+              "source": "1909.10481.pdf",
+              "page": 5,
+              "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+              "section": "4.2 Question Generation",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 0
+            },
+            {
+              "chunk_id": 1199,
+              "text": "PIPELINE (XLM) is a pipeline method that uses En-En-QG",
+              "source": "1909.10481.pdf",
+              "page": 5,
+              "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+              "section": "4.2 Question Generation",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 1
+            },
+            {
+              "chunk_id": 1200,
+              "text": "Models BL-4 MTR RG-L XLM 0.25 0.62 2.56 16.37 18.74 34.93 XNLG −XAE 13.71 15.88 31.43 −DAE 0.38 1.79 3.79 Table 9: Ablations for pre-training objectives, where models are evaluated on zero-shot Chinese-Chinese question gener- ation. Same shorthands apply as in Table 1. with XLM to generate questions, and then translates the re- sults to Chinese. Because there are no annotations for En- Zh-QG, we perform human evaluation studies for this set- ting.",
+              "source": "1909.10481.pdf",
+              "page": 6,
+              "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+              "section": "4.2 Question Generation",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 2
+            }
+          ],
+          "trace": {
+            "window": 2,
+            "max_window": 2,
+            "selected_ids": [
+              1196,
+              1197,
+              1198,
+              1199,
+              1200
+            ],
+            "read_chars": 1942,
+            "elapsed_seconds": 0.000157,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        1199,
+        1200
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          1199,
+          1200
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "partial",
+            "evidence": [
+              {
+                "chunk_id": 1195,
+                "quote": "We include the following models as our baselines: • XLM Fine-tuning XLM with the English QG data."
+              },
+              {
+                "chunk_id": 1198,
+                "quote": "we use XLM and PIPELINE (XLM) as our baselines."
+              }
+            ],
+            "supported_part": "基线包括 XLM（用英文 QG 数据微调的 XLM）以及 PIPELINE (XLM)，分别在中文-中文和英文-中文问句生成实验中作为基线。",
+            "reason": "所给段落明确列出了部分基线模型（XLM、PIPELINE (XLM)），但完整基线清单可能还包含其他任务下的选项（如 PIPELINE (XLM) with Google Translator 等是否作为基线未在此明确），论文整体的完整基线集合尚未全部确立。",
+            "gap": "论文在全部实验任务上所使用的完整基线模型集合尚未完整确立（例如各任务是否还包含其他基线模型未明确列出）。"
+          }
+        ],
+        "next_action": {
+          "type": "read_neighbors",
+          "reason": "基线清单仍在补充中，可继续读取 1195 附近的段落以获取完整基线列表，但已有的 1195/1198 邻域已覆盖；改为读取 1193 附近以确认第 5 页基线列表开头部分是否还有遗漏的基线模型。",
+          "requirement_ids": [
+            "r1"
+          ],
+          "query": null,
+          "source": "1909.10481.pdf",
+          "chunk_id": 1193
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "检查范围与 r1 的问题摘录一致，仅评估基线这一事实。"
+        }
+      }
+    },
+    {
+      "number": 3,
+      "action": {
+        "type": "read_neighbors",
+        "reason": "基线清单仍在补充中，可继续读取 1195 附近的段落以获取完整基线列表，但已有的 1195/1198 邻域已覆盖；改为读取 1193 附近以确认第 5 页基线列表开头部分是否还有遗漏的基线模型。",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": null,
+        "source": "1909.10481.pdf",
+        "chunk_id": 1193
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "read_neighbors",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "chunk_id": 1193,
+          "source": "1909.10481.pdf",
+          "knowledge_base": {
+            "version": "qasper-test50-20261024",
+            "chunk_count": 1612,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/manifest.json",
+            "manifest_sha256": "9974fa3a87051eda09cd42cd585d1501ed257548d187d0321ed8f82f71790f5e",
+            "files": {
+              "faiss.index": "f4c8de7951c30bb0deee445e8d9983d05f7360576c426b58f6f8046d093ef5c7",
+              "chunks.json": "0061d789f2d24144b80e14598fd7509c48803fd6c87d04a78c6960c34d268a4f"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 1191,
+              "text": "To construct the input sequence, we view the whole input passage as a single sentence, and concatenate the passage and the answer into one sequence with a special token [S] between them. During decoding Chinese, we utilize a subset of vocabulary, which is obtained from the passage sentences of the WebQA dataset. English-English Question Generation We ﬁrst conduct experiments on the supervised English-English QG setting.",
+              "source": "1909.10481.pdf",
+              "page": 5,
+              "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+              "section": "4.2 Question Generation",
+              "kb_version": "qasper-test50-20261024",
+              "offset": -2
+            },
+            {
+              "chunk_id": 1192,
+              "text": "We compare our model to the following baselines: • COREFNQG (Du and Cardie 2018) An attentional sequence-to-sequence model with a feature-rich encoder. • MP-GSN (Zhao et al.",
+              "source": "1909.10481.pdf",
+              "page": 5,
+              "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+              "section": "4.2 Question Generation",
+              "kb_version": "qasper-test50-20261024",
+              "offset": -1
+            },
+            {
+              "chunk_id": 1193,
+              "text": "2018) A sequence-to-sequence model with self-attention and maxout pointer mechanism. • XLM (Lample and Conneau 2019) State-of-the-art cross-lingual pre-trained Transformer. We initialize the sequence-to-sequence model with pre-trained XLM. We evaluate models with BLEU-4 (BL-4), ROUGE (RG) and METEOR (MTR) metrics.",
+              "source": "1909.10481.pdf",
+              "page": 5,
+              "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+              "section": "4.2 Question Generation",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 0
+            },
+            {
+              "chunk_id": 1194,
+              "text": "As shown in Table 1, XNLG Models RG-1 RG-2 RG-L XLM 14.53 1.80 13.43 PIPELINE (XLM) 30.58 12.01 27.44 w/ Google Translator 38.48 18.86 34.98 39.98 20.31 36.31 XNLG Table 7: Evaluation results of zero-shot French abstractive summarization. Same shorthands apply as in Table 1. Models RG-1 RG-2 RG-L XLM 0.71 0.28 0.70 PIPELINE (XLM) 26.39 13.11 23.98 w/ Google Translator 36.96 22.03 33.99 41.66 28.70 38.91 XNLG Table 8: Evaluation results of zero-shot Chinese abstractive summarization.",
+              "source": "1909.10481.pdf",
+              "page": 5,
+              "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+              "section": "4.2 Question Generation",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 1
+            },
+            {
+              "chunk_id": 1195,
+              "text": "Same shorthands apply as in Table 1. outperforms the baselines, which demonstrates that our pre- trained model provides a good initialization for NLG. Chinese-Chinese Question Generation We conduct ex- periments on zero-shot Chinese-Chinese QG to evaluate the cross-lingual transfer ability. In this task, models are trained with English QG data but evaluated with Chinese QG exam- ples. We include the following models as our baselines: • XLM Fine-tuning XLM with the English QG data.",
+              "source": "1909.10481.pdf",
+              "page": 5,
+              "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+              "section": "4.2 Question Generation",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 2
+            }
+          ],
+          "trace": {
+            "window": 2,
+            "max_window": 2,
+            "selected_ids": [
+              1191,
+              1192,
+              1193,
+              1194,
+              1195
+            ],
+            "read_chars": 1883,
+            "elapsed_seconds": 0.00031,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        1191,
+        1192
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          1191,
+          1192
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      }
+    }
+  ],
+  "evidence_after": [
+    {
+      "chunk_id": 1224,
+      "source": "1909.10481.pdf",
+      "page": 8,
+      "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+      "text": "In NAACL, 4171–4186. [Dong et al. 2019] Dong, L.; Yang, N.; Wang, W.; Wei, F.; Liu, X.; Wang, Y.; Gao, J.; Zhou, M.; and Hon, H.-W. 2019. Uniﬁed language model pre-training for natural arXiv preprint language understanding and generation. arXiv:1905.03197. [Du and Cardie 2018] Du, X., and Cardie, C. 2018. Harvest- ing paragraph-level question-answer pairs from wikipedia. In ACL, 1907–1917. [Duan et al. 2019] Duan, X.; Yin, M.; Zhang, M.; Chen, B.; and Luo, W.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1227,
+      "source": "1909.10481.pdf",
+      "page": 8,
+      "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+      "text": "TACL 5:339–351. [Joshi et al. 2019] Joshi, M.; Chen, D.; Liu, Y.; Weld, D. S.; Zettlemoyer, L.; and Levy, O. 2019. Spanbert: Improv- ing pre-training by representing and predicting spans. arXiv preprint arXiv:1907.10529. [Junnan et al. 2019] Junnan, Z.; Qian, W.; Yining, W.; Yu, Z.; Jiajun, Z.; Shaonan, W.; and Chengqing, Z. 2019. Ncls: Neural cross-lingual summarization. arXiv preprint arXiv:1909.00156. [Kumar et al. 2019] Kumar, V.; Joshi, N.; Mukherjee, A.; Ramakrishnan, G.; and Jyothi, P.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1233,
+      "source": "1909.10481.pdf",
+      "page": 8,
+      "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+      "text": "2019] Song, K.; Tan, X.; Qin, T.; Lu, J.; and Liu, T.-Y. 2019. Mass: Masked sequence to se- quence pre-training for language generation. arXiv preprint arXiv:1905.02450. [Vaswani et al. 2017] Vaswani, A.; Shazeer, N.; Parmar, N.; Uszkoreit, J.; Jones, L.; Gomez, A. N.; Kaiser, Ł.; and Polo- sukhin, I.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1230,
+      "source": "1909.10481.pdf",
+      "page": 8,
+      "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+      "text": "arXiv preprint arXiv:1607.06275. [Liang et al. 2019] Liang, W.; Wei, Z.; Ruoyu, J.; Sujian, L.; and Jingming, L. 2019. Denoising based sequence-to- arXiv preprint sequence pre-training for text generation. arXiv:1908.08206. [McCann et al. 2017] McCann, B.; Bradbury, J.; Xiong, C.; and Socher, R. 2017. Learned in translation: Contextualized word vectors. In NIPS, 6294–6305. [Mikolov, Le, and Sutskever 2013] Mikolov, T.; Le, Q. V.; and Sutskever, I.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1134,
+      "source": "1909.10481.pdf",
+      "page": 1,
+      "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+      "text": "Cross-Lingual Natural Language Generation via Pre-Training Zewen Chi†∗, Li Dong‡, Furu Wei‡, Wenhui Wang‡, Xian-Ling Mao†, Heyan Huang† †Beijing Institute of Technology ‡Microsoft Research {czw,maoxl,hhy63}@bit.edu.cn {lidong1,fuwei,Wenhui.Wang}@microsoft.com arXiv:1909.10481v3 [cs.CL] 22 Nov 2019 Abstract In this work we focus on transferring supervision signals of natural language generation (NLG) tasks between multiple languages.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1229,
+      "source": "1909.10481.pdf",
+      "page": 8,
+      "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+      "text": "arXiv preprint arXiv:1906.02525. [Lample and Conneau 2019] Lample, G., and Conneau, A. arXiv 2019. Cross-lingual language model pretraining. preprint arXiv:1901.07291. [Li et al. 2016] Li, P.; Li, W.; He, Z.; Wang, X.; Cao, Y.; Zhou, J.; and Xu, W. 2016. Dataset and neural recurrent sequence labeling model for open-domain factoid question answering.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1225,
+      "source": "1909.10481.pdf",
+      "page": 8,
+      "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+      "text": "2019. Zero-shot cross-lingual abstractive sen- tence summarization through teaching generation and atten- tion. In ACL, 3162–3172. [Gu et al. 2019] Gu, J.; Wang, Y.; Cho, K.; and Li, V. 2019. Improved zero-shot neural machine transla- arXiv preprint tion via ignoring spurious correlations. arXiv:1906.01181. [Hendrycks and Gimpel 2016] Hendrycks, D., and Gimpel, arXiv K. 2016. Gaussian error linear units (GELUs). preprint arXiv:1606.08415. [Johnson et al. 2017] Johnson, M.; Schuster, M.; Le, Q.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1195,
+      "source": "1909.10481.pdf",
+      "page": 5,
+      "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+      "text": "Same shorthands apply as in Table 1. outperforms the baselines, which demonstrates that our pre- trained model provides a good initialization for NLG. Chinese-Chinese Question Generation We conduct ex- periments on zero-shot Chinese-Chinese QG to evaluate the cross-lingual transfer ability. In this task, models are trained with English QG data but evaluated with Chinese QG exam- ples. We include the following models as our baselines: • XLM Fine-tuning XLM with the English QG data.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1198,
+      "source": "1909.10481.pdf",
+      "page": 5,
+      "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+      "text": "The re- sults of monolingual supervised models are also reported in Table 1 as reference. In the automatic evaluation, our model consistently performs better than baselines in both zero-shot and monolingual supervised setting. In the human evalu- ation, our model also obtains signiﬁcant improvements in terms of relatedness and correctness. English-Chinese Question Generation In the zero- shot English-Chinese question generation experiments, we use XLM and PIPELINE (XLM) as our baselines.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1231,
+      "source": "1909.10481.pdf",
+      "page": 8,
+      "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+      "text": "2013. Exploiting similarities among arXiv preprint languages for machine translation. arXiv:1309.4168. [Peters et al. 2018] Peters, M.; Neumann, M.; Iyyer, M.; Gardner, M.; Clark, C.; Lee, K.; and Zettlemoyer, L. 2018. In NAACL, Deep contextualized word representations. 2227–2237. [Radford et al. 2018] Radford, A.; Narasimhan, K.; Sali- mans, T.; and Sutskever, I. 2018. Improving language un- derstanding by generative pre-training. [Rajpurkar et al.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1193,
+      "source": "1909.10481.pdf",
+      "page": 5,
+      "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+      "text": "2018) A sequence-to-sequence model with self-attention and maxout pointer mechanism. • XLM (Lample and Conneau 2019) State-of-the-art cross-lingual pre-trained Transformer. We initialize the sequence-to-sequence model with pre-trained XLM. We evaluate models with BLEU-4 (BL-4), ROUGE (RG) and METEOR (MTR) metrics.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1194,
+      "source": "1909.10481.pdf",
+      "page": 5,
+      "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+      "text": "As shown in Table 1, XNLG Models RG-1 RG-2 RG-L XLM 14.53 1.80 13.43 PIPELINE (XLM) 30.58 12.01 27.44 w/ Google Translator 38.48 18.86 34.98 39.98 20.31 36.31 XNLG Table 7: Evaluation results of zero-shot French abstractive summarization. Same shorthands apply as in Table 1. Models RG-1 RG-2 RG-L XLM 0.71 0.28 0.70 PIPELINE (XLM) 26.39 13.11 23.98 w/ Google Translator 36.96 22.03 33.99 41.66 28.70 38.91 XNLG Table 8: Evaluation results of zero-shot Chinese abstractive summarization.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1196,
+      "source": "1909.10481.pdf",
+      "page": 5,
+      "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+      "text": "• PIPELINE (XLM) The pipeline of translating input Chi- nese sentences into English ﬁrst, then performing En-En- QG with the XLM model, and ﬁnally translating back to the Chinese. We use the Transformer as the translator, which is also trained on the MultiUN dataset. • PIPELINE (XLM) with Google Translator Utilizing Google Translator in PIPELINE (XLM) for translation. We evaluate models by both automatic evaluation metrics and human experts.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1197,
+      "source": "1909.10481.pdf",
+      "page": 5,
+      "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+      "text": "The automatic metrics scores are com- puted by regarding each Chinese character as a token. For human evaluation, we consider three metrics: relatedness, ﬂuency, and correctness, which are represented as integers ranged from 1 to 3. We randomly select 100 passage-answer pairs from the English QG test set, and use the models to generate questions. Then we present these examples to three experts to ask for the above scores. In Table 2 and Table 3, we present the results for the zero-shot Zh-Zh-QG.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1199,
+      "source": "1909.10481.pdf",
+      "page": 5,
+      "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+      "text": "PIPELINE (XLM) is a pipeline method that uses En-En-QG",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1200,
+      "source": "1909.10481.pdf",
+      "page": 6,
+      "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+      "text": "Models BL-4 MTR RG-L XLM 0.25 0.62 2.56 16.37 18.74 34.93 XNLG −XAE 13.71 15.88 31.43 −DAE 0.38 1.79 3.79 Table 9: Ablations for pre-training objectives, where models are evaluated on zero-shot Chinese-Chinese question gener- ation. Same shorthands apply as in Table 1. with XLM to generate questions, and then translates the re- sults to Chinese. Because there are no annotations for En- Zh-QG, we perform human evaluation studies for this set- ting.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1191,
+      "source": "1909.10481.pdf",
+      "page": 5,
+      "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+      "text": "To construct the input sequence, we view the whole input passage as a single sentence, and concatenate the passage and the answer into one sequence with a special token [S] between them. During decoding Chinese, we utilize a subset of vocabulary, which is obtained from the passage sentences of the WebQA dataset. English-English Question Generation We ﬁrst conduct experiments on the supervised English-English QG setting.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1192,
+      "source": "1909.10481.pdf",
+      "page": 5,
+      "title": "Cross-Lingual Natural Language Generation via Pre-Training",
+      "text": "We compare our model to the following baselines: • COREFNQG (Du and Cardie 2018) An attentional sequence-to-sequence model with a feature-rich encoder. • MP-GSN (Zhao et al.",
+      "kb_version": "qasper-test50-20261024"
+    }
+  ],
+  "action_attempts": 3,
+  "feedback_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "partial",
+        "evidence": [
+          {
+            "chunk_id": 1195,
+            "quote": "We include the following models as our baselines: • XLM Fine-tuning XLM with the English QG data."
+          },
+          {
+            "chunk_id": 1198,
+            "quote": "we use XLM and PIPELINE (XLM) as our baselines."
+          }
+        ],
+        "supported_part": "基线包括 XLM（用英文 QG 数据微调的 XLM）以及 PIPELINE (XLM)，分别在中文-中文和英文-中文问句生成实验中作为基线。",
+        "reason": "所给段落明确列出了部分基线模型（XLM、PIPELINE (XLM)），但完整基线清单可能还包含其他任务下的选项（如 PIPELINE (XLM) with Google Translator 等是否作为基线未在此明确），论文整体的完整基线集合尚未全部确立。",
+        "gap": "论文在全部实验任务上所使用的完整基线模型集合尚未完整确立（例如各任务是否还包含其他基线模型未明确列出）。"
+      }
+    ],
+    "next_action": {
+      "type": "read_neighbors",
+      "reason": "基线清单仍在补充中，可继续读取 1195 附近的段落以获取完整基线列表，但已有的 1195/1198 邻域已覆盖；改为读取 1193 附近以确认第 5 页基线列表开头部分是否还有遗漏的基线模型。",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": null,
+      "source": "1909.10481.pdf",
+      "chunk_id": 1193
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "检查范围与 r1 的问题摘录一致，仅评估基线这一事实。"
+    }
+  },
+  "validation_repairs": [
+    {
+      "phase": "decision_2",
+      "error": "This exact tool action was already executed and cannot add new evidence. Choose a useful different action, such as reading relevant supplied neighbors, or stop. Keep the bound query and each requirement scope unchanged."
+    }
+  ],
+  "error": "RuntimeError: The one decision-repair budget was already used.",
+  "elapsed_seconds": 18.976
+}

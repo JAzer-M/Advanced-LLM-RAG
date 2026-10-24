@@ -1,8 +1,8 @@
 # Advanced-LLM-RAG 当前进度与交接
 
-更新：2026-10-24（Asia/Shanghai）。工作区 `/Users/j/Desktop/Advanced-LLM-RAG`，分支 `paperlens-frontend-redesign`。
+更新：2026-10-24（Asia/Shanghai）。工作区 `/Users/j/Desktop/Advanced-LLM-RAG`，分支 `main`。
 
-**当前可使用本机 PaperLens 的 RAG、Agent、Auto、引用原文、模型设置和 PDF 入库。中文比较偏题、回答语言与 JSON 代码块兼容已修复。** 此前345项后端测试通过，中文Agent原问题实测切题；独立虚拟环境31项网页检查通过，并完成Mac安装、空库首次入库及前端实际操作验收。**已生成 Mac Apple Silicon 预览下载包**（自带Python，首次启动下载检索模型），从空缓存实测三模式问答通过；最新为后端345项、网页42项通过。尚未签名公证或发布。当前版本尚无独立新题总体质量成绩。[实验总览](docs/PROJECT_METRICS.md) · [安装验收](docs/maintenance/installation_ui_acceptance_20261024/report.md) · [下载包验收](docs/maintenance/macos_package_20261024/report.md)
+**当前可使用本机 PaperLens 的 RAG、Agent、Auto、引用原文、模型设置和 PDF 入库。中文比较偏题、回答语言与 JSON 代码块兼容已修复。** 此前345项后端测试通过，中文Agent原问题实测切题；独立虚拟环境31项网页检查通过，并完成Mac安装、空库首次入库及前端实际操作验收。**已生成 Mac Apple Silicon 预览下载包**（自带Python，首次启动下载检索模型），从空缓存实测三模式问答通过；最新为后端345项、网页42项通过。未签名公证；Mac Release已发布的状态依据Claude会话记录，本轮未复核GitHub线上状态。现已完成QASPER第三方题集15篇52题三模式评测与156条匹配模型判分；模型轮换、输入绑定修订与拒答识别误判限制了泛化结论。[本轮报告](evaluation/results/qasper_20261024/report.md)。[实验总览](docs/PROJECT_METRICS.md) · [安装验收](docs/maintenance/installation_ui_acceptance_20261024/report.md) · [下载包验收](docs/maintenance/macos_package_20261024/report.md)
 
 本页记录当前状态与剩余工作；日期报告记录当时状态。整理前完整进度已逐字节保存到[2026-10-24历史快照](docs/history/PROGRESS_BEFORE_P4_CLOSEOUT_2026-10-24.md)，此前多轮记录见[截至10月22日的完整历史](docs/history/PROGRESS_THROUGH_2026-10-22.md)。桌面总览与[PROJECT_WORKFLOW](docs/PROJECT_WORKFLOW.md)只表示预期路线。
 
@@ -11,11 +11,11 @@
 | 阶段 | 已完成 | 边界与后续 |
 | --- | --- | --- |
 | 基础 RAG 与检索改进 | PDF解析、分块、混合检索、RRF、重排、分解、原文保留、规则补查及引用检查 | 分块不保证无损，引用结构通过不等于事实正确 |
-| P0 论文与知识库 | 3/5/8篇版本与校验、切换、回退；网页PDF批量入库、内容去重、独立版本发布 | 网页当前9篇；OCR、删除、网页回退、arXiv链接导入及Windows导入锁未完成 |
+| P0 论文与知识库 | 3/5/8篇版本与校验、切换、回退；网页PDF批量入库、内容去重、独立版本发布 | 网页当前9篇；Windows导入锁已适配；OCR、删除、网页回退、arXiv链接导入未完成 |
 | P1 评测基线 | 检索量化与12题固定RAG基线，逐题Gold、人工审阅及实际成本 | 同助手出题/审阅、小样本；不是第三方盲评 |
-| P2 Agent / Auto | main三模式、需求绑定、证据判断、本地工具、预算循环、回答复核；中文比较句修复 | 修复版本独立新题收益未验收；隐性漏答可能不触发Auto升级 |
+| P2 Agent / Auto | main三模式、需求绑定、证据判断、本地工具、预算循环、回答复核；中文比较句修复 | 已有QASPER52题模型轮换实测；单模型泛化收益未证明，隐性漏答可能不触发Auto升级 |
 | P3 联网证据 | 显式arXiv搜索、固定版本PDF、独立来源与引用、失败诊断和有限交付 | 默认关闭；不是通用网页搜索，不自动入库；外部可用性不保证 |
-| P4 界面与交付 | 暖白/朱橙前端、引用联动、中英文、Enter发送；文档/分版本实验整理；Mac独立环境安装及操作验收；Mac预览下载包（含权重冷下载、续传、三模式问答与重启验收） | 签名公证、另一台Mac/Windows、GitHub Release、项目介绍/求职材料另做 |
+| P4 界面与交付 | 暖白/朱橙前端、引用联动、中英文、Enter发送；文档/分版本实验整理；Mac独立环境安装及操作验收；Mac预览下载包（含权重冷下载、续传、三模式问答与重启验收） | Windows已据用户记录完成人工验收；签名公证、另一台Mac、v0.2.0 Release和求职材料另做 |
 
 ## 2. 当前三条执行路径
 
@@ -47,6 +47,10 @@ Agent工具最多3行动；规划/状态修正或重复行动改选共用一次�
 
 上述中文Agent及345/27测试属于前一轮记录；其后的文档整理没有新增模型调用。本轮安装与前端验收另外新增一次VGG固定RAG：新建1篇/160段库，20.32秒、2请求、3098 token，答案和第2页引用核对通过。获取模型列表另有1次网关`/models`请求；PDF入库与案例回放不新增生成调用。CLI帮助文字的旧八篇限制已与实际默认/显式版本行为统一。
 
+**QASPER外部题集评测（10月24日，本次新增）：** 已有15篇52题、独立库1612段；原交接中“未抽样/未建库”已过时。原GLM运行遇429；未绑定目标论文的DeepSeek轮保存18条后因输入缺陷中断。新轮只补题名/arXiv编号，题号、Gold、库、生产逻辑和评分不变，保留旧轮及成本。完成156条生成（134 completed、5 degraded、17 failed）和156条匹配作答模型的判分。Answer F1为RAG14.83、Agent14.81、Auto21.39；近似Evidence F1为28.24/41.22/33.00，官方脚本复算一致。每题三模式同模型，但全体39/10/3题分属三种模型；判分correct为25/25/28，不称人工准确率。全部已留档885次模型请求、1,859,159 token，另有未落盘分解用量；正式轮含判分为819请求、1,740,096 token。完整模型切换、失败、抽查、成本与边界见[报告](evaluation/results/qasper_20261024/report.md)、[汇总](evaluation/results/qasper_20261024/summary.json)。
+
+**本次新发现的边界：** 拒答启发式至少有一处明确误标和一处漏标；部分英文问题得到中文输出。原GLM已通过的语言回归保留，但不再将其外推到所有模型。Agent仍有需求引文、一次修正额度及最终复核失败。本轮未据结果改分或调生产代码，也没有重跑旧345/42项测试；执行层3项离线检查通过。
+
 ## 4. 优先级与下一步
 
 完整性仍按用户已确认的顺序：必须回答明确需求及影响结论的条件，避免编造和错引；按任务补充复现步骤；不为无关背景满分反复调试。
@@ -57,15 +61,15 @@ Agent工具最多3行动；规划/状态修正或重复行动改选共用一次�
 
 **发布准备（10月24日）：** README改为展示页（截图、架构图、检索消融与回答对照、局限），旧版全文存于[历史目录](docs/history/README_BEFORE_SHOWCASE_2026-10-24.md)；新增MIT许可与GitHub Actions离线测试（CPU版torch，干净克隆中跳过1项依赖本机八篇库的测试）；`docs/chat_history/`改为仅本机保存，并已从未推送的历史中移除；同时把未推送提交的作者统一为JAzer-M，提交号因此变化，对照见[历史改写记录](docs/maintenance/history_rewrite_20261024.md)。干净克隆中后端345项（跳过1）、网页42项通过；CI已在GitHub上通过（ubuntu）。
 
-**Windows 适配（10月24日，验收中）：** 入库/模型准备的`fcntl`锁改为跨平台`try_lock`（Windows用msvcrt）；进程存活检查改为`pid_alive`，避免Windows上`os.kill(pid,0)`实际发送Ctrl+C；冻结版Windows数据目录为`%LOCALAPPDATA%\PaperLens`；新增`webui/start.bat`（UTF-8模式、网页内下载模型）及安装说明第7节；CI的windows-latest已通过（后端与网页测试），现为正式检查。用户已在真实Windows电脑上按源码方式人工验收：模型下载、配置、入库、问答与引用、输入法回车、重复上传、刷新接续和重启均正常；期间一次中文提问未得到答案，重试后正常，原因未定位。
+**Windows 适配（10月24日，用户人工验收已记录）：** 入库/模型准备的`fcntl`锁改为跨平台`try_lock`（Windows用msvcrt）；进程存活检查改为`pid_alive`，避免Windows上`os.kill(pid,0)`实际发送Ctrl+C；冻结版Windows数据目录为`%LOCALAPPDATA%\PaperLens`；新增`webui/start.bat`（UTF-8模式、网页内下载模型）及安装说明第7节；CI的windows-latest已通过（后端与网页测试），现为正式检查。用户已在真实Windows电脑上按源码方式人工验收：模型下载、配置、入库、问答与引用、输入法回车、重复上传、刷新接续和重启均正常；期间一次中文提问未得到答案，重试后正常，原因未定位。
 
 **Windows 安装包（10月24日）：** 版本号改为0.2.0；新增`packaging/windows/`（PyInstaller无控制台构建，启用UTF-8模式，构建时在源码目录外自检并核对`utf8_mode=1`）和`build-windows`工作流（手动或推送`v*`标签触发，产物为Actions Artifact）。冻结入口在无标准流时改写到空设备，自检结果同时写入数据目录。GitHub Actions首次构建即成功（自检通过、UTF-8模式生效）；用户在真实Windows电脑上用安装包人工验收通过。待发布为`v0.2.0`。
 
 **接下来交付工作：**
 
-1. 发布 Mac 预览包：决定是否办理 Developer ID 签名与公证（不办理则用户需右键打开），在另一台无开发环境的 Mac 上验收，再创建 GitHub Release。重建时带上断线提示文案更新。Windows 锁与启动方式需单独处理。[下载包验收](docs/maintenance/macos_package_20261024/report.md)
+1. 发布Windows `v0.2.0` Release（用户验收已记录）；可选重建Mac 0.2.0包并带上断线提示更新。Mac预览Release已发布的依据来自Claude会话，本轮未复核线上状态。签名公证、另一台Mac验收仍可后续处理。[下载包验收](docs/maintenance/macos_package_20261024/report.md)
 2. 准备架构图、代表性案例、项目讲解和求职材料，效果描述引用实验总览及原始记录。
-3. 若要宣称当前Agent/Auto总体优于RAG，再另做同模型、同库、独立新题对照。
+3. QASPER本轮已完成，先使用已保存报告与真实数字；若要宣称Agent/Auto普遍优于RAG，另行冻结更大单模型新题、拒答及语言处理口径，不重复调试本轮题目来修饰成绩。
 
 本轮安装从`2dbe1dd`导出源码，叠加本轮必要修复后在独立`.venv`在线安装依赖；没有复用原虚拟环境或复制八/九篇版本。检索模型复用本机缓存，问答服务复用现有网关配置；权重全新下载、另一台机器及所有输入法均不在本轮结论内。
 
@@ -75,12 +79,12 @@ Agent工具最多3行动；规划/状态修正或重复行动改选共用一次�
 
 ## 5. 配置、知识库与关键约束
 
-以下为2026-10-24本机核对值；模型设置可被用户改变，[状态快照](docs/maintenance/p4_closeout_20261024/current_state.json)保存本次公开选项，不含密钥。
+以下为2026-10-24本机核对值；模型设置可被用户改变，[本轮校验](evaluation/results/qasper_20261024/verification.json)保存当前公开选项与资产哈希检查，不含密钥；早期P4快照仍保留在历史验收目录。
 
 | 项目 | 当前值 |
 | --- | --- |
 | Python / 本地模型 | `.venv` / 3.11.9；MiniLM `paraphrase-multilingual-MiniLM-L12-v2`，384维；`BAAI/bge-reranker-base`，CPU |
-| 生成/分解模型 | 请求 `cn:glm-5.3`，最近真实响应报告 `glm-5.3`；旧评测多为DeepSeek，不混算 |
+| 生成/分解模型 | 本机当前请求 `cn:deepseek-v4.1-flash`，本轮响应报告同名去前缀ID；QASPER另含DeepSeek v4 Flash和GLM 5.3 Flash，逐题留档，不混称单模型 |
 | 生成选项 | thinking disabled、temperature 0、max_tokens 4096；私有配置留本机 |
 | 候选与最终证据 | 每路及RRF候选120，RRF常数60；最终Top-10、子题局部Top-3 |
 | 规则补查 | 按来源信号最多2轮；rewrite/HyDE关闭。检索评估须显式启用两轮，每个K独立选证据 |
@@ -92,6 +96,7 @@ Agent工具最多3行动；规划/状态修正或重复行动改选共用一次�
 | 历史先导 | `arxiv-pilot-5-20261019` | 5 / 1019 |
 | Agent/Auto未指定版本的实验基线 | `all-papers-8-20261020` | 8 / 1397 |
 | 网页当前；通过`data/webui/library.json`独立选择 | `webui-72bf8b69e9cf45f28135637e5ead075c` | 9 / 1767 |
+| QASPER独立评测库；未切换现有指针 | `qasper-test50-20261024` | 15 / 1612 |
 
 旧版本和首次标题回退前的网页版本均保留。`activate`改变全局指针，不改变网页独立指针或Agent/Auto的默认八篇版本。[版本操作](docs/KNOWLEDGE_BASE_VERSIONS.md)
 

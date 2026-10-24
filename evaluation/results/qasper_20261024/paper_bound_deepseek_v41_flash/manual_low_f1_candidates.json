@@ -1,0 +1,129 @@
+[
+  {
+    "id": "521a3e7300567f6e8e4c531f223dbc9fc306c393",
+    "mode": "rag",
+    "f1": 0.0,
+    "prediction_kind": "answered",
+    "question": "Does regularization of the fine-tuning process hurt performance in the target domain?",
+    "references": [
+      "No",
+      "No"
+    ],
+    "answer": "Based on the provided context, the paper reports that regularization of the fine-tuning process via auxiliary penalty terms is intended to preserve source-domain performance while still achieving optimal performance in the target domain. The authors state that a combination of penalty terms produces the most robust model that both preserves source-domain performance and achieves optimal performance in the target domain [1]. They also note that when evaluating different auxiliary penalty terms, they intentionally tuned hyper-parameters for the different penalty terms to generate similar performance on target domains [10].\n\nThe context does not explicitly state whether regularization hurts target-domain performance in general. One related caveat is that over-optimizing for a development set can lead to poor performance on test cases in the wild [6], but this is a general concern, not a direct statement that regularization harms target-domain performance. Therefore, the evidence is insufficient to conclude that regularization hurts target-domain performance; the paper's stated aim is to regularize fine-tuning to reduce forgetting without requiring source-domain data [2][9], and its reported best configuration combines penalty terms to preserve source performance and achieve optimal target performance [1].",
+    "judge": "The system answer effectively supports the reference answer 'No' by explaining that regularization aims to preserve source-domain performance while achieving optimal target-domain performance, indicating it does not hurt target-domain performance.",
+    "model": "cn:deepseek-v4-flash"
+  },
+  {
+    "id": "965e0ce975a0b8612a30cfc31bbfd4b8a57aa138",
+    "mode": "rag",
+    "f1": 0.0273972602739726,
+    "prediction_kind": "answered",
+    "question": "Does their method rely on the column headings of the table?",
+    "references": [
+      "Yes",
+      "Yes"
+    ],
+    "answer": "Yes. The method treats a table as a triple consisting of headers, cells, and caption, where each header indicates the property of a column and can be used to identify a column [6]. Their approach matches the query against each aspect of the table, using different mechanisms to measure relevance between the query and headers, cells, and caption [8]. Caption is reported as the most effective single aspect on their dataset, which refers only to single-aspect performance, not to whether headers are used overall [9].",
+    "judge": "The system answer explicitly says yes and explains that the method uses headers as one aspect of the table, matching the reference answers.",
+    "model": "cn:deepseek-v4.1-flash"
+  },
+  {
+    "id": "9d6d17120c42a834b2b5d96f2120d646218ed4bb",
+    "mode": "rag",
+    "f1": 0.03389830508474576,
+    "prediction_kind": "answered",
+    "question": "Do they use the unstructured text on the webpage that was the source of the table?",
+    "references": [
+      "No",
+      "No"
+    ],
+    "answer": "No. The paper explicitly contrasts its work with existing database-community studies that use \"surrounding text of a table or pagerank score of a web page,\" stating that \"we focus on making a thorough exploration of table content in this work\" [2]. This indicates they did not rely on the unstructured text of the webpage that was the source of the table, instead focusing on the table content itself.",
+    "judge": "The system answer says 'No' and correctly explains that the paper focuses on table content rather than surrounding webpage text, matching the reference answers.",
+    "model": "cn:deepseek-v4.1-flash"
+  },
+  {
+    "id": "521a3e7300567f6e8e4c531f223dbc9fc306c393",
+    "mode": "auto",
+    "f1": 0.0,
+    "prediction_kind": "answered",
+    "question": "Does regularization of the fine-tuning process hurt performance in the target domain?",
+    "references": [
+      "No",
+      "No"
+    ],
+    "answer": "Extra evidence checking did not finish. The answer below uses only the initial evidence and keeps its existing gaps:\nBased on the provided context, the evidence does not show regularization of the fine-tuning process hurting target-domain performance. The paper states that a combination of auxiliary penalty terms \"produces the most robust model that both preserves performance in the source domain and achieves optimal performance in the target domain\" [1]. It also introduces auxiliary penalty terms to regularize fine-tuning and observes the best performance when a combination is used [2]. These auxiliary penalty terms are favored because they do not require storing source-domain data samples [9].\n\nFor target-domain results specifically, the paper notes that the hyper-parameters for different auxiliary penalty terms were \"intentionally tuned... to generate similar performance on target domains\" [10]. This indicates that the compared variants were configured to perform similarly on the target domain, rather than one regularized variant degrading target performance. The context does not report a comparison in which regularization lowers target-domain performance.",
+    "judge": "The system answer correctly conveys that regularization does not hurt target-domain performance, matching the reference answer 'No'.",
+    "model": "cn:deepseek-v4-flash"
+  },
+  {
+    "id": "965e0ce975a0b8612a30cfc31bbfd4b8a57aa138",
+    "mode": "auto",
+    "f1": 0.028169014084507043,
+    "prediction_kind": "answered",
+    "question": "Does their method rely on the column headings of the table?",
+    "references": [
+      "Yes",
+      "Yes"
+    ],
+    "answer": "Yes. The paper treats headers (column headings) as one of the core aspects of a table: a table is defined as a triple consisting of headers, cells, and caption, where each header indicates the property of a column [6]. The methods match the query against each aspect of the table, including headers [8]. At the same time, headers are not the only aspect used—the approach also matches against cells and caption [8], and the paper reports that caption was the most effective single aspect on their dataset [9].",
+    "judge": "The system answer says yes, matching the reference answers, and correctly explains that headers are one of the table aspects used by the method.",
+    "model": "cn:deepseek-v4.1-flash"
+  },
+  {
+    "id": "9d6d17120c42a834b2b5d96f2120d646218ed4bb",
+    "mode": "auto",
+    "f1": 0.03278688524590164,
+    "prediction_kind": "answered",
+    "question": "Do they use the unstructured text on the webpage that was the source of the table?",
+    "references": [
+      "No",
+      "No"
+    ],
+    "answer": "No. The paper explicitly contrasts its approach with studies that use a table's surrounding text: unlike existing database-community studies that utilize the surrounding text of a table or a web page's pagerank score, they focus on thoroughly exploring table content [2]. This content-based focus is also framed as the paper's central aim [2], and its representation of a table centers on table aspects such as headers, cells and caption [5].",
+    "judge": "The system answer correctly says 'No' and explains that the paper explicitly does not use surrounding text, focusing on table content instead.",
+    "model": "cn:deepseek-v4.1-flash"
+  },
+  {
+    "id": "1a0794ebbc9ee61bbb7ef2422d576a10576d9d96",
+    "mode": "agent",
+    "f1": 0.0,
+    "prediction_kind": "answered",
+    "question": "What is the sign language recognition task investigated?",
+    "references": [
+      "We present a deep learning based approach for ASL recognition that leverages skeletal and video data. The proposed model captures the underlying temporal dynamics associated with sign language and also identifies specific hand shape patterns from video data to improve recognition performance. ",
+      " American Sign Language recognition ",
+      "Unanswerable"
+    ],
+    "answer": "该论文研究的任务是基于骨骼数据与RGB视频数据（多模态数据）进行美国手语（ASL）标志识别，并探究将RGB视频数据与骨骼数据结合后对识别准确率的影响[4][6]。",
+    "judge": "The system answer correctly identifies American Sign Language (ASL) recognition using multimodal skeletal and RGB video data, matching both reference answers' key information.",
+    "model": "cn:deepseek-v4-flash"
+  },
+  {
+    "id": "965e0ce975a0b8612a30cfc31bbfd4b8a57aa138",
+    "mode": "agent",
+    "f1": 0.028985507246376812,
+    "prediction_kind": "answered",
+    "question": "Does their method rely on the column headings of the table?",
+    "references": [
+      "Yes",
+      "Yes"
+    ],
+    "answer": "Yes. The method has a dedicated mechanism for matching headers: it develops different mechanisms to match a query against each aspect of a table, including headers, cells, and caption [8]; it represents each header as an embedding vector and treats the set of header embeddings as external memory, assigning a probability to each header embedding given the query vector [13]; and it then obtains a query-specific header vector through weighted average [14]. Thus the method relies on the column headings of the table.",
+    "judge": "The system answer says Yes and provides detailed support that the method relies on column headings, matching both reference answers.",
+    "model": "cn:deepseek-v4.1-flash"
+  },
+  {
+    "id": "9d6d17120c42a834b2b5d96f2120d646218ed4bb",
+    "mode": "agent",
+    "f1": 0.03508771929824561,
+    "prediction_kind": "answered",
+    "question": "Do they use the unstructured text on the webpage that was the source of the table?",
+    "references": [
+      "No",
+      "No"
+    ],
+    "answer": "No. The paper explicitly contrasts its approach with existing studies that \"utilize surrounding text of a table or page-rank score of a web page,\" stating that instead \"we focus on making a thorough exploration of table content in this work\" [2]. Their representation of a table centers on semi-structured aspects such as headers, cells and caption [5], not the unstructured text of the source webpage.",
+    "judge": "The system answer says 'No' and correctly explains that the paper focuses on table content rather than surrounding/unstructured webpage text, matching the reference answers.",
+    "model": "cn:deepseek-v4.1-flash"
+  }
+]

@@ -1,0 +1,102 @@
+[
+  {
+    "number": 1,
+    "phase": "decompose",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n   For an open-ended \"difference between X and Y\" question, retrieve each\n   entity's purpose and core approach. Do not replace it with comparisons\n   between versions of X or versions of Y, or request unasked benchmark scores.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nFor the paper \"Sign Language Recognition Analysis using Multimodal Data\" (arXiv: 1909.11232), answer this question: What is the sign language recognition task investigated?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-24T14:30:10.913201+00:00",
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+      "requested_model": "cn:deepseek-v4-flash",
+      "reported_model": "deepseek-v4-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 512,
+        "cached_tokens": 512,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 19,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.01,
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 196,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 708,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 512,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 727
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.569
+  },
+  {
+    "number": 2,
+    "phase": "probe",
+    "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in the same language as the user's question. If the question explicitly asks for a particular language, use that language instead. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported question, begin with 当前证据不足 when answering in Chinese, or with \"Insufficient evidence\" when answering in English, and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n14. Prioritize explicit subquestions, correct facts and citations, and conditions/units that change the conclusion. Add definitions or steps only when needed for the task. Optional background, stylistic preferences and unasked exceptions are not completeness requirements. Failure to retrieve a paper does not establish that the paper never reported a result.\n\n15. For a comparison, synthesize separately supported facts about the requested objects, citing each side. A literal sentence comparing both papers is NOT required. Different purposes, inputs or mechanisms can be contrasted from their respective descriptions. This does not establish causality or which method performs better. Do not call the comparison unsupported merely because no head-to-head experiment is provided.\n16. Lead with the main difference the user asked about. For a broad comparison, explain what each object does and its supported core approach; do not replace this with differences between versions of each object, benchmark tables or unasked numerical results.\n\nContext:\n[1] Source: 1909.11232.pdf | Page: 1 | Section: None\nTitle: Sign Language Recognition Analysis using Multimodal Data\nWe validate our results on a large-scale American Sign Language (ASL) dataset of 12 users and 13107 samples across 51 signs. It is named as GMU- ASL51. 1 We collected the dataset over 6 months and it will be publicly released in the hope of spurring further machine learning research towards providing improved accessibility for digital assistants. 2 Index Terms—neural networks, deep learning, modality-fusion, sign language recognition I.\n\n[2] Source: 1909.11232.pdf | Page: 3 | Section: None\nTitle: Sign Language Recognition Analysis using Multimodal Data\ntectures to model sign languages from both input modes (RGB and skeletal). Unlike traditional image classiﬁcation or object detection models where neural networks learn hierarchical spatial features from data, sign recognition requires capture of temporal body motion. Recurrent Neural Networks (RNN) RNN has shown success in modeling sequential pattern in data [7]. It can capture temporal dynamics in data by maintaining an internal state.\n\n[3] Source: 1909.11232.pdf | Page: 3 | Section: None\nTitle: Sign Language Recognition Analysis using Multimodal Data\n2. a) Distribution of number of samples per gesture class. b) Distribution of gesture sample duration; X-axis represents gesture length in terms of number of frames in a video. 3. Visualization of hand shapes and skeletal joints of two sign classes. Top panel shows the sign Alarm and middle panel shows the sign Doorbell. For each sign, ﬁrst two rows are the left and right hand image patches and third row is the skeletal conﬁguration.\n\n[4] Source: 1909.11232.pdf | Page: 1 | Section: None\nTitle: Sign Language Recognition Analysis using Multimodal Data\nDespite having similarity with the well-studied human activity recognition, the use of 3D skeleton data in sign language recognition is rare. This is because unlike activity recognition, sign language is mostly dependent on hand shape pattern. In this work, we investigate the feasibility of using skeletal and RGB video data for sign language recognition using a combination of different deep learning architectures.\n\n[5] Source: 1909.11232.pdf | Page: 1 | Section: None\nTitle: Sign Language Recognition Analysis using Multimodal Data\nINTRODUCTION According to The National Institute on Deafness, one in thousand infants is born deaf. An additional one to six per thousand are born with hearing loss at different levels [1]. Sign language is commonly used by Deaf and Hard-of- Hearing (DHH) persons to communicate via hand gestures. An automatic sign language recognizer enables an ASL user to translate the sign language to written text or speech, allowing them to communicate with people who are not familiar with ASL.\n\n[6] Source: 1909.11232.pdf | Page: 1 | Section: None\nTitle: Sign Language Recognition Analysis using Multimodal Data\nWith skeletal data, an ASL sign can be seen as a sequence of 3D coordinates or a 3D time series [6]. Recurrent neural networks (RNN) have shown strong performance for sequen- tial modeling [7]. In this work, we investigate the impact of RGB video data in recognition accuracy when combined with skeletal data. We also propose a combined RNN network with a simple spatial data augmentation technique.\n\n[7] Source: 1909.11232.pdf | Page: 7 | Section: None\nTitle: Sign Language Recognition Analysis using Multimodal Data\nThis is important for assessing the practial usability of a recognition system. In other words, we want to know how quickly or with what amount of data, the current system can be adapted for a subject completely unknown to the system. To do that, we ﬁrst pick a test subject and train a model for the test subject with data from all other subjects in our dataset. Then we retrain the model with some fraction of data from the test subject.\n\n[8] Source: 1909.11232.pdf | Page: 2 | Section: None\nTitle: Sign Language Recognition Analysis using Multimodal Data\n[11] proposed two new features with existing hand crafted features and developed the system using HMM based approach. Some researchers have used appearance-based features and divided the approach into sub units of RGB and tracking data, with a HMM model for recognition [12]. Compared to RGB methods, skeletal data has received little attention in ASL recognition.\n\n[9] Source: 1909.11232.pdf | Page: 2 | Section: None\nTitle: Sign Language Recognition Analysis using Multimodal Data\nSome prior works converted skeleton sequences of body joints or RGB videos into an image representation and then applied state-of-the-art image recognition models [18], [19]. Motivated by the success of skeletal data in human activity recognition, we investigate its suitability for recognizing ASL signs. DATASET ASL recognition with skeletal data has received little at- tention, resulting in a scarcity of public datasets. There exists one dataset for ASL recognition with skeletal data [20].\n\n[10] Source: 1909.11232.pdf | Page: 1 | Section: None\nTitle: Sign Language Recognition Analysis using Multimodal Data\nSign Language Recognition Analysis using Multimodal Data Al Amin Hosain, Panneer Selvam Santhalingam, Parth Pathak, Jana Koˇseck´a and Huzefa Rangwala Department of Computer Science George Mason University {ahosain, psanthal, phpathak, kosecka, rangwala}@gmu.edu Abstract—Voice-controlled personal and home assistants (such arXiv:1909.11232v1 [cs.LG] 24 Sep 2019 as the Amazon Echo and Apple Siri) are becoming increasingly popular for a variety of applications.\n\nQuestion:\nFor the paper \"Sign Language Recognition Analysis using Multimodal Data\" (arXiv: 1909.11232), answer this question: What is the sign language recognition task investigated?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n- For a broad difference-between question with no requested aspect, use 3-5 sentences: lead with the purposes, then the supported core methods. Prefer primary-paper abstract/introductory definitions. Omit training/test hyperparameters and unasked performance caveats.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-24T14:30:18.591547+00:00",
+    "response": {
+      "answer": "The paper investigates American Sign Language (ASL) sign recognition using a combination of **skeletal (3D joint coordinate) data and RGB video data**, modeled with deep learning architectures including RNNs [4][6]. Specifically, it examines the impact of RGB video data on recognition accuracy when combined with skeletal data, and proposes a combined RNN network with a simple spatial data augmentation technique [6]. The authors note that skeletal data has received little attention in ASL recognition compared to RGB methods [8][9], and they validate results on the GMU-ASL51 dataset of 12 users, 13,107 samples, and 51 signs [1].\n\nThe work also studies adaptation to an unknown subject by retraining a model with a fraction of that subject's data [7].",
+      "requested_model": "cn:deepseek-v4-flash",
+      "reported_model": "deepseek-v4-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 1792,
+        "cached_tokens": 1792,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 160,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.03,
+        "prompt_cache_hit_tokens": 1792,
+        "prompt_cache_miss_tokens": 249,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2041,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 1792,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2201
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.519
+  }
+]

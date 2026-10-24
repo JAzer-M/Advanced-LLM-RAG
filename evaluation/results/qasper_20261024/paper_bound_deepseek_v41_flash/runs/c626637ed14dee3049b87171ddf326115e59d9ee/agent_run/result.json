@@ -1,0 +1,788 @@
+{
+  "query": "For the paper \"Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\" (arXiv: 2003.03728), answer this question: How does their approach work for domains with few overlapping utterances?",
+  "status": "failed",
+  "decomposition": {
+    "needs_decomposition": false,
+    "sub_queries": [],
+    "status": "not_needed"
+  },
+  "knowledge_base": {
+    "version": "qasper-test50-20261024",
+    "chunk_count": 1612,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/manifest.json",
+    "manifest_sha256": "9974fa3a87051eda09cd42cd585d1501ed257548d187d0321ed8f82f71790f5e",
+    "files": {
+      "faiss.index": "f4c8de7951c30bb0deee445e8d9983d05f7360576c426b58f6f8046d093ef5c7",
+      "chunks.json": "0061d789f2d24144b80e14598fd7509c48803fd6c87d04a78c6960c34d268a4f"
+    }
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 120,
+    "global_top_ids": [
+      1488,
+      1460,
+      1469,
+      1477,
+      1455,
+      1475,
+      1458,
+      1464,
+      1480,
+      1457
+    ],
+    "protected_ids": [],
+    "sub_query_evidence": [],
+    "retrieval_anchor_ids": [
+      1503
+    ],
+    "evidence_completion": {
+      "requested_sources": [
+        "2003.03728.pdf"
+      ],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        1488,
+        1460,
+        1469,
+        1477,
+        1455,
+        1475,
+        1458,
+        1464,
+        1480,
+        1503
+      ],
+      "retained_local_ids": [],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        1488,
+        1460,
+        1469,
+        1477,
+        1455,
+        1475,
+        1458,
+        1464,
+        1480,
+        1503
+      ],
+      "elapsed_seconds": 0.000483
+    }
+  },
+  "selected_ids": [
+    1488,
+    1460,
+    1469,
+    1477,
+    1455,
+    1475,
+    1458,
+    1464,
+    1480,
+    1503
+  ],
+  "context": "Original passages:\n[1] Source: 2003.03728.pdf | Page: 3 | Section: 4. HYPOTHESIS RERANKING MODEL\nTitle: Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\nFirst, we run intent classiﬁca- tion and slot ﬁlling for the k most conﬁdent domains from the shortlister outputs to obtain additional information for those domains [1].8 Then, we compose k hypotheses, each of which is a vector consists of the shortlister conﬁdence score, (4) intent score, Viterbi score of slot-ﬁlling, domain vector, intent vector, and the summation of the slot vectors.\n\n[2] Source: 2003.03728.pdf | Page: 1 | Section: 1. INTRODUCTION\nTitle: Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\nThis setting corresponds to multi-label positive and unlabeled (PU) learning, where as- signed labels are positive, unassigned labels are not neces- 1A domain is usually deﬁned as an application or functionality than can handle speciﬁc intents [1, 2, 3]. Young-Bum Kim sarily negative, and one or more labels are assigned for an instance [6, 7].2 In this paper, we utilize user log data, which contain triples of an utterance, the predicted domain, and the re- sponse, for the model training.\n\n[3] Source: 2003.03728.pdf | Page: 2 | Section: 2. MODEL OVERVIEW\nTitle: Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\nity [14, 5]. Within the approach, a shortlister, which is a light-weighted domain classiﬁer, suggests the most promis- ing k domains as the hypotheses. We train the shortlister along with the added pseudo labels, leveraging negative sys- tem responses, and self-distillation, which are described in Section 3. Then a hypothesis reranker selects the ﬁnal pre- diction from the k hypotheses enriched with additional input features, which is described in Section 4.\n\n[4] Source: 2003.03728.pdf | Page: 2 | Section: 3.2. Leveraging Negative Feedback\nTitle: Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\n3.2. Leveraging Negative Feedback During the model training, irrelevant domains could be top predicted, and regarding them as additional target labels re- sults in wrong conﬁrmation bias [20], which causes incorrect model training. To reduce the side effect, we leverage utter- ances with negative responses in order to discourage the utter- ances’ incorrect predictions.\n\n[5] Source: 2003.03728.pdf | Page: 1 | Section: None\nTitle: Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\nIn this paper, given one ground-truth domain for each training utterance, we regard domains con- sistently predicted with the highest conﬁdences as additional pseudo labels for the training. In order to reduce prediction errors due to incorrect pseudo labels, we leverage utterances with negative system responses to decrease the conﬁdences of the incorrectly predicted domains.\n\n[6] Source: 2003.03728.pdf | Page: 2 | Section: 3.1. Deriving Pseudo Labels\nTitle: Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\nWe derive the pseudo labels when the following condi- tions are met: • Maximally p domains predicted with the highest conﬁ- dences that are higher than the conﬁdence of the known ground-truth. • Domains predicted with the highest conﬁdences for r times consecutively so that consistent top predictions are used as pseudo labels. For the experiments in Section 5, we use p=2 and r=4, which show the best dev set performance.\n\n[7] Source: 2003.03728.pdf | Page: 1 | Section: 1. INTRODUCTION\nTitle: Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\nAs they are independently and rapidly developed without a centralized ontology, multi- ple domains have overlapped capabilities that can process the same utterances. For example, “make an elephant sound” can be processed by AnimalSounds, AnimalNoises, and ZooKeeper domains.\n\n[8] Source: 2003.03728.pdf | Page: 1 | Section: 1. INTRODUCTION\nTitle: Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\nPseudo labels can be wrongly derived when irrelevant do- mains are top predicted, which can lead the model training with wrong supervision. To mitigate this issue, we lever- age utterances with negative system responses to lower the prediction conﬁdences of the failing domains. For example, if a system response of a domain for an input utterance is “I don’t know that one”, the domain is regarded as a negative ground-truth since it fails to handle the utterance.\n\n[9] Source: 2003.03728.pdf | Page: 3 | Section: 3.2. Leveraging Negative Feedback\nTitle: Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\nWe ﬁnd that it is more effective to ex- plicitly demote the prediction conﬁdences of the domains re- sulted in negative responses if they are top ranked. It is for- mulated as a loss function: \u001a −log (1 −oj) ∀i̸ = j oi ≤oj Ln = 0 Otherwise, where j denotes the index corresponding to the negative ground-truth domain. We demote the conﬁdences of the negative ground-truths only when they are the highest so that the inﬂuence of using the negative ground-truths is not overwhelming.7\n\n[10] Source: 2003.03728.pdf | Page: 4 | Section: 6. CONCLUSION\nTitle: Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\n6. CONCLUSION We have proposed deriving pseudo labels along with lever- aging utterances with negative system responses and self- distillation to improve the performance of domain classiﬁca- tion when multiple domains are ground-truths even if only one ground-truth is known in large-scale domain classiﬁca- tion.\n\n[11] Source: 2003.03728.pdf | Page: 1 | Section: 1. INTRODUCTION\nTitle: Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\nAlso, the approach is related to self- distillation, which leverages the conﬁdence scores of the non- target outputs to improve the model performance [12, 13]. While distillation methods utilize the conﬁdence scores as the soft targets, pseudo labeling regards high conﬁdent out- puts as the hard targets to further boost their conﬁdences. We use both pseudo labeling and self-distillation in our work.\n\n[12] Source: 2003.03728.pdf | Page: 3 | Section: 3.2. Leveraging Negative Feedback\nTitle: Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\nFor example, AnimalSounds is a (positive) ground-truth domain for “a monkey sound” because the system response to the utterance is “Here comes a monkey sound” while it is a negative ground-truth for “a dragon sound” as the response is “I don’t know what sound a dragon makes”.5 6 Previous work [22, 23] excludes such negative utterances from the training set.\n\nEvidence guidance:\n- Rule-based subject attribution: AnimalSounds; passage: “We ﬁnd that it is more effective to ex- plicitly demote the prediction conﬁdences of the domains re- sulted in negative responses if they are top ranked.” [9][12]\n- Rule-based subject attribution: AnimalSounds; passage: “It is for- mulated as a loss function: \u001a −log (1 −oj) ∀i̸ = j oi ≤oj Ln = 0 Otherwise, where j denotes the index corresponding to the negative ground-truth domain.” [9][12]",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": "8 Then, we compose k hypotheses, each of which is a vector consists of the shortlister conﬁdence score, (4) intent score, Viterbi score of slot-ﬁlling, domain vector, intent vector, and the summation of the slot vectors.",
+        "evidence_start": 169,
+        "evidence_end": 389,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1488,
+            1487
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2003.03728.pdf",
+        "chunk_id": 1488,
+        "page": 3,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "This setting corresponds to multi-label positive and unlabeled (PU) learning, where as- signed labels are positive, unassigned labels are not neces- 1A domain is usually deﬁned as an application or functionality than can handle speciﬁc intents [1, 2, 3].",
+        "evidence_start": 0,
+        "evidence_end": 254,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1460,
+            1459,
+            1458
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2003.03728.pdf",
+        "chunk_id": 1460,
+        "page": 1,
+        "citations": [
+          2
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "2 In this paper, we utilize user log data, which contain triples of an utterance, the predicted domain, and the re- sponse, for the model training.",
+        "evidence_start": 345,
+        "evidence_end": 492,
+        "subject": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+        "identity": {
+          "subject": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            1460
+          ],
+          "identity_quote": "This setting corresponds to multi-label positive and unlabeled (PU) learning, where as- signed labels are positive, unassigned labels are not neces- 1A domain is usually deﬁned as an application or functionality than can handle speciﬁc intents [1, 2, 3]. Young-Bum Kim sarily negative, and one or more labels are assigned for an instance [6, 7].2 In this paper, we utilize user log data, which contain triples of an utterance, the predicted domain, and the re- sponse, for the model training.",
+          "identity_chunk_id": 1460
+        },
+        "source": "2003.03728.pdf",
+        "chunk_id": 1460,
+        "page": 1,
+        "citations": [
+          2
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Within the approach, a shortlister, which is a light-weighted domain classiﬁer, suggests the most promis- ing k domains as the hypotheses.",
+        "evidence_start": 12,
+        "evidence_end": 151,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1469,
+            1468,
+            1467,
+            1466
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2003.03728.pdf",
+        "chunk_id": 1469,
+        "page": 2,
+        "citations": [
+          3
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We train the shortlister along with the added pseudo labels, leveraging negative sys- tem responses, and self-distillation, which are described in Section 3.",
+        "evidence_start": 151,
+        "evidence_end": 309,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1469,
+            1468,
+            1467,
+            1466
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2003.03728.pdf",
+        "chunk_id": 1469,
+        "page": 2,
+        "citations": [
+          3
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Then a hypothesis reranker selects the ﬁnal pre- diction from the k hypotheses enriched with additional input features, which is described in Section 4.",
+        "evidence_start": 309,
+        "evidence_end": 462,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1469,
+            1468,
+            1467,
+            1466
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2003.03728.pdf",
+        "chunk_id": 1469,
+        "page": 2,
+        "citations": [
+          3
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Leveraging Negative Feedback During the model training, irrelevant domains could be top predicted, and regarding them as additional target labels re- sults in wrong conﬁrmation bias [20], which causes incorrect model training.",
+        "evidence_start": 4,
+        "evidence_end": 231,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            1477
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2003.03728.pdf",
+        "chunk_id": 1477,
+        "page": 2,
+        "citations": [
+          4
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " To reduce the side effect, we leverage utter- ances with negative responses in order to discourage the utter- ances’ incorrect predictions.",
+        "evidence_start": 231,
+        "evidence_end": 371,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            1477
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2003.03728.pdf",
+        "chunk_id": 1477,
+        "page": 2,
+        "citations": [
+          4
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "In this paper, given one ground-truth domain for each training utterance, we regard domains con- sistently predicted with the highest conﬁdences as additional pseudo labels for the training.",
+        "evidence_start": 0,
+        "evidence_end": 190,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1455,
+            1454
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2003.03728.pdf",
+        "chunk_id": 1455,
+        "page": 1,
+        "citations": [
+          5
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In order to reduce prediction errors due to incorrect pseudo labels, we leverage utterances with negative system responses to decrease the conﬁdences of the incorrectly predicted domains.",
+        "evidence_start": 190,
+        "evidence_end": 378,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1455,
+            1454
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2003.03728.pdf",
+        "chunk_id": 1455,
+        "page": 1,
+        "citations": [
+          5
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "We derive the pseudo labels when the following condi- tions are met: • Maximally p domains predicted with the highest conﬁ- dences that are higher than the conﬁdence of the known ground-truth.",
+        "evidence_start": 0,
+        "evidence_end": 192,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1475,
+            1474
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2003.03728.pdf",
+        "chunk_id": 1475,
+        "page": 2,
+        "citations": [
+          6
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " • Domains predicted with the highest conﬁdences for r times consecutively so that consistent top predictions are used as pseudo labels.",
+        "evidence_start": 192,
+        "evidence_end": 328,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1475,
+            1474
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2003.03728.pdf",
+        "chunk_id": 1475,
+        "page": 2,
+        "citations": [
+          6
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " For the experiments in Section 5, we use p=2 and r=4, which show the best dev set performance.",
+        "evidence_start": 328,
+        "evidence_end": 423,
+        "subject": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+        "identity": {
+          "subject": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            1475
+          ],
+          "identity_quote": "We derive the pseudo labels when the following condi- tions are met: • Maximally p domains predicted with the highest conﬁ- dences that are higher than the conﬁdence of the known ground-truth. • Domains predicted with the highest conﬁdences for r times consecutively so that consistent top predictions are used as pseudo labels. For the experiments in Section 5, we use p=2 and r=4, which show the best dev set performance.",
+          "identity_chunk_id": 1475
+        },
+        "source": "2003.03728.pdf",
+        "chunk_id": 1475,
+        "page": 2,
+        "citations": [
+          6
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "As they are independently and rapidly developed without a centralized ontology, multi- ple domains have overlapped capabilities that can process the same utterances.",
+        "evidence_start": 0,
+        "evidence_end": 165,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            1458,
+            1457
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2003.03728.pdf",
+        "chunk_id": 1458,
+        "page": 1,
+        "citations": [
+          7
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " For example, “make an elephant sound” can be processed by AnimalSounds, AnimalNoises, and ZooKeeper domains.",
+        "evidence_start": 165,
+        "evidence_end": 274,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            1458
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2003.03728.pdf",
+        "chunk_id": 1458,
+        "page": 1,
+        "citations": [
+          7
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Pseudo labels can be wrongly derived when irrelevant do- mains are top predicted, which can lead the model training with wrong supervision.",
+        "evidence_start": 0,
+        "evidence_end": 139,
+        "subject": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+        "identity": {
+          "subject": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            1464,
+            1463
+          ],
+          "identity_quote": "Also, the approach is related to self- distillation, which leverages the conﬁdence scores of the non- target outputs to improve the model performance [12, 13]. While distillation methods utilize the conﬁdence scores as the soft targets, pseudo labeling regards high conﬁdent out- puts as the hard targets to further boost their conﬁdences. We use both pseudo labeling and self-distillation in our work.",
+          "identity_chunk_id": 1463
+        },
+        "source": "2003.03728.pdf",
+        "chunk_id": 1464,
+        "page": 1,
+        "citations": [
+          8,
+          11
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " To mitigate this issue, we lever- age utterances with negative system responses to lower the prediction conﬁdences of the failing domains.",
+        "evidence_start": 139,
+        "evidence_end": 278,
+        "subject": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+        "identity": {
+          "subject": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            1464,
+            1463
+          ],
+          "identity_quote": "Also, the approach is related to self- distillation, which leverages the conﬁdence scores of the non- target outputs to improve the model performance [12, 13]. While distillation methods utilize the conﬁdence scores as the soft targets, pseudo labeling regards high conﬁdent out- puts as the hard targets to further boost their conﬁdences. We use both pseudo labeling and self-distillation in our work.",
+          "identity_chunk_id": 1463
+        },
+        "source": "2003.03728.pdf",
+        "chunk_id": 1464,
+        "page": 1,
+        "citations": [
+          8,
+          11
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " For example, if a system response of a domain for an input utterance is “I don’t know that one”, the domain is regarded as a negative ground-truth since it fails to handle the utterance.",
+        "evidence_start": 278,
+        "evidence_end": 465,
+        "subject": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+        "identity": {
+          "subject": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            1464,
+            1463
+          ],
+          "identity_quote": "Also, the approach is related to self- distillation, which leverages the conﬁdence scores of the non- target outputs to improve the model performance [12, 13]. While distillation methods utilize the conﬁdence scores as the soft targets, pseudo labeling regards high conﬁdent out- puts as the hard targets to further boost their conﬁdences. We use both pseudo labeling and self-distillation in our work.",
+          "identity_chunk_id": 1463
+        },
+        "source": "2003.03728.pdf",
+        "chunk_id": 1464,
+        "page": 1,
+        "citations": [
+          8,
+          11
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "We ﬁnd that it is more effective to ex- plicitly demote the prediction conﬁdences of the domains re- sulted in negative responses if they are top ranked.",
+        "evidence_start": 0,
+        "evidence_end": 153,
+        "subject": "AnimalSounds",
+        "identity": {
+          "subject": "AnimalSounds",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            1480,
+            1479
+          ],
+          "identity_quote": "For example, AnimalSounds is a (positive) ground-truth domain for “a monkey sound” because the system response to the utterance is “Here comes a monkey sound” while it is a negative ground-truth for “a dragon sound” as the response is “I don’t know what sound a dragon makes”.5 6 Previous work [22, 23] excludes such negative utterances from the training set.",
+          "identity_chunk_id": 1479
+        },
+        "source": "2003.03728.pdf",
+        "chunk_id": 1480,
+        "page": 3,
+        "citations": [
+          9,
+          12
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " It is for- mulated as a loss function: \u001a −log (1 −oj) ∀i̸ = j oi ≤oj Ln = 0 Otherwise, where j denotes the index corresponding to the negative ground-truth domain.",
+        "evidence_start": 153,
+        "evidence_end": 317,
+        "subject": "AnimalSounds",
+        "identity": {
+          "subject": "AnimalSounds",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            1480,
+            1479
+          ],
+          "identity_quote": "For example, AnimalSounds is a (positive) ground-truth domain for “a monkey sound” because the system response to the utterance is “Here comes a monkey sound” while it is a negative ground-truth for “a dragon sound” as the response is “I don’t know what sound a dragon makes”.5 6 Previous work [22, 23] excludes such negative utterances from the training set.",
+          "identity_chunk_id": 1479
+        },
+        "source": "2003.03728.pdf",
+        "chunk_id": 1480,
+        "page": 3,
+        "citations": [
+          9,
+          12
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " CONCLUSION We have proposed deriving pseudo labels along with lever- aging utterances with negative system responses and self- distillation to improve the performance of domain classiﬁca- tion when multiple domains are ground-truths even if only one ground-truth is known in large-scale domain classiﬁca- tion.",
+        "evidence_start": 2,
+        "evidence_end": 313,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            1503
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2003.03728.pdf",
+        "chunk_id": 1503,
+        "page": 4,
+        "citations": [
+          10
+        ],
+        "record_id": "E21"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 1488,
+        "text": "First, we run intent classiﬁca- tion and slot ﬁlling for the k most conﬁdent domains from the shortlister outputs to obtain additional information for those domains [1].8 Then, we compose k hypotheses, each of which is a vector consists of the shortlister conﬁdence score, (4) intent score, Viterbi score of slot-ﬁlling, domain vector, intent vector, and the summation of the slot vectors.",
+        "source": "2003.03728.pdf",
+        "page": 3,
+        "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+        "section": "4. HYPOTHESIS RERANKING MODEL"
+      },
+      {
+        "chunk_id": 1460,
+        "text": "This setting corresponds to multi-label positive and unlabeled (PU) learning, where as- signed labels are positive, unassigned labels are not neces- 1A domain is usually deﬁned as an application or functionality than can handle speciﬁc intents [1, 2, 3]. Young-Bum Kim sarily negative, and one or more labels are assigned for an instance [6, 7].2 In this paper, we utilize user log data, which contain triples of an utterance, the predicted domain, and the re- sponse, for the model training.",
+        "source": "2003.03728.pdf",
+        "page": 1,
+        "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+        "section": "1. INTRODUCTION"
+      },
+      {
+        "chunk_id": 1469,
+        "text": "ity [14, 5]. Within the approach, a shortlister, which is a light-weighted domain classiﬁer, suggests the most promis- ing k domains as the hypotheses. We train the shortlister along with the added pseudo labels, leveraging negative sys- tem responses, and self-distillation, which are described in Section 3. Then a hypothesis reranker selects the ﬁnal pre- diction from the k hypotheses enriched with additional input features, which is described in Section 4.",
+        "source": "2003.03728.pdf",
+        "page": 2,
+        "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+        "section": "2. MODEL OVERVIEW"
+      },
+      {
+        "chunk_id": 1477,
+        "text": "3.2. Leveraging Negative Feedback During the model training, irrelevant domains could be top predicted, and regarding them as additional target labels re- sults in wrong conﬁrmation bias [20], which causes incorrect model training. To reduce the side effect, we leverage utter- ances with negative responses in order to discourage the utter- ances’ incorrect predictions.",
+        "source": "2003.03728.pdf",
+        "page": 2,
+        "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+        "section": "3.2. Leveraging Negative Feedback"
+      },
+      {
+        "chunk_id": 1455,
+        "text": "In this paper, given one ground-truth domain for each training utterance, we regard domains con- sistently predicted with the highest conﬁdences as additional pseudo labels for the training. In order to reduce prediction errors due to incorrect pseudo labels, we leverage utterances with negative system responses to decrease the conﬁdences of the incorrectly predicted domains.",
+        "source": "2003.03728.pdf",
+        "page": 1,
+        "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+        "section": null
+      },
+      {
+        "chunk_id": 1475,
+        "text": "We derive the pseudo labels when the following condi- tions are met: • Maximally p domains predicted with the highest conﬁ- dences that are higher than the conﬁdence of the known ground-truth. • Domains predicted with the highest conﬁdences for r times consecutively so that consistent top predictions are used as pseudo labels. For the experiments in Section 5, we use p=2 and r=4, which show the best dev set performance.",
+        "source": "2003.03728.pdf",
+        "page": 2,
+        "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+        "section": "3.1. Deriving Pseudo Labels"
+      },
+      {
+        "chunk_id": 1458,
+        "text": "As they are independently and rapidly developed without a centralized ontology, multi- ple domains have overlapped capabilities that can process the same utterances. For example, “make an elephant sound” can be processed by AnimalSounds, AnimalNoises, and ZooKeeper domains.",
+        "source": "2003.03728.pdf",
+        "page": 1,
+        "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+        "section": "1. INTRODUCTION"
+      },
+      {
+        "chunk_id": 1464,
+        "text": "Pseudo labels can be wrongly derived when irrelevant do- mains are top predicted, which can lead the model training with wrong supervision. To mitigate this issue, we lever- age utterances with negative system responses to lower the prediction conﬁdences of the failing domains. For example, if a system response of a domain for an input utterance is “I don’t know that one”, the domain is regarded as a negative ground-truth since it fails to handle the utterance.",
+        "source": "2003.03728.pdf",
+        "page": 1,
+        "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+        "section": "1. INTRODUCTION"
+      },
+      {
+        "chunk_id": 1480,
+        "text": "We ﬁnd that it is more effective to ex- plicitly demote the prediction conﬁdences of the domains re- sulted in negative responses if they are top ranked. It is for- mulated as a loss function: \u001a −log (1 −oj) ∀i̸ = j oi ≤oj Ln = 0 Otherwise, where j denotes the index corresponding to the negative ground-truth domain. We demote the conﬁdences of the negative ground-truths only when they are the highest so that the inﬂuence of using the negative ground-truths is not overwhelming.7",
+        "source": "2003.03728.pdf",
+        "page": 3,
+        "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+        "section": "3.2. Leveraging Negative Feedback"
+      },
+      {
+        "chunk_id": 1503,
+        "text": "6. CONCLUSION We have proposed deriving pseudo labels along with lever- aging utterances with negative system responses and self- distillation to improve the performance of domain classiﬁca- tion when multiple domains are ground-truths even if only one ground-truth is known in large-scale domain classiﬁca- tion.",
+        "source": "2003.03728.pdf",
+        "page": 4,
+        "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+        "section": "6. CONCLUSION"
+      },
+      {
+        "chunk_id": 1463,
+        "text": "Also, the approach is related to self- distillation, which leverages the conﬁdence scores of the non- target outputs to improve the model performance [12, 13]. While distillation methods utilize the conﬁdence scores as the soft targets, pseudo labeling regards high conﬁdent out- puts as the hard targets to further boost their conﬁdences. We use both pseudo labeling and self-distillation in our work.",
+        "source": "2003.03728.pdf",
+        "page": 1,
+        "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+        "section": "1. INTRODUCTION"
+      },
+      {
+        "chunk_id": 1479,
+        "text": "For example, AnimalSounds is a (positive) ground-truth domain for “a monkey sound” because the system response to the utterance is “Here comes a monkey sound” while it is a negative ground-truth for “a dragon sound” as the response is “I don’t know what sound a dragon makes”.5 6 Previous work [22, 23] excludes such negative utterances from the training set.",
+        "source": "2003.03728.pdf",
+        "page": 3,
+        "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+        "section": "3.2. Leveraging Negative Feedback"
+      }
+    ],
+    "selected_ids": [
+      1488,
+      1460,
+      1469,
+      1477,
+      1455,
+      1475,
+      1458,
+      1464,
+      1480,
+      1503
+    ]
+  },
+  "mode": "agent",
+  "answer": "Processing did not finish, so the answer cannot be verified yet. The error details are kept in the run log.",
+  "run_dir": "/Users/j/Desktop/Advanced-LLM-RAG/evaluation/results/qasper_20261024/paper_bound_deepseek_v41_flash/runs/c626637ed14dee3049b87171ddf326115e59d9ee/agent_run",
+  "initial_selected_ids": [
+    1488,
+    1460,
+    1469,
+    1477,
+    1455,
+    1475,
+    1458,
+    1464,
+    1480,
+    1503
+  ],
+  "agent": {
+    "invoked": true,
+    "actions_executed": 0,
+    "decision_summary": {
+      "planned_cases": 1,
+      "completed_cases": 0,
+      "api_attempts": 2,
+      "failed_api_attempts": 0,
+      "automatic_retries": 0,
+      "actions_executed": 0,
+      "usage_missing_calls": [],
+      "reported_usage": {
+        "prompt_tokens": 1228,
+        "completion_tokens": 90,
+        "total_tokens": 1318
+      },
+      "proposed_actions": {
+        "question": null
+      },
+      "action_attempts": 0,
+      "reassessment_api_attempts": 0,
+      "reassessed_actions": {
+        "question": null
+      },
+      "final_answer_generations": 0,
+      "automatic_action_loop": true,
+      "validation_repair_attempts": 1,
+      "paused_cases": 0,
+      "halt_reasons": {
+        "question": null
+      }
+    },
+    "halt_reason": null
+  },
+  "actions": [],
+  "error": "ValueError: Requirement question_quote must name its own subject and show its scope.",
+  "answer_status": "unavailable",
+  "stop_reason": "processing_failed",
+  "network": {
+    "status": "not_requested",
+    "http_tool_calls": 0,
+    "papers_read": 0
+  },
+  "api_summary": {
+    "attempts": 3,
+    "failed_attempts": 0,
+    "automatic_retries": 0,
+    "usage_missing_calls": [],
+    "reported_usage": {
+      "prompt_tokens": 1945,
+      "completion_tokens": 109,
+      "total_tokens": 2054
+    }
+  }
+}

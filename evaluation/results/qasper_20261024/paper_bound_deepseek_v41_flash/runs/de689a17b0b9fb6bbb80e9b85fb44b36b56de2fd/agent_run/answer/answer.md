@@ -1,0 +1,1 @@
+They had three annotators: a team of three volunteers classified each tweet [3]. The acknowledgements also name Maria, Raphael and Anastasia as the team of volunteer annotators for v1.0 of the dataset [8].

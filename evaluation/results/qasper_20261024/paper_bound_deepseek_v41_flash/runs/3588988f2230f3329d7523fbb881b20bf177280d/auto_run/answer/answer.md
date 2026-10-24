@@ -1,0 +1,1 @@
+The paper experimented with three OWL ontologies: (1) the Wine Ontology, which provides information about wines and wine producers; (2) the Consumer Electronics Ontology, intended to help exchange information about consumer electronics products; and (3) the Disease Ontology, which describes diseases, including their symptoms and causes [1].

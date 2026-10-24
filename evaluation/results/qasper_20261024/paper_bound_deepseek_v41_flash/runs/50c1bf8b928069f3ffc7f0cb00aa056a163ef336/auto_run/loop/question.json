@@ -1,0 +1,1010 @@
+{
+  "id": "question",
+  "query": "For the paper \"How multilingual is Multilingual BERT?\" (arXiv: 1906.01502), answer this question: What evaluation metrics are used?",
+  "kb_version": "qasper-test50-20261024",
+  "status": "completed",
+  "actions_executed": 3,
+  "semantic_correctness": "requires_manual_review",
+  "plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "How multilingual is Multilingual BERT?",
+        "question_quote": "For the paper \"How multilingual is Multilingual BERT?\" (arXiv: 1906.01502), answer this question: What evaluation metrics are used?",
+        "need": "For the paper \"How multilingual is Multilingual BERT?\" (arXiv: 1906.01502), answer this question: What evaluation metrics are used?"
+      }
+    ]
+  },
+  "assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "partial",
+        "evidence": [
+          {
+            "chunk_id": 849,
+            "quote": "achieving over 80% accuracy for all pairs"
+          },
+          {
+            "chunk_id": 907,
+            "quote": "Table 8: POS accuracy on the UD test sets"
+          }
+        ],
+        "supported_part": "POS 任务使用 accuracy 作为评价指标。",
+        "reason": "给定段落只显示 POS 实验使用 accuracy，但没有涵盖论文（NER 等其他任务）使用的完整评价指标集合，因此只能部分确立整体要求的‘评价指标有哪些’。",
+        "gap": "缺少 NER 及其他任务的评价指标（如 F1 等）的明确界定。"
+      }
+    ],
+    "next_action": {
+      "type": "read_neighbors",
+      "reason": "现有段落显示 POS 用 accuracy，但完整的评价指标列表可能出现在实验设置或表格附近，需就近阅读 1906.01502.pdf 中相关段落以查找 NER 等其他任务的评价指标。",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": null,
+      "source": "1906.01502.pdf",
+      "chunk_id": 849
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "已对照该需求的提问范围，仅评估论文使用的评价指标，未扩展到其他方法或额外条件。"
+    }
+  },
+  "steps": [
+    {
+      "number": 1,
+      "action": {
+        "type": "read_neighbors",
+        "reason": "现有段落显示 POS 用 accuracy，但完整的评价指标列表可能出现在实验设置或表格附近，需就近阅读 1906.01502.pdf 中相关段落以查找 NER 等其他任务的评价指标。",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": null,
+        "source": "1906.01502.pdf",
+        "chunk_id": 849
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "read_neighbors",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "chunk_id": 849,
+          "source": "1906.01502.pdf",
+          "knowledge_base": {
+            "version": "qasper-test50-20261024",
+            "chunk_count": 1612,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/manifest.json",
+            "manifest_sha256": "9974fa3a87051eda09cd42cd585d1501ed257548d187d0321ed8f82f71790f5e",
+            "files": {
+              "faiss.index": "f4c8de7951c30bb0deee445e8d9983d05f7360576c426b58f6f8046d093ef5c7",
+              "chunks.json": "0061d789f2d24144b80e14598fd7509c48803fd6c87d04a78c6960c34d268a4f"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 847,
+              "text": "We to- kenize the input sentence, feed it to BERT, get the last layer’s activations, and pass them through a ﬁ- nal layer to make the tag predictions. The whole model is then ﬁne-tuned to minimize the cross en- tropy loss for the task. When tokenization splits words into multiple pieces, we take the prediction for the ﬁrst piece as the prediction for the word.",
+              "source": "1906.01502.pdf",
+              "page": 2,
+              "title": "How multilingual is Multilingual BERT?",
+              "section": "2 Models and Data",
+              "kb_version": "qasper-test50-20261024",
+              "offset": -2
+            },
+            {
+              "chunk_id": 848,
+              "text": "2.1 Named entity recognition experiments We perform NER experiments on two datasets: the publicly available CoNLL-2002 and -2003 sets, containing Dutch, Spanish, English, and Ger- man (Tjong Kim Sang, 2002; Sang and Meulder, 2003); and an in-house dataset with 16 languages,2 using the same CoNLL categories. Table 1 shows M-BERT zero-shot performance on all language pairs in the CoNLL data.",
+              "source": "1906.01502.pdf",
+              "page": 2,
+              "title": "How multilingual is Multilingual BERT?",
+              "section": "2.1 Named entity recognition experiments",
+              "kb_version": "qasper-test50-20261024",
+              "offset": -1
+            },
+            {
+              "chunk_id": 849,
+              "text": "2.2 Part of speech tagging experiments We perform POS experiments using Universal De- pendencies (UD) (Nivre et al., 2016) data for 41 languages.3 We use the evaluation sets from Ze- man et al. Table 2 shows M-BERT zero- shot results for four European languages. We see that M-BERT generalizes well across languages, achieving over 80% accuracy for all pairs.",
+              "source": "1906.01502.pdf",
+              "page": 2,
+              "title": "How multilingual is Multilingual BERT?",
+              "section": "2.2 Part of speech tagging experiments",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 0
+            },
+            {
+              "chunk_id": 850,
+              "text": "2Arabic, Bengali, Czech, German, English, Spanish, French, Hindi, Indonesian, Italian, Japanese, Korean, Por- tuguese, Russian, Turkish, and Chinese.",
+              "source": "1906.01502.pdf",
+              "page": 2,
+              "title": "How multilingual is Multilingual BERT?",
+              "section": "2.2 Part of speech tagging experiments",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 1
+            },
+            {
+              "chunk_id": 851,
+              "text": "3Arabic, Bulgarian, Catalan, Czech, Danish, German, Greek, English, Spanish, Estonian, Basque, Persian, Finnish, French, Galician, Hebrew, Hindi, Croatian, Hungarian, In- donesian, Italian, Japanese, Korean, Latvian, Marathi, Dutch, Norwegian (Bokmaal and Nynorsk), Polish, Portuguese (Eu- ropean and Brazilian), Romanian, Russian, Slovak, Slove- nian, Swedish, Tamil, Telugu, Turkish, Urdu, and Chinese.",
+              "source": "1906.01502.pdf",
+              "page": 2,
+              "title": "How multilingual is Multilingual BERT?",
+              "section": "2.2 Part of speech tagging experiments",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 2
+            }
+          ],
+          "trace": {
+            "window": 2,
+            "max_window": 2,
+            "selected_ids": [
+              847,
+              848,
+              849,
+              850,
+              851
+            ],
+            "read_chars": 1666,
+            "elapsed_seconds": 0.000173,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        847,
+        848,
+        850,
+        851
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          847,
+          848,
+          850,
+          851
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "missing",
+            "evidence": [],
+            "supported_part": "",
+            "reason": "所给段落涉及NMR/POS实验设置、数据集、损失函数及词汇重叠分析，但均未明确说明该论文用于评估的度量指标（如accuracy、F1等具体名称）。",
+            "gap": "缺少论文对评估度量指标（metrics）的明确说明。"
+          }
+        ],
+        "next_action": {
+          "type": "search",
+          "reason": "尚未找到论文使用的评估度量指标，需检索其评估部分。",
+          "requirement_ids": [
+            "r1"
+          ],
+          "query": "How multilingual is Multilingual BERT?: For the paper \"How multilingual is Multilingual BERT?\" (arXiv: 1906.01502), answer this question: What evaluation metrics are used? | For the paper \"How multilingual is Multilingual BERT?\" (arXiv: 1906.01502), answer this question: What evaluation metrics are used?",
+          "source": "1906.01502.pdf",
+          "chunk_id": null
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "评估度量指标属于该问题所要求的范围。"
+        }
+      }
+    },
+    {
+      "number": 2,
+      "action": {
+        "type": "search",
+        "reason": "尚未找到论文使用的评估度量指标，需检索其评估部分。",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": "How multilingual is Multilingual BERT?: For the paper \"How multilingual is Multilingual BERT?\" (arXiv: 1906.01502), answer this question: What evaluation metrics are used? | For the paper \"How multilingual is Multilingual BERT?\" (arXiv: 1906.01502), answer this question: What evaluation metrics are used?",
+        "source": "1906.01502.pdf",
+        "chunk_id": null
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "search",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "query": "How multilingual is Multilingual BERT?: For the paper \"How multilingual is Multilingual BERT?\" (arXiv: 1906.01502), answer this question: What evaluation metrics are used? | For the paper \"How multilingual is Multilingual BERT?\" (arXiv: 1906.01502), answer this question: What evaluation metrics are used?",
+          "source": "1906.01502.pdf",
+          "knowledge_base": {
+            "version": "qasper-test50-20261024",
+            "chunk_count": 1612,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/manifest.json",
+            "manifest_sha256": "9974fa3a87051eda09cd42cd585d1501ed257548d187d0321ed8f82f71790f5e",
+            "files": {
+              "faiss.index": "f4c8de7951c30bb0deee445e8d9983d05f7360576c426b58f6f8046d093ef5c7",
+              "chunks.json": "0061d789f2d24144b80e14598fd7509c48803fd6c87d04a78c6960c34d268a4f"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 846,
+              "score": 0.021195236534469572,
+              "source": "1906.01502.pdf",
+              "page": 2,
+              "title": "How multilingual is Multilingual BERT?",
+              "section": "2 Models and Data",
+              "text": "ing trained only on monolingual English data with an English-derived vocabulary, it is trained on the Wikipedia pages of 104 languages with a shared word piece vocabulary. It does not use any marker denoting the input language, and does not have any explicit mechanism to encourage translation- equivalent pairs to have similar representations. For NER and POS, we use the same sequence tagging architecture as Devlin et al.",
+              "rerank_score": 0.9977803826332092,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 840,
+              "score": 0.020517676767676768,
+              "source": "1906.01502.pdf",
+              "page": 1,
+              "title": "How multilingual is Multilingual BERT?",
+              "section": "1 Introduction",
+              "text": "(2019) as a single language model pre-trained on the concatenation of mono- lingual Wikipedia corpora from 104 languages.1 M-BERT is particularly well suited to this probing study because it enables a very straightforward ap- proach to zero-shot cross-lingual model transfer: we ﬁne-tune the model using task-speciﬁc super- vised training data from one language, and evalu- ate that task in a different language, thus allowing us to observe the ways in which the model gener- alizes information across languages.",
+              "rerank_score": 0.9970008730888367,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 849,
+              "score": 0.02353266888150609,
+              "source": "1906.01502.pdf",
+              "page": 2,
+              "title": "How multilingual is Multilingual BERT?",
+              "section": "2.2 Part of speech tagging experiments",
+              "text": "2.2 Part of speech tagging experiments We perform POS experiments using Universal De- pendencies (UD) (Nivre et al., 2016) data for 41 languages.3 We use the evaluation sets from Ze- man et al. Table 2 shows M-BERT zero- shot results for four European languages. We see that M-BERT generalizes well across languages, achieving over 80% accuracy for all pairs.",
+              "rerank_score": 0.9955854415893555,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 872,
+              "score": 0.008547008547008548,
+              "source": "1906.01502.pdf",
+              "page": 3,
+              "title": "How multilingual is Multilingual BERT?",
+              "section": "4.2 Generalizing across typological features",
+              "text": "7SVO languages: Bulgarian, Catalan, Czech, Danish, English, Spanish, Estonian, Finnish, French, Galician, He- brew, Croatian, Indonesian, Italian, Latvian, Norwegian (Bokmaal and Nynorsk), Polish, Portuguese (European and Brazilian), Romanian, Russian, Slovak, Slovenian, Swedish, SOV Languages: and Chinese. Basque, Farsi, Hindi, Japanese, Korean, Marathi, Tamil, Telugu, Turkish, and Urdu.",
+              "rerank_score": 0.9943880438804626,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 887,
+              "score": 0.01738934056007227,
+              "source": "1906.01502.pdf",
+              "page": 5,
+              "title": "How multilingual is Multilingual BERT?",
+              "section": "5.2 Results",
+              "text": "It achieves over 50% accuracy for all but the bottom layers,9 which seems to imply that the hidden representations, al- though separated in space, share a common sub- space that represents useful linguistic information, in a language-agnostic way. Similar curves are ob- tained for EN-RU, and UR-HI (in-house dataset), showing this works for multiple languages.",
+              "rerank_score": 0.9941188097000122,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 842,
+              "score": 0.027443609022556388,
+              "source": "1906.01502.pdf",
+              "page": 1,
+              "title": "How multilingual is Multilingual BERT?",
+              "section": "1 Introduction",
+              "text": "Our experiments show that while high lexical overlap between languages im- proves transfer, M-BERT is also able to transfer between languages written in different scripts— thus having zero lexical overlap—indicating that it captures multilingual representations.",
+              "rerank_score": 0.9940536618232727,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 862,
+              "score": 0.022363465160075327,
+              "source": "1906.01502.pdf",
+              "page": 3,
+              "title": "How multilingual is Multilingual BERT?",
+              "section": "3.2 Generalization across scripts",
+              "text": "Among the most surprising results, an M-BERT model that has been ﬁne-tuned using only POS- labeled Urdu (written in Arabic script), achieves 91% accuracy on Hindi (written in Devanagari script), even though it has never seen a single POS- tagged Devanagari word. This provides clear ev- idence of M-BERT’s multilingual representation ability, mapping structures onto new vocabularies based on a shared representation induced solely from monolingual language model training data.",
+              "rerank_score": 0.9939131140708923,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 879,
+              "score": 0.017956019617149183,
+              "source": "1906.01502.pdf",
+              "page": 4,
+              "title": "How multilingual is Multilingual BERT?",
+              "section": "4.3 Code switching and transliteration",
+              "text": "els ﬁne-tuned using a combination of monolingual Hindi and English, and using the CS training set (both ﬁne-tuning on the script-corrected version of the corpus as well as the transliterated version). For script-corrected inputs, i.e., when Hindi is written in Devanagari, M-BERT’s performance when trained only on monolingual corpora is com- parable to performance when training on code- switched data, and it is likely that some of the remaining difference is due to domain mismatch.",
+              "rerank_score": 0.993381142616272,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 860,
+              "score": 0.027425373134328357,
+              "source": "1906.01502.pdf",
+              "page": 3,
+              "title": "How multilingual is Multilingual BERT?",
+              "section": "3.1 Effect of vocabulary overlap",
+              "text": "M-BERT’s performance, on the other hand, is ﬂat for a wide range of overlaps, and even for language pairs with almost no lexical overlap, scores vary between 40% and 70%, showing that M-BERT’s pretraining on multiple languages has enabled a representational capacity deeper than simple vocabulary memorization.5 To further verify that EN-BERT’s inability to generalize is due to its lack of a multilingual rep- resentation and not an inability of its English- speciﬁc word piece vocabulary to represent data in other languages, we evaluate on non-cross-lingual NER and see that it performs comparably to a pre- vious state of the art model (see Table 3).",
+              "rerank_score": 0.9925630688667297,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 859,
+              "score": 0.020163322915616497,
+              "source": "1906.01502.pdf",
+              "page": 3,
+              "title": "How multilingual is Multilingual BERT?",
+              "section": "3.1 Effect of vocabulary overlap",
+              "text": "(2016) 90.94 78.76 81.74 85.75 EN-BERT 91.07 73.32 84.23 81.84 Table 3: NER F1 results ﬁne-tuning and evaluating on the same language (not zero-shot transfer). performance using EN-BERT depends directly on word piece overlap: the ability to transfer dete- riorates as word piece overlap diminishes, and F1 scores are near zero for languages written in differ- ent scripts.",
+              "rerank_score": 0.991578221321106,
+              "kb_version": "qasper-test50-20261024"
+            }
+          ],
+          "trace": {
+            "retrieval_depth": 1612,
+            "candidate_k": 120,
+            "rrf_k": 60,
+            "result_k": 10,
+            "dense_ids": [
+              832,
+              839,
+              882,
+              854,
+              866,
+              835,
+              860,
+              896,
+              902,
+              890,
+              856,
+              853,
+              891,
+              843,
+              861,
+              842,
+              870,
+              863,
+              868,
+              874,
+              846,
+              844,
+              897,
+              849,
+              881,
+              836,
+              875,
+              893,
+              898,
+              865,
+              901,
+              869,
+              841,
+              889,
+              880,
+              906,
+              899,
+              852,
+              840,
+              884,
+              895,
+              876,
+              858,
+              905,
+              878,
+              885,
+              834,
+              864,
+              859,
+              888,
+              847,
+              857,
+              877,
+              894,
+              867,
+              892,
+              872,
+              862,
+              848,
+              838,
+              900,
+              833,
+              887,
+              850,
+              851,
+              873,
+              907,
+              908,
+              879,
+              886,
+              883,
+              855,
+              837,
+              903,
+              871,
+              845,
+              904
+            ],
+            "bm25_ids": [
+              832,
+              839,
+              854,
+              882,
+              866,
+              906,
+              861,
+              853,
+              835,
+              842,
+              889,
+              862,
+              833,
+              863,
+              893,
+              843,
+              890,
+              875,
+              876,
+              860,
+              841,
+              897,
+              907,
+              844,
+              880,
+              849,
+              908,
+              891,
+              877,
+              858,
+              859,
+              869,
+              878,
+              865,
+              847,
+              840,
+              857,
+              879,
+              901,
+              883,
+              848,
+              856,
+              874,
+              895,
+              838,
+              902,
+              896,
+              887,
+              905,
+              888,
+              885,
+              892,
+              846,
+              837,
+              867,
+              868,
+              834,
+              886,
+              864,
+              845,
+              871,
+              855,
+              884,
+              894,
+              870
+            ],
+            "candidate_ids": [
+              832,
+              839,
+              882,
+              854,
+              866,
+              835,
+              853,
+              861,
+              842,
+              860,
+              890,
+              843,
+              863,
+              906,
+              891,
+              889,
+              893,
+              875,
+              897,
+              844,
+              896,
+              902,
+              856,
+              849,
+              841,
+              876,
+              862,
+              880,
+              874,
+              833,
+              865,
+              869,
+              868,
+              846,
+              901,
+              870,
+              858,
+              840,
+              878,
+              859,
+              877,
+              907,
+              847,
+              895,
+              908,
+              857,
+              905,
+              885,
+              848,
+              888,
+              884,
+              879,
+              834,
+              838,
+              864,
+              883,
+              892,
+              867,
+              887,
+              894,
+              837,
+              886,
+              855,
+              845,
+              871,
+              881,
+              836,
+              898,
+              899,
+              852,
+              872,
+              900,
+              850,
+              851,
+              873,
+              903,
+              904
+            ],
+            "selected_ids": [
+              846,
+              840,
+              849,
+              872,
+              887,
+              842,
+              862,
+              879,
+              860,
+              859
+            ],
+            "elapsed_seconds": 5.323366,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        846,
+        840,
+        872,
+        887,
+        862,
+        879,
+        859
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          846,
+          840,
+          872,
+          887,
+          862,
+          879,
+          859
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "partial",
+            "evidence": [
+              {
+                "chunk_id": 849,
+                "quote": "achieving over 80% accuracy for all pairs"
+              },
+              {
+                "chunk_id": 859,
+                "quote": "NER F1 results ﬁne-tuning and evaluating on the same language (not zero-shot transfer)."
+              }
+            ],
+            "supported_part": "该论文在 POS 任务上使用准确率（accuracy），在 NER 任务上使用 F1 分数作为评价指标。",
+            "reason": "所引段落分别显示 POS 实验报告准确率、NER 表格报告 F1，仅确立了部分评价指标；论文对评价指标的完整清单（例如是否还使用其他度量）尚未明确给出。",
+            "gap": "尚未明确建立该论文所使用的完整评价指标集合（是否除 POS 的 accuracy 与 NER 的 F1 之外还使用其他指标）。"
+          }
+        ],
+        "next_action": {
+          "type": "read_neighbors",
+          "reason": "评价指标可能出现在 NER/POS 实验设置附近的章节，需在已有段落邻近处查找明确列出评价指标的表述。",
+          "requirement_ids": [
+            "r1"
+          ],
+          "query": null,
+          "source": "1906.01502.pdf",
+          "chunk_id": 848
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "仅针对 r1 的评价指标这一问题逐项核对，未扩展到其他需求或论文。"
+        }
+      }
+    },
+    {
+      "number": 3,
+      "action": {
+        "type": "read_neighbors",
+        "reason": "评价指标可能出现在 NER/POS 实验设置附近的章节，需在已有段落邻近处查找明确列出评价指标的表述。",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": null,
+        "source": "1906.01502.pdf",
+        "chunk_id": 848
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "read_neighbors",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "chunk_id": 848,
+          "source": "1906.01502.pdf",
+          "knowledge_base": {
+            "version": "qasper-test50-20261024",
+            "chunk_count": 1612,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/manifest.json",
+            "manifest_sha256": "9974fa3a87051eda09cd42cd585d1501ed257548d187d0321ed8f82f71790f5e",
+            "files": {
+              "faiss.index": "f4c8de7951c30bb0deee445e8d9983d05f7360576c426b58f6f8046d093ef5c7",
+              "chunks.json": "0061d789f2d24144b80e14598fd7509c48803fd6c87d04a78c6960c34d268a4f"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 846,
+              "text": "ing trained only on monolingual English data with an English-derived vocabulary, it is trained on the Wikipedia pages of 104 languages with a shared word piece vocabulary. It does not use any marker denoting the input language, and does not have any explicit mechanism to encourage translation- equivalent pairs to have similar representations. For NER and POS, we use the same sequence tagging architecture as Devlin et al.",
+              "source": "1906.01502.pdf",
+              "page": 2,
+              "title": "How multilingual is Multilingual BERT?",
+              "section": "2 Models and Data",
+              "kb_version": "qasper-test50-20261024",
+              "offset": -2
+            },
+            {
+              "chunk_id": 847,
+              "text": "We to- kenize the input sentence, feed it to BERT, get the last layer’s activations, and pass them through a ﬁ- nal layer to make the tag predictions. The whole model is then ﬁne-tuned to minimize the cross en- tropy loss for the task. When tokenization splits words into multiple pieces, we take the prediction for the ﬁrst piece as the prediction for the word.",
+              "source": "1906.01502.pdf",
+              "page": 2,
+              "title": "How multilingual is Multilingual BERT?",
+              "section": "2 Models and Data",
+              "kb_version": "qasper-test50-20261024",
+              "offset": -1
+            },
+            {
+              "chunk_id": 848,
+              "text": "2.1 Named entity recognition experiments We perform NER experiments on two datasets: the publicly available CoNLL-2002 and -2003 sets, containing Dutch, Spanish, English, and Ger- man (Tjong Kim Sang, 2002; Sang and Meulder, 2003); and an in-house dataset with 16 languages,2 using the same CoNLL categories. Table 1 shows M-BERT zero-shot performance on all language pairs in the CoNLL data.",
+              "source": "1906.01502.pdf",
+              "page": 2,
+              "title": "How multilingual is Multilingual BERT?",
+              "section": "2.1 Named entity recognition experiments",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 0
+            },
+            {
+              "chunk_id": 849,
+              "text": "2.2 Part of speech tagging experiments We perform POS experiments using Universal De- pendencies (UD) (Nivre et al., 2016) data for 41 languages.3 We use the evaluation sets from Ze- man et al. Table 2 shows M-BERT zero- shot results for four European languages. We see that M-BERT generalizes well across languages, achieving over 80% accuracy for all pairs.",
+              "source": "1906.01502.pdf",
+              "page": 2,
+              "title": "How multilingual is Multilingual BERT?",
+              "section": "2.2 Part of speech tagging experiments",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 1
+            },
+            {
+              "chunk_id": 850,
+              "text": "2Arabic, Bengali, Czech, German, English, Spanish, French, Hindi, Indonesian, Italian, Japanese, Korean, Por- tuguese, Russian, Turkish, and Chinese.",
+              "source": "1906.01502.pdf",
+              "page": 2,
+              "title": "How multilingual is Multilingual BERT?",
+              "section": "2.2 Part of speech tagging experiments",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 2
+            }
+          ],
+          "trace": {
+            "window": 2,
+            "max_window": 2,
+            "selected_ids": [
+              846,
+              847,
+              848,
+              849,
+              850
+            ],
+            "read_chars": 1686,
+            "elapsed_seconds": 0.000169,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": []
+    }
+  ],
+  "evidence_after": [
+    {
+      "chunk_id": 833,
+      "source": "1906.01502.pdf",
+      "page": 1,
+      "title": "How multilingual is Multilingual BERT?",
+      "text": "(2019) arXiv:1906.01502v1 [cs.CL] 4 Jun 2019 as a single language model pre-trained from monolingual corpora in 104 languages, is surprisingly good at zero-shot cross-lingual model transfer, in which task-speciﬁc annota- tions in one language are used to ﬁne-tune the model for evaluation in another language.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 860,
+      "source": "1906.01502.pdf",
+      "page": 3,
+      "title": "How multilingual is Multilingual BERT?",
+      "text": "M-BERT’s performance, on the other hand, is ﬂat for a wide range of overlaps, and even for language pairs with almost no lexical overlap, scores vary between 40% and 70%, showing that M-BERT’s pretraining on multiple languages has enabled a representational capacity deeper than simple vocabulary memorization.5 To further verify that EN-BERT’s inability to generalize is due to its lack of a multilingual rep- resentation and not an inability of its English- speciﬁc word piece vocabulary to represent data in other languages, we evaluate on non-cross-lingual NER and see that it performs comparably to a pre- vious state of the art model (see Table 3).",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 897,
+      "source": "1906.01502.pdf",
+      "page": 6,
+      "title": "How multilingual is Multilingual BERT?",
+      "text": "Neural architectures for named entity recognition. In Proceedings of NAACL. Guillaume Lample and Alexis Conneau. 2019. Cross- lingual language model pretraining. arXiv preprint arXiv:1901.07291. Tahira Naseem, Regina Barzilay, and Amir Globerson. 2012. Selective sharing for multilingual dependency parsing. In Proceedings of ACL. Joakim Nivre, Marie-Catherine de Marneffe, Filip Ginter, Yoav Goldberg, Jan Hajic, Christopher D. Manning, Ryan T.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 839,
+      "source": "1906.01502.pdf",
+      "page": 1,
+      "title": "How multilingual is Multilingual BERT?",
+      "text": "Dan Garrette In this paper, we empirically investigate the degree to which these representations generalize across languages. We explore this question us- ing Multilingual BERT (henceforth, M-BERT), re- leased by Devlin et al.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 849,
+      "source": "1906.01502.pdf",
+      "page": 2,
+      "title": "How multilingual is Multilingual BERT?",
+      "text": "2.2 Part of speech tagging experiments We perform POS experiments using Universal De- pendencies (UD) (Nivre et al., 2016) data for 41 languages.3 We use the evaluation sets from Ze- man et al. Table 2 shows M-BERT zero- shot results for four European languages. We see that M-BERT generalizes well across languages, achieving over 80% accuracy for all pairs.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 907,
+      "source": "1906.01502.pdf",
+      "page": 6,
+      "title": "How multilingual is Multilingual BERT?",
+      "text": "There is a big gap between this model’s zero-shot performance and M-BERT’s, showing that the pre-training is helping in cross-lingual transfer. C Some POS Results for EN-BERT Fine-tuning \\Eval EN DE ES IT 96.94 38.31 50.38 46.07 EN 92.63 28.62 30.23 25.59 DE 94.36 28.78 46.15 71.50 ES 96.41 52.48 48.08 76.51 IT Table 8: POS accuracy on the UD test sets for a subset of European languages using EN-BERT. The row spec- iﬁes a ﬁne-tuning language, the column the evaluation language.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 854,
+      "source": "1906.01502.pdf",
+      "page": 2,
+      "title": "How multilingual is Multilingual BERT?",
+      "text": "3 Vocabulary Memorization Because M-BERT uses a single, multilingual vo- cabulary, one form of cross-lingual transfer occurs when word pieces present during ﬁne-tuning also appear in the evaluation languages. In this sec- tion, we present experiments probing M-BERT’s dependence on this superﬁcial form of generaliza- tion: How much does transferability depend on lexical overlap?",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1389,
+      "source": "1911.00202.pdf",
+      "page": 4,
+      "title": "Forget Me Not: Reducing Catastrophic Forgetting for Domain Adaptation in Reading Comprehension",
+      "text": "We also freeze the input embeddings for BERT.9 To measure performance, we use the standard macro-averaged F1 as the evaluation metric, which measures the average overlap of word tokens between prediction and ground truth answer.10 Our pre-trained QANet, decaNLP and BERT achieve an F1 score of 80.47, 75.50 and 87.62 respectively on the devel- opment partition of SQUAD.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 843,
+      "source": "1906.01502.pdf",
+      "page": 1,
+      "title": "How multilingual is Multilingual BERT?",
+      "text": "We fur- ther show that transfer works best for typolog- ically similar languages, suggesting that while M-BERT’s multilingual representation is able to map learned structures onto new vocabularies, it does not seem to learn systematic transformations of those structures to accommodate a target lan- guage with different word order.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 832,
+      "source": "1906.01502.pdf",
+      "page": 1,
+      "title": "How multilingual is Multilingual BERT?",
+      "text": "How multilingual is Multilingual BERT? Telmo Pires∗ Eva Schlinger Google Research {telmop,eschling,dhgarrette}@google.com Abstract In this paper, we show that Multilingual BERT (M-BERT), released by Devlin et al.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 842,
+      "source": "1906.01502.pdf",
+      "page": 1,
+      "title": "How multilingual is Multilingual BERT?",
+      "text": "Our experiments show that while high lexical overlap between languages im- proves transfer, M-BERT is also able to transfer between languages written in different scripts— thus having zero lexical overlap—indicating that it captures multilingual representations.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 847,
+      "source": "1906.01502.pdf",
+      "page": 2,
+      "title": "How multilingual is Multilingual BERT?",
+      "text": "We to- kenize the input sentence, feed it to BERT, get the last layer’s activations, and pass them through a ﬁ- nal layer to make the tag predictions. The whole model is then ﬁne-tuned to minimize the cross en- tropy loss for the task. When tokenization splits words into multiple pieces, we take the prediction for the ﬁrst piece as the prediction for the word.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 848,
+      "source": "1906.01502.pdf",
+      "page": 2,
+      "title": "How multilingual is Multilingual BERT?",
+      "text": "2.1 Named entity recognition experiments We perform NER experiments on two datasets: the publicly available CoNLL-2002 and -2003 sets, containing Dutch, Spanish, English, and Ger- man (Tjong Kim Sang, 2002; Sang and Meulder, 2003); and an in-house dataset with 16 languages,2 using the same CoNLL categories. Table 1 shows M-BERT zero-shot performance on all language pairs in the CoNLL data.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 850,
+      "source": "1906.01502.pdf",
+      "page": 2,
+      "title": "How multilingual is Multilingual BERT?",
+      "text": "2Arabic, Bengali, Czech, German, English, Spanish, French, Hindi, Indonesian, Italian, Japanese, Korean, Por- tuguese, Russian, Turkish, and Chinese.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 851,
+      "source": "1906.01502.pdf",
+      "page": 2,
+      "title": "How multilingual is Multilingual BERT?",
+      "text": "3Arabic, Bulgarian, Catalan, Czech, Danish, German, Greek, English, Spanish, Estonian, Basque, Persian, Finnish, French, Galician, Hebrew, Hindi, Croatian, Hungarian, In- donesian, Italian, Japanese, Korean, Latvian, Marathi, Dutch, Norwegian (Bokmaal and Nynorsk), Polish, Portuguese (Eu- ropean and Brazilian), Romanian, Russian, Slovak, Slove- nian, Swedish, Tamil, Telugu, Turkish, Urdu, and Chinese.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 846,
+      "source": "1906.01502.pdf",
+      "page": 2,
+      "title": "How multilingual is Multilingual BERT?",
+      "text": "ing trained only on monolingual English data with an English-derived vocabulary, it is trained on the Wikipedia pages of 104 languages with a shared word piece vocabulary. It does not use any marker denoting the input language, and does not have any explicit mechanism to encourage translation- equivalent pairs to have similar representations. For NER and POS, we use the same sequence tagging architecture as Devlin et al.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 840,
+      "source": "1906.01502.pdf",
+      "page": 1,
+      "title": "How multilingual is Multilingual BERT?",
+      "text": "(2019) as a single language model pre-trained on the concatenation of mono- lingual Wikipedia corpora from 104 languages.1 M-BERT is particularly well suited to this probing study because it enables a very straightforward ap- proach to zero-shot cross-lingual model transfer: we ﬁne-tune the model using task-speciﬁc super- vised training data from one language, and evalu- ate that task in a different language, thus allowing us to observe the ways in which the model gener- alizes information across languages.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 872,
+      "source": "1906.01502.pdf",
+      "page": 3,
+      "title": "How multilingual is Multilingual BERT?",
+      "text": "7SVO languages: Bulgarian, Catalan, Czech, Danish, English, Spanish, Estonian, Finnish, French, Galician, He- brew, Croatian, Indonesian, Italian, Latvian, Norwegian (Bokmaal and Nynorsk), Polish, Portuguese (European and Brazilian), Romanian, Russian, Slovak, Slovenian, Swedish, SOV Languages: and Chinese. Basque, Farsi, Hindi, Japanese, Korean, Marathi, Tamil, Telugu, Turkish, and Urdu.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 887,
+      "source": "1906.01502.pdf",
+      "page": 5,
+      "title": "How multilingual is Multilingual BERT?",
+      "text": "It achieves over 50% accuracy for all but the bottom layers,9 which seems to imply that the hidden representations, al- though separated in space, share a common sub- space that represents useful linguistic information, in a language-agnostic way. Similar curves are ob- tained for EN-RU, and UR-HI (in-house dataset), showing this works for multiple languages.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 862,
+      "source": "1906.01502.pdf",
+      "page": 3,
+      "title": "How multilingual is Multilingual BERT?",
+      "text": "Among the most surprising results, an M-BERT model that has been ﬁne-tuned using only POS- labeled Urdu (written in Arabic script), achieves 91% accuracy on Hindi (written in Devanagari script), even though it has never seen a single POS- tagged Devanagari word. This provides clear ev- idence of M-BERT’s multilingual representation ability, mapping structures onto new vocabularies based on a shared representation induced solely from monolingual language model training data.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 879,
+      "source": "1906.01502.pdf",
+      "page": 4,
+      "title": "How multilingual is Multilingual BERT?",
+      "text": "els ﬁne-tuned using a combination of monolingual Hindi and English, and using the CS training set (both ﬁne-tuning on the script-corrected version of the corpus as well as the transliterated version). For script-corrected inputs, i.e., when Hindi is written in Devanagari, M-BERT’s performance when trained only on monolingual corpora is com- parable to performance when training on code- switched data, and it is likely that some of the remaining difference is due to domain mismatch.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 859,
+      "source": "1906.01502.pdf",
+      "page": 3,
+      "title": "How multilingual is Multilingual BERT?",
+      "text": "(2016) 90.94 78.76 81.74 85.75 EN-BERT 91.07 73.32 84.23 81.84 Table 3: NER F1 results ﬁne-tuning and evaluating on the same language (not zero-shot transfer). performance using EN-BERT depends directly on word piece overlap: the ability to transfer dete- riorates as word piece overlap diminishes, and F1 scores are near zero for languages written in differ- ent scripts.",
+      "kb_version": "qasper-test50-20261024"
+    }
+  ],
+  "action_attempts": 3,
+  "feedback_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "partial",
+        "evidence": [
+          {
+            "chunk_id": 849,
+            "quote": "achieving over 80% accuracy for all pairs"
+          },
+          {
+            "chunk_id": 859,
+            "quote": "NER F1 results ﬁne-tuning and evaluating on the same language (not zero-shot transfer)."
+          }
+        ],
+        "supported_part": "该论文在 POS 任务上使用准确率（accuracy），在 NER 任务上使用 F1 分数作为评价指标。",
+        "reason": "所引段落分别显示 POS 实验报告准确率、NER 表格报告 F1，仅确立了部分评价指标；论文对评价指标的完整清单（例如是否还使用其他度量）尚未明确给出。",
+        "gap": "尚未明确建立该论文所使用的完整评价指标集合（是否除 POS 的 accuracy 与 NER 的 F1 之外还使用其他指标）。"
+      }
+    ],
+    "next_action": {
+      "type": "read_neighbors",
+      "reason": "评价指标可能出现在 NER/POS 实验设置附近的章节，需在已有段落邻近处查找明确列出评价指标的表述。",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": null,
+      "source": "1906.01502.pdf",
+      "chunk_id": 848
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "仅针对 r1 的评价指标这一问题逐项核对，未扩展到其他需求或论文。"
+    }
+  },
+  "halt_reason": "no_new_evidence",
+  "final_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "partial",
+        "evidence": [
+          {
+            "chunk_id": 849,
+            "quote": "achieving over 80% accuracy for all pairs"
+          },
+          {
+            "chunk_id": 859,
+            "quote": "NER F1 results ﬁne-tuning and evaluating on the same language (not zero-shot transfer)."
+          }
+        ],
+        "supported_part": "该论文在 POS 任务上使用准确率（accuracy），在 NER 任务上使用 F1 分数作为评价指标。",
+        "reason": "所引段落分别显示 POS 实验报告准确率、NER 表格报告 F1，仅确立了部分评价指标；论文对评价指标的完整清单（例如是否还使用其他度量）尚未明确给出。",
+        "gap": "尚未明确建立该论文所使用的完整评价指标集合（是否除 POS 的 accuracy 与 NER 的 F1 之外还使用其他指标）。"
+      }
+    ],
+    "next_action": {
+      "type": "read_neighbors",
+      "reason": "评价指标可能出现在 NER/POS 实验设置附近的章节，需在已有段落邻近处查找明确列出评价指标的表述。",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": null,
+      "source": "1906.01502.pdf",
+      "chunk_id": 848
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "仅针对 r1 的评价指标这一问题逐项核对，未扩展到其他需求或论文。"
+    }
+  },
+  "elapsed_seconds": 16.534
+}

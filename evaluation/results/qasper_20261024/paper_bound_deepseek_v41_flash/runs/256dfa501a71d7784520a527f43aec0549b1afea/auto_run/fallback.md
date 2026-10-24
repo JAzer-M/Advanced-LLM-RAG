@@ -1,0 +1,2 @@
+Extra evidence checking did not finish. The answer below uses only the initial evidence and keeps its existing gaps:
+The provided context states that the model achieves recognition accuracy close to 95% for almost all of the subjects shown [1]. It does not identify a single "best model" by name, so the evidence is insufficient to specify which model that figure belongs to exactly; the passage reports it as the recognition accuracy observed in their results.

@@ -1,0 +1,145 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "For the paper \"Cross-Lingual Natural Language Generation via Pre-Training\" (arXiv: 1909.10481), answer this question: What is the architecture of the decoder?",
+  "kb_version": "qasper-test50-20261024",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": false,
+    "drafts": [
+      "The decoder is part of XNLG, a pre-trained sequence-to-sequence model based on Transformer [11]. Both the encoder and decoder support multiple languages, using language tag embeddings to distinguish source and target languages; conditioned on the encoding vectors and a specific target language tag, the decoder generates the output sequence in the target language [10]. The decoder is pre-trained together with the encoder using the 15-language pre-trained XLM to initialize their parameters [7], and pre-training both encoder and decoder (rather than only the encoder) is intended for cross-lingual generation tasks [12]. However, the specific architectural composition of the decoder (e.g., number of layers, attention configuration) is not specified in the provided passages."
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "The decoder is part of XNLG, a pre-trained sequence-to-sequence model based on Transformer [11]. Both the encoder and decoder support multiple languages, using language tag embeddings to distinguish source and target languages; conditioned on the encoding vectors and a specific target language tag, the decoder generates the output sequence in the target language [10]. The decoder is pre-trained together with the encoder using the 15-language pre-trained XLM to initialize their parameters [7], and pre-training both encoder and decoder (rather than only the encoder) is intended for cross-lingual generation tasks [12]. However, the specific architectural composition of the decoder (e.g., number of layers, attention configuration) is not specified in the provided passages.",
+              "reason": "回答基于所给片段说明了该论文中解码器的架构定位：属于基于Transformer的序列到序列模型XNLG的一部分[11]，与编码器共同支持多语言并用语言标签嵌入区分源/目标语言[10]，由15语言预训练XLM初始化参数[7]，且与编码器一起预训练用于跨语言生成[12]。同时明确指出现有片段未给出层数、注意力配置等具体组成，属于对实际信息缺口的如实说明，符合部分可答但需承认缺口的要求，故通过。",
+              "citations": [
+                {
+                  "number": 11,
+                  "quote": "3 Methods As shown in Figure 2, XNLG is a pre-trained sequence-to- sequence model, which is based on Transformer (Vaswani et al."
+                },
+                {
+                  "number": 10,
+                  "quote": "Both the encoder and the decoder are supposed to support multiple languages. Following (Lample and Con- neau 2019), we use language tag embeddings to distinguish the source and target languages. Given a sentence and its corresponding language tag, XNLG encodes the input into vector representations. By conditioning on the encoding vec- tors and a speciﬁc language tag, the decoder generates the output sequence in the target language."
+                },
+                {
+                  "number": 7,
+                  "quote": "In the ﬁrst pre- training stage, we directly use the 15-language pre-trained XLM (Lample and Conneau 2019) to initialize the pa- rameters of our encoder and decoder."
+                },
+                {
+                  "number": 12,
+                  "quote": "By comparison, we pre- train both encoder and decoder for cross-lingual genera- tion tasks, rather than only focusing on encoder."
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            7,
+            10,
+            11,
+            12
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 7,
+              "chunk_id": 1179,
+              "source": "1909.10481.pdf",
+              "page": 4,
+              "text": "In the ﬁrst pre- training stage, we directly use the 15-language pre-trained XLM (Lample and Conneau 2019) to initialize the pa- rameters of our encoder and decoder. In the second stage, Models Rel Flu Corr XLM 0 0 0 PIPELINE (XLM) 0.50 0.80 0.03 1.43* w/ Google Translator 1.31 0.69 1.68* 0.89* XNLG 1.29 Table 3: Human evaluation results of zero-shot Chinese- Chinese question generation. Rel is short for relatedness, Flu for ﬂuency, and Corr for correctness."
+            },
+            {
+              "citation": 10,
+              "chunk_id": 1157,
+              "source": "1909.10481.pdf",
+              "page": 2,
+              "text": "Both the encoder and the decoder are supposed to support multiple languages. Following (Lample and Con- neau 2019), we use language tag embeddings to distinguish the source and target languages. Given a sentence and its corresponding language tag, XNLG encodes the input into vector representations. By conditioning on the encoding vec- tors and a speciﬁc language tag, the decoder generates the output sequence in the target language."
+            },
+            {
+              "citation": 11,
+              "chunk_id": 1156,
+              "source": "1909.10481.pdf",
+              "page": 2,
+              "text": "3 Methods As shown in Figure 2, XNLG is a pre-trained sequence-to- sequence model, which is based on Transformer (Vaswani et al."
+            },
+            {
+              "citation": 12,
+              "chunk_id": 1154,
+              "source": "1909.10481.pdf",
+              "page": 2,
+              "text": "2019) on corpus of multiple languages, it shows a surprising ability to produce cross-lingual repre- sentations (Wu and Dredze 2019). More recently, Lam- ple and Conneau (2019) extend mask language modeling pre-training to cross-lingual settings, which shows signiﬁ- cant improvements on cross-lingual classiﬁcation and un- supervised machine translation. By comparison, we pre- train both encoder and decoder for cross-lingual genera- tion tasks, rather than only focusing on encoder."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "The decoder is part of XNLG, a pre-trained sequence-to-sequence model based on Transformer [11]. Both the encoder and decoder support multiple languages, using language tag embeddings to distinguish source and target languages; conditioned on the encoding vectors and a specific target language tag, the decoder generates the output sequence in the target language [10]. The decoder is pre-trained together with the encoder using the 15-language pre-trained XLM to initialize their parameters [7], and pre-training both encoder and decoder (rather than only the encoder) is intended for cross-lingual generation tasks [12]. However, the specific architectural composition of the decoder (e.g., number of layers, attention configuration) is not specified in the provided passages.",
+    "citation_check": {
+      "cited_numbers": [
+        7,
+        10,
+        11,
+        12
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 7,
+          "chunk_id": 1179,
+          "source": "1909.10481.pdf",
+          "page": 4,
+          "text": "In the ﬁrst pre- training stage, we directly use the 15-language pre-trained XLM (Lample and Conneau 2019) to initialize the pa- rameters of our encoder and decoder. In the second stage, Models Rel Flu Corr XLM 0 0 0 PIPELINE (XLM) 0.50 0.80 0.03 1.43* w/ Google Translator 1.31 0.69 1.68* 0.89* XNLG 1.29 Table 3: Human evaluation results of zero-shot Chinese- Chinese question generation. Rel is short for relatedness, Flu for ﬂuency, and Corr for correctness."
+        },
+        {
+          "citation": 10,
+          "chunk_id": 1157,
+          "source": "1909.10481.pdf",
+          "page": 2,
+          "text": "Both the encoder and the decoder are supposed to support multiple languages. Following (Lample and Con- neau 2019), we use language tag embeddings to distinguish the source and target languages. Given a sentence and its corresponding language tag, XNLG encodes the input into vector representations. By conditioning on the encoding vec- tors and a speciﬁc language tag, the decoder generates the output sequence in the target language."
+        },
+        {
+          "citation": 11,
+          "chunk_id": 1156,
+          "source": "1909.10481.pdf",
+          "page": 2,
+          "text": "3 Methods As shown in Figure 2, XNLG is a pre-trained sequence-to- sequence model, which is based on Transformer (Vaswani et al."
+        },
+        {
+          "citation": 12,
+          "chunk_id": 1154,
+          "source": "1909.10481.pdf",
+          "page": 2,
+          "text": "2019) on corpus of multiple languages, it shows a surprising ability to produce cross-lingual repre- sentations (Wu and Dredze 2019). More recently, Lam- ple and Conneau (2019) extend mask language modeling pre-training to cross-lingual settings, which shows signiﬁ- cant improvements on cross-lingual classiﬁcation and un- supervised machine translation. By comparison, we pre- train both encoder and decoder for cross-lingual genera- tion tasks, rather than only focusing on encoder."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

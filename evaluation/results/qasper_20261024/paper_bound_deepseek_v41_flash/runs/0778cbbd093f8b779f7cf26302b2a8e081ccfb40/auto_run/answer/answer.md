@@ -1,0 +1,1 @@
+Argumentative zoning (AZ) is a rhetorical sentence classification task: it is the process of assigning rhetorical status to extracted sentences [1]. In the context of scientific paper analysis, AZ is described as an important task [7].

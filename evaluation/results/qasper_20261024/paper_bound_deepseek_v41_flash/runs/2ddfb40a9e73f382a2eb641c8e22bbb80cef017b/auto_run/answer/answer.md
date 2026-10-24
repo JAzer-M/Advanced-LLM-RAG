@@ -1,0 +1,1 @@
+The paper reports NER experiments on two datasets: the publicly available CoNLL-2002 and CoNLL-2003 sets, containing Dutch, Spanish, English, and German, and an in-house dataset with 16 languages using the same CoNLL categories [5].

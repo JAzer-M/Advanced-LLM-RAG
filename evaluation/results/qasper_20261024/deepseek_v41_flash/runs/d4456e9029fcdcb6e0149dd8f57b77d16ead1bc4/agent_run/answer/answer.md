@@ -1,0 +1,1 @@
+The evaluation metric considered is the standard macro-averaged F1 score, which measures the average overlap of word tokens between prediction and ground truth answer [12]. Macro-F1 is also listed among the evaluation metrics, with the best in bold [14].

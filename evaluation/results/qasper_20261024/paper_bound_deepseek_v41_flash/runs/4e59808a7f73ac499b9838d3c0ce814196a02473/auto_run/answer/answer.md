@@ -1,0 +1,2 @@
+Insufficient evidence to reliably answer these requirements:
+- Hard but Robust, Easy but Sensitive: How Encoder and Decoder Perform in Neural Machine Translation: For the paper "Hard but Robust, Easy but Sensitive: How Encoder and Decoder Perform in Neural Machine Translation" (arXiv: 1908.06259), answer this question: How do they measure conditional information strength?; The passages do not establish how conditional information strength is measured (e.g., the metric, computation, or procedure used to quantify it).

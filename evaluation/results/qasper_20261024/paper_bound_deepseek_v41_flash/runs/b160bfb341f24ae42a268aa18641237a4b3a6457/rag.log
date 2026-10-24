@@ -1,0 +1,122 @@
+LLM: proxy API | Model: cn:deepseek-v4.1-flash
+Knowledge Base: qasper-test50-20261024
+Total Vectors: 1612
+Vector Dimensions: 384
+Total Chunks: 1612
+
+Original Query: For the paper "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification" (arXiv: 2003.03728), answer this question: How do they decide by how much to decrease confidences of incorrectly predicted domains?
+Decomposition: {'needs_decomposition': False, 'sub_queries': [], 'status': 'not_needed'}
+Additional Retrieval Lists: 0
+HyDE Enabled: False
+
+Candidate Pool Before Deduplication: 120
+Candidate Pool After Deduplication: 120
+Selected Chunk IDs: [1455, 1488, 1464, 1460, 1477, 1475, 1454, 1457, 1500, 1490]
+Sub-Query Evidence Selection: {'candidate_count': 120, 'global_top_ids': [1455, 1488, 1464, 1460, 1477, 1475, 1454, 1457, 1500, 1490], 'protected_ids': [], 'sub_query_evidence': [], 'retrieval_anchor_ids': [1455], 'evidence_completion': {'requested_sources': ['2003.03728.pdf'], 'tasks': [], 'coverage': 'heuristic_only', 'rounds': 0, 'supplement_queries': 0, 'max_rounds': 2, 'completed_passes': 0, 'round_history': [], 'selected_ids_before': [1455, 1488, 1464, 1460, 1477, 1475, 1454, 1457, 1500, 1490], 'retained_local_ids': [], 'stop_reason': 'not_explicit_cross_paper', 'selected_ids_after': [1455, 1488, 1464, 1460, 1477, 1475, 1454, 1457, 1500, 1490], 'elapsed_seconds': 0.000504}}
+
+=== Retrieved Top-10 ===
+
+Rank: 1
+Source: 2003.03728.pdf
+Page: 1
+Section: None
+Text: In this paper, given one ground-truth domain for each training utterance, we regard domains con- sistently predicted with the highest conﬁdences as additional pseudo labels for the training. In order to reduce prediction errors due to incorrect pseudo labels, we leverage utterances with negative system responses to decrease the conﬁdences of the incorrectly predicted domains.
+
+Rank: 2
+Source: 2003.03728.pdf
+Page: 3
+Section: 4. HYPOTHESIS RERANKING MODEL
+Text: First, we run intent classiﬁca- tion and slot ﬁlling for the k most conﬁdent domains from the shortlister outputs to obtain additional information for those domains [1].8 Then, we compose k hypotheses, each of which is a vector consists of the shortlister conﬁdence score, (4) intent score, Viterbi score of slot-ﬁlling, domain vector, intent vector, and the summation of the slot vectors.
+
+Rank: 3
+Source: 2003.03728.pdf
+Page: 1
+Section: 1. INTRODUCTION
+Text: Pseudo labels can be wrongly derived when irrelevant do- mains are top predicted, which can lead the model training with wrong supervision. To mitigate this issue, we lever- age utterances with negative system responses to lower the prediction conﬁdences of the failing domains. For example, if a system response of a domain for an input utterance is “I don’t know that one”, the domain is regarded as a negative ground-truth since it fails to handle the utterance.
+
+Rank: 4
+Source: 2003.03728.pdf
+Page: 1
+Section: 1. INTRODUCTION
+Text: This setting corresponds to multi-label positive and unlabeled (PU) learning, where as- signed labels are positive, unassigned labels are not neces- 1A domain is usually deﬁned as an application or functionality than can handle speciﬁc intents [1, 2, 3]. Young-Bum Kim sarily negative, and one or more labels are assigned for an instance [6, 7].2 In this paper, we utilize user log data, which contain triples of an utterance, the predicted domain, and the re- sponse, for the model training.
+
+Rank: 5
+Source: 2003.03728.pdf
+Page: 2
+Section: 3.2. Leveraging Negative Feedback
+Text: 3.2. Leveraging Negative Feedback During the model training, irrelevant domains could be top predicted, and regarding them as additional target labels re- sults in wrong conﬁrmation bias [20], which causes incorrect model training. To reduce the side effect, we leverage utter- ances with negative responses in order to discourage the utter- ances’ incorrect predictions.
+
+Rank: 6
+Source: 2003.03728.pdf
+Page: 2
+Section: 3.1. Deriving Pseudo Labels
+Text: We derive the pseudo labels when the following condi- tions are met: • Maximally p domains predicted with the highest conﬁ- dences that are higher than the conﬁdence of the known ground-truth. • Domains predicted with the highest conﬁdences for r times consecutively so that consistent top predictions are used as pseudo labels. For the experiments in Section 5, we use p=2 and r=4, which show the best dev set performance.
+
+Rank: 7
+Source: 2003.03728.pdf
+Page: 1
+Section: None
+Text: PSEUDO LABELING AND NEGATIVE FEEDBACK LEARNING FOR LARGE-SCALE MULTI-LABEL DOMAIN CLASSIFICATION Joo-Kyung Kim Amazon Alexa AI ABSTRACT arXiv:2003.03728v1 [cs.CL] 8 Mar 2020 In large-scale domain classiﬁcation, an utterance can be han- dled by multiple domains with overlapped capabilities. How- ever, only a limited number of ground-truth domains are pro- vided for each training utterance in practice while knowing as many as correct target labels is helpful for improving the model performance.
+
+Rank: 8
+Source: 2003.03728.pdf
+Page: 1
+Section: 1. INTRODUCTION
+Text: 1. INTRODUCTION Domain classiﬁcation is a task that predicts the most rele- vant domain given an input utterance [1].1 It is becoming more challenging since recent conversational interaction sys- tems such as Amazon Alexa, Google Assistant, and Microsoft Cortana support more than thousands of domains developed by external developers [4, 3, 5].
+
+Rank: 9
+Source: 2003.03728.pdf
+Page: 4
+Section: 5.2. Experiment Results
+Text: In addition, recall is increased when self-distillation is used, which achieves the best F1 score (6). Each of utilizing the negative feedback ((1) →(3) and (2) →(5)) and then additional pseudo labels ((3) →(5) and (4) →(6)) show statistically signiﬁcant improvements with McNemar test for p=0.05 for the ﬁnal reranker results. Using self-distillation ((3) →(4) and (5) →(6)) shows increased F-1 score by increasing recall and decreasing pre- cision, but the improvements are not signiﬁcant.
+
+Rank: 10
+Source: 2003.03728.pdf
+Page: 3
+Section: 4. HYPOTHESIS RERANKING MODEL
+Text: We use hinge loss with margin 0.4 as the loss function. One issue of the hypothesis reranking is that a training ut- terance cannot be used if no ground-truth exist in the top k (5) predictions of the shortlister. This is problematic in the multi- label PU setting since correct domains can indeed exist in the top k list but unknown, which makes the training utterance less useful in the reranking. Our pseudo labeling method can address this issue.
+
+=== Evidence: parsed facts and source quotations ===
+- Source quotation (2003.03728.pdf, p.1): “In this paper, given one ground-truth domain for each training utterance, we regard domains con- sistently predicted with the highest conﬁdences as additional pseudo labels for the training.” [1]
+- Source quotation (2003.03728.pdf, p.1): “In order to reduce prediction errors due to incorrect pseudo labels, we leverage utterances with negative system responses to decrease the conﬁdences of the incorrectly predicted domains.” [1]
+- Source quotation (2003.03728.pdf, p.3): “8 Then, we compose k hypotheses, each of which is a vector consists of the shortlister conﬁdence score, (4) intent score, Viterbi score of slot-ﬁlling, domain vector, intent vector, and the summation of the slot vectors.” [2]
+- Source quotation (2003.03728.pdf, p.1): “Pseudo labels can be wrongly derived when irrelevant do- mains are top predicted, which can lead the model training with wrong supervision.” [3][11]
+- Source quotation (2003.03728.pdf, p.1): “To mitigate this issue, we lever- age utterances with negative system responses to lower the prediction conﬁdences of the failing domains.” [3][11]
+- Source quotation (2003.03728.pdf, p.1): “For example, if a system response of a domain for an input utterance is “I don’t know that one”, the domain is regarded as a negative ground-truth since it fails to handle the utterance.” [3][11]
+- Source quotation (2003.03728.pdf, p.1): “This setting corresponds to multi-label positive and unlabeled (PU) learning, where as- signed labels are positive, unassigned labels are not neces- 1A domain is usually deﬁned as an application or functionality than can handle speciﬁc intents [1, 2, 3].” [4]
+- Source quotation (2003.03728.pdf, p.1): “2 In this paper, we utilize user log data, which contain triples of an utterance, the predicted domain, and the re- sponse, for the model training.” [4]
+- Source quotation (2003.03728.pdf, p.2): “Leveraging Negative Feedback During the model training, irrelevant domains could be top predicted, and regarding them as additional target labels re- sults in wrong conﬁrmation bias [20], which causes incorrect model training.” [5]
+- Source quotation (2003.03728.pdf, p.2): “To reduce the side effect, we leverage utter- ances with negative responses in order to discourage the utter- ances’ incorrect predictions.” [5]
+- Source quotation (2003.03728.pdf, p.2): “We derive the pseudo labels when the following condi- tions are met: • Maximally p domains predicted with the highest conﬁ- dences that are higher than the conﬁdence of the known ground-truth.” [6]
+- Source quotation (2003.03728.pdf, p.2): “• Domains predicted with the highest conﬁdences for r times consecutively so that consistent top predictions are used as pseudo labels.” [6]
+- Source quotation (2003.03728.pdf, p.2): “For the experiments in Section 5, we use p=2 and r=4, which show the best dev set performance.” [6]
+- Source quotation (2003.03728.pdf, p.1): “CL] 8 Mar 2020 In large-scale domain classiﬁcation, an utterance can be han- dled by multiple domains with overlapped capabilities.” [7]
+- Source quotation (2003.03728.pdf, p.1): “How- ever, only a limited number of ground-truth domains are pro- vided for each training utterance in practice while knowing as many as correct target labels is helpful for improving the model performance.” [7]
+- Source quotation (2003.03728.pdf, p.1): “1 It is becoming more challenging since recent conversational interaction sys- tems such as Amazon Alexa, Google Assistant, and Microsoft Cortana support more than thousands of domains developed by external developers [4, 3, 5].” [8]
+- Source quotation (2003.03728.pdf, p.4): “In addition, recall is increased when self-distillation is used, which achieves the best F1 score (6).” [9]
+- Source quotation (2003.03728.pdf, p.4): “05 for the ﬁnal reranker results.” [9]
+- Source quotation (2003.03728.pdf, p.4): “Using self-distillation ((3) →(4) and (5) →(6)) shows increased F-1 score by increasing recall and decreasing pre- cision, but the improvements are not signiﬁcant.” [9]
+- Source quotation (2003.03728.pdf, p.3): “One issue of the hypothesis reranking is that a training ut- terance cannot be used if no ground-truth exist in the top k (5) predictions of the shortlister.” [10]
+- Source quotation (2003.03728.pdf, p.3): “This is problematic in the multi- label PU setting since correct domains can indeed exist in the top k list but unknown, which makes the training utterance less useful in the reranking.” [10]
+- Source quotation (2003.03728.pdf, p.3): “Our pseudo labeling method can address this issue.” [10]
+
+=== Citation Sources ===
+[1] 2003.03728.pdf, p.1 (chunk 1455)
+[2] 2003.03728.pdf, p.3 (chunk 1488)
+[3] 2003.03728.pdf, p.1 (chunk 1464)
+[4] 2003.03728.pdf, p.1 (chunk 1460)
+[5] 2003.03728.pdf, p.2 (chunk 1477)
+[6] 2003.03728.pdf, p.2 (chunk 1475)
+[7] 2003.03728.pdf, p.1 (chunk 1454)
+[8] 2003.03728.pdf, p.1 (chunk 1457)
+[9] 2003.03728.pdf, p.4 (chunk 1500)
+[10] 2003.03728.pdf, p.3 (chunk 1490)
+[11] 2003.03728.pdf, p.1 (chunk 1463)
+
+=== Citation Structure Check (semantic support not verified) ===
+Status: not_needed
+Initial: {'has_citations': True, 'invalid_numbers': [], 'malformed_markers': []}
+Final structure passed: True
+
+=== Generated Answer (model draft; check against evidence) ===
+Insufficient evidence. The provided context states that utterances with negative system responses are used to lower the prediction confidences of failing/incorrectly predicted domains (e.g., treating such a domain as a "negative ground-truth" when the response is "I don't know that one") [3][5], but it does not specify how the magnitude of the confidence decrease is determined, such as a formula, loss term, margin, or weighting rule. The only margin value mentioned (hinge loss with margin 0.4) [10] is not tied in the context to the confidence-decrease amount.

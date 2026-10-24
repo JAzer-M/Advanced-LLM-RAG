@@ -1,0 +1,1 @@
+The paper states that several computational models were trained and tested on the OGTD data [1]. More specifically, the reported evaluation includes classical machine learning approaches, such as a linear SVM and a Stochastic Gradient Descent (SGD) classifier, as well as neural models: LSTM and GRU with Attention, which achieved the best F1-macro of 0.89 [7].

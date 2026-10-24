@@ -1,0 +1,165 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "For the paper \"Toward Interpretable Topic Discovery via Anchored Correlation Explanation\" (arXiv: 1606.07043), answer this question: How do they incorporate expert knowledge into their topic model?",
+  "kb_version": "qasper-test50-20261024",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": false,
+    "drafts": [
+      "专家知识通过“锚点词”(anchor words/锚点变量)的方式融入主题模型：专家指定一组相关性变量(relevance variables),模型在 CorEx 目标函数中加入第二项——即锚点变量 X_i 与隐因子 Y_j 之间的互信息项(对集合 R 中指定的 (i, j) 对)，权重为 β;该项受 information bottleneck 启发，使隐因子在解释数据中多元相关性的同时，也对专家指定的锚点变量保持信息量 [7][13][17]。这样，用户可以利用领域知识引导文档集合的探索，并为 CorEx 学到的隐因子赋予语义 [1],实验表明引入简单的锚点词能提升主题的连贯性和可解释性 [11]。"
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "专家知识通过“锚点词”(anchor words/锚点变量)的方式融入主题模型：专家指定一组相关性变量(relevance variables),模型在 CorEx 目标函数中加入第二项——即锚点变量 X_i 与隐因子 Y_j 之间的互信息项(对集合 R 中指定的 (i, j) 对)，权重为 β;该项受 information bottleneck 启发，使隐因子在解释数据中多元相关性的同时，也对专家指定的锚点变量保持信息量 [7][13][17]。这样，用户可以利用领域知识引导文档集合的探索，并为 CorEx 学到的隐因子赋予语义 [1],实验表明引入简单的锚点词能提升主题的连贯性和可解释性 [11]。",
+              "reason": "答案准确说明专家知识通过锚点词/相关性变量融入：在 CorEx 目标中加入锚点变量与隐因子的互信息项(权重β、集合R),受信息瓶颈启发，并引用支撑该机制及效果的原文段落，无无依据断言。",
+              "citations": [
+                {
+                  "number": 7,
+                  "quote": "We propose a simple way to use fuzzy and informal knowledge from experts to guide discovery of interpretable latent topics in text. The underlying intuition of our approach is that latent factors should be informative about both correlations in the data and a set of relevance variables speciﬁed by an expert."
+                },
+                {
+                  "number": 13,
+                  "quote": "TC(X; Y ) + β max I(Xi; Yj) i,j∈R The ﬁrst term is the CorEx objective TC(X; Y ) TC(X) −TC(X|Y ), which aims to construct latent variables Y that best explain multivariate dependencies in the data X."
+                },
+                {
+                  "number": 17,
+                  "quote": "The second term involves the mutual information between pairs of latent factors Yj) and anchor variables Xi spec- iﬁed in the set R {(i, j)}. = This is inspired by the information bottleneck (Tishby et al., 2000; Slonim et al., 2006)"
+                },
+                {
+                  "number": 1,
+                  "quote": "This ﬂexible framework enables the user to leverage domain knowledge to guide exploration of a collection of documents and to impose semantics onto latent factors learned by CorEx."
+                },
+                {
+                  "number": 11,
+                  "quote": "our experimental results conﬁrm that the introduction of simple anchor words can improve the coherence and human interpretability of topics discovered from data."
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            1,
+            7,
+            11,
+            13,
+            17
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 1,
+              "chunk_id": 8,
+              "source": "1606.07043.pdf",
+              "page": 1,
+              "text": "In this workshop paper, we introduce a simple approach to anchored information theoretic topic modeling using a novel combination of Correlation Explanation (CorEx) (Ver Steeg & Galstyan, 2014) and the information bottle- neck (Tishby et al., 2000). This ﬂexible framework enables the user to leverage domain knowledge to guide exploration of a collection of documents and to impose semantics onto latent factors learned by CorEx."
+            },
+            {
+              "citation": 7,
+              "chunk_id": 1,
+              "source": "1606.07043.pdf",
+              "page": 1,
+              "text": "We propose a simple way to use fuzzy and informal knowledge from experts to guide discovery of interpretable latent topics in text. The underlying intuition of our approach is that latent factors should be informative about both correlations in the data and a set of relevance variables speciﬁed by an expert. Mathematically, this approach is a combination of the information bottleneck and Total Correlation Explanation (CorEx)."
+            },
+            {
+              "citation": 11,
+              "chunk_id": 10,
+              "source": "1606.07043.pdf",
+              "page": 1,
+              "text": "First, our framework provides a way for human users to share domain knowledge with a statistical learning algorithm that is both convenient for the human user and easily digestible by the machine. Second, our experimental results conﬁrm that the introduction of simple anchor words can improve the coherence and human interpretability of topics discovered from data. Both are es- sential to successful and interactive collaboration between machine learning and human users."
+            },
+            {
+              "citation": 13,
+              "chunk_id": 13,
+              "source": "1606.07043.pdf",
+              "page": 2,
+              "text": ", m that optimize the following information theoretic objective: X p(yj|x),j=1,...,m TC(X; Y ) + β max I(Xi; Yj) i,j∈R The ﬁrst term is the CorEx objective TC(X; Y ) TC(X) −TC(X|Y ), which aims to construct latent variables Y that best explain multivariate dependencies in the data X. Here the data consist of n-dimensional binary vectors [X1, . Total correlation, or multivariate mutual information (Watanabe, 1960), is speciﬁed as DKL (p(x1, . , xn)|| Q TC(X1, ."
+            },
+            {
+              "citation": 17,
+              "chunk_id": 15,
+              "source": "1606.07043.pdf",
+              "page": 2,
+              "text": "The second term involves the mutual information between pairs of latent factors Yj) and anchor variables Xi spec- iﬁed in the set R {(i, j)}. = This is inspired by the information bottleneck (Tishby et al., 2000; Slonim et al., 2006), a supervised information-theoretic approach to discovering latent factors. The bottleneck objective maxp(y|x) −I(X; Y ) + βI(Z; Y ) constructs latent factors Y that trade off compression of X against preserving information about relevance variables Z."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "专家知识通过“锚点词”(anchor words/锚点变量)的方式融入主题模型：专家指定一组相关性变量(relevance variables),模型在 CorEx 目标函数中加入第二项——即锚点变量 X_i 与隐因子 Y_j 之间的互信息项(对集合 R 中指定的 (i, j) 对)，权重为 β;该项受 information bottleneck 启发，使隐因子在解释数据中多元相关性的同时，也对专家指定的锚点变量保持信息量 [7][13][17]。这样，用户可以利用领域知识引导文档集合的探索，并为 CorEx 学到的隐因子赋予语义 [1],实验表明引入简单的锚点词能提升主题的连贯性和可解释性 [11]。",
+    "citation_check": {
+      "cited_numbers": [
+        1,
+        7,
+        11,
+        13,
+        17
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 8,
+          "source": "1606.07043.pdf",
+          "page": 1,
+          "text": "In this workshop paper, we introduce a simple approach to anchored information theoretic topic modeling using a novel combination of Correlation Explanation (CorEx) (Ver Steeg & Galstyan, 2014) and the information bottle- neck (Tishby et al., 2000). This ﬂexible framework enables the user to leverage domain knowledge to guide exploration of a collection of documents and to impose semantics onto latent factors learned by CorEx."
+        },
+        {
+          "citation": 7,
+          "chunk_id": 1,
+          "source": "1606.07043.pdf",
+          "page": 1,
+          "text": "We propose a simple way to use fuzzy and informal knowledge from experts to guide discovery of interpretable latent topics in text. The underlying intuition of our approach is that latent factors should be informative about both correlations in the data and a set of relevance variables speciﬁed by an expert. Mathematically, this approach is a combination of the information bottleneck and Total Correlation Explanation (CorEx)."
+        },
+        {
+          "citation": 11,
+          "chunk_id": 10,
+          "source": "1606.07043.pdf",
+          "page": 1,
+          "text": "First, our framework provides a way for human users to share domain knowledge with a statistical learning algorithm that is both convenient for the human user and easily digestible by the machine. Second, our experimental results conﬁrm that the introduction of simple anchor words can improve the coherence and human interpretability of topics discovered from data. Both are es- sential to successful and interactive collaboration between machine learning and human users."
+        },
+        {
+          "citation": 13,
+          "chunk_id": 13,
+          "source": "1606.07043.pdf",
+          "page": 2,
+          "text": ", m that optimize the following information theoretic objective: X p(yj|x),j=1,...,m TC(X; Y ) + β max I(Xi; Yj) i,j∈R The ﬁrst term is the CorEx objective TC(X; Y ) TC(X) −TC(X|Y ), which aims to construct latent variables Y that best explain multivariate dependencies in the data X. Here the data consist of n-dimensional binary vectors [X1, . Total correlation, or multivariate mutual information (Watanabe, 1960), is speciﬁed as DKL (p(x1, . , xn)|| Q TC(X1, ."
+        },
+        {
+          "citation": 17,
+          "chunk_id": 15,
+          "source": "1606.07043.pdf",
+          "page": 2,
+          "text": "The second term involves the mutual information between pairs of latent factors Yj) and anchor variables Xi spec- iﬁed in the set R {(i, j)}. = This is inspired by the information bottleneck (Tishby et al., 2000; Slonim et al., 2006), a supervised information-theoretic approach to discovering latent factors. The bottleneck objective maxp(y|x) −I(X; Y ) + βI(Z; Y ) constructs latent factors Y that trade off compression of X against preserving information about relevance variables Z."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

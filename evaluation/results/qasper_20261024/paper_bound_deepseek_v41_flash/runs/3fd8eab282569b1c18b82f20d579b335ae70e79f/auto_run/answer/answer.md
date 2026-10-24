@@ -1,0 +1,1 @@
+The paper's experiments use Universal Dependencies data for 41 languages, with zero-shot results shown for four European languages [1]. M-BERT itself was pre-trained on monolingual Wikipedia corpora from 104 languages [6], and the probing experiments cover transfer to languages in different scripts, typologically similar languages, and multiple language pairs [4][7][8].

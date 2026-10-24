@@ -1,0 +1,105 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "For the paper \"Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\" (arXiv: 2003.03728), answer this question: How do they decide by how much to decrease confidences of incorrectly predicted domains?",
+  "kb_version": "qasper-test50-20261024",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": false,
+    "drafts": [
+      "The amount by which confidences of incorrectly predicted domains are decreased is governed by a negative-feedback loss term, Ln = −log(1 − oj), applied only when the negative ground-truth domain j is top ranked (i.e., when all other domains' confidences oi ≤ oj); otherwise Ln = 0 [18]. This demotion is applied only when the negative ground-truth is the highest, so its influence is not overwhelming [18]. The term is weighted by a hyperparameter β set to 0.00025, which showed the best dev set performance [17]."
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "The amount by which confidences of incorrectly predicted domains are decreased is governed by a negative-feedback loss term, Ln = −log(1 − oj), applied only when the negative ground-truth domain j is top ranked (i.e., when all other domains' confidences oi ≤ oj); otherwise Ln = 0 [18]. This demotion is applied only when the negative ground-truth is the highest, so its influence is not overwhelming [18]. The term is weighted by a hyperparameter β set to 0.00025, which showed the best dev set performance [17].",
+              "reason": "答案完整回答了置信度下降幅度的决定机制：使用负反馈损失项 Ln=−log(1−oj)，仅在负向真实域j排名最高（所有oi≤oj）时生效，否则为0；并通过超参数β加权，β=0.00025为最佳dev性能。数值、条件与引文均与原文一致，引用[18]支持损失公式与触发条件，[17]支持β取值。",
+              "citations": [
+                {
+                  "number": 18,
+                  "quote": "We ﬁnd that it is more effective to ex- plicitly demote the prediction conﬁdences of the domains re- sulted in negative responses if they are top ranked. It is for- mulated as a loss function: \u001a −log (1 −oj) ∀i̸ = j oi ≤oj Ln = 0 Otherwise, where j denotes the index corresponding to the negative ground-truth domain."
+                },
+                {
+                  "number": 17,
+                  "quote": "β is a hyperparameter for utiliz- ing negative ground-truths, which is set to 0.00025 showing the best dev set performance."
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            17,
+            18
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 17,
+              "chunk_id": 1486,
+              "source": "2003.03728.pdf",
+              "page": 3,
+              "text": "pseudo labels and self-distillation are more contributing in the later epochs following [24]. β is a hyperparameter for utiliz- ing negative ground-truths, which is set to 0.00025 showing the best dev set performance."
+            },
+            {
+              "citation": 18,
+              "chunk_id": 1480,
+              "source": "2003.03728.pdf",
+              "page": 3,
+              "text": "We ﬁnd that it is more effective to ex- plicitly demote the prediction conﬁdences of the domains re- sulted in negative responses if they are top ranked. It is for- mulated as a loss function: \u001a −log (1 −oj) ∀i̸ = j oi ≤oj Ln = 0 Otherwise, where j denotes the index corresponding to the negative ground-truth domain. We demote the conﬁdences of the negative ground-truths only when they are the highest so that the inﬂuence of using the negative ground-truths is not overwhelming.7"
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "The amount by which confidences of incorrectly predicted domains are decreased is governed by a negative-feedback loss term, Ln = −log(1 − oj), applied only when the negative ground-truth domain j is top ranked (i.e., when all other domains' confidences oi ≤ oj); otherwise Ln = 0 [18]. This demotion is applied only when the negative ground-truth is the highest, so its influence is not overwhelming [18]. The term is weighted by a hyperparameter β set to 0.00025, which showed the best dev set performance [17].",
+    "citation_check": {
+      "cited_numbers": [
+        17,
+        18
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 17,
+          "chunk_id": 1486,
+          "source": "2003.03728.pdf",
+          "page": 3,
+          "text": "pseudo labels and self-distillation are more contributing in the later epochs following [24]. β is a hyperparameter for utiliz- ing negative ground-truths, which is set to 0.00025 showing the best dev set performance."
+        },
+        {
+          "citation": 18,
+          "chunk_id": 1480,
+          "source": "2003.03728.pdf",
+          "page": 3,
+          "text": "We ﬁnd that it is more effective to ex- plicitly demote the prediction conﬁdences of the domains re- sulted in negative responses if they are top ranked. It is for- mulated as a loss function: \u001a −log (1 −oj) ∀i̸ = j oi ≤oj Ln = 0 Otherwise, where j denotes the index corresponding to the negative ground-truth domain. We demote the conﬁdences of the negative ground-truths only when they are the highest so that the inﬂuence of using the negative ground-truths is not overwhelming.7"
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

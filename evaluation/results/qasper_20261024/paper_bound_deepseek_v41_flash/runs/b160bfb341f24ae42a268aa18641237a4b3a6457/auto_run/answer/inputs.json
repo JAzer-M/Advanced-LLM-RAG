@@ -1,0 +1,194 @@
+{
+  "question": "For the paper \"Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\" (arXiv: 2003.03728), answer this question: How do they decide by how much to decrease confidences of incorrectly predicted domains?",
+  "requirements": [
+    {
+      "id": "r1",
+      "subject": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+      "question_quote": "For the paper \"Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\" (arXiv: 2003.03728), answer this question: How do they decide by how much to decrease confidences of incorrectly predicted domains?",
+      "need": "For the paper \"Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification\" (arXiv: 2003.03728), answer this question: How do they decide by how much to decrease confidences of incorrectly predicted domains?"
+    }
+  ],
+  "assessment": [
+    {
+      "id": "r1",
+      "status": "supported",
+      "supported_part": "The decision of how much to decrease confidences is governed by a loss term Ln=−log(1−oj) applied when the negative ground-truth domain j is top ranked, weighted by hyperparameter β set to 0.00025.",
+      "gap": "",
+      "evidence": [
+        {
+          "chunk_id": 1480,
+          "quote": "We ﬁnd that it is more effective to ex- plicitly demote the prediction conﬁdences of the domains re- sulted in negative responses if they are top ranked. It is for- mulated as a loss function: \u001a −log (1 −oj) ∀i̸ = j oi ≤oj Ln = 0 Otherwise, where j denotes the index corresponding to the negative ground-truth domain. We demote the conﬁdences of the negative ground-truths only when they are the highest so that the inﬂuence of using the negative ground-truths is not overwhelming.7"
+        },
+        {
+          "chunk_id": 1486,
+          "quote": "β is a hyperparameter for utiliz- ing negative ground-truths, which is set to 0.00025 showing the best dev set performance."
+        }
+      ]
+    }
+  ],
+  "halt_reason": "answer_ready",
+  "passages": [
+    {
+      "citation": 1,
+      "chunk_id": 1455,
+      "source": "2003.03728.pdf",
+      "page": 1,
+      "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+      "text": "In this paper, given one ground-truth domain for each training utterance, we regard domains con- sistently predicted with the highest conﬁdences as additional pseudo labels for the training. In order to reduce prediction errors due to incorrect pseudo labels, we leverage utterances with negative system responses to decrease the conﬁdences of the incorrectly predicted domains.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "citation": 2,
+      "chunk_id": 1488,
+      "source": "2003.03728.pdf",
+      "page": 3,
+      "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+      "text": "First, we run intent classiﬁca- tion and slot ﬁlling for the k most conﬁdent domains from the shortlister outputs to obtain additional information for those domains [1].8 Then, we compose k hypotheses, each of which is a vector consists of the shortlister conﬁdence score, (4) intent score, Viterbi score of slot-ﬁlling, domain vector, intent vector, and the summation of the slot vectors.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "citation": 3,
+      "chunk_id": 1464,
+      "source": "2003.03728.pdf",
+      "page": 1,
+      "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+      "text": "Pseudo labels can be wrongly derived when irrelevant do- mains are top predicted, which can lead the model training with wrong supervision. To mitigate this issue, we lever- age utterances with negative system responses to lower the prediction conﬁdences of the failing domains. For example, if a system response of a domain for an input utterance is “I don’t know that one”, the domain is regarded as a negative ground-truth since it fails to handle the utterance.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "citation": 4,
+      "chunk_id": 1460,
+      "source": "2003.03728.pdf",
+      "page": 1,
+      "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+      "text": "This setting corresponds to multi-label positive and unlabeled (PU) learning, where as- signed labels are positive, unassigned labels are not neces- 1A domain is usually deﬁned as an application or functionality than can handle speciﬁc intents [1, 2, 3]. Young-Bum Kim sarily negative, and one or more labels are assigned for an instance [6, 7].2 In this paper, we utilize user log data, which contain triples of an utterance, the predicted domain, and the re- sponse, for the model training.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "citation": 5,
+      "chunk_id": 1477,
+      "source": "2003.03728.pdf",
+      "page": 2,
+      "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+      "text": "3.2. Leveraging Negative Feedback During the model training, irrelevant domains could be top predicted, and regarding them as additional target labels re- sults in wrong conﬁrmation bias [20], which causes incorrect model training. To reduce the side effect, we leverage utter- ances with negative responses in order to discourage the utter- ances’ incorrect predictions.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "citation": 6,
+      "chunk_id": 1475,
+      "source": "2003.03728.pdf",
+      "page": 2,
+      "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+      "text": "We derive the pseudo labels when the following condi- tions are met: • Maximally p domains predicted with the highest conﬁ- dences that are higher than the conﬁdence of the known ground-truth. • Domains predicted with the highest conﬁdences for r times consecutively so that consistent top predictions are used as pseudo labels. For the experiments in Section 5, we use p=2 and r=4, which show the best dev set performance.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "citation": 7,
+      "chunk_id": 1454,
+      "source": "2003.03728.pdf",
+      "page": 1,
+      "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+      "text": "PSEUDO LABELING AND NEGATIVE FEEDBACK LEARNING FOR LARGE-SCALE MULTI-LABEL DOMAIN CLASSIFICATION Joo-Kyung Kim Amazon Alexa AI ABSTRACT arXiv:2003.03728v1 [cs.CL] 8 Mar 2020 In large-scale domain classiﬁcation, an utterance can be han- dled by multiple domains with overlapped capabilities. How- ever, only a limited number of ground-truth domains are pro- vided for each training utterance in practice while knowing as many as correct target labels is helpful for improving the model performance.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "citation": 8,
+      "chunk_id": 1457,
+      "source": "2003.03728.pdf",
+      "page": 1,
+      "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+      "text": "1. INTRODUCTION Domain classiﬁcation is a task that predicts the most rele- vant domain given an input utterance [1].1 It is becoming more challenging since recent conversational interaction sys- tems such as Amazon Alexa, Google Assistant, and Microsoft Cortana support more than thousands of domains developed by external developers [4, 3, 5].",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "citation": 9,
+      "chunk_id": 1500,
+      "source": "2003.03728.pdf",
+      "page": 4,
+      "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+      "text": "In addition, recall is increased when self-distillation is used, which achieves the best F1 score (6). Each of utilizing the negative feedback ((1) →(3) and (2) →(5)) and then additional pseudo labels ((3) →(5) and (4) →(6)) show statistically signiﬁcant improvements with McNemar test for p=0.05 for the ﬁnal reranker results. Using self-distillation ((3) →(4) and (5) →(6)) shows increased F-1 score by increasing recall and decreasing pre- cision, but the improvements are not signiﬁcant.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "citation": 10,
+      "chunk_id": 1490,
+      "source": "2003.03728.pdf",
+      "page": 3,
+      "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+      "text": "We use hinge loss with margin 0.4 as the loss function. One issue of the hypothesis reranking is that a training ut- terance cannot be used if no ground-truth exist in the top k (5) predictions of the shortlister. This is problematic in the multi- label PU setting since correct domains can indeed exist in the top k list but unknown, which makes the training utterance less useful in the reranking. Our pseudo labeling method can address this issue.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "citation": 11,
+      "chunk_id": 1463,
+      "source": "2003.03728.pdf",
+      "page": 1,
+      "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+      "text": "Also, the approach is related to self- distillation, which leverages the conﬁdence scores of the non- target outputs to improve the model performance [12, 13]. While distillation methods utilize the conﬁdence scores as the soft targets, pseudo labeling regards high conﬁdent out- puts as the hard targets to further boost their conﬁdences. We use both pseudo labeling and self-distillation in our work.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "citation": 12,
+      "chunk_id": 1476,
+      "source": "2003.03728.pdf",
+      "page": 2,
+      "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+      "text": "Those derived pseudo labels are used in the model training as follows: n X Ld = − ˜yi log oi + (1 −˜yi) log (1 −oi) , (2) i=1 where ˜y denotes an n-hot vector such that the elements cor- responding to the original ground-truth and the additional pseudo labels are set to 1.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "citation": 13,
+      "chunk_id": 1478,
+      "source": "2003.03728.pdf",
+      "page": 2,
+      "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+      "text": "This setting can be considered as a multi-label variant of Positive, Unlabeled, and Biased Neg- ative Data (PUbN) learning [21]. We obtain training utterances from log data, where utter- ances with positive system responses are used as the positive train set in Equation 1 and 2 while the utterances with nega- tive responses are used as the negative train set in Equation 3.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "citation": 14,
+      "chunk_id": 1479,
+      "source": "2003.03728.pdf",
+      "page": 3,
+      "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+      "text": "For example, AnimalSounds is a (positive) ground-truth domain for “a monkey sound” because the system response to the utterance is “Here comes a monkey sound” while it is a negative ground-truth for “a dragon sound” as the response is “I don’t know what sound a dragon makes”.5 6 Previous work [22, 23] excludes such negative utterances from the training set.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "citation": 15,
+      "chunk_id": 1473,
+      "source": "2003.03728.pdf",
+      "page": 2,
+      "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+      "text": "represented as a scalar value between 0 and 1. Given an input utterance and its target label, binary cross entropy is used as the baseline loss function as follows: n X Lb = − yi log oi + (1 −yi) log (1 −oi) , (1) i=1 where o, y, and n denote the model output vector, the one- hot vector of the target label, and the number of total labels. We describe other proposed loss functions in the following subsections.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "citation": 16,
+      "chunk_id": 1507,
+      "source": "2003.03728.pdf",
+      "page": 5,
+      "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+      "text": "391397. [3] Young-Bum Kim, Dongchan Kim, Anjishnu Kumar, and Ruhi Sarikaya, “Efﬁcient Large-Scale Neural Do- main Classiﬁcation with Personalized Attention,” ACL, 2018, pp.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "citation": 17,
+      "chunk_id": 1486,
+      "source": "2003.03728.pdf",
+      "page": 3,
+      "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+      "text": "pseudo labels and self-distillation are more contributing in the later epochs following [24]. β is a hyperparameter for utiliz- ing negative ground-truths, which is set to 0.00025 showing the best dev set performance.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "citation": 18,
+      "chunk_id": 1480,
+      "source": "2003.03728.pdf",
+      "page": 3,
+      "title": "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification",
+      "text": "We ﬁnd that it is more effective to ex- plicitly demote the prediction conﬁdences of the domains re- sulted in negative responses if they are top ranked. It is for- mulated as a loss function: \u001a −log (1 −oj) ∀i̸ = j oi ≤oj Ln = 0 Otherwise, where j denotes the index corresponding to the negative ground-truth domain. We demote the conﬁdences of the negative ground-truths only when they are the highest so that the inﬂuence of using the negative ground-truths is not overwhelming.7",
+      "kb_version": "qasper-test50-20261024"
+    }
+  ]
+}

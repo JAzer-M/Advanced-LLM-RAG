@@ -1,0 +1,102 @@
+[
+  {
+    "number": 1,
+    "phase": "decompose",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n   For an open-ended \"difference between X and Y\" question, retrieve each\n   entity's purpose and core approach. Do not replace it with comparisons\n   between versions of X or versions of Y, or request unasked benchmark scores.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nFor the paper \"Building a robust sentiment lexicon with (almost) no resource\" (arXiv: 1612.05202), answer this question: Do they compare to non-lexicon methods?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-24T14:18:30.777277+00:00",
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 512,
+        "cached_tokens": 512,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 19,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0,
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 199,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 711,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 512,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 730
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.684
+  },
+  {
+    "number": 2,
+    "phase": "probe",
+    "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in the same language as the user's question. If the question explicitly asks for a particular language, use that language instead. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported question, begin with 当前证据不足 when answering in Chinese, or with \"Insufficient evidence\" when answering in English, and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n14. Prioritize explicit subquestions, correct facts and citations, and conditions/units that change the conclusion. Add definitions or steps only when needed for the task. Optional background, stylistic preferences and unasked exceptions are not completeness requirements. Failure to retrieve a paper does not establish that the paper never reported a result.\n\n15. For a comparison, synthesize separately supported facts about the requested objects, citing each side. A literal sentence comparing both papers is NOT required. Different purposes, inputs or mechanisms can be contrasted from their respective descriptions. This does not establish causality or which method performs better. Do not call the comparison unsupported merely because no head-to-head experiment is provided.\n16. Lead with the main difference the user asked about. For a broad comparison, explain what each object does and its supported core approach; do not replace this with differences between versions of each object, benchmark tables or unasked numerical results.\n\nContext:\n[1] Source: 1612.05202.pdf | Page: 1 | Section: None\nTitle: Building a robust sentiment lexicon with (almost) no resource\nAutomatically translating them from resourceful languages requires in-domain machine translation systems, which rely on large quantities of bi-texts. In this paper, we propose to replace machine translation by transferring words from the lexicon through word embeddings aligned across languages with a simple linear transform. The approach leads to no degradation, compared to machine translation, when tested on sentiment polarity classiﬁcation on tweets from four lan- guages.\n\n[2] Source: 1612.05202.pdf | Page: 1 | Section: 1. INTRODUCTION\nTitle: Building a robust sentiment lexicon with (almost) no resource\n1. INTRODUCTION Sentiment analysis is a task that aims at recognizing in text the opinion of the writer. It is often modeled as a classiﬁ- cation problem which relies on features extracted from the text in order to feed a classiﬁer.\n\n[3] Source: 1612.05202.pdf | Page: 3 | Section: 4.3. Results\nTitle: Building a robust sentiment lexicon with (almost) no resource\n62 61,72 61,7 61,8 61,56 61,53 61,53 61,6 Macro-­‐FMeasure (%) 61,4 61,2 61,2 61 60,64 60,8 60,6 60,6 60,4 60,2 60 100 500 1000 5000 10000 50000 100000 200000 Number of words in dic7onaries Fig. 1. Average macro-fmeasure over the four languages when training the linear transform with a bilingual dictionary of n most frequent words (MPQA sentiment lexicon).\n\n[4] Source: 1612.05202.pdf | Page: 3 | Section: 4.2. System\nTitle: Building a robust sentiment lexicon with (almost) no resource\n• Words n-grams • All-caps: the number of words with all characters in upper case • Hashtags: the number of hashtags • Lexicons: number of words present in each lexicon • Punctuation: the number of contiguous sequences of exclamation marks, question marks, and both exclama- tion and question marks • Last punctuation: whether the last token contains an exclamation or question mark • Emoticons: presence or absence of positive and nega- tive emoticons at any position in the tweet • Last emoticon: whether the last token is a positive or negative emoticon • Elongated words: the number of words with one char- acter repeated more than three times, for example : “loooool” We did not implement part-of-speech and cluster features as they cannot be assumed to be available in the target lan- guages.\n\n[5] Source: 1612.05202.pdf | Page: 4 | Section: 5. CONCLUSIONS\nTitle: Building a robust sentiment lexicon with (almost) no resource\n5. CONCLUSIONS This paper is focused on translating sentiment polarity lexi- cons from a resourceful language through word embeddings mapped from the source to the target language. Experiments on four languages with mappings from English show that the approach performs as well as full-ﬂedged SMT. While the ap- proach was successful for languages close to English where word-to-word translations are possible, it may not be as effec- tive for languages where this assumption does not hold.\n\n[6] Source: 1612.05202.pdf | Page: 4 | Section: 6. REFERENCES\nTitle: Building a robust sentiment lexicon with (almost) no resource\n209–216. [6] Hiroshi Kanayama and Tetsuya Nasukawa, “Fully auto- matic lexicon expansion for domain-oriented sentiment analysis,” in EMNLP, 2006. [7] Carmen Banea, Rada Mihalcea, Janyce Wiebe, and Samer Hassan, “Multilingual subjectivity analysis us- ing machine translation,” in EMNLP, 2008. [8] Tomas Mikolov, Quoc V Le, and Ilya Sutskever, “Ex- ploiting similarities among languages for machine trans- lation,” arXiv preprint arXiv:1309.4168, 2013. [9] Andrea Esuli and Fabrizio Sebastiani, “Pageranking wordnet synsets: An application to opinion mining,” in ACL, 2007, vol.\n\n[7] Source: 1612.05202.pdf | Page: 1 | Section: 1. INTRODUCTION\nTitle: Building a robust sentiment lexicon with (almost) no resource\nBenoit Favre In this paper, we propose to apply the method proposed in [8] for automatically mapping word embeddings across languages and use them to translate sentiment lexicons only given a small, general bilingual dictionary. After creating monolingual word embeddings in the source and target lan- guage, we train a linear transform on the bilingual dictionary and apply that transform to words for which we don’t have a translation.\n\n[8] Source: 1612.05202.pdf | Page: 2 | Section: 3. APPROACH\nTitle: Building a robust sentiment lexicon with (almost) no resource\nTherefore, it should be reasonable to train a linear transform to map words between the source and target languages. Note that a linear transform would conserve the translations associated to linguistic regu- larities observed in the vector spaces. The idea is to translate words in another language in the goal to generate sentiment lexicon.\n\n[9] Source: 1612.05202.pdf | Page: 3 | Section: 4.3. Results\nTitle: Building a robust sentiment lexicon with (almost) no resource\nThe No Sentiment Lexicon system does not have any lexicon feature. It obtains a macro-fmeasure of 60.65 on the four corpora. Systems denoted [22], [23], [24] are baselines that cor- respond respectively to unsupervised, supervised and semi- supervised approaches for generating the lexicon. We observe that adding sentiment lexicons improves performance. The Moses system consists in translating the different sen- timent lexicons with the Moses SMT toolkit. It is trained on the Europarl bi-texts.\n\n[10] Source: 1612.05202.pdf | Page: 1 | Section: 1. INTRODUCTION\nTitle: Building a robust sentiment lexicon with (almost) no resource\nSen- timent lexicons allow to increase the feature space with more relevant and generalizing characteristics of the input. Unfor- tunately, creating sentiment lexicons requires human exper- tise, is time consuming, and often results in limited coverage when dealing with new domains.\n\nQuestion:\nFor the paper \"Building a robust sentiment lexicon with (almost) no resource\" (arXiv: 1612.05202), answer this question: Do they compare to non-lexicon methods?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n- For a broad difference-between question with no requested aspect, use 3-5 sentences: lead with the purposes, then the supported core methods. Prefer primary-paper abstract/introductory definitions. Omit training/test hyperparameters and unasked performance caveats.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-24T14:18:38.786099+00:00",
+    "response": {
+      "answer": "Yes. The paper compares against a \"No Sentiment Lexicon\" system that has no lexicon feature and obtains a macro-fmeasure of 60.65 on the four corpora [9]. It also reports baselines corresponding respectively to unsupervised, supervised, and semi-supervised approaches for generating the lexicon [9].",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 2048,
+        "cached_tokens": 2048,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 63,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.01,
+        "prompt_cache_hit_tokens": 2048,
+        "prompt_cache_miss_tokens": 180,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2228,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 2048,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2291
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.93
+  }
+]

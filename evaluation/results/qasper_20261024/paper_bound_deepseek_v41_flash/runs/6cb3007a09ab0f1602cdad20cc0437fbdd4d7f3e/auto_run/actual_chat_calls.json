@@ -1,0 +1,102 @@
+[
+  {
+    "number": 1,
+    "phase": "decompose",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n   For an open-ended \"difference between X and Y\" question, retrieve each\n   entity's purpose and core approach. Do not replace it with comparisons\n   between versions of X or versions of Y, or request unasked benchmark scores.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nFor the paper \"Offensive Language Identification in Greek\" (arXiv: 2003.07459), answer this question: What models do they experiment on?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-24T14:53:45.178148+00:00",
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 512,
+        "cached_tokens": 512,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 19,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0,
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 191,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 703,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 512,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 722
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.65
+  },
+  {
+    "number": 2,
+    "phase": "probe",
+    "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in the same language as the user's question. If the question explicitly asks for a particular language, use that language instead. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported question, begin with 当前证据不足 when answering in Chinese, or with \"Insufficient evidence\" when answering in English, and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n14. Prioritize explicit subquestions, correct facts and citations, and conditions/units that change the conclusion. Add definitions or steps only when needed for the task. Optional background, stylistic preferences and unasked exceptions are not completeness requirements. Failure to retrieve a paper does not establish that the paper never reported a result.\n\n15. For a comparison, synthesize separately supported facts about the requested objects, citing each side. A literal sentence comparing both papers is NOT required. Different purposes, inputs or mechanisms can be contrasted from their respective descriptions. This does not establish causality or which method performs better. Do not call the comparison unsupported merely because no head-to-head experiment is provided.\n16. Lead with the main difference the user asked about. For a broad comparison, explain what each object does and its supported core approach; do not replace this with differences between versions of each object, benchmark tables or unasked numerical results.\n\nContext:\nOriginal passages:\n[1] Source: 2003.07459.pdf | Page: 1 | Section: None\nTitle: Offensive Language Identification in Greek\nThis is mostly due to the availability of language resources for English. To address this shortcoming, this paper presents the ﬁrst Greek annotated dataset for offensive language identiﬁcation: the Offensive Greek Tweet Dataset (OGTD). OGTD is a manually annotated dataset containing 4,779 posts from Twitter annotated as offensive and not offensive. Along with a detailed description of the dataset, we evaluate several computational models trained and tested on this data.\n\n[2] Source: 2003.07459.pdf | Page: 5 | Section: 4.2. Results\nTitle: Offensive Language Identification in Greek\nThe complete results are presented in table 5 below. The experiment with linguistic features was the combina- tion of dependency relation tags with TF/IDF unigrams. This experimented yielded the same F1-score of 80% as the other Linear SVM classiﬁers, performing almost iden- tically with the previous model trained with POS tags, only bested in precision for the Offensive class.\n\n[3] Source: 2003.07459.pdf | Page: 5 | Section: 4.2. Results\nTitle: Offensive Language Identification in Greek\nIn the next experiment, POS tags were used in conjunction with TF/IDF unigram features. Surprisingly, the addition of POS tags in the Linear SVM yields the same F1-score as the ﬁrst model trained on TF/IDF unigram features, yield- ing lower precision scores for both classes, while the re- call score for the Offensive class improved marginally. The Naïve Bayes models show a marginal decrease in their per- formance.\n\n[4] Source: 2003.07459.pdf | Page: 1 | Section: None\nTitle: Offensive Language Identification in Greek\nOffensive Language Identiﬁcation in Greek Zeses Pitenis1, Marcos Zampieri2, Tharindu Ranasinghe1 1University of Wolverhampton - Wolverhampton, UK 2Rochester Institute of Technology - Rochester, NY, USA z.pitenis@wlv.ac.uk, marcos.zampieri@rit.edu, tharindu.ranasinghe@wlv.ac.uk As offensive language has become a rising issue for online communities and social media platforms, researchers have been investigating ways of coping with abusive content and developing systems to detect its different types: cyberbullying, hate speech, aggression, etc. With a few notable exceptions, most research on this topic so far has dealt with English.\n\n[5] Source: 2003.07459.pdf | Page: 5 | Section: 4.3. Discussion\nTitle: Offensive Language Identification in Greek\n4.3. Discussion The data annotated in OGTD proved to be facilitating in offensive language detection with a signiﬁcant success for Greek, taking into consideration its size and label distri- bution, with the best model (LSTM and GRU with Atten- tion) achieving a F1-macro of 0.89. Among the classi- cal machine learning approaches, the linear SVM model achieved the best results, 0.80, whereas the the Stochastic Gradient Descent (SGD) learning classiﬁer yielded the best recall score for the Offensive class, at 0.61. In terms of features used, TF/IDF matrices of word unigrams proved to work work well with multiple classical ML classiﬁers.\n\n[6] Source: 2003.07459.pdf | Page: 3 | Section: 4. Methods\nTitle: Offensive Language Identification in Greek\nA sentiment lexicon was considered, but one suitable for this project is as of yet unavailable for Greek. For the ﬁrst six deep learning models we used Greek word embeddings trained on a large Greek web corpus (Outsios 3https://spacy.io/ et al., 2018). Each Greek word can be represented with a 300 dimensional vector using the trained model. The vec- tor then can be used to feed in to the deep learning models which will be described in section 4.1.2..\n\n[7] Source: 2003.07459.pdf | Page: 5 | Section: 4.3. Discussion\nTitle: Offensive Language Identification in Greek\nOf the linguistic features, POS tags improved the perfor- mance of the Linear SVM marginally in terms of recall for the Offensive class, other classiﬁers deteriorated in their performance.It is not yet clear whether this is due to the ac- curacy of the Greek model available for spaCy in producing such tags or the tags themselves as features and is a subject that can be explored with further improvements of spaCy or other NLP tools developed for Greek.\n\n[8] Source: 2003.07459.pdf | Page: 3 | Section: 4. Methods\nTitle: Offensive Language Identification in Greek\nGiven the consistent use of linguistic features for training machine learning models and results from previous work for offensive language detection, part- of-speech (POS) and dependency relation tags were consid- ered as additional features. Using the spaCy3 pipeline for Greek, POS-tags and dependency relations were extracted for every token in a tweet, which were then transformed to count matrices.\n\n[9] Source: 2003.07459.pdf | Page: 3 | Section: 4. Methods\nTitle: Offensive Language Identification in Greek\nFor the last deep learning architecture we wanted to use a BERT (Devlin et al., 2019) model trained on Greek. However there was no BERT model available for Greek language. The model that came closest our requirement was multilingual BERT model 4 trained on 108 languages (Devlin et al., 2019) in- cluding Greek. Since training BERT is a very computation- aly expensive task we used the available multilingual BERT cased model for the sixth deep learning architecture.\n\n[10] Source: 2003.07459.pdf | Page: 1 | Section: None\nTitle: Offensive Language Identification in Greek\narXiv:2003.07459v2 [cs.CL] 18 Mar 2020 Keywords: offensive language, hate speech, Greek\n\nEvidence guidance:\n- Rule-based subject attribution: OGTD; passage: “OGTD is a manually annotated dataset containing 4,779 posts from Twitter annotated as offensive and not offensive.” [1]\n- Rule-based subject attribution: OGTD; passage: “Along with a detailed description of the dataset, we evaluate several computational models trained and tested on this data.” [1]\n- Rule-based subject attribution: BERT; passage: “Since training BERT is a very computation- aly expensive task we used the available multilingual BERT cased model for the sixth deep learning architecture.” [9]\n- Rule-based subject attribution: OGTD; passage: “CL] 18 Mar 2020 Keywords: offensive language, hate speech, Greek” [10][1]\n\nQuestion:\nFor the paper \"Offensive Language Identification in Greek\" (arXiv: 2003.07459), answer this question: What models do they experiment on?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n- For a broad difference-between question with no requested aspect, use 3-5 sentences: lead with the purposes, then the supported core methods. Prefer primary-paper abstract/introductory definitions. Omit training/test hyperparameters and unasked performance caveats.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-24T14:53:52.840987+00:00",
+    "response": {
+      "answer": "The paper experiments on several computational models trained and tested on the OGTD data [1]. These include classical machine learning models—Linear SVM, Naïve Bayes, and Stochastic Gradient Descent (SGD) [2][3][5]—as well as deep learning models, specifically LSTM and GRU with Attention, which achieved the best F1-macro of 0.89 [5]. For the deep learning models, Greek word embeddings trained on a large Greek web corpus were used, with each word represented as a 300-dimensional vector [6]. For the sixth deep learning architecture, they used the available multilingual BERT cased model, since no Greek-specific BERT model was available [9].",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 2048,
+        "cached_tokens": 2048,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 144,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.01,
+        "prompt_cache_hit_tokens": 2048,
+        "prompt_cache_miss_tokens": 217,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2265,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 2048,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2409
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.337
+  }
+]

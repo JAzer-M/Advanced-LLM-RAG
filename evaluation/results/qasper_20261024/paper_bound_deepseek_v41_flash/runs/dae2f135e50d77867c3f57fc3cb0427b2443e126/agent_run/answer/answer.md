@@ -1,0 +1,1 @@
+During pretraining, they directly use the 15-language pre-trained XLM to initialize the encoder and decoder [1]. They then train XNLG models in a two-language (English/Chinese) and a three-language (English/French/Chinese) setting [14].

@@ -1,0 +1,1 @@
+No. The paper reports that a combination of auxiliary penalty terms used to regularize fine-tuning produces the most robust model, preserving source-domain performance while achieving optimal performance in the target domain [1], and that the best performance was observed with a combination of these auxiliary penalty terms [2].

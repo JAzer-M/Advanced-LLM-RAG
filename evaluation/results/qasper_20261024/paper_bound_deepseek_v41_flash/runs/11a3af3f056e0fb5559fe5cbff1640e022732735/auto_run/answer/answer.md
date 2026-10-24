@@ -1,0 +1,1 @@
+Yes. The paper compares against a "No Sentiment Lexicon" system that has no lexicon feature and obtains a macro-fmeasure of 60.65 on the four corpora [9]. It also reports baselines corresponding respectively to unsupervised, supervised, and semi-supervised approaches for generating the lexicon [9].

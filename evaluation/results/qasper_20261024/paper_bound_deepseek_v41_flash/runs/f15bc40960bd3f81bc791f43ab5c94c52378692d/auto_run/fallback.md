@@ -1,0 +1,2 @@
+Extra evidence checking did not finish. The answer below uses only the initial evidence and keeps its existing gaps:
+The evidence is insufficient to identify a named dataset used for the tool. The context states that the authors "collected and annotated a novel dataset" associating news articles with a stance towards a specified topic [1], and that they trained a stance detection model on "our dataset" [6], but the dataset is not given a name or further identification in the provided passages.

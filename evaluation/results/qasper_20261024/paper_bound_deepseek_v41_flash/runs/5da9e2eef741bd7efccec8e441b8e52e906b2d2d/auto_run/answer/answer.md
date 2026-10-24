@@ -1,0 +1,1 @@
+Yes. The paper compares its stance detection model with other systems: the best model achieves a test accuracy of 61.7 and a macro-averaged test F1 score of 56.9, and it significantly outperforms baselines such as a bag-of-n-grams (accuracy: 46.3; F1: 44.2) [13]. These scores are also described as comparable to those achieved in Augenstein et al. (2016) [17].

@@ -1,0 +1,885 @@
+{
+  "query": "For the paper \"Building a robust sentiment lexicon with (almost) no resource\" (arXiv: 1612.05202), answer this question: Do they compare against manually-created lexicons?",
+  "status": "retrieval_completed",
+  "decomposition": {
+    "needs_decomposition": false,
+    "sub_queries": [],
+    "status": "not_needed"
+  },
+  "knowledge_base": {
+    "version": "qasper-test50-20261024",
+    "chunk_count": 1612,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/manifest.json",
+    "manifest_sha256": "9974fa3a87051eda09cd42cd585d1501ed257548d187d0321ed8f82f71790f5e",
+    "files": {
+      "faiss.index": "f4c8de7951c30bb0deee445e8d9983d05f7360576c426b58f6f8046d093ef5c7",
+      "chunks.json": "0061d789f2d24144b80e14598fd7509c48803fd6c87d04a78c6960c34d268a4f"
+    }
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 120,
+    "global_top_ids": [
+      67,
+      83,
+      109,
+      74,
+      105,
+      70,
+      97,
+      72,
+      114,
+      87
+    ],
+    "protected_ids": [],
+    "sub_query_evidence": [],
+    "retrieval_anchor_ids": [
+      101
+    ],
+    "evidence_completion": {
+      "requested_sources": [
+        "1612.05202.pdf"
+      ],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        67,
+        83,
+        109,
+        74,
+        105,
+        70,
+        97,
+        72,
+        114,
+        101
+      ],
+      "retained_local_ids": [],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        67,
+        83,
+        109,
+        74,
+        105,
+        70,
+        97,
+        72,
+        114,
+        101
+      ],
+      "elapsed_seconds": 0.000448
+    }
+  },
+  "selected_ids": [
+    67,
+    83,
+    109,
+    74,
+    105,
+    70,
+    97,
+    72,
+    114,
+    101
+  ],
+  "context": "[1] Source: 1612.05202.pdf | Page: 1 | Section: None\nTitle: Building a robust sentiment lexicon with (almost) no resource\nAutomatically translating them from resourceful languages requires in-domain machine translation systems, which rely on large quantities of bi-texts. In this paper, we propose to replace machine translation by transferring words from the lexicon through word embeddings aligned across languages with a simple linear transform. The approach leads to no degradation, compared to machine translation, when tested on sentiment polarity classiﬁcation on tweets from four lan- guages.\n\n[2] Source: 1612.05202.pdf | Page: 2 | Section: 3. APPROACH\nTitle: Building a robust sentiment lexicon with (almost) no resource\nTherefore, it should be reasonable to train a linear transform to map words between the source and target languages. Note that a linear transform would conserve the translations associated to linguistic regu- larities observed in the vector spaces. The idea is to translate words in another language in the goal to generate sentiment lexicon.\n\n[3] Source: 1612.05202.pdf | Page: 4 | Section: 5. CONCLUSIONS\nTitle: Building a robust sentiment lexicon with (almost) no resource\n5. CONCLUSIONS This paper is focused on translating sentiment polarity lexi- cons from a resourceful language through word embeddings mapped from the source to the target language. Experiments on four languages with mappings from English show that the approach performs as well as full-ﬂedged SMT. While the ap- proach was successful for languages close to English where word-to-word translations are possible, it may not be as effec- tive for languages where this assumption does not hold.\n\n[4] Source: 1612.05202.pdf | Page: 1 | Section: 1. INTRODUCTION\nTitle: Building a robust sentiment lexicon with (almost) no resource\nWe perform experiments on 3-class polarity classiﬁca- tion in tweets, and report results on four different languages: French, Italian, Spanish and German. Existing English senti- ment lexicons are translated to the target languages through the proposed approach, given gs trained on the respective Wikipedia of each language. Then, a SVM-based classiﬁer is fed with lexicon features, comparing machine translation with embedding transfer.\n\n[5] Source: 1612.05202.pdf | Page: 4 | Section: 4.3. Results\nTitle: Building a robust sentiment lexicon with (almost) no resource\nThis approach obtains results comparable to the SMT approach. The main advantage of this approach is to be able to general- ize on words unknown to the SMT system. Moses and BWE can be combined by creating a lexicon from the union of the lexicons obtained by those systems. This combination yields even better results than translation or mapping alone.\n\n[6] Source: 1612.05202.pdf | Page: 1 | Section: 1. INTRODUCTION\nTitle: Building a robust sentiment lexicon with (almost) no resource\nSen- timent lexicons allow to increase the feature space with more relevant and generalizing characteristics of the input. Unfor- tunately, creating sentiment lexicons requires human exper- tise, is time consuming, and often results in limited coverage when dealing with new domains.\n\n[7] Source: 1612.05202.pdf | Page: 3 | Section: 4.2. System\nTitle: Building a robust sentiment lexicon with (almost) no resource\n• Words n-grams • All-caps: the number of words with all characters in upper case • Hashtags: the number of hashtags • Lexicons: number of words present in each lexicon • Punctuation: the number of contiguous sequences of exclamation marks, question marks, and both exclama- tion and question marks • Last punctuation: whether the last token contains an exclamation or question mark • Emoticons: presence or absence of positive and nega- tive emoticons at any position in the tweet • Last emoticon: whether the last token is a positive or negative emoticon • Elongated words: the number of words with one char- acter repeated more than three times, for example : “loooool” We did not implement part-of-speech and cluster features as they cannot be assumed to be available in the target lan- guages.\n\n[8] Source: 1612.05202.pdf | Page: 1 | Section: 1. INTRODUCTION\nTitle: Building a robust sentiment lexicon with (almost) no resource\nBut automatically trans- lating sentiment lexicons leads to two problems: (1) out-of- vocabulary words, such as mis-spellings, morphological vari- ants and slang, cannot be translated, and (2) machine trans- lation performance strongly depends on available training re- sources such as bi-texts.\n\n[9] Source: 1612.05202.pdf | Page: 4 | Section: 6. REFERENCES\nTitle: Building a robust sentiment lexicon with (almost) no resource\n209–216. [6] Hiroshi Kanayama and Tetsuya Nasukawa, “Fully auto- matic lexicon expansion for domain-oriented sentiment analysis,” in EMNLP, 2006. [7] Carmen Banea, Rada Mihalcea, Janyce Wiebe, and Samer Hassan, “Multilingual subjectivity analysis us- ing machine translation,” in EMNLP, 2008. [8] Tomas Mikolov, Quoc V Le, and Ilya Sutskever, “Ex- ploiting similarities among languages for machine trans- lation,” arXiv preprint arXiv:1309.4168, 2013. [9] Andrea Esuli and Fabrizio Sebastiani, “Pageranking wordnet synsets: An application to opinion mining,” in ACL, 2007, vol.\n\n[10] Source: 1612.05202.pdf | Page: 3 | Section: 4.3. Results\nTitle: Building a robust sentiment lexicon with (almost) no resource\nThe No Sentiment Lexicon system does not have any lexicon feature. It obtains a macro-fmeasure of 60.65 on the four corpora. Systems denoted [22], [23], [24] are baselines that cor- respond respectively to unsupervised, supervised and semi- supervised approaches for generating the lexicon. We observe that adding sentiment lexicons improves performance. The Moses system consists in translating the different sen- timent lexicons with the Moses SMT toolkit. It is trained on the Europarl bi-texts.\n\n[11] Source: 1612.05202.pdf | Page: 1 | Section: 1. INTRODUCTION\nTitle: Building a robust sentiment lexicon with (almost) no resource\nBenoit Favre In this paper, we propose to apply the method proposed in [8] for automatically mapping word embeddings across languages and use them to translate sentiment lexicons only given a small, general bilingual dictionary. After creating monolingual word embeddings in the source and target lan- guage, we train a linear transform on the bilingual dictionary and apply that transform to words for which we don’t have a translation.",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": "Automatically translating them from resourceful languages requires in-domain machine translation systems, which rely on large quantities of bi-texts.",
+        "evidence_start": 0,
+        "evidence_end": 149,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            67,
+            66
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 67,
+        "page": 1,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In this paper, we propose to replace machine translation by transferring words from the lexicon through word embeddings aligned across languages with a simple linear transform.",
+        "evidence_start": 149,
+        "evidence_end": 326,
+        "subject": "Building a robust sentiment lexicon with (almost) no resource",
+        "identity": {
+          "subject": "Building a robust sentiment lexicon with (almost) no resource",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            67
+          ],
+          "identity_quote": "Automatically translating them from resourceful languages requires in-domain machine translation systems, which rely on large quantities of bi-texts. In this paper, we propose to replace machine translation by transferring words from the lexicon through word embeddings aligned across languages with a simple linear transform. The approach leads to no degradation, compared to machine translation, when tested on sentiment polarity classiﬁcation on tweets from four lan- guages.",
+          "identity_chunk_id": 67
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 67,
+        "page": 1,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The approach leads to no degradation, compared to machine translation, when tested on sentiment polarity classiﬁcation on tweets from four lan- guages.",
+        "evidence_start": 326,
+        "evidence_end": 478,
+        "subject": "Building a robust sentiment lexicon with (almost) no resource",
+        "identity": {
+          "subject": "Building a robust sentiment lexicon with (almost) no resource",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            67
+          ],
+          "identity_quote": "Automatically translating them from resourceful languages requires in-domain machine translation systems, which rely on large quantities of bi-texts. In this paper, we propose to replace machine translation by transferring words from the lexicon through word embeddings aligned across languages with a simple linear transform.",
+          "identity_chunk_id": 67
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 67,
+        "page": 1,
+        "citations": [
+          1
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Therefore, it should be reasonable to train a linear transform to map words between the source and target languages.",
+        "evidence_start": 0,
+        "evidence_end": 116,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            83,
+            82,
+            81,
+            80,
+            79
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 83,
+        "page": 2,
+        "citations": [
+          2
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Note that a linear transform would conserve the translations associated to linguistic regu- larities observed in the vector spaces.",
+        "evidence_start": 116,
+        "evidence_end": 248,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            83,
+            82,
+            81,
+            80,
+            79
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 83,
+        "page": 2,
+        "citations": [
+          2
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The idea is to translate words in another language in the goal to generate sentiment lexicon.",
+        "evidence_start": 248,
+        "evidence_end": 342,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            83,
+            82,
+            81,
+            80,
+            79
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 83,
+        "page": 2,
+        "citations": [
+          2
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " CONCLUSIONS This paper is focused on translating sentiment polarity lexi- cons from a resourceful language through word embeddings mapped from the source to the target language.",
+        "evidence_start": 2,
+        "evidence_end": 180,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            109
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 109,
+        "page": 4,
+        "citations": [
+          3
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Experiments on four languages with mappings from English show that the approach performs as well as full-ﬂedged SMT.",
+        "evidence_start": 180,
+        "evidence_end": 297,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            109
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 109,
+        "page": 4,
+        "citations": [
+          3
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " While the ap- proach was successful for languages close to English where word-to-word translations are possible, it may not be as effec- tive for languages where this assumption does not hold.",
+        "evidence_start": 297,
+        "evidence_end": 490,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            109
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 109,
+        "page": 4,
+        "citations": [
+          3
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "We perform experiments on 3-class polarity classiﬁca- tion in tweets, and report results on four different languages: French, Italian, Spanish and German.",
+        "evidence_start": 0,
+        "evidence_end": 154,
+        "subject": "Building a robust sentiment lexicon with (almost) no resource",
+        "identity": {
+          "subject": "Building a robust sentiment lexicon with (almost) no resource",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            74,
+            73
+          ],
+          "identity_quote": "Benoit Favre In this paper, we propose to apply the method proposed in [8] for automatically mapping word embeddings across languages and use them to translate sentiment lexicons only given a small, general bilingual dictionary. After creating monolingual word embeddings in the source and target lan- guage, we train a linear transform on the bilingual dictionary and apply that transform to words for which we don’t have a translation.",
+          "identity_chunk_id": 73
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 74,
+        "page": 1,
+        "citations": [
+          4,
+          11
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Existing English senti- ment lexicons are translated to the target languages through the proposed approach, given gs trained on the respective Wikipedia of each language.",
+        "evidence_start": 154,
+        "evidence_end": 325,
+        "subject": "Building a robust sentiment lexicon with (almost) no resource",
+        "identity": {
+          "subject": "Building a robust sentiment lexicon with (almost) no resource",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            74,
+            73
+          ],
+          "identity_quote": "Benoit Favre In this paper, we propose to apply the method proposed in [8] for automatically mapping word embeddings across languages and use them to translate sentiment lexicons only given a small, general bilingual dictionary. After creating monolingual word embeddings in the source and target lan- guage, we train a linear transform on the bilingual dictionary and apply that transform to words for which we don’t have a translation.",
+          "identity_chunk_id": 73
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 74,
+        "page": 1,
+        "citations": [
+          4,
+          11
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Then, a SVM-based classiﬁer is fed with lexicon features, comparing machine translation with embedding transfer.",
+        "evidence_start": 325,
+        "evidence_end": 438,
+        "subject": "Building a robust sentiment lexicon with (almost) no resource",
+        "identity": {
+          "subject": "Building a robust sentiment lexicon with (almost) no resource",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            74,
+            73
+          ],
+          "identity_quote": "Benoit Favre In this paper, we propose to apply the method proposed in [8] for automatically mapping word embeddings across languages and use them to translate sentiment lexicons only given a small, general bilingual dictionary. After creating monolingual word embeddings in the source and target lan- guage, we train a linear transform on the bilingual dictionary and apply that transform to words for which we don’t have a translation.",
+          "identity_chunk_id": 73
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 74,
+        "page": 1,
+        "citations": [
+          4,
+          11
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "This approach obtains results comparable to the SMT approach.",
+        "evidence_start": 0,
+        "evidence_end": 61,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            105,
+            104
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 105,
+        "page": 4,
+        "citations": [
+          5
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The main advantage of this approach is to be able to general- ize on words unknown to the SMT system.",
+        "evidence_start": 61,
+        "evidence_end": 163,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            105,
+            104
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 105,
+        "page": 4,
+        "citations": [
+          5
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Moses and BWE can be combined by creating a lexicon from the union of the lexicons obtained by those systems.",
+        "evidence_start": 163,
+        "evidence_end": 273,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            105,
+            104
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 105,
+        "page": 4,
+        "citations": [
+          5
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " This combination yields even better results than translation or mapping alone.",
+        "evidence_start": 273,
+        "evidence_end": 352,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            105
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 105,
+        "page": 4,
+        "citations": [
+          5
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Sen- timent lexicons allow to increase the feature space with more relevant and generalizing characteristics of the input.",
+        "evidence_start": 0,
+        "evidence_end": 122,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            70,
+            69,
+            68
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 70,
+        "page": 1,
+        "citations": [
+          6
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Unfor- tunately, creating sentiment lexicons requires human exper- tise, is time consuming, and often results in limited coverage when dealing with new domains.",
+        "evidence_start": 122,
+        "evidence_end": 283,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            70,
+            69,
+            68
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 70,
+        "page": 1,
+        "citations": [
+          6
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "• Words n-grams • All-caps: the number of words with all characters in upper case • Hashtags: the number of hashtags • Lexicons: number of words present in each lexicon • Punctuation: the number of contiguous sequences of exclamation marks, question marks, and both exclama- tion and question marks • Last punctuation: whether the last token contains an exclamation or question mark • Emoticons: presence or absence of positive and nega- tive emoticons at any position in the tweet • Last emoticon: whether the last token is a positive or negative emoticon • Elongated words: the number of words with one char- acter repeated more than three times, for example : “loooool” We did not implement part-of-speech and cluster features as they cannot be assumed to be available in the target lan- guages.",
+        "evidence_start": 0,
+        "evidence_end": 798,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            97,
+            96,
+            95
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 97,
+        "page": 3,
+        "citations": [
+          7
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "But automatically trans- lating sentiment lexicons leads to two problems: (1) out-of- vocabulary words, such as mis-spellings, morphological vari- ants and slang, cannot be translated, and (2) machine trans- lation performance strongly depends on available training re- sources such as bi-texts.",
+        "evidence_start": 0,
+        "evidence_end": 295,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            72,
+            71,
+            70,
+            69,
+            68
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 72,
+        "page": 1,
+        "citations": [
+          8
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " [6] Hiroshi Kanayama and Tetsuya Nasukawa, “Fully auto- matic lexicon expansion for domain-oriented sentiment analysis,” in EMNLP, 2006.",
+        "evidence_start": 8,
+        "evidence_end": 145,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            114,
+            113
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 114,
+        "page": 4,
+        "citations": [
+          9
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " [7] Carmen Banea, Rada Mihalcea, Janyce Wiebe, and Samer Hassan, “Multilingual subjectivity analysis us- ing machine translation,” in EMNLP, 2008.",
+        "evidence_start": 145,
+        "evidence_end": 292,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            114,
+            113
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 114,
+        "page": 4,
+        "citations": [
+          9
+        ],
+        "record_id": "E22"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " [9] Andrea Esuli and Fabrizio Sebastiani, “Pageranking wordnet synsets: An application to opinion mining,” in ACL, 2007, vol.",
+        "evidence_start": 451,
+        "evidence_end": 577,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            114,
+            113
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 114,
+        "page": 4,
+        "citations": [
+          9
+        ],
+        "record_id": "E23"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "The No Sentiment Lexicon system does not have any lexicon feature.",
+        "evidence_start": 0,
+        "evidence_end": 66,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            101,
+            100
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 101,
+        "page": 3,
+        "citations": [
+          10
+        ],
+        "record_id": "E24"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Systems denoted [22], [23], [24] are baselines that cor- respond respectively to unsupervised, supervised and semi- supervised approaches for generating the lexicon.",
+        "evidence_start": 124,
+        "evidence_end": 290,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            101,
+            100
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 101,
+        "page": 3,
+        "citations": [
+          10
+        ],
+        "record_id": "E25"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We observe that adding sentiment lexicons improves performance.",
+        "evidence_start": 290,
+        "evidence_end": 354,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            101,
+            100
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 101,
+        "page": 3,
+        "citations": [
+          10
+        ],
+        "record_id": "E26"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The Moses system consists in translating the different sen- timent lexicons with the Moses SMT toolkit.",
+        "evidence_start": 354,
+        "evidence_end": 458,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            101,
+            100
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 101,
+        "page": 3,
+        "citations": [
+          10
+        ],
+        "record_id": "E27"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " It is trained on the Europarl bi-texts.",
+        "evidence_start": 458,
+        "evidence_end": 498,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            101,
+            100
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1612.05202.pdf",
+        "chunk_id": 101,
+        "page": 3,
+        "citations": [
+          10
+        ],
+        "record_id": "E28"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 67,
+        "text": "Automatically translating them from resourceful languages requires in-domain machine translation systems, which rely on large quantities of bi-texts. In this paper, we propose to replace machine translation by transferring words from the lexicon through word embeddings aligned across languages with a simple linear transform. The approach leads to no degradation, compared to machine translation, when tested on sentiment polarity classiﬁcation on tweets from four lan- guages.",
+        "source": "1612.05202.pdf",
+        "page": 1,
+        "title": "Building a robust sentiment lexicon with (almost) no resource",
+        "section": null
+      },
+      {
+        "chunk_id": 83,
+        "text": "Therefore, it should be reasonable to train a linear transform to map words between the source and target languages. Note that a linear transform would conserve the translations associated to linguistic regu- larities observed in the vector spaces. The idea is to translate words in another language in the goal to generate sentiment lexicon.",
+        "source": "1612.05202.pdf",
+        "page": 2,
+        "title": "Building a robust sentiment lexicon with (almost) no resource",
+        "section": "3. APPROACH"
+      },
+      {
+        "chunk_id": 109,
+        "text": "5. CONCLUSIONS This paper is focused on translating sentiment polarity lexi- cons from a resourceful language through word embeddings mapped from the source to the target language. Experiments on four languages with mappings from English show that the approach performs as well as full-ﬂedged SMT. While the ap- proach was successful for languages close to English where word-to-word translations are possible, it may not be as effec- tive for languages where this assumption does not hold.",
+        "source": "1612.05202.pdf",
+        "page": 4,
+        "title": "Building a robust sentiment lexicon with (almost) no resource",
+        "section": "5. CONCLUSIONS"
+      },
+      {
+        "chunk_id": 74,
+        "text": "We perform experiments on 3-class polarity classiﬁca- tion in tweets, and report results on four different languages: French, Italian, Spanish and German. Existing English senti- ment lexicons are translated to the target languages through the proposed approach, given gs trained on the respective Wikipedia of each language. Then, a SVM-based classiﬁer is fed with lexicon features, comparing machine translation with embedding transfer.",
+        "source": "1612.05202.pdf",
+        "page": 1,
+        "title": "Building a robust sentiment lexicon with (almost) no resource",
+        "section": "1. INTRODUCTION"
+      },
+      {
+        "chunk_id": 105,
+        "text": "This approach obtains results comparable to the SMT approach. The main advantage of this approach is to be able to general- ize on words unknown to the SMT system. Moses and BWE can be combined by creating a lexicon from the union of the lexicons obtained by those systems. This combination yields even better results than translation or mapping alone.",
+        "source": "1612.05202.pdf",
+        "page": 4,
+        "title": "Building a robust sentiment lexicon with (almost) no resource",
+        "section": "4.3. Results"
+      },
+      {
+        "chunk_id": 70,
+        "text": "Sen- timent lexicons allow to increase the feature space with more relevant and generalizing characteristics of the input. Unfor- tunately, creating sentiment lexicons requires human exper- tise, is time consuming, and often results in limited coverage when dealing with new domains.",
+        "source": "1612.05202.pdf",
+        "page": 1,
+        "title": "Building a robust sentiment lexicon with (almost) no resource",
+        "section": "1. INTRODUCTION"
+      },
+      {
+        "chunk_id": 97,
+        "text": "• Words n-grams • All-caps: the number of words with all characters in upper case • Hashtags: the number of hashtags • Lexicons: number of words present in each lexicon • Punctuation: the number of contiguous sequences of exclamation marks, question marks, and both exclama- tion and question marks • Last punctuation: whether the last token contains an exclamation or question mark • Emoticons: presence or absence of positive and nega- tive emoticons at any position in the tweet • Last emoticon: whether the last token is a positive or negative emoticon • Elongated words: the number of words with one char- acter repeated more than three times, for example : “loooool” We did not implement part-of-speech and cluster features as they cannot be assumed to be available in the target lan- guages.",
+        "source": "1612.05202.pdf",
+        "page": 3,
+        "title": "Building a robust sentiment lexicon with (almost) no resource",
+        "section": "4.2. System"
+      },
+      {
+        "chunk_id": 72,
+        "text": "But automatically trans- lating sentiment lexicons leads to two problems: (1) out-of- vocabulary words, such as mis-spellings, morphological vari- ants and slang, cannot be translated, and (2) machine trans- lation performance strongly depends on available training re- sources such as bi-texts.",
+        "source": "1612.05202.pdf",
+        "page": 1,
+        "title": "Building a robust sentiment lexicon with (almost) no resource",
+        "section": "1. INTRODUCTION"
+      },
+      {
+        "chunk_id": 114,
+        "text": "209–216. [6] Hiroshi Kanayama and Tetsuya Nasukawa, “Fully auto- matic lexicon expansion for domain-oriented sentiment analysis,” in EMNLP, 2006. [7] Carmen Banea, Rada Mihalcea, Janyce Wiebe, and Samer Hassan, “Multilingual subjectivity analysis us- ing machine translation,” in EMNLP, 2008. [8] Tomas Mikolov, Quoc V Le, and Ilya Sutskever, “Ex- ploiting similarities among languages for machine trans- lation,” arXiv preprint arXiv:1309.4168, 2013. [9] Andrea Esuli and Fabrizio Sebastiani, “Pageranking wordnet synsets: An application to opinion mining,” in ACL, 2007, vol.",
+        "source": "1612.05202.pdf",
+        "page": 4,
+        "title": "Building a robust sentiment lexicon with (almost) no resource",
+        "section": "6. REFERENCES"
+      },
+      {
+        "chunk_id": 101,
+        "text": "The No Sentiment Lexicon system does not have any lexicon feature. It obtains a macro-fmeasure of 60.65 on the four corpora. Systems denoted [22], [23], [24] are baselines that cor- respond respectively to unsupervised, supervised and semi- supervised approaches for generating the lexicon. We observe that adding sentiment lexicons improves performance. The Moses system consists in translating the different sen- timent lexicons with the Moses SMT toolkit. It is trained on the Europarl bi-texts.",
+        "source": "1612.05202.pdf",
+        "page": 3,
+        "title": "Building a robust sentiment lexicon with (almost) no resource",
+        "section": "4.3. Results"
+      },
+      {
+        "chunk_id": 73,
+        "text": "Benoit Favre In this paper, we propose to apply the method proposed in [8] for automatically mapping word embeddings across languages and use them to translate sentiment lexicons only given a small, general bilingual dictionary. After creating monolingual word embeddings in the source and target lan- guage, we train a linear transform on the bilingual dictionary and apply that transform to words for which we don’t have a translation.",
+        "source": "1612.05202.pdf",
+        "page": 1,
+        "title": "Building a robust sentiment lexicon with (almost) no resource",
+        "section": "1. INTRODUCTION"
+      }
+    ],
+    "selected_ids": [
+      67,
+      83,
+      109,
+      74,
+      105,
+      70,
+      97,
+      72,
+      114,
+      101
+    ]
+  }
+}

@@ -1,0 +1,1 @@
+No. The paper's released dataset includes 273,816 web tables from Wikipedia [4][6], and to enlarge the search space they additionally extract 252,703 web tables from Wikipedia as searchable tables [5]. The passages do not establish that every table comes from a single website; they only identify Wikipedia as a source of many of the tables [5][6].

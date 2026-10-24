@@ -1,0 +1,3 @@
+Insufficient evidence to reliably answer these requirements:
+- Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification: For the paper "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification" (arXiv: 2003.03728), answer this question: How does their approach work for domains with few overlapping utterances?; 缺少对“重叠话语很少的领域”这一具体情形的处理方式，即当可用于共享/重叠能力的话语稀少时，该方法如何运作。
+The retrieval budget for this run is used up, and the points above are still unverified.

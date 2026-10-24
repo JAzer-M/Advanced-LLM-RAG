@@ -1,0 +1,1 @@
+Yes. The paper reports results comparing the proposed system with different baselines in Table 1 [12], and it explicitly includes a "No Sentiment Lexicon" system that has no lexicon feature and obtains a macro-f-measure of 60.65 on the four corpora [9].

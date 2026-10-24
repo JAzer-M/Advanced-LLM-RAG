@@ -1,0 +1,130 @@
+LLM: proxy API | Model: cn:deepseek-v4-flash
+Knowledge Base: qasper-test50-20261024
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|##########| 199/199 [00:00<00:00, 18508.25it/s]
+Total Vectors: 1612
+Vector Dimensions: 384
+Total Chunks: 1612
+
+Original Query: For the paper "Forget Me Not: Reducing Catastrophic Forgetting for Domain Adaptation in Reading Comprehension" (arXiv: 1911.00202), answer this question: What is the training objective in the method introduced in this paper?
+Decomposition: {'needs_decomposition': False, 'sub_queries': [], 'status': 'not_needed'}
+Additional Retrieval Lists: 0
+HyDE Enabled: False
+
+Candidate Pool Before Deduplication: 120
+Candidate Pool After Deduplication: 120
+Loading weights:   0%|          | 0/201 [00:00<?, ?it/s]Loading weights: 100%|##########| 201/201 [00:00<00:00, 22932.79it/s]
+Selected Chunk IDs: [1339, 1357, 1346, 1337, 1370, 1365, 1345, 1342, 1356, 1349]
+Sub-Query Evidence Selection: {'candidate_count': 120, 'global_top_ids': [1339, 1357, 1346, 1337, 1370, 1365, 1345, 1342, 1356, 1349], 'protected_ids': [], 'sub_query_evidence': [], 'retrieval_anchor_ids': [1337], 'evidence_completion': {'requested_sources': ['1911.00202.pdf'], 'tasks': [], 'coverage': 'heuristic_only', 'rounds': 0, 'supplement_queries': 0, 'max_rounds': 2, 'completed_passes': 0, 'round_history': [], 'selected_ids_before': [1339, 1357, 1346, 1337, 1370, 1365, 1345, 1342, 1356, 1349], 'retained_local_ids': [], 'stop_reason': 'not_explicit_cross_paper', 'selected_ids_after': [1339, 1357, 1346, 1337, 1370, 1365, 1345, 1342, 1356, 1349], 'elapsed_seconds': 0.002023}}
+
+=== Retrieved Top-10 ===
+
+Rank: 1
+Source: 1911.00202.pdf
+Page: 1
+Section: None
+Text: In this paper, we explore methods that reduce catastrophic forgetting during ﬁne-tuning without assuming access to data from the source domain. We introduce new auxiliary penalty terms and observe the best performance when a combination of auxiliary penalty terms is used to regularise the ﬁne-tuning process for adapting comprehension models. To test our methods, we develop and release 6 narrow domain data sets that can potentially be used as reading comprehension benchmarks.
+
+Rank: 2
+Source: 1911.00202.pdf
+Page: 2
+Section: None
+Text: Using multi-task learning to tackle catastrophic forgetting is effective and generates robust models. The drawback, however, is that when training for each new domain/task, data from the previous domains/tasks has to be available. Several studies present methods to reduce forgetting with limited or no access to previous data [9], [10], [13], [21], [22]. Inspired by synaptic consolidation, Kirkpatrick et al. [9] propose to selectively penalise parameter change during ﬁne- tuning.
+
+Rank: 3
+Source: 1911.00202.pdf
+Page: 1
+Section: None
+Text: However, in real-world applications, data became inaccessible for a number of reasons, such as an expired data sharing agreement, physical damage to data storage, accidental deletion of data, and the introduction of new data privacy laws. Here we focus on exploring methods to reduce catastrophic forgetting assuming no access to the source domain data. In this paper, we explore strategies to reduce forgetting for comprehension systems during domain adaptation.
+
+Rank: 4
+Source: 1911.00202.pdf
+Page: 1
+Section: None
+Text: Forget Me Not: Reducing Catastrophic Forgetting for Domain Adaptation in Reading Comprehension 1st Ying Xu 2nd Xu Zhong IBM Research Australia IBM Research Australia Melbourne, Australia Melbourne, Australia ying.jo.xu@au1.ibm.com peter.zhong@au1.ibm.com Abstract—The creation of large-scale open domain reading arXiv:1911.00202v3 [cs.CL] 20 Nov 2020 comprehension data sets in recent years has enabled the develop- ment of end-to-end neural comprehension models with promising results.
+
+Rank: 5
+Source: 1911.00202.pdf
+Page: 3
+Section: None
+Text: QANet is a Transformer-based [27] comprehension model, where the encoder consists of stacked convolution and self-attention layers. The objective of the model is to predict the position of the starting and ending indices of the answer words in the context. decaNLP is a recurrent network-based comprehen- sion model trained on ten NLP tasks simultaneously, all casted as a question-answer problem.
+
+Rank: 6
+Source: 1911.00202.pdf
+Page: 2
+Section: None
+Text: We create multiple (context, question, answer) training examples if a QA pair has multiple contexts,3 and ﬁlter them to keep only extractive examples.4 In addition to the MSMARCO data sets, we also experiment with a real biomedical comprehension data set: BIOASQ [26]. 2When collecting the passages, we include only those being selected as useful for answering a query (i.e. is_selected = 1). We tokenise the passages with Stanford CoreNLP [24] and use MALLET [25] for topic modelling.
+
+Rank: 7
+Source: 1911.00202.pdf
+Page: 1
+Section: None
+Text: When full access is available, the most straightforward way to reduce catastrophic forgetting is to perform multitask learning, where the model is learned to perform well for both source and target domains [11], [12]. For partial access assumption, the gradient episodic memory (GEM) [13] was proposed to store a piece of data from the source domain, which is used to regularise the ﬁne tuning process.
+
+Rank: 8
+Source: 1911.00202.pdf
+Page: 1
+Section: None
+Text: A better approach is to transfer knowledge via ﬁne-tuning, i.e. by ﬁrst pre-training the model using data from a large source domain and continously training it with examples from the small target domain. It is an effective strategy, although a ﬁne-tuned model often performs poorly when it is re-applied to the source domain, a phenomenon known as catastrophic forgetting [7]–[10].
+
+Rank: 9
+Source: 1911.00202.pdf
+Page: 2
+Section: None
+Text: This issue of catastrophic forgetting is less of a problem when data from multiple domains or tasks are present during training. For example in [15], their model decaNLP is trained on 10 tasks simultaneously — all cast as a QA problem — and forgetting is minimal. For multi-domain adaptation, Daum´e III, H. [11] and Kim et al. [12] propose using a K+1 model to capture domain-general pattern that is shared by K domains, resulting in a more robust model.
+
+Rank: 10
+Source: 1911.00202.pdf
+Page: 1
+Section: None
+Text: We also show that the methodology can be used for transferring to entirely different natural language processing tasks. With that said, we focus on comprehension here because it is a practical problem in real world applications, where the target domain often has a small number of QA pairs and over-ﬁtting occurs easily when we ﬁne-tune based on a small development set. In this scenario, it is as important to develop a robust model as achieving optimal development performance.
+
+=== Evidence: parsed facts and source quotations ===
+- Source quotation (1911.00202.pdf, p.1): “In this paper, we explore methods that reduce catastrophic forgetting during ﬁne-tuning without assuming access to data from the source domain.” [1]
+- Source quotation (1911.00202.pdf, p.1): “We introduce new auxiliary penalty terms and observe the best performance when a combination of auxiliary penalty terms is used to regularise the ﬁne-tuning process for adapting comprehension models.” [1]
+- Source quotation (1911.00202.pdf, p.1): “To test our methods, we develop and release 6 narrow domain data sets that can potentially be used as reading comprehension benchmarks.” [1]
+- Source quotation (1911.00202.pdf, p.2): “Using multi-task learning to tackle catastrophic forgetting is effective and generates robust models.” [2]
+- Source quotation (1911.00202.pdf, p.2): “The drawback, however, is that when training for each new domain/task, data from the previous domains/tasks has to be available.” [2]
+- Source quotation (1911.00202.pdf, p.2): “Several studies present methods to reduce forgetting with limited or no access to previous data [9], [10], [13], [21], [22].” [2]
+- Source quotation (1911.00202.pdf, p.2): “Inspired by synaptic consolidation, Kirkpatrick et al.” [2]
+- Source quotation (1911.00202.pdf, p.2): “[9] propose to selectively penalise parameter change during ﬁne- tuning.” [2]
+- Source quotation (1911.00202.pdf, p.1): “However, in real-world applications, data became inaccessible for a number of reasons, such as an expired data sharing agreement, physical damage to data storage, accidental deletion of data, and the introduction of new data privacy laws.” [3]
+- Source quotation (1911.00202.pdf, p.1): “Here we focus on exploring methods to reduce catastrophic forgetting assuming no access to the source domain data.” [3]
+- Source quotation (1911.00202.pdf, p.1): “In this paper, we explore strategies to reduce forgetting for comprehension systems during domain adaptation.” [3]
+- Source quotation (1911.00202.pdf, p.1): “CL] 20 Nov 2020 comprehension data sets in recent years has enabled the develop- ment of end-to-end neural comprehension models with promising results.” [4]
+- Source quotation (1911.00202.pdf, p.3): “QANet is a Transformer-based [27] comprehension model, where the encoder consists of stacked convolution and self-attention layers.” [5]
+- Source quotation (1911.00202.pdf, p.3): “The objective of the model is to predict the position of the starting and ending indices of the answer words in the context.” [5]
+- Source quotation (1911.00202.pdf, p.3): “decaNLP is a recurrent network-based comprehen- sion model trained on ten NLP tasks simultaneously, all casted as a question-answer problem.” [5]
+- Source quotation (1911.00202.pdf, p.2): “4 In addition to the MSMARCO data sets, we also experiment with a real biomedical comprehension data set: BIOASQ [26].” [6]
+- Source quotation (1911.00202.pdf, p.2): “We tokenise the passages with Stanford CoreNLP [24] and use MALLET [25] for topic modelling.” [6]
+- Source quotation (1911.00202.pdf, p.1): “When full access is available, the most straightforward way to reduce catastrophic forgetting is to perform multitask learning, where the model is learned to perform well for both source and target domains [11], [12].” [7]
+- Source quotation (1911.00202.pdf, p.1): “For partial access assumption, the gradient episodic memory (GEM) [13] was proposed to store a piece of data from the source domain, which is used to regularise the ﬁne tuning process.” [7]
+- Source quotation (1911.00202.pdf, p.1): “by ﬁrst pre-training the model using data from a large source domain and continously training it with examples from the small target domain.” [8][11]
+- Source quotation (1911.00202.pdf, p.1): “It is an effective strategy, although a ﬁne-tuned model often performs poorly when it is re-applied to the source domain, a phenomenon known as catastrophic forgetting [7]–[10].” [8][11]
+- Source quotation (1911.00202.pdf, p.2): “This issue of catastrophic forgetting is less of a problem when data from multiple domains or tasks are present during training.” [9]
+- Source quotation (1911.00202.pdf, p.2): “For example in [15], their model decaNLP is trained on 10 tasks simultaneously — all cast as a QA problem — and forgetting is minimal.” [9]
+- Source quotation (1911.00202.pdf, p.2): “For multi-domain adaptation, Daum´e III, H.” [9]
+- Source quotation (1911.00202.pdf, p.2): “[12] propose using a K+1 model to capture domain-general pattern that is shared by K domains, resulting in a more robust model.” [9]
+- Source quotation (1911.00202.pdf, p.1): “We also show that the methodology can be used for transferring to entirely different natural language processing tasks.” [10]
+- Source quotation (1911.00202.pdf, p.1): “With that said, we focus on comprehension here because it is a practical problem in real world applications, where the target domain often has a small number of QA pairs and over-ﬁtting occurs easily when we ﬁne-tune based on a small development set.” [10]
+- Source quotation (1911.00202.pdf, p.1): “In this scenario, it is as important to develop a robust model as achieving optimal development performance.” [10]
+
+=== Citation Sources ===
+[1] 1911.00202.pdf, p.1 (chunk 1339)
+[2] 1911.00202.pdf, p.2 (chunk 1357)
+[3] 1911.00202.pdf, p.1 (chunk 1346)
+[4] 1911.00202.pdf, p.1 (chunk 1337)
+[5] 1911.00202.pdf, p.3 (chunk 1370)
+[6] 1911.00202.pdf, p.2 (chunk 1365)
+[7] 1911.00202.pdf, p.1 (chunk 1345)
+[8] 1911.00202.pdf, p.1 (chunk 1342)
+[9] 1911.00202.pdf, p.2 (chunk 1356)
+[10] 1911.00202.pdf, p.1 (chunk 1349)
+[11] 1911.00202.pdf, p.1 (chunk 1340)
+
+=== Citation Structure Check (semantic support not verified) ===
+Status: not_needed
+Initial: {'has_citations': True, 'invalid_numbers': [], 'malformed_markers': []}
+Final structure passed: True
+
+=== Generated Answer (model draft; check against evidence) ===
+The provided context does not state the specific training objective formula of the method introduced in the paper. What it does describe is that the authors "introduce new auxiliary penalty terms" and observe the best performance "when a combination of auxiliary penalty terms is used to regularise the fine-tuning process for adapting comprehension models" [1], and that they "focus on exploring methods to reduce catastrophic forgetting assuming no access to the source domain data" [3]. However, the exact training objective (e.g., the loss function form and how the penalty terms are combined) is not given in these passages, so the specific objective cannot be supported from the available evidence.

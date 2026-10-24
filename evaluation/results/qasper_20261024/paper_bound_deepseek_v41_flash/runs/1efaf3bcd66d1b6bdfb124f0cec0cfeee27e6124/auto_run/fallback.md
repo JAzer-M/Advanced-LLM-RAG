@@ -1,0 +1,2 @@
+Extra evidence checking did not finish. The answer below uses only the initial evidence and keeps its existing gaps:
+Insufficient evidence. The provided passages do not include any comparison against popular topic models such as LDA; they only describe the Anchored CorEx method itself [4][7] and its experiments on topics and classification tasks [6][8]. No head-to-head results with LDA appear in the context.

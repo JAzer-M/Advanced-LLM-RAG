@@ -1,0 +1,968 @@
+{
+  "query": "For the paper \"Content-Based Table Retrieval for Web Queries\" (arXiv: 1706.02427), answer this question: How are the tables extracted from the HTML?",
+  "status": "retrieval_completed",
+  "decomposition": {
+    "needs_decomposition": false,
+    "sub_queries": [],
+    "status": "not_needed"
+  },
+  "knowledge_base": {
+    "version": "qasper-test50-20261024",
+    "chunk_count": 1612,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/manifest.json",
+    "manifest_sha256": "9974fa3a87051eda09cd42cd585d1501ed257548d187d0321ed8f82f71790f5e",
+    "files": {
+      "faiss.index": "f4c8de7951c30bb0deee445e8d9983d05f7360576c426b58f6f8046d093ef5c7",
+      "chunks.json": "0061d789f2d24144b80e14598fd7509c48803fd6c87d04a78c6960c34d268a4f"
+    }
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 120,
+    "global_top_ids": [
+      309,
+      195,
+      211,
+      254,
+      284,
+      249,
+      196,
+      291,
+      215,
+      252
+    ],
+    "protected_ids": [],
+    "sub_query_evidence": [],
+    "retrieval_anchor_ids": [
+      291
+    ],
+    "evidence_completion": {
+      "requested_sources": [
+        "1706.02427.pdf"
+      ],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        309,
+        195,
+        211,
+        254,
+        284,
+        249,
+        196,
+        291,
+        215,
+        252
+      ],
+      "retained_local_ids": [],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        309,
+        195,
+        211,
+        254,
+        284,
+        249,
+        196,
+        291,
+        215,
+        252
+      ],
+      "elapsed_seconds": 0.000407
+    }
+  },
+  "selected_ids": [
+    309,
+    195,
+    211,
+    254,
+    284,
+    249,
+    196,
+    291,
+    215,
+    252
+  ],
+  "context": "Original passages:\n[1] Source: 1706.02427.pdf | Page: 10 | Section: 7 Conclusion\nTitle: Content-Based Table Retrieval for Web Queries\nIn Advances in Neural Information Process- ing Systems (NIPS). pages 2431–2439. Petros Venetis, Alon Halevy, Jayant Madhavan, Mar- ius Pas¸ca, Warren Shen, Fei Wu, Gengxin Miao, and Chung Wu. 2011. Recovering semantics of tables on the web. Proceedings of the VLDB Endowment 4(9):528–538. Oriol Vinyals, Samy Bengio, and Manjunath Kudlur. 2015. Order matters: Sequence to sequence for sets. arXiv preprint arXiv:1511.06391 .\n\n[2] Source: 1706.02427.pdf | Page: 1 | Section: None\nTitle: Content-Based Table Retrieval for Web Queries\nContent-Based Table Retrieval for Web Queries Zhao Yan†∗, Duyu Tang‡ , Nan Duan‡ , Junwei Bao+∗, Yuanhua Lv§ , Ming Zhou‡ , Zhoujun Li† †Beihang University +Harbin Institute of Technology §Microsoft AI and Research, Sunnyvale CA, USA †{yanzhao, lizj}@buaa.edu.cn ‡§{dutang, nanduan, yuanhual, mingzhou}@microsoft.com Abstract Understanding the connections between unstructured text and semi-structured table arXiv:1706.02427v1 [cs.CL] 8 Jun 2017 is an important yet neglected problem in natural language processing.\n\n[3] Source: 1706.02427.pdf | Page: 2 | Section: 2 Task Deﬁnition\nTitle: Content-Based Table Retrieval for Web Queries\nA table t is a set of data elements arranged by vertical columns and horizontal rows. Formally, we deﬁne a table as a triple t = {headers, cells, caption} that con- sists of three aspects. A table could have multiple headers, each of which indicates the property of a column and could be used to identify a column. A table could have multiple cells, each of which is a unit where a row and a column intersects. A table could have a caption, which is typically an explanatory text about the table.\n\n[4] Source: 1706.02427.pdf | Page: 5 | Section: 5.1 Dataset and Setting\nTitle: Content-Based Table Retrieval for Web Queries\nWe also conduct a synthetic experiment for ta- ble retrieval on WikiTableQuestions (Pasupat and Liang, 2015), which is a widely used dataset for table-based question answering. It contains 2,108 HTML tables extracted from Wikipedia.\n\n[5] Source: 1706.02427.pdf | Page: 8 | Section: 6 Related Work\nTitle: Content-Based Table Retrieval for Web Queries\nVenetis et al. (2011) go one step further and use labels and relationships extracted from the web. Pimplikar and Sarawagi (2012) fo- cus on the queries that describe table columns, and retrieve tables based on column mapping. There also exists table-related studies such as search- ing related tables from a table (Das Sarma et al., 2012), assembling a table from list in web page (Gupta and Sarawagi, 2009) and extracting tables using tabular structure from web page (Gatter- bauer et al., 2007).\n\n[6] Source: 1706.02427.pdf | Page: 5 | Section: 5.1 Dataset and Setting\nTitle: Content-Based Table Retrieval for Web Queries\nWe select the tables occurred in the top ranked web page, and ask annotators to label whether a table is relevant to a query or not. In this way, we get 21,113 query-table pairs. In the real scenario of table retrieval, a system is required to ﬁnd a table from a huge collection of tables.\n\n[7] Source: 1706.02427.pdf | Page: 1 | Section: None\nTitle: Content-Based Table Retrieval for Web Queries\nIn this work, we focus on content-based table retrieval. Given a query, the task is to ﬁnd the most relevant table from a collection of tables. Further progress towards improving this area requires powerful models of semantic matching and richer training and evalua- tion resources. To remedy this, we present a ranking based approach, and implement both carefully designed features and neu- ral network architectures to measure the relevance between a query and the con- tent of a table.\n\n[8] Source: 1706.02427.pdf | Page: 8 | Section: 7 Conclusion\nTitle: Content-Based Table Retrieval for Web Queries\n7 Conclusion In this paper, we give an empirical study of content-based table retrieval for web queries. We implement a feature-based approach and a neural network based approach, and release a new dataset consisting of web queries and web tables.\n\n[9] Source: 1706.02427.pdf | Page: 2 | Section: 3 Approach Overview\nTitle: Content-Based Table Retrieval for Web Queries\nTo build a system with high ef- ﬁciency, we separate the task into two cascaded modules, including candidate table retrieval and table ranking. Candidate table retrieval aims to ﬁnd a small set of tables, such as 50 or 100. These candidate tables will be further used in the table ranking step, which uses more sophisticated fea- tures to measure the relevance between a query and a table. In the following subsections, we will give the work-ﬂow of candidate table retrieval and table ranking.\n\n[10] Source: 1706.02427.pdf | Page: 5 | Section: 5.1 Dataset and Setting\nTitle: Content-Based Table Retrieval for Web Queries\nData statistics are given in Table 1. WQT dataset WTQ dataset # of tables 273,816 2,108 Avg # of columns 4.55 6.38 Max # of columns 52 25 Min # of columns 1 3 Avg # of rows 9.15 28.50 Max # of rows 1,517 754 Min # of rows 2 5 # of questions 21,113 22,033 4.61 11.25 Avg # of questions Table 1: Statistics of WebQueryTable (WQT) dataset and WikiTableQuestions (WTQ) dataset. We sampled 200 examples to analyze the dis- tribution of the query types in our dataset.\n\nEvidence guidance:\n- Rule-based subject attribution: WikiTableQuestions; passage: “We also conduct a synthetic experiment for ta- ble retrieval on WikiTableQuestions (Pasupat and Liang, 2015), which is a widely used dataset for table-based question answering.” [4]\n- Rule-based subject attribution: WikiTableQuestions; passage: “It contains 2,108 HTML tables extracted from Wikipedia.” [4]",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": "In Advances in Neural Information Process- ing Systems (NIPS).",
+        "evidence_start": 0,
+        "evidence_end": 62,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            309,
+            308,
+            307,
+            306
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 309,
+        "page": 10,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Petros Venetis, Alon Halevy, Jayant Madhavan, Mar- ius Pas¸ca, Warren Shen, Fei Wu, Gengxin Miao, and Chung Wu.",
+        "evidence_start": 79,
+        "evidence_end": 191,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            309,
+            308,
+            307,
+            306
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 309,
+        "page": 10,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Recovering semantics of tables on the web.",
+        "evidence_start": 197,
+        "evidence_end": 240,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            309,
+            308,
+            307,
+            306
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 309,
+        "page": 10,
+        "citations": [
+          1
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Proceedings of the VLDB Endowment 4(9):528–538.",
+        "evidence_start": 240,
+        "evidence_end": 288,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            309,
+            308,
+            307,
+            306
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 309,
+        "page": 10,
+        "citations": [
+          1
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Oriol Vinyals, Samy Bengio, and Manjunath Kudlur.",
+        "evidence_start": 288,
+        "evidence_end": 338,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            309
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 309,
+        "page": 10,
+        "citations": [
+          1
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Order matters: Sequence to sequence for sets.",
+        "evidence_start": 344,
+        "evidence_end": 390,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            309
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 309,
+        "page": 10,
+        "citations": [
+          1
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "CL] 8 Jun 2017 is an important yet neglected problem in natural language processing.",
+        "evidence_start": 431,
+        "evidence_end": 515,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            195
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 195,
+        "page": 1,
+        "citations": [
+          2
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "A table t is a set of data elements arranged by vertical columns and horizontal rows.",
+        "evidence_start": 0,
+        "evidence_end": 85,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            211,
+            210,
+            209
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 211,
+        "page": 2,
+        "citations": [
+          3
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Formally, we deﬁne a table as a triple t = {headers, cells, caption} that con- sists of three aspects.",
+        "evidence_start": 85,
+        "evidence_end": 188,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            211,
+            210,
+            209
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 211,
+        "page": 2,
+        "citations": [
+          3
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " A table could have multiple headers, each of which indicates the property of a column and could be used to identify a column.",
+        "evidence_start": 188,
+        "evidence_end": 314,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            211,
+            210,
+            209
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 211,
+        "page": 2,
+        "citations": [
+          3
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " A table could have multiple cells, each of which is a unit where a row and a column intersects.",
+        "evidence_start": 314,
+        "evidence_end": 410,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            211,
+            210,
+            209
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 211,
+        "page": 2,
+        "citations": [
+          3
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " A table could have a caption, which is typically an explanatory text about the table.",
+        "evidence_start": 410,
+        "evidence_end": 496,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            211,
+            210,
+            209
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 211,
+        "page": 2,
+        "citations": [
+          3
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "We also conduct a synthetic experiment for ta- ble retrieval on WikiTableQuestions (Pasupat and Liang, 2015), which is a widely used dataset for table-based question answering.",
+        "evidence_start": 0,
+        "evidence_end": 176,
+        "subject": "WikiTableQuestions",
+        "identity": {
+          "subject": "WikiTableQuestions",
+          "basis": "explicit_named_clause",
+          "context_chunk_ids": [
+            254
+          ],
+          "identity_quote": "We also conduct a synthetic experiment for ta- ble retrieval on WikiTableQuestions (Pasupat and Liang, 2015), which is a widely used dataset for table-based question answering. It contains 2,108 HTML tables extracted from Wikipedia.",
+          "identity_chunk_id": 254
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 254,
+        "page": 5,
+        "citations": [
+          4
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " It contains 2,108 HTML tables extracted from Wikipedia.",
+        "evidence_start": 176,
+        "evidence_end": 232,
+        "subject": "WikiTableQuestions",
+        "identity": {
+          "subject": "WikiTableQuestions",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            254
+          ],
+          "identity_quote": "We also conduct a synthetic experiment for ta- ble retrieval on WikiTableQuestions (Pasupat and Liang, 2015), which is a widely used dataset for table-based question answering.",
+          "identity_chunk_id": 254
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 254,
+        "page": 5,
+        "citations": [
+          4
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " (2011) go one step further and use labels and relationships extracted from the web.",
+        "evidence_start": 14,
+        "evidence_end": 98,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            284,
+            283
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 284,
+        "page": 8,
+        "citations": [
+          5
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Pimplikar and Sarawagi (2012) fo- cus on the queries that describe table columns, and retrieve tables based on column mapping.",
+        "evidence_start": 98,
+        "evidence_end": 225,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            284,
+            283
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 284,
+        "page": 8,
+        "citations": [
+          5
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "We select the tables occurred in the top ranked web page, and ask annotators to label whether a table is relevant to a query or not.",
+        "evidence_start": 0,
+        "evidence_end": 132,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            249,
+            248
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 249,
+        "page": 5,
+        "citations": [
+          6
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In this way, we get 21,113 query-table pairs.",
+        "evidence_start": 132,
+        "evidence_end": 178,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            249,
+            248
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 249,
+        "page": 5,
+        "citations": [
+          6
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In the real scenario of table retrieval, a system is required to ﬁnd a table from a huge collection of tables.",
+        "evidence_start": 178,
+        "evidence_end": 289,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            249,
+            248
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 249,
+        "page": 5,
+        "citations": [
+          6
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "In this work, we focus on content-based table retrieval.",
+        "evidence_start": 0,
+        "evidence_end": 56,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            196,
+            195
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 196,
+        "page": 1,
+        "citations": [
+          7
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Given a query, the task is to ﬁnd the most relevant table from a collection of tables.",
+        "evidence_start": 56,
+        "evidence_end": 143,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            196,
+            195
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 196,
+        "page": 1,
+        "citations": [
+          7
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Further progress towards improving this area requires powerful models of semantic matching and richer training and evalua- tion resources.",
+        "evidence_start": 143,
+        "evidence_end": 282,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            196,
+            195
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 196,
+        "page": 1,
+        "citations": [
+          7
+        ],
+        "record_id": "E22"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " To remedy this, we present a ranking based approach, and implement both carefully designed features and neu- ral network architectures to measure the relevance between a query and the con- tent of a table.",
+        "evidence_start": 282,
+        "evidence_end": 488,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            196,
+            195
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 196,
+        "page": 1,
+        "citations": [
+          7
+        ],
+        "record_id": "E23"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "7 Conclusion In this paper, we give an empirical study of content-based table retrieval for web queries.",
+        "evidence_start": 0,
+        "evidence_end": 104,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            291
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 291,
+        "page": 8,
+        "citations": [
+          8
+        ],
+        "record_id": "E24"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We implement a feature-based approach and a neural network based approach, and release a new dataset consisting of web queries and web tables.",
+        "evidence_start": 104,
+        "evidence_end": 247,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            291
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 291,
+        "page": 8,
+        "citations": [
+          8
+        ],
+        "record_id": "E25"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "To build a system with high ef- ﬁciency, we separate the task into two cascaded modules, including candidate table retrieval and table ranking.",
+        "evidence_start": 0,
+        "evidence_end": 143,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            215,
+            214
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 215,
+        "page": 2,
+        "citations": [
+          9
+        ],
+        "record_id": "E26"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Candidate table retrieval aims to ﬁnd a small set of tables, such as 50 or 100.",
+        "evidence_start": 143,
+        "evidence_end": 223,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            215,
+            214
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 215,
+        "page": 2,
+        "citations": [
+          9
+        ],
+        "record_id": "E27"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " These candidate tables will be further used in the table ranking step, which uses more sophisticated fea- tures to measure the relevance between a query and a table.",
+        "evidence_start": 223,
+        "evidence_end": 389,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            215,
+            214
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 215,
+        "page": 2,
+        "citations": [
+          9
+        ],
+        "record_id": "E28"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In the following subsections, we will give the work-ﬂow of candidate table retrieval and table ranking.",
+        "evidence_start": 389,
+        "evidence_end": 493,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            215,
+            214
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 215,
+        "page": 2,
+        "citations": [
+          9
+        ],
+        "record_id": "E29"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Data statistics are given in Table 1.",
+        "evidence_start": 0,
+        "evidence_end": 37,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            252,
+            251,
+            250,
+            249,
+            248
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 252,
+        "page": 5,
+        "citations": [
+          10
+        ],
+        "record_id": "E30"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "25 Avg # of questions Table 1: Statistics of WebQueryTable (WQT) dataset and WikiTableQuestions (WTQ) dataset.",
+        "evidence_start": 263,
+        "evidence_end": 373,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            252
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 252,
+        "page": 5,
+        "citations": [
+          10
+        ],
+        "record_id": "E31"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We sampled 200 examples to analyze the dis- tribution of the query types in our dataset.",
+        "evidence_start": 373,
+        "evidence_end": 462,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            252
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1706.02427.pdf",
+        "chunk_id": 252,
+        "page": 5,
+        "citations": [
+          10
+        ],
+        "record_id": "E32"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 309,
+        "text": "In Advances in Neural Information Process- ing Systems (NIPS). pages 2431–2439. Petros Venetis, Alon Halevy, Jayant Madhavan, Mar- ius Pas¸ca, Warren Shen, Fei Wu, Gengxin Miao, and Chung Wu. 2011. Recovering semantics of tables on the web. Proceedings of the VLDB Endowment 4(9):528–538. Oriol Vinyals, Samy Bengio, and Manjunath Kudlur. 2015. Order matters: Sequence to sequence for sets. arXiv preprint arXiv:1511.06391 .",
+        "source": "1706.02427.pdf",
+        "page": 10,
+        "title": "Content-Based Table Retrieval for Web Queries",
+        "section": "7 Conclusion"
+      },
+      {
+        "chunk_id": 195,
+        "text": "Content-Based Table Retrieval for Web Queries Zhao Yan†∗, Duyu Tang‡ , Nan Duan‡ , Junwei Bao+∗, Yuanhua Lv§ , Ming Zhou‡ , Zhoujun Li† †Beihang University +Harbin Institute of Technology §Microsoft AI and Research, Sunnyvale CA, USA †{yanzhao, lizj}@buaa.edu.cn ‡§{dutang, nanduan, yuanhual, mingzhou}@microsoft.com Abstract Understanding the connections between unstructured text and semi-structured table arXiv:1706.02427v1 [cs.CL] 8 Jun 2017 is an important yet neglected problem in natural language processing.",
+        "source": "1706.02427.pdf",
+        "page": 1,
+        "title": "Content-Based Table Retrieval for Web Queries",
+        "section": null
+      },
+      {
+        "chunk_id": 211,
+        "text": "A table t is a set of data elements arranged by vertical columns and horizontal rows. Formally, we deﬁne a table as a triple t = {headers, cells, caption} that con- sists of three aspects. A table could have multiple headers, each of which indicates the property of a column and could be used to identify a column. A table could have multiple cells, each of which is a unit where a row and a column intersects. A table could have a caption, which is typically an explanatory text about the table.",
+        "source": "1706.02427.pdf",
+        "page": 2,
+        "title": "Content-Based Table Retrieval for Web Queries",
+        "section": "2 Task Deﬁnition"
+      },
+      {
+        "chunk_id": 254,
+        "text": "We also conduct a synthetic experiment for ta- ble retrieval on WikiTableQuestions (Pasupat and Liang, 2015), which is a widely used dataset for table-based question answering. It contains 2,108 HTML tables extracted from Wikipedia.",
+        "source": "1706.02427.pdf",
+        "page": 5,
+        "title": "Content-Based Table Retrieval for Web Queries",
+        "section": "5.1 Dataset and Setting"
+      },
+      {
+        "chunk_id": 284,
+        "text": "Venetis et al. (2011) go one step further and use labels and relationships extracted from the web. Pimplikar and Sarawagi (2012) fo- cus on the queries that describe table columns, and retrieve tables based on column mapping. There also exists table-related studies such as search- ing related tables from a table (Das Sarma et al., 2012), assembling a table from list in web page (Gupta and Sarawagi, 2009) and extracting tables using tabular structure from web page (Gatter- bauer et al., 2007).",
+        "source": "1706.02427.pdf",
+        "page": 8,
+        "title": "Content-Based Table Retrieval for Web Queries",
+        "section": "6 Related Work"
+      },
+      {
+        "chunk_id": 249,
+        "text": "We select the tables occurred in the top ranked web page, and ask annotators to label whether a table is relevant to a query or not. In this way, we get 21,113 query-table pairs. In the real scenario of table retrieval, a system is required to ﬁnd a table from a huge collection of tables.",
+        "source": "1706.02427.pdf",
+        "page": 5,
+        "title": "Content-Based Table Retrieval for Web Queries",
+        "section": "5.1 Dataset and Setting"
+      },
+      {
+        "chunk_id": 196,
+        "text": "In this work, we focus on content-based table retrieval. Given a query, the task is to ﬁnd the most relevant table from a collection of tables. Further progress towards improving this area requires powerful models of semantic matching and richer training and evalua- tion resources. To remedy this, we present a ranking based approach, and implement both carefully designed features and neu- ral network architectures to measure the relevance between a query and the con- tent of a table.",
+        "source": "1706.02427.pdf",
+        "page": 1,
+        "title": "Content-Based Table Retrieval for Web Queries",
+        "section": null
+      },
+      {
+        "chunk_id": 291,
+        "text": "7 Conclusion In this paper, we give an empirical study of content-based table retrieval for web queries. We implement a feature-based approach and a neural network based approach, and release a new dataset consisting of web queries and web tables.",
+        "source": "1706.02427.pdf",
+        "page": 8,
+        "title": "Content-Based Table Retrieval for Web Queries",
+        "section": "7 Conclusion"
+      },
+      {
+        "chunk_id": 215,
+        "text": "To build a system with high ef- ﬁciency, we separate the task into two cascaded modules, including candidate table retrieval and table ranking. Candidate table retrieval aims to ﬁnd a small set of tables, such as 50 or 100. These candidate tables will be further used in the table ranking step, which uses more sophisticated fea- tures to measure the relevance between a query and a table. In the following subsections, we will give the work-ﬂow of candidate table retrieval and table ranking.",
+        "source": "1706.02427.pdf",
+        "page": 2,
+        "title": "Content-Based Table Retrieval for Web Queries",
+        "section": "3 Approach Overview"
+      },
+      {
+        "chunk_id": 252,
+        "text": "Data statistics are given in Table 1. WQT dataset WTQ dataset # of tables 273,816 2,108 Avg # of columns 4.55 6.38 Max # of columns 52 25 Min # of columns 1 3 Avg # of rows 9.15 28.50 Max # of rows 1,517 754 Min # of rows 2 5 # of questions 21,113 22,033 4.61 11.25 Avg # of questions Table 1: Statistics of WebQueryTable (WQT) dataset and WikiTableQuestions (WTQ) dataset. We sampled 200 examples to analyze the dis- tribution of the query types in our dataset.",
+        "source": "1706.02427.pdf",
+        "page": 5,
+        "title": "Content-Based Table Retrieval for Web Queries",
+        "section": "5.1 Dataset and Setting"
+      }
+    ],
+    "selected_ids": [
+      309,
+      195,
+      211,
+      254,
+      284,
+      249,
+      196,
+      291,
+      215,
+      252
+    ]
+  }
+}

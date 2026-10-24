@@ -1,0 +1,125 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "For the paper \"Content-Based Table Retrieval for Web Queries\" (arXiv: 1706.02427), answer this question: Does their method rely on the column headings of the table?",
+  "kb_version": "qasper-test50-20261024",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": false,
+    "drafts": [
+      "Yes. The method has a dedicated mechanism for matching headers: it develops different mechanisms to match a query against each aspect of a table, including headers, cells, and caption [8]; it represents each header as an embedding vector and treats the set of header embeddings as external memory, assigning a probability to each header embedding given the query vector [13]; and it then obtains a query-specific header vector through weighted average [14]. Thus the method relies on the column headings of the table."
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "Yes. The method has a dedicated mechanism for matching headers: it develops different mechanisms to match a query against each aspect of a table, including headers, cells, and caption [8]; it represents each header as an embedding vector and treats the set of header embeddings as external memory, assigning a probability to each header embedding given the query vector [13]; and it then obtains a query-specific header vector through weighted average [14]. Thus the method relies on the column headings of the table.",
+              "reason": "问题询问该方法是否依赖表的列标题，答案明确回答“Yes”，并引用原文说明方法为 headers 建立了专门匹配机制：将每个 header 表示为 embedding、作为外部记忆并为每个 header embedding 分配概率、再通过加权平均得到 query-specific header vector。引用 [8][13][14] 与所述内容一致，直接支持结论。",
+              "citations": [
+                {
+                  "number": 8,
+                  "quote": "A table has different types of information, in- cluding headers, cells and caption. We develop different mechanisms to match the relevance be- tween a query and each aspect of a table."
+                },
+                {
+                  "number": 13,
+                  "quote": "We ﬁrst describe the method to deal with headers. To satisfy these conditions, we represent each header as an embedding vector, and regard a set of header embeddings as exter- nal memory Mh ∈Rk×d, where d is the dimen- sion of word embedding, and k is the number of header cells. Given a query vector vq, the model ﬁrst assigns a probability αi to each memory cell mi, which is a header embedding in this case."
+                },
+                {
+                  "number": 14,
+                  "quote": "Afterwards, a query-speciﬁc header vector is ob- tained through weighted average (Bahdanau et al., 2015; Sukhbaatar et al., 2015), namely vheader = Pk i=1 αimi"
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            8,
+            13,
+            14
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 8,
+              "chunk_id": 240,
+              "source": "1706.02427.pdf",
+              "page": 4,
+              "text": "A table has different types of information, in- cluding headers, cells and caption. We develop different mechanisms to match the relevance be- tween a query and each aspect of a table. An important property of a table is that randomly exchanging two rows or tow columns will not change the meaning of a table (Vinyals et al., 2015). Therefore, a matching model should en- sure that exchanging rows or columns will result in the same output."
+            },
+            {
+              "citation": 13,
+              "chunk_id": 241,
+              "source": "1706.02427.pdf",
+              "page": 4,
+              "text": "We ﬁrst describe the method to deal with headers. To satisfy these conditions, we represent each header as an embedding vector, and regard a set of header embeddings as exter- nal memory Mh ∈Rk×d, where d is the dimen- sion of word embedding, and k is the number of header cells. Given a query vector vq, the model ﬁrst assigns a probability αi to each memory cell mi, which is a header embedding in this case."
+            },
+            {
+              "citation": 14,
+              "chunk_id": 242,
+              "source": "1706.02427.pdf",
+              "page": 4,
+              "text": "Afterwards, a query-speciﬁc header vector is ob- tained through weighted average (Bahdanau et al., 2015; Sukhbaatar et al., 2015), namely vheader = Pk i=1 αimi, where αi ∈[0, 1] is the weight of mi calculated as below and P i αi = 1. exp(tanh(W[mi; vq] + b)) αi = Pk j=1 exp(tanh(W[mj; vq] + b)) Similar techniques have been successfully applied in table-based question answering (Yin et al., 2015b; Neelakantan et al., 2015)."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "Yes. The method has a dedicated mechanism for matching headers: it develops different mechanisms to match a query against each aspect of a table, including headers, cells, and caption [8]; it represents each header as an embedding vector and treats the set of header embeddings as external memory, assigning a probability to each header embedding given the query vector [13]; and it then obtains a query-specific header vector through weighted average [14]. Thus the method relies on the column headings of the table.",
+    "citation_check": {
+      "cited_numbers": [
+        8,
+        13,
+        14
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 8,
+          "chunk_id": 240,
+          "source": "1706.02427.pdf",
+          "page": 4,
+          "text": "A table has different types of information, in- cluding headers, cells and caption. We develop different mechanisms to match the relevance be- tween a query and each aspect of a table. An important property of a table is that randomly exchanging two rows or tow columns will not change the meaning of a table (Vinyals et al., 2015). Therefore, a matching model should en- sure that exchanging rows or columns will result in the same output."
+        },
+        {
+          "citation": 13,
+          "chunk_id": 241,
+          "source": "1706.02427.pdf",
+          "page": 4,
+          "text": "We ﬁrst describe the method to deal with headers. To satisfy these conditions, we represent each header as an embedding vector, and regard a set of header embeddings as exter- nal memory Mh ∈Rk×d, where d is the dimen- sion of word embedding, and k is the number of header cells. Given a query vector vq, the model ﬁrst assigns a probability αi to each memory cell mi, which is a header embedding in this case."
+        },
+        {
+          "citation": 14,
+          "chunk_id": 242,
+          "source": "1706.02427.pdf",
+          "page": 4,
+          "text": "Afterwards, a query-speciﬁc header vector is ob- tained through weighted average (Bahdanau et al., 2015; Sukhbaatar et al., 2015), namely vheader = Pk i=1 αimi, where αi ∈[0, 1] is the weight of mi calculated as below and P i αi = 1. exp(tanh(W[mi; vq] + b)) αi = Pk j=1 exp(tanh(W[mj; vq] + b)) Similar techniques have been successfully applied in table-based question answering (Yin et al., 2015b; Neelakantan et al., 2015)."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

@@ -1,0 +1,165 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "For the paper \"Sequential Neural Networks as Automata\" (arXiv: 1906.01615), answer this question: How do attention, recurrent and convolutional networks differ on the language classes they accept?",
+  "kb_version": "qasper-test50-20261024",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": true,
+    "drafts": [
+      "The paper characterizes these architectures as follows. LSTMs \"function like counter machines,\" and convolutional networks are related \"to the subregular hierarchy\" [3]. Attention is not given a full automaton/language-class characterization in these passages; instead, the paper shows that attention adds memory by converting the recurrent state into a growing sequence, enabling 2^Θ(n) state complexity [16], and that this \"exponential state complexity provided by attention enables copying,\" unlike LSTMs, whose O(nk) complexity \"means that it is impossible for LSTMs to copy or reverse long strings\" [16][17]. The exact language class acceptable by attention is therefore not established by the supplied passages.",
+      "The paper characterizes the acceptable language classes as follows. LSTMs \"function like counter machines,\" and convolutional networks are related \"to the subregular hierarchy\" [3]. Attention is not given a full automaton/language-class characterization in the supplied passages. Instead, attention is shown to add memory by converting the network state into a growing sequence, enabling 2^Θ(n) state complexity [16], and this \"exponential state complexity provided by attention enables copying\" [17], unlike LSTMs, whose O(nk) complexity \"means that it is impossible for LSTMs to copy or reverse long strings\" [16]. The exact language class accepted by attention is therefore not established by the supplied passages."
+    ],
+    "reviews": [
+      {
+        "review_error": "Invalid requirement review fields.",
+        "citation_check": {
+          "cited_numbers": [
+            3,
+            16,
+            17
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 3,
+              "chunk_id": 910,
+              "source": "1906.01615.pdf",
+              "page": 1,
+              "text": "We then characterize the classes of languages acceptable by various recurrent net- works, attention, and convolutional networks. We ﬁnd that LSTMs function like counter ma- chines and relate convolutional networks to the subregular hierarchy."
+            },
+            {
+              "citation": 16,
+              "chunk_id": 974,
+              "source": "1906.01615.pdf",
+              "page": 6,
+              "text": "In addition to modeling alignment, attention im- proves a bounded-state model by providing ad- ditional memory. By converting the state of the network to a growing sequence Vt instead of a ﬁxed length vector vt, attention enables 2Θ(n) state complexity. Theorem 4.2 (Encoder state complexity). The full state of the attention layer has state complexity m(Vn) = 2Θ(n). The O(nk) complexity of the LSTM architec- ture means that it is impossible for LSTMs to copy or reverse long strings."
+            },
+            {
+              "citation": 17,
+              "chunk_id": 975,
+              "source": "1906.01615.pdf",
+              "page": 6,
+              "text": "The exponential state complexity provided by attention enables copying, which we can view as a simpliﬁed version of ma- chine translation. Thus, it makes sense that atten- tion is almost universal in machine translation ar- chitectures. The additional memory introduced by attention might also allow more complex hierar- chical representations. A natural follow-up question to Theorem 4.2 is whether this additional complexity is preserved in the attention summary vector hn."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      },
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "LSTMs \"function like counter machines,\" and convolutional networks are related \"to the subregular hierarchy\" [3]. Attention is not given a full automaton/language-class characterization in the supplied passages. Instead, attention is shown to add memory by converting the network state into a growing sequence, enabling 2^Θ(n) state complexity [16], and this \"exponential state complexity provided by attention enables copying\" [17], unlike LSTMs, whose O(nk) complexity \"means that it is impossible for LSTMs to copy or reverse long strings\" [16]. The exact language class accepted by attention is therefore not established by the supplied passages.",
+              "reason": "回答覆盖了三种架构：LSTM对应counter machines、CNN对应subregular hierarchy（引用[3]），并明确承认注意力在给定片段中缺少确切语言类/自动机刻画这一真实缺口。注意力与LSTM的对比（指数状态复杂度可复制 vs O(nk)不可复制长串）由[16][17]直接支持，且明确区分了'状态复杂度'与'语言类'，未将状态复杂度误当作语言类结论。数字2^Θ(n)、O(nk)与原文一致。",
+              "citations": [
+                {
+                  "number": 3,
+                  "quote": "We then characterize the classes of languages acceptable by various recurrent net- works, attention, and convolutional networks. We ﬁnd that LSTMs function like counter ma- chines and relate convolutional networks to the subregular hierarchy."
+                },
+                {
+                  "number": 16,
+                  "quote": "By converting the state of the network to a growing sequence Vt instead of a ﬁxed length vector vt, attention enables 2Θ(n) state complexity. Theorem 4.2 (Encoder state complexity). The full state of the attention layer has state complexity m(Vn) = 2Θ(n). The O(nk) complexity of the LSTM architec- ture means that it is impossible for LSTMs to copy or reverse long strings."
+                },
+                {
+                  "number": 17,
+                  "quote": "The exponential state complexity provided by attention enables copying, which we can view as a simpliﬁed version of ma- chine translation."
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            3,
+            16,
+            17
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 3,
+              "chunk_id": 910,
+              "source": "1906.01615.pdf",
+              "page": 1,
+              "text": "We then characterize the classes of languages acceptable by various recurrent net- works, attention, and convolutional networks. We ﬁnd that LSTMs function like counter ma- chines and relate convolutional networks to the subregular hierarchy."
+            },
+            {
+              "citation": 16,
+              "chunk_id": 974,
+              "source": "1906.01615.pdf",
+              "page": 6,
+              "text": "In addition to modeling alignment, attention im- proves a bounded-state model by providing ad- ditional memory. By converting the state of the network to a growing sequence Vt instead of a ﬁxed length vector vt, attention enables 2Θ(n) state complexity. Theorem 4.2 (Encoder state complexity). The full state of the attention layer has state complexity m(Vn) = 2Θ(n). The O(nk) complexity of the LSTM architec- ture means that it is impossible for LSTMs to copy or reverse long strings."
+            },
+            {
+              "citation": 17,
+              "chunk_id": 975,
+              "source": "1906.01615.pdf",
+              "page": 6,
+              "text": "The exponential state complexity provided by attention enables copying, which we can view as a simpliﬁed version of ma- chine translation. Thus, it makes sense that atten- tion is almost universal in machine translation ar- chitectures. The additional memory introduced by attention might also allow more complex hierar- chical representations. A natural follow-up question to Theorem 4.2 is whether this additional complexity is preserved in the attention summary vector hn."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "The paper characterizes the acceptable language classes as follows. LSTMs \"function like counter machines,\" and convolutional networks are related \"to the subregular hierarchy\" [3]. Attention is not given a full automaton/language-class characterization in the supplied passages. Instead, attention is shown to add memory by converting the network state into a growing sequence, enabling 2^Θ(n) state complexity [16], and this \"exponential state complexity provided by attention enables copying\" [17], unlike LSTMs, whose O(nk) complexity \"means that it is impossible for LSTMs to copy or reverse long strings\" [16]. The exact language class accepted by attention is therefore not established by the supplied passages.",
+    "citation_check": {
+      "cited_numbers": [
+        3,
+        16,
+        17
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 3,
+          "chunk_id": 910,
+          "source": "1906.01615.pdf",
+          "page": 1,
+          "text": "We then characterize the classes of languages acceptable by various recurrent net- works, attention, and convolutional networks. We ﬁnd that LSTMs function like counter ma- chines and relate convolutional networks to the subregular hierarchy."
+        },
+        {
+          "citation": 16,
+          "chunk_id": 974,
+          "source": "1906.01615.pdf",
+          "page": 6,
+          "text": "In addition to modeling alignment, attention im- proves a bounded-state model by providing ad- ditional memory. By converting the state of the network to a growing sequence Vt instead of a ﬁxed length vector vt, attention enables 2Θ(n) state complexity. Theorem 4.2 (Encoder state complexity). The full state of the attention layer has state complexity m(Vn) = 2Θ(n). The O(nk) complexity of the LSTM architec- ture means that it is impossible for LSTMs to copy or reverse long strings."
+        },
+        {
+          "citation": 17,
+          "chunk_id": 975,
+          "source": "1906.01615.pdf",
+          "page": 6,
+          "text": "The exponential state complexity provided by attention enables copying, which we can view as a simpliﬁed version of ma- chine translation. Thus, it makes sense that atten- tion is almost universal in machine translation ar- chitectures. The additional memory introduced by attention might also allow more complex hierar- chical representations. A natural follow-up question to Theorem 4.2 is whether this additional complexity is preserved in the attention summary vector hn."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

@@ -1,0 +1,1 @@
+The best-performing model on the OGTD offensive language identification task is **LSTM and GRU with Attention**, which achieved a F1-macro of 0.89 [6]. Among classical machine learning approaches, the linear SVM achieved the best results at 0.80, while the Stochastic Gradient Descent (SGD) classifier yielded the best recall score for the Offensive class at 0.61 [6].

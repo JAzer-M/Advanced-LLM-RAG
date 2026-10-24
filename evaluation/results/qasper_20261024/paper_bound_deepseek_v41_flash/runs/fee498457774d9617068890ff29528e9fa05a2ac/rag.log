@@ -1,0 +1,118 @@
+LLM: proxy API | Model: cn:deepseek-v4.1-flash
+Knowledge Base: qasper-test50-20261024
+Total Vectors: 1612
+Vector Dimensions: 384
+Total Chunks: 1612
+
+Original Query: For the paper "Pseudo Labeling and Negative Feedback Learning for Large-scale Multi-label Domain Classification" (arXiv: 2003.03728), answer this question: Which dataset do they evaluate on?
+Decomposition: {'needs_decomposition': False, 'sub_queries': [], 'status': 'not_needed'}
+Additional Retrieval Lists: 0
+HyDE Enabled: False
+
+Candidate Pool Before Deduplication: 120
+Candidate Pool After Deduplication: 120
+Selected Chunk IDs: [1460, 1465, 1454, 1488, 1507, 1500, 1457, 1492, 1475, 1477]
+Sub-Query Evidence Selection: {'candidate_count': 120, 'global_top_ids': [1460, 1465, 1454, 1488, 1507, 1500, 1457, 1492, 1475, 1477], 'protected_ids': [], 'sub_query_evidence': [], 'retrieval_anchor_ids': [1460], 'evidence_completion': {'requested_sources': ['2003.03728.pdf'], 'tasks': [], 'coverage': 'heuristic_only', 'rounds': 0, 'supplement_queries': 0, 'max_rounds': 2, 'completed_passes': 0, 'round_history': [], 'selected_ids_before': [1460, 1465, 1454, 1488, 1507, 1500, 1457, 1492, 1475, 1477], 'retained_local_ids': [], 'stop_reason': 'not_explicit_cross_paper', 'selected_ids_after': [1460, 1465, 1454, 1488, 1507, 1500, 1457, 1492, 1475, 1477], 'elapsed_seconds': 0.000461}}
+
+=== Retrieved Top-10 ===
+
+Rank: 1
+Source: 2003.03728.pdf
+Page: 1
+Section: 1. INTRODUCTION
+Text: This setting corresponds to multi-label positive and unlabeled (PU) learning, where as- signed labels are positive, unassigned labels are not neces- 1A domain is usually deﬁned as an application or functionality than can handle speciﬁc intents [1, 2, 3]. Young-Bum Kim sarily negative, and one or more labels are assigned for an instance [6, 7].2 In this paper, we utilize user log data, which contain triples of an utterance, the predicted domain, and the re- sponse, for the model training.
+
+Rank: 2
+Source: 2003.03728.pdf
+Page: 1
+Section: 1. INTRODUCTION
+Text: Evaluating on an annotated dataset from the user logs of a large-scale conversation interaction system, we show that the proposed approach signiﬁcantly improves the domain classi- ﬁcation especially when hypothesis reranking is used [14, 5].
+
+Rank: 3
+Source: 2003.03728.pdf
+Page: 1
+Section: None
+Text: PSEUDO LABELING AND NEGATIVE FEEDBACK LEARNING FOR LARGE-SCALE MULTI-LABEL DOMAIN CLASSIFICATION Joo-Kyung Kim Amazon Alexa AI ABSTRACT arXiv:2003.03728v1 [cs.CL] 8 Mar 2020 In large-scale domain classiﬁcation, an utterance can be han- dled by multiple domains with overlapped capabilities. How- ever, only a limited number of ground-truth domains are pro- vided for each training utterance in practice while knowing as many as correct target labels is helpful for improving the model performance.
+
+Rank: 4
+Source: 2003.03728.pdf
+Page: 3
+Section: 4. HYPOTHESIS RERANKING MODEL
+Text: First, we run intent classiﬁca- tion and slot ﬁlling for the k most conﬁdent domains from the shortlister outputs to obtain additional information for those domains [1].8 Then, we compose k hypotheses, each of which is a vector consists of the shortlister conﬁdence score, (4) intent score, Viterbi score of slot-ﬁlling, domain vector, intent vector, and the summation of the slot vectors.
+
+Rank: 5
+Source: 2003.03728.pdf
+Page: 5
+Section: 7. REFERENCES
+Text: 391397. [3] Young-Bum Kim, Dongchan Kim, Anjishnu Kumar, and Ruhi Sarikaya, “Efﬁcient Large-Scale Neural Do- main Classiﬁcation with Personalized Attention,” ACL, 2018, pp.
+
+Rank: 6
+Source: 2003.03728.pdf
+Page: 4
+Section: 5.2. Experiment Results
+Text: In addition, recall is increased when self-distillation is used, which achieves the best F1 score (6). Each of utilizing the negative feedback ((1) →(3) and (2) →(5)) and then additional pseudo labels ((3) →(5) and (4) →(6)) show statistically signiﬁcant improvements with McNemar test for p=0.05 for the ﬁnal reranker results. Using self-distillation ((3) →(4) and (5) →(6)) shows increased F-1 score by increasing recall and decreasing pre- cision, but the improvements are not signiﬁcant.
+
+Rank: 7
+Source: 2003.03728.pdf
+Page: 1
+Section: 1. INTRODUCTION
+Text: 1. INTRODUCTION Domain classiﬁcation is a task that predicts the most rele- vant domain given an input utterance [1].1 It is becoming more challenging since recent conversational interaction sys- tems such as Amazon Alexa, Google Assistant, and Microsoft Cortana support more than thousands of domains developed by external developers [4, 3, 5].
+
+Rank: 8
+Source: 2003.03728.pdf
+Page: 4
+Section: 4. HYPOTHESIS RERANKING MODEL
+Text: Model Precision (1) Base 77.27 (2) Base+pseudo 76.77 (3) Base+neg feed 77.90 (4) Base+neg feed+self dist 77.73 78.14 (5) Base+pseudo+neg feed (6) Base+pseudo+neg feed+self dist 77.96 Table 1. Evaluation results on various metrics (%). pseudo, neg feed, and self dist denote using derived pseudo labels, negative feedback, and self-distillation, respectively.
+
+Rank: 9
+Source: 2003.03728.pdf
+Page: 2
+Section: 3.1. Deriving Pseudo Labels
+Text: We derive the pseudo labels when the following condi- tions are met: • Maximally p domains predicted with the highest conﬁ- dences that are higher than the conﬁdence of the known ground-truth. • Domains predicted with the highest conﬁdences for r times consecutively so that consistent top predictions are used as pseudo labels. For the experiments in Section 5, we use p=2 and r=4, which show the best dev set performance.
+
+Rank: 10
+Source: 2003.03728.pdf
+Page: 2
+Section: 3.2. Leveraging Negative Feedback
+Text: 3.2. Leveraging Negative Feedback During the model training, irrelevant domains could be top predicted, and regarding them as additional target labels re- sults in wrong conﬁrmation bias [20], which causes incorrect model training. To reduce the side effect, we leverage utter- ances with negative responses in order to discourage the utter- ances’ incorrect predictions.
+
+=== Evidence: parsed facts and source quotations ===
+- Source quotation (2003.03728.pdf, p.1): “This setting corresponds to multi-label positive and unlabeled (PU) learning, where as- signed labels are positive, unassigned labels are not neces- 1A domain is usually deﬁned as an application or functionality than can handle speciﬁc intents [1, 2, 3].” [1]
+- Source quotation (2003.03728.pdf, p.1): “2 In this paper, we utilize user log data, which contain triples of an utterance, the predicted domain, and the re- sponse, for the model training.” [1]
+- Source quotation (2003.03728.pdf, p.1): “Evaluating on an annotated dataset from the user logs of a large-scale conversation interaction system, we show that the proposed approach signiﬁcantly improves the domain classi- ﬁcation especially when hypothesis reranking is used [14, 5].” [2][11]
+- Source quotation (2003.03728.pdf, p.1): “CL] 8 Mar 2020 In large-scale domain classiﬁcation, an utterance can be han- dled by multiple domains with overlapped capabilities.” [3]
+- Source quotation (2003.03728.pdf, p.1): “How- ever, only a limited number of ground-truth domains are pro- vided for each training utterance in practice while knowing as many as correct target labels is helpful for improving the model performance.” [3]
+- Source quotation (2003.03728.pdf, p.3): “8 Then, we compose k hypotheses, each of which is a vector consists of the shortlister conﬁdence score, (4) intent score, Viterbi score of slot-ﬁlling, domain vector, intent vector, and the summation of the slot vectors.” [4]
+- Source quotation (2003.03728.pdf, p.5): “[3] Young-Bum Kim, Dongchan Kim, Anjishnu Kumar, and Ruhi Sarikaya, “Efﬁcient Large-Scale Neural Do- main Classiﬁcation with Personalized Attention,” ACL, 2018, pp.” [5]
+- Source quotation (2003.03728.pdf, p.4): “In addition, recall is increased when self-distillation is used, which achieves the best F1 score (6).” [6]
+- Source quotation (2003.03728.pdf, p.4): “05 for the ﬁnal reranker results.” [6]
+- Source quotation (2003.03728.pdf, p.4): “Using self-distillation ((3) →(4) and (5) →(6)) shows increased F-1 score by increasing recall and decreasing pre- cision, but the improvements are not signiﬁcant.” [6]
+- Source quotation (2003.03728.pdf, p.1): “1 It is becoming more challenging since recent conversational interaction sys- tems such as Amazon Alexa, Google Assistant, and Microsoft Cortana support more than thousands of domains developed by external developers [4, 3, 5].” [7]
+- Source quotation (2003.03728.pdf, p.4): “Evaluation results on various metrics (%).” [8]
+- Source quotation (2003.03728.pdf, p.4): “pseudo, neg feed, and self dist denote using derived pseudo labels, negative feedback, and self-distillation, respectively.” [8]
+- Source quotation (2003.03728.pdf, p.2): “We derive the pseudo labels when the following condi- tions are met: • Maximally p domains predicted with the highest conﬁ- dences that are higher than the conﬁdence of the known ground-truth.” [9]
+- Source quotation (2003.03728.pdf, p.2): “• Domains predicted with the highest conﬁdences for r times consecutively so that consistent top predictions are used as pseudo labels.” [9]
+- Source quotation (2003.03728.pdf, p.2): “For the experiments in Section 5, we use p=2 and r=4, which show the best dev set performance.” [9]
+- Source quotation (2003.03728.pdf, p.2): “Leveraging Negative Feedback During the model training, irrelevant domains could be top predicted, and regarding them as additional target labels re- sults in wrong conﬁrmation bias [20], which causes incorrect model training.” [10]
+- Source quotation (2003.03728.pdf, p.2): “To reduce the side effect, we leverage utter- ances with negative responses in order to discourage the utter- ances’ incorrect predictions.” [10]
+
+=== Citation Sources ===
+[1] 2003.03728.pdf, p.1 (chunk 1460)
+[2] 2003.03728.pdf, p.1 (chunk 1465)
+[3] 2003.03728.pdf, p.1 (chunk 1454)
+[4] 2003.03728.pdf, p.3 (chunk 1488)
+[5] 2003.03728.pdf, p.5 (chunk 1507)
+[6] 2003.03728.pdf, p.4 (chunk 1500)
+[7] 2003.03728.pdf, p.1 (chunk 1457)
+[8] 2003.03728.pdf, p.4 (chunk 1492)
+[9] 2003.03728.pdf, p.2 (chunk 1475)
+[10] 2003.03728.pdf, p.2 (chunk 1477)
+[11] 2003.03728.pdf, p.1 (chunk 1463)
+
+=== Citation Structure Check (semantic support not verified) ===
+Status: not_needed
+Initial: {'has_citations': True, 'invalid_numbers': [], 'malformed_markers': []}
+Final structure passed: True
+
+=== Generated Answer (model draft; check against evidence) ===
+They evaluate on an annotated dataset from the user logs of a large-scale conversation interaction system [2].

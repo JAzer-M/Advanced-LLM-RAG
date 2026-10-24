@@ -1,0 +1,102 @@
+[
+  {
+    "number": 1,
+    "phase": "decompose",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n   For an open-ended \"difference between X and Y\" question, retrieve each\n   entity's purpose and core approach. Do not replace it with comparisons\n   between versions of X or versions of Y, or request unasked benchmark scores.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nFor the paper \"Toward Interpretable Topic Discovery via Anchored Correlation Explanation\" (arXiv: 1606.07043), answer this question: How do they incorporate expert knowledge into their topic model?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-24T14:34:01.194827+00:00",
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+      "requested_model": "cn:glm-5.3-flash",
+      "reported_model": "glm-5.3-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 704,
+        "cached_tokens": 704,
+        "completion_thinking_tokens": 4,
+        "completion_tokens": 22,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 4,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0,
+        "prompt_cache_hit_tokens": 704,
+        "prompt_cache_miss_tokens": 9,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 713,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 704,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 735
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.377
+  },
+  {
+    "number": 2,
+    "phase": "probe",
+    "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in the same language as the user's question. If the question explicitly asks for a particular language, use that language instead. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported question, begin with 当前证据不足 when answering in Chinese, or with \"Insufficient evidence\" when answering in English, and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n14. Prioritize explicit subquestions, correct facts and citations, and conditions/units that change the conclusion. Add definitions or steps only when needed for the task. Optional background, stylistic preferences and unasked exceptions are not completeness requirements. Failure to retrieve a paper does not establish that the paper never reported a result.\n\n15. For a comparison, synthesize separately supported facts about the requested objects, citing each side. A literal sentence comparing both papers is NOT required. Different purposes, inputs or mechanisms can be contrasted from their respective descriptions. This does not establish causality or which method performs better. Do not call the comparison unsupported merely because no head-to-head experiment is provided.\n16. Lead with the main difference the user asked about. For a broad comparison, explain what each object does and its supported core approach; do not replace this with differences between versions of each object, benchmark tables or unasked numerical results.\n\nContext:\nOriginal passages:\n[1] Source: 1606.07043.pdf | Page: 1 | Section: 1. Introduction\nTitle: Toward Interpretable Topic Discovery via Anchored Correlation Explanation\nIn this workshop paper, we introduce a simple approach to anchored information theoretic topic modeling using a novel combination of Correlation Explanation (CorEx) (Ver Steeg & Galstyan, 2014) and the information bottle- neck (Tishby et al., 2000). This ﬂexible framework enables the user to leverage domain knowledge to guide exploration of a collection of documents and to impose semantics onto latent factors learned by CorEx.\n\n[2] Source: 1606.07043.pdf | Page: 5 | Section: 5. Conclusion\nTitle: Toward Interpretable Topic Discovery via Anchored Correlation Explanation\nJournal of the American Medical Informatics Association, 20(e1):e147–e154, 2013. Nguyen, Thang, Hu, Yuening, and Boyd-Graber, Jordan L. Anchors regularized: Adding robustness and extensibility In Assocation for to scalable topic-modeling algorithms. Computational Linguistics, pp. 359–369, 2014. Slonim, Noam, Friedman, Nir, and Tishby, Naftali. Multivariate Neural Computation, 18(8):1739– information bottleneck. 1789, 2006. Tishby, Naftali, Pereira, Fernando C, and Bialek, William.\n\n[3] Source: 1606.07043.pdf | Page: 5 | Section: 5. Conclusion\nTitle: Toward Interpretable Topic Discovery via Anchored Correlation Explanation\nIncorporating domain knowledge into topic modeling via In Proceedings of the 26th Annual dirichlet forest priors. International Conference on Machine Learning, pp. 25–32, 2009. Arora, Sanjeev, Ge, Rong, and Moitra, Ankur. Learning topic models – going beyond svd. In Proceedings of the 2012 IEEE 53rd Annual Symposium on Foundations of Computer Science, FOCS ’12, pp. 1–10, 2012. Chapman, Wendy W., Bridewell, Will, Hanbury, Paul, Cooper, Gregory F., and Buchanan, Bruce G.\n\n[4] Source: 1606.07043.pdf | Page: 1 | Section: None\nTitle: Toward Interpretable Topic Discovery via Anchored Correlation Explanation\nToward Interpretable Topic Discovery via Anchored Correlation Explanation Kyle Reing David Kale Greg Ver Steeg Aram Galstyan USC Information Sciences Institute, Marina del Rey, CA, USA arXiv:1606.07043v1 [stat.ML] 22 Jun 2016 Abstract Many predictive tasks, such as diagnosing a pa- tient based on their medical chart, are ultimately deﬁned by the decisions of human experts. Un- fortunately, encoding experts’ knowledge is of- ten time consuming and expensive.\n\n[5] Source: 1606.07043.pdf | Page: 5 | Section: 5. Conclusion\nTitle: Toward Interpretable Topic Discovery via Anchored Correlation Explanation\nDisentangling In The the lexicons of disaster response in twitter. 3rd International Workshop on Social Web for Disaster Management (SWDM’15), 2015. Jagarlamudi, Jagadeesh, Daum´e III, Hal, and Udupa, Raghaven- dra. Incorporating lexical priors into topic models. In Proceedings of the 13th Conference of the European Chapter of the Association for Computational Linguistics, pp. 204–213, 2012. Lee, Moontae and Mimno, David.\n\n[6] Source: 1606.07043.pdf | Page: 2 | Section: 3. Related Work\nTitle: Toward Interpretable Topic Discovery via Anchored Correlation Explanation\n3. Related Work There is a large body of work on integrating domain knowledge into topic models and other unsupervised la- tent variable models, often in the form of constraints (Wagstaff et al., 2001), prior distributions (Andrzejewski et al., 2009), and token labels (Andrzejewski & Zhu, 2009). Like Anchored CorEx, seeded latent dirichlet ≡ allocation (SeededLDA) allows the speciﬁcation of word- topic relationships (Jagarlamudi et al., 2012).\n\n[7] Source: 1606.07043.pdf | Page: 1 | Section: None\nTitle: Toward Interpretable Topic Discovery via Anchored Correlation Explanation\nWe propose a simple way to use fuzzy and informal knowledge from experts to guide discovery of interpretable latent topics in text. The underlying intuition of our approach is that latent factors should be informative about both correlations in the data and a set of relevance variables speciﬁed by an expert. Mathematically, this approach is a combination of the information bottleneck and Total Correlation Explanation (CorEx).\n\n[8] Source: 1606.07043.pdf | Page: 3 | Section: 4. Results and Discussion\nTitle: Toward Interpretable Topic Discovery via Anchored Correlation Explanation\nToward Interpretable Topic Discovery via Anchored Correlation Explanation 17:gas miles apr air vehicle gmt 0:as by such *israel 15:after during three 6:we s our into example *politics times came took 28:t don it may fact but i if 16:and to in the on this 21:of all them those make 3:they their were said case did right 26:year last april san 22:gun crime guns new york criminal self mr 8:good much still back 9:then would time only here ll 34:is not there no which could take 0 2 other 5:that be are so people 23:at from least through than part without 11:just out ve got going better 2:*jesus god *christ 35:think say go thought 27:research subject press bible christians 37:car bike cars engine oh guess following article posted christian ride riding 18:test function results note useful water Figure 1. A hierarchical topic model learned by CorEx.\n\n[9] Source: 1606.07043.pdf | Page: 2 | Section: 2. Methods\nTitle: Toward Interpretable Topic Discovery via Anchored Correlation Explanation\n, Xn) = i p(xi)) where DKL is the KL divergence. Maximizing TC(X; Y ) over latent factors {Yj}m amounts to minimizing j=1 TC(X|Y ), which measures how much dependence in X is explained by Y . At the global optimum, TC(X|Y ) is zero and the observations are independent conditioned on the latent factors. Several papers have explored CorEx for unsupervised hierarchical topic modeling (Ver Steeg & Galstyan, 2014; Chen et al., 2015; Hodas et al., 2015).\n\n[10] Source: 1606.07043.pdf | Page: 2 | Section: 1. Introduction\nTitle: Toward Interpretable Topic Discovery via Anchored Correlation Explanation\nToward Interpretable Topic Discovery via Anchored Correlation Explanation\n\nEvidence guidance:\n- Rule-based subject attribution: TC; passage: “At the global optimum, TC(X|Y ) is zero and the observations are independent conditioned on the latent factors.” [9]\n\nQuestion:\nFor the paper \"Toward Interpretable Topic Discovery via Anchored Correlation Explanation\" (arXiv: 1606.07043), answer this question: How do they incorporate expert knowledge into their topic model?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n- For a broad difference-between question with no requested aspect, use 3-5 sentences: lead with the purposes, then the supported core methods. Prefer primary-paper abstract/introductory definitions. Omit training/test hyperparameters and unasked performance caveats.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-24T14:34:10.836440+00:00",
+    "response": {
+      "answer": "The paper incorporates expert knowledge by letting the user specify a set of \"anchor\" words (relevance variables), so that latent factors are required to be informative about both correlations in the data and the expert-specified variables [7]. This anchored approach combines the information bottleneck with Correlation Explanation (CorEx), enabling users to leverage domain knowledge to guide exploration of documents and impose semantics onto the latent factors learned by CorEx [1]. Like seeded LDA, this allows the specification of word–topic relationships [6].",
+      "requested_model": "cn:glm-5.3-flash",
+      "reported_model": "glm-5.3-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 2432,
+        "cached_tokens": 2432,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 105,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.02,
+        "prompt_cache_hit_tokens": 2432,
+        "prompt_cache_miss_tokens": 5,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2437,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 2432,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2542
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 4.228
+  }
+]

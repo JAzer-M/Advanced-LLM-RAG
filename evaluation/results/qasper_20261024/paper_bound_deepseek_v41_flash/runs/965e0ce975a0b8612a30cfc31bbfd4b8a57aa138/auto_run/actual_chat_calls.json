@@ -1,0 +1,102 @@
+[
+  {
+    "number": 1,
+    "phase": "decompose",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n   For an open-ended \"difference between X and Y\" question, retrieve each\n   entity's purpose and core approach. Do not replace it with comparisons\n   between versions of X or versions of Y, or request unasked benchmark scores.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nFor the paper \"Content-Based Table Retrieval for Web Queries\" (arXiv: 1706.02427), answer this question: Does their method rely on the column headings of the table?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-24T14:44:11.079782+00:00",
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 512,
+        "cached_tokens": 512,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 19,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0,
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 199,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 711,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 512,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 730
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.519
+  },
+  {
+    "number": 2,
+    "phase": "probe",
+    "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in the same language as the user's question. If the question explicitly asks for a particular language, use that language instead. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported question, begin with 当前证据不足 when answering in Chinese, or with \"Insufficient evidence\" when answering in English, and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n14. Prioritize explicit subquestions, correct facts and citations, and conditions/units that change the conclusion. Add definitions or steps only when needed for the task. Optional background, stylistic preferences and unasked exceptions are not completeness requirements. Failure to retrieve a paper does not establish that the paper never reported a result.\n\n15. For a comparison, synthesize separately supported facts about the requested objects, citing each side. A literal sentence comparing both papers is NOT required. Different purposes, inputs or mechanisms can be contrasted from their respective descriptions. This does not establish causality or which method performs better. Do not call the comparison unsupported merely because no head-to-head experiment is provided.\n16. Lead with the main difference the user asked about. For a broad comparison, explain what each object does and its supported core approach; do not replace this with differences between versions of each object, benchmark tables or unasked numerical results.\n\nContext:\nOriginal passages:\n[1] Source: 1706.02427.pdf | Page: 3 | Section: 3.1 Candidate Table Retrieval\nTitle: Content-Based Table Retrieval for Web Queries\nWe use each fea- ture to calculate a relevance score, representing the similarity between a query and a table from some perspective. Afterwards, we use LambdaMART (Burges, 2010), a successful algorithm for solv- ing real world ranking problem, to get the ﬁnal ranking score of each table.2 The basic idea of LambdaMART is that it constructs a forest of de- cision trees, and its output is a linear combination of the results of decision trees.\n\n[2] Source: 1706.02427.pdf | Page: 1 | Section: None\nTitle: Content-Based Table Retrieval for Web Queries\nContent-Based Table Retrieval for Web Queries Zhao Yan†∗, Duyu Tang‡ , Nan Duan‡ , Junwei Bao+∗, Yuanhua Lv§ , Ming Zhou‡ , Zhoujun Li† †Beihang University +Harbin Institute of Technology §Microsoft AI and Research, Sunnyvale CA, USA †{yanzhao, lizj}@buaa.edu.cn ‡§{dutang, nanduan, yuanhual, mingzhou}@microsoft.com Abstract Understanding the connections between unstructured text and semi-structured table arXiv:1706.02427v1 [cs.CL] 8 Jun 2017 is an important yet neglected problem in natural language processing.\n\n[3] Source: 1706.02427.pdf | Page: 8 | Section: 7 Conclusion\nTitle: Content-Based Table Retrieval for Web Queries\n7 Conclusion In this paper, we give an empirical study of content-based table retrieval for web queries. We implement a feature-based approach and a neural network based approach, and release a new dataset consisting of web queries and web tables.\n\n[4] Source: 1706.02427.pdf | Page: 10 | Section: 7 Conclusion\nTitle: Content-Based Table Retrieval for Web Queries\nIn Advances in Neural Information Process- ing Systems (NIPS). pages 2431–2439. Petros Venetis, Alon Halevy, Jayant Madhavan, Mar- ius Pas¸ca, Warren Shen, Fei Wu, Gengxin Miao, and Chung Wu. 2011. Recovering semantics of tables on the web. Proceedings of the VLDB Endowment 4(9):528–538. Oriol Vinyals, Samy Bengio, and Manjunath Kudlur. 2015. Order matters: Sequence to sequence for sets. arXiv preprint arXiv:1511.06391 .\n\n[5] Source: 1706.02427.pdf | Page: 1 | Section: 1 Introduction\nTitle: Content-Based Table Retrieval for Web Queries\nThe ﬁrst challenge is how to effectively represent a table, which is semi-structured and includes many aspects such as headers, cells and caption. The second chal- lenge is how to build a robust model that mea- sures the relevance between an unstructured nat- ural language query and a semi-structured table. Table retrieval could be viewed as a multi-modal task because the query and the table are of differ- ent forms.\n\n[6] Source: 1706.02427.pdf | Page: 2 | Section: 2 Task Deﬁnition\nTitle: Content-Based Table Retrieval for Web Queries\nA table t is a set of data elements arranged by vertical columns and horizontal rows. Formally, we deﬁne a table as a triple t = {headers, cells, caption} that con- sists of three aspects. A table could have multiple headers, each of which indicates the property of a column and could be used to identify a column. A table could have multiple cells, each of which is a unit where a row and a column intersects. A table could have a caption, which is typically an explanatory text about the table.\n\n[7] Source: 1706.02427.pdf | Page: 1 | Section: None\nTitle: Content-Based Table Retrieval for Web Queries\nIn this work, we focus on content-based table retrieval. Given a query, the task is to ﬁnd the most relevant table from a collection of tables. Further progress towards improving this area requires powerful models of semantic matching and richer training and evalua- tion resources. To remedy this, we present a ranking based approach, and implement both carefully designed features and neu- ral network architectures to measure the relevance between a query and the con- tent of a table.\n\n[8] Source: 1706.02427.pdf | Page: 4 | Section: 4.2 Matching with Neural Networks\nTitle: Content-Based Table Retrieval for Web Queries\nA table has different types of information, in- cluding headers, cells and caption. We develop different mechanisms to match the relevance be- tween a query and each aspect of a table. An important property of a table is that randomly exchanging two rows or tow columns will not change the meaning of a table (Vinyals et al., 2015). Therefore, a matching model should en- sure that exchanging rows or columns will result in the same output.\n\n[9] Source: 1706.02427.pdf | Page: 6 | Section: 4.1 and neural networks (NeuralNet) described\nTitle: Content-Based Table Retrieval for Web Queries\nWe ﬁrst use each aspect separately and then increasingly combine different aspects. Re- sults are given in Table 3. We can ﬁnd that in general the performance of an aspect in designed features is consistent with its performance in neu- ral networks. Caption is the most effective aspect on WebQueryTable. This is reasonable as we ﬁnd that majority of the queries are asking about a list of objects, such as “polish rivers”, “world top 5 mountains” and “list of american cruise lines”.\n\n[10] Source: 1706.02427.pdf | Page: 1 | Section: 1 Introduction\nTitle: Content-Based Table Retrieval for Web Queries\nOn the other hand, the retrieved table could be used as the input for question answering (Pasupat and Liang, 2015). Unlike existing studies in database community (Cafarella et al., 2008; Balakrishnan et al., 2015) that utilize surrounding text of a table or pager- ank score of a web page, we focus on making a thorough exploration of table content in this work. We believe that content-based table retrieval has the following challenges.\n\nEvidence guidance:\n- Rule-based subject attribution: LambdaMART; passage: “2 The basic idea of LambdaMART is that it constructs a forest of de- cision trees, and its output is a linear combination of the results of decision trees.” [1]\n\nQuestion:\nFor the paper \"Content-Based Table Retrieval for Web Queries\" (arXiv: 1706.02427), answer this question: Does their method rely on the column headings of the table?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n- For a broad difference-between question with no requested aspect, use 3-5 sentences: lead with the purposes, then the supported core methods. Prefer primary-paper abstract/introductory definitions. Omit training/test hyperparameters and unasked performance caveats.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-24T14:44:18.654868+00:00",
+    "response": {
+      "answer": "Yes. The paper treats headers (column headings) as one of the core aspects of a table: a table is defined as a triple consisting of headers, cells, and caption, where each header indicates the property of a column [6]. The methods match the query against each aspect of the table, including headers [8]. At the same time, headers are not the only aspect used—the approach also matches against cells and caption [8], and the paper reports that caption was the most effective single aspect on their dataset [9].",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 2048,
+        "cached_tokens": 2048,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 107,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.01,
+        "prompt_cache_hit_tokens": 2048,
+        "prompt_cache_miss_tokens": 206,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2254,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 2048,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2361
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.435
+  }
+]

@@ -1,0 +1,1153 @@
+{
+  "id": "question",
+  "query": "For the paper \"Content-Based Table Retrieval for Web Queries\" (arXiv: 1706.02427), answer this question: How are the tables extracted from the HTML?",
+  "kb_version": "qasper-test50-20261024",
+  "status": "completed",
+  "actions_executed": 3,
+  "semantic_correctness": "requires_manual_review",
+  "plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "Content-Based Table Retrieval for Web Queries",
+        "question_quote": "For the paper \"Content-Based Table Retrieval for Web Queries\" (arXiv: 1706.02427), answer this question: How are the tables extracted from the HTML?",
+        "need": "For the paper \"Content-Based Table Retrieval for Web Queries\" (arXiv: 1706.02427), answer this question: How are the tables extracted from the HTML?"
+      }
+    ]
+  },
+  "assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "missing",
+        "evidence": [],
+        "supported_part": "",
+        "reason": "The passages define what a table is and describe datasets with HTML tables (e.g., WikiTableQuestions contains HTML tables extracted from Wikipedia), but no passage describes how tables are extracted from HTML in this paper's methodology.",
+        "gap": "The passages do not state the procedure or method used to extract tables from HTML."
+      }
+    ],
+    "next_action": {
+      "type": "search",
+      "reason": "The question asks how tables are extracted from HTML; no supplied passage establishes this extraction procedure. Searching the paper may locate a data construction or preprocessing section describing HTML table extraction.",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": "Content-Based Table Retrieval for Web Queries: For the paper \"Content-Based Table Retrieval for Web Queries\" (arXiv: 1706.02427), answer this question: How are the tables extracted from the HTML? | For the paper \"Content-Based Table Retrieval for Web Queries\" (arXiv: 1706.02427), answer this question: How are the tables extracted from the HTML?",
+      "source": "1706.02427.pdf",
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "Scope checked against the single bound question excerpt; no action exceeds it."
+    }
+  },
+  "steps": [
+    {
+      "number": 1,
+      "action": {
+        "type": "search",
+        "reason": "The question asks how tables are extracted from HTML; no supplied passage establishes this extraction procedure. Searching the paper may locate a data construction or preprocessing section describing HTML table extraction.",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": "Content-Based Table Retrieval for Web Queries: For the paper \"Content-Based Table Retrieval for Web Queries\" (arXiv: 1706.02427), answer this question: How are the tables extracted from the HTML? | For the paper \"Content-Based Table Retrieval for Web Queries\" (arXiv: 1706.02427), answer this question: How are the tables extracted from the HTML?",
+        "source": "1706.02427.pdf",
+        "chunk_id": null
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "search",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "query": "Content-Based Table Retrieval for Web Queries: For the paper \"Content-Based Table Retrieval for Web Queries\" (arXiv: 1706.02427), answer this question: How are the tables extracted from the HTML? | For the paper \"Content-Based Table Retrieval for Web Queries\" (arXiv: 1706.02427), answer this question: How are the tables extracted from the HTML?",
+          "source": "1706.02427.pdf",
+          "knowledge_base": {
+            "version": "qasper-test50-20261024",
+            "chunk_count": 1612,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/manifest.json",
+            "manifest_sha256": "9974fa3a87051eda09cd42cd585d1501ed257548d187d0321ed8f82f71790f5e",
+            "files": {
+              "faiss.index": "f4c8de7951c30bb0deee445e8d9983d05f7360576c426b58f6f8046d093ef5c7",
+              "chunks.json": "0061d789f2d24144b80e14598fd7509c48803fd6c87d04a78c6960c34d268a4f"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 251,
+              "score": 0.025124843945068663,
+              "source": "1706.02427.pdf",
+              "page": 5,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "5.1 Dataset and Setting",
+              "text": "Therefore, in order to enlarge the search space of our dataset, we extract 252,703 web tables from Wikipedia and regard them as searchable tables as well.",
+              "rerank_score": 0.9983831644058228,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 241,
+              "score": 0.013515981735159818,
+              "source": "1706.02427.pdf",
+              "page": 4,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "4.2 Matching with Neural Networks",
+              "text": "We ﬁrst describe the method to deal with headers. To satisfy these conditions, we represent each header as an embedding vector, and regard a set of header embeddings as exter- nal memory Mh ∈Rk×d, where d is the dimen- sion of word embedding, and k is the number of header cells. Given a query vector vq, the model ﬁrst assigns a probability αi to each memory cell mi, which is a header embedding in this case.",
+              "rerank_score": 0.9981864094734192,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 244,
+              "score": 0.015265436318067897,
+              "source": "1706.02427.pdf",
+              "page": 5,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "4.2 Matching with Neural Networks",
+              "text": "Mcol from table cells in order to match from cell level, row level and column level. Each memory cell in Mcel represents the embedding of a table cell. Each cell in Mrow represent the vector a row, which is computed with weighted average over the embeddings of cells in the same row. We derive the column memory Mcol in an analogous way. We use the same module NN1() to calculate the relevance scores for these three memories.",
+              "rerank_score": 0.9977338314056396,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 219,
+              "score": 0.017094017094017096,
+              "source": "1706.02427.pdf",
+              "page": 2,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "3.1 Candidate Table Retrieval",
+              "text": "Given a query q = x1, x2, ..., xn, a table t and the whole table set T, the BM25 score of query q and table t is calculated as follows. n tf(xi, t) · (k1 + 1) X BM25(q, t) = idf(xi) |t| tf(xi, T) + k1(1 −b + b avgtl ) i=1 where tf(xi, t) is the term frequency of word xi in t, idf(xi) is its inverse document frequency, avgtl is the average sequence length in the whole table set T, and k1 and b are hyper-parameters.",
+              "rerank_score": 0.9966482520103455,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 239,
+              "score": 0.012896825396825396,
+              "source": "1706.02427.pdf",
+              "page": 4,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "4.2 Matching with Neural Networks",
+              "text": "It re- cursively transforming current word vector eq t with the output vector of the previous step ht−1. = σ(Wzeq zi i + Uzhi−1) = σ(Wreq ri i + Urhi−1) = tanh(Wheq i + Uh(ri ⊙hi−1)) ehi = zi ⊙ehi + (1 −zi) ⊙hi−1 hi where zi and ri are update and reset gates of GRU. We use a bi-directional RNN to get the meaning of a query from both directions, and use the concate- nation of two last hidden states as the ﬁnal query representation vq = [−→h n, ←−h n].",
+              "rerank_score": 0.9963127970695496,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 211,
+              "score": 0.016636998493769685,
+              "source": "1706.02427.pdf",
+              "page": 2,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "2 Task Deﬁnition",
+              "text": "A table t is a set of data elements arranged by vertical columns and horizontal rows. Formally, we deﬁne a table as a triple t = {headers, cells, caption} that con- sists of three aspects. A table could have multiple headers, each of which indicates the property of a column and could be used to identify a column. A table could have multiple cells, each of which is a unit where a row and a column intersects. A table could have a caption, which is typically an explanatory text about the table.",
+              "rerank_score": 0.9957292675971985,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 221,
+              "score": 0.016196721311475412,
+              "source": "1706.02427.pdf",
+              "page": 3,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "3.1 Candidate Table Retrieval",
+              "text": "We use each fea- ture to calculate a relevance score, representing the similarity between a query and a table from some perspective. Afterwards, we use LambdaMART (Burges, 2010), a successful algorithm for solv- ing real world ranking problem, to get the ﬁnal ranking score of each table.2 The basic idea of LambdaMART is that it constructs a forest of de- cision trees, and its output is a linear combination of the results of decision trees.",
+              "rerank_score": 0.9952589869499207,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 245,
+              "score": 0.01369485294117647,
+              "source": "1706.02427.pdf",
+              "page": 5,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "4.2 Matching with Neural Networks",
+              "text": "fnn(cell, q) = NN1(Mcel, vq) fnn(column, q) = NN1(Mcol, vq) fnn(row, q) = NN1(Mrow, vq) Since a table caption is typically a descriptive word sequence.",
+              "rerank_score": 0.994965136051178,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 232,
+              "score": 0.013844974609562135,
+              "source": "1706.02427.pdf",
+              "page": 3,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "4.1 Matching with Designed Features",
+              "text": "The phrase level score is calculated as follows, where N is the maximum n-gram order, which is i,n and srcq set as 3, and srcat j,n are the phrase in ta and q starts from the i-th and j-th word with the length of n, and i ∈{1, ..., |ta| −n + 1} and j ∈{1, ..., |q| −n + 1}. tq i,n, srcq N P i,j score(src j,n) fpp(ta, q) = 1 X |ta| −N + 1 N n=1 X p(tgtk|srcx) · p(srcy|tgtk) score(srcx; srcy) = P T",
+              "rerank_score": 0.9940272569656372,
+              "kb_version": "qasper-test50-20261024"
+            },
+            {
+              "chunk_id": 246,
+              "score": 0.013523391812865496,
+              "source": "1706.02427.pdf",
+              "page": 5,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "4.2 Matching with Neural Networks",
+              "text": "We model it with bi-directional GRU-RNN, the same strategy we have used for modeling the query. We concatenate the caption vector vcap with vq, and feed the results to a linear layer followed by softmax. fnn(caption, q) = NN2(vcap, vq) We separately train the parameters for each as- pect with back-propagation. We use negative log- likelihood as the loss function.3 loss = −1 X log(fnn(ta, q)) |D| (ta,q)∈D",
+              "rerank_score": 0.9928597211837769,
+              "kb_version": "qasper-test50-20261024"
+            }
+          ],
+          "trace": {
+            "retrieval_depth": 1612,
+            "candidate_k": 120,
+            "rrf_k": 60,
+            "result_k": 10,
+            "dense_ids": [
+              249,
+              201,
+              291,
+              248,
+              207,
+              196,
+              284,
+              282,
+              254,
+              263,
+              257,
+              251,
+              195,
+              199,
+              217,
+              224,
+              218,
+              258,
+              255,
+              212,
+              197,
+              283,
+              215,
+              292,
+              285,
+              306,
+              240,
+              298,
+              202,
+              209,
+              252,
+              300,
+              206,
+              205,
+              294,
+              279,
+              256,
+              200,
+              233,
+              236,
+              227,
+              208,
+              260,
+              225,
+              277,
+              270,
+              275,
+              281,
+              211,
+              301,
+              203,
+              220,
+              234,
+              297,
+              229,
+              253,
+              219,
+              264,
+              307,
+              262,
+              237,
+              304,
+              210,
+              308,
+              221,
+              309,
+              230,
+              245,
+              268,
+              261,
+              243,
+              242,
+              265,
+              296,
+              295,
+              273,
+              271,
+              267,
+              280,
+              305,
+              204,
+              232,
+              278,
+              246,
+              302,
+              241,
+              198,
+              303,
+              286,
+              310,
+              226,
+              266,
+              228,
+              244,
+              216,
+              293,
+              222,
+              235,
+              287,
+              288,
+              213,
+              238,
+              290,
+              247,
+              269,
+              214,
+              274,
+              239,
+              272,
+              259,
+              250,
+              299,
+              231,
+              276,
+              223,
+              289
+            ],
+            "bm25_ids": [
+              291,
+              195,
+              284,
+              254,
+              201,
+              199,
+              282,
+              207,
+              285,
+              196,
+              249,
+              248,
+              292,
+              212,
+              215,
+              233,
+              306,
+              256,
+              258,
+              209,
+              300,
+              202,
+              217,
+              200,
+              197,
+              220,
+              262,
+              263,
+              251,
+              257,
+              268,
+              224,
+              283,
+              206,
+              279,
+              229,
+              261,
+              309,
+              277,
+              271,
+              208,
+              298,
+              264,
+              301,
+              204,
+              294,
+              307,
+              255,
+              205,
+              281,
+              236,
+              280,
+              203,
+              244,
+              253,
+              273,
+              219,
+              275,
+              227,
+              252,
+              213,
+              221,
+              234,
+              278,
+              270,
+              225,
+              242,
+              240,
+              310,
+              218,
+              260,
+              230,
+              243,
+              211,
+              266,
+              247,
+              250,
+              289,
+              303,
+              222,
+              223,
+              265,
+              231,
+              239,
+              297,
+              198,
+              232,
+              308,
+              259,
+              241,
+              214,
+              246,
+              216,
+              304,
+              238,
+              296,
+              267,
+              272,
+              286,
+              290,
+              210,
+              305,
+              276,
+              295,
+              287,
+              228,
+              288,
+              237,
+              269,
+              245,
+              226,
+              274,
+              235
+            ],
+            "candidate_ids": [
+              291,
+              201,
+              284,
+              249,
+              254,
+              207,
+              195,
+              282,
+              248,
+              196,
+              199,
+              285,
+              212,
+              263,
+              292,
+              258,
+              217,
+              215,
+              257,
+              251,
+              306,
+              197,
+              224,
+              209,
+              202,
+              233,
+              300,
+              256,
+              283,
+              200,
+              255,
+              206,
+              298,
+              279,
+              218,
+              220,
+              294,
+              262,
+              205,
+              208,
+              277,
+              252,
+              240,
+              229,
+              236,
+              268,
+              301,
+              281,
+              227,
+              264,
+              309,
+              261,
+              203,
+              275,
+              307,
+              225,
+              270,
+              260,
+              253,
+              271,
+              219,
+              234,
+              211,
+              204,
+              221,
+              280,
+              273,
+              297,
+              230,
+              242,
+              244,
+              243,
+              278,
+              308,
+              304,
+              265,
+              213,
+              310,
+              210,
+              237,
+              266,
+              303,
+              296,
+              232,
+              245,
+              198,
+              267,
+              246,
+              241,
+              222,
+              295,
+              247,
+              305,
+              250,
+              286,
+              216,
+              289,
+              239,
+              223,
+              231,
+              214,
+              238,
+              259,
+              228,
+              226,
+              290,
+              287,
+              272,
+              288,
+              235,
+              269,
+              276,
+              274,
+              302,
+              293,
+              299
+            ],
+            "selected_ids": [
+              251,
+              241,
+              244,
+              219,
+              239,
+              211,
+              221,
+              245,
+              232,
+              246
+            ],
+            "elapsed_seconds": 7.937775,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        251,
+        241,
+        244,
+        219,
+        239,
+        221,
+        245,
+        232,
+        246
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          251,
+          241,
+          244,
+          219,
+          239,
+          221,
+          245,
+          232,
+          246
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "missing",
+            "evidence": [],
+            "supported_part": "",
+            "reason": "提供的段落中没有任何一段描述从 HTML 中提取表格的方法。chunk 251 只说明从 Wikipedia 提取了 web tables，但没有说明其 HTML 抽取机制；其余段落涉及表格表示、特征、BM25、GRU 编码、LambdaMART 或数据集统计，均未说明抽取流程。",
+            "gap": "需要从 HTML 页面中抽取表格的具体方法或流程说明。"
+          }
+        ],
+        "next_action": {
+          "type": "read_neighbors",
+          "reason": "通过检索已定位到同一论文的数据集段落（chunk 251），该段提到从 Wikipedia 提取 web tables，抽取方法应在相邻的数据集/预处理段落中，因此读取 chunk 251 及其邻近段落。",
+          "requirement_ids": [
+            "r1"
+          ],
+          "query": null,
+          "source": "1706.02427.pdf",
+          "chunk_id": 251
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "检查范围仅针对 r1 所问的表格如何从 HTML 中提取，未扩展到无关条件。"
+        }
+      }
+    },
+    {
+      "number": 2,
+      "action": {
+        "type": "read_neighbors",
+        "reason": "通过检索已定位到同一论文的数据集段落（chunk 251），该段提到从 Wikipedia 提取 web tables，抽取方法应在相邻的数据集/预处理段落中，因此读取 chunk 251 及其邻近段落。",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": null,
+        "source": "1706.02427.pdf",
+        "chunk_id": 251
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "read_neighbors",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "chunk_id": 251,
+          "source": "1706.02427.pdf",
+          "knowledge_base": {
+            "version": "qasper-test50-20261024",
+            "chunk_count": 1612,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/manifest.json",
+            "manifest_sha256": "9974fa3a87051eda09cd42cd585d1501ed257548d187d0321ed8f82f71790f5e",
+            "files": {
+              "faiss.index": "f4c8de7951c30bb0deee445e8d9983d05f7360576c426b58f6f8046d093ef5c7",
+              "chunks.json": "0061d789f2d24144b80e14598fd7509c48803fd6c87d04a78c6960c34d268a4f"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 249,
+              "text": "We select the tables occurred in the top ranked web page, and ask annotators to label whether a table is relevant to a query or not. In this way, we get 21,113 query-table pairs. In the real scenario of table retrieval, a system is required to ﬁnd a table from a huge collection of tables.",
+              "source": "1706.02427.pdf",
+              "page": 5,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "5.1 Dataset and Setting",
+              "kb_version": "qasper-test50-20261024",
+              "offset": -2
+            },
+            {
+              "chunk_id": 250,
+              "text": "3We also implemented a ranking based loss function max(0, 1−fnn(ta, q)+fnn(t∗ a, q)), but it performed worse than the negative log-likelihood in our experiment.",
+              "source": "1706.02427.pdf",
+              "page": 5,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "5.1 Dataset and Setting",
+              "kb_version": "qasper-test50-20261024",
+              "offset": -1
+            },
+            {
+              "chunk_id": 251,
+              "text": "Therefore, in order to enlarge the search space of our dataset, we extract 252,703 web tables from Wikipedia and regard them as searchable tables as well.",
+              "source": "1706.02427.pdf",
+              "page": 5,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "5.1 Dataset and Setting",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 0
+            },
+            {
+              "chunk_id": 252,
+              "text": "Data statistics are given in Table 1. WQT dataset WTQ dataset # of tables 273,816 2,108 Avg # of columns 4.55 6.38 Max # of columns 52 25 Min # of columns 1 3 Avg # of rows 9.15 28.50 Max # of rows 1,517 754 Min # of rows 2 5 # of questions 21,113 22,033 4.61 11.25 Avg # of questions Table 1: Statistics of WebQueryTable (WQT) dataset and WikiTableQuestions (WTQ) dataset. We sampled 200 examples to analyze the dis- tribution of the query types in our dataset.",
+              "source": "1706.02427.pdf",
+              "page": 5,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "5.1 Dataset and Setting",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 1
+            },
+            {
+              "chunk_id": 253,
+              "text": "We ob- serve that 69.5% queries are asking about “a list of XXX”, such as “list of countries and capitals” and “major cities in netherlands”, and about 24.5% queries are asking about an attribute of an object, such as “density of liquid water temperature”. We randomly separate the dataset as training, valida- tion, test with a 70:10:20 split.",
+              "source": "1706.02427.pdf",
+              "page": 5,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "5.1 Dataset and Setting",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 2
+            }
+          ],
+          "trace": {
+            "window": 2,
+            "max_window": 2,
+            "selected_ids": [
+              249,
+              250,
+              251,
+              252,
+              253
+            ],
+            "read_chars": 1409,
+            "elapsed_seconds": 0.000203,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        250,
+        253
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          250,
+          253
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "missing",
+            "evidence": [],
+            "supported_part": "",
+            "reason": "现有段落只说明从维基百科抽取了252,703张网页表格，以及WTQ数据集包含来自维基百科的2,108张HTML表格，但没有任何段落说明表格是如何从HTML中抽取的（即抽取方法/流程）。",
+            "gap": "缺少对表格如何从HTML中抽取的具体方法或流程的描述。"
+          }
+        ],
+        "next_action": {
+          "type": "read_neighbors",
+          "reason": "r1需要找到从HTML中抽取表格的方法，现有段落仅提及抽取数量与来源，应在相关数据集构建段落附近继续读取，查找抽取流程的描述。",
+          "requirement_ids": [
+            "r1"
+          ],
+          "query": null,
+          "source": "1706.02427.pdf",
+          "chunk_id": 251
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "检查范围限定于r1的问题摘录：如何从HTML中抽取表格，引用的证据与缺口均未超出该要求。"
+        }
+      }
+    },
+    {
+      "number": 3,
+      "action": {
+        "type": "read_neighbors",
+        "reason": "r1需要找到从HTML中抽取表格的方法/流程；已读取过251的邻居，改读数据集构建段落附近的其他相关块（如249的邻居），查找抽取流程描述。",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": null,
+        "source": "1706.02427.pdf",
+        "chunk_id": 249
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "read_neighbors",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "chunk_id": 249,
+          "source": "1706.02427.pdf",
+          "knowledge_base": {
+            "version": "qasper-test50-20261024",
+            "chunk_count": 1612,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/manifest.json",
+            "manifest_sha256": "9974fa3a87051eda09cd42cd585d1501ed257548d187d0321ed8f82f71790f5e",
+            "files": {
+              "faiss.index": "f4c8de7951c30bb0deee445e8d9983d05f7360576c426b58f6f8046d093ef5c7",
+              "chunks.json": "0061d789f2d24144b80e14598fd7509c48803fd6c87d04a78c6960c34d268a4f"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 247,
+              "text": "5 Experiment We describe the experimental setting and analyze the results in this section.",
+              "source": "1706.02427.pdf",
+              "page": 5,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "5 Experiment",
+              "kb_version": "qasper-test50-20261024",
+              "offset": -2
+            },
+            {
+              "chunk_id": 248,
+              "text": "5.1 Dataset and Setting To the best of our knowledge, there is no publicly available dataset for table retrieval. We introduce WebQueryTable, an open-domain dataset con- sisting of query-table pairs. We use search logs from a commercial search engine to get a list of queries that could be potentially answered by web tables. Each query in query logs is paired with a list of web pages, ordered by the number of user clicks for the query.",
+              "source": "1706.02427.pdf",
+              "page": 5,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "5.1 Dataset and Setting",
+              "kb_version": "qasper-test50-20261024",
+              "offset": -1
+            },
+            {
+              "chunk_id": 249,
+              "text": "We select the tables occurred in the top ranked web page, and ask annotators to label whether a table is relevant to a query or not. In this way, we get 21,113 query-table pairs. In the real scenario of table retrieval, a system is required to ﬁnd a table from a huge collection of tables.",
+              "source": "1706.02427.pdf",
+              "page": 5,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "5.1 Dataset and Setting",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 0
+            },
+            {
+              "chunk_id": 250,
+              "text": "3We also implemented a ranking based loss function max(0, 1−fnn(ta, q)+fnn(t∗ a, q)), but it performed worse than the negative log-likelihood in our experiment.",
+              "source": "1706.02427.pdf",
+              "page": 5,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "5.1 Dataset and Setting",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 1
+            },
+            {
+              "chunk_id": 251,
+              "text": "Therefore, in order to enlarge the search space of our dataset, we extract 252,703 web tables from Wikipedia and regard them as searchable tables as well.",
+              "source": "1706.02427.pdf",
+              "page": 5,
+              "title": "Content-Based Table Retrieval for Web Queries",
+              "section": "5.1 Dataset and Setting",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 2
+            }
+          ],
+          "trace": {
+            "window": 2,
+            "max_window": 2,
+            "selected_ids": [
+              247,
+              248,
+              249,
+              250,
+              251
+            ],
+            "read_chars": 1131,
+            "elapsed_seconds": 9.3e-05,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        247,
+        248
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          247,
+          248
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "missing",
+            "evidence": [],
+            "supported_part": "",
+            "reason": "现有段落仅说明从维基百科提取了252,703个网页表格（表格数量），但没有说明这些表格是如何从HTML中抽取出来的具体方式/步骤。新增的段落（247、248）只涉及实验设置和数据集构建（查询日志、网页排序等），仍未建立HTML表格抽取方法这一事实。",
+            "gap": "缺少关于如何从HTML中抽取表格的具体方法/步骤（抽取规则、解析方式等）的说明。"
+          }
+        ],
+        "next_action": {
+          "type": "read_neighbors",
+          "reason": "已检索到提及从维基百科提取网页表格的段落（chunk 251），但缺少其具体抽取方式；应就近阅读该段落附近的任务/数据构建章节以查找HTML表格抽取细节。",
+          "requirement_ids": [
+            "r1"
+          ],
+          "query": null,
+          "source": "1706.02427.pdf",
+          "chunk_id": 251
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "核对了r1的问题摘录范围：仅询问HTML中表格的抽取方式，评估未超出该范围。"
+        }
+      }
+    }
+  ],
+  "evidence_after": [
+    {
+      "chunk_id": 309,
+      "source": "1706.02427.pdf",
+      "page": 10,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "In Advances in Neural Information Process- ing Systems (NIPS). pages 2431–2439. Petros Venetis, Alon Halevy, Jayant Madhavan, Mar- ius Pas¸ca, Warren Shen, Fei Wu, Gengxin Miao, and Chung Wu. 2011. Recovering semantics of tables on the web. Proceedings of the VLDB Endowment 4(9):528–538. Oriol Vinyals, Samy Bengio, and Manjunath Kudlur. 2015. Order matters: Sequence to sequence for sets. arXiv preprint arXiv:1511.06391 .",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 195,
+      "source": "1706.02427.pdf",
+      "page": 1,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "Content-Based Table Retrieval for Web Queries Zhao Yan†∗, Duyu Tang‡ , Nan Duan‡ , Junwei Bao+∗, Yuanhua Lv§ , Ming Zhou‡ , Zhoujun Li† †Beihang University +Harbin Institute of Technology §Microsoft AI and Research, Sunnyvale CA, USA †{yanzhao, lizj}@buaa.edu.cn ‡§{dutang, nanduan, yuanhual, mingzhou}@microsoft.com Abstract Understanding the connections between unstructured text and semi-structured table arXiv:1706.02427v1 [cs.CL] 8 Jun 2017 is an important yet neglected problem in natural language processing.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 211,
+      "source": "1706.02427.pdf",
+      "page": 2,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "A table t is a set of data elements arranged by vertical columns and horizontal rows. Formally, we deﬁne a table as a triple t = {headers, cells, caption} that con- sists of three aspects. A table could have multiple headers, each of which indicates the property of a column and could be used to identify a column. A table could have multiple cells, each of which is a unit where a row and a column intersects. A table could have a caption, which is typically an explanatory text about the table.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 254,
+      "source": "1706.02427.pdf",
+      "page": 5,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "We also conduct a synthetic experiment for ta- ble retrieval on WikiTableQuestions (Pasupat and Liang, 2015), which is a widely used dataset for table-based question answering. It contains 2,108 HTML tables extracted from Wikipedia.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 284,
+      "source": "1706.02427.pdf",
+      "page": 8,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "Venetis et al. (2011) go one step further and use labels and relationships extracted from the web. Pimplikar and Sarawagi (2012) fo- cus on the queries that describe table columns, and retrieve tables based on column mapping. There also exists table-related studies such as search- ing related tables from a table (Das Sarma et al., 2012), assembling a table from list in web page (Gupta and Sarawagi, 2009) and extracting tables using tabular structure from web page (Gatter- bauer et al., 2007).",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 249,
+      "source": "1706.02427.pdf",
+      "page": 5,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "We select the tables occurred in the top ranked web page, and ask annotators to label whether a table is relevant to a query or not. In this way, we get 21,113 query-table pairs. In the real scenario of table retrieval, a system is required to ﬁnd a table from a huge collection of tables.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 196,
+      "source": "1706.02427.pdf",
+      "page": 1,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "In this work, we focus on content-based table retrieval. Given a query, the task is to ﬁnd the most relevant table from a collection of tables. Further progress towards improving this area requires powerful models of semantic matching and richer training and evalua- tion resources. To remedy this, we present a ranking based approach, and implement both carefully designed features and neu- ral network architectures to measure the relevance between a query and the con- tent of a table.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 291,
+      "source": "1706.02427.pdf",
+      "page": 8,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "7 Conclusion In this paper, we give an empirical study of content-based table retrieval for web queries. We implement a feature-based approach and a neural network based approach, and release a new dataset consisting of web queries and web tables.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 215,
+      "source": "1706.02427.pdf",
+      "page": 2,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "To build a system with high ef- ﬁciency, we separate the task into two cascaded modules, including candidate table retrieval and table ranking. Candidate table retrieval aims to ﬁnd a small set of tables, such as 50 or 100. These candidate tables will be further used in the table ranking step, which uses more sophisticated fea- tures to measure the relevance between a query and a table. In the following subsections, we will give the work-ﬂow of candidate table retrieval and table ranking.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 252,
+      "source": "1706.02427.pdf",
+      "page": 5,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "Data statistics are given in Table 1. WQT dataset WTQ dataset # of tables 273,816 2,108 Avg # of columns 4.55 6.38 Max # of columns 52 25 Min # of columns 1 3 Avg # of rows 9.15 28.50 Max # of rows 1,517 754 Min # of rows 2 5 # of questions 21,113 22,033 4.61 11.25 Avg # of questions Table 1: Statistics of WebQueryTable (WQT) dataset and WikiTableQuestions (WTQ) dataset. We sampled 200 examples to analyze the dis- tribution of the query types in our dataset.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 251,
+      "source": "1706.02427.pdf",
+      "page": 5,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "Therefore, in order to enlarge the search space of our dataset, we extract 252,703 web tables from Wikipedia and regard them as searchable tables as well.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 241,
+      "source": "1706.02427.pdf",
+      "page": 4,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "We ﬁrst describe the method to deal with headers. To satisfy these conditions, we represent each header as an embedding vector, and regard a set of header embeddings as exter- nal memory Mh ∈Rk×d, where d is the dimen- sion of word embedding, and k is the number of header cells. Given a query vector vq, the model ﬁrst assigns a probability αi to each memory cell mi, which is a header embedding in this case.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 244,
+      "source": "1706.02427.pdf",
+      "page": 5,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "Mcol from table cells in order to match from cell level, row level and column level. Each memory cell in Mcel represents the embedding of a table cell. Each cell in Mrow represent the vector a row, which is computed with weighted average over the embeddings of cells in the same row. We derive the column memory Mcol in an analogous way. We use the same module NN1() to calculate the relevance scores for these three memories.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 219,
+      "source": "1706.02427.pdf",
+      "page": 2,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "Given a query q = x1, x2, ..., xn, a table t and the whole table set T, the BM25 score of query q and table t is calculated as follows. n tf(xi, t) · (k1 + 1) X BM25(q, t) = idf(xi) |t| tf(xi, T) + k1(1 −b + b avgtl ) i=1 where tf(xi, t) is the term frequency of word xi in t, idf(xi) is its inverse document frequency, avgtl is the average sequence length in the whole table set T, and k1 and b are hyper-parameters.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 239,
+      "source": "1706.02427.pdf",
+      "page": 4,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "It re- cursively transforming current word vector eq t with the output vector of the previous step ht−1. = σ(Wzeq zi i + Uzhi−1) = σ(Wreq ri i + Urhi−1) = tanh(Wheq i + Uh(ri ⊙hi−1)) ehi = zi ⊙ehi + (1 −zi) ⊙hi−1 hi where zi and ri are update and reset gates of GRU. We use a bi-directional RNN to get the meaning of a query from both directions, and use the concate- nation of two last hidden states as the ﬁnal query representation vq = [−→h n, ←−h n].",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 221,
+      "source": "1706.02427.pdf",
+      "page": 3,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "We use each fea- ture to calculate a relevance score, representing the similarity between a query and a table from some perspective. Afterwards, we use LambdaMART (Burges, 2010), a successful algorithm for solv- ing real world ranking problem, to get the ﬁnal ranking score of each table.2 The basic idea of LambdaMART is that it constructs a forest of de- cision trees, and its output is a linear combination of the results of decision trees.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 245,
+      "source": "1706.02427.pdf",
+      "page": 5,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "fnn(cell, q) = NN1(Mcel, vq) fnn(column, q) = NN1(Mcol, vq) fnn(row, q) = NN1(Mrow, vq) Since a table caption is typically a descriptive word sequence.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 232,
+      "source": "1706.02427.pdf",
+      "page": 3,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "The phrase level score is calculated as follows, where N is the maximum n-gram order, which is i,n and srcq set as 3, and srcat j,n are the phrase in ta and q starts from the i-th and j-th word with the length of n, and i ∈{1, ..., |ta| −n + 1} and j ∈{1, ..., |q| −n + 1}. tq i,n, srcq N P i,j score(src j,n) fpp(ta, q) = 1 X |ta| −N + 1 N n=1 X p(tgtk|srcx) · p(srcy|tgtk) score(srcx; srcy) = P T",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 246,
+      "source": "1706.02427.pdf",
+      "page": 5,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "We model it with bi-directional GRU-RNN, the same strategy we have used for modeling the query. We concatenate the caption vector vcap with vq, and feed the results to a linear layer followed by softmax. fnn(caption, q) = NN2(vcap, vq) We separately train the parameters for each as- pect with back-propagation. We use negative log- likelihood as the loss function.3 loss = −1 X log(fnn(ta, q)) |D| (ta,q)∈D",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 250,
+      "source": "1706.02427.pdf",
+      "page": 5,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "3We also implemented a ranking based loss function max(0, 1−fnn(ta, q)+fnn(t∗ a, q)), but it performed worse than the negative log-likelihood in our experiment.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 253,
+      "source": "1706.02427.pdf",
+      "page": 5,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "We ob- serve that 69.5% queries are asking about “a list of XXX”, such as “list of countries and capitals” and “major cities in netherlands”, and about 24.5% queries are asking about an attribute of an object, such as “density of liquid water temperature”. We randomly separate the dataset as training, valida- tion, test with a 70:10:20 split.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 247,
+      "source": "1706.02427.pdf",
+      "page": 5,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "5 Experiment We describe the experimental setting and analyze the results in this section.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 248,
+      "source": "1706.02427.pdf",
+      "page": 5,
+      "title": "Content-Based Table Retrieval for Web Queries",
+      "text": "5.1 Dataset and Setting To the best of our knowledge, there is no publicly available dataset for table retrieval. We introduce WebQueryTable, an open-domain dataset con- sisting of query-table pairs. We use search logs from a commercial search engine to get a list of queries that could be potentially answered by web tables. Each query in query logs is paired with a list of web pages, ordered by the number of user clicks for the query.",
+      "kb_version": "qasper-test50-20261024"
+    }
+  ],
+  "action_attempts": 3,
+  "feedback_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "missing",
+        "evidence": [],
+        "supported_part": "",
+        "reason": "现有段落仅说明从维基百科提取了252,703个网页表格（表格数量），但没有说明这些表格是如何从HTML中抽取出来的具体方式/步骤。新增的段落（247、248）只涉及实验设置和数据集构建（查询日志、网页排序等），仍未建立HTML表格抽取方法这一事实。",
+        "gap": "缺少关于如何从HTML中抽取表格的具体方法/步骤（抽取规则、解析方式等）的说明。"
+      }
+    ],
+    "next_action": {
+      "type": "read_neighbors",
+      "reason": "已检索到提及从维基百科提取网页表格的段落（chunk 251），但缺少其具体抽取方式；应就近阅读该段落附近的任务/数据构建章节以查找HTML表格抽取细节。",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": null,
+      "source": "1706.02427.pdf",
+      "chunk_id": 251
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "核对了r1的问题摘录范围：仅询问HTML中表格的抽取方式，评估未超出该范围。"
+    }
+  },
+  "validation_repairs": [
+    {
+      "phase": "decision_3",
+      "error": "This exact tool action was already executed and cannot add new evidence. Choose a useful different action, such as reading relevant supplied neighbors, or stop. Keep the bound query and each requirement scope unchanged."
+    }
+  ],
+  "halt_reason": "repeated_action",
+  "final_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "missing",
+        "evidence": [],
+        "supported_part": "",
+        "reason": "现有段落仅说明从维基百科提取了252,703个网页表格（表格数量），但没有说明这些表格是如何从HTML中抽取出来的具体方式/步骤。新增的段落（247、248）只涉及实验设置和数据集构建（查询日志、网页排序等），仍未建立HTML表格抽取方法这一事实。",
+        "gap": "缺少关于如何从HTML中抽取表格的具体方法/步骤（抽取规则、解析方式等）的说明。"
+      }
+    ],
+    "next_action": {
+      "type": "read_neighbors",
+      "reason": "已检索到提及从维基百科提取网页表格的段落（chunk 251），但缺少其具体抽取方式；应就近阅读该段落附近的任务/数据构建章节以查找HTML表格抽取细节。",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": null,
+      "source": "1706.02427.pdf",
+      "chunk_id": 251
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "核对了r1的问题摘录范围：仅询问HTML中表格的抽取方式，评估未超出该范围。"
+    }
+  },
+  "elapsed_seconds": 24.508
+}

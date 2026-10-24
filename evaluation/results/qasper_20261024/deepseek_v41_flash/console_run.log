@@ -1,0 +1,138 @@
+待运行 156 次（已完成的跳过）；模型 cn:deepseek-v4.1-flash，知识库 qasper-test50-20261024
+[1/156] d4456e9029 rag   completed 11.89s 2908 token
+[2/156] d4456e9029 agent completed 26.2s 15472 token
+[3/156] d4456e9029 auto  completed 10.36s 2950 token
+[4/156] d0b967bfca rag   completed 9.16s 2825 token
+[5/156] d0b967bfca agent failed 22.09s 8829 token
+[6/156] d0b967bfca auto  completed 25.13s 14292 token
+[7/156] 31e6062ba4 rag   completed 10.72s 2916 token
+[8/156] 31e6062ba4 agent failed 9.5s 1873 token
+[9/156] 31e6062ba4 auto  degraded 12.54s 4013 token
+[10/156] 38b29b0dcb rag   completed 9.02s 2832 token
+[11/156] 38b29b0dcb agent completed 17.32s 10239 token
+[12/156] 38b29b0dcb auto  completed 8.88s 2826 token
+[13/156] 6e134d51a7 rag   completed 8.33s 2930 token
+[14/156] 6e134d51a7 agent completed 27.27s 21861 token
+[15/156] 6e134d51a7 auto  degraded 12.38s 4227 token
+[16/156] 0778cbbd09 rag   completed 9.02s 2756 token
+[17/156] 0778cbbd09 agent completed 16.45s 9587 token
+[18/156] 0778cbbd09 auto  completed 8.82s 2705 token
+Traceback (most recent call last):
+  File "/Users/j/Desktop/Advanced-LLM-RAG/evaluation/results/qasper_20261024/run_supervised.py", line 72, in <module>
+    main()
+  File "/Users/j/Desktop/Advanced-LLM-RAG/evaluation/results/qasper_20261024/run_supervised.py", line 66, in main
+    evaluation.main()
+  File "/Users/j/Desktop/Advanced-LLM-RAG/evaluation/qasper_eval.py", line 447, in main
+    {'prepare': prepare, 'build': build, 'run': run, 'score': score, 'judge': judge, 'report': report}[args.step](args)
+  File "/Users/j/Desktop/Advanced-LLM-RAG/evaluation/qasper_eval.py", line 299, in run
+    result = pipeline.main(q['question'], kb_version=KB_VERSION, mode=mode,
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/main.py", line 772, in main
+    result = _run_pipeline(query, kb_version, complete_evidence, completion_rounds,
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/main.py", line 429, in _run_pipeline
+    global_ranking, sub_query_evidence = rank_evidence(
+                                         ^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/src/reranker.py", line 66, in rank_evidence
+    global_ranking = rerank_results(query, candidates, model, top_k=len(candidates),
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/src/reranker.py", line 38, in rerank_results
+    for pair, score in zip(missing, model.predict(missing)))
+                                    ^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/torch/utils/_contextlib.py", line 124, in decorate_context
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/sentence_transformers/util/decorators.py", line 46, in wrapper
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/sentence_transformers/util/decorators.py", line 203, in wrapper
+    return func(self, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/sentence_transformers/cross_encoder/model.py", line 717, in predict
+    out_features = self(features, **kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/sentence_transformers/base/model.py", line 569, in forward
+    input = module(input, **module_kwargs)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/sentence_transformers/base/modules/transformer.py", line 1650, in forward
+    model_output = model_method(**filtered_kwargs)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/transformers/utils/generic.py", line 943, in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/transformers/models/xlm_roberta/modeling_xlm_roberta.py", line 946, in forward
+    outputs = self.roberta(
+              ^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/transformers/utils/generic.py", line 1081, in wrapper
+    output = func(self, *args, **kwargs)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/transformers/utils/output_capturing.py", line 287, in wrapper
+    outputs = func(self, *args, **kwargs)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/transformers/models/xlm_roberta/modeling_xlm_roberta.py", line 637, in forward
+    encoder_outputs = self.encoder(
+                      ^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/transformers/models/xlm_roberta/modeling_xlm_roberta.py", line 531, in forward
+    hidden_states = layer_module(
+                    ^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/transformers/modeling_layers.py", line 110, in __call__
+    return super().__call__(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/transformers/models/xlm_roberta/modeling_xlm_roberta.py", line 455, in forward
+    layer_output = apply_chunking_to_forward(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/transformers/pytorch_utils.py", line 199, in apply_chunking_to_forward
+    return forward_fn(*input_tensors)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/transformers/models/xlm_roberta/modeling_xlm_roberta.py", line 461, in feed_forward_chunk
+    intermediate_output = self.intermediate(attention_output)
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/transformers/models/xlm_roberta/modeling_xlm_roberta.py", line 382, in forward
+    hidden_states = self.dense(hidden_states)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1783, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/torch/nn/modules/module.py", line 1794, in _call_impl
+    return forward_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/.venv/lib/python3.11/site-packages/torch/nn/modules/linear.py", line 134, in forward
+    return F.linear(input, self.weight, self.bias)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+KeyboardInterrupt

@@ -1,42 +1,34 @@
-# QASPER 评测：交接与后续步骤
+# QASPER评测交接：执行已完成
 
-写于 2026-10-24 21:40（Asia/Shanghai），供新对话或其他助手接手。评测协议见同目录 `protocol.md`（运行前冻结，不要修改）。
+更新：2026-10-24（Asia/Shanghai）。先读[完整报告](report.md)、[根汇总](summary.json)、[助手抽查](manual_review.md)。修改前的交接文件及其他文档保存在[source_before](source_before/)。
 
-## 当前状态
+## 当前已完成
 
-- 评测脚本：`evaluation/qasper_eval.py`，6 个步骤均可断点续跑，已完成的结果不会重算，失败不自动重试。
-- 第一次 `prepare` 因 macOS Python 缺根证书失败（`CERTIFICATE_VERIFY_FAILED`），已改为使用 certifi（提交 `b38f7d0`），尚未重跑成功。
-- 尚未抽样、建库或调用任何模型 API。
+- 15篇52题、15份PDF与独立库1612段已存在且哈希通过；全局激活库和网页指针未切换。
+- 原GLM第二条遇429；原DeepSeek未绑定论文轮保存18条后中断。两轮和成本全部保留。
+- 实际主结果在`paper_bound_deepseek_v41_flash/`。目录名沿用首个模型，但正式轮发生模型轮换：39/10/3题分别使用DeepSeek v4.1 Flash、DeepSeek v4 Flash、GLM 5.3 Flash；每题三模式同模型。新输入仅增加目标论文标题和arXiv编号，原题/Gold/生产代码/评分不变，新协议在运行前冻结。
+- 三模式156条结果、156条匹配作答模型的判分、官方评分交叉核对、汇总与报告均已完成。
+- RAG/Agent/Auto的Answer F1为14.83/14.81/21.39，近似Evidence F1为28.24/41.22/33.00。失败保留在52题分母。判分correct为25/25/28，不是人工准确率。
+- 正式生成+判分819次请求、1,740,096 token。包含旧轮共885次已留档请求、1,859,159已报告token，另有未落盘/未回传用量；完整账单总量未知。当前私有配置选择`cn:deepseek-v4.1-flash`。
+- README、PROJECT_METRICS、PROGRESS和实验索引已同步。本轮只做执行与文档，未修生产逻辑，未重跑旧345/42项测试；执行层3项检查通过。
 
-## 一次跑完（在 Mac 终端，项目根目录）
+## 接手时怎样使用现有结果
+
+已有全量作答和判分，接手直接分析保存文件。旧版“一次跑完prepare/build/run/score/judge/report”命令对应原始输入目录，不再作为当前执行入口。
+
+仅离线复算（不调用模型）：
 
 ```bash
-cd ~/Desktop/Advanced-LLM-RAG
-export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 TOKENIZERS_PARALLELISM=false HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1
-for step in prepare build run score judge report; do
-  caffeinate -i .venv/bin/python evaluation/qasper_eval.py $step || { echo "停在 $step"; break; }
-done 2>&1 | tee evaluation/results/qasper_20261024/console.log
+QASPER_OUTPUT_DIR=evaluation/results/qasper_20261024/paper_bound_deepseek_v41_flash .venv/bin/python evaluation/results/qasper_20261024/run_supervised.py score
+QASPER_OUTPUT_DIR=evaluation/results/qasper_20261024/paper_bound_deepseek_v41_flash .venv/bin/python evaluation/results/qasper_20261024/run_supervised.py report
+.venv/bin/python evaluation/results/qasper_20261024/analyze_results.py
 ```
 
-- `prepare`：下载 QASPER v0.3 测试集，按种子 20261024 抽约 50 题，下载对应 arXiv PDF 到 `data/raw/qasper-test50-20261024/`（本机）。
-- `build`：建独立知识库 `qasper-test50-20261024`，不切换当前库、不影响网页库。
-- `run`：三种模式各跑一遍（约 150 次运行，预计 1～1.5 小时，真实调用模型 API）。
-- `score`：官方口径 Answer F1 / Evidence F1（近似段落对齐）/ 检索命中 / 拒答；并用官方 `qasper_evaluator.py` 交叉核对。
-- `judge`：同一模型服务做大模型判分（约 150 次请求）。
-- `report`：生成 `summary.json`。
+PDF、QASPER原数据包与知识库资产只在本机保留，跨机器需配对复制并校验。原`protocol.md`、原`frozen_sample.json`及原`evaluation/qasper_eval.py`均保持原字节；论文绑定新轮的协议和样本位于主结果目录。
 
-中途中断：重新执行同一段命令即可，从断点继续。
+## 尚未解决的边界与下一步
 
-## 跑完后要做的分析（给接手的助手）
-
-1. 读 `summary.json`、`scores/official_evaluator.json`（核对官方脚本的 Answer F1 是否与本脚本一致；不一致要查原因，不要改协议）、`console.log`。
-2. 抽查 `scores/per_question.json` 中 F1 很低但判分为 correct 的题，确认是"回答偏长导致 F1 低"还是判分偏宽。
-3. 抽查 `prediction_kind=declined` 的题，确认拒答识别规则没有明显误判。
-4. 写 `report.md`：三种模式的 Answer F1、按答案类型的 F1、Evidence F1、检索命中率、拒答、判分分布、请求数/token/耗时；如实写协议中的结论边界（小样本、同模型判分、PDF 版本差异、近似对齐）。
-5. 更新 README「关键结果」加入 QASPER 表格，更新 `docs/PROJECT_METRICS.md` 与 `PROGRESS.md`；README「已知局限」里“没有独立新题评测”一条改为实际情况。
-6. 提交（作者 `JAzer-M <d1599356723@163.com>`），由用户推送。
-
-## 其他待办（与评测无关）
-
-- 发布 `v0.2.0` Release（Windows 安装包已通过 GitHub Actions `build-windows` 构建并由用户在 Windows 上验收；Artifact 保留 14 天）。
-- 可选：Mac 重新打 0.2.0 包；补 GitHub 个人主页资料。
+1. 拒答启发式存在至少1处明确误标、1处漏标；部分英文问题得到中文答案。Agent仍有需求引文/修正额度/复核失败。当前分数保留，不把本轮题目反复调试后称为新的独立成绩。
+2. 若要更强泛化结论，另冻结更多新题、单一模型及可靠拒答/语言处理。模型轮换、本轮曾看过部分问题、近似段落对齐和同模型判分均需披露。
+3. 本地提交按交接要求使用作者`JAzer-M <d1599356723@163.com>`；由用户推送，未授权自动推送。
+4. 发布Windows `v0.2.0` Release、可选Mac重打0.2.0包、个人主页及简历/面试材料仍待后续。Windows人工验收与Mac预览已发布的状态来自已有记录，本轮没有重新核对GitHub线上状态。

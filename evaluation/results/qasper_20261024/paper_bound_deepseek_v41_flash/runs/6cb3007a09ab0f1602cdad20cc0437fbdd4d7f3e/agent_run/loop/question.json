@@ -1,0 +1,746 @@
+{
+  "id": "question",
+  "query": "For the paper \"Offensive Language Identification in Greek\" (arXiv: 2003.07459), answer this question: What models do they experiment on?",
+  "kb_version": "qasper-test50-20261024",
+  "status": "completed",
+  "actions_executed": 3,
+  "semantic_correctness": "requires_manual_review",
+  "plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "Offensive Language Identification in Greek",
+        "question_quote": "For the paper \"Offensive Language Identification in Greek\" (arXiv: 2003.07459), answer this question: What models do they experiment on?",
+        "need": "For the paper \"Offensive Language Identification in Greek\" (arXiv: 2003.07459), answer this question: What models do they experiment on?"
+      }
+    ]
+  },
+  "assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "partial",
+        "evidence": [
+          {
+            "chunk_id": 1578,
+            "quote": "The experiment with linguistic features was the combina- tion of dependency relation tags with TF/IDF unigrams. This experimented yielded the same F1-score of 80% as the other Linear SVM classiﬁers"
+          },
+          {
+            "chunk_id": 1576,
+            "quote": "In the next experiment, POS tags were used in conjunction with TF/IDF unigram features. Surprisingly, the addition of POS tags in the Linear SVM yields the same F1-score as the ﬁrst model trained on TF/IDF unigram features"
+          },
+          {
+            "chunk_id": 1583,
+            "quote": "the best model (LSTM and GRU with Atten- tion) achieving a F1-macro of 0.89. Among the classi- cal machine learning approaches, the linear SVM model achieved the best results, 0.80"
+          },
+          {
+            "chunk_id": 1555,
+            "quote": "we used the available multilingual BERT cased model for the sixth deep learning architecture"
+          }
+        ],
+        "supported_part": "论文中提到了实验的部分模型，如 Linear SVM、POS 标签配合 TF/IDF 一元特征的模型、LSTM 与 GRU with Attention、SGD 分类器以及多语言 BERT 模型。",
+        "reason": "所提供的片段列举了若干被实验的模型（Linear SVM、LSTM/GRU with Attention、SGD、multilingual BERT 等），但没有提供完整的模型清单或系统的实验模型描述，无法据此确定全部被实验的模型。",
+        "gap": "缺乏对论文所实验的全部模型的完整、系统列举（例如所有深度学习架构的名称及完整实验设置）。"
+      }
+    ],
+    "next_action": {
+      "type": "read_neighbors",
+      "reason": "关于所实验模型的清单可能集中在该论文的实验/方法部分（第4节附近），可以通过读取第3页至第5页相关片段的邻近段落来补全缺失的模型列表。",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": null,
+      "source": "2003.07459.pdf",
+      "chunk_id": 1555
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "仅针对“论文实验了哪些模型”这一要求进行检查，引用的片段均与模型实验相关，未超出范围。"
+    }
+  },
+  "steps": [
+    {
+      "number": 1,
+      "action": {
+        "type": "read_neighbors",
+        "reason": "关于所实验模型的清单可能集中在该论文的实验/方法部分（第4节附近），可以通过读取第3页至第5页相关片段的邻近段落来补全缺失的模型列表。",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": null,
+        "source": "2003.07459.pdf",
+        "chunk_id": 1555
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "read_neighbors",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "chunk_id": 1555,
+          "source": "2003.07459.pdf",
+          "knowledge_base": {
+            "version": "qasper-test50-20261024",
+            "chunk_count": 1612,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/manifest.json",
+            "manifest_sha256": "9974fa3a87051eda09cd42cd585d1501ed257548d187d0321ed8f82f71790f5e",
+            "files": {
+              "faiss.index": "f4c8de7951c30bb0deee445e8d9983d05f7360576c426b58f6f8046d093ef5c7",
+              "chunks.json": "0061d789f2d24144b80e14598fd7509c48803fd6c87d04a78c6960c34d268a4f"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 1553,
+              "text": "Given the consistent use of linguistic features for training machine learning models and results from previous work for offensive language detection, part- of-speech (POS) and dependency relation tags were consid- ered as additional features. Using the spaCy3 pipeline for Greek, POS-tags and dependency relations were extracted for every token in a tweet, which were then transformed to count matrices.",
+              "source": "2003.07459.pdf",
+              "page": 3,
+              "title": "Offensive Language Identification in Greek",
+              "section": "4. Methods",
+              "kb_version": "qasper-test50-20261024",
+              "offset": -2
+            },
+            {
+              "chunk_id": 1554,
+              "text": "A sentiment lexicon was considered, but one suitable for this project is as of yet unavailable for Greek. For the ﬁrst six deep learning models we used Greek word embeddings trained on a large Greek web corpus (Outsios 3https://spacy.io/ et al., 2018). Each Greek word can be represented with a 300 dimensional vector using the trained model. The vec- tor then can be used to feed in to the deep learning models which will be described in section 4.1.2..",
+              "source": "2003.07459.pdf",
+              "page": 3,
+              "title": "Offensive Language Identification in Greek",
+              "section": "4. Methods",
+              "kb_version": "qasper-test50-20261024",
+              "offset": -1
+            },
+            {
+              "chunk_id": 1555,
+              "text": "For the last deep learning architecture we wanted to use a BERT (Devlin et al., 2019) model trained on Greek. However there was no BERT model available for Greek language. The model that came closest our requirement was multilingual BERT model 4 trained on 108 languages (Devlin et al., 2019) in- cluding Greek. Since training BERT is a very computation- aly expensive task we used the available multilingual BERT cased model for the sixth deep learning architecture.",
+              "source": "2003.07459.pdf",
+              "page": 3,
+              "title": "Offensive Language Identification in Greek",
+              "section": "4. Methods",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 0
+            },
+            {
+              "chunk_id": 1556,
+              "text": "4.1.1. Classical Machine Learning Models Every classical model was considered on the condition it could take matrices as input for ﬁtting and was trained with the default settings because of the size of the dataset. Five models were trained: Two SVMs, one with linear kernel and the other with a radial basis function kernel (RBF), both with a value of 1 in the penalty parameter C of the error term.",
+              "source": "2003.07459.pdf",
+              "page": 3,
+              "title": "Offensive Language Identification in Greek",
+              "section": "4.1.1. Classical Machine Learning Models",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 1
+            },
+            {
+              "chunk_id": 1557,
+              "text": "The gamma value of the RBF SVM which indicates how much inﬂuence a single training example has, was set to 2. The third classiﬁer trained was another linear clas- siﬁer with Stochastic Gradient Descent (SGDC) learning. The gradient of the loss is estimated each sample at a time and the SGDC is updated along the way with a decreas- ing learning rate. The parameters for maximum epochs and the stopping criterion were deﬁned using the default values in scikit-learn.",
+              "source": "2003.07459.pdf",
+              "page": 3,
+              "title": "Offensive Language Identification in Greek",
+              "section": "4.1.1. Classical Machine Learning Models",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 2
+            }
+          ],
+          "trace": {
+            "window": 2,
+            "max_window": 2,
+            "selected_ids": [
+              1553,
+              1554,
+              1555,
+              1556,
+              1557
+            ],
+            "read_chars": 2190,
+            "elapsed_seconds": 0.000163,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        1556,
+        1557
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          1556,
+          1557
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "partial",
+            "evidence": [
+              {
+                "chunk_id": 1556,
+                "quote": "Five models were trained: Two SVMs, one with linear kernel and the other with a radial basis function kernel (RBF), both with a value of 1 in the penalty parameter C of the error term."
+              },
+              {
+                "chunk_id": 1557,
+                "quote": "The third classiﬁer trained was another linear clas- siﬁer with Stochastic Gradient Descent (SGDC) learning."
+              },
+              {
+                "chunk_id": 1555,
+                "quote": "Since training BERT is a very computation- aly expensive task we used the available multilingual BERT cased model for the sixth deep learning architecture."
+              }
+            ],
+            "supported_part": "论文在多个经典机器学习模型（两个SVM：线性核与RBF核、SGDC）以及包括多语言BERT在内的深度学习模型上进行了实验。",
+            "reason": "段落确立了部分所用模型（经典ML分类器与深度学习中含多语言BERT），但未完整列出全部实验模型（如各深度学习架构的具体清单）。",
+            "gap": "尚未建立全部深度学习模型（例如LSTM、GRU with Attention等具体架构）的完整实验模型列表。"
+          }
+        ],
+        "next_action": {
+          "type": "read_neighbors",
+          "reason": "所需事实为论文实验的全部模型；已有段落提到部分模型，但完整深度学习模型清单可能位于相关实验章节附近，需在已提供的深度学习/实验段落附近读取邻接内容。",
+          "requirement_ids": [
+            "r1"
+          ],
+          "query": null,
+          "source": "2003.07459.pdf",
+          "chunk_id": 1554
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "检查范围限于问题要求的“他们实验了哪些模型”，未扩展到其他条件。"
+        }
+      }
+    },
+    {
+      "number": 2,
+      "action": {
+        "type": "read_neighbors",
+        "reason": "所需事实为论文实验的全部模型；已有段落提到部分模型，但完整深度学习模型清单可能位于相关实验章节附近，需在已提供的深度学习/实验段落附近读取邻接内容。",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": null,
+        "source": "2003.07459.pdf",
+        "chunk_id": 1554
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "read_neighbors",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "chunk_id": 1554,
+          "source": "2003.07459.pdf",
+          "knowledge_base": {
+            "version": "qasper-test50-20261024",
+            "chunk_count": 1612,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/manifest.json",
+            "manifest_sha256": "9974fa3a87051eda09cd42cd585d1501ed257548d187d0321ed8f82f71790f5e",
+            "files": {
+              "faiss.index": "f4c8de7951c30bb0deee445e8d9983d05f7360576c426b58f6f8046d093ef5c7",
+              "chunks.json": "0061d789f2d24144b80e14598fd7509c48803fd6c87d04a78c6960c34d268a4f"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 1552,
+              "text": "The threshold for corpus speciﬁc words was set to 80%, ignoring terms appearing in more than 80% of the documents while the minimum document frequency was set to 6, and both unigrams and bigrams were tested.",
+              "source": "2003.07459.pdf",
+              "page": 3,
+              "title": "Offensive Language Identification in Greek",
+              "section": "4. Methods",
+              "kb_version": "qasper-test50-20261024",
+              "offset": -2
+            },
+            {
+              "chunk_id": 1553,
+              "text": "Given the consistent use of linguistic features for training machine learning models and results from previous work for offensive language detection, part- of-speech (POS) and dependency relation tags were consid- ered as additional features. Using the spaCy3 pipeline for Greek, POS-tags and dependency relations were extracted for every token in a tweet, which were then transformed to count matrices.",
+              "source": "2003.07459.pdf",
+              "page": 3,
+              "title": "Offensive Language Identification in Greek",
+              "section": "4. Methods",
+              "kb_version": "qasper-test50-20261024",
+              "offset": -1
+            },
+            {
+              "chunk_id": 1554,
+              "text": "A sentiment lexicon was considered, but one suitable for this project is as of yet unavailable for Greek. For the ﬁrst six deep learning models we used Greek word embeddings trained on a large Greek web corpus (Outsios 3https://spacy.io/ et al., 2018). Each Greek word can be represented with a 300 dimensional vector using the trained model. The vec- tor then can be used to feed in to the deep learning models which will be described in section 4.1.2..",
+              "source": "2003.07459.pdf",
+              "page": 3,
+              "title": "Offensive Language Identification in Greek",
+              "section": "4. Methods",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 0
+            },
+            {
+              "chunk_id": 1555,
+              "text": "For the last deep learning architecture we wanted to use a BERT (Devlin et al., 2019) model trained on Greek. However there was no BERT model available for Greek language. The model that came closest our requirement was multilingual BERT model 4 trained on 108 languages (Devlin et al., 2019) in- cluding Greek. Since training BERT is a very computation- aly expensive task we used the available multilingual BERT cased model for the sixth deep learning architecture.",
+              "source": "2003.07459.pdf",
+              "page": 3,
+              "title": "Offensive Language Identification in Greek",
+              "section": "4. Methods",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 1
+            },
+            {
+              "chunk_id": 1556,
+              "text": "4.1.1. Classical Machine Learning Models Every classical model was considered on the condition it could take matrices as input for ﬁtting and was trained with the default settings because of the size of the dataset. Five models were trained: Two SVMs, one with linear kernel and the other with a radial basis function kernel (RBF), both with a value of 1 in the penalty parameter C of the error term.",
+              "source": "2003.07459.pdf",
+              "page": 3,
+              "title": "Offensive Language Identification in Greek",
+              "section": "4.1.1. Classical Machine Learning Models",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 2
+            }
+          ],
+          "trace": {
+            "window": 2,
+            "max_window": 2,
+            "selected_ids": [
+              1552,
+              1553,
+              1554,
+              1555,
+              1556
+            ],
+            "read_chars": 1931,
+            "elapsed_seconds": 9e-05,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        1552
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          1552
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "partial",
+            "evidence": [
+              {
+                "chunk_id": 1556,
+                "quote": "Every classical model was considered on the condition it could take matrices as input for ﬁtting and was trained with the default settings because of the size of the dataset. Five models were trained: Two SVMs, one with linear kernel and the other with a radial basis function kernel (RBF), both with a value of 1 in the penalty parameter C of the error term."
+              },
+              {
+                "chunk_id": 1557,
+                "quote": "The third classiﬁer trained was another linear clas- siﬁer with Stochastic Gradient Descent (SGDC) learning."
+              },
+              {
+                "chunk_id": 1555,
+                "quote": "For the last deep learning architecture we wanted to use a BERT (Devlin et al., 2019) model trained on Greek. However there was no BERT model available for Greek language. The model that came closest our requirement was multilingual BERT model 4 trained on 108 languages (Devlin et al., 2019) in- cluding Greek. Since training BERT is a very computation- aly expensive task we used the available multilingual BERT cased model for the sixth deep learning architecture."
+              }
+            ],
+            "supported_part": "实验包括多个经典机器学习模型（线性SVM、RBF SVM、随机梯度下降分类器）以及深度学习架构中的多语言BERT模型。",
+            "reason": "已提供的段落确立了部分被实验的模型：经典机器学习分类器（两个SVM和SGDC）以及多语言BERT模型。然而，完整的模型列表尚未完全确立——深度学习模型组（如LSTM和GRU）被提及但未在其专门的章节中详细列出。",
+            "gap": "深度学习模型组的完整列表（例如LSTM、GRU及其具体架构）未被现有引文以列举形式确立。"
+          }
+        ],
+        "next_action": {
+          "type": "read_neighbors",
+          "reason": "深度学习模型组的具体列表可能位于经典机器学习模型章节（chunk 1556）附近的相邻段落中，需读取其邻近内容以寻找完整模型列举。",
+          "requirement_ids": [
+            "r1"
+          ],
+          "query": null,
+          "source": "2003.07459.pdf",
+          "chunk_id": 1556
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "范围检查仅针对r1的模型实验问题，未超出其问题摘录。"
+        }
+      }
+    },
+    {
+      "number": 3,
+      "action": {
+        "type": "read_neighbors",
+        "reason": "深度学习模型组的具体列表可能位于经典机器学习模型章节（chunk 1556）附近的相邻段落中，需读取其邻近内容以寻找完整模型列举。",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": null,
+        "source": "2003.07459.pdf",
+        "chunk_id": 1556
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "read_neighbors",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "chunk_id": 1556,
+          "source": "2003.07459.pdf",
+          "knowledge_base": {
+            "version": "qasper-test50-20261024",
+            "chunk_count": 1612,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-test50-20261024/manifest.json",
+            "manifest_sha256": "9974fa3a87051eda09cd42cd585d1501ed257548d187d0321ed8f82f71790f5e",
+            "files": {
+              "faiss.index": "f4c8de7951c30bb0deee445e8d9983d05f7360576c426b58f6f8046d093ef5c7",
+              "chunks.json": "0061d789f2d24144b80e14598fd7509c48803fd6c87d04a78c6960c34d268a4f"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 1554,
+              "text": "A sentiment lexicon was considered, but one suitable for this project is as of yet unavailable for Greek. For the ﬁrst six deep learning models we used Greek word embeddings trained on a large Greek web corpus (Outsios 3https://spacy.io/ et al., 2018). Each Greek word can be represented with a 300 dimensional vector using the trained model. The vec- tor then can be used to feed in to the deep learning models which will be described in section 4.1.2..",
+              "source": "2003.07459.pdf",
+              "page": 3,
+              "title": "Offensive Language Identification in Greek",
+              "section": "4. Methods",
+              "kb_version": "qasper-test50-20261024",
+              "offset": -2
+            },
+            {
+              "chunk_id": 1555,
+              "text": "For the last deep learning architecture we wanted to use a BERT (Devlin et al., 2019) model trained on Greek. However there was no BERT model available for Greek language. The model that came closest our requirement was multilingual BERT model 4 trained on 108 languages (Devlin et al., 2019) in- cluding Greek. Since training BERT is a very computation- aly expensive task we used the available multilingual BERT cased model for the sixth deep learning architecture.",
+              "source": "2003.07459.pdf",
+              "page": 3,
+              "title": "Offensive Language Identification in Greek",
+              "section": "4. Methods",
+              "kb_version": "qasper-test50-20261024",
+              "offset": -1
+            },
+            {
+              "chunk_id": 1556,
+              "text": "4.1.1. Classical Machine Learning Models Every classical model was considered on the condition it could take matrices as input for ﬁtting and was trained with the default settings because of the size of the dataset. Five models were trained: Two SVMs, one with linear kernel and the other with a radial basis function kernel (RBF), both with a value of 1 in the penalty parameter C of the error term.",
+              "source": "2003.07459.pdf",
+              "page": 3,
+              "title": "Offensive Language Identification in Greek",
+              "section": "4.1.1. Classical Machine Learning Models",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 0
+            },
+            {
+              "chunk_id": 1557,
+              "text": "The gamma value of the RBF SVM which indicates how much inﬂuence a single training example has, was set to 2. The third classiﬁer trained was another linear clas- siﬁer with Stochastic Gradient Descent (SGDC) learning. The gradient of the loss is estimated each sample at a time and the SGDC is updated along the way with a decreas- ing learning rate. The parameters for maximum epochs and the stopping criterion were deﬁned using the default values in scikit-learn.",
+              "source": "2003.07459.pdf",
+              "page": 3,
+              "title": "Offensive Language Identification in Greek",
+              "section": "4.1.1. Classical Machine Learning Models",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 1
+            },
+            {
+              "chunk_id": 1558,
+              "text": "The ﬁnal classiﬁer was two models based on the Bayes theorem: Multinomial Naïve Bayes, which To works with occurrence counts, and Bernoulli Naïve Bayes, which is designed for binary features.",
+              "source": "2003.07459.pdf",
+              "page": 3,
+              "title": "Offensive Language Identification in Greek",
+              "section": "4.1.1. Classical Machine Learning Models",
+              "kb_version": "qasper-test50-20261024",
+              "offset": 2
+            }
+          ],
+          "trace": {
+            "window": 2,
+            "max_window": 2,
+            "selected_ids": [
+              1554,
+              1555,
+              1556,
+              1557,
+              1558
+            ],
+            "read_chars": 1978,
+            "elapsed_seconds": 0.000167,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        1558
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          1558
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "partial",
+            "evidence": [
+              {
+                "chunk_id": 1556,
+                "quote": "4.1.1. Classical Machine Learning Models Every classical model was considered on the condition it could take matrices as input for ﬁtting and was trained with the default settings because of the size of the dataset. Five models were trained: Two SVMs, one with linear kernel and the other with a radial basis function kernel (RBF), both with a value of 1 in the penalty parameter C of the error term."
+              },
+              {
+                "chunk_id": 1557,
+                "quote": "The third classiﬁer trained was another linear clas- siﬁer with Stochastic Gradient Descent (SGDC) learning."
+              },
+              {
+                "chunk_id": 1558,
+                "quote": "The ﬁnal classiﬁer was two models based on the Bayes theorem: Multinomial Naïve Bayes, which To works with occurrence counts, and Bernoulli Naïve Bayes, which is designed for binary features."
+              },
+              {
+                "chunk_id": 1555,
+                "quote": "For the last deep learning architecture we wanted to use a BERT (Devlin et al., 2019) model trained on Greek."
+              },
+              {
+                "chunk_id": 1583,
+                "quote": "with the best model (LSTM and GRU with Atten- tion) achieving a F1-macro of 0.89."
+              }
+            ],
+            "supported_part": "古典机器学习模型（Linear SVM、RBF SVM、SGDC、Multinomial Naïve Bayes、Bernoulli Naïve Bayes）以及部分深度学习模型（BERT、LSTM/GRU with Attention）被实验。",
+            "reason": "多个段落列举了若干被实验的模型，但问题要求的完整模型列表需要涵盖第4.1.2节全部深度学习架构（提及“ﬁrst six deep learning models”），现有引文仅覆盖其一部分，其余模型名称未确立。",
+            "gap": "第4.1.2节所列的完整深度学习模型集合（例如前六个深度模型的具体名称）未被完整引用确立。"
+          }
+        ],
+        "next_action": {
+          "type": "read_neighbors",
+          "reason": "已找到古典与部分深度模型的描述，但完整的深度学习架构列表（第4.1.2节）尚未确立，需读取该节附近段落。",
+          "requirement_ids": [
+            "r1"
+          ],
+          "query": null,
+          "source": "2003.07459.pdf",
+          "chunk_id": 1554
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "检查范围限于所绑定问题的excerpt：该论文实验的模型；引文均来自该论文对应章节。"
+        }
+      }
+    }
+  ],
+  "evidence_after": [
+    {
+      "chunk_id": 1518,
+      "source": "2003.07459.pdf",
+      "page": 1,
+      "title": "Offensive Language Identification in Greek",
+      "text": "This is mostly due to the availability of language resources for English. To address this shortcoming, this paper presents the ﬁrst Greek annotated dataset for offensive language identiﬁcation: the Offensive Greek Tweet Dataset (OGTD). OGTD is a manually annotated dataset containing 4,779 posts from Twitter annotated as offensive and not offensive. Along with a detailed description of the dataset, we evaluate several computational models trained and tested on this data.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1578,
+      "source": "2003.07459.pdf",
+      "page": 5,
+      "title": "Offensive Language Identification in Greek",
+      "text": "The complete results are presented in table 5 below. The experiment with linguistic features was the combina- tion of dependency relation tags with TF/IDF unigrams. This experimented yielded the same F1-score of 80% as the other Linear SVM classiﬁers, performing almost iden- tically with the previous model trained with POS tags, only bested in precision for the Offensive class.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1576,
+      "source": "2003.07459.pdf",
+      "page": 5,
+      "title": "Offensive Language Identification in Greek",
+      "text": "In the next experiment, POS tags were used in conjunction with TF/IDF unigram features. Surprisingly, the addition of POS tags in the Linear SVM yields the same F1-score as the ﬁrst model trained on TF/IDF unigram features, yield- ing lower precision scores for both classes, while the re- call score for the Offensive class improved marginally. The Naïve Bayes models show a marginal decrease in their per- formance.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1517,
+      "source": "2003.07459.pdf",
+      "page": 1,
+      "title": "Offensive Language Identification in Greek",
+      "text": "Offensive Language Identiﬁcation in Greek Zeses Pitenis1, Marcos Zampieri2, Tharindu Ranasinghe1 1University of Wolverhampton - Wolverhampton, UK 2Rochester Institute of Technology - Rochester, NY, USA z.pitenis@wlv.ac.uk, marcos.zampieri@rit.edu, tharindu.ranasinghe@wlv.ac.uk As offensive language has become a rising issue for online communities and social media platforms, researchers have been investigating ways of coping with abusive content and developing systems to detect its different types: cyberbullying, hate speech, aggression, etc. With a few notable exceptions, most research on this topic so far has dealt with English.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1583,
+      "source": "2003.07459.pdf",
+      "page": 5,
+      "title": "Offensive Language Identification in Greek",
+      "text": "4.3. Discussion The data annotated in OGTD proved to be facilitating in offensive language detection with a signiﬁcant success for Greek, taking into consideration its size and label distri- bution, with the best model (LSTM and GRU with Atten- tion) achieving a F1-macro of 0.89. Among the classi- cal machine learning approaches, the linear SVM model achieved the best results, 0.80, whereas the the Stochastic Gradient Descent (SGD) learning classiﬁer yielded the best recall score for the Offensive class, at 0.61. In terms of features used, TF/IDF matrices of word unigrams proved to work work well with multiple classical ML classiﬁers.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1554,
+      "source": "2003.07459.pdf",
+      "page": 3,
+      "title": "Offensive Language Identification in Greek",
+      "text": "A sentiment lexicon was considered, but one suitable for this project is as of yet unavailable for Greek. For the ﬁrst six deep learning models we used Greek word embeddings trained on a large Greek web corpus (Outsios 3https://spacy.io/ et al., 2018). Each Greek word can be represented with a 300 dimensional vector using the trained model. The vec- tor then can be used to feed in to the deep learning models which will be described in section 4.1.2..",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1585,
+      "source": "2003.07459.pdf",
+      "page": 5,
+      "title": "Offensive Language Identification in Greek",
+      "text": "Of the linguistic features, POS tags improved the perfor- mance of the Linear SVM marginally in terms of recall for the Offensive class, other classiﬁers deteriorated in their performance.It is not yet clear whether this is due to the ac- curacy of the Greek model available for spaCy in producing such tags or the tags themselves as features and is a subject that can be explored with further improvements of spaCy or other NLP tools developed for Greek.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1553,
+      "source": "2003.07459.pdf",
+      "page": 3,
+      "title": "Offensive Language Identification in Greek",
+      "text": "Given the consistent use of linguistic features for training machine learning models and results from previous work for offensive language detection, part- of-speech (POS) and dependency relation tags were consid- ered as additional features. Using the spaCy3 pipeline for Greek, POS-tags and dependency relations were extracted for every token in a tweet, which were then transformed to count matrices.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1555,
+      "source": "2003.07459.pdf",
+      "page": 3,
+      "title": "Offensive Language Identification in Greek",
+      "text": "For the last deep learning architecture we wanted to use a BERT (Devlin et al., 2019) model trained on Greek. However there was no BERT model available for Greek language. The model that came closest our requirement was multilingual BERT model 4 trained on 108 languages (Devlin et al., 2019) in- cluding Greek. Since training BERT is a very computation- aly expensive task we used the available multilingual BERT cased model for the sixth deep learning architecture.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1519,
+      "source": "2003.07459.pdf",
+      "page": 1,
+      "title": "Offensive Language Identification in Greek",
+      "text": "arXiv:2003.07459v2 [cs.CL] 18 Mar 2020 Keywords: offensive language, hate speech, Greek",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1556,
+      "source": "2003.07459.pdf",
+      "page": 3,
+      "title": "Offensive Language Identification in Greek",
+      "text": "4.1.1. Classical Machine Learning Models Every classical model was considered on the condition it could take matrices as input for ﬁtting and was trained with the default settings because of the size of the dataset. Five models were trained: Two SVMs, one with linear kernel and the other with a radial basis function kernel (RBF), both with a value of 1 in the penalty parameter C of the error term.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1557,
+      "source": "2003.07459.pdf",
+      "page": 3,
+      "title": "Offensive Language Identification in Greek",
+      "text": "The gamma value of the RBF SVM which indicates how much inﬂuence a single training example has, was set to 2. The third classiﬁer trained was another linear clas- siﬁer with Stochastic Gradient Descent (SGDC) learning. The gradient of the loss is estimated each sample at a time and the SGDC is updated along the way with a decreas- ing learning rate. The parameters for maximum epochs and the stopping criterion were deﬁned using the default values in scikit-learn.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1552,
+      "source": "2003.07459.pdf",
+      "page": 3,
+      "title": "Offensive Language Identification in Greek",
+      "text": "The threshold for corpus speciﬁc words was set to 80%, ignoring terms appearing in more than 80% of the documents while the minimum document frequency was set to 6, and both unigrams and bigrams were tested.",
+      "kb_version": "qasper-test50-20261024"
+    },
+    {
+      "chunk_id": 1558,
+      "source": "2003.07459.pdf",
+      "page": 3,
+      "title": "Offensive Language Identification in Greek",
+      "text": "The ﬁnal classiﬁer was two models based on the Bayes theorem: Multinomial Naïve Bayes, which To works with occurrence counts, and Bernoulli Naïve Bayes, which is designed for binary features.",
+      "kb_version": "qasper-test50-20261024"
+    }
+  ],
+  "action_attempts": 3,
+  "feedback_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "partial",
+        "evidence": [
+          {
+            "chunk_id": 1556,
+            "quote": "4.1.1. Classical Machine Learning Models Every classical model was considered on the condition it could take matrices as input for ﬁtting and was trained with the default settings because of the size of the dataset. Five models were trained: Two SVMs, one with linear kernel and the other with a radial basis function kernel (RBF), both with a value of 1 in the penalty parameter C of the error term."
+          },
+          {
+            "chunk_id": 1557,
+            "quote": "The third classiﬁer trained was another linear clas- siﬁer with Stochastic Gradient Descent (SGDC) learning."
+          },
+          {
+            "chunk_id": 1558,
+            "quote": "The ﬁnal classiﬁer was two models based on the Bayes theorem: Multinomial Naïve Bayes, which To works with occurrence counts, and Bernoulli Naïve Bayes, which is designed for binary features."
+          },
+          {
+            "chunk_id": 1555,
+            "quote": "For the last deep learning architecture we wanted to use a BERT (Devlin et al., 2019) model trained on Greek."
+          },
+          {
+            "chunk_id": 1583,
+            "quote": "with the best model (LSTM and GRU with Atten- tion) achieving a F1-macro of 0.89."
+          }
+        ],
+        "supported_part": "古典机器学习模型（Linear SVM、RBF SVM、SGDC、Multinomial Naïve Bayes、Bernoulli Naïve Bayes）以及部分深度学习模型（BERT、LSTM/GRU with Attention）被实验。",
+        "reason": "多个段落列举了若干被实验的模型，但问题要求的完整模型列表需要涵盖第4.1.2节全部深度学习架构（提及“ﬁrst six deep learning models”），现有引文仅覆盖其一部分，其余模型名称未确立。",
+        "gap": "第4.1.2节所列的完整深度学习模型集合（例如前六个深度模型的具体名称）未被完整引用确立。"
+      }
+    ],
+    "next_action": {
+      "type": "read_neighbors",
+      "reason": "已找到古典与部分深度模型的描述，但完整的深度学习架构列表（第4.1.2节）尚未确立，需读取该节附近段落。",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": null,
+      "source": "2003.07459.pdf",
+      "chunk_id": 1554
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "检查范围限于所绑定问题的excerpt：该论文实验的模型；引文均来自该论文对应章节。"
+    }
+  },
+  "halt_reason": "repeated_action",
+  "final_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "partial",
+        "evidence": [
+          {
+            "chunk_id": 1556,
+            "quote": "4.1.1. Classical Machine Learning Models Every classical model was considered on the condition it could take matrices as input for ﬁtting and was trained with the default settings because of the size of the dataset. Five models were trained: Two SVMs, one with linear kernel and the other with a radial basis function kernel (RBF), both with a value of 1 in the penalty parameter C of the error term."
+          },
+          {
+            "chunk_id": 1557,
+            "quote": "The third classiﬁer trained was another linear clas- siﬁer with Stochastic Gradient Descent (SGDC) learning."
+          },
+          {
+            "chunk_id": 1558,
+            "quote": "The ﬁnal classiﬁer was two models based on the Bayes theorem: Multinomial Naïve Bayes, which To works with occurrence counts, and Bernoulli Naïve Bayes, which is designed for binary features."
+          },
+          {
+            "chunk_id": 1555,
+            "quote": "For the last deep learning architecture we wanted to use a BERT (Devlin et al., 2019) model trained on Greek."
+          },
+          {
+            "chunk_id": 1583,
+            "quote": "with the best model (LSTM and GRU with Atten- tion) achieving a F1-macro of 0.89."
+          }
+        ],
+        "supported_part": "古典机器学习模型（Linear SVM、RBF SVM、SGDC、Multinomial Naïve Bayes、Bernoulli Naïve Bayes）以及部分深度学习模型（BERT、LSTM/GRU with Attention）被实验。",
+        "reason": "多个段落列举了若干被实验的模型，但问题要求的完整模型列表需要涵盖第4.1.2节全部深度学习架构（提及“ﬁrst six deep learning models”），现有引文仅覆盖其一部分，其余模型名称未确立。",
+        "gap": "第4.1.2节所列的完整深度学习模型集合（例如前六个深度模型的具体名称）未被完整引用确立。"
+      }
+    ],
+    "next_action": {
+      "type": "read_neighbors",
+      "reason": "已找到古典与部分深度模型的描述，但完整的深度学习架构列表（第4.1.2节）尚未确立，需读取该节附近段落。",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": null,
+      "source": "2003.07459.pdf",
+      "chunk_id": 1554
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "检查范围限于所绑定问题的excerpt：该论文实验的模型；引文均来自该论文对应章节。"
+    }
+  },
+  "elapsed_seconds": 17.683
+}

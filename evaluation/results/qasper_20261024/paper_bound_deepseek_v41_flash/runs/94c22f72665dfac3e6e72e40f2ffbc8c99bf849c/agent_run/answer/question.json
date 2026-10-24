@@ -1,0 +1,134 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "For the paper \"Sequential Neural Networks as Automata\" (arXiv: 1906.01615), answer this question: What type of languages do they test LSTMs on?",
+  "kb_version": "qasper-test50-20261024",
+  "result": {
+    "status": "review_failed",
+    "repair_attempted": true,
+    "drafts": [
+      "The paper discusses the language types relevant to LSTMs in terms of **counter languages**, noting that the asymptotic expressiveness of the LSTM falls somewhere between the general and simplified counter languages [2], and that LSTMs function like counter machines [3]. Related discussion mentions **languages like aⁿbⁿ** in connection with counter behavior [8].\n\nHowever, the specific language types used to **test** LSTMs in the authors' experiments (the experimental setup) are not established by the provided passages; the question is only partially answered, and the experimental test languages remain a gap.",
+      "The provided passages do not establish the specific language types used to test LSTMs in the paper's experiments. The passages instead characterize LSTMs theoretically as functioning like counter machines, with asymptotic expressiveness falling somewhere between general and simplified counter languages [2][3], and mention languages like aⁿbⁿ only in connection with counter behavior [8]. The experimental test languages therefore remain a gap."
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "fail",
+              "answer_quote": "The paper discusses the language types relevant to LSTMs in terms of **counter languages**, noting that the asymptotic expressiveness of the LSTM falls somewhere between the general and simplified counter languages [2], and that LSTMs function like counter machines [3]. Related discussion mentions **languages like aⁿbⁿ** in connection with counter behavior [8]. However, the specific language types used to **test** LSTMs in the authors' experiments (the experimental setup) are not established by the provided passages; the question is only partially answered, and the experimental test languages remain a gap.",
+              "reason": "问题问的是论文在实验中用哪些类型的语言测试 LSTM。回答给出的是关于 LSTM 渐近表达力的理论刻画（counter languages、counter machines）以及 Weiss et al. 对 anbn 的讨论，均非本文实验中用于测试 LSTM 的语言类型；且回答未给出实验测试语言的具体类型，仅明确承认该实验设置缺口，因此未正面回答问题。所引 [2]/[3]/[8] 属于理论/相关讨论，不能支撑“测试语言类型”这一要求，[8] 更是关于 GRU 与 anbn 的对比讨论，属于误引。",
+              "citations": [
+                {
+                  "number": 2,
+                  "quote": "(2018) show how the LSTM can simulate a simpliﬁed variant of the counter ma- chine. Combining these results, we see that the asymptotic expressiveness of the LSTM falls somewhere between the general and simpliﬁed counter languages."
+                },
+                {
+                  "number": 3,
+                  "quote": "We then characterize the classes of languages acceptable by various recurrent net- works, attention, and convolutional networks. We ﬁnd that LSTMs function like counter ma- chines and relate convolutional networks to the subregular hierarchy."
+                },
+                {
+                  "number": 8,
+                  "quote": "(2018) observe that GRUs do not exhibit the same counter behavior as LSTMs on (15) languages like anbn."
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": false,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": false,
+            "unsupported_claims": false,
+            "gaps": true
+          },
+          "issues": [
+            "未回答实验中用于测试 LSTM 的具体语言类型；给出的 counter languages/counter machines 属于理论表达力刻画，而非实验测试语言。",
+            "引用 [8] 是 GRU 与 anbn 的对比讨论，不能支撑 LSTM 测试语言类型，属于误引/冗余引用。",
+            "回答虽承认实验设置缺口（gaps 为 true），但核心要求仍未被满足，故 r1 判 fail。"
+          ]
+        },
+        "citation_check": {
+          "cited_numbers": [
+            2,
+            3,
+            8
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 2,
+              "chunk_id": 961,
+              "source": "1906.01615.pdf",
+              "page": 5,
+              "text": "(2018) show how the LSTM can simulate a simpliﬁed variant of the counter ma- chine. Combining these results, we see that the asymptotic expressiveness of the LSTM falls somewhere between the general and simpliﬁed counter languages. This suggests counting is a good way to understand the behavior of LSTMs."
+            },
+            {
+              "citation": 3,
+              "chunk_id": 910,
+              "source": "1906.01615.pdf",
+              "page": 1,
+              "text": "We then characterize the classes of languages acceptable by various recurrent net- works, attention, and convolutional networks. We ﬁnd that LSTMs function like counter ma- chines and relate convolutional networks to the subregular hierarchy."
+            },
+            {
+              "citation": 8,
+              "chunk_id": 963,
+              "source": "1906.01615.pdf",
+              "page": 5,
+              "text": "(2018) observe that GRUs do not exhibit the same counter behavior as LSTMs on (15) languages like anbn. As with the SRN, the GRU (16) state is squashed between −1 and 1 (20). Taken together, Lemmas C.1 and C.2 show that GRUs, like SRNs, are ﬁnite-state. (17) Theorem 3.5 (GRU characterization). L(GRU) = RL."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      },
+      {
+        "review_error": "Review cites a source not cited by its answer quote.",
+        "citation_check": {
+          "cited_numbers": [
+            2,
+            3,
+            8
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 2,
+              "chunk_id": 961,
+              "source": "1906.01615.pdf",
+              "page": 5,
+              "text": "(2018) show how the LSTM can simulate a simpliﬁed variant of the counter ma- chine. Combining these results, we see that the asymptotic expressiveness of the LSTM falls somewhere between the general and simpliﬁed counter languages. This suggests counting is a good way to understand the behavior of LSTMs."
+            },
+            {
+              "citation": 3,
+              "chunk_id": 910,
+              "source": "1906.01615.pdf",
+              "page": 1,
+              "text": "We then characterize the classes of languages acceptable by various recurrent net- works, attention, and convolutional networks. We ﬁnd that LSTMs function like counter ma- chines and relate convolutional networks to the subregular hierarchy."
+            },
+            {
+              "citation": 8,
+              "chunk_id": 963,
+              "source": "1906.01615.pdf",
+              "page": 5,
+              "text": "(2018) observe that GRUs do not exhibit the same counter behavior as LSTMs on (15) languages like anbn. As with the SRN, the GRU (16) state is squashed between −1 and 1 (20). Taken together, Lemmas C.1 and C.2 show that GRUs, like SRNs, are ﬁnite-state. (17) Theorem 3.5 (GRU characterization). L(GRU) = RL."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "The answer failed review, so no reliable factual answer can be delivered this time.\n- Sequential Neural Networks as Automata: For the paper \"Sequential Neural Networks as Automata\" (arXiv: 1906.01615), answer this question: What type of languages do they test LSTMs on?; 仍缺：作者在实验中对 LSTM 进行测试所使用的具体语言类型（实验设置）。",
+    "rejected_answer": "The provided passages do not establish the specific language types used to test LSTMs in the paper's experiments. The passages instead characterize LSTMs theoretically as functioning like counter machines, with asymptotic expressiveness falling somewhere between general and simplified counter languages [2][3], and mention languages like aⁿbⁿ only in connection with counter behavior [8]. The experimental test languages therefore remain a gap."
+  }
+}

@@ -1,0 +1,1 @@
+During pretraining, they directly use the 15-language pre-trained XLM to initialize the encoder and decoder parameters [1]. Separately, the evaluation datasets introduced for cross-lingual NLG cover three languages—English, Chinese, and French [3].

@@ -1,0 +1,3 @@
+The paper investigates American Sign Language (ASL) sign recognition using a combination of **skeletal (3D joint coordinate) data and RGB video data**, modeled with deep learning architectures including RNNs [4][6]. Specifically, it examines the impact of RGB video data on recognition accuracy when combined with skeletal data, and proposes a combined RNN network with a simple spatial data augmentation technique [6]. The authors note that skeletal data has received little attention in ASL recognition compared to RGB methods [8][9], and they validate results on the GMU-ASL51 dataset of 12 users, 13,107 samples, and 51 signs [1].
+
+The work also studies adaptation to an unknown subject by retraining a model with a fraction of that subject's data [7].

@@ -1,0 +1,2 @@
+Insufficient evidence to reliably answer these requirements:
+- Forget Me Not: Reducing Catastrophic Forgetting for Domain Adaptation in Reading Comprehension: For the paper "Forget Me Not: Reducing Catastrophic Forgetting for Domain Adaptation in Reading Comprehension" (arXiv: 1911.00202), answer this question: What is the training objective in the method introduced in this paper?; The specific training objective of the introduced method is not stated in the supplied passages.

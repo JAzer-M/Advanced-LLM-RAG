@@ -1,0 +1,1 @@
+They used a newly collected and annotated dataset that associates news articles with a stance toward a specified topic, on which they trained a state-of-the-art stance detection model (Augenstein et al., 2016) [1].
