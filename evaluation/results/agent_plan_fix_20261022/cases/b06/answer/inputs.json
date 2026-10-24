@@ -1,0 +1,180 @@
+{
+  "question": "What do DCNN and VGG report about the usefulness of local response normalization, and what computational costs does VGG mention?",
+  "requirements": [
+    {
+      "id": "r1",
+      "subject": "DCNN",
+      "question_quote": "What do DCNN and VGG report about the usefulness of local response normalization",
+      "need": "what do dcnn report about the usefulness of local response normalization"
+    },
+    {
+      "id": "r2",
+      "subject": "VGG",
+      "question_quote": "What do DCNN and VGG report about the usefulness of local response normalization",
+      "need": "what do vgg report about the usefulness of local response normalization"
+    },
+    {
+      "id": "r3",
+      "subject": "VGG",
+      "question_quote": "what computational costs does VGG mention?",
+      "need": "what computational costs does VGG mention?"
+    }
+  ],
+  "assessment": [
+    {
+      "id": "r1",
+      "status": "supported",
+      "supported_part": "DCNN报告局部响应归一化有助于泛化，并降低top-1和top-5错误率（分别1.4%和1.2%），且在CIFAR-10上验证有效。",
+      "gap": "",
+      "evidence": [
+        {
+          "chunk_id": 142,
+          "quote": "However, we still find that the following local normalization scheme aids gen-"
+        },
+        {
+          "chunk_id": 146,
+          "quote": "Response normalization reduces our top-1 and top-5 error rates by 1.4% and 1.2%, respectively. We also verified the effectiveness of this scheme on the CIFAR-10 dataset: a four-layer CNN achieved a 13% test error rate without normalization and 11% with normalization.c"
+        }
+      ]
+    },
+    {
+      "id": "r2",
+      "status": "supported",
+      "supported_part": "VGG报告局部响应归一化在ILSVRC数据集上不提高性能，且不优于无归一化层模型。",
+      "gap": "",
+      "evidence": [
+        {
+          "chunk_id": 235,
+          "quote": "such normalisation does not improve the performance on the ILSVRC dataset, but leads to increased memory con- sumption and computation time."
+        },
+        {
+          "chunk_id": 279,
+          "quote": "using local response normalisation (A-LRN network) does not improve on the model A without any normalisation layers."
+        }
+      ]
+    },
+    {
+      "id": "r3",
+      "status": "supported",
+      "supported_part": "VGG提到局部响应归一化会带来内存消耗和计算时间的增加。",
+      "gap": "",
+      "evidence": [
+        {
+          "chunk_id": 235,
+          "quote": "leads to increased memory con- sumption and computation time."
+        }
+      ]
+    }
+  ],
+  "halt_reason": "answer_ready",
+  "passages": [
+    {
+      "citation": 1,
+      "chunk_id": 301,
+      "source": "VGG.pdf",
+      "page": 8,
+      "title": "VGG",
+      "text": "24.0 7.1 7.0 (D/[256;512]/256,384,512), (E/[256;512]/256,384,512), multi-crop 23.9 7.2 - (D/[256;512]/256,384,512), (E/[256;512]/256,384,512), multi-crop & dense eval. 23.7 6.8 6.8 7.3% test error using an ensemble of 7 models. After the submission, we decreased the error rate to 6.8% using an ensemble of 2 models.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 2,
+      "chunk_id": 250,
+      "source": "VGG.pdf",
+      "page": 4,
+      "title": "VGG",
+      "text": "Published as a conference paper at ICLR 2015 (22 weight layers) and small convolution ﬁlters (apart from 3 × 3, they also use 1 × 1 and 5 × 5 convolutions). Their network topology is, however, more complex than ours, and the spatial reso- lution of the feature maps is reduced more aggressively in the ﬁrst layers to decrease the amount of computation.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 3,
+      "chunk_id": 235,
+      "source": "VGG.pdf",
+      "page": 2,
+      "title": "VGG",
+      "text": "The conﬁguration of the fully connected layers is the same in all networks. All hidden layers are equipped with the rectiﬁcation (ReLU (Krizhevsky et al., 2012)) non-linearity. We note that none of our networks (except for one) contain Local Response Normalisation (LRN) normalisation (Krizhevsky et al., 2012): as will be shown in Sect. 4, such normalisation does not improve the performance on the ILSVRC dataset, but leads to increased memory con- sumption and computation time.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 4,
+      "chunk_id": 142,
+      "source": "DCNN.pdf",
+      "page": 3,
+      "title": "DCNN",
+      "text": "4.3. Local response normalization ReLUs have the desirable property that they do not require input normalization to prevent them from saturating. If at least some training examples produce a positive input to a ReLU, learning will happen in that neuron. However, we still find that the following local normalization scheme aids gen- x, y the activity of a neuron com- eralization.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 5,
+      "chunk_id": 262,
+      "source": "VGG.pdf",
+      "page": 4,
+      "title": "VGG",
+      "text": "In our experiments, we evaluated models trained at two ﬁxed scales: S = 256 (which has been widely used in the prior art (Krizhevsky et al., 2012; Zeiler & Fergus, 2013; Sermanet et al., 2014)) and S = 384. Given a ConvNet conﬁguration, we ﬁrst trained the network using S = 256. To speed-up training of the S = 384 network, it was initialised with the weights pre-trained with S = 256, and we used a smaller initial learning rate of 10−3. The second approach to setting S is multi-scale training, where each training image is individually rescaled by randomly sampling S from a certain range [Smin, Smax] (we used Smin = 256 and Smax = 512).",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 6,
+      "chunk_id": 146,
+      "source": "DCNN.pdf",
+      "page": 3,
+      "title": "DCNN",
+      "text": "Response normalization reduces our top-1 and top-5 error rates by 1.4% and 1.2%, respectively. We also verified the effectiveness of this scheme on the CIFAR-10 dataset: a four-layer CNN achieved a 13% test error rate without normalization and 11% with normalization.c",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 7,
+      "chunk_id": 373,
+      "source": "VGG.pdf",
+      "page": 14,
+      "title": "VGG",
+      "text": "Published as a conference paper at ICLR 2015 Table 12: Comparison with the state of the art in single-image action classiﬁcation on VOC- 2012. Our models are denoted as “VGG”. Results marked with * were achieved using ConvNets pre-trained on the extended ILSVRC dataset (1512 classes).",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 8,
+      "chunk_id": 144,
+      "source": "DCNN.pdf",
+      "page": 3,
+      "title": "DCNN",
+      "text": "This sort of response normalization implements a form of lateral inhibi- tion inspired by the type found in real neurons, creating com- petition for big activities among neuron outputs computed 40 using different kernels.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 9,
+      "chunk_id": 376,
+      "source": "VGG.pdf",
+      "page": 14,
+      "title": "VGG",
+      "text": "v1 Initial version. Presents the experiments carried out before the ILSVRC submission. v2 Adds post-submission ILSVRC experiments with training set augmentation using scale jittering, which improves the performance. v3 Adds generalisation experiments (Appendix B) on PASCAL VOC and Caltech image classiﬁca- tion datasets. The models used for these experiments are publicly available. v4 The paper is converted to ICLR-2015 submission format.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 10,
+      "chunk_id": 279,
+      "source": "VGG.pdf",
+      "page": 6,
+      "title": "VGG",
+      "text": "4.1 SINGLE SCALE EVALUATION We begin with evaluating the performance of individual ConvNet models at a single scale with the layer conﬁgurations described in Sect. 2.2. The test image size was set as follows: Q = S for ﬁxed S, and Q = 0.5(Smin + Smax) for jittered S ∈[Smin, Smax]. The results of are shown in Table 3. First, we note that using local response normalisation (A-LRN network) does not improve on the model A without any normalisation layers.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 11,
+      "chunk_id": 249,
+      "source": "VGG.pdf",
+      "page": 3,
+      "title": "VGG",
+      "text": "(2014) applied deep ConvNets (11 weight layers) to the task of street number recognition, and showed that the increased depth led to better performance. GoogLeNet (Szegedy et al., 2014), a top-performing entry of the ILSVRC-2014 classiﬁcation task, was developed independently of our work, but is similar in that it is based on very deep ConvNets",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 12,
+      "chunk_id": 233,
+      "source": "VGG.pdf",
+      "page": 2,
+      "title": "VGG",
+      "text": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.",
+      "kb_version": "all-papers-8-20261020"
+    }
+  ]
+}

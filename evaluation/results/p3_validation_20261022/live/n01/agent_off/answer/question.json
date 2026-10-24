@@ -1,0 +1,105 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "In Attention Is All You Need, what transformations and activation make up the position-wise feed-forward network, and what inner-layer dimensionality is specified in its description?",
+  "kb_version": "all-papers-8-20261020",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": false,
+    "drafts": [
+      "在《Attention Is All You Need》中，位置前馈网络由两次线性变换组成，中间夹一个 ReLU 激活，即 FFN(x)=max(0, xW1 + b1)W2 + b2 [1]。其输入和输出维度为 dmodel = 512，内层维度为 dff = 2048 [1]。该网络对每个位置分别且相同地应用 [4]。"
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "位置前馈网络由两次线性变换组成，中间夹一个 ReLU 激活，即 FFN(x)=max(0, xW1 + b1)W2 + b2 [1]。其输入和输出维度为 dmodel = 512，内层维度为 dff = 2048 [1]。",
+              "reason": "回答完整覆盖了两次线性变换、中间的ReLU激活、FFN公式以及内层维度dff=2048，且均以[1]引用支持；额外补充的输入输出维度dmodel=512也由同一原文支持，属于相关且受支持的补充，不构成缺陷。",
+              "citations": [
+                {
+                  "number": 1,
+                  "quote": "This consists of two linear transformations with a ReLU activation in between. FFN(x) = max(0, xW1 + b1)W2 + b2 (2)"
+                },
+                {
+                  "number": 1,
+                  "quote": "The dimensionality of input and output is dmodel = 512, and the inner-layer has dimensionality dff = 2048."
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            1,
+            4
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 1,
+              "chunk_id": 42,
+              "source": "Attention is all you need.pdf",
+              "page": 5,
+              "text": "This consists of two linear transformations with a ReLU activation in between. FFN(x) = max(0, xW1 + b1)W2 + b2 (2) While the linear transformations are the same across different positions, they use different parameters from layer to layer. Another way of describing this is as two convolutions with kernel size 1. The dimensionality of input and output is dmodel = 512, and the inner-layer has dimensionality dff = 2048."
+            },
+            {
+              "citation": 4,
+              "chunk_id": 41,
+              "source": "Attention is all you need.pdf",
+              "page": 5,
+              "text": "3.3 Position-wise Feed-Forward Networks In addition to attention sub-layers, each of the layers in our encoder and decoder contains a fully connected feed-forward network, which is applied to each position separately and identically."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "在《Attention Is All You Need》中，位置前馈网络由两次线性变换组成，中间夹一个 ReLU 激活，即 FFN(x)=max(0, xW1 + b1)W2 + b2 [1]。其输入和输出维度为 dmodel = 512，内层维度为 dff = 2048 [1]。该网络对每个位置分别且相同地应用 [4]。",
+    "citation_check": {
+      "cited_numbers": [
+        1,
+        4
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 42,
+          "source": "Attention is all you need.pdf",
+          "page": 5,
+          "text": "This consists of two linear transformations with a ReLU activation in between. FFN(x) = max(0, xW1 + b1)W2 + b2 (2) While the linear transformations are the same across different positions, they use different parameters from layer to layer. Another way of describing this is as two convolutions with kernel size 1. The dimensionality of input and output is dmodel = 512, and the inner-layer has dimensionality dff = 2048."
+        },
+        {
+          "citation": 4,
+          "chunk_id": 41,
+          "source": "Attention is all you need.pdf",
+          "page": 5,
+          "text": "3.3 Position-wise Feed-Forward Networks In addition to attention sub-layers, each of the layers in our encoder and decoder contains a fully connected feed-forward network, which is applied to each position separately and identically."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

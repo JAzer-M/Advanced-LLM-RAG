@@ -1,0 +1,165 @@
+{
+  "id": "b06",
+  "status": "completed",
+  "query": "What do DCNN and VGG report about the usefulness of local response normalization, and what computational costs does VGG mention?",
+  "kb_version": "all-papers-8-20261020",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": false,
+    "drafts": [
+      "DCNN报告局部响应归一化有助于泛化[4]，并将top-1和top-5错误率分别降低1.4%和1.2%[6]；该方案在CIFAR-10上也被验证有效（四层CNN无归一化时为13%测试错误率，有归一化时为11%）[6]。\n\nVGG报告局部响应归一化在ILSVRC数据集上不提升性能[3]，且带局部响应归一化的A-LRN网络相较不含任何归一化层的模型A没有改进[10]。\n\n关于计算成本，VGG提到这种归一化会增加内存消耗和计算时间[3]。"
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "DCNN报告局部响应归一化有助于泛化[4]，并将top-1和top-5错误率分别降低1.4%和1.2%[6]；该方案在CIFAR-10上也被验证有效（四层CNN无归一化时为13%测试错误率，有归一化时为11%）[6]。",
+              "reason": "答案完整覆盖DCNN关于局部响应归一化的报告：有助于泛化[4]、降低top-1/top-5错误率1.4%和1.2%[6]，并在CIFAR-10上验证（13%对11%）[6]，与原文一致。",
+              "citations": [
+                {
+                  "number": 4,
+                  "quote": "However, we still find that the following local normalization scheme aids gen- x, y the activity of a neuron com- eralization."
+                },
+                {
+                  "number": 6,
+                  "quote": "Response normalization reduces our top-1 and top-5 error rates by 1.4% and 1.2%, respectively. We also verified the effectiveness of this scheme on the CIFAR-10 dataset: a four-layer CNN achieved a 13% test error rate without normalization and 11% with normalization.c"
+                }
+              ]
+            },
+            {
+              "id": "r2",
+              "verdict": "pass",
+              "answer_quote": "VGG报告局部响应归一化在ILSVRC数据集上不提升性能[3]，且带局部响应归一化的A-LRN网络相较不含任何归一化层的模型A没有改进[10]。",
+              "reason": "答案准确反映VGG的两处表述：在ILSVRC上不提升性能且增加内存与计算时间[3]，A-LRN相较无归一化的模型A无改进[10]，主体和范围正确。",
+              "citations": [
+                {
+                  "number": 3,
+                  "quote": "such normalisation does not improve the performance on the ILSVRC dataset, but leads to increased memory con- sumption and computation time."
+                },
+                {
+                  "number": 10,
+                  "quote": "First, we note that using local response normalisation (A-LRN network) does not improve on the model A without any normalisation layers."
+                }
+              ]
+            },
+            {
+              "id": "r3",
+              "verdict": "pass",
+              "answer_quote": "关于计算成本，VGG提到这种归一化会增加内存消耗和计算时间[3]。",
+              "reason": "答案正确引用VGG关于局部响应归一化增加内存消耗和计算时间的表述，符合问题所问的计算成本。",
+              "citations": [
+                {
+                  "number": 3,
+                  "quote": "such normalisation does not improve the performance on the ILSVRC dataset, but leads to increased memory con- sumption and computation time."
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            3,
+            4,
+            6,
+            10
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 3,
+              "chunk_id": 235,
+              "source": "VGG.pdf",
+              "page": 2,
+              "text": "The conﬁguration of the fully connected layers is the same in all networks. All hidden layers are equipped with the rectiﬁcation (ReLU (Krizhevsky et al., 2012)) non-linearity. We note that none of our networks (except for one) contain Local Response Normalisation (LRN) normalisation (Krizhevsky et al., 2012): as will be shown in Sect. 4, such normalisation does not improve the performance on the ILSVRC dataset, but leads to increased memory con- sumption and computation time."
+            },
+            {
+              "citation": 4,
+              "chunk_id": 142,
+              "source": "DCNN.pdf",
+              "page": 3,
+              "text": "4.3. Local response normalization ReLUs have the desirable property that they do not require input normalization to prevent them from saturating. If at least some training examples produce a positive input to a ReLU, learning will happen in that neuron. However, we still find that the following local normalization scheme aids gen- x, y the activity of a neuron com- eralization."
+            },
+            {
+              "citation": 6,
+              "chunk_id": 146,
+              "source": "DCNN.pdf",
+              "page": 3,
+              "text": "Response normalization reduces our top-1 and top-5 error rates by 1.4% and 1.2%, respectively. We also verified the effectiveness of this scheme on the CIFAR-10 dataset: a four-layer CNN achieved a 13% test error rate without normalization and 11% with normalization.c"
+            },
+            {
+              "citation": 10,
+              "chunk_id": 279,
+              "source": "VGG.pdf",
+              "page": 6,
+              "text": "4.1 SINGLE SCALE EVALUATION We begin with evaluating the performance of individual ConvNet models at a single scale with the layer conﬁgurations described in Sect. 2.2. The test image size was set as follows: Q = S for ﬁxed S, and Q = 0.5(Smin + Smax) for jittered S ∈[Smin, Smax]. The results of are shown in Table 3. First, we note that using local response normalisation (A-LRN network) does not improve on the model A without any normalisation layers."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "DCNN报告局部响应归一化有助于泛化[4]，并将top-1和top-5错误率分别降低1.4%和1.2%[6]；该方案在CIFAR-10上也被验证有效（四层CNN无归一化时为13%测试错误率，有归一化时为11%）[6]。\n\nVGG报告局部响应归一化在ILSVRC数据集上不提升性能[3]，且带局部响应归一化的A-LRN网络相较不含任何归一化层的模型A没有改进[10]。\n\n关于计算成本，VGG提到这种归一化会增加内存消耗和计算时间[3]。",
+    "citation_check": {
+      "cited_numbers": [
+        3,
+        4,
+        6,
+        10
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 3,
+          "chunk_id": 235,
+          "source": "VGG.pdf",
+          "page": 2,
+          "text": "The conﬁguration of the fully connected layers is the same in all networks. All hidden layers are equipped with the rectiﬁcation (ReLU (Krizhevsky et al., 2012)) non-linearity. We note that none of our networks (except for one) contain Local Response Normalisation (LRN) normalisation (Krizhevsky et al., 2012): as will be shown in Sect. 4, such normalisation does not improve the performance on the ILSVRC dataset, but leads to increased memory con- sumption and computation time."
+        },
+        {
+          "citation": 4,
+          "chunk_id": 142,
+          "source": "DCNN.pdf",
+          "page": 3,
+          "text": "4.3. Local response normalization ReLUs have the desirable property that they do not require input normalization to prevent them from saturating. If at least some training examples produce a positive input to a ReLU, learning will happen in that neuron. However, we still find that the following local normalization scheme aids gen- x, y the activity of a neuron com- eralization."
+        },
+        {
+          "citation": 6,
+          "chunk_id": 146,
+          "source": "DCNN.pdf",
+          "page": 3,
+          "text": "Response normalization reduces our top-1 and top-5 error rates by 1.4% and 1.2%, respectively. We also verified the effectiveness of this scheme on the CIFAR-10 dataset: a four-layer CNN achieved a 13% test error rate without normalization and 11% with normalization.c"
+        },
+        {
+          "citation": 10,
+          "chunk_id": 279,
+          "source": "VGG.pdf",
+          "page": 6,
+          "text": "4.1 SINGLE SCALE EVALUATION We begin with evaluating the performance of individual ConvNet models at a single scale with the layer conﬁgurations described in Sect. 2.2. The test image size was set as follows: Q = S for ﬁxed S, and Q = 0.5(Smin + Smax) for jittered S ∈[Smin, Smax]. The results of are shown in Table 3. First, we note that using local response normalisation (A-LRN network) does not improve on the model A without any normalisation layers."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

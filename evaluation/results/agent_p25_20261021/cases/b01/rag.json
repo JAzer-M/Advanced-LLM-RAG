@@ -1,0 +1,823 @@
+{
+  "query": "Which optimizer and beta1, beta2, and epsilon values does the Transformer in Attention Is All You Need use?",
+  "decomposition": {
+    "needs_decomposition": true,
+    "sub_queries": [
+      "Which optimizer does the Transformer in Attention Is All You Need use?",
+      "What beta1 value does the Transformer in Attention Is All You Need use?",
+      "What beta2 value does the Transformer in Attention Is All You Need use?",
+      "What epsilon value does the Transformer in Attention Is All You Need use?"
+    ],
+    "status": "accepted",
+    "proposed_count": 4
+  },
+  "knowledge_base": {
+    "version": "all-papers-8-20261020",
+    "chunk_count": 1397,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/manifest.json",
+    "manifest_sha256": "9c4e2c26b4f11fe7baf526595630cbee2d325416ec0e497f417975fbd60779ef",
+    "files": {
+      "faiss.index": "ff1f4a3e38e20c0275ba79d805e6475639b3cea7a7a583f9c18c67ec8e40a2ed",
+      "chunks.json": "3e63d75abbe164ff8e135b1d66fd6b02d9479b2e037e289a726e7c542464593a"
+    }
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 202,
+    "global_top_ids": [
+      12,
+      2,
+      15,
+      81,
+      20,
+      17,
+      66,
+      82,
+      68,
+      38
+    ],
+    "protected_ids": [
+      12,
+      66,
+      15
+    ],
+    "sub_query_evidence": [
+      {
+        "query": "Which optimizer does the Transformer in Attention Is All You Need use?",
+        "top_ids": [
+          12,
+          81,
+          20
+        ]
+      },
+      {
+        "query": "What beta1 value does the Transformer in Attention Is All You Need use?",
+        "top_ids": [
+          66,
+          15,
+          17
+        ]
+      },
+      {
+        "query": "What beta2 value does the Transformer in Attention Is All You Need use?",
+        "top_ids": [
+          15,
+          66,
+          12
+        ]
+      },
+      {
+        "query": "What epsilon value does the Transformer in Attention Is All You Need use?",
+        "top_ids": [
+          12,
+          15,
+          42
+        ]
+      }
+    ],
+    "retrieval_anchor_ids": [
+      38
+    ],
+    "evidence_completion": {
+      "requested_sources": [
+        "Attention is all you need.pdf"
+      ],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        12,
+        2,
+        15,
+        81,
+        20,
+        17,
+        66,
+        82,
+        38,
+        42
+      ],
+      "retained_local_ids": [
+        12,
+        15,
+        81,
+        20,
+        17,
+        66,
+        42
+      ],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        12,
+        2,
+        15,
+        81,
+        20,
+        17,
+        66,
+        82,
+        38,
+        42
+      ],
+      "elapsed_seconds": 0.000858
+    }
+  },
+  "selected_ids": [
+    12,
+    2,
+    15,
+    81,
+    20,
+    17,
+    66,
+    82,
+    38,
+    42
+  ],
+  "context": "[1] Source: Attention is all you need.pdf | Page: 2 | Section: 1 Introduction\nIn this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output. The Transformer allows for signiﬁcantly more parallelization and can reach a new state of the art in translation quality after being trained for as little as twelve hours on eight P100 GPUs.\n\n[2] Source: Attention is all you need.pdf | Page: 1 | Section: None\nWe propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely.\n\n[3] Source: Attention is all you need.pdf | Page: 2 | Section: 2 Background\nIn the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as described in section 3.2. Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.\n\n[4] Source: Attention is all you need.pdf | Page: 9 | Section: 7 Conclusion\n7 Conclusion In this work, we presented the Transformer, the ﬁrst sequence transduction model based entirely on attention, replacing the recurrent layers most commonly used in encoder-decoder architectures with multi-headed self-attention. For translation tasks, the Transformer can be trained signiﬁcantly faster than architectures based on recurrent or convolutional layers. On both WMT 2014 English-to-German and WMT 2014 English-to-French translation tasks, we achieve a new state of the art.\n\n[5] Source: Attention is all you need.pdf | Page: 2 | Section: 3 Model Architecture\nThe Transformer follows this overall architecture using stacked self-attention and point-wise, fully connected layers for both the encoder and decoder, shown in the left and right halves of Figure 1, respectively.\n\n[6] Source: Attention is all you need.pdf | Page: 2 | Section: 2 Background\nTo the best of our knowledge, however, the Transformer is the ﬁrst transduction model relying entirely on self-attention to compute representations of its input and output without using sequence- aligned RNNs or convolution. In the following sections, we will describe the Transformer, motivate self-attention and discuss its advantages over models such as [14, 15] and [8].\n\n[7] Source: Attention is all you need.pdf | Page: 7 | Section: 5.3 Optimizer\n5.3 Optimizer We used the Adam optimizer [17] with β1 = 0.9, β2 = 0.98 and ϵ = 10−9. We varied the learning rate over the course of training, according to the formula: lrate = d−0.5 model · min(step_num−0.5, step_num · warmup_steps−1.5) (3) This corresponds to increasing the learning rate linearly for the ﬁrst warmup_steps training steps, and decreasing it thereafter proportionally to the inverse square root of the step number. We used warmup_steps = 4000.\n\n[8] Source: Attention is all you need.pdf | Page: 9 | Section: 7 Conclusion\nIn the former task our best model outperforms even all previously reported ensembles. We are excited about the future of attention-based models and plan to apply them to other tasks. We plan to extend the Transformer to problems involving input and output modalities other than text and to investigate local, restricted attention mechanisms to efﬁciently handle large inputs and outputs such as images, audio and video. Making generation less sequential is another research goals of ours.\n\n[9] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\n3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].\n\n[10] Source: Attention is all you need.pdf | Page: 5 | Section: 3.3 Position-wise Feed-Forward Networks\nThis consists of two linear transformations with a ReLU activation in between. FFN(x) = max(0, xW1 + b1)W2 + b2 (2) While the linear transformations are the same across different positions, they use different parameters from layer to layer. Another way of describing this is as two convolutions with kernel size 1. The dimensionality of input and output is dmodel = 512, and the inner-layer has dimensionality dff = 2048.",
+  "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\n[1] Source: Attention is all you need.pdf | Page: 2 | Section: 1 Introduction\nIn this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output. The Transformer allows for signiﬁcantly more parallelization and can reach a new state of the art in translation quality after being trained for as little as twelve hours on eight P100 GPUs.\n\n[2] Source: Attention is all you need.pdf | Page: 1 | Section: None\nWe propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely.\n\n[3] Source: Attention is all you need.pdf | Page: 2 | Section: 2 Background\nIn the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as described in section 3.2. Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.\n\n[4] Source: Attention is all you need.pdf | Page: 9 | Section: 7 Conclusion\n7 Conclusion In this work, we presented the Transformer, the ﬁrst sequence transduction model based entirely on attention, replacing the recurrent layers most commonly used in encoder-decoder architectures with multi-headed self-attention. For translation tasks, the Transformer can be trained signiﬁcantly faster than architectures based on recurrent or convolutional layers. On both WMT 2014 English-to-German and WMT 2014 English-to-French translation tasks, we achieve a new state of the art.\n\n[5] Source: Attention is all you need.pdf | Page: 2 | Section: 3 Model Architecture\nThe Transformer follows this overall architecture using stacked self-attention and point-wise, fully connected layers for both the encoder and decoder, shown in the left and right halves of Figure 1, respectively.\n\n[6] Source: Attention is all you need.pdf | Page: 2 | Section: 2 Background\nTo the best of our knowledge, however, the Transformer is the ﬁrst transduction model relying entirely on self-attention to compute representations of its input and output without using sequence- aligned RNNs or convolution. In the following sections, we will describe the Transformer, motivate self-attention and discuss its advantages over models such as [14, 15] and [8].\n\n[7] Source: Attention is all you need.pdf | Page: 7 | Section: 5.3 Optimizer\n5.3 Optimizer We used the Adam optimizer [17] with β1 = 0.9, β2 = 0.98 and ϵ = 10−9. We varied the learning rate over the course of training, according to the formula: lrate = d−0.5 model · min(step_num−0.5, step_num · warmup_steps−1.5) (3) This corresponds to increasing the learning rate linearly for the ﬁrst warmup_steps training steps, and decreasing it thereafter proportionally to the inverse square root of the step number. We used warmup_steps = 4000.\n\n[8] Source: Attention is all you need.pdf | Page: 9 | Section: 7 Conclusion\nIn the former task our best model outperforms even all previously reported ensembles. We are excited about the future of attention-based models and plan to apply them to other tasks. We plan to extend the Transformer to problems involving input and output modalities other than text and to investigate local, restricted attention mechanisms to efﬁciently handle large inputs and outputs such as images, audio and video. Making generation less sequential is another research goals of ours.\n\n[9] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\n3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].\n\n[10] Source: Attention is all you need.pdf | Page: 5 | Section: 3.3 Position-wise Feed-Forward Networks\nThis consists of two linear transformations with a ReLU activation in between. FFN(x) = max(0, xW1 + b1)W2 + b2 (2) While the linear transformations are the same across different positions, they use different parameters from layer to layer. Another way of describing this is as two convolutions with kernel size 1. The dimensionality of input and output is dmodel = 512, and the inner-layer has dimensionality dff = 2048.\n\nQuestion:\nWhich optimizer and beta1, beta2, and epsilon values does the Transformer in Attention Is All You Need use?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": "In this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output.",
+        "evidence_start": 0,
+        "evidence_end": 191,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            12
+          ],
+          "identity_quote": "In this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output. The Transformer allows for signiﬁcantly more parallelization and can reach a new state of the art in translation quality after being trained for as little as twelve hours on eight P100 GPUs.",
+          "identity_chunk_id": 12
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 12,
+        "page": 2,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The Transformer allows for signiﬁcantly more parallelization and can reach a new state of the art in translation quality after being trained for as little as twelve hours on eight P100 GPUs.",
+        "evidence_start": 191,
+        "evidence_end": 382,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            12
+          ],
+          "identity_quote": "In this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output.",
+          "identity_chunk_id": 12
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 12,
+        "page": 2,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely.",
+        "evidence_start": 0,
+        "evidence_end": 154,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            2
+          ],
+          "identity_quote": "We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely.",
+          "identity_chunk_id": 2
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 2,
+        "page": 1,
+        "citations": [
+          2
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.",
+        "evidence_start": 247,
+        "evidence_end": 426,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            15,
+            14
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 15,
+        "page": 2,
+        "citations": [
+          3
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "7 Conclusion In this work, we presented the Transformer, the ﬁrst sequence transduction model based entirely on attention, replacing the recurrent layers most commonly used in encoder-decoder architectures with multi-headed self-attention.",
+        "evidence_start": 0,
+        "evidence_end": 239,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            81
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 81,
+        "page": 9,
+        "citations": [
+          4
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " For translation tasks, the Transformer can be trained signiﬁcantly faster than architectures based on recurrent or convolutional layers.",
+        "evidence_start": 239,
+        "evidence_end": 376,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            81
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 81,
+        "page": 9,
+        "citations": [
+          4
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " On both WMT 2014 English-to-German and WMT 2014 English-to-French translation tasks, we achieve a new state of the art.",
+        "evidence_start": 376,
+        "evidence_end": 496,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            81
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 81,
+        "page": 9,
+        "citations": [
+          4
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "The Transformer follows this overall architecture using stacked self-attention and point-wise, fully connected layers for both the encoder and decoder, shown in the left and right halves of Figure 1, respectively.",
+        "evidence_start": 0,
+        "evidence_end": 213,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            20,
+            19,
+            18
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 20,
+        "page": 2,
+        "citations": [
+          5
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "To the best of our knowledge, however, the Transformer is the ﬁrst transduction model relying entirely on self-attention to compute representations of its input and output without using sequence- aligned RNNs or convolution.",
+        "evidence_start": 0,
+        "evidence_end": 224,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            17,
+            16,
+            15,
+            14
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 17,
+        "page": 2,
+        "citations": [
+          6
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In the following sections, we will describe the Transformer, motivate self-attention and discuss its advantages over models such as [14, 15] and [8].",
+        "evidence_start": 224,
+        "evidence_end": 374,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            17,
+            16,
+            15,
+            14
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 17,
+        "page": 2,
+        "citations": [
+          6
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "5) (3) This corresponds to increasing the learning rate linearly for the ﬁrst warmup_steps training steps, and decreasing it thereafter proportionally to the inverse square root of the step number.",
+        "evidence_start": 234,
+        "evidence_end": 431,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            66
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 66,
+        "page": 7,
+        "citations": [
+          7
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "In the former task our best model outperforms even all previously reported ensembles.",
+        "evidence_start": 0,
+        "evidence_end": 85,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            82,
+            81
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 82,
+        "page": 9,
+        "citations": [
+          8
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We are excited about the future of attention-based models and plan to apply them to other tasks.",
+        "evidence_start": 85,
+        "evidence_end": 182,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            82,
+            81
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 82,
+        "page": 9,
+        "citations": [
+          8
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We plan to extend the Transformer to problems involving input and output modalities other than text and to investigate local, restricted attention mechanisms to efﬁciently handle large inputs and outputs such as images, audio and video.",
+        "evidence_start": 182,
+        "evidence_end": 419,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            82,
+            81
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 82,
+        "page": 9,
+        "citations": [
+          8
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Making generation less sequential is another research goals of ours.",
+        "evidence_start": 419,
+        "evidence_end": 488,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            82,
+            81
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 82,
+        "page": 9,
+        "citations": [
+          8
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder.",
+        "evidence_start": 4,
+        "evidence_end": 270,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            38
+          ],
+          "identity_quote": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+          "identity_chunk_id": 38
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 38,
+        "page": 5,
+        "citations": [
+          9
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " This allows every position in the decoder to attend over all positions in the input sequence.",
+        "evidence_start": 270,
+        "evidence_end": 364,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            38
+          ],
+          "identity_quote": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder.",
+          "identity_chunk_id": 38
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 38,
+        "page": 5,
+        "citations": [
+          9
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+        "evidence_start": 364,
+        "evidence_end": 476,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            38
+          ],
+          "identity_quote": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence.",
+          "identity_chunk_id": 38
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 38,
+        "page": 5,
+        "citations": [
+          9
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "This consists of two linear transformations with a ReLU activation in between.",
+        "evidence_start": 0,
+        "evidence_end": 78,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            42,
+            41
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 42,
+        "page": 5,
+        "citations": [
+          10
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " FFN(x) = max(0, xW1 + b1)W2 + b2 (2) While the linear transformations are the same across different positions, they use different parameters from layer to layer.",
+        "evidence_start": 78,
+        "evidence_end": 240,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            42,
+            41
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 42,
+        "page": 5,
+        "citations": [
+          10
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Another way of describing this is as two convolutions with kernel size 1.",
+        "evidence_start": 240,
+        "evidence_end": 314,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            42,
+            41
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 42,
+        "page": 5,
+        "citations": [
+          10
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The dimensionality of input and output is dmodel = 512, and the inner-layer has dimensionality dff = 2048.",
+        "evidence_start": 314,
+        "evidence_end": 421,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            42,
+            41
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 42,
+        "page": 5,
+        "citations": [
+          10
+        ],
+        "record_id": "E22"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 12,
+        "text": "In this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output. The Transformer allows for signiﬁcantly more parallelization and can reach a new state of the art in translation quality after being trained for as little as twelve hours on eight P100 GPUs.",
+        "source": "Attention is all you need.pdf",
+        "page": 2,
+        "title": "Attention is All you Need",
+        "section": "1 Introduction"
+      },
+      {
+        "chunk_id": 2,
+        "text": "We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely.",
+        "source": "Attention is all you need.pdf",
+        "page": 1,
+        "title": "Attention is All you Need",
+        "section": null
+      },
+      {
+        "chunk_id": 15,
+        "text": "In the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as described in section 3.2. Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.",
+        "source": "Attention is all you need.pdf",
+        "page": 2,
+        "title": "Attention is All you Need",
+        "section": "2 Background"
+      },
+      {
+        "chunk_id": 81,
+        "text": "7 Conclusion In this work, we presented the Transformer, the ﬁrst sequence transduction model based entirely on attention, replacing the recurrent layers most commonly used in encoder-decoder architectures with multi-headed self-attention. For translation tasks, the Transformer can be trained signiﬁcantly faster than architectures based on recurrent or convolutional layers. On both WMT 2014 English-to-German and WMT 2014 English-to-French translation tasks, we achieve a new state of the art.",
+        "source": "Attention is all you need.pdf",
+        "page": 9,
+        "title": "Attention is All you Need",
+        "section": "7 Conclusion"
+      },
+      {
+        "chunk_id": 20,
+        "text": "The Transformer follows this overall architecture using stacked self-attention and point-wise, fully connected layers for both the encoder and decoder, shown in the left and right halves of Figure 1, respectively.",
+        "source": "Attention is all you need.pdf",
+        "page": 2,
+        "title": "Attention is All you Need",
+        "section": "3 Model Architecture"
+      },
+      {
+        "chunk_id": 17,
+        "text": "To the best of our knowledge, however, the Transformer is the ﬁrst transduction model relying entirely on self-attention to compute representations of its input and output without using sequence- aligned RNNs or convolution. In the following sections, we will describe the Transformer, motivate self-attention and discuss its advantages over models such as [14, 15] and [8].",
+        "source": "Attention is all you need.pdf",
+        "page": 2,
+        "title": "Attention is All you Need",
+        "section": "2 Background"
+      },
+      {
+        "chunk_id": 66,
+        "text": "5.3 Optimizer We used the Adam optimizer [17] with β1 = 0.9, β2 = 0.98 and ϵ = 10−9. We varied the learning rate over the course of training, according to the formula: lrate = d−0.5 model · min(step_num−0.5, step_num · warmup_steps−1.5) (3) This corresponds to increasing the learning rate linearly for the ﬁrst warmup_steps training steps, and decreasing it thereafter proportionally to the inverse square root of the step number. We used warmup_steps = 4000.",
+        "source": "Attention is all you need.pdf",
+        "page": 7,
+        "title": "Attention is All you Need",
+        "section": "5.3 Optimizer"
+      },
+      {
+        "chunk_id": 82,
+        "text": "In the former task our best model outperforms even all previously reported ensembles. We are excited about the future of attention-based models and plan to apply them to other tasks. We plan to extend the Transformer to problems involving input and output modalities other than text and to investigate local, restricted attention mechanisms to efﬁciently handle large inputs and outputs such as images, audio and video. Making generation less sequential is another research goals of ours.",
+        "source": "Attention is all you need.pdf",
+        "page": 9,
+        "title": "Attention is All you Need",
+        "section": "7 Conclusion"
+      },
+      {
+        "chunk_id": 38,
+        "text": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+        "source": "Attention is all you need.pdf",
+        "page": 5,
+        "title": "Attention is All you Need",
+        "section": "3.2.3 Applications of Attention in our Model"
+      },
+      {
+        "chunk_id": 42,
+        "text": "This consists of two linear transformations with a ReLU activation in between. FFN(x) = max(0, xW1 + b1)W2 + b2 (2) While the linear transformations are the same across different positions, they use different parameters from layer to layer. Another way of describing this is as two convolutions with kernel size 1. The dimensionality of input and output is dmodel = 512, and the inner-layer has dimensionality dff = 2048.",
+        "source": "Attention is all you need.pdf",
+        "page": 5,
+        "title": "Attention is All you Need",
+        "section": "3.3 Position-wise Feed-Forward Networks"
+      }
+    ],
+    "selected_ids": [
+      12,
+      2,
+      15,
+      81,
+      20,
+      17,
+      66,
+      82,
+      38,
+      42
+    ]
+  },
+  "answer": "Transformer 使用的是 Adam 优化器，β1 = 0.9、β2 = 0.98、ϵ = 10⁻⁹ [7]。",
+  "original_answer": "Transformer 使用的是 Adam 优化器，β1 = 0.9、β2 = 0.98、ϵ = 10⁻⁹ [7]。",
+  "citation_validation": {
+    "answer": "Transformer 使用的是 Adam 优化器，β1 = 0.9、β2 = 0.98、ϵ = 10⁻⁹ [7]。",
+    "original_answer": "Transformer 使用的是 Adam 优化器，β1 = 0.9、β2 = 0.98、ϵ = 10⁻⁹ [7]。",
+    "repair_candidate": null,
+    "initial_check": {
+      "cited_numbers": [
+        7
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 7,
+          "chunk_id": 66,
+          "source": "Attention is all you need.pdf",
+          "page": 7,
+          "text": "5.3 Optimizer We used the Adam optimizer [17] with β1 = 0.9, β2 = 0.98 and ϵ = 10−9. We varied the learning rate over the course of training, according to the formula: lrate = d−0.5 model · min(step_num−0.5, step_num · warmup_steps−1.5) (3) This corresponds to increasing the learning rate linearly for the ﬁrst warmup_steps training steps, and decreasing it thereafter proportionally to the inverse square root of the step number. We used warmup_steps = 4000."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "final_check": {
+      "cited_numbers": [
+        7
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 7,
+          "chunk_id": 66,
+          "source": "Attention is all you need.pdf",
+          "page": 7,
+          "text": "5.3 Optimizer We used the Adam optimizer [17] with β1 = 0.9, β2 = 0.98 and ϵ = 10−9. We varied the learning rate over the course of training, according to the formula: lrate = d−0.5 model · min(step_num−0.5, step_num · warmup_steps−1.5) (3) This corresponds to increasing the learning rate linearly for the ﬁrst warmup_steps training steps, and decreasing it thereafter proportionally to the inverse square root of the step number. We used warmup_steps = 4000."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "repair_attempted": false,
+    "normalization_applied": false,
+    "repair_applied": false,
+    "repair_response": null,
+    "repair_prompt": null,
+    "unresolved_blocks": [],
+    "status": "not_needed",
+    "note": "Citation structure only; source relevance and claim meaning are not automatically verified."
+  },
+  "status": "completed"
+}

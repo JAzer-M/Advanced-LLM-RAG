@@ -1,0 +1,125 @@
+{
+  "id": "b03",
+  "status": "completed",
+  "query": "In VGG multi-scale training, how is the training scale S sampled, what crop size is used, and how is the multi-scale model initialized?",
+  "kb_version": "all-papers-8-20261020",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": false,
+    "drafts": [
+      "VGG多尺度训练中，每张训练图像通过从范围[Smin, Smax]随机采样S进行单独缩放，实验中取Smin = 256、Smax = 512 [1]；裁剪尺寸固定为224×224 [2]；多尺度模型通过微调一个相同配置、以固定S = 384预训练的单尺度模型的所有层来初始化 [4]。"
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "每张训练图像通过从范围[Smin, Smax]随机采样S进行单独缩放，实验中取Smin = 256、Smax = 512 [1]；裁剪尺寸固定为224×224 [2]；多尺度模型通过微调一个相同配置、以固定S = 384预训练的单尺度模型的所有层来初始化 [4]。",
+              "reason": "回答完整覆盖三个子问题：S在[Smin,Smax]随机采样（256到512）、裁剪尺寸224×224、以及通过微调固定S=384预训练的单尺度模型全部层初始化多尺度模型，且引用与原文一致。",
+              "citations": [
+                {
+                  "number": 1,
+                  "quote": "The second approach to setting S is multi-scale training, where each training image is individually rescaled by randomly sampling S from a certain range [Smin, Smax] (we used Smin = 256 and Smax = 512)."
+                },
+                {
+                  "number": 2,
+                  "quote": "While the crop size is ﬁxed to 224 × 224, in principle S can take on any value not less than 224"
+                },
+                {
+                  "number": 4,
+                  "quote": "For speed reasons, we trained multi-scale models by ﬁne-tuning all layers of a single-scale model with the same conﬁguration, pre-trained with ﬁxed S = 384."
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            1,
+            2,
+            4
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 1,
+              "chunk_id": 262,
+              "source": "VGG.pdf",
+              "page": 4,
+              "text": "In our experiments, we evaluated models trained at two ﬁxed scales: S = 256 (which has been widely used in the prior art (Krizhevsky et al., 2012; Zeiler & Fergus, 2013; Sermanet et al., 2014)) and S = 384. Given a ConvNet conﬁguration, we ﬁrst trained the network using S = 256. To speed-up training of the S = 384 network, it was initialised with the weights pre-trained with S = 256, and we used a smaller initial learning rate of 10−3. The second approach to setting S is multi-scale training, where each training image is individually rescaled by randomly sampling S from a certain range [Smin, Smax] (we used Smin = 256 and Smax = 512)."
+            },
+            {
+              "citation": 2,
+              "chunk_id": 260,
+              "source": "VGG.pdf",
+              "page": 4,
+              "text": "Let S be the smallest side of an isotropically-rescaled training image, from which the ConvNet input is cropped (we also refer to S as the training scale). While the crop size is ﬁxed to 224 × 224, in principle S can take on any value not less than 224: for S = 224 the crop will capture whole-image statistics, completely spanning the smallest side of a training image; for S ≫224 the crop will correspond to a small part of the image, containing a small object or an object part."
+            },
+            {
+              "citation": 4,
+              "chunk_id": 264,
+              "source": "VGG.pdf",
+              "page": 5,
+              "text": "Published as a conference paper at ICLR 2015 model is trained to recognise objects over a wide range of scales. For speed reasons, we trained multi-scale models by ﬁne-tuning all layers of a single-scale model with the same conﬁguration, pre-trained with ﬁxed S = 384."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "VGG多尺度训练中，每张训练图像通过从范围[Smin, Smax]随机采样S进行单独缩放，实验中取Smin = 256、Smax = 512 [1]；裁剪尺寸固定为224×224 [2]；多尺度模型通过微调一个相同配置、以固定S = 384预训练的单尺度模型的所有层来初始化 [4]。",
+    "citation_check": {
+      "cited_numbers": [
+        1,
+        2,
+        4
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 262,
+          "source": "VGG.pdf",
+          "page": 4,
+          "text": "In our experiments, we evaluated models trained at two ﬁxed scales: S = 256 (which has been widely used in the prior art (Krizhevsky et al., 2012; Zeiler & Fergus, 2013; Sermanet et al., 2014)) and S = 384. Given a ConvNet conﬁguration, we ﬁrst trained the network using S = 256. To speed-up training of the S = 384 network, it was initialised with the weights pre-trained with S = 256, and we used a smaller initial learning rate of 10−3. The second approach to setting S is multi-scale training, where each training image is individually rescaled by randomly sampling S from a certain range [Smin, Smax] (we used Smin = 256 and Smax = 512)."
+        },
+        {
+          "citation": 2,
+          "chunk_id": 260,
+          "source": "VGG.pdf",
+          "page": 4,
+          "text": "Let S be the smallest side of an isotropically-rescaled training image, from which the ConvNet input is cropped (we also refer to S as the training scale). While the crop size is ﬁxed to 224 × 224, in principle S can take on any value not less than 224: for S = 224 the crop will capture whole-image statistics, completely spanning the smallest side of a training image; for S ≫224 the crop will correspond to a small part of the image, containing a small object or an object part."
+        },
+        {
+          "citation": 4,
+          "chunk_id": 264,
+          "source": "VGG.pdf",
+          "page": 5,
+          "text": "Published as a conference paper at ICLR 2015 model is trained to recognise objects over a wide range of scales. For speed reasons, we trained multi-scale models by ﬁne-tuning all layers of a single-scale model with the same conﬁguration, pre-trained with ﬁxed S = 384."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

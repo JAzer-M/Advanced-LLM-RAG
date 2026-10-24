@@ -1,0 +1,61 @@
+{
+  "stage": "Known-case development regression, not held-out accuracy",
+  "frozen_at_utc": "2026-10-22T04:08:50.590280+00:00",
+  "api_public_settings": {
+    "base_url": "http://127.0.0.1:7863/v1",
+    "model": "cn:deepseek-v4.1-flash",
+    "chat_options": {
+      "thinking": {
+        "type": "disabled"
+      },
+      "temperature": 0,
+      "max_tokens": 4096
+    }
+  },
+  "max_actual_chat_attempts": 7,
+  "max_actual_chat_attempts_per_question": 7,
+  "automatic_retries": 0,
+  "max_new_http_posts": 6,
+  "cached_probe": "One exact successful prior probe; logical usage retained, new billing excludes HTTP=0 cache rows.",
+  "source_hashes": {
+    "agent.py": "c8d94cca092fec7719a716740cdfc9c11be5fd9321748024d0f5b6db6b45f429",
+    "main.py": "d39ba658b5ebe5986623ef5744ef869b6b44742fc0ffd2c25125e8d658c19880",
+    "src/agent_answer.py": "d75e86ee41ba78f979c392fdce9e82aea5dc2d6fec68be98b2a612605a3e12ea",
+    "src/agent_tools.py": "c919b73dc407f65f577b29716702445a641c028b12c56ea76b282120f5208bb5",
+    "src/api_llm.py": "cd0a98fba82668d4adbe2a968821c3b14ff626cea22c5ff7df4e34fac17c2a8b",
+    "src/bm25_retriever.py": "b5b56c5308b9aa490dea6776ddd75a77974586947f543ad4857ff3c63787e8f2",
+    "src/chunk_storage.py": "df9a899b4af581855c194a3cbfa3d73dcd0e875ef31df7ae93c28a828975c20e",
+    "src/chunking_recursive.py": "2c057e363b30016042c68dd376de4adde44a3bbc37d86a15b8b70673e1f4b458",
+    "src/chunking_semantic.py": "21870edb0c85cb0c65b335c19855c1a86a9299a3b1a473e78a3397dd5d63c470",
+    "src/citation_validation.py": "2352d675c5ea369106f676f57356723553ae7a5f413cdd8a35ab7dc46d4400af",
+    "src/embedding.py": "b09f963065a3b90bb11df81c8784c26d03a1e425d7bb9ee0b59b39496e5b65b7",
+    "src/evidence_gap.py": "5fc0e5b621aac8a103ce67b6575bdf04d9af61466f7692a4085fb01e21553703",
+    "src/grounded_evidence.py": "3dfcb90028d4b28ac365e4caad1beca8874c22be5ac1449cf69e9e1653635759",
+    "src/hybrid_retriever.py": "677cf0308664147cf5ef65918eb443fd5482dc26a6a6511f0bf855ac6764e3c2",
+    "src/hyde.py": "93a18caa62835be2b15a9866f2763f3ea4b75289a1cfe976f10afaf5d7c7e333",
+    "src/knowledge_base.py": "b3c174f0c5da193b2a097a3c2b0a20f8d9c5caf25c69d4662b1c67ce8d37baec",
+    "src/numeric_evidence.py": "be243e377676e3d8adc9dc5940656c8f56af0eb0b872144c1fbd372f11f38cff",
+    "src/pdf_loader.py": "67241b05f25b2cc3b1030a0b61a8629e00e5ff313d044a65c6f986a22420a649",
+    "src/query_decomposer.py": "133121a4920386f4bbeeb8012ccc34817385ef02e0e6e1f4b2ae7b910118238a",
+    "src/query_rewriter.py": "d803d534021260e916ad81a62c4ca7eba8d330dd6fef94bf2d88c1999bb76470",
+    "src/reranker.py": "8b80fc3ca5788a77b298c9dcb9f48abb99ced37e3b7f8aefb4a0b693aa706bd6",
+    "src/retriever.py": "f0621a8b1733fda583094553d94dcd447a432d8dcd2939559b718ed9f2b4087b",
+    "src/vector_store.py": "a8622cccb1311d91837f0d4323b406d7d6c6bd7321e00d7b7f702506dfad62c9",
+    "tests/test_agent_auto_improvements.py": "0f7ffa9078b77c22b6574914aec94912cd700006c9aff33e85d109b62e1f6b03",
+    "tests/test_main_auto.py": "5e98e24712bdb18fd8a555c1d81698ac6326734b0b58c3ad02785b549c6b5268",
+    "evaluation/results/agent_auto_improvement_20261022/scoped_inputs/run_validation.py": "bc5c7346abcc32b48512ccba95dee0cd6a2079e0f5b049dd0be5a40ecd8e66de",
+    "evaluation/results/agent_auto_improvement_20261022/scoped_inputs/run_inputs.json": "7cb7d62085dcee8f88c6a2c3211e60360e06915ad08e856ce8937e4cc9b416cc",
+    "evaluation/results/agent_auto_improvement_20261022/scoped_inputs/probe_cache.json": "2ed94d8202778829df39d99fb85c07e1c243a4c51de947a673e2ca6625c84667",
+    "evaluation/results/auto_closeout_20261022/run_comparison.py": "b4b691519de1c5fc50df12c5f51fd261f766003625ed2d8e57345e817e5d7aec"
+  },
+  "expected_checks": {
+    "a03_auto": "Threshold values, citation support, one gate, direct delivery.",
+    "a04_agent": "Beam4 for Transformer and RAG generation; RAG ten docs; no QA settings transfer.",
+    "a04_auto": "Same facts, one gate before direct generation.",
+    "a02_agent": "Four LRN constants and after-ReLU, no unsupported extra formula.",
+    "h10_rag": "Same original incomplete initial context; assess honest partial answer/unsupported inference.",
+    "h10_auto": "Find RAG EM and Self-RAG answer inclusion with actual local tools; do not guess."
+  },
+  "comparison": "h10 uses the same unmodified original initial evidence for both paths. No synthetic deletion.",
+  "limits": "No new-set claim, no tuning after freeze, stop on transport failure, no automatic retry."
+}

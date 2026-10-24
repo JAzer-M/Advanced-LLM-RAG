@@ -1,0 +1,149 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "What training batch size and learning rate are reported for the main DPR retriever and for ColBERT fine-tuning?",
+  "kb_version": "all-papers-8-20261020",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": false,
+    "drafts": [
+      "对于主 DPR 检索器，报告的训练 batch size 为 128 [2]，学习率为 10⁻⁵，使用 Adam、带 warm-up 的线性调度，dropout 为 0.1 [3][9]。对于 ColBERT 微调，报告的学习率为 3 × 10⁻⁶，batch size 为 32 [1]。两者相比，DPR 的 batch size 更大（128 对 32），学习率也更高（10⁻⁵ 对 3 × 10⁻⁶）[1][2][3][9]。"
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "对于主 DPR 检索器，报告的训练 batch size 为 128 [2]，学习率为 10⁻⁵，使用 Adam、带 warm-up 的线性调度，dropout 为 0.1 [3][9]。",
+              "reason": "答案给出了主 DPR 检索器的 batch size 128 与学习率 10⁻⁵，分别由 [2] 的 batch size 128 和 [9] 的学习率 10⁻⁵ 支撑；[3] 虽非必需但为 ColBERT 论文中的优化器描述，不构成对 DPR 参数的误引。",
+              "citations": [
+                {
+                  "number": 2,
+                  "quote": "The DPR model used in our main experiments is trained using the in-batch negative setting (Sec- tion 3.2) with a batch size of 128 and one additional BM25 negative passage per question."
+                },
+                {
+                  "number": 9,
+                  "quote": "with a learning rate of 10−5 using Adam, linear scheduling with warm-up and dropout rate 0.1."
+                }
+              ]
+            },
+            {
+              "id": "r2",
+              "verdict": "pass",
+              "answer_quote": "对于 ColBERT 微调，报告的学习率为 3 × 10⁻⁶，batch size 为 32 [1]。",
+              "reason": "答案给出了 ColBERT 微调的学习率 3 × 10⁻⁶ 与 batch size 32，并由 [1] 原文直接支撑。",
+              "citations": [
+                {
+                  "number": 1,
+                  "quote": "we ﬁne-tune all ColBERT models with learning rate 3 × 10−6 with a batch size 32."
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            1,
+            2,
+            3,
+            9
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 1,
+              "chunk_id": 641,
+              "source": "2004.12832v2.pdf",
+              "page": 6,
+              "text": "Similar to [25], we ﬁne-tune all ColBERT models with learning rate 3 × 10−6 with a batch size 32. We ﬁx the number of embeddings per query at Nq = 32. We set our ColBERT embedding dimension m to be 128; §4.5 demonstrates ColBERT’s robustness to a wide range of embedding dimensions. For MS MARCO, we initialize the BERT components of the Col- BERT query and document encoders using Google’s oﬃcial pre- trained BERTbase model. Further, we train all models for 200k itera- tions."
+            },
+            {
+              "citation": 2,
+              "chunk_id": 435,
+              "source": "2004.04906v3.pdf",
+              "page": 5,
+              "text": "See text for more details. traditional retrieval methods, the effects of different training schemes and the run-time efﬁciency. The DPR model used in our main experiments is trained using the in-batch negative setting (Sec- tion 3.2) with a batch size of 128 and one additional BM25 negative passage per question."
+            },
+            {
+              "citation": 3,
+              "chunk_id": 613,
+              "source": "2004.12832v2.pdf",
+              "page": 5,
+              "text": "Õ j ∈[|Ed |] Eqi · ET Sq,d := max dj i ∈[|Eq |] ColBERT is diﬀerentiable end-to-end. We ﬁne-tune the BERT encoders and train from scratch the additional parameters (i.e., the linear layer and the [Q] and [D] markers’ embeddings) using the Adam [16] optimizer. Notice that our interaction mechanism has no trainable parameters."
+            },
+            {
+              "citation": 9,
+              "chunk_id": 436,
+              "source": "2004.04906v3.pdf",
+              "page": 5,
+              "text": "We trained the question and passage encoders for up to 40 epochs for large datasets (NQ, TriviaQA, SQuAD) and 100 epochs for small datasets (TREC, WQ), with a learning rate of 10−5 using Adam, linear scheduling with warm-up and dropout rate 0.1. While it is good to have the ﬂexibility to adapt the retriever to each dataset, it would also be de- sirable to obtain a single retriever that works well across the board."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "对于主 DPR 检索器，报告的训练 batch size 为 128 [2]，学习率为 10⁻⁵，使用 Adam、带 warm-up 的线性调度，dropout 为 0.1 [3][9]。对于 ColBERT 微调，报告的学习率为 3 × 10⁻⁶，batch size 为 32 [1]。两者相比，DPR 的 batch size 更大（128 对 32），学习率也更高（10⁻⁵ 对 3 × 10⁻⁶）[1][2][3][9]。",
+    "citation_check": {
+      "cited_numbers": [
+        1,
+        2,
+        3,
+        9
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 641,
+          "source": "2004.12832v2.pdf",
+          "page": 6,
+          "text": "Similar to [25], we ﬁne-tune all ColBERT models with learning rate 3 × 10−6 with a batch size 32. We ﬁx the number of embeddings per query at Nq = 32. We set our ColBERT embedding dimension m to be 128; §4.5 demonstrates ColBERT’s robustness to a wide range of embedding dimensions. For MS MARCO, we initialize the BERT components of the Col- BERT query and document encoders using Google’s oﬃcial pre- trained BERTbase model. Further, we train all models for 200k itera- tions."
+        },
+        {
+          "citation": 2,
+          "chunk_id": 435,
+          "source": "2004.04906v3.pdf",
+          "page": 5,
+          "text": "See text for more details. traditional retrieval methods, the effects of different training schemes and the run-time efﬁciency. The DPR model used in our main experiments is trained using the in-batch negative setting (Sec- tion 3.2) with a batch size of 128 and one additional BM25 negative passage per question."
+        },
+        {
+          "citation": 3,
+          "chunk_id": 613,
+          "source": "2004.12832v2.pdf",
+          "page": 5,
+          "text": "Õ j ∈[|Ed |] Eqi · ET Sq,d := max dj i ∈[|Eq |] ColBERT is diﬀerentiable end-to-end. We ﬁne-tune the BERT encoders and train from scratch the additional parameters (i.e., the linear layer and the [Q] and [D] markers’ embeddings) using the Adam [16] optimizer. Notice that our interaction mechanism has no trainable parameters."
+        },
+        {
+          "citation": 9,
+          "chunk_id": 436,
+          "source": "2004.04906v3.pdf",
+          "page": 5,
+          "text": "We trained the question and passage encoders for up to 40 epochs for large datasets (NQ, TriviaQA, SQuAD) and 100 epochs for small datasets (TREC, WQ), with a learning rate of 10−5 using Adam, linear scheduling with warm-up and dropout rate 0.1. While it is good to have the ﬂexibility to adapt the retriever to each dataset, it would also be de- sirable to obtain a single retriever that works well across the board."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

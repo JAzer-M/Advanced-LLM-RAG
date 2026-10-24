@@ -1,0 +1,178 @@
+{
+  "planned_runs": 2,
+  "runs": [
+    {
+      "id": "n04",
+      "arm": "auto_on",
+      "mode": "auto",
+      "allow_network": true,
+      "status": "degraded",
+      "seconds": 34.81659766600933,
+      "actual_model_requests": 5,
+      "api_summary": {
+        "attempts": 5,
+        "failed_attempts": 0,
+        "automatic_retries": 0,
+        "usage_missing_calls": [],
+        "reported_usage": {
+          "prompt_tokens": 6860,
+          "completion_tokens": 546,
+          "total_tokens": 7406
+        }
+      },
+      "answer_strategy": "initial_rag_after_agent_failure",
+      "network": {
+        "status": "failed",
+        "network_decision_calls": 1,
+        "http_tool_calls": 1,
+        "papers_read": 0,
+        "automatic_retries": 0,
+        "permanent_kb_import": false,
+        "route": {
+          "route": "arxiv",
+          "requirement_id": "r1",
+          "paper_title": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",
+          "reason": "清单中只有 DPR、ColBERT、RAG、Self-RAG、Corrective RAG、Attention is all you need、DCNN、VGG，没有原始 FlashAttention 论文。该需求明确指向原始 FlashAttention 论文，其完整标题可确定为 FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness，因此应走 arxiv 检索。"
+        },
+        "subject_identity": {
+          "bound_subject": "original FlashAttention paper",
+          "lookup_subject": "flashattention"
+        },
+        "search_query": "ti:\"FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness\"",
+        "error": "HTTPError: HTTP Error 429: Unknown Error"
+      },
+      "agent": {
+        "invoked": true,
+        "actions_executed": 0,
+        "decision_summary": {
+          "planned_cases": 1,
+          "completed_cases": 1,
+          "api_attempts": 2,
+          "failed_api_attempts": 0,
+          "automatic_retries": 0,
+          "actions_executed": 0,
+          "usage_missing_calls": [],
+          "reported_usage": {
+            "prompt_tokens": 3675,
+            "completion_tokens": 295,
+            "total_tokens": 3970
+          },
+          "proposed_actions": {
+            "question": {
+              "type": "stop",
+              "reason": "所需原始 FlashAttention 论文不在本地论文清单中，现有段落只是引用提及，无法确立两级内存与实现技术这一具体事实。",
+              "requirement_ids": [
+                "r1"
+              ],
+              "query": null,
+              "source": null,
+              "chunk_id": null
+            }
+          },
+          "action_attempts": 0,
+          "reassessment_api_attempts": 0,
+          "reassessed_actions": {
+            "question": null
+          },
+          "final_answer_generations": 0,
+          "automatic_action_loop": true,
+          "validation_repair_attempts": 0,
+          "paused_cases": 0,
+          "halt_reasons": {
+            "question": "model_stop"
+          }
+        },
+        "halt_reason": "model_stop"
+      },
+      "error": "HTTPError: HTTP Error 429: Unknown Error"
+    },
+    {
+      "id": "n06",
+      "arm": "agent_on",
+      "mode": "agent",
+      "allow_network": true,
+      "status": "failed",
+      "seconds": 15.212358083983418,
+      "actual_model_requests": 4,
+      "api_summary": {
+        "attempts": 4,
+        "failed_attempts": 0,
+        "automatic_retries": 0,
+        "usage_missing_calls": [],
+        "reported_usage": {
+          "prompt_tokens": 4562,
+          "completion_tokens": 310,
+          "total_tokens": 4872
+        }
+      },
+      "answer_strategy": null,
+      "network": {
+        "status": "failed",
+        "network_decision_calls": 1,
+        "http_tool_calls": 1,
+        "papers_read": 0,
+        "automatic_retries": 0,
+        "permanent_kb_import": false,
+        "route": {
+          "route": "arxiv",
+          "requirement_id": "r1",
+          "paper_title": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",
+          "reason": "本地目录中没有 FlashAttention 原始论文，需求明确指向该原始论文的实验能耗数据，故需检索缺失的原始论文。"
+        },
+        "subject_identity": {
+          "bound_subject": "FlashAttention",
+          "lookup_subject": "flashattention"
+        },
+        "search_query": "ti:\"FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness\"",
+        "error": "HTTPError: HTTP Error 429: Unknown Error"
+      },
+      "agent": {
+        "invoked": true,
+        "actions_executed": 0,
+        "decision_summary": {
+          "planned_cases": 1,
+          "completed_cases": 1,
+          "api_attempts": 2,
+          "failed_api_attempts": 0,
+          "automatic_retries": 0,
+          "actions_executed": 0,
+          "usage_missing_calls": [],
+          "reported_usage": {
+            "prompt_tokens": 3427,
+            "completion_tokens": 230,
+            "total_tokens": 3657
+          },
+          "proposed_actions": {
+            "question": {
+              "type": "stop",
+              "reason": "清单中不包含FlashAttention原始论文（仅有其他论文提及FlashAttention作为工具），本地工具无法获得该论文的能耗测量数据。",
+              "requirement_ids": [
+                "r1"
+              ],
+              "query": null,
+              "source": null,
+              "chunk_id": null
+            }
+          },
+          "action_attempts": 0,
+          "reassessment_api_attempts": 0,
+          "reassessed_actions": {
+            "question": null
+          },
+          "final_answer_generations": 0,
+          "automatic_action_loop": true,
+          "validation_repair_attempts": 0,
+          "paused_cases": 0,
+          "halt_reasons": {
+            "question": "model_stop"
+          }
+        },
+        "halt_reason": "model_stop"
+      },
+      "error": "HTTPError: HTTP Error 429: Unknown Error"
+    }
+  ],
+  "actual_model_requests": 9,
+  "automatic_retries": 0,
+  "semantic_correctness": "requires_manual_review"
+}

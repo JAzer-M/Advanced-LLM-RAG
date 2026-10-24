@@ -1,3 +1,6 @@
+# 默认分块方法：比较相邻句向量，在相似度较低的位置切分，再满足字符长度预算。
+# 各 document 独立处理；短句/短块会被过滤，超长单句保留，不保证 PDF 文本无损。
+
 import re
 import numpy as np
 
@@ -48,6 +51,7 @@ def embed_sentences(sentences, model):
 
     return embeddings
 
+# 句向量已归一化，相邻向量点积可作为余弦相似度。
 def compute_adjacent_similarities(embeddings):
 
     if len(embeddings) < 2:
@@ -60,6 +64,7 @@ def compute_adjacent_similarities(embeddings):
 
     return similarities
 
+# percentile 控制低相似度阈值；返回后一个句子的下标，供切块时断开。
 def detect_semantic_boundaries(similarities, percentile):
 
     if not 0 <= percentile <= 100:
@@ -139,6 +144,7 @@ def group_sentences_by_boundaries(
 
     return chunks
 
+# 输出 chunk_id 与列表位置一致的元数据字典；入口构建脚本显式传 percentile=10。
 def split_documents_semantic(
         documents,
         model,

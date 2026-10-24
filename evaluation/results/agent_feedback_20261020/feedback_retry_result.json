@@ -1,0 +1,245 @@
+{
+  "status": "failed",
+  "source_execution": "saved_feedback_result.json",
+  "initial_plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "RAG",
+        "question_quote": "how does the correctness criterion reported by RAG differ",
+        "need": "how does the correctness criterion reported by RAG differ"
+      },
+      {
+        "id": "r2",
+        "subject": "Self-RAG",
+        "question_quote": "the criterion used by Self-RAG for PopQA and TriviaQA",
+        "need": "the criterion used by Self-RAG for PopQA and TriviaQA"
+      }
+    ]
+  },
+  "initial_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "missing",
+        "evidence": [],
+        "supported_part": "",
+        "reason": "提供的段落中没有关于RAG所报告的correctness criterion的内容。chunk_id 910仅涉及TriviaQA训练目标过滤，chunk_id 763描述训练和比较，均未确立RAG的correctness评价准则。",
+        "gap": "缺少RAG在其评估中所使用的correctness criterion的描述。"
+      },
+      {
+        "id": "r2",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 1003,
+            "source": "2310.11511v1.pdf",
+            "quote": "We evaluate performance based on whether gold answers are included in the model generations instead of strictly requiring exact matching, following Mallen et al."
+          },
+          {
+            "chunk_id": 1002,
+            "source": "2310.11511v1.pdf",
+            "quote": "Short-form generations tasks include two open-domain question answering (QA) datasets, PopQA (Mallen et al., 2023) and TriviaQA-unfiltered (Joshi et al., 2017), where systems need to answer arbitrary questions about factual knowledge."
+          }
+        ],
+        "supported_part": "Self-RAG在PopQA和TriviaQA-unfiltered上的评估准则为：检查模型生成中是否包含标准答案，而非严格要求完全匹配。",
+        "reason": "chunk_id 1002将PopQA和TriviaQA-unfiltered确定为Short-form生成任务；chunk_id 1003说明性能评估基于标准答案是否包含在模型生成中，而非严格完全匹配。",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "search",
+      "reason": "r1尚未满足；使用其预计算的检索查询查找RAG的correctness criterion。",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": "RAG: how does the correctness criterion reported by RAG differ | how does the correctness criterion reported by RAG differ",
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "每项要求均根据其自身绑定的问题摘录进行检查；未将任何条件跨方法转移。"
+    }
+  },
+  "actions_executed_this_retry": 0,
+  "previous_actions_executed": 1,
+  "evidence_after": [
+    {
+      "chunk_id": 1138,
+      "source": "2310.11511v1.pdf",
+      "page": 20,
+      "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+      "text": "C RESULTS C.1 ANALYSIS Reliance on parametric- and non-parametric memories. We conduct analysis on how frequently model answers come from retrieved passages (non-parametric memories) or their own parametric memories. On two open-domain QA datasets, TriviaQA and PopQA, we conduct the following analysis: 1) sample query models successfully answer correctly, 2) for each query in this group, check whether the matched ground-truth answer is a sub-string of the retrieved passage or not.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 1003,
+      "source": "2310.11511v1.pdf",
+      "page": 7,
+      "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+      "text": "For PopQA, we use the long-tail subset, consisting of 1,399 rare entity queries whose monthly Wikipedia page views are less than 100. As the TriviaQA-unfiltered (open) test set is not publicly available, we follow prior work’s validation and test split (Min et al., 2019; Guu et al., 2020), using 11,313 test queries for evaluation. We evaluate performance based on whether gold answers are included in the model generations instead of strictly requiring exact matching, following Mallen et al.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 1002,
+      "source": "2310.11511v1.pdf",
+      "page": 7,
+      "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+      "text": "Challenge; Clark et al. We use accuracy as an evaluation metric and report on the test set. We aggregate the answer probabilities of target classes for both of these datasets (Appendix Section B.2). Short-form generations tasks include two open-domain question answering (QA) datasets, PopQA (Mallen et al., 2023) and TriviaQA-unfiltered (Joshi et al., 2017), where systems need to answer arbitrary questions about factual knowledge.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 1043,
+      "source": "2310.11511v1.pdf",
+      "page": 10,
+      "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+      "text": "We then ask our annotators whether the model-predicted reflection tokens about ISREL and ISSUP match their inspections (e.g., whether the fully supported output is supported by the cited evidence). Human annotators find SELF-RAG answers are often plausible and supported by relevant passages with higher S&P scores on short-form PopQA, which is consistent with Menick et al. Human annotators also find ISREL and ISSUP reflection token predictions are mostly aligned with their assessments.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 910,
+      "source": "2005.11401v4.pdf",
+      "page": 18,
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "text": "For RAG, we also make use of multiple annotation examples for Natural Questions and WebQuestions by training the model with each (q, a) pair separately, leading to a small increase in accuracy. For TriviaQA, there are often many valid answers to a given question, some of which are not suitable training targets, such as emoji or spelling variants. For TriviaQA, we ﬁlter out answer candidates if they do not occur in top 1000 documents for the query.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 1300,
+      "source": "2401.15884v3.pdf",
+      "page": 8,
+      "title": "Corrective Retrieval Augmented Generation",
+      "text": "Compared with the current state-of-the- art Self-RAG, Self-CRAG outperformed it by margins of 20.0% accuracy on PopQA, 36.9% FactScore on Biography, and 4.0% accuracy on Arc-Challenge when based on LLaMA2-hf-7b, as well as by margins of 6.9% accuracy on PopQA, 5.0% FactScore on Biography, and 2.4% accuracy on PubHealth, when based on SelfRAG-LLaMA2- 7b. These results demonstrated the adaptability of CRAG which is plug-and-play and can be implemented into RAG-based approaches.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 1393,
+      "source": "2401.15884v3.pdf",
+      "page": 16,
+      "title": "Corrective Retrieval Augmented Generation",
+      "text": "Table 11: Ablation study for removing only a single action on the PopQA dataset in terms of accuracy. LLaMA2-hf-7b SelfRAG-LLaMA2-7b CRAG 54.9 59.8 only Correct 52.4 56.7 only Incorrect 47.0 48.5 only Ambiguous 52.7 58.0 Self-CRAG 49.0 61.8 only Correct 48.6 57.2 only Incorrect 40.8 53.3 only Ambiguous 44.9 59.8 is an advanced RAG approach that introduces a critic model to decide whether to retrieve and which retrieved document to be referred for generation.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 1016,
+      "source": "2310.11511v1.pdf",
+      "page": 8,
+      "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+      "text": "Models are sorted based on scale. FS, em, rg, mau, prec, rec denote FactScore (factuality); str-em, rouge (correctness); MAUVE (fluency); citation precision and recall, respectively.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 763,
+      "source": "2005.11401v4.pdf",
+      "page": 4,
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "text": "3.1 Open-domain Question Answering Open-domain question answering (QA) is an important real-world application and common testbed for knowledge-intensive tasks [20]. We treat questions and answers as input-output text pairs (x, y) and train RAG by directly minimizing the negative log-likelihood of answers. We compare RAG to the popular extractive QA paradigm [5, 7, 31, 26], where answers are extracted spans from retrieved documents, relying primarily on non-parametric knowledge.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 475,
+      "source": "2004.04906v3.pdf",
+      "page": 8,
+      "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+      "text": "see that higher retriever accuracy typically leads to better ﬁnal QA results: in all cases except SQuAD, answers extracted from the passages retrieved by DPR are more likely to be correct, compared to those from BM25. For large datasets like NQ and TriviaQA, models trained using multiple datasets (Multi) perform comparably to those trained using the individual training set (Single). Conversely, on smaller datasets like WQ and TREC, the multi- dataset setting has a clear advantage.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 1289,
+      "source": "2401.15884v3.pdf",
+      "page": 6,
+      "title": "Corrective Retrieval Augmented Generation",
+      "text": "The same metrics are used because our proposed method is comparable to previous studies, since we used the same retrieval results as previous work. The difference lies in that our motivation is to improve the retrieval quality by correcting the retrieval results that the system judges to be of low quality. This can be analogous to RAG’s augmentation to standalone parameterized language models and we further augment RAG with corrective strategies.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 1130,
+      "source": "2310.11511v1.pdf",
+      "page": 20,
+      "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+      "text": "Therefore, for PopQA, we used the December 2020 preprocessed Wikipedia corpus provided by Izacard et al. (2022b) and generated document embeddings.8 The issues of performance variance from different Wikipedia dumps have been reported by prior work (Asai et al., 2020; Izacard et al., 2022b). Yet, we observe limited effectiveness of such off-the-shelf retrieval models trained primarily on knowledge-intensive tasks for open-ended generation (e.g., instruction following).",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 788,
+      "source": "2005.11401v4.pdf",
+      "page": 6,
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "text": "Evaluators indicated that BART was more factual than RAG in only 7.1% of cases, while RAG was more factual in 42.7% of cases, and both RAG and BART were factual in a further 17% of cases, clearly demonstrating the effectiveness of RAG on the task over a state-of-the-art generation model. Evaluators also ﬁnd RAG generations to be more speciﬁc by a large margin. Table 3 shows typical generations from each model.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 786,
+      "source": "2005.11401v4.pdf",
+      "page": 6,
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "text": "Qualitatively, we ﬁnd that RAG models hallucinate less and generate factually correct text more often than BART. Later, we also show that RAG generations are more diverse than BART generations (see §4.5).",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 1325,
+      "source": "2401.15884v3.pdf",
+      "page": 10,
+      "title": "Corrective Retrieval Augmented Generation",
+      "text": "anism, rather than solely from the supplementary information obtained through web searches. To further demonstrate the effectiveness of the pro- posed self-correction mechanism, both RAG and Self-RAG were consistently supplemented with web search knowledge to ensure they had access to the same scope of the retrieved knowledge. The results in Table 5 show that consistently supplementing RAG or Self-RAG with web search knowledge can improve the performance in most cases (except Self-RAG w.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 1235,
+      "source": "2401.15884v3.pdf",
+      "page": 2,
+      "title": "Corrective Retrieval Augmented Generation",
+      "text": "In summary, our contributions in this paper are three-fold: 1) This paper studies the scenarios where the retriever returns inaccurate results and, to the best of our knowledge, makes the first attempt to design corrective strategies for RAG to improve its robustness. 2) A plug-and-play method named CRAG is proposed to improve the ability of A automatic self-correction and efficient utilization of retrieved documents.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 1213,
+      "source": "2310.11511v1.pdf",
+      "page": 30,
+      "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+      "text": "4: The response mostly fulfills the need in the query, while there can be some minor improvements such as discussing more detailed information, having better structure of the response, or im- proving coherence. 3: The response is acceptable, but some major additions or improvements are needed to satisfy users’ needs. 2: The response still addresses the main request, but it is not complete or not relevant to the query. 1: The response is barely on-topic or completely irrelevant.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 796,
+      "source": "2005.11401v4.pdf",
+      "page": 7,
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "text": "The posterior for document 1 is high when generating “A Farewell to Arms\" and for document 2 when generating “The Sun Also Rises\". Table 3: Examples from generation tasks. RAG models generate more speciﬁc and factually accurate responses. ‘?’ indicates factually incorrect responses, * indicates partially correct responses. Task Input Model Generation MS- MARCO deﬁne middle ear BART ?The middle ear is the part of the ear between the middle ear and the nose.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 779,
+      "source": "2005.11401v4.pdf",
+      "page": 5,
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "text": "It is worth noting that RAG’s retriever is initialized using DPR’s retriever, which uses retrieval supervision on Natural Questions and TriviaQA. RAG compares favourably to the DPR QA system, which uses a BERT-based “cross- encoder” to re-rank documents, along with an extractive reader. RAG demonstrates that neither a re-ranker nor extractive reader is necessary for state-of-the-art performance. There are several advantages to generating answers even when it is possible to extract them.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 1326,
+      "source": "2401.15884v3.pdf",
+      "page": 10,
+      "title": "Corrective Retrieval Augmented Generation",
+      "text": "web using the original LLaMA2 model), though the improvement remains limited. Furthermore, augmenting RAG or Self- RAG with the proposed self-correction mechanism significantly outperformed the models consistently supplemented with web search knowledge in all cases. This finding confirms that the observed advancements are primarily attributable to the proposed self-correction mechanism.",
+      "kb_version": "all-papers-8-20261020"
+    }
+  ],
+  "added_ids": [
+    1289,
+    1130,
+    788,
+    786,
+    1325,
+    1235,
+    1213,
+    796,
+    779,
+    1326
+  ],
+  "automatic_action_loop": false,
+  "error": "RuntimeError: 反代 API 连接失败或超时；未自动重试。",
+  "new_chat_requests": 1,
+  "tracked_inputs_unchanged": true
+}

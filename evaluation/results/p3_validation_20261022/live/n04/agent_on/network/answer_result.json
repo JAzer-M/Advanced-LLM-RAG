@@ -1,0 +1,127 @@
+{
+  "status": "review_passed",
+  "repair_attempted": true,
+  "drafts": [
+    "原始 FlashAttention 论文指出，IO 减少涉及的 GPU 内存层级为 GPU 高带宽内存（HBM）与 GPU 片上 SRAM，并通过 tiling 技术减少这两者之间的内存读写/传输[12]。该论文进一步说明，tiling 可避免在（相对较慢的）GPU HBM 上物化大型 N×N 注意力矩阵[14]。",
+    "原始 FlashAttention 论文指出，IO 减少涉及的 GPU 内存层级为 GPU 高带宽内存（HBM）与 GPU 片上 SRAM，并通过 tiling 技术减少这两者之间的内存读写/传输[12]。该论文进一步说明，tiling 可避免在（相对较慢的）GPU HBM 上物化大型 N×N 注意力矩阵[14]。"
+  ],
+  "reviews": [
+    {
+      "review_error": "Review cites a source not cited by its answer quote.",
+      "citation_check": {
+        "cited_numbers": [
+          12,
+          14
+        ],
+        "invalid_numbers": [],
+        "malformed_markers": [],
+        "has_citations": true,
+        "require_citations": true,
+        "structure_passed": true,
+        "cited_sources": [
+          {
+            "citation": 12,
+            "chunk_id": 1397,
+            "source": "2205.14135v2.pdf",
+            "page": 1,
+            "text": "FlashAttention: Fast and Memory-Eﬃcient Exact Attention\nwith IO-Awareness\nTri Dao†, Daniel Y. Fu†, Stefano Ermon†, Atri Rudra‡, and Christopher Ré†\n†Department of Computer Science, Stanford University\n‡Department of Computer Science and Engineering, University at Buﬀalo, SUNY\narXiv:2205.14135v2  [cs.LG]  23 Jun 2022\n{trid,danfu}@cs.stanford.edu, ermon@stanford.edu, atri@buffalo.edu,\nchrismre@cs.stanford.edu\nJune 24, 2022\nTransformers are slow and memory-hungry on long sequences, since the time and memory complexity\nof self-attention are quadratic in sequence length. Approximate attention methods have attempted\nto address this problem by trading oﬀmodel quality to reduce the compute complexity, but often do\nnot achieve wall-clock speedup. We argue that a missing principle is making attention algorithms IO-\naware—accounting for reads and writes between levels of GPU memory. We propose FlashAttention,\nan IO-aware exact attention algorithm that uses tiling to reduce the number of memory reads/writes\nbetween GPU high bandwidth memory (HBM) and GPU on-chip SRAM. We analyze the IO complexity\nof FlashAttention, showing that it requires fewer HBM accesses than standard attention, and is\nopt"
+          },
+          {
+            "citation": 14,
+            "chunk_id": 1401,
+            "source": "2205.14135v2.pdf",
+            "page": 2,
+            "text": "KT: d x N\nQ: N x d\nQKT: N x N\nSRAM: 19 TB/s (20 MB)\nGPU\nSRAM\nGPU\nHBM: 1.5 TB/s (40 GB)\nInner Loop\nHBM\nCopy\nMain Memory\nDRAM: 12.8 GB/s\n(>1 TB)\n(CPU DRAM)\nMemory Hierarchy with\nBandwidth & Memory Size\nsm(QKT)V: N x d\nFigure 1: Left: FlashAttention uses tiling to prevent materialization of the large 𝑁× 𝑁attention matrix\n(dotted box) on (relatively) slow GPU HBM. In the outer loop (red arrows), FlashAttention loops through\nblocks of the K and V matrices and loads them to fast on-chip SRAM. In each block, FlashAttention\nloops over blocks of Q matrix (blue arrows), loading them to SRAM, and writing the output of the attention\ncomputation back to HBM. Right: Speedup over the PyTorch implementation of attention on GPT-2.\nFlashAttention does not read and write the large 𝑁× 𝑁attention matrix to HBM, resulting in an 7.6×\nspeedup on the attention computation.\nGPUs, compute speed has out-paced memory speed [61, 62, 63], and most operations in Transformers are\nbottlenecked by memory accesses [43]. IO-aware algorithms have been critical for similar memory-bound\noperations, when reading and writing data can account for a large portion of the runtime—such as database\njoins [71], image processing ["
+          }
+        ],
+        "semantic_support": "requires_manual_review"
+      }
+    },
+    {
+      "review": {
+        "requirements": [
+          {
+            "id": "r1",
+            "verdict": "pass",
+            "answer_quote": "原始 FlashAttention 论文指出，IO 减少涉及的 GPU 内存层级为 GPU 高带宽内存（HBM）与 GPU 片上 SRAM，并通过 tiling 技术减少这两者之间的内存读写/传输[12]。",
+            "reason": "答案明确指出两个GPU内存层级为HBM与GPU片上SRAM，并指出减少传输的技术为tiling，与原始FlashAttention论文摘要完全一致，[12]引用支持。",
+            "citations": [
+              {
+                "number": 12,
+                "quote": "We propose FlashAttention, an IO-aware exact attention algorithm that uses tiling to reduce the number of memory reads/writes between GPU high bandwidth memory (HBM) and GPU on-chip SRAM."
+              }
+            ]
+          }
+        ],
+        "checks": {
+          "coverage": true,
+          "subjects": true,
+          "numbers": true,
+          "conditions": true,
+          "citations": true,
+          "unsupported_claims": true,
+          "gaps": true
+        },
+        "issues": []
+      },
+      "citation_check": {
+        "cited_numbers": [
+          12,
+          14
+        ],
+        "invalid_numbers": [],
+        "malformed_markers": [],
+        "has_citations": true,
+        "require_citations": true,
+        "structure_passed": true,
+        "cited_sources": [
+          {
+            "citation": 12,
+            "chunk_id": 1397,
+            "source": "2205.14135v2.pdf",
+            "page": 1,
+            "text": "FlashAttention: Fast and Memory-Eﬃcient Exact Attention\nwith IO-Awareness\nTri Dao†, Daniel Y. Fu†, Stefano Ermon†, Atri Rudra‡, and Christopher Ré†\n†Department of Computer Science, Stanford University\n‡Department of Computer Science and Engineering, University at Buﬀalo, SUNY\narXiv:2205.14135v2  [cs.LG]  23 Jun 2022\n{trid,danfu}@cs.stanford.edu, ermon@stanford.edu, atri@buffalo.edu,\nchrismre@cs.stanford.edu\nJune 24, 2022\nTransformers are slow and memory-hungry on long sequences, since the time and memory complexity\nof self-attention are quadratic in sequence length. Approximate attention methods have attempted\nto address this problem by trading oﬀmodel quality to reduce the compute complexity, but often do\nnot achieve wall-clock speedup. We argue that a missing principle is making attention algorithms IO-\naware—accounting for reads and writes between levels of GPU memory. We propose FlashAttention,\nan IO-aware exact attention algorithm that uses tiling to reduce the number of memory reads/writes\nbetween GPU high bandwidth memory (HBM) and GPU on-chip SRAM. We analyze the IO complexity\nof FlashAttention, showing that it requires fewer HBM accesses than standard attention, and is\nopt"
+          },
+          {
+            "citation": 14,
+            "chunk_id": 1401,
+            "source": "2205.14135v2.pdf",
+            "page": 2,
+            "text": "KT: d x N\nQ: N x d\nQKT: N x N\nSRAM: 19 TB/s (20 MB)\nGPU\nSRAM\nGPU\nHBM: 1.5 TB/s (40 GB)\nInner Loop\nHBM\nCopy\nMain Memory\nDRAM: 12.8 GB/s\n(>1 TB)\n(CPU DRAM)\nMemory Hierarchy with\nBandwidth & Memory Size\nsm(QKT)V: N x d\nFigure 1: Left: FlashAttention uses tiling to prevent materialization of the large 𝑁× 𝑁attention matrix\n(dotted box) on (relatively) slow GPU HBM. In the outer loop (red arrows), FlashAttention loops through\nblocks of the K and V matrices and loads them to fast on-chip SRAM. In each block, FlashAttention\nloops over blocks of Q matrix (blue arrows), loading them to SRAM, and writing the output of the attention\ncomputation back to HBM. Right: Speedup over the PyTorch implementation of attention on GPT-2.\nFlashAttention does not read and write the large 𝑁× 𝑁attention matrix to HBM, resulting in an 7.6×\nspeedup on the attention computation.\nGPUs, compute speed has out-paced memory speed [61, 62, 63], and most operations in Transformers are\nbottlenecked by memory accesses [43]. IO-aware algorithms have been critical for similar memory-bound\noperations, when reading and writing data can account for a large portion of the runtime—such as database\njoins [71], image processing ["
+          }
+        ],
+        "semantic_support": "requires_manual_review"
+      }
+    }
+  ],
+  "semantic_correctness": "requires_manual_review",
+  "answer": "原始 FlashAttention 论文指出，IO 减少涉及的 GPU 内存层级为 GPU 高带宽内存（HBM）与 GPU 片上 SRAM，并通过 tiling 技术减少这两者之间的内存读写/传输[12]。该论文进一步说明，tiling 可避免在（相对较慢的）GPU HBM 上物化大型 N×N 注意力矩阵[14]。",
+  "citation_check": {
+    "cited_numbers": [
+      12,
+      14
+    ],
+    "invalid_numbers": [],
+    "malformed_markers": [],
+    "has_citations": true,
+    "require_citations": true,
+    "structure_passed": true,
+    "cited_sources": [
+      {
+        "citation": 12,
+        "chunk_id": 1397,
+        "source": "2205.14135v2.pdf",
+        "page": 1,
+        "text": "FlashAttention: Fast and Memory-Eﬃcient Exact Attention\nwith IO-Awareness\nTri Dao†, Daniel Y. Fu†, Stefano Ermon†, Atri Rudra‡, and Christopher Ré†\n†Department of Computer Science, Stanford University\n‡Department of Computer Science and Engineering, University at Buﬀalo, SUNY\narXiv:2205.14135v2  [cs.LG]  23 Jun 2022\n{trid,danfu}@cs.stanford.edu, ermon@stanford.edu, atri@buffalo.edu,\nchrismre@cs.stanford.edu\nJune 24, 2022\nTransformers are slow and memory-hungry on long sequences, since the time and memory complexity\nof self-attention are quadratic in sequence length. Approximate attention methods have attempted\nto address this problem by trading oﬀmodel quality to reduce the compute complexity, but often do\nnot achieve wall-clock speedup. We argue that a missing principle is making attention algorithms IO-\naware—accounting for reads and writes between levels of GPU memory. We propose FlashAttention,\nan IO-aware exact attention algorithm that uses tiling to reduce the number of memory reads/writes\nbetween GPU high bandwidth memory (HBM) and GPU on-chip SRAM. We analyze the IO complexity\nof FlashAttention, showing that it requires fewer HBM accesses than standard attention, and is\nopt"
+      },
+      {
+        "citation": 14,
+        "chunk_id": 1401,
+        "source": "2205.14135v2.pdf",
+        "page": 2,
+        "text": "KT: d x N\nQ: N x d\nQKT: N x N\nSRAM: 19 TB/s (20 MB)\nGPU\nSRAM\nGPU\nHBM: 1.5 TB/s (40 GB)\nInner Loop\nHBM\nCopy\nMain Memory\nDRAM: 12.8 GB/s\n(>1 TB)\n(CPU DRAM)\nMemory Hierarchy with\nBandwidth & Memory Size\nsm(QKT)V: N x d\nFigure 1: Left: FlashAttention uses tiling to prevent materialization of the large 𝑁× 𝑁attention matrix\n(dotted box) on (relatively) slow GPU HBM. In the outer loop (red arrows), FlashAttention loops through\nblocks of the K and V matrices and loads them to fast on-chip SRAM. In each block, FlashAttention\nloops over blocks of Q matrix (blue arrows), loading them to SRAM, and writing the output of the attention\ncomputation back to HBM. Right: Speedup over the PyTorch implementation of attention on GPT-2.\nFlashAttention does not read and write the large 𝑁× 𝑁attention matrix to HBM, resulting in an 7.6×\nspeedup on the attention computation.\nGPUs, compute speed has out-paced memory speed [61, 62, 63], and most operations in Transformers are\nbottlenecked by memory accesses [43]. IO-aware algorithms have been critical for similar memory-bound\noperations, when reading and writing data can account for a large portion of the runtime—such as database\njoins [71], image processing ["
+      }
+    ],
+    "semantic_support": "requires_manual_review"
+  }
+}

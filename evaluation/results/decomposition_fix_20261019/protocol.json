@@ -1,0 +1,92 @@
+{
+  "started_at": "2026-10-19T11:57:13.220778+00:00",
+  "scope": "Captured-response before/after offline comparison and one fresh seven-question evaluation; same five-paper KB and unchanged question/Gold file.",
+  "kb_version": "arxiv-pilot-5-20261019",
+  "generation_question_ids": [
+    "p1",
+    "p2",
+    "p3",
+    "p4",
+    "p5",
+    "p6",
+    "p7"
+  ],
+  "api_budget": "One decomposition and one answer per question; existing maximum one citation repair if required, no automatic response retries.",
+  "model": "cn:deepseek-v4.1-flash",
+  "chat_options": {
+    "thinking": {
+      "type": "disabled"
+    },
+    "temperature": 0,
+    "max_tokens": 4096
+  },
+  "python": "3.11.9 (v3.11.9:de54cf5be3, Apr  2 2024, 07:12:50) [Clang 13.0.0 (clang-1300.0.29.30)]",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "runtime": "CPU, OMP/BLAS/VECLIB threads=1, torch intra/interop=1, local HF offline cache",
+  "max_sub_queries": 4,
+  "sub_query_evidence_k": 3,
+  "final_k": 10,
+  "candidate_budget": "Each Dense/BM25 and RRF=60; at most 300 before dedup; subquery reranker local scores not compared across queries.",
+  "rubric": {
+    "p1": [
+      "BART-large",
+      "about 400M; appendix 406M accepted when sourced and qualified"
+    ],
+    "p2": [
+      "question/passage vector dot product"
+    ],
+    "p3": [
+      "max over document tokens for each query token",
+      "sum over query tokens"
+    ],
+    "p4": [
+      "Retrieve: whether to retrieve",
+      "ISREL: relevance",
+      "ISSUP: support",
+      "ISUSE: usefulness"
+    ],
+    "p5": [
+      "Correct",
+      "Incorrect",
+      "Ambiguous"
+    ],
+    "p6": [
+      "DPR single vectors",
+      "DPR dot product",
+      "ColBERT token-level multiple vectors",
+      "ColBERT MaxSim then summation"
+    ],
+    "p7": [
+      "no local Mac measurements, no ranking or invented milliseconds",
+      "concise Chinese refusal without irrelevant hardware numbers"
+    ]
+  },
+  "review_rule": "Manual inspect each answer against its actual cited passages; syntactic citation checks are separate. These fixed development examples are not holdout accuracy. Rubric and Gold are not sent to generation.",
+  "completed_phases": [
+    {
+      "name": "full_seven",
+      "source": "answers/",
+      "provenance": "fresh full pipeline",
+      "api_calls": 15
+    },
+    {
+      "name": "output_refinement",
+      "source": "refined_answers/",
+      "question_ids": [
+        "p1",
+        "p3",
+        "p6",
+        "p7"
+      ],
+      "provenance": "fixed evidence; generation only",
+      "api_calls": 4
+    },
+    {
+      "name": "redundant_title_guard",
+      "provenance": "new corpus input bytes unchanged for all 1019 chunks; old corpus original input restored for all 378 chunks",
+      "source": "reranker_input_equivalence.json",
+      "api_calls": 0
+    }
+  ],
+  "legacy_evaluation_recovery": "First run hit old q6 without gold_evidence; optional empty Gold fixed, rerun succeeded. Duplicate title guard restored identical old Top10 IDs."
+}

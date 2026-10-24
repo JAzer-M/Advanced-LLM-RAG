@@ -1,0 +1,169 @@
+{
+  "id": "question",
+  "query": "In Attention Is All You Need, what transformations and activation make up the position-wise feed-forward network, and what inner-layer dimensionality is specified in its description?",
+  "kb_version": "all-papers-8-20261020",
+  "status": "completed",
+  "actions_executed": 0,
+  "semantic_correctness": "requires_manual_review",
+  "plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "Attention Is All You Need",
+        "question_quote": "In Attention Is All You Need, what transformations and activation make up the position-wise feed-forward network, and what inner-layer dimensionality is specified in its description?",
+        "need": "In Attention Is All You Need, what transformations and activation make up the position-wise feed-forward network, and what inner-layer dimensionality is specified in its description?"
+      }
+    ]
+  },
+  "assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 42,
+            "quote": "This consists of two linear transformations with a ReLU activation in between. FFN(x) = max(0, xW1 + b1)W2 + b2 (2)"
+          },
+          {
+            "chunk_id": 42,
+            "quote": "The dimensionality of input and output is dmodel = 512, and the inner-layer has dimensionality dff = 2048."
+          }
+        ],
+        "supported_part": "位置前馈网络由两次线性变换及中间的ReLU激活组成（FFN(x)=max(0,xW1+b1)W2+b2），且内层维度为dff=2048。",
+        "reason": "第42块明确给出两次线性变换加ReLU激活以及内层维度dff=2048，完整覆盖了变换、激活和指定内层维度。",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "answer",
+      "reason": "该要求的变换、激活及内层维度均已由第42块证据支持。",
+      "requirement_ids": [],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "证据均落在该要求所问的前馈网络组成与内层维度范围内。"
+    }
+  },
+  "steps": [],
+  "evidence_after": [
+    {
+      "chunk_id": 42,
+      "source": "Attention is all you need.pdf",
+      "page": 5,
+      "title": "Attention is All you Need",
+      "text": "This consists of two linear transformations with a ReLU activation in between. FFN(x) = max(0, xW1 + b1)W2 + b2 (2) While the linear transformations are the same across different positions, they use different parameters from layer to layer. Another way of describing this is as two convolutions with kernel size 1. The dimensionality of input and output is dmodel = 512, and the inner-layer has dimensionality dff = 2048.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 2,
+      "source": "Attention is all you need.pdf",
+      "page": 1,
+      "title": "Attention is All you Need",
+      "text": "We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 26,
+      "source": "Attention is all you need.pdf",
+      "page": 3,
+      "title": "Attention is All you Need",
+      "text": "3.2 Attention An attention function can be described as mapping a query and a set of key-value pairs to an output, where the query, keys, values, and output are all vectors. The output is computed as a weighted sum of the values, where the weight assigned to each value is computed by a compatibility function of the query with the corresponding key.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 41,
+      "source": "Attention is all you need.pdf",
+      "page": 5,
+      "title": "Attention is All you Need",
+      "text": "3.3 Position-wise Feed-Forward Networks In addition to attention sub-layers, each of the layers in our encoder and decoder contains a fully connected feed-forward network, which is applied to each position separately and identically.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 15,
+      "source": "Attention is all you need.pdf",
+      "page": 2,
+      "title": "Attention is All you Need",
+      "text": "In the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as described in section 3.2. Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 33,
+      "source": "Attention is all you need.pdf",
+      "page": 4,
+      "title": "Attention is All you Need",
+      "text": "3.2.2 Multi-Head Attention Instead of performing a single attention function with dmodel-dimensional keys, values and queries, we found it beneﬁcial to linearly project the queries, keys and values h times with different, learned linear projections to dk, dk and dv dimensions, respectively. On each of these projected versions of queries, keys and values we then perform the attention function in parallel, yielding dv-dimensional output values.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 30,
+      "source": "Attention is all you need.pdf",
+      "page": 4,
+      "title": "Attention is All you Need",
+      "text": "query with all keys, divide each by √dk, and apply a softmax function to obtain the weights on the values. In practice, we compute the attention function on a set of queries simultaneously, packed together into a matrix Q. The keys and values are also packed together into matrices K and V . We compute the matrix of outputs as: Attention(Q, K, V ) = softmax(QKT √dk )V (1) The two most commonly used attention functions are additive attention [2], and dot-product (multi- plicative) attention.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 82,
+      "source": "Attention is all you need.pdf",
+      "page": 9,
+      "title": "Attention is All you Need",
+      "text": "In the former task our best model outperforms even all previously reported ensembles. We are excited about the future of attention-based models and plan to apply them to other tasks. We plan to extend the Transformer to problems involving input and output modalities other than text and to investigate local, restricted attention mechanisms to efﬁciently handle large inputs and outputs such as images, audio and video. Making generation less sequential is another research goals of ours.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 52,
+      "source": "Attention is all you need.pdf",
+      "page": 6,
+      "title": "Attention is All you Need",
+      "text": "One is the total computational complexity per layer. Another is the amount of computation that can be parallelized, as measured by the minimum number of sequential operations required. The third is the path length between long-range dependencies in the network. Learning long-range dependencies is a key challenge in many sequence transduction tasks.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 31,
+      "source": "Attention is all you need.pdf",
+      "page": 4,
+      "title": "Attention is All you Need",
+      "text": "Dot-product attention is identical to our algorithm, except for the scaling factor of 1 √dk . Additive attention computes the compatibility function using a feed-forward network with a single hidden layer. While the two are similar in theoretical complexity, dot-product attention is much faster and more space-efﬁcient in practice, since it can be implemented using highly optimized matrix multiplication code.",
+      "kb_version": "all-papers-8-20261020"
+    }
+  ],
+  "halt_reason": "answer_ready",
+  "final_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 42,
+            "quote": "This consists of two linear transformations with a ReLU activation in between. FFN(x) = max(0, xW1 + b1)W2 + b2 (2)"
+          },
+          {
+            "chunk_id": 42,
+            "quote": "The dimensionality of input and output is dmodel = 512, and the inner-layer has dimensionality dff = 2048."
+          }
+        ],
+        "supported_part": "位置前馈网络由两次线性变换及中间的ReLU激活组成（FFN(x)=max(0,xW1+b1)W2+b2），且内层维度为dff=2048。",
+        "reason": "第42块明确给出两次线性变换加ReLU激活以及内层维度dff=2048，完整覆盖了变换、激活和指定内层维度。",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "answer",
+      "reason": "该要求的变换、激活及内层维度均已由第42块证据支持。",
+      "requirement_ids": [],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "证据均落在该要求所问的前馈网络组成与内层维度范围内。"
+    }
+  },
+  "elapsed_seconds": 4.313
+}

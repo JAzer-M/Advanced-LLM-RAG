@@ -1,0 +1,63 @@
+{
+  "id": "h10",
+  "query": "For short-answer open-domain QA, how does the correctness criterion reported by RAG differ from the criterion used by Self-RAG for PopQA and TriviaQA?",
+  "plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "RAG",
+        "question_quote": "how does the correctness criterion reported by RAG differ",
+        "need": "how does the correctness criterion reported by RAG differ"
+      },
+      {
+        "id": "r2",
+        "subject": "Self-RAG",
+        "question_quote": "from the criterion used by Self-RAG for PopQA and TriviaQA",
+        "need": "from the criterion used by Self-RAG for PopQA and TriviaQA"
+      }
+    ]
+  },
+  "actions_executed": 0,
+  "fresh_retrieval": false,
+  "fresh_final_answer": false,
+  "assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "missing",
+        "evidence": [],
+        "supported_part": "",
+        "reason": "提供的段落中没有任何关于RAG在PopQA和TriviaQA上报告的正确答案判定标准的描述；chunk 910仅讨论TriviaQA的训练过滤和标注使用，未说明RAG的正确性评估准则。",
+        "gap": "缺少RAG对PopQA和TriviaQA所采用正确性判定标准的说明。"
+      },
+      {
+        "id": "r2",
+        "status": "partial",
+        "evidence": [
+          {
+            "chunk_id": 1003,
+            "quote": "We evaluate performance based on whether gold answers are included in the model generations instead of strictly requiring exact matching, following Mallen et al."
+          }
+        ],
+        "supported_part": "Self-RAG在PopQA和TriviaQA上以金标准答案是否包含在模型生成中作为正确性判定，而非严格要求完全匹配。",
+        "reason": "chunk 1003明确给出了Self-RAG在PopQA和TriviaQA评估时采用的包含式正确性准则，但问题要求的是与RAG准则的差异，RAG一侧缺失。",
+        "gap": "缺少RAG对应的正确性判定标准，无法完成差异比较。"
+      }
+    ],
+    "next_action": {
+      "type": "search",
+      "reason": "r1关于RAG正确性判定标准完全缺失，需在库存中的RAG论文中检索。",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": "RAG: how does the correctness criterion reported by RAG differ | how does the correctness criterion reported by RAG differ",
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "两项需求均对应原问题中RAG与Self-RAG在PopQA/TriviaQA上正确性判定标准的比较，未引入额外条件；检索动作仅针对缺失的RAG准则，范围一致。"
+    }
+  },
+  "status": "completed"
+}

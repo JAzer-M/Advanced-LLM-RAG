@@ -1,0 +1,153 @@
+{
+  "id": "b10",
+  "status": "completed",
+  "query": "How does Self-RAG obtain reflection-token supervision for its own critic, and how does CRAG use ChatGPT before a web search?",
+  "kb_version": "all-papers-8-20261020",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": false,
+    "drafts": [
+      "Self-RAG通过提示GPT-4生成reflection token来收集监督数据，再将这些知识蒸馏到内部critic模型中[2][4][5]。CRAG在web search之前使用ChatGPT将输入改写为由关键词组成的查询[8]。"
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "Self-RAG通过提示GPT-4生成reflection token来收集监督数据，再将这些知识蒸馏到内部critic模型中[2][4][5]。",
+              "reason": "答案涵盖Self-RAG用GPT-4提示生成reflection token收集监督数据、再蒸馏到内部critic，三项引用均支持该机制。",
+              "citations": [
+                {
+                  "number": 2,
+                  "quote": "The critic model, in part, is supervised on a dataset of input, output, and corresponding reflection tokens collected by prompting a propriety LM (i.e., GPT-4; OpenAI 2023)."
+                },
+                {
+                  "number": 4,
+                  "quote": "Prompt GPT-4 to collect a reflection token r for (x, y)"
+                },
+                {
+                  "number": 5,
+                  "quote": "We create supervised data by prompting GPT-4 to generate reflection tokens and then distill their knowledge into an in-house C."
+                }
+              ]
+            },
+            {
+              "id": "r2",
+              "verdict": "pass",
+              "answer_quote": "CRAG在web search之前使用ChatGPT将输入改写为由关键词组成的查询[8]。",
+              "reason": "答案准确说明CRAG在web search之前用ChatGPT把输入改写为关键词查询，引用[8]直接支持。",
+              "citations": [
+                {
+                  "number": 8,
+                  "quote": "the inputs are rewritten into queries composed of keywords by ChatGPT to mimic the daily usage of search engine"
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            2,
+            4,
+            5,
+            8
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 2,
+              "chunk_id": 944,
+              "source": "2310.11511v1.pdf",
+              "page": 2,
+              "text": "This eliminates the need to host a critic model during training, reducing overhead. The critic model, in part, is supervised on a dataset of input, output, and corresponding reflection tokens collected by prompting a propriety LM (i.e., GPT-4; OpenAI 2023)."
+            },
+            {
+              "citation": 4,
+              "chunk_id": 1113,
+              "source": "2310.11511v1.pdf",
+              "page": 18,
+              "text": "Algorithm 2 SELF-RAG Training 1: Input input-output data D = {X, Y }, generator M, C θ 2: Initialize C with a pre-trained LM 3: Sample data {Xsample, Y sample} ∼{X, Y } ▷Training Critic LM (Section 3.2.1) 4: for (x, y) ∈(Xsample, Y sample) do ▷Data collections for C 5: Prompt GPT-4 to collect a reflection token r for (x, y) 6: Add {(x, y, r)} to Dcritic 7: Update C with next token prediction loss ▷Critic learning; Eq."
+            },
+            {
+              "citation": 5,
+              "chunk_id": 982,
+              "source": "2310.11511v1.pdf",
+              "page": 5,
+              "text": "We create supervised data by prompting GPT-4 to generate reflection tokens and then distill their knowledge into an in-house C. For each group of reflection tokens, we randomly sample instances from the original training data: {Xsample, Y sample} ∼{X, Y }. As different reflection token groups have their own definitions and input, as shown in Table 1, we use different instruction prompts for them. Here, we use Retrieve as an example."
+            },
+            {
+              "citation": 8,
+              "chunk_id": 1283,
+              "source": "2401.15884v3.pdf",
+              "page": 6,
+              "text": "Since retrieval from static and limited corpora can only return sub-optimal documents in terms of scope and diversity, large-scale web searches (Piktus et al., 2021; Komeili et al., 2022) are integrated as a strategic extension of RAG. Specifically, the inputs are rewritten into queries composed of keywords by ChatGPT to mimic the daily usage of search engine. The prompt for rewriting is shown in Appendix A."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "Self-RAG通过提示GPT-4生成reflection token来收集监督数据，再将这些知识蒸馏到内部critic模型中[2][4][5]。CRAG在web search之前使用ChatGPT将输入改写为由关键词组成的查询[8]。",
+    "citation_check": {
+      "cited_numbers": [
+        2,
+        4,
+        5,
+        8
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 2,
+          "chunk_id": 944,
+          "source": "2310.11511v1.pdf",
+          "page": 2,
+          "text": "This eliminates the need to host a critic model during training, reducing overhead. The critic model, in part, is supervised on a dataset of input, output, and corresponding reflection tokens collected by prompting a propriety LM (i.e., GPT-4; OpenAI 2023)."
+        },
+        {
+          "citation": 4,
+          "chunk_id": 1113,
+          "source": "2310.11511v1.pdf",
+          "page": 18,
+          "text": "Algorithm 2 SELF-RAG Training 1: Input input-output data D = {X, Y }, generator M, C θ 2: Initialize C with a pre-trained LM 3: Sample data {Xsample, Y sample} ∼{X, Y } ▷Training Critic LM (Section 3.2.1) 4: for (x, y) ∈(Xsample, Y sample) do ▷Data collections for C 5: Prompt GPT-4 to collect a reflection token r for (x, y) 6: Add {(x, y, r)} to Dcritic 7: Update C with next token prediction loss ▷Critic learning; Eq."
+        },
+        {
+          "citation": 5,
+          "chunk_id": 982,
+          "source": "2310.11511v1.pdf",
+          "page": 5,
+          "text": "We create supervised data by prompting GPT-4 to generate reflection tokens and then distill their knowledge into an in-house C. For each group of reflection tokens, we randomly sample instances from the original training data: {Xsample, Y sample} ∼{X, Y }. As different reflection token groups have their own definitions and input, as shown in Table 1, we use different instruction prompts for them. Here, we use Retrieve as an example."
+        },
+        {
+          "citation": 8,
+          "chunk_id": 1283,
+          "source": "2401.15884v3.pdf",
+          "page": 6,
+          "text": "Since retrieval from static and limited corpora can only return sub-optimal documents in terms of scope and diversity, large-scale web searches (Piktus et al., 2021; Komeili et al., 2022) are integrated as a strategic extension of RAG. Specifically, the inputs are rewritten into queries composed of keywords by ChatGPT to mimic the daily usage of search engine. The prompt for rewriting is shown in Appendix A."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

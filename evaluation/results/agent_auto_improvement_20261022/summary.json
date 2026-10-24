@@ -1,0 +1,207 @@
+{
+  "scope": "Known development regressions across documented versions; not a new accuracy benchmark.",
+  "summarized_at_utc": "2026-10-22T04:16:01.972477+00:00",
+  "final_design": "RAG first, explicit evidence gap/citation failure triggers bounded Agent; failed upgrades visibly degraded.",
+  "typical_full_query_calls": {
+    "rag": 2,
+    "old_auto": 4,
+    "final_auto_direct": 2
+  },
+  "maximum_full_query_calls": {
+    "agent": 11,
+    "auto": 13
+  },
+  "actual_unique_http_posts": 32,
+  "logical_calls_including_cache": 33,
+  "cached_successful_probe_calls": 1,
+  "actual_new_reported_usage": {
+    "prompt_tokens": 89087,
+    "completion_tokens": 9312,
+    "total_tokens": 98399
+  },
+  "http_failures": 0,
+  "automatic_retries": 0,
+  "usage_missing_calls": 0,
+  "phases": [
+    {
+      "name": ".",
+      "logical_calls": 18,
+      "actual_http_posts": 18,
+      "cached_calls": 0,
+      "new_reported_usage": {
+        "prompt_tokens": 52684,
+        "completion_tokens": 5439,
+        "total_tokens": 58123
+      },
+      "results": {
+        "a03_auto": "completed",
+        "h10_rag": "completed",
+        "a02_agent": "completed",
+        "h10_auto": "failed",
+        "a04_auto": "failed",
+        "a04_agent": "completed"
+      }
+    },
+    {
+      "name": "followup",
+      "logical_calls": 4,
+      "actual_http_posts": 4,
+      "cached_calls": 0,
+      "new_reported_usage": {
+        "prompt_tokens": 10508,
+        "completion_tokens": 1511,
+        "total_tokens": 12019
+      },
+      "results": {
+        "h10_auto": "failed",
+        "a04_auto": "completed"
+      }
+    },
+    {
+      "name": "final",
+      "logical_calls": 6,
+      "actual_http_posts": 6,
+      "cached_calls": 0,
+      "new_reported_usage": {
+        "prompt_tokens": 13651,
+        "completion_tokens": 1160,
+        "total_tokens": 14811
+      },
+      "results": {
+        "a03_auto": "completed",
+        "h10_auto": "degraded",
+        "a04_auto": "completed"
+      }
+    },
+    {
+      "name": "scoped_inputs",
+      "logical_calls": 5,
+      "actual_http_posts": 4,
+      "cached_calls": 1,
+      "new_reported_usage": {
+        "prompt_tokens": 12244,
+        "completion_tokens": 1202,
+        "total_tokens": 13446
+      },
+      "results": {
+        "h10_auto": "degraded"
+      }
+    }
+  ],
+  "selected_development_reviews": [
+    {
+      "id": "a03_auto",
+      "result_path": "final/runs/a03_auto/result.json",
+      "status": "completed",
+      "required_covered": [
+        true,
+        true
+      ],
+      "strict_pass": true,
+      "source_chunk_ids": [
+        1387
+      ],
+      "notes": "两组upper/lower阈值均正确，[4]指向1387；仅一次原RAG生成，无Agent调用。",
+      "result_sha256": "b24534c4025b29a6556aca886ef5a243a65ba49443482b9056d8a9398695d9be",
+      "actions": 0,
+      "route": "direct"
+    },
+    {
+      "id": "a04_auto",
+      "result_path": "final/runs/a04_auto/result.json",
+      "status": "completed",
+      "required_covered": [
+        true,
+        true,
+        true
+      ],
+      "strict_pass": true,
+      "source_chunk_ids": [
+        73,
+        903
+      ],
+      "notes": "Transformer beam4，RAG指定两生成任务beam4/10文档，分别[8]73和[1]903。",
+      "result_sha256": "24e89b4865c704d51c034fc7aa4ac571da6ac748fc683666f2c1e9f0005dd63d",
+      "actions": 0,
+      "route": "direct"
+    },
+    {
+      "id": "a04_agent",
+      "result_path": "runs/a04_agent/result.json",
+      "status": "completed",
+      "required_covered": [
+        true,
+        true,
+        true
+      ],
+      "strict_pass": true,
+      "source_chunk_ids": [
+        73,
+        903
+      ],
+      "notes": "阶段一恢复交付，但初检已足够仍执行search和read_neighbors两行动，保留过处理事实。",
+      "result_sha256": "d01b37d9d6dab31b98e6095a40b0fea5beb3b8c9b5ef24e42a4bd852c18a6844",
+      "actions": 2,
+      "route": null
+    },
+    {
+      "id": "a02_agent",
+      "result_path": "runs/a02_agent/result.json",
+      "status": "completed",
+      "required_covered": [
+        true,
+        true
+      ],
+      "strict_pass": true,
+      "source_chunk_ids": [
+        145
+      ],
+      "notes": "参数2/5/1e-4/.75及ReLU后均正确；本次未额外编造完整归一化公式。",
+      "result_sha256": "9e1f501e47ef9c6afd931fa760d1ed602285ed66dbcbcdd6b4ff0475e04b220a",
+      "actions": 0,
+      "route": null
+    },
+    {
+      "id": "h10_rag",
+      "result_path": "runs/h10_rag/result.json",
+      "status": "completed",
+      "required_covered": [
+        false,
+        true
+      ],
+      "strict_pass": false,
+      "source_chunk_ids": [
+        1003
+      ],
+      "notes": "只给出Self-RAG包含金标准答案标准；RAG判据缺失，未建立完整比较。",
+      "result_sha256": "883a016cf2fa06746928710609951e67fee4721ccd35feb712032d664ac8eb6d",
+      "actions": 0,
+      "route": null
+    },
+    {
+      "id": "h10_auto",
+      "result_path": "scoped_inputs/runs/h10_auto/result.json",
+      "status": "degraded",
+      "required_covered": [
+        false,
+        true
+      ],
+      "strict_pass": false,
+      "source_chunk_ids": [
+        1003
+      ],
+      "notes": "升级后实际搜索一次，未补到765；反馈再次partial/空gap且共享修正额度已用，degraded。缓存草稿还把RAG套到PopQA/TriviaQA，降级不代表内容正确。",
+      "result_sha256": "ab0192678f9a6669dc7560d6b329c173169d10e708e5c7745abafea33139dbb9",
+      "actions": 1,
+      "route": "agent"
+    }
+  ],
+  "old_eight_question_scores_recomputed": false,
+  "remaining_issue": "Repeated invalid partial/empty-gap feedback consumes the one shared correction allowance; h10 did not complete.",
+  "limits": [
+    "Same assistant author/reviewer; not independent or blind.",
+    "Saved real initial retrieval reused; actual new decomposition/retrieval was not rerun.",
+    "Different phases use documented code versions; do not merge selected successes into an accuracy rate.",
+    "No new held-out quality, concurrency or P95 claim."
+  ]
+}

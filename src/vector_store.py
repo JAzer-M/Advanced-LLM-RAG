@@ -1,3 +1,5 @@
+# FAISS 的基础建库/读写；使用 IndexFlatIP 精确内积检索，归一化由编码阶段完成。
+
 import faiss
 import numpy as np
 from pathlib import Path

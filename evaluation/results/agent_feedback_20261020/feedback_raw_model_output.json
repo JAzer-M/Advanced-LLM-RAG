@@ -1,0 +1,43 @@
+{
+  "requirements": [
+    {
+      "id": "r1",
+      "status": "missing",
+      "evidence": [],
+      "supported_part": "",
+      "reason": "检索到的RAG相关段落仅涉及训练/过滤（chunk 910）、开放域QA训练方式（chunk 763）、定性评估与示例（chunks 788、786、796）、与DPR比较（chunk 779）等，均未陈述RAG所报告的correctness criterion，也未陈述该准则与其它方法的差异。",
+      "gap": "现有段落未提供RAG在评估中所采用的correctness criterion及其差异。"
+    },
+    {
+      "id": "r2",
+      "status": "partial",
+      "evidence": [
+        {
+          "chunk_id": 1003,
+          "quote": "We evaluate performance based on whether gold answers are included in the model generations instead of strictly requiring exact matching, following Mallen et al."
+        },
+        {
+          "chunk_id": 1002,
+          "quote": "Short-form generations tasks include two open-domain question answering (QA) datasets, PopQA (Mallen et al., 2023) and TriviaQA-unfiltered (Joshi et al., 2017), where systems need to answer arbitrary questions about factual knowledge."
+        }
+      ],
+      "supported_part": "Self-RAG在PopQA和TriviaQA等短答案生成任务上的评估采用“生成内容是否包含金标准答案”（而非严格要求完全匹配）的准则。",
+      "reason": "chunk 1003明确给出评估准则为generation中是否包含gold answer而非exact matching；chunk 1002确认PopQA与TriviaQA属于short-form generation任务，从而将该准则锚定到两个数据集。",
+      "gap": ""
+    }
+  ],
+  "next_action": {
+    "type": "search",
+    "reason": "r1关于RAG所报告的correctness criterion及其差异完全未被现有段落建立，需要检索RAG原文以定位其评估准则。",
+    "requirement_ids": [
+      "r1"
+    ],
+    "query": "RAG: how does the correctness criterion reported by RAG differ | how does the correctness criterion reported by RAG differ",
+    "source": null,
+    "chunk_id": null
+  },
+  "scope_check": {
+    "valid": true,
+    "reason": "各需求均按自身问题片段独立核查；r2的证据仅锚定PopQA/TriviaQA的评估准则，未越界扩展到比较结论，也未借用r1的条件。"
+  }
+}

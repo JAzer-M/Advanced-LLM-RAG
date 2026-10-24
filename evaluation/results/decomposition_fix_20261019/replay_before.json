@@ -1,0 +1,777 @@
+{
+  "query": "DPR 和 ColBERT 在问题／文档的向量表示以及相关性打分上有什么主要区别？",
+  "decomposition": {
+    "needs_decomposition": false,
+    "sub_queries": []
+  },
+  "knowledge_base": {
+    "version": "arxiv-pilot-5-20261019",
+    "chunk_count": 1019,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/arxiv-pilot-5-20261019/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/arxiv-pilot-5-20261019/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/arxiv-pilot-5-20261019/manifest.json",
+    "manifest_sha256": "3629c41d73fd61d80c86880909c97de67c15088fe4ac2e5c2e6b49f3901aff0e",
+    "files": {
+      "faiss.index": "88a186f7ef0fe7cdf2f058c2074326b62f06f682f67c0cecf0bec172fc4f9888",
+      "chunks.json": "8df8a3ae53faa7544703ae8e9484ec089bad83754b9051d048dde9f0aa533c35"
+    }
+  },
+  "selected_ids": [
+    81,
+    28,
+    154,
+    170,
+    236,
+    228,
+    235,
+    246,
+    103,
+    153
+  ],
+  "context": "Original passages:\n[1] Source: 2004.04906v3.pdf | Page: 7 | Section: 5.3 Qualitative Analysis\n5.3 Qualitative Analysis Although DPR performs better than BM25 in gen- eral, passages retrieved by these two methods dif- fer qualitatively. Term-matching methods like BM25 are sensitive to highly selective keywords and phrases, while DPR captures lexical variations or semantic relationships better.\n\n[2] Source: 2004.04906v3.pdf | Page: 3 | Section: 3.1 Overview\nAt run-time, DPR applies a different encoder EQ(·) that maps the input question to a d-dimensional vector, and retrieves k passages of which vectors are the closest to the question vector. We deﬁne the similarity between the question and the passage using the dot product of their vectors: sim(q, p) = EQ(q)⊺EP (p).\n\n[3] Source: 2004.04906v3.pdf | Page: 12 | Section: 8 Conclusion\nMethods like BM25 are sensitive to highly selective keywords and phrases, but cannot capture lexical variations or se- mantic relationships well. In contrast, DPR excels at semantic representation, but might lack sufﬁcient capacity to represent salient phrases which appear rarely. Table 7 illustrates this phenomenon with two examples.\n\n[4] Source: 2004.12832v2.pdf | Page: 1 | Section: None\nColBERT introduces a late interaction architecture that indepen- dently encodes the query and the document using BERT and then employs a cheap yet powerful interaction step that models their ﬁne-grained similarity. By delaying and yet retaining this ﬁne- granular interaction, ColBERT can leverage the expressiveness of deep LMs while simultaneously gaining the ability to pre-compute document representations oﬄine, considerably speeding up query processing.\n\n[5] Source: 2004.12832v2.pdf | Page: 5 | Section: 3 COLBERT\nGiven a triple ⟨q,d+,d−⟩with query q, positive document d+ and negative document d−, ColBERT is used to produce a score for each document individually and is optimized via pairwise sofmax cross-entropy loss over the computed scores of d+ and d−. 3.4 Oﬀline Indexing: Computing & Storing Document Embeddings By design, ColBERT isolates almost all of the computations between queries and documents, largely to enable pre-computing document representations oﬄine.\n\n[6] Source: 2004.12832v2.pdf | Page: 4 | Section: 3 COLBERT\nWhile ColBERT’s embedding dimension has limited impact on the eﬃciency of query encoding, this step is crucial for controlling the space footprint of documents, as we show in §4.5. In addition, it can have a signiﬁcant impact on query execution time, particularly the time taken for transferring the document representations onto the GPU from system memory (where they reside before processing a query).\n\n[7] Source: 2004.12832v2.pdf | Page: 5 | Section: 3 COLBERT\nÕ j ∈[|Ed |] Eqi · ET Sq,d := max dj i ∈[|Eq |] ColBERT is diﬀerentiable end-to-end. We ﬁne-tune the BERT encoders and train from scratch the additional parameters (i.e., the linear layer and the [Q] and [D] markers’ embeddings) using the Adam [16] optimizer. Notice that our interaction mechanism has no trainable parameters.\n\n[8] Source: 2004.12832v2.pdf | Page: 5 | Section: 3 COLBERT\nIn con- trast, ColBERT feeds BERT only a single, much shorter sequence of length l = |q|. Consequently, ColBERT is not only cheaper, it also scales much beter with k as we examine in §4.2. 3.6 End-to-end Top-k Retrieval with ColBERT As mentioned before, ColBERT’s late-interaction operator is speciﬁ- cally designed to enable end-to-end retrieval from a large collection, largely to improve recall relative to term-based retrieval approaches.\n\n[9] Source: 2004.04906v3.pdf | Page: 8 | Section: 6.2 Results\nWhile DPR processes up to 100 passages for each question, the reader is able to ﬁt all of them into one batch on a sin- gle 32GB GPU, thus the latency remains almost identical to the single passage case (around 20ms). The exact impact on throughput is harder to mea- sure: ORQA uses 2-3x longer passages compared to DPR (288 word pieces compared to our 100 tokens) and the computational complexity is super- linear in passage length.\n\n[10] Source: 2004.04906v3.pdf | Page: 12 | Section: 8 Conclusion\nNote that the retrieval accuracy for our “baseline” settings reported in Table 5 (Gold) and Table 6 (DP, NLL) is slightly better than those reported in Table 3. This is due to a better hyper-parameter setting used in these analysis experiments, which is documented in our code release. C Qualitative Analysis Although DPR performs better than BM25 in gen- eral, the retrieved passages of these two retrievers actually differ qualitatively.\n\nEvidence guidance:\n- Rule-based subject attribution: ColBERT; passage: “Given a triple ⟨q,d+,d−⟩with query q, positive document d+ and negative document d−, ColBERT is used to produce a score for each document individually and is optimized via pairwise sofmax cross-entropy loss over the computed scores of d+ and d−.” [5]\n- Rule-based subject attribution: ColBERT; passage: “4 Oﬀline Indexing: Computing & Storing Document Embeddings By design, ColBERT isolates almost all of the computations between queries and documents, largely to enable pre-computing document representations oﬄine.” [5]\n- Rule-based subject attribution: ColBERT; passage: “Õ j ∈[|Ed |] Eqi · ET Sq,d := max dj i ∈[|Eq |] ColBERT is diﬀerentiable end-to-end.” [7]\n- Rule-based subject attribution: ORQA; passage: “The exact impact on throughput is harder to mea- sure: ORQA uses 2-3x longer passages compared to DPR (288 word pieces compared to our 100 tokens) and the computational complexity is super- linear in passage length.” [9]",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": "3 Qualitative Analysis Although DPR performs better than BM25 in gen- eral, passages retrieved by these two methods dif- fer qualitatively.",
+        "evidence_start": 2,
+        "evidence_end": 141,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            81
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 81,
+        "page": 7,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Term-matching methods like BM25 are sensitive to highly selective keywords and phrases, while DPR captures lexical variations or semantic relationships better.",
+        "evidence_start": 141,
+        "evidence_end": 301,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            81
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 81,
+        "page": 7,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "At run-time, DPR applies a different encoder EQ(·) that maps the input question to a d-dimensional vector, and retrieves k passages of which vectors are the closest to the question vector.",
+        "evidence_start": 0,
+        "evidence_end": 188,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            28
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 28,
+        "page": 3,
+        "citations": [
+          2
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We deﬁne the similarity between the question and the passage using the dot product of their vectors: sim(q, p) = EQ(q)⊺EP (p).",
+        "evidence_start": 188,
+        "evidence_end": 315,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            28
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 28,
+        "page": 3,
+        "citations": [
+          2
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Methods like BM25 are sensitive to highly selective keywords and phrases, but cannot capture lexical variations or se- mantic relationships well.",
+        "evidence_start": 0,
+        "evidence_end": 145,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            154,
+            153
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 154,
+        "page": 12,
+        "citations": [
+          3
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In contrast, DPR excels at semantic representation, but might lack sufﬁcient capacity to represent salient phrases which appear rarely.",
+        "evidence_start": 145,
+        "evidence_end": 281,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            154,
+            153
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 154,
+        "page": 12,
+        "citations": [
+          3
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Table 7 illustrates this phenomenon with two examples.",
+        "evidence_start": 281,
+        "evidence_end": 336,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            154,
+            153
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 154,
+        "page": 12,
+        "citations": [
+          3
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "ColBERT introduces a late interaction architecture that indepen- dently encodes the query and the document using BERT and then employs a cheap yet powerful interaction step that models their ﬁne-grained similarity.",
+        "evidence_start": 0,
+        "evidence_end": 214,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            170
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 170,
+        "page": 1,
+        "citations": [
+          4
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " By delaying and yet retaining this ﬁne- granular interaction, ColBERT can leverage the expressiveness of deep LMs while simultaneously gaining the ability to pre-compute document representations oﬄine, considerably speeding up query processing.",
+        "evidence_start": 214,
+        "evidence_end": 459,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            170
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 170,
+        "page": 1,
+        "citations": [
+          4
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Given a triple ⟨q,d+,d−⟩with query q, positive document d+ and negative document d−, ColBERT is used to produce a score for each document individually and is optimized via pairwise sofmax cross-entropy loss over the computed scores of d+ and d−.",
+        "evidence_start": 0,
+        "evidence_end": 245,
+        "subject": "ColBERT",
+        "identity": {
+          "subject": "ColBERT",
+          "basis": "explicit_named_clause",
+          "context_chunk_ids": [
+            236
+          ],
+          "identity_quote": "Given a triple ⟨q,d+,d−⟩with query q, positive document d+ and negative document d−, ColBERT is used to produce a score for each document individually and is optimized via pairwise sofmax cross-entropy loss over the computed scores of d+ and d−. 3.4 Oﬀline Indexing: Computing & Storing Document Embeddings By design, ColBERT isolates almost all of the computations between queries and documents, largely to enable pre-computing document representations oﬄine.",
+          "identity_chunk_id": 236
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 236,
+        "page": 5,
+        "citations": [
+          5
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "4 Oﬀline Indexing: Computing & Storing Document Embeddings By design, ColBERT isolates almost all of the computations between queries and documents, largely to enable pre-computing document representations oﬄine.",
+        "evidence_start": 248,
+        "evidence_end": 460,
+        "subject": "ColBERT",
+        "identity": {
+          "subject": "ColBERT",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            236
+          ],
+          "identity_quote": "Given a triple ⟨q,d+,d−⟩with query q, positive document d+ and negative document d−, ColBERT is used to produce a score for each document individually and is optimized via pairwise sofmax cross-entropy loss over the computed scores of d+ and d−. 3.",
+          "identity_chunk_id": 236
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 236,
+        "page": 5,
+        "citations": [
+          5
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In addition, it can have a signiﬁcant impact on query execution time, particularly the time taken for transferring the document representations onto the GPU from system memory (where they reside before processing a query).",
+        "evidence_start": 180,
+        "evidence_end": 403,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            228,
+            227
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 228,
+        "page": 4,
+        "citations": [
+          6
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Õ j ∈[|Ed |] Eqi · ET Sq,d := max dj i ∈[|Eq |] ColBERT is diﬀerentiable end-to-end.",
+        "evidence_start": 0,
+        "evidence_end": 84,
+        "subject": "ColBERT",
+        "identity": {
+          "subject": "ColBERT",
+          "basis": "explicit_named_clause",
+          "context_chunk_ids": [
+            235
+          ],
+          "identity_quote": "Õ j ∈[|Ed |] Eqi · ET Sq,d := max dj i ∈[|Eq |] ColBERT is diﬀerentiable end-to-end. We ﬁne-tune the BERT encoders and train from scratch the additional parameters (i.e., the linear layer and the [Q] and [D] markers’ embeddings) using the Adam [16] optimizer. Notice that our interaction mechanism has no trainable parameters.",
+          "identity_chunk_id": 235
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 235,
+        "page": 5,
+        "citations": [
+          7
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": ", the linear layer and the [Q] and [D] markers’ embeddings) using the Adam [16] optimizer.",
+        "evidence_start": 169,
+        "evidence_end": 259,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            235
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 235,
+        "page": 5,
+        "citations": [
+          7
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Notice that our interaction mechanism has no trainable parameters.",
+        "evidence_start": 259,
+        "evidence_end": 326,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            235
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 235,
+        "page": 5,
+        "citations": [
+          7
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "In con- trast, ColBERT feeds BERT only a single, much shorter sequence of length l = |q|.",
+        "evidence_start": 0,
+        "evidence_end": 89,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            246
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 246,
+        "page": 5,
+        "citations": [
+          8
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "6 End-to-end Top-k Retrieval with ColBERT As mentioned before, ColBERT’s late-interaction operator is speciﬁ- cally designed to enable end-to-end retrieval from a large collection, largely to improve recall relative to term-based retrieval approaches.",
+        "evidence_start": 191,
+        "evidence_end": 442,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            246
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 246,
+        "page": 5,
+        "citations": [
+          8
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "While DPR processes up to 100 passages for each question, the reader is able to ﬁt all of them into one batch on a sin- gle 32GB GPU, thus the latency remains almost identical to the single passage case (around 20ms).",
+        "evidence_start": 0,
+        "evidence_end": 217,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            103,
+            102
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 103,
+        "page": 8,
+        "citations": [
+          9
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The exact impact on throughput is harder to mea- sure: ORQA uses 2-3x longer passages compared to DPR (288 word pieces compared to our 100 tokens) and the computational complexity is super- linear in passage length.",
+        "evidence_start": 217,
+        "evidence_end": 433,
+        "subject": "ORQA",
+        "identity": {
+          "subject": "ORQA",
+          "basis": "explicit_named_clause",
+          "context_chunk_ids": [
+            103
+          ],
+          "identity_quote": "While DPR processes up to 100 passages for each question, the reader is able to ﬁt all of them into one batch on a sin- gle 32GB GPU, thus the latency remains almost identical to the single passage case (around 20ms). The exact impact on throughput is harder to mea- sure: ORQA uses 2-3x longer passages compared to DPR (288 word pieces compared to our 100 tokens) and the computational complexity is super- linear in passage length.",
+          "identity_chunk_id": 103
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 103,
+        "page": 8,
+        "citations": [
+          9
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Note that the retrieval accuracy for our “baseline” settings reported in Table 5 (Gold) and Table 6 (DP, NLL) is slightly better than those reported in Table 3.",
+        "evidence_start": 0,
+        "evidence_end": 160,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            153
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 153,
+        "page": 12,
+        "citations": [
+          10
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " This is due to a better hyper-parameter setting used in these analysis experiments, which is documented in our code release.",
+        "evidence_start": 160,
+        "evidence_end": 285,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            153
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 153,
+        "page": 12,
+        "citations": [
+          10
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " C Qualitative Analysis Although DPR performs better than BM25 in gen- eral, the retrieved passages of these two retrievers actually differ qualitatively.",
+        "evidence_start": 285,
+        "evidence_end": 439,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            153
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 153,
+        "page": 12,
+        "citations": [
+          10
+        ],
+        "record_id": "E22"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 81,
+        "text": "5.3 Qualitative Analysis Although DPR performs better than BM25 in gen- eral, passages retrieved by these two methods dif- fer qualitatively. Term-matching methods like BM25 are sensitive to highly selective keywords and phrases, while DPR captures lexical variations or semantic relationships better.",
+        "source": "2004.04906v3.pdf",
+        "page": 7,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "5.3 Qualitative Analysis"
+      },
+      {
+        "chunk_id": 28,
+        "text": "At run-time, DPR applies a different encoder EQ(·) that maps the input question to a d-dimensional vector, and retrieves k passages of which vectors are the closest to the question vector. We deﬁne the similarity between the question and the passage using the dot product of their vectors: sim(q, p) = EQ(q)⊺EP (p).",
+        "source": "2004.04906v3.pdf",
+        "page": 3,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "3.1 Overview"
+      },
+      {
+        "chunk_id": 154,
+        "text": "Methods like BM25 are sensitive to highly selective keywords and phrases, but cannot capture lexical variations or se- mantic relationships well. In contrast, DPR excels at semantic representation, but might lack sufﬁcient capacity to represent salient phrases which appear rarely. Table 7 illustrates this phenomenon with two examples.",
+        "source": "2004.04906v3.pdf",
+        "page": 12,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "8 Conclusion"
+      },
+      {
+        "chunk_id": 170,
+        "text": "ColBERT introduces a late interaction architecture that indepen- dently encodes the query and the document using BERT and then employs a cheap yet powerful interaction step that models their ﬁne-grained similarity. By delaying and yet retaining this ﬁne- granular interaction, ColBERT can leverage the expressiveness of deep LMs while simultaneously gaining the ability to pre-compute document representations oﬄine, considerably speeding up query processing.",
+        "source": "2004.12832v2.pdf",
+        "page": 1,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": null
+      },
+      {
+        "chunk_id": 236,
+        "text": "Given a triple ⟨q,d+,d−⟩with query q, positive document d+ and negative document d−, ColBERT is used to produce a score for each document individually and is optimized via pairwise sofmax cross-entropy loss over the computed scores of d+ and d−. 3.4 Oﬀline Indexing: Computing & Storing Document Embeddings By design, ColBERT isolates almost all of the computations between queries and documents, largely to enable pre-computing document representations oﬄine.",
+        "source": "2004.12832v2.pdf",
+        "page": 5,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "3 COLBERT"
+      },
+      {
+        "chunk_id": 228,
+        "text": "While ColBERT’s embedding dimension has limited impact on the eﬃciency of query encoding, this step is crucial for controlling the space footprint of documents, as we show in §4.5. In addition, it can have a signiﬁcant impact on query execution time, particularly the time taken for transferring the document representations onto the GPU from system memory (where they reside before processing a query).",
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "3 COLBERT"
+      },
+      {
+        "chunk_id": 235,
+        "text": "Õ j ∈[|Ed |] Eqi · ET Sq,d := max dj i ∈[|Eq |] ColBERT is diﬀerentiable end-to-end. We ﬁne-tune the BERT encoders and train from scratch the additional parameters (i.e., the linear layer and the [Q] and [D] markers’ embeddings) using the Adam [16] optimizer. Notice that our interaction mechanism has no trainable parameters.",
+        "source": "2004.12832v2.pdf",
+        "page": 5,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "3 COLBERT"
+      },
+      {
+        "chunk_id": 246,
+        "text": "In con- trast, ColBERT feeds BERT only a single, much shorter sequence of length l = |q|. Consequently, ColBERT is not only cheaper, it also scales much beter with k as we examine in §4.2. 3.6 End-to-end Top-k Retrieval with ColBERT As mentioned before, ColBERT’s late-interaction operator is speciﬁ- cally designed to enable end-to-end retrieval from a large collection, largely to improve recall relative to term-based retrieval approaches.",
+        "source": "2004.12832v2.pdf",
+        "page": 5,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "3 COLBERT"
+      },
+      {
+        "chunk_id": 103,
+        "text": "While DPR processes up to 100 passages for each question, the reader is able to ﬁt all of them into one batch on a sin- gle 32GB GPU, thus the latency remains almost identical to the single passage case (around 20ms). The exact impact on throughput is harder to mea- sure: ORQA uses 2-3x longer passages compared to DPR (288 word pieces compared to our 100 tokens) and the computational complexity is super- linear in passage length.",
+        "source": "2004.04906v3.pdf",
+        "page": 8,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "6.2 Results"
+      },
+      {
+        "chunk_id": 153,
+        "text": "Note that the retrieval accuracy for our “baseline” settings reported in Table 5 (Gold) and Table 6 (DP, NLL) is slightly better than those reported in Table 3. This is due to a better hyper-parameter setting used in these analysis experiments, which is documented in our code release. C Qualitative Analysis Although DPR performs better than BM25 in gen- eral, the retrieved passages of these two retrievers actually differ qualitatively.",
+        "source": "2004.04906v3.pdf",
+        "page": 12,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "8 Conclusion"
+      }
+    ],
+    "selected_ids": [
+      81,
+      28,
+      154,
+      170,
+      236,
+      228,
+      235,
+      246,
+      103,
+      153
+    ]
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 60,
+    "global_top_ids": [
+      81,
+      28,
+      154,
+      170,
+      236,
+      228,
+      235,
+      246,
+      103,
+      153
+    ],
+    "protected_ids": [],
+    "sub_query_evidence": []
+  },
+  "run_provenance": "Offline paired retrieval audit: captured API response, real models, no generation.",
+  "api_calls": 0,
+  "generation_run": false,
+  "gold": [
+    {
+      "source": "2004.04906v3.pdf",
+      "page": 3,
+      "quote": "using the dot product of their vectors",
+      "matching_ids": [
+        28
+      ],
+      "ranks": [
+        2
+      ]
+    },
+    {
+      "source": "2004.12832v2.pdf",
+      "page": 4,
+      "quote": "maximum cosine similarity",
+      "matching_ids": [
+        219
+      ],
+      "ranks": []
+    },
+    {
+      "source": "2004.12832v2.pdf",
+      "page": 4,
+      "quote": "combine the outputs via summation",
+      "matching_ids": [
+        219
+      ],
+      "ranks": []
+    }
+  ],
+  "top10": [
+    {
+      "chunk_id": 81,
+      "text": "5.3 Qualitative Analysis Although DPR performs better than BM25 in gen- eral, passages retrieved by these two methods dif- fer qualitatively. Term-matching methods like BM25 are sensitive to highly selective keywords and phrases, while DPR captures lexical variations or semantic relationships better.",
+      "source": "2004.04906v3.pdf",
+      "page": 7,
+      "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+      "section": "5.3 Qualitative Analysis"
+    },
+    {
+      "chunk_id": 28,
+      "text": "At run-time, DPR applies a different encoder EQ(·) that maps the input question to a d-dimensional vector, and retrieves k passages of which vectors are the closest to the question vector. We deﬁne the similarity between the question and the passage using the dot product of their vectors: sim(q, p) = EQ(q)⊺EP (p).",
+      "source": "2004.04906v3.pdf",
+      "page": 3,
+      "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+      "section": "3.1 Overview"
+    },
+    {
+      "chunk_id": 154,
+      "text": "Methods like BM25 are sensitive to highly selective keywords and phrases, but cannot capture lexical variations or se- mantic relationships well. In contrast, DPR excels at semantic representation, but might lack sufﬁcient capacity to represent salient phrases which appear rarely. Table 7 illustrates this phenomenon with two examples.",
+      "source": "2004.04906v3.pdf",
+      "page": 12,
+      "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+      "section": "8 Conclusion"
+    },
+    {
+      "chunk_id": 170,
+      "text": "ColBERT introduces a late interaction architecture that indepen- dently encodes the query and the document using BERT and then employs a cheap yet powerful interaction step that models their ﬁne-grained similarity. By delaying and yet retaining this ﬁne- granular interaction, ColBERT can leverage the expressiveness of deep LMs while simultaneously gaining the ability to pre-compute document representations oﬄine, considerably speeding up query processing.",
+      "source": "2004.12832v2.pdf",
+      "page": 1,
+      "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+      "section": null
+    },
+    {
+      "chunk_id": 236,
+      "text": "Given a triple ⟨q,d+,d−⟩with query q, positive document d+ and negative document d−, ColBERT is used to produce a score for each document individually and is optimized via pairwise sofmax cross-entropy loss over the computed scores of d+ and d−. 3.4 Oﬀline Indexing: Computing & Storing Document Embeddings By design, ColBERT isolates almost all of the computations between queries and documents, largely to enable pre-computing document representations oﬄine.",
+      "source": "2004.12832v2.pdf",
+      "page": 5,
+      "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+      "section": "3 COLBERT"
+    },
+    {
+      "chunk_id": 228,
+      "text": "While ColBERT’s embedding dimension has limited impact on the eﬃciency of query encoding, this step is crucial for controlling the space footprint of documents, as we show in §4.5. In addition, it can have a signiﬁcant impact on query execution time, particularly the time taken for transferring the document representations onto the GPU from system memory (where they reside before processing a query).",
+      "source": "2004.12832v2.pdf",
+      "page": 4,
+      "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+      "section": "3 COLBERT"
+    },
+    {
+      "chunk_id": 235,
+      "text": "Õ j ∈[|Ed |] Eqi · ET Sq,d := max dj i ∈[|Eq |] ColBERT is diﬀerentiable end-to-end. We ﬁne-tune the BERT encoders and train from scratch the additional parameters (i.e., the linear layer and the [Q] and [D] markers’ embeddings) using the Adam [16] optimizer. Notice that our interaction mechanism has no trainable parameters.",
+      "source": "2004.12832v2.pdf",
+      "page": 5,
+      "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+      "section": "3 COLBERT"
+    },
+    {
+      "chunk_id": 246,
+      "text": "In con- trast, ColBERT feeds BERT only a single, much shorter sequence of length l = |q|. Consequently, ColBERT is not only cheaper, it also scales much beter with k as we examine in §4.2. 3.6 End-to-end Top-k Retrieval with ColBERT As mentioned before, ColBERT’s late-interaction operator is speciﬁ- cally designed to enable end-to-end retrieval from a large collection, largely to improve recall relative to term-based retrieval approaches.",
+      "source": "2004.12832v2.pdf",
+      "page": 5,
+      "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+      "section": "3 COLBERT"
+    },
+    {
+      "chunk_id": 103,
+      "text": "While DPR processes up to 100 passages for each question, the reader is able to ﬁt all of them into one batch on a sin- gle 32GB GPU, thus the latency remains almost identical to the single passage case (around 20ms). The exact impact on throughput is harder to mea- sure: ORQA uses 2-3x longer passages compared to DPR (288 word pieces compared to our 100 tokens) and the computational complexity is super- linear in passage length.",
+      "source": "2004.04906v3.pdf",
+      "page": 8,
+      "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+      "section": "6.2 Results"
+    },
+    {
+      "chunk_id": 153,
+      "text": "Note that the retrieval accuracy for our “baseline” settings reported in Table 5 (Gold) and Table 6 (DP, NLL) is slightly better than those reported in Table 3. This is due to a better hyper-parameter setting used in these analysis experiments, which is documented in our code release. C Qualitative Analysis Although DPR performs better than BM25 in gen- eral, the retrieved passages of these two retrievers actually differ qualitatively.",
+      "source": "2004.04906v3.pdf",
+      "page": 12,
+      "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+      "section": "8 Conclusion"
+    }
+  ],
+  "elapsed_seconds": 3.12
+}

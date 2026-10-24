@@ -1,0 +1,298 @@
+[
+  {
+    "id": "b01",
+    "type": "single_document",
+    "question": "Which optimizer and beta1, beta2, and epsilon values does the Transformer in Attention Is All You Need use?",
+    "reference_points": [
+      "The optimizer is Adam.",
+      "beta1=0.9, beta2=0.98 and epsilon=10^-9."
+    ],
+    "gold_evidence": [
+      {
+        "source": "Attention is all you need.pdf",
+        "page": 7,
+        "quote": "We used the Adam optimizer"
+      }
+    ],
+    "novelty_and_scope": "Optimizer constants; distinct from old learning-rate schedule questions.",
+    "gold_chunk_ids_at_freeze": [
+      66
+    ]
+  },
+  {
+    "id": "b02",
+    "type": "single_document",
+    "question": "How does DCNN initialize neuron biases in different layers, and why does it use positive biases in selected layers?",
+    "reference_points": [
+      "Biases are 1 in convolutional layers 2, 4, 5 and fully connected hidden layers.",
+      "Biases in the remaining layers are 0.",
+      "Positive initial biases accelerate early learning by supplying ReLUs with positive inputs."
+    ],
+    "gold_evidence": [
+      {
+        "source": "DCNN.pdf",
+        "page": 5,
+        "quote": "We ini- tialized the neuron biases"
+      },
+      {
+        "source": "DCNN.pdf",
+        "page": 5,
+        "quote": "with the constant 0"
+      }
+    ],
+    "novelty_and_scope": "Bias initialization rather than earlier weight-initialization comparison.",
+    "gold_chunk_ids_at_freeze": [
+      177,
+      178
+    ]
+  },
+  {
+    "id": "b03",
+    "type": "single_document",
+    "question": "In VGG multi-scale training, how is the training scale S sampled, what crop size is used, and how is the multi-scale model initialized?",
+    "reference_points": [
+      "Each image samples S from [256,512]; S is the shortest side of the isotropically rescaled image.",
+      "The input crop remains 224x224.",
+      "All layers of a same-configuration single-scale model pretrained at S=384 are fine-tuned."
+    ],
+    "gold_evidence": [
+      {
+        "source": "VGG.pdf",
+        "page": 4,
+        "quote": "smallest side of an isotropically-rescaled training image"
+      },
+      {
+        "source": "VGG.pdf",
+        "page": 4,
+        "quote": "randomly sampling S from a certain range"
+      },
+      {
+        "source": "VGG.pdf",
+        "page": 5,
+        "quote": "fine-tuning all layers of a single-scale model"
+      }
+    ],
+    "novelty_and_scope": "Scale jitter and initialization; fixed-scale/model-initialization facts in old questions are related but not this question.",
+    "gold_chunk_ids_at_freeze": [
+      260,
+      262,
+      264
+    ]
+  },
+  {
+    "id": "b04",
+    "type": "single_document",
+    "question": "After the token embeddings are projected in ColBERT, how are they normalized, and what equivalence and value range does this give to their dot products?",
+    "reference_points": [
+      "Each output embedding is normalized to L2 norm 1.",
+      "The dot product of two normalized embeddings equals cosine similarity and lies in [-1,1]."
+    ],
+    "gold_evidence": [
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "quote": "each has L2 norm equal to one"
+      }
+    ],
+    "novelty_and_scope": "Normalization mechanism; related to previously tested MaxSim, but a new question and scoring points.",
+    "gold_chunk_ids_at_freeze": [
+      608
+    ]
+  },
+  {
+    "id": "b05",
+    "type": "cross_document",
+    "question": "Which checkpoints are averaged for Transformer base and big models, and how does this differ from the way VGG combines multiple model predictions?",
+    "reference_points": [
+      "Transformer base uses one model formed by averaging its last 5 checkpoints; big averages its last 20 checkpoints.",
+      "VGG averages softmax class posteriors from several models.",
+      "The distinction is averaging model checkpoints versus averaging model output probabilities."
+    ],
+    "gold_evidence": [
+      {
+        "source": "Attention is all you need.pdf",
+        "page": 8,
+        "quote": "averaging the last 5 checkpoints"
+      },
+      {
+        "source": "VGG.pdf",
+        "page": 7,
+        "quote": "averaging their soft-max class posteriors"
+      }
+    ],
+    "novelty_and_scope": "Two different averaging operations; no requirement to compare measured accuracy across tasks.",
+    "gold_chunk_ids_at_freeze": [
+      73,
+      296
+    ]
+  },
+  {
+    "id": "b06",
+    "type": "cross_document",
+    "question": "What do DCNN and VGG report about the usefulness of local response normalization, and what computational costs does VGG mention?",
+    "reference_points": [
+      "DCNN reports that response normalization improves generalization and reduces top-1/top-5 errors (1.4/1.2 percentage points if numbers are supplied).",
+      "VGG finds no performance improvement and generally omits LRN, with the A-LRN comparison as an exception.",
+      "VGG says LRN increases memory consumption and computation time."
+    ],
+    "gold_evidence": [
+      {
+        "source": "DCNN.pdf",
+        "page": 3,
+        "quote": "reduces our top-1 and top-5 error rates"
+      },
+      {
+        "source": "VGG.pdf",
+        "page": 2,
+        "quote": "increased memory con- sumption and computation time"
+      },
+      {
+        "source": "VGG.pdf",
+        "page": 6,
+        "quote": "A-LRN network"
+      }
+    ],
+    "novelty_and_scope": "New LRN comparison; preserve VGG exception instead of saying every model omits normalization.",
+    "gold_chunk_ids_at_freeze": [
+      141,
+      146,
+      235,
+      279
+    ]
+  },
+  {
+    "id": "b07",
+    "type": "cross_document",
+    "question": "What does DPR's top-k retrieval accuracy count, and which metrics does Self-RAG use for correctness, fluency, and citations on ASQA?",
+    "reference_points": [
+      "DPR counts the fraction of questions whose top-k retrieved passages contain an answer span.",
+      "Self-RAG uses str-em for ASQA correctness.",
+      "Self-RAG uses MAUVE for ASQA fluency.",
+      "Self-RAG uses citation precision and recall for ASQA citations."
+    ],
+    "gold_evidence": [
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 2,
+        "quote": "fraction of ques- tions"
+      },
+      {
+        "source": "2310.11511v1.pdf",
+        "page": 7,
+        "quote": "citation precision and recall"
+      }
+    ],
+    "novelty_and_scope": "Retrieval success versus long-form generation metrics; not old short-answer correctness comparison.",
+    "gold_chunk_ids_at_freeze": [
+      400,
+      1004
+    ]
+  },
+  {
+    "id": "b08",
+    "type": "cross_document",
+    "question": "What hardware and approximate training duration do the Transformer base model and DCNN report for their own experiments?",
+    "reference_points": [
+      "Transformer base trains on 8 NVIDIA P100 GPUs for 100000 steps or about 12 hours.",
+      "DCNN trains on 2 NVIDIA GTX 580 GPUs with 3GB each for about 5-6 days."
+    ],
+    "gold_evidence": [
+      {
+        "source": "Attention is all you need.pdf",
+        "page": 7,
+        "quote": "8 NVIDIA P100 GPUs"
+      },
+      {
+        "source": "Attention is all you need.pdf",
+        "page": 7,
+        "quote": "100,000 steps or 12 hours"
+      },
+      {
+        "source": "DCNN.pdf",
+        "page": 5,
+        "quote": "5–6 days on two NVIDIA GTX 580 3GB GPUs"
+      }
+    ],
+    "novelty_and_scope": "Reported paper training resources; not the old unmeasured local-project latency questions.",
+    "gold_chunk_ids_at_freeze": [
+      64,
+      65,
+      179
+    ]
+  },
+  {
+    "id": "b09",
+    "type": "cross_document",
+    "question": "How does RAG-Sequence's Thorough Decoding score a candidate absent from a document's beam, and how does Self-RAG use critique-token probabilities to score output segments?",
+    "reference_points": [
+      "RAG-Sequence runs an extra forward pass for each document whose beam did not contain the candidate.",
+      "It multiplies generator probability by retriever probability and sums across documents for the marginal.",
+      "Self-RAG uses segment-level beam search and a weighted linear sum of normalized critique-token probabilities to update segment scores."
+    ],
+    "gold_evidence": [
+      {
+        "source": "2005.11401v4.pdf",
+        "page": 4,
+        "quote": "additional forward pass for each document"
+      },
+      {
+        "source": "2310.11511v1.pdf",
+        "page": 6,
+        "quote": "linear weighted sum of the normalized probability"
+      }
+    ],
+    "novelty_and_scope": "New RAG decoding component paired with a previously covered Self-RAG scoring mechanism; not unseen atomic knowledge.",
+    "gold_chunk_ids_at_freeze": [
+      757,
+      995
+    ]
+  },
+  {
+    "id": "b10",
+    "type": "cross_document",
+    "question": "How does Self-RAG obtain reflection-token supervision for its own critic, and how does CRAG use ChatGPT before a web search?",
+    "reference_points": [
+      "Self-RAG prompts GPT-4 for reflection-token labels and distills that supervision into its own critic.",
+      "CRAG uses ChatGPT to rewrite the input question into a keyword-based search query."
+    ],
+    "gold_evidence": [
+      {
+        "source": "2310.11511v1.pdf",
+        "page": 5,
+        "quote": "prompting GPT-4 to generate reflection tokens"
+      },
+      {
+        "source": "2401.15884v3.pdf",
+        "page": 6,
+        "quote": "queries composed of keywords by ChatGPT"
+      }
+    ],
+    "novelty_and_scope": "Different roles of teacher/rewriter models; related to prior critic and external-retrieval questions.",
+    "gold_chunk_ids_at_freeze": [
+      982,
+      1283
+    ]
+  },
+  {
+    "id": "b11",
+    "type": "unanswerable",
+    "question": "Using only the supplied corpus, what training-token count and context-window length are specified for Mistral 7B in the Mistral 7B paper?",
+    "reference_points": [
+      "The Mistral 7B primary paper is absent from the eight-paper corpus; the requested specifications cannot be established and must not be guessed."
+    ],
+    "gold_evidence": [],
+    "novelty_and_scope": "Absent primary paper; related boundary type to old Mamba, with a new target.",
+    "gold_chunk_ids_at_freeze": []
+  },
+  {
+    "id": "b12",
+    "type": "unanswerable",
+    "question": "What exact annual index-refresh cost in US dollars and fixed index-refresh interval does the original RAG paper report?",
+    "reference_points": [
+      "The RAG paper does not specify an annual USD cost or a fixed refresh interval; explain the missing measurements without inventing either value."
+    ],
+    "gold_evidence": [],
+    "novelty_and_scope": "Present paper, absent operational measurements; qualitative update mechanisms are not numerical cost/interval evidence.",
+    "gold_chunk_ids_at_freeze": []
+  }
+]

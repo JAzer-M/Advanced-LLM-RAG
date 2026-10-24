@@ -1,0 +1,344 @@
+--- before/main.py
++++ after/main.py
+@@ -20,6 +20,7 @@
+ from src.bm25_retriever import build_bm25_index, retrieve_bm25
+ from src.citation_validation import repair_citations_once
+ from src.embedding import load_embedding_model
++from src.evidence_gap import complete_evidence_once
+ from src.hybrid_retriever import reciprocal_rank_fusion
+ from src.hyde import generate_hypothetical_document
+ from src.grounded_evidence import build_ledger, render_complete, render_guidance
+@@ -41,6 +42,9 @@
+ # Disabled because the latest production-aligned ON/OFF evaluation showed
+ # no meaningful overall retrieval improvement.
+ USE_HYDE = False
++
++# Opt-in until the fixed new/old question comparison passes its adoption gates.
++USE_EVIDENCE_COMPLETION = False
+ 
+ RETRIEVAL_TOP_K = 60
+ RRF_TOP_K = 60
+@@ -172,7 +176,7 @@
+ # Main pipeline
+ # ---------------------------------------------------------------------------
+ 
+-def main(query=None, kb_version=None):
++def main(query=None, kb_version=None, complete_evidence=None):
+     # 1. Load the Semantic FAISS index and its corresponding chunks.
+     project_dir = Path(__file__).resolve().parent
+     print("LLM: proxy API | Model:", load_settings().get('model', 'not configured'))
+@@ -361,6 +365,13 @@
+         'sub_query_evidence': sub_query_evidence,
+         'retrieval_anchor_ids': retrieval_anchor_ids,
+     }
++    completion_enabled = USE_EVIDENCE_COMPLETION if complete_evidence is None else complete_evidence
++    if completion_enabled:
++        results, completion = complete_evidence_once(
++            query, global_ranking, sub_query_evidence, retrieval_anchor_ids,
++            embedding_model, index, chunks, bm25, reranker_model,
++            top_k=RERANK_TOP_K, candidate_k=RETRIEVAL_TOP_K)
++        retrieval_diagnostics['evidence_completion'] = completion
+ 
+     print("Selected Chunk IDs:", [r["chunk_id"] for r in results])
+     print("Sub-Query Evidence Selection:", retrieval_diagnostics)
+--- before/evaluation/run_evaluation.py
++++ after/evaluation/run_evaluation.py
+@@ -20,6 +20,7 @@
+ from src.bm25_retriever import build_bm25_index, retrieve_bm25
+ import src.api_llm as api
+ from src.embedding import load_embedding_model
++from src.evidence_gap import complete_evidence_once
+ from src.hybrid_retriever import reciprocal_rank_fusion
+ from src.knowledge_base import load_knowledge_base
+ from src.query_rewriter import rewrite_query
+@@ -507,10 +508,14 @@
+     parser.add_argument('--output-dir', type=Path, help='保存逐题指标、阶段排名及辅助查询')
+     parser.add_argument('--auxiliary-cache', type=Path, help='复用同一问题的分解/改写，不调用 API')
+     parser.add_argument('--no-auxiliary', action='store_true', help='禁用分解/改写，只评估原问题')
++    parser.add_argument('--complete-evidence', action='store_true',
++                        help='额外评估一次限定论文的补检索；原方法与指标保留')
+     args = parser.parse_args()
+     ks = sorted(set(args.top_k))
+     if min(ks) <= 0 or args.candidate_k < max(ks):
+         parser.error('top-k 必须大于零，candidate-k 必须不小于最大 top-k。')
++    if args.complete_evidence and ks != [10]:
++        parser.error('本轮补检索原型固定最终 top-k=10。')
+     FINAL_K, CANDIDATE_K, RRF_TOP_K = max(ks), args.candidate_k, args.candidate_k
+     ENABLE_REWRITING = ENABLE_DECOMPOSITION = not args.no_auxiliary
+     questions = json.loads(args.questions.read_text(encoding='utf-8'))
+@@ -539,6 +544,7 @@
+               'configuration': {'top_k': ks, 'candidate_k': CANDIDATE_K, 'rrf_k': RRF_K,
+                                 'auxiliary_enabled': not args.no_auxiliary,
+                                 'auxiliary_cache': str(args.auxiliary_cache) if args.auxiliary_cache else None,
++                                'evidence_completion_enabled': args.complete_evidence,
+                                 'scoring': 'Original Gold chunks and metric formulas; no answers or LLM judge'},
+               'input_sha256': {str(p.resolve()): hashlib.sha256(p.read_bytes()).hexdigest() for p in tracked},
+               'questions': [], 'api_calls': [], 'metrics': {}}
+@@ -557,6 +563,9 @@
+     if not args.no_auxiliary:
+         names += ['Rewritten Hybrid + Reranker', 'Multi-Query + Reranker', coverage_name,
+                   no_anchor_name, legacy_name]
++    completion_name = 'Evidence Completion (one round)'
++    if args.complete_evidence:
++        names.append(completion_name)
+     test_cases = {k: {name: [] for name in names} for k in ks}
+     save_report()
+     print('Questions:', args.questions, 'Knowledge Base:', knowledge_base['version'])
+@@ -610,6 +619,14 @@
+                     _, multi_ranking = fuse_and_rerank(query, dense, sparse, reranker, extra_results=[rd, rb])
+                 methods['Rewritten Hybrid + Reranker'] = get_result_ids(rewrite_ranking)
+                 methods['Multi-Query + Reranker'] = get_result_ids(multi_ranking)
++            completion = None
++            if args.complete_evidence:
++                completed, completion = complete_evidence_once(
++                    query, info['global_ranking'] if info else ranking,
++                    info['sub_query_evidence'] if info else [], get_result_ids(fused[:1]),
++                    embedding, index, chunks, bm25, reranker,
++                    top_k=FINAL_K, candidate_k=CANDIDATE_K)
++                methods[completion_name] = get_result_ids(completed)
+             entry = {'id': qid, 'query': query, 'status': 'completed', 'gold_ids': sorted(gold_ids),
+                      'auxiliary': auxiliary, 'retrieval_seconds': round(time.perf_counter() - question_started, 3),
+                      'stage_ids': {name: get_result_ids(items) for name, items in stages.items()},
+@@ -620,6 +637,8 @@
+                      'subquery_stages': [{'query': item['query'],
+                                           'ids': {name: get_result_ids(item[name]) for name in ('dense','bm25','rrf')}}
+                                          for item in (details or [])], 'metrics_by_k': {}}
++            if completion is not None:
++                entry['evidence_completion'] = completion
+             for k in ks:
+                 methods_k = {name: ids[:k] for name,ids in methods.items()}
+                 anchor_ids = get_result_ids(fused[:1])
+--- before/src/evidence_gap.py
++++ after/src/evidence_gap.py
+@@ -0,0 +1,128 @@
++"""One bounded, source-scoped evidence completion pass; no generation or Gold input."""
++import re
++import time
++from pathlib import Path
++
++from src.bm25_retriever import retrieve_bm25
++from src.hybrid_retriever import reciprocal_rank_fusion
++from src.reranker import rerank_results, select_evidence
++from src.retriever import retrieve
++
++
++def named_sources(query, chunks):
++    """Recognize only unambiguous names derivable from existing paper metadata."""
++    papers = {c['source']: c.get('title', '') for c in chunks}
++    aliases = {}
++    stop_words = {'a', 'an', 'the', 'for', 'of', 'and', 'in', 'with', 'to', 'on'}
++    for source, title in papers.items():
++        words = [w for w in re.findall(r'[A-Za-z]+', title) if w.lower() not in stop_words]
++        names = {title, title.split(':')[0]}
++        names.update(''.join(w[0] for w in words[:n]) for n in (2, 3, 4) if len(words) >= n)
++        stem = Path(source).stem
++        if not re.fullmatch(r'\d{4}\.\d{4,5}v\d+', stem):
++            names.add(stem)
++        for name in names:
++            if len(name.strip()) >= 2:
++                aliases.setdefault(name.strip().casefold(), set()).add(source)
++    matches = []
++    for name, sources in aliases.items():
++        if len(sources) == 1:
++            match = re.search(r'(?<![\w-])' + re.escape(name) + r'(?![\w-])', query, re.I)
++            if match:
++                matches.append((match.start(), -len(name), next(iter(sources))))
++    return list(dict.fromkeys(source for _, _, source in sorted(matches)))
++
++
++def plan_evidence_gap(query, global_ranking, local_evidence, selected, chunks, top_k):
++    """Coverage signals are diagnostic heuristics, not proof of semantic support."""
++    sources = named_sources(query, chunks)
++    plan = {'requested_sources': sources, 'tasks': [], 'coverage': 'heuristic_only'}
++    if len(sources) < 2:
++        return plan
++    source_by_id = {c['chunk_id']: c['source'] for c in chunks}
++    selected_ids = {c['chunk_id'] for c in selected}
++    tasks = []
++    for item in local_evidence:
++        matches = [s for s in named_sources(item['query'], chunks) if s in sources]
++        if len(matches) == 1:
++            tasks.append({'query': item['query'], 'source': matches[0], 'top_ids': item['top_ids']})
++    for source in sources:
++        if not any(t['source'] == source for t in tasks):
++            tasks.append({'query': query, 'source': source, 'top_ids': []})
++    seen = set()
++    for task in tasks:
++        key = task['source'], task['query']
++        if key in seen:
++            continue
++        seen.add(key)
++        matched = [cid for cid in task['top_ids'] if source_by_id[cid] == task['source']]
++        retained = [cid for cid in matched if cid in selected_ids]
++        excluded = [c['chunk_id'] for c in global_ranking[:top_k]
++                    if c['source'] == task['source'] and c['chunk_id'] not in selected_ids]
++        plan['tasks'].append({**task, 'source_matched_top_ids': matched,
++                              'selected_top_ids': retained, 'excluded_global_ids': excluded,
++                              'needs_retrieval': len(matched) < 2 or len(retained) < 2})
++    plan['truncated_tasks'] = max(0, len(plan['tasks']) - 4)
++    plan['tasks'] = plan['tasks'][:4]
++    return plan
++
++
++def complete_evidence_once(query, global_ranking, local_evidence, retrieval_anchor_ids,
++                           embedding_model, index, chunks, bm25, reranker_model,
++                           top_k=10, candidate_k=60):
++    """Keep the first pool, supplement at most four scoped tasks once, then select."""
++    started = time.perf_counter()
++    baseline = select_evidence(global_ranking, local_evidence, top_k, retrieval_anchor_ids)
++    trace = plan_evidence_gap(query, global_ranking, local_evidence, baseline, chunks, top_k)
++    trace.update(rounds=0, supplement_queries=0,
++                 selected_ids_before=[c['chunk_id'] for c in baseline])
++    tasks = trace['tasks']
++    if not tasks or not any(t['needs_retrieval'] or t['excluded_global_ids'] for t in tasks):
++        trace.update(stop_reason='not_explicit_cross_paper' if not tasks else 'no_coverage_signal',
++                     selected_ids_after=trace['selected_ids_before'],
++                     elapsed_seconds=round(time.perf_counter() - started, 6))
++        return baseline, trace
++
++    candidates = {c['chunk_id']: c for c in global_ranking}
++    identities = {(c['source'], c['page'], c['text']): c for c in global_ranking}
++    for task in tasks:
++        if task['needs_retrieval']:
++            # Exact IndexFlat search of this small pilot corpus; filter BEFORE truncating.
++            dense = retrieve(embedding_model, index, chunks, task['query'], top_k=len(chunks))
++            sparse = retrieve_bm25(bm25, chunks, task['query'], top_k=len(chunks))
++            scoped_dense = [c for c in dense if c['source'] == task['source']][:candidate_k]
++            scoped_sparse = [c for c in sparse if c['source'] == task['source']][:candidate_k]
++            scoped = reciprocal_rank_fusion(scoped_dense, scoped_sparse, top_k=candidate_k)
++            trace['supplement_queries'] += 1
++            trace['rounds'] = 1
++            task['retrieved_ids'] = [c['chunk_id'] for c in scoped]
++        else:
++            scoped = [c for c in global_ranking if c['source'] == task['source']][:candidate_k]
++        canonical = []
++        for chunk in scoped:
++            key = chunk['source'], chunk['page'], chunk['text']
++            chunk = identities.setdefault(key, chunk)
++            candidates.setdefault(chunk['chunk_id'], chunk)
++            if chunk['chunk_id'] not in {c['chunk_id'] for c in canonical}:
++                canonical.append(chunk)
++        task['scoped_top_ids'] = [c['chunk_id'] for c in rerank_results(
++            task['query'], canonical, reranker_model, top_k=3, include_source=True)]
++
++    existing_ids = {c['chunk_id'] for c in global_ranking}
++    new_candidates = [c for cid, c in candidates.items() if cid not in existing_ids]
++    new_ranking = rerank_results(query, new_candidates, reranker_model,
++                                 top_k=len(new_candidates), include_source=True)
++    merged = sorted([*global_ranking, *new_ranking], key=lambda c: -c['rerank_score'])
++    # Global relevance gets half the budget; local scores never compete across tasks.
++    priority = [c['chunk_id'] for c in merged[:max(1, top_k // 2)]]
++    priority.extend(retrieval_anchor_ids[:1])
++    priority.extend(t['scoped_top_ids'][0] for t in tasks if t['scoped_top_ids'])
++    priority.extend(c['chunk_id'] for c in merged)
++    selected_ids = set(list(dict.fromkeys(priority))[:top_k])
++    selected = [c for c in merged if c['chunk_id'] in selected_ids]
++    trace.update(merged_candidate_ids=[c['chunk_id'] for c in merged],
++                 new_candidate_ids=[c['chunk_id'] for c in new_candidates],
++                 selected_ids_after=[c['chunk_id'] for c in selected],
++                 stop_reason='single_round_budget_exhausted' if trace['rounds'] else 'selection_repaired_without_search',
++                 elapsed_seconds=round(time.perf_counter() - started, 6))
++    return selected, trace
+--- before/tests/test_evidence_gap.py
++++ after/tests/test_evidence_gap.py
+@@ -0,0 +1,100 @@
++import unittest
++from unittest.mock import patch
++
++from src.evidence_gap import complete_evidence_once, named_sources, plan_evidence_gap
++
++
++def passage(cid, source, title):
++    return {'chunk_id': cid, 'source': source, 'title': title,
++            'page': cid + 1, 'section': 'Methods', 'text': f'Evidence {cid}.',
++            'rerank_score': 100 - cid}
++
++
++class EvidenceGapTests(unittest.TestCase):
++    def setUp(self):
++        self.chunks = [passage(i, 'alpha.pdf', 'Alpha: Retrieval') for i in range(8)]
++        self.chunks += [passage(i, 'beta.pdf', 'Beta: Search') for i in range(8, 16)]
++
++    def test_paper_names_do_not_match_inside_other_method_names(self):
++        chunks = [passage(0, 'a.pdf', 'Retrieval-Augmented Generation for NLP'),
++                  passage(1, 'b.pdf', 'Self-RAG: Learning to Retrieve'),
++                  passage(2, 'c.pdf', 'Corrective Retrieval Augmented Generation')]
++        self.assertEqual(named_sources('Compare Self-RAG and CRAG.', chunks), ['b.pdf', 'c.pdf'])
++        self.assertEqual(named_sources('Compare RAG and CRAG.', chunks), ['a.pdf', 'c.pdf'])
++
++    def test_diagnostics_separate_wrong_source_and_excluded_candidates(self):
++        selected = self.chunks[:5] + self.chunks[10:15]
++        local = [{'query': 'What does Beta store?', 'top_ids': [0, 1, 2]}]
++        plan = plan_evidence_gap('Compare Alpha and Beta.', self.chunks, local,
++                                 selected, self.chunks, 10)
++        task = next(t for t in plan['tasks'] if t['source'] == 'beta.pdf')
++        self.assertEqual(task['source_matched_top_ids'], [])
++        self.assertTrue(task['needs_retrieval'])
++        self.assertEqual(task['excluded_global_ids'], [8, 9])
++
++    def test_single_paper_keeps_baseline_without_supplement_calls(self):
++        with patch('src.evidence_gap.retrieve') as dense:
++            results, trace = complete_evidence_once('Explain Alpha.', self.chunks, [], [],
++                object(), object(), self.chunks, object(), object())
++        self.assertEqual([c['chunk_id'] for c in results], list(range(10)))
++        dense.assert_not_called()
++        self.assertEqual(trace['rounds'], 0)
++
++    def test_scoped_supplement_recovers_excluded_paper_and_stops_after_one_round(self):
++        # Initial Alpha task hits the wrong paper; the actual search supplies Alpha evidence.
++        initial = self.chunks[8:]
++        local = [{'query': 'What does Alpha store?', 'top_ids': [8, 9, 10]},
++                 {'query': 'What does Beta store?', 'top_ids': [8, 9, 10]}]
++
++        def rank(query, candidates, model, top_k, include_source=True):
++            return [{**c, 'rerank_score': 100 - c['chunk_id']}
++                    for c in sorted(candidates, key=lambda c: c['chunk_id'])[:top_k]]
++
++        with patch('src.evidence_gap.retrieve', return_value=self.chunks) as dense, \
++                patch('src.evidence_gap.retrieve_bm25', return_value=self.chunks), \
++                patch('src.evidence_gap.rerank_results', side_effect=rank):
++            selected, trace = complete_evidence_once('Compare Alpha and Beta.', initial,
++                local, [8], object(), object(), self.chunks, object(), object())
++        self.assertEqual(trace['rounds'], 1)
++        self.assertEqual(trace['supplement_queries'], 1)
++        self.assertTrue({'alpha.pdf', 'beta.pdf'} <= {c['source'] for c in selected})
++        self.assertEqual(len({c['chunk_id'] for c in selected}), 10)
++        self.assertTrue(all(c['chunk_id'] in trace['merged_candidate_ids'] for c in selected))
++        dense.assert_called_once()
++        self.assertEqual(trace['stop_reason'], 'single_round_budget_exhausted')
++
++    def test_no_gold_fields_enter_the_completion_interface(self):
++        import inspect
++        self.assertFalse({'gold_ids', 'gold_evidence', 'reference_points'} &
++                         set(inspect.signature(complete_evidence_once).parameters))
++
++    def test_existing_candidates_can_be_repaired_without_another_search(self):
++        local = [{'query': 'What does Alpha store?', 'top_ids': [7, 6, 5]},
++                 {'query': 'What does Beta store?', 'top_ids': [8, 9, 10]}]
++        with patch('src.evidence_gap.retrieve') as dense, \
++                patch('src.evidence_gap.rerank_results',
++                      side_effect=lambda query, candidates, model, top_k, **kwargs: candidates[:top_k]):
++            selected, trace = complete_evidence_once('Compare Alpha and Beta.', self.chunks,
++                local, [], object(), object(), self.chunks, object(), object())
++        dense.assert_not_called()
++        self.assertEqual(trace['rounds'], 0)
++        self.assertEqual(trace['stop_reason'], 'selection_repaired_without_search')
++        self.assertTrue(set(range(5)) <= {c['chunk_id'] for c in selected})
++
++    def test_task_limit_is_explicit_and_does_not_recurse(self):
++        local = [{'query': f'Compare Alpha and its property {i}', 'top_ids': [8, 9, 10]}
++                 for i in range(6)]
++        plan = plan_evidence_gap('Compare Alpha and Beta.', self.chunks, local,
++                                 self.chunks[:10], self.chunks, 10)
++        self.assertEqual(len(plan['tasks']), 4)
++        self.assertEqual(plan['truncated_tasks'], 3)
++
++    def test_cross_paper_question_without_decomposition_gets_one_task_per_source(self):
++        plan = plan_evidence_gap('Compare Alpha and Beta.', self.chunks, [],
++                                 self.chunks[:10], self.chunks, 10)
++        self.assertEqual([t['source'] for t in plan['tasks']], ['alpha.pdf', 'beta.pdf'])
++        self.assertTrue(all(t['needs_retrieval'] for t in plan['tasks']))
++
++
++if __name__ == '__main__':
++    unittest.main()

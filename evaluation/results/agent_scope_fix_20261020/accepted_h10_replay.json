@@ -1,0 +1,68 @@
+{
+  "status": "completed_offline_exact_prompt_replay",
+  "query": "For short-answer open-domain QA, how does the correctness criterion reported by RAG differ from the criterion used by Self-RAG for PopQA and TriviaQA?",
+  "plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "RAG",
+        "question_quote": "how does the correctness criterion reported by RAG differ",
+        "need": "how does the correctness criterion reported by RAG differ"
+      },
+      {
+        "id": "r2",
+        "subject": "Self-RAG",
+        "question_quote": "from the criterion used by Self-RAG for PopQA and TriviaQA",
+        "need": "from the criterion used by Self-RAG for PopQA and TriviaQA"
+      }
+    ]
+  },
+  "assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "missing",
+        "evidence": [],
+        "supported_part": "",
+        "reason": "提供的段落中仅提及RAG的训练方式（最小化负对数似然）及TriviaQA答案过滤，未说明RAG所报告的“正确性判据”本身是什么，也未说明其如何与其他方法不同。",
+        "gap": "缺少RAG所报告的正确性判据的描述，以及其与Self-RAG判据差异的陈述。"
+      },
+      {
+        "id": "r2",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 1003,
+            "quote": "We evaluate performance based on whether gold answers are included in the model generations instead of strictly requiring exact matching, following Mallen et al."
+          },
+          {
+            "chunk_id": 1002,
+            "quote": "Short-form generations tasks include two open-domain question answering (QA) datasets, PopQA (Mallen et al., 2023) and TriviaQA-unfiltered (Joshi et al., 2017), where systems need to answer arbitrary questions about factual knowledge."
+          }
+        ],
+        "supported_part": "Self-RAG在PopQA和TriviaQA上基于生成文本是否包含金标准答案（而非严格精确匹配）来评估性能。",
+        "reason": "chunk 1002确认PopQA和TriviaQA属于短形式生成任务，chunk 1003给出该任务的评估判据为金标准答案是否包含在模型生成中。",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "search",
+      "reason": "r1所需的RAG正确性判据在提供的段落中未建立，需检索Retrieval-Augmented Generation论文中关于评估判据的内容。",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": "RAG: how does the correctness criterion reported by RAG differ | how does the correctness criterion reported by RAG differ",
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "各需求均独立对照其绑定的问题片段检查，未跨需求合并或扩展义务。"
+    }
+  },
+  "actions_executed": 0,
+  "real_api_response": "isolated_recheck/actual_chat_call.json",
+  "api_prompt_sha256": "bb46bce636f343cf0ca00e86cf18c4539461995322b7e420e966648947770d5f",
+  "final_agent_sha256": "2d35a1198a31e148532c25ceeb36d751ba1418c8c66b15477aefc50f1a69e0fd",
+  "additional_api_calls": 0
+}

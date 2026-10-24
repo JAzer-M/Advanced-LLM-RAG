@@ -1,0 +1,158 @@
+{
+  "question": "According to the original FlashAttention paper, which two GPU memory levels are involved in the IO reduction, and which implementation technique reduces those transfers?",
+  "requirements": [
+    {
+      "id": "r1",
+      "subject": "FlashAttention",
+      "question_quote": "According to the original FlashAttention paper, which two GPU memory levels are involved in the IO reduction, and which implementation technique reduces those transfers?",
+      "need": "According to the original FlashAttention paper, which two GPU memory levels are involved in the IO reduction, and which implementation technique reduces those transfers?"
+    }
+  ],
+  "assessment": [
+    {
+      "id": "r1",
+      "status": "missing",
+      "supported_part": "",
+      "gap": "缺少原始 FlashAttention 论文中关于参与 IO 归约的两个 GPU 内存层级（如 HBM 与 SRAM）以及减少传输的实现技术（如分块/平铺）的说明。",
+      "evidence": []
+    }
+  ],
+  "halt_reason": "model_stop",
+  "passages": [
+    {
+      "citation": 1,
+      "chunk_id": 1128,
+      "source": "2310.11511v1.pdf",
+      "page": 19,
+      "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+      "text": "We use Deepspeed stage 3 (Rajbhandari et al., 2020) to conduct multi-GPU distributed training, with training precision Bfloat16 enabled. FlashAttention (Dao et al., 2022) is used to make the long-context training more efficient. We run inference of our trained models using 1-2 Quadro RTX 6000 GPUs with 24GB memory.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 2,
+      "chunk_id": 1055,
+      "source": "2310.11511v1.pdf",
+      "page": 11,
+      "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+      "text": "Flashattention: Fast and memory- efficient exact attention with io-awareness. In Advances in Neural Information Processing Systems, 2022. URL https://openreview.net/forum?id=H4DqfPSibmx. Shehzaad Dhuliawala, Mojtaba Komeili, Jing Xu, Roberta Raileanu, Xian Li, Asli Celikyilmaz, and Jason Weston. Chain-of-verification reduces hallucination in large language models.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 3,
+      "chunk_id": 103,
+      "source": "DCNN.pdf",
+      "page": 1,
+      "title": "DCNN",
+      "text": "To make training faster, we used non- saturating neurons and a very efficient GPU implementation of the convolution operation. To reduce overfitting in the fully connected layers we employed a recently developed reg- ularization method called “dropout” that proved to be very effective. We also entered a variant of this model in the ILSVRC-2012 competition and achieved a winning top-5 test error rate of 15.3%, compared to 26.2% achieved by the sec- ond-best entry.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 4,
+      "chunk_id": 141,
+      "source": "DCNN.pdf",
+      "page": 3,
+      "title": "DCNN",
+      "text": "This scheme reduces our top-1 and top-5 error rates by 1.7% and 1.2%, respectively, as compared with a net with half as many kernels in each convolutional layer trained on one GPU. The two-GPU net takes slightly less time to train than the one-GPU net.b",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 5,
+      "chunk_id": 173,
+      "source": "DCNN.pdf",
+      "page": 5,
+      "title": "DCNN",
+      "text": "This technique reduces complex co adaptations of neurons, since a neuron cannot rely on the presence of particular other neurons. It is, therefore, forced to learn more robust features that are useful in conjunction with many different random subsets of the other neurons. At test time, we use all the neu- rons but multiply their outputs by 0.5, which is a reasonable approximation to taking the geometric mean of the predic- tive distributions produced by the exponentially-many drop- out networks.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 6,
+      "chunk_id": 121,
+      "source": "DCNN.pdf",
+      "page": 2,
+      "title": "DCNN",
+      "text": "We wrote a highly optimized GPU implementation of 2D convolution and all the other opera- tions inherent in training CNNs, which we make available publicly.a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4. The size of our network made overfitting a significant problem, even with 1.2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 5. Our final network contains five convo- lutional and three fully connected layers, and this depth seems to be important: we found that removing any convolu- tional layer (each of which contains no more than 1% of the model’s parameters) resulted in inferior performance.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 7,
+      "chunk_id": 138,
+      "source": "DCNN.pdf",
+      "page": 3,
+      "title": "DCNN",
+      "text": "4.2. Training on multiple GPUs A single GTX 580 GPU has only 3GB of memory, which limits the maximum size of the networks that can be trained on it. It turns out that 1.2 million training examples are enough to train networks which are too big to fit on one GPU. Therefore we spread the net across two GPUs. Current GPUs are particularly well-suited to cross-GPU parallelization, as they are able to read from and write to one another’s mem- ory directly, without going through host machine memory.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 8,
+      "chunk_id": 622,
+      "source": "2004.12832v2.pdf",
+      "page": 5,
+      "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+      "text": "On the GPU, we compute a batch dot-product of Eq and D, possibly over multiple mini-batches. Te output materializes a 3-dimensional tensor that is a collection of cross-match matrices between q and each document. To compute the score of each docu- ment, we reduce its matrix across document terms via a max-pool (i.e., representing an exhaustive implementation of our MaxSim computation) and reduce across query terms via a summation. Fi- nally, we sort the k documents by their total scores.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 9,
+      "chunk_id": 15,
+      "source": "Attention is all you need.pdf",
+      "page": 2,
+      "title": "Attention is All you Need",
+      "text": "In the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as described in section 3.2. Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 10,
+      "chunk_id": 188,
+      "source": "DCNN.pdf",
+      "page": 6,
+      "title": "DCNN",
+      "text": "Notice the specialization exhibited by the two GPUs, a result of the restricted connectivity described in Section 4.5. The kernels on GPU 1 are largely color-agnostic, while the kernels on on GPU 2 are largely Figure 4. (Left) Eight ILSVRC-2010 test images and the five labels considered most probable by our model. The correct label is written under each image, and the probability assigned to the correct label is also shown with a red bar (if it happens to be in the top 5).",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 11,
+      "chunk_id": 139,
+      "source": "DCNN.pdf",
+      "page": 3,
+      "title": "DCNN",
+      "text": "The parallelization scheme that we employ essentially puts half of the kernels (or neurons) on each GPU, with one addi- tional trick: the GPUs communicate only in certain layers. This means that, for example, the kernels of layer 3 take input from all kernel maps in layer 2. However, kernels in layer 4 take input only from those kernel maps in layer 3 which reside on the same GPU.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 12,
+      "chunk_id": 151,
+      "source": "DCNN.pdf",
+      "page": 4,
+      "title": "DCNN",
+      "text": "Figure 2. An illustration of the architecture of our CNN, explicitly showing the delineation of responsibilities between the two GPUs. One GPU runs the layer-parts at the top of the figure while the other runs the layer-parts at the bottom. The GPUs communicate only at certain layers.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 13,
+      "chunk_id": 74,
+      "source": "Attention is all you need.pdf",
+      "page": 8,
+      "title": "Attention is All you Need",
+      "text": "We set the maximum output length during inference to input length + 50, but terminate early when possible [31]. Table 2 summarizes our results and compares our translation quality and training costs to other model architectures from the literature. We estimate the number of ﬂoating point operations used to train a model by multiplying the training time, the number of GPUs used, and an estimate of the sustained single-precision ﬂoating-point capacity of each GPU 5.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 14,
+      "chunk_id": 13,
+      "source": "Attention is all you need.pdf",
+      "page": 2,
+      "title": "Attention is All you Need",
+      "text": "2 Background The goal of reducing sequential computation also forms the foundation of the Extended Neural GPU [20], ByteNet [15] and ConvS2S [8], all of which use convolutional neural networks as basic building block, computing hidden representations in parallel for all input and output positions.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 15,
+      "chunk_id": 163,
+      "source": "DCNN.pdf",
+      "page": 4,
+      "title": "DCNN",
+      "text": "In our implementation, the transformed images are generated in Python code on the CPU while the GPU is training on the previous batch of images. So these data augmentation schemes are, in effect, computa- tionally free. The first form of data augmentation consists of generating image translations and horizontal reflections.",
+      "kb_version": "all-papers-8-20261020"
+    }
+  ]
+}

@@ -1,0 +1,952 @@
+{
+  "question_id": "h11",
+  "query": "Using only the supplied eight-paper corpus, what training-data size and hidden-state dimension are specified for the Mamba model in the Mamba paper?",
+  "run_provenance": "fresh full main pipeline",
+  "knowledge_base": {
+    "version": "all-papers-8-20261020",
+    "chunk_count": 1397,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/manifest.json",
+    "manifest_sha256": "9c4e2c26b4f11fe7baf526595630cbee2d325416ec0e497f417975fbd60779ef",
+    "files": {
+      "faiss.index": "ff1f4a3e38e20c0275ba79d805e6475639b3cea7a7a583f9c18c67ec8e40a2ed",
+      "chunks.json": "3e63d75abbe164ff8e135b1d66fd6b02d9479b2e037e289a726e7c542464593a"
+    }
+  },
+  "decomposition": {
+    "needs_decomposition": false,
+    "sub_queries": [],
+    "status": "not_needed"
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 120,
+    "global_top_ids": [
+      1030,
+      1038,
+      767,
+      467,
+      1040,
+      9,
+      305,
+      852,
+      62,
+      752
+    ],
+    "protected_ids": [],
+    "sub_query_evidence": [],
+    "retrieval_anchor_ids": [
+      391
+    ],
+    "evidence_completion": {
+      "requested_sources": [],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        1030,
+        1038,
+        767,
+        467,
+        1040,
+        9,
+        305,
+        852,
+        62,
+        391
+      ],
+      "retained_local_ids": [],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        1030,
+        1038,
+        767,
+        467,
+        1040,
+        9,
+        305,
+        852,
+        62,
+        391
+      ],
+      "elapsed_seconds": 0.000252
+    }
+  },
+  "selected_ids": [
+    1030,
+    1038,
+    767,
+    467,
+    1040,
+    9,
+    305,
+    852,
+    62,
+    391
+  ],
+  "context": "[1] Source: 2310.11511v1.pdf | Page: 9 | Section: 5.2 ANALYSIS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\n4. In this ablation experiment, we use a training instance size of 50k for a more efficient exploration of training variations. Later in this section, we conduct an analysis of the effect of training data size. We conduct the ablation studies on three datasets, PopQA, PubHealth, and ASQA. On ASQA, we evaluate models on sampled 150 instances and exclude ablations involving adaptive or no retrieval processes. We show in Table 3a the ablation results.\n\n[2] Source: 2310.11511v1.pdf | Page: 10 | Section: 5.2 ANALYSIS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nOn one hand, performance deterioration by retrieving less is smaller on PubHealth but larger in PopQA. Effects of training data size. We conduct an analysis of how the data scale affects the model’s performance. In particular, we randomly sample 5k, 10k, 20k, and 50k instances from our original 150k training instances, and fine-tune four SELF-RAG 7B variants on those subsets.\n\n[3] Source: 2005.11401v4.pdf | Page: 4 | Section: 3.2 Abstractive Question Answering\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nThe task consists of questions, ten gold passages retrieved from a search engine for each question, and a full sentence answer annotated from the retrieved passages. We do not use the supplied passages, only the questions and answers, to treat\n\n[4] Source: 2004.04906v3.pdf | Page: 7 | Section: 6.1 End-to-end QA System\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nSpeciﬁcally, let Pi ∈RL×h (1 ≤i ≤k) be a BERT (base, uncased in our experiments) rep- resentation for the i-th passage, where L is the maximum length of the passage and h the hidden dimension. The probabilities of a token being the starting/ending positions of an answer span and a passage being selected are deﬁned as: \u0000 \u0001 Pstart,i(s) = softmax Piwstart s, (3) \u0000 \u0001 Pend,i(t) = softmax Piwend t, (4) \u0000ˆP⊺wselected \u0001 Pselected(i) = softmax i, (5) ] ∈Rh×k and where ˆP = [P[CLS] , .\n\n[5] Source: 2310.11511v1.pdf | Page: 10 | Section: 5.2 ANALYSIS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nAcross all datasets, increasing data size often shows upward trajectories and the improvements are significantly larger in PopQA and ASQA, while we do not observed such significant improvements on Llama2-FT7B when increasing the training data from 50k to 150k. These results also indicate that further expanding the training data of SELF-RAG may lead to further improvements, although in this work we limit our training data size to 150k. Human evaluations.\n\n[6] Source: Attention is all you need.pdf | Page: 2 | Section: 1 Introduction\nRecurrent models typically factor computation along the symbol positions of the input and output sequences. Aligning the positions to steps in computation time, they generate a sequence of hidden states ht, as a function of the previous hidden state ht−1 and the input for position t. This inherently sequential nature precludes parallelization within training examples, which becomes critical at longer sequence lengths, as memory constraints limit batching across examples.\n\n[7] Source: VGG.pdf | Page: 8 | Section: 4.5 COMPARISON WITH THE STATE OF THE ART\nOnly the results obtained without outside training data are reported. Method top-1 val. error (%) top-5 val.\n\n[8] Source: 2005.11401v4.pdf | Page: 12 | Section: 6 Discussion\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\n[20] Kelvin Guu, Kenton Lee, Zora Tung, Panupong Pasupat, and Ming-Wei Chang. REALM: Retrieval-augmented language model pre-training. ArXiv, abs/2002.08909, 2020. URL https: //arxiv.org/abs/2002.08909. [21] Tatsunori B Hashimoto, Kelvin Guu, Yonatan Oren, and Percy S Liang. A retrieve-and-edit framework for predicting structured outputs. Wallach, H. Larochelle, K. Grauman, N. Cesa-Bianchi, and R.\n\n[9] Source: Attention is all you need.pdf | Page: 7 | Section: 5.1 Training Data and Batching\n5.1 Training Data and Batching We trained on the standard WMT 2014 English-German dataset consisting of about 4.5 million sentence pairs.\n\n[10] Source: 2004.04906v3.pdf | Page: 2 | Section: 1 Introduction\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nIn this paper, we address the question: can we train a better dense embedding model using only pairs of questions and passages (or answers), with- out additional pretraining? By leveraging the now standard BERT pretrained model (Devlin et al., 2019) and a dual-encoder architecture (Bromley et al., 1994), we focus on developing the right training scheme using a relatively small number of question and passage pairs.",
+  "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\n[1] Source: 2310.11511v1.pdf | Page: 9 | Section: 5.2 ANALYSIS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\n4. In this ablation experiment, we use a training instance size of 50k for a more efficient exploration of training variations. Later in this section, we conduct an analysis of the effect of training data size. We conduct the ablation studies on three datasets, PopQA, PubHealth, and ASQA. On ASQA, we evaluate models on sampled 150 instances and exclude ablations involving adaptive or no retrieval processes. We show in Table 3a the ablation results.\n\n[2] Source: 2310.11511v1.pdf | Page: 10 | Section: 5.2 ANALYSIS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nOn one hand, performance deterioration by retrieving less is smaller on PubHealth but larger in PopQA. Effects of training data size. We conduct an analysis of how the data scale affects the model’s performance. In particular, we randomly sample 5k, 10k, 20k, and 50k instances from our original 150k training instances, and fine-tune four SELF-RAG 7B variants on those subsets.\n\n[3] Source: 2005.11401v4.pdf | Page: 4 | Section: 3.2 Abstractive Question Answering\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nThe task consists of questions, ten gold passages retrieved from a search engine for each question, and a full sentence answer annotated from the retrieved passages. We do not use the supplied passages, only the questions and answers, to treat\n\n[4] Source: 2004.04906v3.pdf | Page: 7 | Section: 6.1 End-to-end QA System\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nSpeciﬁcally, let Pi ∈RL×h (1 ≤i ≤k) be a BERT (base, uncased in our experiments) rep- resentation for the i-th passage, where L is the maximum length of the passage and h the hidden dimension. The probabilities of a token being the starting/ending positions of an answer span and a passage being selected are deﬁned as: \u0000 \u0001 Pstart,i(s) = softmax Piwstart s, (3) \u0000 \u0001 Pend,i(t) = softmax Piwend t, (4) \u0000ˆP⊺wselected \u0001 Pselected(i) = softmax i, (5) ] ∈Rh×k and where ˆP = [P[CLS] , .\n\n[5] Source: 2310.11511v1.pdf | Page: 10 | Section: 5.2 ANALYSIS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nAcross all datasets, increasing data size often shows upward trajectories and the improvements are significantly larger in PopQA and ASQA, while we do not observed such significant improvements on Llama2-FT7B when increasing the training data from 50k to 150k. These results also indicate that further expanding the training data of SELF-RAG may lead to further improvements, although in this work we limit our training data size to 150k. Human evaluations.\n\n[6] Source: Attention is all you need.pdf | Page: 2 | Section: 1 Introduction\nRecurrent models typically factor computation along the symbol positions of the input and output sequences. Aligning the positions to steps in computation time, they generate a sequence of hidden states ht, as a function of the previous hidden state ht−1 and the input for position t. This inherently sequential nature precludes parallelization within training examples, which becomes critical at longer sequence lengths, as memory constraints limit batching across examples.\n\n[7] Source: VGG.pdf | Page: 8 | Section: 4.5 COMPARISON WITH THE STATE OF THE ART\nOnly the results obtained without outside training data are reported. Method top-1 val. error (%) top-5 val.\n\n[8] Source: 2005.11401v4.pdf | Page: 12 | Section: 6 Discussion\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\n[20] Kelvin Guu, Kenton Lee, Zora Tung, Panupong Pasupat, and Ming-Wei Chang. REALM: Retrieval-augmented language model pre-training. ArXiv, abs/2002.08909, 2020. URL https: //arxiv.org/abs/2002.08909. [21] Tatsunori B Hashimoto, Kelvin Guu, Yonatan Oren, and Percy S Liang. A retrieve-and-edit framework for predicting structured outputs. Wallach, H. Larochelle, K. Grauman, N. Cesa-Bianchi, and R.\n\n[9] Source: Attention is all you need.pdf | Page: 7 | Section: 5.1 Training Data and Batching\n5.1 Training Data and Batching We trained on the standard WMT 2014 English-German dataset consisting of about 4.5 million sentence pairs.\n\n[10] Source: 2004.04906v3.pdf | Page: 2 | Section: 1 Introduction\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nIn this paper, we address the question: can we train a better dense embedding model using only pairs of questions and passages (or answers), with- out additional pretraining? By leveraging the now standard BERT pretrained model (Devlin et al., 2019) and a dual-encoder architecture (Bromley et al., 1994), we focus on developing the right training scheme using a relatively small number of question and passage pairs.\n\nQuestion:\nUsing only the supplied eight-paper corpus, what training-data size and hidden-state dimension are specified for the Mamba model in the Mamba paper?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": " In this ablation experiment, we use a training instance size of 50k for a more efficient exploration of training variations.",
+        "evidence_start": 2,
+        "evidence_end": 127,
+        "subject": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "identity": {
+          "subject": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            1030
+          ],
+          "identity_quote": "4. In this ablation experiment, we use a training instance size of 50k for a more efficient exploration of training variations. Later in this section, we conduct an analysis of the effect of training data size. We conduct the ablation studies on three datasets, PopQA, PubHealth, and ASQA. On ASQA, we evaluate models on sampled 150 instances and exclude ablations involving adaptive or no retrieval processes. We show in Table 3a the ablation results.",
+          "identity_chunk_id": 1030
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1030,
+        "page": 9,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Later in this section, we conduct an analysis of the effect of training data size.",
+        "evidence_start": 127,
+        "evidence_end": 210,
+        "subject": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "identity": {
+          "subject": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            1030
+          ],
+          "identity_quote": "4. In this ablation experiment, we use a training instance size of 50k for a more efficient exploration of training variations.",
+          "identity_chunk_id": 1030
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1030,
+        "page": 9,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We conduct the ablation studies on three datasets, PopQA, PubHealth, and ASQA.",
+        "evidence_start": 210,
+        "evidence_end": 289,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            1030
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1030,
+        "page": 9,
+        "citations": [
+          1
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " On ASQA, we evaluate models on sampled 150 instances and exclude ablations involving adaptive or no retrieval processes.",
+        "evidence_start": 289,
+        "evidence_end": 410,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1030
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1030,
+        "page": 9,
+        "citations": [
+          1
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We show in Table 3a the ablation results.",
+        "evidence_start": 410,
+        "evidence_end": 452,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1030
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1030,
+        "page": 9,
+        "citations": [
+          1
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "On one hand, performance deterioration by retrieving less is smaller on PubHealth but larger in PopQA.",
+        "evidence_start": 0,
+        "evidence_end": 102,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            1038
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1038,
+        "page": 10,
+        "citations": [
+          2
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Effects of training data size.",
+        "evidence_start": 102,
+        "evidence_end": 133,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1038
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1038,
+        "page": 10,
+        "citations": [
+          2
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We conduct an analysis of how the data scale affects the model’s performance.",
+        "evidence_start": 133,
+        "evidence_end": 211,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1038
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1038,
+        "page": 10,
+        "citations": [
+          2
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In particular, we randomly sample 5k, 10k, 20k, and 50k instances from our original 150k training instances, and fine-tune four SELF-RAG 7B variants on those subsets.",
+        "evidence_start": 211,
+        "evidence_end": 378,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            1038
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1038,
+        "page": 10,
+        "citations": [
+          2
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "The task consists of questions, ten gold passages retrieved from a search engine for each question, and a full sentence answer annotated from the retrieved passages.",
+        "evidence_start": 0,
+        "evidence_end": 165,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            767,
+            766
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 767,
+        "page": 4,
+        "citations": [
+          3
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We do not use the supplied passages, only the questions and answers, to treat",
+        "evidence_start": 165,
+        "evidence_end": 243,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            767,
+            766
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 767,
+        "page": 4,
+        "citations": [
+          3
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Speciﬁcally, let Pi ∈RL×h (1 ≤i ≤k) be a BERT (base, uncased in our experiments) rep- resentation for the i-th passage, where L is the maximum length of the passage and h the hidden dimension.",
+        "evidence_start": 0,
+        "evidence_end": 192,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            467
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 467,
+        "page": 7,
+        "citations": [
+          4
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The probabilities of a token being the starting/ending positions of an answer span and a passage being selected are deﬁned as: \u0000 \u0001 Pstart,i(s) = softmax Piwstart s, (3) \u0000 \u0001 Pend,i(t) = softmax Piwend t, (4) \u0000ˆP⊺wselected \u0001 Pselected(i) = softmax i, (5) ] ∈Rh×k and where ˆP = [P[CLS] , .",
+        "evidence_start": 192,
+        "evidence_end": 480,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            467
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 467,
+        "page": 7,
+        "citations": [
+          4
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Across all datasets, increasing data size often shows upward trajectories and the improvements are significantly larger in PopQA and ASQA, while we do not observed such significant improvements on Llama2-FT7B when increasing the training data from 50k to 150k.",
+        "evidence_start": 0,
+        "evidence_end": 260,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            1040
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1040,
+        "page": 10,
+        "citations": [
+          5
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " These results also indicate that further expanding the training data of SELF-RAG may lead to further improvements, although in this work we limit our training data size to 150k.",
+        "evidence_start": 260,
+        "evidence_end": 438,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            1040
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1040,
+        "page": 10,
+        "citations": [
+          5
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Recurrent models typically factor computation along the symbol positions of the input and output sequences.",
+        "evidence_start": 0,
+        "evidence_end": 107,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            9,
+            8
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 9,
+        "page": 2,
+        "citations": [
+          6
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Aligning the positions to steps in computation time, they generate a sequence of hidden states ht, as a function of the previous hidden state ht−1 and the input for position t.",
+        "evidence_start": 107,
+        "evidence_end": 284,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            9,
+            8
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 9,
+        "page": 2,
+        "citations": [
+          6
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " This inherently sequential nature precludes parallelization within training examples, which becomes critical at longer sequence lengths, as memory constraints limit batching across examples.",
+        "evidence_start": 284,
+        "evidence_end": 475,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            9,
+            8
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 9,
+        "page": 2,
+        "citations": [
+          6
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Only the results obtained without outside training data are reported.",
+        "evidence_start": 0,
+        "evidence_end": 69,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            305,
+            304
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 305,
+        "page": 8,
+        "citations": [
+          7
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "[20] Kelvin Guu, Kenton Lee, Zora Tung, Panupong Pasupat, and Ming-Wei Chang.",
+        "evidence_start": 0,
+        "evidence_end": 77,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            852,
+            851,
+            850,
+            849
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 852,
+        "page": 12,
+        "citations": [
+          8
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " REALM: Retrieval-augmented language model pre-training.",
+        "evidence_start": 77,
+        "evidence_end": 133,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            852,
+            851,
+            850,
+            849
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 852,
+        "page": 12,
+        "citations": [
+          8
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " [21] Tatsunori B Hashimoto, Kelvin Guu, Yonatan Oren, and Percy S Liang.",
+        "evidence_start": 201,
+        "evidence_end": 274,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            852
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 852,
+        "page": 12,
+        "citations": [
+          8
+        ],
+        "record_id": "E22"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " A retrieve-and-edit framework for predicting structured outputs.",
+        "evidence_start": 274,
+        "evidence_end": 339,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            852
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 852,
+        "page": 12,
+        "citations": [
+          8
+        ],
+        "record_id": "E23"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "In this paper, we address the question: can we train a better dense embedding model using only pairs of questions and passages (or answers), with- out additional pretraining?",
+        "evidence_start": 0,
+        "evidence_end": 174,
+        "subject": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "identity": {
+          "subject": "Dense Passage Retrieval for Open-Domain Question Answering",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            391
+          ],
+          "identity_quote": "In this paper, we address the question: can we train a better dense embedding model using only pairs of questions and passages (or answers), with- out additional pretraining? By leveraging the now standard BERT pretrained model (Devlin et al., 2019) and a dual-encoder architecture (Bromley et al., 1994), we focus on developing the right training scheme using a relatively small number of question and passage pairs.",
+          "identity_chunk_id": 391
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 391,
+        "page": 2,
+        "citations": [
+          10
+        ],
+        "record_id": "E24"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": ", 1994), we focus on developing the right training scheme using a relatively small number of question and passage pairs.",
+        "evidence_start": 297,
+        "evidence_end": 417,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            391
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 391,
+        "page": 2,
+        "citations": [
+          10
+        ],
+        "record_id": "E25"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 1030,
+        "text": "4. In this ablation experiment, we use a training instance size of 50k for a more efficient exploration of training variations. Later in this section, we conduct an analysis of the effect of training data size. We conduct the ablation studies on three datasets, PopQA, PubHealth, and ASQA. On ASQA, we evaluate models on sampled 150 instances and exclude ablations involving adaptive or no retrieval processes. We show in Table 3a the ablation results.",
+        "source": "2310.11511v1.pdf",
+        "page": 9,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "5.2 ANALYSIS"
+      },
+      {
+        "chunk_id": 1038,
+        "text": "On one hand, performance deterioration by retrieving less is smaller on PubHealth but larger in PopQA. Effects of training data size. We conduct an analysis of how the data scale affects the model’s performance. In particular, we randomly sample 5k, 10k, 20k, and 50k instances from our original 150k training instances, and fine-tune four SELF-RAG 7B variants on those subsets.",
+        "source": "2310.11511v1.pdf",
+        "page": 10,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "5.2 ANALYSIS"
+      },
+      {
+        "chunk_id": 767,
+        "text": "The task consists of questions, ten gold passages retrieved from a search engine for each question, and a full sentence answer annotated from the retrieved passages. We do not use the supplied passages, only the questions and answers, to treat",
+        "source": "2005.11401v4.pdf",
+        "page": 4,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "3.2 Abstractive Question Answering"
+      },
+      {
+        "chunk_id": 467,
+        "text": "Speciﬁcally, let Pi ∈RL×h (1 ≤i ≤k) be a BERT (base, uncased in our experiments) rep- resentation for the i-th passage, where L is the maximum length of the passage and h the hidden dimension. The probabilities of a token being the starting/ending positions of an answer span and a passage being selected are deﬁned as: \u0000 \u0001 Pstart,i(s) = softmax Piwstart s, (3) \u0000 \u0001 Pend,i(t) = softmax Piwend t, (4) \u0000ˆP⊺wselected \u0001 Pselected(i) = softmax i, (5) ] ∈Rh×k and where ˆP = [P[CLS] , .",
+        "source": "2004.04906v3.pdf",
+        "page": 7,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "6.1 End-to-end QA System"
+      },
+      {
+        "chunk_id": 1040,
+        "text": "Across all datasets, increasing data size often shows upward trajectories and the improvements are significantly larger in PopQA and ASQA, while we do not observed such significant improvements on Llama2-FT7B when increasing the training data from 50k to 150k. These results also indicate that further expanding the training data of SELF-RAG may lead to further improvements, although in this work we limit our training data size to 150k. Human evaluations.",
+        "source": "2310.11511v1.pdf",
+        "page": 10,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "5.2 ANALYSIS"
+      },
+      {
+        "chunk_id": 9,
+        "text": "Recurrent models typically factor computation along the symbol positions of the input and output sequences. Aligning the positions to steps in computation time, they generate a sequence of hidden states ht, as a function of the previous hidden state ht−1 and the input for position t. This inherently sequential nature precludes parallelization within training examples, which becomes critical at longer sequence lengths, as memory constraints limit batching across examples.",
+        "source": "Attention is all you need.pdf",
+        "page": 2,
+        "title": "Attention is All you Need",
+        "section": "1 Introduction"
+      },
+      {
+        "chunk_id": 305,
+        "text": "Only the results obtained without outside training data are reported. Method top-1 val. error (%) top-5 val.",
+        "source": "VGG.pdf",
+        "page": 8,
+        "title": "VGG",
+        "section": "4.5 COMPARISON WITH THE STATE OF THE ART"
+      },
+      {
+        "chunk_id": 852,
+        "text": "[20] Kelvin Guu, Kenton Lee, Zora Tung, Panupong Pasupat, and Ming-Wei Chang. REALM: Retrieval-augmented language model pre-training. ArXiv, abs/2002.08909, 2020. URL https: //arxiv.org/abs/2002.08909. [21] Tatsunori B Hashimoto, Kelvin Guu, Yonatan Oren, and Percy S Liang. A retrieve-and-edit framework for predicting structured outputs. Wallach, H. Larochelle, K. Grauman, N. Cesa-Bianchi, and R.",
+        "source": "2005.11401v4.pdf",
+        "page": 12,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "6 Discussion"
+      },
+      {
+        "chunk_id": 62,
+        "text": "5.1 Training Data and Batching We trained on the standard WMT 2014 English-German dataset consisting of about 4.5 million sentence pairs.",
+        "source": "Attention is all you need.pdf",
+        "page": 7,
+        "title": "Attention is All you Need",
+        "section": "5.1 Training Data and Batching"
+      },
+      {
+        "chunk_id": 391,
+        "text": "In this paper, we address the question: can we train a better dense embedding model using only pairs of questions and passages (or answers), with- out additional pretraining? By leveraging the now standard BERT pretrained model (Devlin et al., 2019) and a dual-encoder architecture (Bromley et al., 1994), we focus on developing the right training scheme using a relatively small number of question and passage pairs.",
+        "source": "2004.04906v3.pdf",
+        "page": 2,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "1 Introduction"
+      }
+    ],
+    "selected_ids": [
+      1030,
+      1038,
+      767,
+      467,
+      1040,
+      9,
+      305,
+      852,
+      62,
+      391
+    ]
+  },
+  "answer": "当前证据不足。提供的八篇论文上下文中没有 Mamba 论文，也没有关于 Mamba 模型训练数据规模或隐藏状态维度的信息。",
+  "original_answer": "当前证据不足。提供的八篇论文上下文中没有 Mamba 论文，也没有关于 Mamba 模型训练数据规模或隐藏状态维度的信息。",
+  "citation_validation": {
+    "answer": "当前证据不足。提供的八篇论文上下文中没有 Mamba 论文，也没有关于 Mamba 模型训练数据规模或隐藏状态维度的信息。",
+    "original_answer": "当前证据不足。提供的八篇论文上下文中没有 Mamba 论文，也没有关于 Mamba 模型训练数据规模或隐藏状态维度的信息。",
+    "repair_candidate": null,
+    "initial_check": {
+      "cited_numbers": [],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": false,
+      "require_citations": false,
+      "structure_passed": true,
+      "cited_sources": [],
+      "semantic_support": "requires_manual_review"
+    },
+    "final_check": {
+      "cited_numbers": [],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": false,
+      "require_citations": false,
+      "structure_passed": true,
+      "cited_sources": [],
+      "semantic_support": "requires_manual_review"
+    },
+    "repair_attempted": false,
+    "normalization_applied": false,
+    "repair_applied": false,
+    "repair_response": null,
+    "repair_prompt": null,
+    "unresolved_blocks": [],
+    "status": "not_needed",
+    "note": "Citation structure only; source relevance and claim meaning are not automatically verified."
+  },
+  "holdout_cached_chat_responses": 0,
+  "citation_structure": {
+    "cited_numbers": [],
+    "invalid_numbers": [],
+    "malformed_markers": [],
+    "has_citations": false,
+    "require_citations": false,
+    "structure_passed": true,
+    "cited_sources": [],
+    "semantic_support": "requires_manual_review"
+  },
+  "status": "completed",
+  "api_calls": [
+    {
+      "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nUsing only the supplied eight-paper corpus, what training-data size and hidden-state dimension are specified for the Mamba model in the Mamba paper?\n",
+      "response": {
+        "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+        "requested_model": "cn:deepseek-v4.1-flash",
+        "reported_model": "deepseek-v4.1-flash",
+        "usage": {
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 384,
+          "cached_tokens": 384,
+          "completion_thinking_tokens": 0,
+          "completion_tokens": 19,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "credit": 0.01,
+          "prompt_cache_hit_tokens": 384,
+          "prompt_cache_miss_tokens": 268,
+          "prompt_cache_write_tokens": 0,
+          "prompt_tokens": 652,
+          "prompt_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 384,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "total_tokens": 671
+        },
+        "finish_reason": "stop",
+        "request_parameters": {
+          "model": "cn:deepseek-v4.1-flash",
+          "stream": false,
+          "thinking": {
+            "type": "disabled"
+          },
+          "temperature": 0,
+          "max_tokens": 4096
+        }
+      },
+      "elapsed_seconds": 1.77
+    },
+    {
+      "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\n[1] Source: 2310.11511v1.pdf | Page: 9 | Section: 5.2 ANALYSIS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\n4. In this ablation experiment, we use a training instance size of 50k for a more efficient exploration of training variations. Later in this section, we conduct an analysis of the effect of training data size. We conduct the ablation studies on three datasets, PopQA, PubHealth, and ASQA. On ASQA, we evaluate models on sampled 150 instances and exclude ablations involving adaptive or no retrieval processes. We show in Table 3a the ablation results.\n\n[2] Source: 2310.11511v1.pdf | Page: 10 | Section: 5.2 ANALYSIS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nOn one hand, performance deterioration by retrieving less is smaller on PubHealth but larger in PopQA. Effects of training data size. We conduct an analysis of how the data scale affects the model’s performance. In particular, we randomly sample 5k, 10k, 20k, and 50k instances from our original 150k training instances, and fine-tune four SELF-RAG 7B variants on those subsets.\n\n[3] Source: 2005.11401v4.pdf | Page: 4 | Section: 3.2 Abstractive Question Answering\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nThe task consists of questions, ten gold passages retrieved from a search engine for each question, and a full sentence answer annotated from the retrieved passages. We do not use the supplied passages, only the questions and answers, to treat\n\n[4] Source: 2004.04906v3.pdf | Page: 7 | Section: 6.1 End-to-end QA System\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nSpeciﬁcally, let Pi ∈RL×h (1 ≤i ≤k) be a BERT (base, uncased in our experiments) rep- resentation for the i-th passage, where L is the maximum length of the passage and h the hidden dimension. The probabilities of a token being the starting/ending positions of an answer span and a passage being selected are deﬁned as: \u0000 \u0001 Pstart,i(s) = softmax Piwstart s, (3) \u0000 \u0001 Pend,i(t) = softmax Piwend t, (4) \u0000ˆP⊺wselected \u0001 Pselected(i) = softmax i, (5) ] ∈Rh×k and where ˆP = [P[CLS] , .\n\n[5] Source: 2310.11511v1.pdf | Page: 10 | Section: 5.2 ANALYSIS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nAcross all datasets, increasing data size often shows upward trajectories and the improvements are significantly larger in PopQA and ASQA, while we do not observed such significant improvements on Llama2-FT7B when increasing the training data from 50k to 150k. These results also indicate that further expanding the training data of SELF-RAG may lead to further improvements, although in this work we limit our training data size to 150k. Human evaluations.\n\n[6] Source: Attention is all you need.pdf | Page: 2 | Section: 1 Introduction\nRecurrent models typically factor computation along the symbol positions of the input and output sequences. Aligning the positions to steps in computation time, they generate a sequence of hidden states ht, as a function of the previous hidden state ht−1 and the input for position t. This inherently sequential nature precludes parallelization within training examples, which becomes critical at longer sequence lengths, as memory constraints limit batching across examples.\n\n[7] Source: VGG.pdf | Page: 8 | Section: 4.5 COMPARISON WITH THE STATE OF THE ART\nOnly the results obtained without outside training data are reported. Method top-1 val. error (%) top-5 val.\n\n[8] Source: 2005.11401v4.pdf | Page: 12 | Section: 6 Discussion\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\n[20] Kelvin Guu, Kenton Lee, Zora Tung, Panupong Pasupat, and Ming-Wei Chang. REALM: Retrieval-augmented language model pre-training. ArXiv, abs/2002.08909, 2020. URL https: //arxiv.org/abs/2002.08909. [21] Tatsunori B Hashimoto, Kelvin Guu, Yonatan Oren, and Percy S Liang. A retrieve-and-edit framework for predicting structured outputs. Wallach, H. Larochelle, K. Grauman, N. Cesa-Bianchi, and R.\n\n[9] Source: Attention is all you need.pdf | Page: 7 | Section: 5.1 Training Data and Batching\n5.1 Training Data and Batching We trained on the standard WMT 2014 English-German dataset consisting of about 4.5 million sentence pairs.\n\n[10] Source: 2004.04906v3.pdf | Page: 2 | Section: 1 Introduction\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nIn this paper, we address the question: can we train a better dense embedding model using only pairs of questions and passages (or answers), with- out additional pretraining? By leveraging the now standard BERT pretrained model (Devlin et al., 2019) and a dual-encoder architecture (Bromley et al., 1994), we focus on developing the right training scheme using a relatively small number of question and passage pairs.\n\nQuestion:\nUsing only the supplied eight-paper corpus, what training-data size and hidden-state dimension are specified for the Mamba model in the Mamba paper?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+      "response": {
+        "answer": "当前证据不足。提供的八篇论文上下文中没有 Mamba 论文，也没有关于 Mamba 模型训练数据规模或隐藏状态维度的信息。",
+        "requested_model": "cn:deepseek-v4.1-flash",
+        "reported_model": "deepseek-v4.1-flash",
+        "usage": {
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 128,
+          "cached_tokens": 128,
+          "completion_thinking_tokens": 0,
+          "completion_tokens": 32,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "credit": 0.05,
+          "prompt_cache_hit_tokens": 128,
+          "prompt_cache_miss_tokens": 1648,
+          "prompt_cache_write_tokens": 0,
+          "prompt_tokens": 1776,
+          "prompt_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 128,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "total_tokens": 1808
+        },
+        "finish_reason": "stop",
+        "request_parameters": {
+          "model": "cn:deepseek-v4.1-flash",
+          "stream": false,
+          "thinking": {
+            "type": "disabled"
+          },
+          "temperature": 0,
+          "max_tokens": 4096
+        }
+      },
+      "elapsed_seconds": 2.06
+    }
+  ],
+  "model_calls": 2,
+  "evaluation_code_sha256": {
+    "main.py": "85b1f60ffd76b9c81e2336da79f903bb212b7cea7998cd50a863aae01d3439d6",
+    "llm.py": "b68fcd071621630f08ad2cbcb848a6757a6a5beca6b9e900d3a8c0bd61039861",
+    "evaluation/run_answer_evaluation.py": "bc512f96499b8cb196f8ab57c68408762acfc085aacc82673a685f02145f1650",
+    "src/api_llm.py": "2adea1ea9a8268d1260e0f8e2d7a80d9bff42143812b140e54f3003c62e2d2d4",
+    "src/bm25_retriever.py": "06a12c701da323963166a8c2a9206ead1281e59649efbbe0aff1293ace8c7e92",
+    "src/chunk_storage.py": "794ea2fa58826b895711a7d0f39a244f79e2a91aa39f99bec36955a235430630",
+    "src/chunking_recursive.py": "d4d6aae8d4f7b7f72503eadb440e72279e9d8fe1834b86cefd8f8d519fd1528f",
+    "src/chunking_semantic.py": "524e0c902cea605cfc5af30a15cdf5399b05807ad1ff49e2c16c94e0e29e22b8",
+    "src/citation_validation.py": "b9bd5c48a839a7bc62b79b38248889ade65fad1b3b654dc135c06cc4f9bb682b",
+    "src/embedding.py": "4b0e2699c9aeb23eb5db5585b64aa088ad9b1be4b01e33c95692f4f5f9624390",
+    "src/evidence_gap.py": "5e0405de84a6d4bd6268cb3270f75a5a217446d780ec35fabb0f008021198109",
+    "src/grounded_evidence.py": "78a7e63512970492f4e52050cb8b2312e2658281acfe979eb4476516ff8c2663",
+    "src/hybrid_retriever.py": "3306823530036b662f04e5790b1e74cb69b01051367385d33b388b87119fbe7d",
+    "src/hyde.py": "b0482baf2559e44d5d1d8c5a1bd31db046df279de53be70c7e8fb83bbcf32e72",
+    "src/knowledge_base.py": "dfb63dfafd00d463a194fe934d1c2f5a7a55d98b2ed5db95fc35b74606759474",
+    "src/numeric_evidence.py": "492fb546e6bc89b881843ece4b4582e533aec5aabbc58d61cd1cf158c4bac3d0",
+    "src/pdf_loader.py": "1f527ed51d318304858e4d95ffb85bd9c966961ef02157e9ce4f74b86f8fec64",
+    "src/query_decomposer.py": "52d3f2329e88d57ca8e4b150925710f13905d18d4b10d006ca523602e0aa41f2",
+    "src/query_rewriter.py": "404152aa9326445ecce721cd46be75fa14e19f99ff0a8fe7318e0c47f909d2c3",
+    "src/reranker.py": "36380b730f4bcfcbdd982cdd0f63a389d6a4172607f19f4cc7370df1f9666cba",
+    "src/retriever.py": "1382bbb41922a0bfe2da00e16a6d31e4448861e4a31544abdbfc171ec34cab3a",
+    "src/vector_store.py": "161d8c6597038788d195f034b3ea77ac391d7497e53c6dc1a7dbcf5f83a7fecf",
+    "/Users/j/.codex/.chatgpt-projects/g-p-6acc943a50508191b19cc746a2de0b5d/work/holdout-v1-20261020/candidate/holdout_v1_questions_en.json": "085367e8e613fddd247cf9cfc6a1b479b6e97fbaa0985ab338d29746595707aa",
+    "evaluation/answer_review_protocol.md": "614a18fe1babb3cffc96aa7aaa8956c3d84b94a1ca10f37234fd8cd00ed3bf27",
+    "data/processed/versions/all-papers-8-20261020/faiss.index": "ff1f4a3e38e20c0275ba79d805e6475639b3cea7a7a583f9c18c67ec8e40a2ed",
+    "data/processed/versions/all-papers-8-20261020/chunks.json": "3e63d75abbe164ff8e135b1d66fd6b02d9479b2e037e289a726e7c542464593a",
+    "data/processed/versions/all-papers-8-20261020/manifest.json": "9c4e2c26b4f11fe7baf526595630cbee2d325416ec0e497f417975fbd60779ef"
+  },
+  "elapsed_seconds": 9.86
+}

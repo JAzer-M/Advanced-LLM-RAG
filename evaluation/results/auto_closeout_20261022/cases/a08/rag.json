@@ -1,0 +1,955 @@
+{
+  "query": "What exact monetary training bill in US dollars and energy consumption in kWh does the original DPR paper report for training its main retriever?",
+  "decomposition": {
+    "needs_decomposition": true,
+    "sub_queries": [
+      "What exact monetary training bill in US dollars does the original DPR paper report for training its main retriever?",
+      "What exact energy consumption in kWh does the original DPR paper report for training its main retriever?"
+    ],
+    "status": "accepted",
+    "proposed_count": 2
+  },
+  "knowledge_base": {
+    "version": "all-papers-8-20261020",
+    "chunk_count": 1397,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/manifest.json",
+    "manifest_sha256": "9c4e2c26b4f11fe7baf526595630cbee2d325416ec0e497f417975fbd60779ef",
+    "files": {
+      "faiss.index": "ff1f4a3e38e20c0275ba79d805e6475639b3cea7a7a583f9c18c67ec8e40a2ed",
+      "chunks.json": "3e63d75abbe164ff8e135b1d66fd6b02d9479b2e037e289a726e7c542464593a"
+    }
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 169,
+    "global_top_ids": [
+      435,
+      437,
+      779,
+      429,
+      442,
+      493,
+      529,
+      748,
+      434,
+      730
+    ],
+    "protected_ids": [
+      435
+    ],
+    "sub_query_evidence": [
+      {
+        "query": "What exact monetary training bill in US dollars does the original DPR paper report for training its main retriever?",
+        "top_ids": [
+          435,
+          779,
+          437
+        ]
+      },
+      {
+        "query": "What exact energy consumption in kWh does the original DPR paper report for training its main retriever?",
+        "top_ids": [
+          435,
+          779,
+          437
+        ]
+      }
+    ],
+    "retrieval_anchor_ids": [
+      536
+    ],
+    "evidence_completion": {
+      "requested_sources": [
+        "2004.04906v3.pdf"
+      ],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        435,
+        437,
+        779,
+        429,
+        442,
+        493,
+        529,
+        748,
+        434,
+        536
+      ],
+      "retained_local_ids": [
+        435,
+        437,
+        779
+      ],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        435,
+        437,
+        779,
+        429,
+        442,
+        493,
+        529,
+        748,
+        434,
+        536
+      ],
+      "elapsed_seconds": 0.000215
+    }
+  },
+  "selected_ids": [
+    435,
+    437,
+    779,
+    429,
+    442,
+    493,
+    529,
+    748,
+    434,
+    536
+  ],
+  "context": "Original passages:\n[1] Source: 2004.04906v3.pdf | Page: 5 | Section: 5 Experiments: Passage Retrieval\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nSee text for more details. traditional retrieval methods, the effects of different training schemes and the run-time efﬁciency. The DPR model used in our main experiments is trained using the in-batch negative setting (Sec- tion 3.2) with a batch size of 128 and one additional BM25 negative passage per question.\n\n[2] Source: 2004.04906v3.pdf | Page: 5 | Section: 5 Experiments: Passage Retrieval\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nTo this end, we train a multi- dataset encoder by combining training data from all datasets excluding SQuAD.8 In addition to DPR, we also present the results of BM25, the traditional retrieval method9 and BM25+DPR, using a linear combination of their scores as the new ranking function. Speciﬁcally, we obtain two initial sets of top-2000 passages based on BM25 and DPR, respectively, and rerank the union of them using BM25(q,p) + λ · sim(q, p) as the ranking function.\n\n[3] Source: 2005.11401v4.pdf | Page: 5 | Section: 4.1 Open-domain Question Answering\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nIt is worth noting that RAG’s retriever is initialized using DPR’s retriever, which uses retrieval supervision on Natural Questions and TriviaQA. RAG compares favourably to the DPR QA system, which uses a BERT-based “cross- encoder” to re-rank documents, along with an extractive reader. RAG demonstrates that neither a re-ranker nor extractive reader is necessary for state-of-the-art performance. There are several advantages to generating answers even when it is possible to extract them.\n\n[4] Source: 2004.04906v3.pdf | Page: 4 | Section: 4.2 Question Answering Datasets\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nDataset Train Dev Test Natural Questions 79,168 58,880 8,757 3,610 TriviaQA 78,785 60,413 8,837 11,313 WebQuestions 3,417 2,474 361 2,032 CuratedTREC 1,353 1,125 133 694 SQuAD 78,713 70,096 8,886 10,570 Table 1: Number of questions in each QA dataset. The two columns of Train denote the original training ex- amples in the dataset and the actual questions used for training DPR after ﬁltering. See text for more details.\n\n[5] Source: 2004.04906v3.pdf | Page: 5 | Section: 5.1 Main Results\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nOur DPR trained using 1,000 examples already outperforms BM25. tiple datasets, TREC, the smallest dataset of the ﬁve, beneﬁts greatly from more training examples. In contrast, Natural Questions and WebQuestions improve modestly and TriviaQA degrades slightly. Results can be improved further in some cases by combining DPR with BM25 in both single- and multi-dataset settings. We conjecture that the lower performance on SQuAD is due to two reasons.\n\n[6] Source: 2004.04906v3.pdf | Page: 9 | Section: 7 Related Work\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nDPR has also been used as an important mod- ule in very recent work. For instance, extending the idea of leveraging hard negatives, Xiong et al. (2020a) use the retrieval model trained in the pre- vious iteration to discover new negatives and con- struct a different set of examples in each training iteration. Starting from our trained DPR model, they show that the retrieval performance can be further improved.\n\n[7] Source: 2004.04906v3.pdf | Page: 12 | Section: 8 Conclusion\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nUsing the question and answer to- gether as the query, we run Lucene-BM25 and pick the top passage that contains the answer as the pos- itive passage. Table 5 shows the performance of DPR when trained using the original setting and the distant supervision setting. B Alternative Similarity Functions & Triplet Loss In addition to dot product (DP) and negative log- likelihood based on softmax (NLL), we also exper- iment with Euclidean distance (L2) and the triplet loss.\n\n[8] Source: 2005.11401v4.pdf | Page: 3 | Section: 2.2 Retriever: DPR\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nCalculating top-k(pη(·|x)), the list of k documents z with highest prior probability pη(z|x), is a Maximum Inner Product Search (MIPS) problem, which can be approximately solved in sub-linear time [23]. We use a pre-trained bi-encoder from DPR to initialize our retriever and to build the document index. This retriever was trained to retrieve documents which contain answers to TriviaQA [24] questions and Natural Questions [29].\n\n[9] Source: 2004.04906v3.pdf | Page: 5 | Section: 5 Experiments: Passage Retrieval\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nTraining Retriever Top-20 NQ TriviaQA WQ None BM25 59.1 66.9 55.0 78.4 79.4 73.2 DPR Single BM25 + DPR 76.6 79.8 71.0 79.4 75.0 DPR 78.8 Multi 79.9 BM25 + DPR 78.0 74.7 Table 2: Top-20 & Top-100 retrieval accuracy on test sets, measured as the percentage of top 20/100 retrieved passages that contain the answer. Single and Multi denote that our Dense Passage Retriever (DPR) was trained using individial or combined training datasets (all the datasets excluding SQuAD).\n\n[10] Source: 2004.04906v3.pdf | Page: 12 | Section: 8 Conclusion\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nThe salient phrase “Thoros of Myr” is critical, and DPR is unable to capture it. D Joint Training of Retriever and Reader We ﬁx the passage encoder in our joint-training scheme while allowing only the question encoder to receive backpropagation signal from the com- bined (retriever + reader) loss function. This allows us to leverage the HNSW-based FAISS index for efﬁcient low-latency retrieving, without reindexing the passages during model updates.\n\nEvidence guidance:\n- Rule-based subject attribution: DPR; passage: “DPR has also been used as an important mod- ule in very recent work.” [6]\n- Rule-based subject attribution: DPR; passage: “For instance, extending the idea of leveraging hard negatives, Xiong et al.” [6]\n- Rule-based subject attribution: DPR; passage: “(2020a) use the retrieval model trained in the pre- vious iteration to discover new negatives and con- struct a different set of examples in each training iteration.” [6]\n- Rule-based subject attribution: DPR; passage: “Starting from our trained DPR model, they show that the retrieval performance can be further improved.” [6]\n- Rule-based subject attribution: DPR; passage: “The salient phrase “Thoros of Myr” is critical, and DPR is unable to capture it.” [10]",
+  "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\nOriginal passages:\n[1] Source: 2004.04906v3.pdf | Page: 5 | Section: 5 Experiments: Passage Retrieval\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nSee text for more details. traditional retrieval methods, the effects of different training schemes and the run-time efﬁciency. The DPR model used in our main experiments is trained using the in-batch negative setting (Sec- tion 3.2) with a batch size of 128 and one additional BM25 negative passage per question.\n\n[2] Source: 2004.04906v3.pdf | Page: 5 | Section: 5 Experiments: Passage Retrieval\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nTo this end, we train a multi- dataset encoder by combining training data from all datasets excluding SQuAD.8 In addition to DPR, we also present the results of BM25, the traditional retrieval method9 and BM25+DPR, using a linear combination of their scores as the new ranking function. Speciﬁcally, we obtain two initial sets of top-2000 passages based on BM25 and DPR, respectively, and rerank the union of them using BM25(q,p) + λ · sim(q, p) as the ranking function.\n\n[3] Source: 2005.11401v4.pdf | Page: 5 | Section: 4.1 Open-domain Question Answering\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nIt is worth noting that RAG’s retriever is initialized using DPR’s retriever, which uses retrieval supervision on Natural Questions and TriviaQA. RAG compares favourably to the DPR QA system, which uses a BERT-based “cross- encoder” to re-rank documents, along with an extractive reader. RAG demonstrates that neither a re-ranker nor extractive reader is necessary for state-of-the-art performance. There are several advantages to generating answers even when it is possible to extract them.\n\n[4] Source: 2004.04906v3.pdf | Page: 4 | Section: 4.2 Question Answering Datasets\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nDataset Train Dev Test Natural Questions 79,168 58,880 8,757 3,610 TriviaQA 78,785 60,413 8,837 11,313 WebQuestions 3,417 2,474 361 2,032 CuratedTREC 1,353 1,125 133 694 SQuAD 78,713 70,096 8,886 10,570 Table 1: Number of questions in each QA dataset. The two columns of Train denote the original training ex- amples in the dataset and the actual questions used for training DPR after ﬁltering. See text for more details.\n\n[5] Source: 2004.04906v3.pdf | Page: 5 | Section: 5.1 Main Results\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nOur DPR trained using 1,000 examples already outperforms BM25. tiple datasets, TREC, the smallest dataset of the ﬁve, beneﬁts greatly from more training examples. In contrast, Natural Questions and WebQuestions improve modestly and TriviaQA degrades slightly. Results can be improved further in some cases by combining DPR with BM25 in both single- and multi-dataset settings. We conjecture that the lower performance on SQuAD is due to two reasons.\n\n[6] Source: 2004.04906v3.pdf | Page: 9 | Section: 7 Related Work\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nDPR has also been used as an important mod- ule in very recent work. For instance, extending the idea of leveraging hard negatives, Xiong et al. (2020a) use the retrieval model trained in the pre- vious iteration to discover new negatives and con- struct a different set of examples in each training iteration. Starting from our trained DPR model, they show that the retrieval performance can be further improved.\n\n[7] Source: 2004.04906v3.pdf | Page: 12 | Section: 8 Conclusion\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nUsing the question and answer to- gether as the query, we run Lucene-BM25 and pick the top passage that contains the answer as the pos- itive passage. Table 5 shows the performance of DPR when trained using the original setting and the distant supervision setting. B Alternative Similarity Functions & Triplet Loss In addition to dot product (DP) and negative log- likelihood based on softmax (NLL), we also exper- iment with Euclidean distance (L2) and the triplet loss.\n\n[8] Source: 2005.11401v4.pdf | Page: 3 | Section: 2.2 Retriever: DPR\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nCalculating top-k(pη(·|x)), the list of k documents z with highest prior probability pη(z|x), is a Maximum Inner Product Search (MIPS) problem, which can be approximately solved in sub-linear time [23]. We use a pre-trained bi-encoder from DPR to initialize our retriever and to build the document index. This retriever was trained to retrieve documents which contain answers to TriviaQA [24] questions and Natural Questions [29].\n\n[9] Source: 2004.04906v3.pdf | Page: 5 | Section: 5 Experiments: Passage Retrieval\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nTraining Retriever Top-20 NQ TriviaQA WQ None BM25 59.1 66.9 55.0 78.4 79.4 73.2 DPR Single BM25 + DPR 76.6 79.8 71.0 79.4 75.0 DPR 78.8 Multi 79.9 BM25 + DPR 78.0 74.7 Table 2: Top-20 & Top-100 retrieval accuracy on test sets, measured as the percentage of top 20/100 retrieved passages that contain the answer. Single and Multi denote that our Dense Passage Retriever (DPR) was trained using individial or combined training datasets (all the datasets excluding SQuAD).\n\n[10] Source: 2004.04906v3.pdf | Page: 12 | Section: 8 Conclusion\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nThe salient phrase “Thoros of Myr” is critical, and DPR is unable to capture it. D Joint Training of Retriever and Reader We ﬁx the passage encoder in our joint-training scheme while allowing only the question encoder to receive backpropagation signal from the com- bined (retriever + reader) loss function. This allows us to leverage the HNSW-based FAISS index for efﬁcient low-latency retrieving, without reindexing the passages during model updates.\n\nEvidence guidance:\n- Rule-based subject attribution: DPR; passage: “DPR has also been used as an important mod- ule in very recent work.” [6]\n- Rule-based subject attribution: DPR; passage: “For instance, extending the idea of leveraging hard negatives, Xiong et al.” [6]\n- Rule-based subject attribution: DPR; passage: “(2020a) use the retrieval model trained in the pre- vious iteration to discover new negatives and con- struct a different set of examples in each training iteration.” [6]\n- Rule-based subject attribution: DPR; passage: “Starting from our trained DPR model, they show that the retrieval performance can be further improved.” [6]\n- Rule-based subject attribution: DPR; passage: “The salient phrase “Thoros of Myr” is critical, and DPR is unable to capture it.” [10]\n\nQuestion:\nWhat exact monetary training bill in US dollars and energy consumption in kWh does the original DPR paper report for training its main retriever?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": " traditional retrieval methods, the effects of different training schemes and the run-time efﬁciency.",
+        "evidence_start": 26,
+        "evidence_end": 127,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            435,
+            434
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 435,
+        "page": 5,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "2) with a batch size of 128 and one additional BM25 negative passage per question.",
+        "evidence_start": 231,
+        "evidence_end": 313,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            435,
+            434
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 435,
+        "page": 5,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "8 In addition to DPR, we also present the results of BM25, the traditional retrieval method9 and BM25+DPR, using a linear combination of their scores as the new ranking function.",
+        "evidence_start": 108,
+        "evidence_end": 286,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            437,
+            436
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 437,
+        "page": 5,
+        "citations": [
+          2
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Speciﬁcally, we obtain two initial sets of top-2000 passages based on BM25 and DPR, respectively, and rerank the union of them using BM25(q,p) + λ · sim(q, p) as the ranking function.",
+        "evidence_start": 286,
+        "evidence_end": 470,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            437,
+            436
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 437,
+        "page": 5,
+        "citations": [
+          2
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "It is worth noting that RAG’s retriever is initialized using DPR’s retriever, which uses retrieval supervision on Natural Questions and TriviaQA.",
+        "evidence_start": 0,
+        "evidence_end": 145,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            779
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 779,
+        "page": 5,
+        "citations": [
+          3
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " RAG compares favourably to the DPR QA system, which uses a BERT-based “cross- encoder” to re-rank documents, along with an extractive reader.",
+        "evidence_start": 145,
+        "evidence_end": 287,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            779
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 779,
+        "page": 5,
+        "citations": [
+          3
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " RAG demonstrates that neither a re-ranker nor extractive reader is necessary for state-of-the-art performance.",
+        "evidence_start": 287,
+        "evidence_end": 398,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            779
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 779,
+        "page": 5,
+        "citations": [
+          3
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " There are several advantages to generating answers even when it is possible to extract them.",
+        "evidence_start": 398,
+        "evidence_end": 491,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            779
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 779,
+        "page": 5,
+        "citations": [
+          3
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Dataset Train Dev Test Natural Questions 79,168 58,880 8,757 3,610 TriviaQA 78,785 60,413 8,837 11,313 WebQuestions 3,417 2,474 361 2,032 CuratedTREC 1,353 1,125 133 694 SQuAD 78,713 70,096 8,886 10,570 Table 1: Number of questions in each QA dataset.",
+        "evidence_start": 0,
+        "evidence_end": 251,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            429
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 429,
+        "page": 4,
+        "citations": [
+          4
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The two columns of Train denote the original training ex- amples in the dataset and the actual questions used for training DPR after ﬁltering.",
+        "evidence_start": 251,
+        "evidence_end": 394,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            429
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 429,
+        "page": 4,
+        "citations": [
+          4
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Our DPR trained using 1,000 examples already outperforms BM25.",
+        "evidence_start": 0,
+        "evidence_end": 62,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            442,
+            441
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 442,
+        "page": 5,
+        "citations": [
+          5
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " tiple datasets, TREC, the smallest dataset of the ﬁve, beneﬁts greatly from more training examples.",
+        "evidence_start": 62,
+        "evidence_end": 162,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            442,
+            441
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 442,
+        "page": 5,
+        "citations": [
+          5
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In contrast, Natural Questions and WebQuestions improve modestly and TriviaQA degrades slightly.",
+        "evidence_start": 162,
+        "evidence_end": 259,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            442
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 442,
+        "page": 5,
+        "citations": [
+          5
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Results can be improved further in some cases by combining DPR with BM25 in both single- and multi-dataset settings.",
+        "evidence_start": 259,
+        "evidence_end": 376,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            442
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 442,
+        "page": 5,
+        "citations": [
+          5
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We conjecture that the lower performance on SQuAD is due to two reasons.",
+        "evidence_start": 376,
+        "evidence_end": 449,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            442
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 442,
+        "page": 5,
+        "citations": [
+          5
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "DPR has also been used as an important mod- ule in very recent work.",
+        "evidence_start": 0,
+        "evidence_end": 68,
+        "subject": "DPR",
+        "identity": {
+          "subject": "DPR",
+          "basis": "explicit_named_clause",
+          "context_chunk_ids": [
+            493
+          ],
+          "identity_quote": "DPR has also been used as an important mod- ule in very recent work. For instance, extending the idea of leveraging hard negatives, Xiong et al. (2020a) use the retrieval model trained in the pre- vious iteration to discover new negatives and con- struct a different set of examples in each training iteration. Starting from our trained DPR model, they show that the retrieval performance can be further improved.",
+          "identity_chunk_id": 493
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 493,
+        "page": 9,
+        "citations": [
+          6
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " For instance, extending the idea of leveraging hard negatives, Xiong et al.",
+        "evidence_start": 68,
+        "evidence_end": 144,
+        "subject": "DPR",
+        "identity": {
+          "subject": "DPR",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            493
+          ],
+          "identity_quote": "DPR has also been used as an important mod- ule in very recent work.",
+          "identity_chunk_id": 493
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 493,
+        "page": 9,
+        "citations": [
+          6
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " (2020a) use the retrieval model trained in the pre- vious iteration to discover new negatives and con- struct a different set of examples in each training iteration.",
+        "evidence_start": 144,
+        "evidence_end": 310,
+        "subject": "DPR",
+        "identity": {
+          "subject": "DPR",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            493
+          ],
+          "identity_quote": "DPR has also been used as an important mod- ule in very recent work. For instance, extending the idea of leveraging hard negatives, Xiong et al.",
+          "identity_chunk_id": 493
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 493,
+        "page": 9,
+        "citations": [
+          6
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Starting from our trained DPR model, they show that the retrieval performance can be further improved.",
+        "evidence_start": 310,
+        "evidence_end": 413,
+        "subject": "DPR",
+        "identity": {
+          "subject": "DPR",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            493
+          ],
+          "identity_quote": "DPR has also been used as an important mod- ule in very recent work. For instance, extending the idea of leveraging hard negatives, Xiong et al. (2020a) use the retrieval model trained in the pre- vious iteration to discover new negatives and con- struct a different set of examples in each training iteration.",
+          "identity_chunk_id": 493
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 493,
+        "page": 9,
+        "citations": [
+          6
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Using the question and answer to- gether as the query, we run Lucene-BM25 and pick the top passage that contains the answer as the pos- itive passage.",
+        "evidence_start": 0,
+        "evidence_end": 150,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            529,
+            528
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 529,
+        "page": 12,
+        "citations": [
+          7
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Table 5 shows the performance of DPR when trained using the original setting and the distant supervision setting.",
+        "evidence_start": 150,
+        "evidence_end": 264,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            529,
+            528
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 529,
+        "page": 12,
+        "citations": [
+          7
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " B Alternative Similarity Functions & Triplet Loss In addition to dot product (DP) and negative log- likelihood based on softmax (NLL), we also exper- iment with Euclidean distance (L2) and the triplet loss.",
+        "evidence_start": 264,
+        "evidence_end": 471,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            529
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 529,
+        "page": 12,
+        "citations": [
+          7
+        ],
+        "record_id": "E22"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Calculating top-k(pη(·|x)), the list of k documents z with highest prior probability pη(z|x), is a Maximum Inner Product Search (MIPS) problem, which can be approximately solved in sub-linear time [23].",
+        "evidence_start": 0,
+        "evidence_end": 202,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            748,
+            747
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 748,
+        "page": 3,
+        "citations": [
+          8
+        ],
+        "record_id": "E23"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We use a pre-trained bi-encoder from DPR to initialize our retriever and to build the document index.",
+        "evidence_start": 202,
+        "evidence_end": 304,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            748
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 748,
+        "page": 3,
+        "citations": [
+          8
+        ],
+        "record_id": "E24"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " This retriever was trained to retrieve documents which contain answers to TriviaQA [24] questions and Natural Questions [29].",
+        "evidence_start": 304,
+        "evidence_end": 430,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            748
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 748,
+        "page": 3,
+        "citations": [
+          8
+        ],
+        "record_id": "E25"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "7 Table 2: Top-20 & Top-100 retrieval accuracy on test sets, measured as the percentage of top 20/100 retrieved passages that contain the answer.",
+        "evidence_start": 167,
+        "evidence_end": 312,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            434
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 434,
+        "page": 5,
+        "citations": [
+          9
+        ],
+        "record_id": "E26"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Single and Multi denote that our Dense Passage Retriever (DPR) was trained using individial or combined training datasets (all the datasets excluding SQuAD).",
+        "evidence_start": 312,
+        "evidence_end": 470,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            434
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 434,
+        "page": 5,
+        "citations": [
+          9
+        ],
+        "record_id": "E27"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "The salient phrase “Thoros of Myr” is critical, and DPR is unable to capture it.",
+        "evidence_start": 0,
+        "evidence_end": 80,
+        "subject": "DPR",
+        "identity": {
+          "subject": "DPR",
+          "basis": "explicit_named_clause",
+          "context_chunk_ids": [
+            536
+          ],
+          "identity_quote": "The salient phrase “Thoros of Myr” is critical, and DPR is unable to capture it. D Joint Training of Retriever and Reader We ﬁx the passage encoder in our joint-training scheme while allowing only the question encoder to receive backpropagation signal from the com- bined (retriever + reader) loss function. This allows us to leverage the HNSW-based FAISS index for efﬁcient low-latency retrieving, without reindexing the passages during model updates.",
+          "identity_chunk_id": 536
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 536,
+        "page": 12,
+        "citations": [
+          10
+        ],
+        "record_id": "E28"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " D Joint Training of Retriever and Reader We ﬁx the passage encoder in our joint-training scheme while allowing only the question encoder to receive backpropagation signal from the com- bined (retriever + reader) loss function.",
+        "evidence_start": 80,
+        "evidence_end": 307,
+        "subject": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "identity": {
+          "subject": "Dense Passage Retrieval for Open-Domain Question Answering",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            536
+          ],
+          "identity_quote": "The salient phrase “Thoros of Myr” is critical, and DPR is unable to capture it. D Joint Training of Retriever and Reader We ﬁx the passage encoder in our joint-training scheme while allowing only the question encoder to receive backpropagation signal from the com- bined (retriever + reader) loss function. This allows us to leverage the HNSW-based FAISS index for efﬁcient low-latency retrieving, without reindexing the passages during model updates.",
+          "identity_chunk_id": 536
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 536,
+        "page": 12,
+        "citations": [
+          10
+        ],
+        "record_id": "E29"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " This allows us to leverage the HNSW-based FAISS index for efﬁcient low-latency retrieving, without reindexing the passages during model updates.",
+        "evidence_start": 307,
+        "evidence_end": 452,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            536
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 536,
+        "page": 12,
+        "citations": [
+          10
+        ],
+        "record_id": "E30"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 435,
+        "text": "See text for more details. traditional retrieval methods, the effects of different training schemes and the run-time efﬁciency. The DPR model used in our main experiments is trained using the in-batch negative setting (Sec- tion 3.2) with a batch size of 128 and one additional BM25 negative passage per question.",
+        "source": "2004.04906v3.pdf",
+        "page": 5,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "5 Experiments: Passage Retrieval"
+      },
+      {
+        "chunk_id": 437,
+        "text": "To this end, we train a multi- dataset encoder by combining training data from all datasets excluding SQuAD.8 In addition to DPR, we also present the results of BM25, the traditional retrieval method9 and BM25+DPR, using a linear combination of their scores as the new ranking function. Speciﬁcally, we obtain two initial sets of top-2000 passages based on BM25 and DPR, respectively, and rerank the union of them using BM25(q,p) + λ · sim(q, p) as the ranking function.",
+        "source": "2004.04906v3.pdf",
+        "page": 5,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "5 Experiments: Passage Retrieval"
+      },
+      {
+        "chunk_id": 779,
+        "text": "It is worth noting that RAG’s retriever is initialized using DPR’s retriever, which uses retrieval supervision on Natural Questions and TriviaQA. RAG compares favourably to the DPR QA system, which uses a BERT-based “cross- encoder” to re-rank documents, along with an extractive reader. RAG demonstrates that neither a re-ranker nor extractive reader is necessary for state-of-the-art performance. There are several advantages to generating answers even when it is possible to extract them.",
+        "source": "2005.11401v4.pdf",
+        "page": 5,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "4.1 Open-domain Question Answering"
+      },
+      {
+        "chunk_id": 429,
+        "text": "Dataset Train Dev Test Natural Questions 79,168 58,880 8,757 3,610 TriviaQA 78,785 60,413 8,837 11,313 WebQuestions 3,417 2,474 361 2,032 CuratedTREC 1,353 1,125 133 694 SQuAD 78,713 70,096 8,886 10,570 Table 1: Number of questions in each QA dataset. The two columns of Train denote the original training ex- amples in the dataset and the actual questions used for training DPR after ﬁltering. See text for more details.",
+        "source": "2004.04906v3.pdf",
+        "page": 4,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "4.2 Question Answering Datasets"
+      },
+      {
+        "chunk_id": 442,
+        "text": "Our DPR trained using 1,000 examples already outperforms BM25. tiple datasets, TREC, the smallest dataset of the ﬁve, beneﬁts greatly from more training examples. In contrast, Natural Questions and WebQuestions improve modestly and TriviaQA degrades slightly. Results can be improved further in some cases by combining DPR with BM25 in both single- and multi-dataset settings. We conjecture that the lower performance on SQuAD is due to two reasons.",
+        "source": "2004.04906v3.pdf",
+        "page": 5,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "5.1 Main Results"
+      },
+      {
+        "chunk_id": 493,
+        "text": "DPR has also been used as an important mod- ule in very recent work. For instance, extending the idea of leveraging hard negatives, Xiong et al. (2020a) use the retrieval model trained in the pre- vious iteration to discover new negatives and con- struct a different set of examples in each training iteration. Starting from our trained DPR model, they show that the retrieval performance can be further improved.",
+        "source": "2004.04906v3.pdf",
+        "page": 9,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "7 Related Work"
+      },
+      {
+        "chunk_id": 529,
+        "text": "Using the question and answer to- gether as the query, we run Lucene-BM25 and pick the top passage that contains the answer as the pos- itive passage. Table 5 shows the performance of DPR when trained using the original setting and the distant supervision setting. B Alternative Similarity Functions & Triplet Loss In addition to dot product (DP) and negative log- likelihood based on softmax (NLL), we also exper- iment with Euclidean distance (L2) and the triplet loss.",
+        "source": "2004.04906v3.pdf",
+        "page": 12,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "8 Conclusion"
+      },
+      {
+        "chunk_id": 748,
+        "text": "Calculating top-k(pη(·|x)), the list of k documents z with highest prior probability pη(z|x), is a Maximum Inner Product Search (MIPS) problem, which can be approximately solved in sub-linear time [23]. We use a pre-trained bi-encoder from DPR to initialize our retriever and to build the document index. This retriever was trained to retrieve documents which contain answers to TriviaQA [24] questions and Natural Questions [29].",
+        "source": "2005.11401v4.pdf",
+        "page": 3,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "2.2 Retriever: DPR"
+      },
+      {
+        "chunk_id": 434,
+        "text": "Training Retriever Top-20 NQ TriviaQA WQ None BM25 59.1 66.9 55.0 78.4 79.4 73.2 DPR Single BM25 + DPR 76.6 79.8 71.0 79.4 75.0 DPR 78.8 Multi 79.9 BM25 + DPR 78.0 74.7 Table 2: Top-20 & Top-100 retrieval accuracy on test sets, measured as the percentage of top 20/100 retrieved passages that contain the answer. Single and Multi denote that our Dense Passage Retriever (DPR) was trained using individial or combined training datasets (all the datasets excluding SQuAD).",
+        "source": "2004.04906v3.pdf",
+        "page": 5,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "5 Experiments: Passage Retrieval"
+      },
+      {
+        "chunk_id": 536,
+        "text": "The salient phrase “Thoros of Myr” is critical, and DPR is unable to capture it. D Joint Training of Retriever and Reader We ﬁx the passage encoder in our joint-training scheme while allowing only the question encoder to receive backpropagation signal from the com- bined (retriever + reader) loss function. This allows us to leverage the HNSW-based FAISS index for efﬁcient low-latency retrieving, without reindexing the passages during model updates.",
+        "source": "2004.04906v3.pdf",
+        "page": 12,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "8 Conclusion"
+      }
+    ],
+    "selected_ids": [
+      435,
+      437,
+      779,
+      429,
+      442,
+      493,
+      529,
+      748,
+      434,
+      536
+    ]
+  },
+  "answer": "当前证据不足。提供的上下文未包含原版 DPR 论文报告的货币训练费用（美元）或能耗（kWh）数据，因此无法回答该问题。",
+  "original_answer": "当前证据不足。提供的上下文未包含原版 DPR 论文报告的货币训练费用（美元）或能耗（kWh）数据，因此无法回答该问题。",
+  "citation_validation": {
+    "answer": "当前证据不足。提供的上下文未包含原版 DPR 论文报告的货币训练费用（美元）或能耗（kWh）数据，因此无法回答该问题。",
+    "original_answer": "当前证据不足。提供的上下文未包含原版 DPR 论文报告的货币训练费用（美元）或能耗（kWh）数据，因此无法回答该问题。",
+    "repair_candidate": null,
+    "initial_check": {
+      "cited_numbers": [],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": false,
+      "require_citations": false,
+      "structure_passed": true,
+      "cited_sources": [],
+      "semantic_support": "requires_manual_review"
+    },
+    "final_check": {
+      "cited_numbers": [],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": false,
+      "require_citations": false,
+      "structure_passed": true,
+      "cited_sources": [],
+      "semantic_support": "requires_manual_review"
+    },
+    "repair_attempted": false,
+    "normalization_applied": false,
+    "repair_applied": false,
+    "repair_response": null,
+    "repair_prompt": null,
+    "unresolved_blocks": [],
+    "status": "not_needed",
+    "note": "Citation structure only; source relevance and claim meaning are not automatically verified."
+  },
+  "status": "completed"
+}

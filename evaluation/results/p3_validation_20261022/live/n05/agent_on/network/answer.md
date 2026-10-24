@@ -1,0 +1,3 @@
+当前证据不足，无法可靠回答以下需求：
+- RoFormer：According to the original RoFormer paper, what was the exact total cloud-compute bill in US dollars for its pretraining experiments?；RoFormer原始论文中预训练实验的确切云计算总费用（美元）未在所提供片段中出现；该财务/计算成本信息可能在实验或致谢部分，但当前片段未覆盖。
+本轮检索预算已用完，仍有上述内容未核实。

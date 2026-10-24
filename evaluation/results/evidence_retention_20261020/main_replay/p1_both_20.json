@@ -1,0 +1,1181 @@
+{
+  "id": "p1",
+  "mode": "both",
+  "top_k": 20,
+  "selected_ids": [
+    929,
+    947,
+    920,
+    1242,
+    737,
+    746,
+    739,
+    1046,
+    1390,
+    744,
+    1391,
+    966,
+    985,
+    924,
+    1113,
+    986,
+    719,
+    949,
+    1235,
+    750
+  ],
+  "diagnostics": {
+    "candidate_count": 205,
+    "global_top_ids": [
+      929,
+      947,
+      920,
+      1242,
+      737,
+      746,
+      739,
+      1046,
+      1390,
+      744,
+      1391,
+      966,
+      985,
+      924,
+      1113,
+      986,
+      719,
+      949,
+      1235,
+      1218
+    ],
+    "protected_ids": [
+      1242,
+      929
+    ],
+    "sub_query_evidence": [
+      {
+        "query": "Which generator does the original RAG paper use?",
+        "top_ids": [
+          1242,
+          746,
+          1390
+        ]
+      },
+      {
+        "query": "How many parameters does the generator used in the original RAG paper have?",
+        "top_ids": [
+          929,
+          920,
+          1242
+        ]
+      }
+    ],
+    "retrieval_anchor_ids": [
+      750
+    ],
+    "evidence_completion": {
+      "requested_sources": [
+        "2005.11401v4.pdf"
+      ],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        929,
+        947,
+        920,
+        1242,
+        737,
+        746,
+        739,
+        1046,
+        1390,
+        744,
+        1391,
+        966,
+        985,
+        924,
+        1113,
+        986,
+        719,
+        949,
+        1235,
+        750
+      ],
+      "retained_local_ids": [
+        929,
+        920,
+        1242,
+        746,
+        1390
+      ],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        929,
+        947,
+        920,
+        1242,
+        737,
+        746,
+        739,
+        1046,
+        1390,
+        744,
+        1391,
+        966,
+        985,
+        924,
+        1113,
+        986,
+        719,
+        949,
+        1235,
+        750
+      ],
+      "elapsed_seconds": 0.000266
+    }
+  },
+  "context": "Original passages:\n[1] Source: 2310.11511v1.pdf | Page: 1 | Section: None\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nGenerating reflection tokens makes the LM controllable during the inference phase, enabling it to tailor its behavior to diverse task requirements. Experiments show that SELF- RAG (7B and 13B parameters) significantly outperforms state-of-the-art LLMs and retrieval-augmented models on a diverse set of tasks.\n\n[2] Source: 2310.11511v1.pdf | Page: 2 | Section: 1 INTRODUCTION\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nEmpirical results on six tasks, including reasoning and long-form generation, demonstrate that SELF- RAG significantly outperforms pre-trained and instruction-tuned LLMs that have more parameters and widely adopted RAG approaches with higher citation accuracy. In particular, SELF-RAG outperforms retrieval-augmented ChatGPT on four tasks, Llama2-chat (Touvron et al., 2023) and Alpaca (Dubois et al., 2023) on all tasks.\n\n[3] Source: 2005.11401v4.pdf | Page: 18 | Section: 6 Discussion\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nG Parameters Our RAG models contain the trainable parameters for the BERT-base query and document encoder of DPR, with 110M parameters each (although we do not train the document encoder ourselves) and 406M trainable parameters from BART-large, 406M parameters, making a total of 626M trainable\n\n[4] Source: 2401.15884v3.pdf | Page: 3 | Section: 2 Related Work\nTitle: Corrective Retrieval Augmented Generation\nIf retrieved documents are irrelevant, the retrieval system can even exacerbate the factual error that LMs make. Advanced RAG Many advanced approaches have been developed from the original RAG in recent years (Zhang et al., 2024; Kim et al., 2024; Wang et al., 2024; Liu et al., 2024).\n\n[5] Source: 2005.11401v4.pdf | Page: 2 | Section: 2 Methods\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nAs shown in Figure 1, our models leverage two components: (i) a retriever pη(z|x) with parameters η that returns (top-K truncated) distributions over text passages given a query x and (ii) a generator pθ(yi|x, z, y1:i−1) parametrized 1Code to run experiments with RAG has been open-sourced as part of the HuggingFace Transform- ers Library [66] and can be found at https://github.com/huggingface/transformers/blob/master/ examples/rag/.\n\n[6] Source: 2005.11401v4.pdf | Page: 3 | Section: 2.1 Models\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nConcretely, the top K documents are retrieved using the retriever, and then the generator produces a distribution for the next output token for each document, before marginalizing, and repeating the process with the following output token, Formally, we deﬁne: pRAG-Token(y|x) ≈ N Y i X z∈top-k(p(·|x)) pη(z|x)pθ(yi|x, z, y1:i−1) Finally, we note that RAG can be used for sequence classiﬁcation tasks by considering the target class as a target sequence of length one, in which case RAG-Sequence and RAG-Token are equivalent.\n\n[7] Source: 2005.11401v4.pdf | Page: 3 | Section: 2 Methods\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nby θ that generates a current token based on a context of the previous i −1 tokens y1:i−1, the original input x and a retrieved passage z. To train the retriever and generator end-to-end, we treat the retrieved document as a latent variable. We propose two models that marginalize over the latent documents in different ways to produce a distribution over generated text. In one approach, RAG-Sequence, the model uses the same document to predict each target token.\n\n[8] Source: 2310.11511v1.pdf | Page: 10 | Section: 6 CONCLUSION\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nOur holistic evaluations on six tasks using multiple metrics demonstrate that SELF-RAG significantly outperforms LLMs with more parameters or with conventional retrieval-augmented generation approaches.\n\n[9] Source: 2401.15884v3.pdf | Page: 15 | Section: 6 Conclusion & Limitation\nTitle: Corrective Retrieval Augmented Generation\nThus an extra segmentation like the knowledge refinement is not required, related knowledge paragraphs can be directly selected with the evaluator similar to internal knowledge. In this way, the accuracy of the search outcomes can be ensured without compromising the quality and relevance of the information used for generation. Generator: As CRAG is a plug-and-play method, all generation models that can be uti- lized in RAG fit our approach as well.\n\n[10] Source: 2005.11401v4.pdf | Page: 3 | Section: 2.1 Models\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nConcretely, the top K documents are retrieved using the retriever, and the generator produces the output sequence probability for each document, which are then marginalized, pRAG-Sequence(y|x) ≈ X z∈top-k(p(·|x)) pη(z|x)pθ(y|x, z) = X z∈top-k(p(·|x)) pη(z|x) N Y i pθ(yi|x, z, y1:i−1) RAG-Token Model In the RAG-Token model we can draw a different latent document for each target token and marginalize accordingly.\n\n[11] Source: 2401.15884v3.pdf | Page: 15 | Section: 6 Conclusion & Limitation\nTitle: Corrective Retrieval Augmented Generation\nTo be consistent with baselines for comparison, we adopted LLaMA2 (Touvron et al., 2023b) for the generation. We first introduced the LLaMA2-hf- 7b from huggingface to generate responses. Since Self-RAG (Asai et al., 2024) fine-tuned LLaMA2 and reached a new state-of-the-art performance on several tasks, we further utilized the launched model, SelfRAG-LLaMA2-7b, as a new generator to be consistent with their work and study the specific improvement of our method.\n\n[12] Source: 2310.11511v1.pdf | Page: 4 | Section: 3.1 PROBLEM FORMALIZATION AND OVERVIEW\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nThe bottom three rows are three types of Critique tokens, and the bold text indicates the most desirable critique tokens. x, y, d indicate input, output, and a relevant passage, respectively. Algorithm 1 SELF-RAG Inference Require: Generator LM M, Retriever R, Large-scale passage collections {d1, .\n\n[13] Source: 2310.11511v1.pdf | Page: 5 | Section: 3.2.1 TRAINING THE CRITIC MODEL\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\n(1) Though the initial model can be any pre-trained LM, we use the same one as the generator LM (i.e., Llama 2-7B; Touvron et al. 2023) for C initialization. The critic achieves a higher than 90% agreement with GPT-4-based predictions on most reflection token categories (Appendix Table 5).\n\n[14] Source: 2005.11401v4.pdf | Page: 19 | Section: 6 Discussion\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nIn these cases, once retrieval had collapsed, the generator would learn to ignore the documents, and the RAG model would perform equivalently to BART. The collapse could be due to a less-explicit requirement for factual knowledge in some tasks, or the longer target sequences, which could result in less informative gradients for the retriever. Perez et al.\n\n[15] Source: 2310.11511v1.pdf | Page: 18 | Section: 6 CONCLUSION\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nAlgorithm 2 SELF-RAG Training 1: Input input-output data D = {X, Y }, generator M, C θ 2: Initialize C with a pre-trained LM 3: Sample data {Xsample, Y sample} ∼{X, Y } ▷Training Critic LM (Section 3.2.1) 4: for (x, y) ∈(Xsample, Y sample) do ▷Data collections for C 5: Prompt GPT-4 to collect a reflection token r for (x, y) 6: Add {(x, y, r)} to Dcritic 7: Update C with next token prediction loss ▷Critic learning; Eq.\n\n[16] Source: 2310.11511v1.pdf | Page: 5 | Section: 3.2.2 TRAINING THE GENERATOR MODEL\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\n3.2.2 TRAINING THE GENERATOR MODEL Data collection for generator. Given an input-output pair (x, y), we augment the original output y using the retrieval and critic models to create supervised data that precisely mimics the SELF- RAG inference-time process (Section 3.1). For each segment yt ∈y, we run C to assess whether additional passages could help to enhance generation. If retrieval is required, the retrieval special token Retrieve =Yes is added, and R retrieves the top K passages, D.\n\n[17] Source: 2005.11401v4.pdf | Page: 1 | Section: None\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nWe introduce RAG models where the parametric memory is a pre-trained seq2seq model and the non-parametric memory is a dense vector index of Wikipedia, accessed with a pre-trained neural retriever. We com- pare two RAG formulations, one which conditions on the same retrieved passages across the whole generated sequence, and another which can use different passages per token.\n\n[18] Source: 2310.11511v1.pdf | Page: 2 | Section: 2 RELATED WORK\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\n2 RELATED WORK Retrieval-Augmented Generation. Retrieval-Augmented Generation (RAG) augments the input space of LMs with retrieved text passages (Guu et al., 2020; Lewis et al., 2020), leading to large improvements in knowledge-intensive tasks after fine-tuning or used with off-the-shelf LMs (Ram et al., 2023).\n\n[19] Source: 2401.15884v3.pdf | Page: 2 | Section: 1 Introduction\nTitle: Corrective Retrieval Augmented Generation\nIn summary, our contributions in this paper are three-fold: 1) This paper studies the scenarios where the retriever returns inaccurate results and, to the best of our knowledge, makes the first attempt to design corrective strategies for RAG to improve its robustness. 2) A plug-and-play method named CRAG is proposed to improve the ability of A automatic self-correction and efficient utilization of retrieved documents.\n\n[20] Source: 2005.11401v4.pdf | Page: 3 | Section: 2.3 Generator: BART\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\n2.3 Generator: BART The generator component pθ(yi|x, z, y1:i−1) could be modelled using any encoder-decoder. We use BART-large [32], a pre-trained seq2seq transformer [58] with 400M parameters.\n\n[21] Source: 2401.15884v3.pdf | Page: 2 | Section: 2 Related Work\nTitle: Corrective Retrieval Augmented Generation\nThus, it is obvious that the lack of accurate and specific knowledge can lead to misleading or even inaccurate generation, which will severely hurt the experience of users in most practical applications. Retrieval-Augmented Generation RAG (Lewis et al., 2020; Guu et al., 2020) is regarded as a useful method to address the issues above, which enhances the input questions of generative LMs with retrieved documents.\n\n[22] Source: 2401.15884v3.pdf | Page: 15 | Section: 6 Conclusion & Limitation\nTitle: Corrective Retrieval Augmented Generation\nWe directly adopted the evaluator again for knowledge strips filtering, and the top-k is set to 5, filter threshold as -0.5. External Knowledge: Google Search API was adopted to search for the relevant URLs, top-k is set to 5, and pages from Wikipedia will be added preferentially. The searched web pages are generally in the form of HTML files, where content is split with special tokens like <p> and </p>.\n\nEvidence guidance:\n- Rule-based subject attribution: RAG; passage: “If retrieved documents are irrelevant, the retrieval system can even exacerbate the factual error that LMs make.” [4][21]\n- Rule-based subject attribution: RAG; passage: “com/huggingface/transformers/blob/master/ examples/rag/.” [5]\n- Rule-based subject attribution: RAG; passage: “by θ that generates a current token based on a context of the previous i −1 tokens y1:i−1, the original input x and a retrieved passage z.” [7][5]\n- Rule-based subject attribution: RAG; passage: “To train the retriever and generator end-to-end, we treat the retrieved document as a latent variable.” [7][5]\n- Rule-based subject attribution: API; passage: “Thus an extra segmentation like the knowledge refinement is not required, related knowledge paragraphs can be directly selected with the evaluator similar to internal knowledge.” [9][22]\n- Rule-based subject attribution: API; passage: “In this way, the accuracy of the search outcomes can be ensured without compromising the quality and relevance of the information used for generation.” [9][22]\n- Rule-based subject attribution: CRAG; passage: “2) A plug-and-play method named CRAG is proposed to improve the ability of A automatic self-correction and efficient utilization of retrieved documents.” [19]",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": "Generating reflection tokens makes the LM controllable during the inference phase, enabling it to tailor its behavior to diverse task requirements.",
+        "evidence_start": 0,
+        "evidence_end": 147,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            929,
+            928
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 929,
+        "page": 1,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Experiments show that SELF- RAG (7B and 13B parameters) significantly outperforms state-of-the-art LLMs and retrieval-augmented models on a diverse set of tasks.",
+        "evidence_start": 147,
+        "evidence_end": 309,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            929
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 929,
+        "page": 1,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Empirical results on six tasks, including reasoning and long-form generation, demonstrate that SELF- RAG significantly outperforms pre-trained and instruction-tuned LLMs that have more parameters and widely adopted RAG approaches with higher citation accuracy.",
+        "evidence_start": 0,
+        "evidence_end": 260,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            947
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 947,
+        "page": 2,
+        "citations": [
+          2
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "G Parameters Our RAG models contain the trainable parameters for the BERT-base query and document encoder of DPR, with 110M parameters each (although we do not train the document encoder ourselves) and 406M trainable parameters from BART-large, 406M parameters, making a total of 626M trainable",
+        "evidence_start": 0,
+        "evidence_end": 294,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            920
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 920,
+        "page": 18,
+        "citations": [
+          3
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "If retrieved documents are irrelevant, the retrieval system can even exacerbate the factual error that LMs make.",
+        "evidence_start": 0,
+        "evidence_end": 112,
+        "subject": "RAG",
+        "identity": {
+          "subject": "RAG",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            1242,
+            1241,
+            1240,
+            1239
+          ],
+          "identity_quote": "Thus, it is obvious that the lack of accurate and specific knowledge can lead to misleading or even inaccurate generation, which will severely hurt the experience of users in most practical applications. Retrieval-Augmented Generation RAG (Lewis et al., 2020; Guu et al., 2020) is regarded as a useful method to address the issues above, which enhances the input questions of generative LMs with retrieved documents.",
+          "identity_chunk_id": 1239
+        },
+        "source": "2401.15884v3.pdf",
+        "chunk_id": 1242,
+        "page": 3,
+        "citations": [
+          4,
+          21
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "com/huggingface/transformers/blob/master/ examples/rag/.",
+        "evidence_start": 380,
+        "evidence_end": 436,
+        "subject": "RAG",
+        "identity": {
+          "subject": "RAG",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            737
+          ],
+          "identity_quote": "As shown in Figure 1, our models leverage two components: (i) a retriever pη(z|x) with parameters η that returns (top-K truncated) distributions over text passages given a query x and (ii) a generator pθ(yi|x, z, y1:i−1) parametrized 1Code to run experiments with RAG has been open-sourced as part of the HuggingFace Transform- ers Library [66] and can be found at https://github.",
+          "identity_chunk_id": 737
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 737,
+        "page": 2,
+        "citations": [
+          5
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Concretely, the top K documents are retrieved using the retriever, and then the generator produces a distribution for the next output token for each document, before marginalizing, and repeating the process with the following output token, Formally, we deﬁne: pRAG-Token(y|x) ≈ N Y i X z∈top-k(p(·|x)) pη(z|x)pθ(yi|x, z, y1:i−1) Finally, we note that RAG can be used for sequence classiﬁcation tasks by considering the target class as a target sequence of length one, in which case RAG-Sequence and RAG-Token are equivalent.",
+        "evidence_start": 0,
+        "evidence_end": 524,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            746,
+            745,
+            744,
+            743,
+            742
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 746,
+        "page": 3,
+        "citations": [
+          6
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "by θ that generates a current token based on a context of the previous i −1 tokens y1:i−1, the original input x and a retrieved passage z.",
+        "evidence_start": 0,
+        "evidence_end": 138,
+        "subject": "RAG",
+        "identity": {
+          "subject": "RAG",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            739,
+            738,
+            737
+          ],
+          "identity_quote": "As shown in Figure 1, our models leverage two components: (i) a retriever pη(z|x) with parameters η that returns (top-K truncated) distributions over text passages given a query x and (ii) a generator pθ(yi|x, z, y1:i−1) parametrized 1Code to run experiments with RAG has been open-sourced as part of the HuggingFace Transform- ers Library [66] and can be found at https://github.com/huggingface/transformers/blob/master/ examples/rag/.",
+          "identity_chunk_id": 737
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 739,
+        "page": 3,
+        "citations": [
+          7,
+          5
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " To train the retriever and generator end-to-end, we treat the retrieved document as a latent variable.",
+        "evidence_start": 138,
+        "evidence_end": 241,
+        "subject": "RAG",
+        "identity": {
+          "subject": "RAG",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            739,
+            738,
+            737
+          ],
+          "identity_quote": "As shown in Figure 1, our models leverage two components: (i) a retriever pη(z|x) with parameters η that returns (top-K truncated) distributions over text passages given a query x and (ii) a generator pθ(yi|x, z, y1:i−1) parametrized 1Code to run experiments with RAG has been open-sourced as part of the HuggingFace Transform- ers Library [66] and can be found at https://github.com/huggingface/transformers/blob/master/ examples/rag/.",
+          "identity_chunk_id": 737
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 739,
+        "page": 3,
+        "citations": [
+          7,
+          5
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We propose two models that marginalize over the latent documents in different ways to produce a distribution over generated text.",
+        "evidence_start": 241,
+        "evidence_end": 371,
+        "subject": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "identity": {
+          "subject": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            739
+          ],
+          "identity_quote": "by θ that generates a current token based on a context of the previous i −1 tokens y1:i−1, the original input x and a retrieved passage z. To train the retriever and generator end-to-end, we treat the retrieved document as a latent variable. We propose two models that marginalize over the latent documents in different ways to produce a distribution over generated text. In one approach, RAG-Sequence, the model uses the same document to predict each target token.",
+          "identity_chunk_id": 739
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 739,
+        "page": 3,
+        "citations": [
+          7
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In one approach, RAG-Sequence, the model uses the same document to predict each target token.",
+        "evidence_start": 371,
+        "evidence_end": 465,
+        "subject": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "identity": {
+          "subject": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            739
+          ],
+          "identity_quote": "by θ that generates a current token based on a context of the previous i −1 tokens y1:i−1, the original input x and a retrieved passage z. To train the retriever and generator end-to-end, we treat the retrieved document as a latent variable. We propose two models that marginalize over the latent documents in different ways to produce a distribution over generated text.",
+          "identity_chunk_id": 739
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 739,
+        "page": 3,
+        "citations": [
+          7
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Our holistic evaluations on six tasks using multiple metrics demonstrate that SELF-RAG significantly outperforms LLMs with more parameters or with conventional retrieval-augmented generation approaches.",
+        "evidence_start": 0,
+        "evidence_end": 202,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            1046
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1046,
+        "page": 10,
+        "citations": [
+          8
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Thus an extra segmentation like the knowledge refinement is not required, related knowledge paragraphs can be directly selected with the evaluator similar to internal knowledge.",
+        "evidence_start": 0,
+        "evidence_end": 177,
+        "subject": "API",
+        "identity": {
+          "subject": "API",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            1390,
+            1389
+          ],
+          "identity_quote": "We directly adopted the evaluator again for knowledge strips filtering, and the top-k is set to 5, filter threshold as -0.5. External Knowledge: Google Search API was adopted to search for the relevant URLs, top-k is set to 5, and pages from Wikipedia will be added preferentially. The searched web pages are generally in the form of HTML files, where content is split with special tokens like <p> and </p>.",
+          "identity_chunk_id": 1389
+        },
+        "source": "2401.15884v3.pdf",
+        "chunk_id": 1390,
+        "page": 15,
+        "citations": [
+          9,
+          22
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In this way, the accuracy of the search outcomes can be ensured without compromising the quality and relevance of the information used for generation.",
+        "evidence_start": 177,
+        "evidence_end": 328,
+        "subject": "API",
+        "identity": {
+          "subject": "API",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            1390,
+            1389
+          ],
+          "identity_quote": "We directly adopted the evaluator again for knowledge strips filtering, and the top-k is set to 5, filter threshold as -0.5. External Knowledge: Google Search API was adopted to search for the relevant URLs, top-k is set to 5, and pages from Wikipedia will be added preferentially. The searched web pages are generally in the form of HTML files, where content is split with special tokens like <p> and </p>.",
+          "identity_chunk_id": 1389
+        },
+        "source": "2401.15884v3.pdf",
+        "chunk_id": 1390,
+        "page": 15,
+        "citations": [
+          9,
+          22
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Generator: As CRAG is a plug-and-play method, all generation models that can be uti- lized in RAG fit our approach as well.",
+        "evidence_start": 328,
+        "evidence_end": 452,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            1390
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2401.15884v3.pdf",
+        "chunk_id": 1390,
+        "page": 15,
+        "citations": [
+          9
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Concretely, the top K documents are retrieved using the retriever, and the generator produces the output sequence probability for each document, which are then marginalized, pRAG-Sequence(y|x) ≈ X z∈top-k(p(·|x)) pη(z|x)pθ(y|x, z) = X z∈top-k(p(·|x)) pη(z|x) N Y i pθ(yi|x, z, y1:i−1) RAG-Token Model In the RAG-Token model we can draw a different latent document for each target token and marginalize accordingly.",
+        "evidence_start": 0,
+        "evidence_end": 414,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            744,
+            743,
+            742
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 744,
+        "page": 3,
+        "citations": [
+          10
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We first introduced the LLaMA2-hf- 7b from huggingface to generate responses.",
+        "evidence_start": 109,
+        "evidence_end": 187,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1391,
+            1390
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2401.15884v3.pdf",
+        "chunk_id": 1391,
+        "page": 15,
+        "citations": [
+          11
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": ", 2024) fine-tuned LLaMA2 and reached a new state-of-the-art performance on several tasks, we further utilized the launched model, SelfRAG-LLaMA2-7b, as a new generator to be consistent with their work and study the specific improvement of our method.",
+        "evidence_start": 215,
+        "evidence_end": 466,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            1391
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2401.15884v3.pdf",
+        "chunk_id": 1391,
+        "page": 15,
+        "citations": [
+          11
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "The bottom three rows are three types of Critique tokens, and the bold text indicates the most desirable critique tokens.",
+        "evidence_start": 0,
+        "evidence_end": 121,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            966,
+            965
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 966,
+        "page": 4,
+        "citations": [
+          12
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " x, y, d indicate input, output, and a relevant passage, respectively.",
+        "evidence_start": 121,
+        "evidence_end": 191,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            966,
+            965
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 966,
+        "page": 4,
+        "citations": [
+          12
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Algorithm 1 SELF-RAG Inference Require: Generator LM M, Retriever R, Large-scale passage collections {d1, .",
+        "evidence_start": 191,
+        "evidence_end": 299,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            966
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 966,
+        "page": 4,
+        "citations": [
+          12
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The critic achieves a higher than 90% agreement with GPT-4-based predictions on most reflection token categories (Appendix Table 5).",
+        "evidence_start": 157,
+        "evidence_end": 290,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            985
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 985,
+        "page": 5,
+        "citations": [
+          13
+        ],
+        "record_id": "E22"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "In these cases, once retrieval had collapsed, the generator would learn to ignore the documents, and the RAG model would perform equivalently to BART.",
+        "evidence_start": 0,
+        "evidence_end": 150,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            924
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 924,
+        "page": 19,
+        "citations": [
+          14
+        ],
+        "record_id": "E23"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The collapse could be due to a less-explicit requirement for factual knowledge in some tasks, or the longer target sequences, which could result in less informative gradients for the retriever.",
+        "evidence_start": 150,
+        "evidence_end": 344,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            924
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 924,
+        "page": 19,
+        "citations": [
+          14
+        ],
+        "record_id": "E24"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "1) 4: for (x, y) ∈(Xsample, Y sample) do ▷Data collections for C 5: Prompt GPT-4 to collect a reflection token r for (x, y) 6: Add {(x, y, r)} to Dcritic 7: Update C with next token prediction loss ▷Critic learning; Eq.",
+        "evidence_start": 202,
+        "evidence_end": 421,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1113
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1113,
+        "page": 18,
+        "citations": [
+          15
+        ],
+        "record_id": "E25"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "2 TRAINING THE GENERATOR MODEL Data collection for generator.",
+        "evidence_start": 4,
+        "evidence_end": 65,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            986
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 986,
+        "page": 5,
+        "citations": [
+          16
+        ],
+        "record_id": "E26"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " For each segment yt ∈y, we run C to assess whether additional passages could help to enhance generation.",
+        "evidence_start": 271,
+        "evidence_end": 376,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            986
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 986,
+        "page": 5,
+        "citations": [
+          16
+        ],
+        "record_id": "E27"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " If retrieval is required, the retrieval special token Retrieve =Yes is added, and R retrieves the top K passages, D.",
+        "evidence_start": 376,
+        "evidence_end": 493,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            986
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 986,
+        "page": 5,
+        "citations": [
+          16
+        ],
+        "record_id": "E28"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "We introduce RAG models where the parametric memory is a pre-trained seq2seq model and the non-parametric memory is a dense vector index of Wikipedia, accessed with a pre-trained neural retriever.",
+        "evidence_start": 0,
+        "evidence_end": 196,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            719
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 719,
+        "page": 1,
+        "citations": [
+          17
+        ],
+        "record_id": "E29"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We com- pare two RAG formulations, one which conditions on the same retrieved passages across the whole generated sequence, and another which can use different passages per token.",
+        "evidence_start": 196,
+        "evidence_end": 376,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            719
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 719,
+        "page": 1,
+        "citations": [
+          17
+        ],
+        "record_id": "E30"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "2 RELATED WORK Retrieval-Augmented Generation.",
+        "evidence_start": 0,
+        "evidence_end": 46,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            949
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 949,
+        "page": 2,
+        "citations": [
+          18
+        ],
+        "record_id": "E31"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "In summary, our contributions in this paper are three-fold: 1) This paper studies the scenarios where the retriever returns inaccurate results and, to the best of our knowledge, makes the first attempt to design corrective strategies for RAG to improve its robustness.",
+        "evidence_start": 0,
+        "evidence_end": 268,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1235,
+            1234
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2401.15884v3.pdf",
+        "chunk_id": 1235,
+        "page": 2,
+        "citations": [
+          19
+        ],
+        "record_id": "E32"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " 2) A plug-and-play method named CRAG is proposed to improve the ability of A automatic self-correction and efficient utilization of retrieved documents.",
+        "evidence_start": 268,
+        "evidence_end": 421,
+        "subject": "CRAG",
+        "identity": {
+          "subject": "CRAG",
+          "basis": "explicit_named_clause",
+          "context_chunk_ids": [
+            1235
+          ],
+          "identity_quote": "In summary, our contributions in this paper are three-fold: 1) This paper studies the scenarios where the retriever returns inaccurate results and, to the best of our knowledge, makes the first attempt to design corrective strategies for RAG to improve its robustness. 2) A plug-and-play method named CRAG is proposed to improve the ability of A automatic self-correction and efficient utilization of retrieved documents.",
+          "identity_chunk_id": 1235
+        },
+        "source": "2401.15884v3.pdf",
+        "chunk_id": 1235,
+        "page": 2,
+        "citations": [
+          19
+        ],
+        "record_id": "E33"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "3 Generator: BART The generator component pθ(yi|x, z, y1:i−1) could be modelled using any encoder-decoder.",
+        "evidence_start": 2,
+        "evidence_end": 108,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            750
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 750,
+        "page": 3,
+        "citations": [
+          20
+        ],
+        "record_id": "E34"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We use BART-large [32], a pre-trained seq2seq transformer [58] with 400M parameters.",
+        "evidence_start": 108,
+        "evidence_end": 193,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            750
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 750,
+        "page": 3,
+        "citations": [
+          20
+        ],
+        "record_id": "E35"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 929,
+        "text": "Generating reflection tokens makes the LM controllable during the inference phase, enabling it to tailor its behavior to diverse task requirements. Experiments show that SELF- RAG (7B and 13B parameters) significantly outperforms state-of-the-art LLMs and retrieval-augmented models on a diverse set of tasks.",
+        "source": "2310.11511v1.pdf",
+        "page": 1,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": null
+      },
+      {
+        "chunk_id": 947,
+        "text": "Empirical results on six tasks, including reasoning and long-form generation, demonstrate that SELF- RAG significantly outperforms pre-trained and instruction-tuned LLMs that have more parameters and widely adopted RAG approaches with higher citation accuracy. In particular, SELF-RAG outperforms retrieval-augmented ChatGPT on four tasks, Llama2-chat (Touvron et al., 2023) and Alpaca (Dubois et al., 2023) on all tasks.",
+        "source": "2310.11511v1.pdf",
+        "page": 2,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "1 INTRODUCTION"
+      },
+      {
+        "chunk_id": 920,
+        "text": "G Parameters Our RAG models contain the trainable parameters for the BERT-base query and document encoder of DPR, with 110M parameters each (although we do not train the document encoder ourselves) and 406M trainable parameters from BART-large, 406M parameters, making a total of 626M trainable",
+        "source": "2005.11401v4.pdf",
+        "page": 18,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "6 Discussion"
+      },
+      {
+        "chunk_id": 1242,
+        "text": "If retrieved documents are irrelevant, the retrieval system can even exacerbate the factual error that LMs make. Advanced RAG Many advanced approaches have been developed from the original RAG in recent years (Zhang et al., 2024; Kim et al., 2024; Wang et al., 2024; Liu et al., 2024).",
+        "source": "2401.15884v3.pdf",
+        "page": 3,
+        "title": "Corrective Retrieval Augmented Generation",
+        "section": "2 Related Work"
+      },
+      {
+        "chunk_id": 737,
+        "text": "As shown in Figure 1, our models leverage two components: (i) a retriever pη(z|x) with parameters η that returns (top-K truncated) distributions over text passages given a query x and (ii) a generator pθ(yi|x, z, y1:i−1) parametrized 1Code to run experiments with RAG has been open-sourced as part of the HuggingFace Transform- ers Library [66] and can be found at https://github.com/huggingface/transformers/blob/master/ examples/rag/.",
+        "source": "2005.11401v4.pdf",
+        "page": 2,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "2 Methods"
+      },
+      {
+        "chunk_id": 746,
+        "text": "Concretely, the top K documents are retrieved using the retriever, and then the generator produces a distribution for the next output token for each document, before marginalizing, and repeating the process with the following output token, Formally, we deﬁne: pRAG-Token(y|x) ≈ N Y i X z∈top-k(p(·|x)) pη(z|x)pθ(yi|x, z, y1:i−1) Finally, we note that RAG can be used for sequence classiﬁcation tasks by considering the target class as a target sequence of length one, in which case RAG-Sequence and RAG-Token are equivalent.",
+        "source": "2005.11401v4.pdf",
+        "page": 3,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "2.1 Models"
+      },
+      {
+        "chunk_id": 739,
+        "text": "by θ that generates a current token based on a context of the previous i −1 tokens y1:i−1, the original input x and a retrieved passage z. To train the retriever and generator end-to-end, we treat the retrieved document as a latent variable. We propose two models that marginalize over the latent documents in different ways to produce a distribution over generated text. In one approach, RAG-Sequence, the model uses the same document to predict each target token.",
+        "source": "2005.11401v4.pdf",
+        "page": 3,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "2 Methods"
+      },
+      {
+        "chunk_id": 1046,
+        "text": "Our holistic evaluations on six tasks using multiple metrics demonstrate that SELF-RAG significantly outperforms LLMs with more parameters or with conventional retrieval-augmented generation approaches.",
+        "source": "2310.11511v1.pdf",
+        "page": 10,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "6 CONCLUSION"
+      },
+      {
+        "chunk_id": 1390,
+        "text": "Thus an extra segmentation like the knowledge refinement is not required, related knowledge paragraphs can be directly selected with the evaluator similar to internal knowledge. In this way, the accuracy of the search outcomes can be ensured without compromising the quality and relevance of the information used for generation. Generator: As CRAG is a plug-and-play method, all generation models that can be uti- lized in RAG fit our approach as well.",
+        "source": "2401.15884v3.pdf",
+        "page": 15,
+        "title": "Corrective Retrieval Augmented Generation",
+        "section": "6 Conclusion & Limitation"
+      },
+      {
+        "chunk_id": 744,
+        "text": "Concretely, the top K documents are retrieved using the retriever, and the generator produces the output sequence probability for each document, which are then marginalized, pRAG-Sequence(y|x) ≈ X z∈top-k(p(·|x)) pη(z|x)pθ(y|x, z) = X z∈top-k(p(·|x)) pη(z|x) N Y i pθ(yi|x, z, y1:i−1) RAG-Token Model In the RAG-Token model we can draw a different latent document for each target token and marginalize accordingly.",
+        "source": "2005.11401v4.pdf",
+        "page": 3,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "2.1 Models"
+      },
+      {
+        "chunk_id": 1391,
+        "text": "To be consistent with baselines for comparison, we adopted LLaMA2 (Touvron et al., 2023b) for the generation. We first introduced the LLaMA2-hf- 7b from huggingface to generate responses. Since Self-RAG (Asai et al., 2024) fine-tuned LLaMA2 and reached a new state-of-the-art performance on several tasks, we further utilized the launched model, SelfRAG-LLaMA2-7b, as a new generator to be consistent with their work and study the specific improvement of our method.",
+        "source": "2401.15884v3.pdf",
+        "page": 15,
+        "title": "Corrective Retrieval Augmented Generation",
+        "section": "6 Conclusion & Limitation"
+      },
+      {
+        "chunk_id": 966,
+        "text": "The bottom three rows are three types of Critique tokens, and the bold text indicates the most desirable critique tokens. x, y, d indicate input, output, and a relevant passage, respectively. Algorithm 1 SELF-RAG Inference Require: Generator LM M, Retriever R, Large-scale passage collections {d1, .",
+        "source": "2310.11511v1.pdf",
+        "page": 4,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "3.1 PROBLEM FORMALIZATION AND OVERVIEW"
+      },
+      {
+        "chunk_id": 985,
+        "text": "(1) Though the initial model can be any pre-trained LM, we use the same one as the generator LM (i.e., Llama 2-7B; Touvron et al. 2023) for C initialization. The critic achieves a higher than 90% agreement with GPT-4-based predictions on most reflection token categories (Appendix Table 5).",
+        "source": "2310.11511v1.pdf",
+        "page": 5,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "3.2.1 TRAINING THE CRITIC MODEL"
+      },
+      {
+        "chunk_id": 924,
+        "text": "In these cases, once retrieval had collapsed, the generator would learn to ignore the documents, and the RAG model would perform equivalently to BART. The collapse could be due to a less-explicit requirement for factual knowledge in some tasks, or the longer target sequences, which could result in less informative gradients for the retriever. Perez et al.",
+        "source": "2005.11401v4.pdf",
+        "page": 19,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "6 Discussion"
+      },
+      {
+        "chunk_id": 1113,
+        "text": "Algorithm 2 SELF-RAG Training 1: Input input-output data D = {X, Y }, generator M, C θ 2: Initialize C with a pre-trained LM 3: Sample data {Xsample, Y sample} ∼{X, Y } ▷Training Critic LM (Section 3.2.1) 4: for (x, y) ∈(Xsample, Y sample) do ▷Data collections for C 5: Prompt GPT-4 to collect a reflection token r for (x, y) 6: Add {(x, y, r)} to Dcritic 7: Update C with next token prediction loss ▷Critic learning; Eq.",
+        "source": "2310.11511v1.pdf",
+        "page": 18,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "6 CONCLUSION"
+      },
+      {
+        "chunk_id": 986,
+        "text": "3.2.2 TRAINING THE GENERATOR MODEL Data collection for generator. Given an input-output pair (x, y), we augment the original output y using the retrieval and critic models to create supervised data that precisely mimics the SELF- RAG inference-time process (Section 3.1). For each segment yt ∈y, we run C to assess whether additional passages could help to enhance generation. If retrieval is required, the retrieval special token Retrieve =Yes is added, and R retrieves the top K passages, D.",
+        "source": "2310.11511v1.pdf",
+        "page": 5,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "3.2.2 TRAINING THE GENERATOR MODEL"
+      },
+      {
+        "chunk_id": 719,
+        "text": "We introduce RAG models where the parametric memory is a pre-trained seq2seq model and the non-parametric memory is a dense vector index of Wikipedia, accessed with a pre-trained neural retriever. We com- pare two RAG formulations, one which conditions on the same retrieved passages across the whole generated sequence, and another which can use different passages per token.",
+        "source": "2005.11401v4.pdf",
+        "page": 1,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": null
+      },
+      {
+        "chunk_id": 949,
+        "text": "2 RELATED WORK Retrieval-Augmented Generation. Retrieval-Augmented Generation (RAG) augments the input space of LMs with retrieved text passages (Guu et al., 2020; Lewis et al., 2020), leading to large improvements in knowledge-intensive tasks after fine-tuning or used with off-the-shelf LMs (Ram et al., 2023).",
+        "source": "2310.11511v1.pdf",
+        "page": 2,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "2 RELATED WORK"
+      },
+      {
+        "chunk_id": 1235,
+        "text": "In summary, our contributions in this paper are three-fold: 1) This paper studies the scenarios where the retriever returns inaccurate results and, to the best of our knowledge, makes the first attempt to design corrective strategies for RAG to improve its robustness. 2) A plug-and-play method named CRAG is proposed to improve the ability of A automatic self-correction and efficient utilization of retrieved documents.",
+        "source": "2401.15884v3.pdf",
+        "page": 2,
+        "title": "Corrective Retrieval Augmented Generation",
+        "section": "1 Introduction"
+      },
+      {
+        "chunk_id": 750,
+        "text": "2.3 Generator: BART The generator component pθ(yi|x, z, y1:i−1) could be modelled using any encoder-decoder. We use BART-large [32], a pre-trained seq2seq transformer [58] with 400M parameters.",
+        "source": "2005.11401v4.pdf",
+        "page": 3,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "2.3 Generator: BART"
+      },
+      {
+        "chunk_id": 1239,
+        "text": "Thus, it is obvious that the lack of accurate and specific knowledge can lead to misleading or even inaccurate generation, which will severely hurt the experience of users in most practical applications. Retrieval-Augmented Generation RAG (Lewis et al., 2020; Guu et al., 2020) is regarded as a useful method to address the issues above, which enhances the input questions of generative LMs with retrieved documents.",
+        "source": "2401.15884v3.pdf",
+        "page": 2,
+        "title": "Corrective Retrieval Augmented Generation",
+        "section": "2 Related Work"
+      },
+      {
+        "chunk_id": 1389,
+        "text": "We directly adopted the evaluator again for knowledge strips filtering, and the top-k is set to 5, filter threshold as -0.5. External Knowledge: Google Search API was adopted to search for the relevant URLs, top-k is set to 5, and pages from Wikipedia will be added preferentially. The searched web pages are generally in the form of HTML files, where content is split with special tokens like <p> and </p>.",
+        "source": "2401.15884v3.pdf",
+        "page": 15,
+        "title": "Corrective Retrieval Augmented Generation",
+        "section": "6 Conclusion & Limitation"
+      }
+    ],
+    "selected_ids": [
+      929,
+      947,
+      920,
+      1242,
+      737,
+      746,
+      739,
+      1046,
+      1390,
+      744,
+      1391,
+      966,
+      985,
+      924,
+      1113,
+      986,
+      719,
+      949,
+      1235,
+      750
+    ]
+  },
+  "real_answer_generated": false,
+  "api_calls": 0,
+  "matches_evaluation": true
+}

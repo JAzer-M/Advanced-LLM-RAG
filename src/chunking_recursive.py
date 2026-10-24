@@ -1,3 +1,6 @@
+# 对照分块方法：按段落/换行/句号/空格递归拆分，再合并并尽量保留尾部重叠。
+# chunk_size/chunk_overlap 使用字符数，实际重叠由完整片段决定，不保证恰好等于上限。
+
 def recursive_split_text(text, chunk_size, separators):
     # 文本已经足够短
     if len(text) <= chunk_size:
@@ -43,6 +46,7 @@ def recursive_split_text(text, chunk_size, separators):
 
     return results
 
+# 按完整片段逐步丢弃块首，尽量保留不超过 overlap 的尾部文本。
 def merge_chunks(parts, chunk_size, chunk_overlap):
 
     if chunk_size <= 0:
@@ -88,6 +92,7 @@ def merge_chunks(parts, chunk_size, chunk_overlap):
 
     return chunks
 
+# 每个 document 独立切分/合并，继承原页码和来源并重新按顺序编号。
 def split_documents_recursive(
         documents,
         chunk_size = 500,

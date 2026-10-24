@@ -1,0 +1,37 @@
+test_captured_p1_aliases_normalize_without_model_call (test_citation_aliases.CitationAliasTests.test_captured_p1_aliases_normalize_without_model_call) ... FAIL
+test_mixed_alias_and_valid_marker_do_not_hide_bad_syntax (test_citation_aliases.CitationAliasTests.test_mixed_alias_and_valid_marker_do_not_hide_bad_syntax) ... FAIL
+test_out_of_range_alias_cannot_be_silently_accepted (test_citation_aliases.CitationAliasTests.test_out_of_range_alias_cannot_be_silently_accepted) ... ok
+test_standard_citations_keep_the_same_answer_without_model_call (test_citation_aliases.CitationAliasTests.test_standard_citations_keep_the_same_answer_without_model_call) ... ok
+
+======================================================================
+FAIL: test_captured_p1_aliases_normalize_without_model_call (test_citation_aliases.CitationAliasTests.test_captured_p1_aliases_normalize_without_model_call)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/j/Desktop/Advanced-LLM-RAG/tests/test_citation_aliases.py", line 18, in test_captured_p1_aliases_normalize_without_model_call
+    result = repair_citations_once('query', 'context', capture['answer'],
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/j/Desktop/Advanced-LLM-RAG/src/citation_validation.py", line 69, in repair_citations_once
+    response = generate(prompt)
+               ^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/unittest/mock.py", line 1124, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/unittest/mock.py", line 1128, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Library/Frameworks/Python.framework/Versions/3.11/lib/python3.11/unittest/mock.py", line 1183, in _execute_mock_call
+    raise effect
+AssertionError: No model call needed for a known numeric alias
+
+======================================================================
+FAIL: test_mixed_alias_and_valid_marker_do_not_hide_bad_syntax (test_citation_aliases.CitationAliasTests.test_mixed_alias_and_valid_marker_do_not_hide_bad_syntax)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/j/Desktop/Advanced-LLM-RAG/tests/test_citation_aliases.py", line 28, in test_mixed_alias_and_valid_marker_do_not_hide_bad_syntax
+    self.assertFalse(check['structure_passed'])
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.002s
+
+FAILED (failures=2)

@@ -1,0 +1,107 @@
+[
+  {
+    "id": "a01",
+    "expected_route": "direct",
+    "evidence_ids": [
+      44
+    ],
+    "reason": "chunk44明确给出两个嵌入层与pre-softmax共享，且嵌入权重乘sqrt(dmodel)，无需补查。",
+    "reviewed_at_utc": "2026-10-22T03:18:51.110620+00:00",
+    "initial_sha256": "401cb04eba1626697167e5afef6fe39bd69d199e38ab1c220d9994f02ac37a80",
+    "reviewed_before_reading_auto_final_answer": true,
+    "reviewer": "Same coding assistant; knows frozen rubric and execution progress, not an independent blind review."
+  },
+  {
+    "id": "a02",
+    "expected_route": "direct",
+    "evidence_ids": [
+      145
+    ],
+    "reason": "chunk145同时给出四个LRN参数及ReLU之后的位置，全部必答点已有。",
+    "reviewed_at_utc": "2026-10-22T03:18:51.110752+00:00",
+    "initial_sha256": "c54ea1d09328c97195b65a58a61823c592fdfb3d89bf33d89c8f04dd9b06f316",
+    "reviewed_before_reading_auto_final_answer": true,
+    "reviewer": "Same coding assistant; knows frozen rubric and execution progress, not an independent blind review."
+  },
+  {
+    "id": "a03",
+    "expected_route": "direct",
+    "evidence_ids": [
+      1387,
+      1268
+    ],
+    "reason": "chunk1387列出两数据集的阈值对；1268说明upper/lower触发语义，已能确定所问数值。",
+    "reviewed_at_utc": "2026-10-22T03:18:51.110795+00:00",
+    "initial_sha256": "f69cc86832fee9afcd39bb8cc4fa5a33fa69aa1155eccf5c639a4d48558ab11b",
+    "reviewed_before_reading_auto_final_answer": true,
+    "reviewer": "Same coding assistant; knows frozen rubric and execution progress, not an independent blind review."
+  },
+  {
+    "id": "a04",
+    "expected_route": "direct",
+    "evidence_ids": [
+      73,
+      903
+    ],
+    "reason": "chunk73给Transformer beam=4；903给指定RAG两个生成实验的beam=4及10文档；902的QA greedy/15/50不属于所问任务，不能混用。",
+    "reviewed_at_utc": "2026-10-22T03:20:18.294162+00:00",
+    "initial_sha256": "c5e23affca8e3fb6c2ae140b0640b674a4d2c9e6d735f55e29078ef7ca67513e",
+    "reviewed_before_reading_auto_final_answer": true,
+    "reviewer": "Same coding assistant; knows frozen rubric and execution progress, not independent or blind."
+  },
+  {
+    "id": "a05",
+    "expected_route": "direct",
+    "evidence_ids": [
+      435,
+      436,
+      641
+    ],
+    "reason": "435给DPR主实验batch128，436给学习率1e-5；641给ColBERT batch32和3e-6。536/538的联合训练batch16不属于主检索器训练，证据已齐。",
+    "reviewed_at_utc": "2026-10-22T03:22:05.034030+00:00",
+    "initial_sha256": "e753df85ecfaa229b63b87160f851e0121d98fe882c7bc721f7daeea497d11a5",
+    "reviewed_before_reading_auto_final_answer": true,
+    "reviewer": "Same coding assistant; knows frozen rubric and execution progress, not independent or blind."
+  },
+  {
+    "id": "a06",
+    "expected_route": "direct",
+    "evidence_ids": [
+      128,
+      232
+    ],
+    "reason": "128给DCNN按训练集均值逐像素中心化并使用raw RGB；232给VGG减训练集mean RGB，全部必答点已有。",
+    "reviewed_at_utc": "2026-10-22T03:22:05.034189+00:00",
+    "initial_sha256": "286ff87befaafa362c93f212a2510ff202a48e7a6e291e9bffda2878b00a62a8",
+    "reviewed_before_reading_auto_final_answer": true,
+    "reviewer": "Same coding assistant; knows frozen rubric and execution progress, not independent or blind."
+  },
+  {
+    "id": "a07",
+    "expected_route": "stop",
+    "reasonable_alternatives": [],
+    "evidence_ids": [],
+    "reason": "论文目录及冻结语料检查均无Gemma 2；初检只是其他模型片段，不能建立所问层数/窗口，应该停止。",
+    "ambiguity_note": "",
+    "reviewed_at_utc": "2026-10-22T03:23:06.874230+00:00",
+    "initial_sha256": "c11bc7f09103d45e7b3bfcbaa666c17289ec6cf859a339211ce392a4b4cfa203",
+    "reviewed_before_reading_auto_final_answer": true,
+    "reviewer": "Same coding assistant; knows frozen rubric and execution progress, not independent or blind."
+  },
+  {
+    "id": "a08",
+    "expected_route": "stop",
+    "reasonable_alternatives": [
+      "agent"
+    ],
+    "evidence_ids": [
+      435
+    ],
+    "reason": "初检提供训练方法但没有USD/kWh，冻结PDF核对也没有这两项测量，当前应说明证据不足；不能把其他超参换算成账单或电量。",
+    "ambiguity_note": "存在原论文而初检未命中时，先搜索确认缺失也合理；此替代标签在查看Auto最终答案前写入。",
+    "reviewed_at_utc": "2026-10-22T03:23:06.874335+00:00",
+    "initial_sha256": "c6fd4de684b5b6a3544074ae224d9358e64a4b7583a5643f6b08132a841fa2f9",
+    "reviewed_before_reading_auto_final_answer": true,
+    "reviewer": "Same coding assistant; knows frozen rubric and execution progress, not independent or blind."
+  }
+]

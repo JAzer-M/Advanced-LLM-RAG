@@ -1,0 +1,650 @@
+import argparse
+import hashlib
+import json
+import re
+import time
+import unicodedata
+from pathlib import Path
+
+from sentence_transformers import CrossEncoder
+
+from evaluation.metrics import (
+    average_precision_at_k,
+    mean_average_precision_at_k,
+    mean_reciprocal_rank_at_k,
+    precision_at_k,
+    recall_at_k,
+    reciprocal_rank_at_k,
+)
+
+from src.bm25_retriever import build_bm25_index, retrieve_bm25
+import src.api_llm as api
+from src.embedding import load_embedding_model
+from src.hybrid_retriever import reciprocal_rank_fusion
+from src.knowledge_base import load_knowledge_base
+from src.query_rewriter import rewrite_query
+from src.query_decomposer import decompose_query
+from src.reranker import rank_evidence, rerank_results, select_evidence
+from src.retriever import retrieve
+
+
+# ============================================================
+# 1. Experiment configuration
+# ============================================================
+
+PROJECT_DIR = Path(__file__).resolve().parent.parent
+
+QUESTIONS_PATH = PROJECT_DIR / "evaluation" / "questions.json"
+
+FINAL_K = 10
+CANDIDATE_K = 60
+RRF_K = 60
+RRF_TOP_K = 60
+
+ENABLE_REWRITING = True
+ENABLE_DECOMPOSITION = True
+
+RERANKER_NAME = "BAAI/bge-reranker-base"
+RERANKER_DEVICE = "cpu"
+
+
+# ============================================================
+# 2. Gold evidence and result ID utilities
+# ============================================================
+
+def normalize_text(text):
+    text = unicodedata.normalize("NFKC", text)
+    return re.sub(r"\s+", " ", text).lower().strip()
+
+
+def get_gold_chunk_ids(question, chunks):
+    """Map each (source, page, exact quote) to matching chunk IDs."""
+
+    gold_ids = set()
+    unmatched_quotes = []
+
+    for evidence in question["gold_evidence"]:
+
+        matches = []
+
+        for index, chunk in enumerate(chunks):
+
+            if (
+                chunk["source"] == evidence["source"]
+                and chunk["page"] == evidence["page"]
+                and normalize_text(evidence["quote"])
+                in normalize_text(chunk["text"])
+            ):
+                matches.append(chunk.get("chunk_id", index))
+
+        if matches:
+            gold_ids.update(matches)
+
+        else:
+            unmatched_quotes.append(evidence["quote"])
+
+    return gold_ids, unmatched_quotes
+
+
+def get_result_ids(results, candidates=None):
+    """Preserve ranking; recover IDs if the reranker dropped chunk_id."""
+
+    ids = []
+
+    for result in results:
+
+        if "chunk_id" in result:
+            ids.append(result["chunk_id"])
+            continue
+
+        matches = [
+            candidate["chunk_id"]
+            for candidate in (candidates or [])
+            if candidate["source"] == result["source"]
+            and candidate["page"] == result["page"]
+            and candidate["text"] == result["text"]
+        ]
+
+        if len(matches) != 1:
+            raise ValueError("Cannot uniquely identify reranked chunk")
+
+        ids.append(matches[0])
+
+    return ids
+
+
+def deduplicate_results(results):
+    """
+    Remove duplicate chunks while preserving their first occurrence.
+
+    Use the same source/page/text identity as the main pipeline.
+    """
+
+    unique_results = []
+    seen = set()
+
+    for result in results:
+
+        key = (result['source'], result['page'], result['text'])
+
+        if key not in seen:
+            seen.add(key)
+            unique_results.append(result)
+
+    return unique_results
+
+
+# ============================================================
+# 3. Retrieval helpers
+# ============================================================
+
+def retrieve_two_ways(
+        query,
+        embedding_model,
+        index,
+        chunks,
+        bm25
+):
+    dense = retrieve(
+        model=embedding_model,
+        index=index,
+        chunks=chunks,
+        query=query,
+        top_k=CANDIDATE_K,
+    )
+
+    sparse = retrieve_bm25(
+        bm25=bm25,
+        chunks=chunks,
+        query=query,
+        top_k=CANDIDATE_K,
+    )
+
+    return dense, sparse
+
+
+def fuse_and_rerank(
+        query,
+        dense,
+        sparse,
+        reranker_model,
+        extra_results=None
+):
+    """
+    RRF first; rerank against the user's ORIGINAL question.
+    """
+
+    fused = reciprocal_rank_fusion(
+        dense_results=dense,
+        bm25_results=sparse,
+        k=RRF_K,
+        top_k=RRF_TOP_K,
+        extra_results=extra_results,
+    )
+
+    reranked = rerank_results(
+        query=query,
+        candidates=fused,
+        model=reranker_model,
+        top_k=len(fused),
+    )
+
+    return fused, reranked
+
+
+def decomposition_retrieve_and_rerank(
+        query,
+        decomposition,
+        original_fused,
+        embedding_model,
+        index,
+        chunks,
+        bm25,
+        reranker_model
+):
+    """
+    Query Decomposition experiment.
+
+    Strategy:
+
+    Original Query
+        -> Dense + BM25 -> RRF
+        -> candidate pool
+
+    Each Sub-Query
+        -> Dense + BM25 -> RRF
+        -> candidate pool
+
+    Then deduplicate, rank globally and locally, and use the same
+    evidence selection functions as main.py. Keep the global ranking
+    available as a separate legacy control.
+    """
+
+    # 如果不需要 decomposition，
+    # 直接使用原始 Hybrid + Reranker 的结果。
+    if not decomposition["needs_decomposition"]:
+
+        return (
+            original_fused,
+            None,
+            None,
+            None,
+        )
+
+    candidate_pool = list(original_fused)
+
+    sub_query_details = []
+
+    print("\n=== Query Decomposition Retrieval ===")
+
+    for i, sub_query in enumerate(
+        decomposition["sub_queries"],
+        start=1
+    ):
+
+        print(f"\nSub-Query {i}: {sub_query}")
+
+        sub_dense, sub_bm25 = retrieve_two_ways(
+            sub_query,
+            embedding_model,
+            index,
+            chunks,
+            bm25,
+        )
+
+        sub_fused = reciprocal_rank_fusion(
+            dense_results=sub_dense,
+            bm25_results=sub_bm25,
+            k=RRF_K,
+            top_k=RRF_TOP_K,
+        )
+
+        candidate_pool.extend(sub_fused)
+
+        sub_query_details.append({
+            "query": sub_query,
+            "dense": sub_dense,
+            "bm25": sub_bm25,
+            "rrf": sub_fused,
+        })
+
+        print(
+            "Sub-Query RRF Top-5 IDs:",
+            get_result_ids(sub_fused[:FINAL_K])
+        )
+
+    print(
+        "\nDecomposition Candidate Pool Before Deduplication:",
+        len(candidate_pool)
+    )
+
+    unique_candidates = deduplicate_results(candidate_pool)
+
+    print(
+        "Decomposition Candidate Pool After Deduplication:",
+        len(unique_candidates)
+    )
+
+    global_ranking, sub_query_evidence = rank_evidence(
+        query, unique_candidates,
+        [{'query': item['query'], 'results': item['rrf']} for item in sub_query_details],
+        reranker_model)
+    reranked = select_evidence(global_ranking, sub_query_evidence, FINAL_K)
+
+    return (
+        unique_candidates,
+        reranked,
+        {**decomposition, 'global_ranking': global_ranking,
+         'sub_query_evidence': sub_query_evidence},
+        sub_query_details,
+    )
+
+
+# ============================================================
+# 4. Metrics and reporting
+# ============================================================
+
+def evaluate_retrieval(retrieved_ids, gold_ids, k=None):
+    k = FINAL_K if k is None else k
+
+    return {
+        "precision": precision_at_k(
+            retrieved_ids,
+            gold_ids,
+            k
+        ),
+
+        "recall": recall_at_k(
+            retrieved_ids,
+            gold_ids,
+            k
+        ),
+
+        "ap": average_precision_at_k(
+            retrieved_ids,
+            gold_ids,
+            k
+        ),
+
+        "rr": reciprocal_rank_at_k(
+            retrieved_ids,
+            gold_ids,
+            k
+        ),
+    }
+
+
+def summarize_results(cases, k):
+    if not cases:
+        return {'questions': 0}
+    return {'questions': len(cases),
+            'precision': sum(precision_at_k(r, g, k) for r, g in cases) / len(cases),
+            'recall': sum(recall_at_k(r, g, k) for r, g in cases) / len(cases),
+            'map': mean_average_precision_at_k(cases, k),
+            'mrr': mean_reciprocal_rank_at_k(cases, k)}
+
+
+def print_overall_metrics(name, cases, k=None):
+    k = FINAL_K if k is None else k
+
+    if not cases:
+
+        print(f"\n=== Overall {name} Evaluation ===")
+        print("No valid test cases")
+        return
+
+    mean_precision = sum(
+        precision_at_k(
+            retrieved,
+            gold,
+            k
+        )
+        for retrieved, gold in cases
+    ) / len(cases)
+
+    mean_recall = sum(
+        recall_at_k(
+            retrieved,
+            gold,
+            k
+        )
+        for retrieved, gold in cases
+    ) / len(cases)
+
+    print(f"\n=== Overall {name} Evaluation ===")
+
+    print(
+        "Evaluated Questions:",
+        len(cases)
+    )
+
+    print(
+        f"Mean Precision@{k}: "
+        f"{mean_precision:.4f}"
+    )
+
+    print(
+        f"Mean Recall@{k}: "
+        f"{mean_recall:.4f}"
+    )
+
+    print(
+        f"MAP@{k}: "
+        f"{mean_average_precision_at_k(cases, k):.4f}"
+    )
+
+    print(
+        f"MRR@{k}: "
+        f"{mean_reciprocal_rank_at_k(cases, k):.4f}"
+    )
+
+
+def record_results(
+        methods,
+        gold_ids,
+        test_cases,
+        k=None
+):
+    k = FINAL_K if k is None else k
+
+    for name, retrieved_ids in methods.items():
+
+        scores = evaluate_retrieval(
+            retrieved_ids,
+            gold_ids,
+            k
+        )
+
+        test_cases[name].append(
+            (
+                retrieved_ids,
+                gold_ids
+            )
+        )
+
+        print(f"\n=== {name} ===")
+
+        print(
+            "Retrieved IDs:",
+            retrieved_ids
+        )
+
+        print(
+            f"Precision@{k}: "
+            f"{scores['precision']:.4f}"
+        )
+
+        print(
+            f"Recall@{k}: "
+            f"{scores['recall']:.4f}"
+        )
+
+        print(
+            f"AP@{k}: "
+            f"{scores['ap']:.4f}"
+        )
+
+        print(
+            f"RR@{k}: "
+            f"{scores['rr']:.4f}"
+        )
+
+
+# ============================================================
+# 5. Main evaluation
+# ============================================================
+
+def auxiliary_queries(question, cache, calls, output_dir):
+    """Cache query transformations; neither Gold nor answers enter prompts."""
+    qid, query = question['id'], question['question']
+    if cache is not None:
+        saved = cache.get(qid)
+        if saved is None or saved['query'] != query:
+            raise ValueError(f'Auxiliary cache does not match question {qid}')
+        return saved
+    original_chat = api.chat_completion
+
+    def audited_chat(prompt, *args, **kwargs):
+        call = {'question_id': qid, 'prompt': prompt}
+        calls.append(call)
+        started = time.perf_counter()
+        try:
+            response = original_chat(prompt, *args, **kwargs)
+            call['response'] = response
+            return response
+        except Exception as exc:
+            call['error'] = f'{type(exc).__name__}: {exc}'
+            if isinstance(exc, api.IncompleteResponseError):
+                call['response'] = exc.response
+            raise
+        finally:
+            call['elapsed_seconds'] = round(time.perf_counter() - started, 3)
+            if output_dir:
+                (output_dir / 'api_calls.json').write_text(
+                    json.dumps(calls, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+    try:
+        api.chat_completion = audited_chat
+        decomposition = decompose_query(query)
+        rewritten = rewrite_query(query).strip() or query
+        return {'query': query, 'decomposition': decomposition, 'rewritten_query': rewritten}
+    finally:
+        api.chat_completion = original_chat
+
+
+def main():
+    global FINAL_K, CANDIDATE_K, RRF_TOP_K, ENABLE_REWRITING, ENABLE_DECOMPOSITION
+    parser = argparse.ArgumentParser(description='按当前或指定知识库版本评价检索。')
+    parser.add_argument('--kb-version')
+    parser.add_argument('--questions', type=Path, default=QUESTIONS_PATH,
+                        help='题目 JSON；默认保留已有六题')
+    parser.add_argument('--top-k', type=int, nargs='+', default=[10],
+                        help='最终证据条数，可同时对比 5 10 20；默认 10')
+    parser.add_argument('--candidate-k', type=int, default=60,
+                        help='每路检索和 RRF 候选预算；默认与主流程相同为 60')
+    parser.add_argument('--output-dir', type=Path, help='保存逐题指标、阶段排名及辅助查询')
+    parser.add_argument('--auxiliary-cache', type=Path, help='复用同一问题的分解/改写，不调用 API')
+    parser.add_argument('--no-auxiliary', action='store_true', help='禁用分解/改写，只评估原问题')
+    args = parser.parse_args()
+    ks = sorted(set(args.top_k))
+    if min(ks) <= 0 or args.candidate_k < max(ks):
+        parser.error('top-k 必须大于零，candidate-k 必须不小于最大 top-k。')
+    FINAL_K, CANDIDATE_K, RRF_TOP_K = max(ks), args.candidate_k, args.candidate_k
+    ENABLE_REWRITING = ENABLE_DECOMPOSITION = not args.no_auxiliary
+    questions = json.loads(args.questions.read_text(encoding='utf-8'))
+    if len({q['id'] for q in questions}) != len(questions):
+        parser.error('题目 ID 不能重复。')
+    cache = json.loads(args.auxiliary_cache.read_text(encoding='utf-8')) if args.auxiliary_cache else None
+    if cache is not None and not args.no_auxiliary:
+        for question in questions:
+            if question.get('gold_evidence') and (question['id'] not in cache
+                    or cache[question['id']]['query'] != question['question']):
+                parser.error(f"辅助查询缓存与题目不匹配：{question['id']}")
+    if args.output_dir:
+        args.output_dir.mkdir(parents=True, exist_ok=True)
+        if (args.output_dir / 'results.json').exists():
+            parser.error('结果目录已有 results.json；请使用新目录保留旧结果。')
+    started = time.perf_counter()
+    index, chunks, knowledge_base = load_knowledge_base(PROJECT_DIR / 'data/processed', args.kb_version)
+    tracked = [Path(__file__), PROJECT_DIR / 'main.py', args.questions,
+               PROJECT_DIR / 'evaluation/metrics.py', *sorted((PROJECT_DIR / 'src').glob('*.py')),
+               *(Path(knowledge_base[key]) for key in ('index_path', 'chunks_path'))]
+    if knowledge_base['manifest_path']:
+        tracked.append(Path(knowledge_base['manifest_path']))
+    if args.auxiliary_cache:
+        tracked.append(args.auxiliary_cache)
+    report = {'status': 'running', 'knowledge_base': knowledge_base,
+              'configuration': {'top_k': ks, 'candidate_k': CANDIDATE_K, 'rrf_k': RRF_K,
+                                'auxiliary_enabled': not args.no_auxiliary,
+                                'auxiliary_cache': str(args.auxiliary_cache) if args.auxiliary_cache else None,
+                                'scoring': 'Original Gold chunks and metric formulas; no answers or LLM judge'},
+              'input_sha256': {str(p.resolve()): hashlib.sha256(p.read_bytes()).hexdigest() for p in tracked},
+              'questions': [], 'api_calls': [], 'metrics': {}}
+    generated_auxiliary = {}
+
+    def save_report():
+        if args.output_dir:
+            (args.output_dir / 'results.json').write_text(
+                json.dumps(report, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+
+    names = ['Dense', 'BM25', 'Hybrid', 'Hybrid + Reranker']
+    coverage_name = 'Decomposition + Hybrid + Reranker'
+    legacy_name = 'Decomposition + Global Reranker (legacy)'
+    if not args.no_auxiliary:
+        names += ['Rewritten Hybrid + Reranker', 'Multi-Query + Reranker', coverage_name, legacy_name]
+    test_cases = {k: {name: [] for name in names} for k in ks}
+    save_report()
+    print('Questions:', args.questions, 'Knowledge Base:', knowledge_base['version'])
+    print('Candidate budget:', CANDIDATE_K, 'Final evidence budgets:', ks)
+    embedding = load_embedding_model()
+    bm25 = build_bm25_index(chunks)
+    reranker = CrossEncoder(RERANKER_NAME, device=RERANKER_DEVICE)
+    try:
+        for question in questions:
+            qid, query = question['id'], question['question']
+            print('\nQuestion ID:', qid, 'Question:', query, flush=True)
+            if not question.get('gold_evidence'):
+                report['questions'].append({'id': qid, 'status': 'skipped_no_gold'})
+                save_report()
+                print('No Gold: skipped, not counted as correct.')
+                continue
+            gold_ids, unmatched = get_gold_chunk_ids(question, chunks)
+            if unmatched or not gold_ids:
+                raise ValueError(f'Incomplete Gold mapping for {qid}: {unmatched}')
+            auxiliary = auxiliary_queries(question, cache, report['api_calls'], args.output_dir) if (
+                not args.no_auxiliary) else {'query': query,
+                    'decomposition': {'needs_decomposition': False, 'sub_queries': []},
+                    'rewritten_query': query}
+            generated_auxiliary[qid] = auxiliary
+            if args.output_dir:
+                (args.output_dir / 'auxiliary.json').write_text(
+                    json.dumps(generated_auxiliary, ensure_ascii=False, indent=2) + '\n', encoding='utf-8')
+            question_started = time.perf_counter()
+            dense, sparse = retrieve_two_ways(query, embedding, index, chunks, bm25)
+            fused, ranking = fuse_and_rerank(query, dense, sparse, reranker)
+            methods = {'Dense': get_result_ids(dense), 'BM25': get_result_ids(sparse),
+                       'Hybrid': get_result_ids(fused), 'Hybrid + Reranker': get_result_ids(ranking)}
+            stages = {'dense': dense, 'bm25': sparse, 'rrf': fused, 'global_reranker': ranking}
+            info, details = None, []
+            if not args.no_auxiliary:
+                candidates, selected, info, details = decomposition_retrieve_and_rerank(
+                    query, auxiliary['decomposition'], fused, embedding, index, chunks, bm25, reranker)
+                if info:
+                    methods[coverage_name] = get_result_ids(selected)
+                    methods[legacy_name] = get_result_ids(info['global_ranking'])
+                    stages.update(decomposition_pool=candidates,
+                                  decomposition_global=info['global_ranking'])
+                else:
+                    methods[coverage_name] = methods[legacy_name] = get_result_ids(ranking)
+                rewritten = auxiliary['rewritten_query']
+                if rewritten == query:
+                    rewrite_ranking = multi_ranking = ranking
+                else:
+                    rd, rb = retrieve_two_ways(rewritten, embedding, index, chunks, bm25)
+                    _, rewrite_ranking = fuse_and_rerank(query, rd, rb, reranker)
+                    _, multi_ranking = fuse_and_rerank(query, dense, sparse, reranker, extra_results=[rd, rb])
+                methods['Rewritten Hybrid + Reranker'] = get_result_ids(rewrite_ranking)
+                methods['Multi-Query + Reranker'] = get_result_ids(multi_ranking)
+            entry = {'id': qid, 'query': query, 'status': 'completed', 'gold_ids': sorted(gold_ids),
+                     'auxiliary': auxiliary, 'retrieval_seconds': round(time.perf_counter() - question_started, 3),
+                     'stage_ids': {name: get_result_ids(items) for name, items in stages.items()},
+                     'stage_gold_ranks': {name: {str(g): next((i for i,c in enumerate(items,1)
+                                                              if c['chunk_id']==g), None) for g in sorted(gold_ids)}
+                                          for name,items in stages.items()},
+                     'sub_query_evidence': info['sub_query_evidence'] if info else [],
+                     'subquery_stages': [{'query': item['query'],
+                                          'ids': {name: get_result_ids(item[name]) for name in ('dense','bm25','rrf')}}
+                                         for item in (details or [])], 'metrics_by_k': {}}
+            for k in ks:
+                methods_k = {name: ids[:k] for name,ids in methods.items()}
+                if info:
+                    methods_k[coverage_name] = get_result_ids(select_evidence(
+                        info['global_ranking'], info['sub_query_evidence'], k))
+                print(f'\n=== Final evidence budget: {k} ===')
+                record_results(methods_k, gold_ids, test_cases[k], k)
+                entry['metrics_by_k'][str(k)] = {name: {'retrieved_ids': ids,
+                    **evaluate_retrieval(ids, gold_ids, k)} for name,ids in methods_k.items()}
+            report['questions'].append(entry)
+            save_report()
+        for k,cases_by_method in test_cases.items():
+            report['metrics'][str(k)] = {}
+            for name,cases in cases_by_method.items():
+                print_overall_metrics(name, cases, k)
+                report['metrics'][str(k)][name] = summarize_results(cases, k)
+        report['status'] = 'completed'
+    except Exception as exc:
+        report.update(status='failed', error=f'{type(exc).__name__}: {exc}')
+        raise
+    finally:
+        report['elapsed_seconds'] = round(time.perf_counter() - started, 3)
+        report['api_call_count'] = len(report['api_calls'])
+        report['usage'] = {key: sum((call.get('response', {}).get('usage') or {}).get(key, 0)
+                                   for call in report['api_calls'])
+                           for key in ('prompt_tokens', 'completion_tokens', 'total_tokens')}
+        report['inputs_unchanged'] = all(hashlib.sha256(Path(name).read_bytes()).hexdigest() == sha
+                                         for name,sha in report['input_sha256'].items())
+        save_report()
+
+
+if __name__ == '__main__':
+    main()

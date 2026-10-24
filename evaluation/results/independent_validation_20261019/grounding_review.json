@@ -1,0 +1,91 @@
+{
+  "reviewer": "Agent manual source review; not blinded and not an LLM judge score.",
+  "primary_matrix": {
+    "n03": {
+      "closed_book": {
+        "verdict": "core_points_present_with_factual_error",
+        "note": "Includes mask padding and document asymmetry but conflates Q marker with query augmentation; query augmentation is mask padding per chunk224, Q marker placement shown in233."
+      },
+      "gold_evidence": {
+        "verdict": "complete_supported",
+        "support": {
+          "mask_padding": "[1] chunk224",
+          "no_document_masks": "[2] chunk231"
+        }
+      },
+      "irrelevant_evidence": {
+        "verdict": "appropriate_refusal",
+        "note": "Does not substitute Self-RAG facts for ColBERT answer."
+      }
+    },
+    "n05": {
+      "closed_book": {
+        "verdict": "mostly_correct",
+        "note": "RAG/DPR BERT-base dual encoders and CLS representation supplied from own knowledge; uncased detail omitted."
+      },
+      "gold_evidence": {
+        "verdict": "incomplete_false_source_identity",
+        "note": "Answers RAG encoder part but incorrectly denies that source2004.04906v3 is DPR, despite source1 being the DPR paper. Title absent in initial control."
+      },
+      "irrelevant_evidence": {
+        "verdict": "appropriate_refusal"
+      }
+    },
+    "n08": {
+      "closed_book": {
+        "verdict": "main_mechanisms_present_with_unverified_extras",
+        "note": "Retrieve decisions/direct generation and CRAG confidence/web correction broadly present; extra claims about revising/rejecting generations not established by the frozen control passages."
+      },
+      "gold_evidence": {
+        "verdict": "partial_and_over_refusal",
+        "note": "Self-RAG no-retrieval and Incorrect discard covered; web fallback from source3 omitted and CRAG identity denied. Wording can also be read as asking Incorrect behavior for Self-RAG; flag ambiguity rather than change question after run."
+      },
+      "irrelevant_evidence": {
+        "verdict": "appropriate_refusal",
+        "note": "Adds a removable summary of unrelated ColBERT passages."
+      }
+    },
+    "n11": {
+      "closed_book": {
+        "verdict": "appropriate_refusal"
+      },
+      "gold_evidence": {
+        "verdict": "appropriate_refusal",
+        "note": "No Gold exists: empty evidence is expected, not an answerable positive control."
+      },
+      "irrelevant_evidence": {
+        "verdict": "appropriate_refusal",
+        "note": "Does not invent project-specific milliseconds."
+      }
+    }
+  },
+  "metadata_only_followup": {
+    "n05": {
+      "verdict": "identity_improved_but_over_refusal_remains",
+      "note": "Now recognizes DPR and CLS/dimension in source1, but concludes insufficient evidence and gives contradictory source-scope explanations. Not marked strict pass. No further paid retries."
+    },
+    "n08": {
+      "verdict": "complete_supported",
+      "support": {
+        "Self-RAG retrieval/no_retrieval": "[1] chunk590",
+        "CRAG confidence/Incorrect discard": "[2] chunk873",
+        "web fallback": "[3] chunk874"
+      }
+    }
+  },
+  "counts": {
+    "answerable_control_questions": 3,
+    "initial_gold_strict_complete": 1,
+    "initial_irrelevant_appropriate_refusals": 4,
+    "unanswerable_refusal_conditions": 3,
+    "metadata_targeted_replays": 2,
+    "metadata_replays_strict_complete": 1
+  },
+  "limitations": [
+    "Four hand-authored questions do not estimate population accuracy.",
+    "Closed-book and grounded prompts intentionally differ in knowledge policy; cannot interpret this as a pure context-only causal comparison.",
+    "Gold evidence is an oracle generator control, not actual retrieved RAG output.",
+    "Citation-number validity is separate from claim entailment.",
+    "No claim is made that all previous RAG answers came only from model knowledge."
+  ]
+}

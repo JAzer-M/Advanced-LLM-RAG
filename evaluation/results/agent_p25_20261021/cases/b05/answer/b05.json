@@ -1,0 +1,113 @@
+{
+  "id": "b05",
+  "status": "completed",
+  "query": "Which checkpoints are averaged for Transformer base and big models, and how does this differ from the way VGG combines multiple model predictions?",
+  "kb_version": "all-papers-8-20261020",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": false,
+    "drafts": [
+      "Transformer base模型平均最后5个checkpoint（以10分钟间隔写入），big模型平均最后20个checkpoint[1]。VGG则通过平均多个模型的soft-max类别后验概率来组合预测[2]，这与Transformer按时间顺序选取末尾checkpoint做权重的平均方式不同。"
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "Transformer base模型平均最后5个checkpoint（以10分钟间隔写入），big模型平均最后20个checkpoint[1]。",
+              "reason": "答案正确指出 base 模型平均最后5个checkpoint、big 模型平均最后20个checkpoint，并补充了10分钟间隔，均与原文一致，引用[1]直接支撑。",
+              "citations": [
+                {
+                  "number": 1,
+                  "quote": "For the base models, we used a single model obtained by averaging the last 5 checkpoints, which were written at 10-minute intervals. For the big models, we averaged the last 20 checkpoints."
+                }
+              ]
+            },
+            {
+              "id": "r2",
+              "verdict": "pass",
+              "answer_quote": "VGG则通过平均多个模型的soft-max类别后验概率来组合预测[2]，这与Transformer按时间顺序选取末尾checkpoint做权重的平均方式不同。",
+              "reason": "答案正确说明 VGG 通过平均多个模型的 soft-max 类别后验概率来组合预测，并明确对比了与 Transformer 平均末尾 checkpoint 的差异，引用[2]支撑。",
+              "citations": [
+                {
+                  "number": 2,
+                  "quote": "In this part of the exper- iments, we combine the outputs of several models by averaging their soft-max class posteriors."
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            1,
+            2
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 1,
+              "chunk_id": 73,
+              "source": "Attention is all you need.pdf",
+              "page": 8,
+              "text": "The Transformer (big) model trained for English-to-French used dropout rate Pdrop = 0.1, instead of 0.3. For the base models, we used a single model obtained by averaging the last 5 checkpoints, which were written at 10-minute intervals. For the big models, we averaged the last 20 checkpoints. We used beam search with a beam size of 4 and length penalty α = 0.6 [31]. These hyperparameters were chosen after experimentation on the development set."
+            },
+            {
+              "citation": 2,
+              "chunk_id": 296,
+              "source": "VGG.pdf",
+              "page": 7,
+              "text": "In this part of the exper- iments, we combine the outputs of several models by averaging their soft-max class posteriors. This improves the performance due to complementarity of the models, and was used in the top ILSVRC submissions in 2012 (Krizhevsky et al., 2012) and 2013 (Zeiler & Fergus, 2013; Sermanet et al., 2014)."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "Transformer base模型平均最后5个checkpoint（以10分钟间隔写入），big模型平均最后20个checkpoint[1]。VGG则通过平均多个模型的soft-max类别后验概率来组合预测[2]，这与Transformer按时间顺序选取末尾checkpoint做权重的平均方式不同。",
+    "citation_check": {
+      "cited_numbers": [
+        1,
+        2
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 73,
+          "source": "Attention is all you need.pdf",
+          "page": 8,
+          "text": "The Transformer (big) model trained for English-to-French used dropout rate Pdrop = 0.1, instead of 0.3. For the base models, we used a single model obtained by averaging the last 5 checkpoints, which were written at 10-minute intervals. For the big models, we averaged the last 20 checkpoints. We used beam search with a beam size of 4 and length penalty α = 0.6 [31]. These hyperparameters were chosen after experimentation on the development set."
+        },
+        {
+          "citation": 2,
+          "chunk_id": 296,
+          "source": "VGG.pdf",
+          "page": 7,
+          "text": "In this part of the exper- iments, we combine the outputs of several models by averaging their soft-max class posteriors. This improves the performance due to complementarity of the models, and was used in the top ILSVRC submissions in 2012 (Krizhevsky et al., 2012) and 2013 (Zeiler & Fergus, 2013; Sermanet et al., 2014)."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

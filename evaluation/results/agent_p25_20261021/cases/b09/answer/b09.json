@@ -1,0 +1,113 @@
+{
+  "id": "b09",
+  "status": "completed",
+  "query": "How does RAG-Sequence's Thorough Decoding score a candidate absent from a document's beam, and how does Self-RAG use critique-token probabilities to score output segments?",
+  "kb_version": "all-papers-8-20261020",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": false,
+    "drafts": [
+      "RAG-Sequence的Thorough Decoding对未出现在某文档beam中的候选y，会额外运行一次前向传播，将该生成器概率与pη(z|x)相乘，再跨beam求和得到边缘概率[7]。Self-RAG对每个critique token组G，以最理想反思token ˆr的生成概率sG t（即pt(ˆr)除以该组NG个token概率之和）按权重wG线性求和得到S(Critique)，再与生成概率相加得到分段得分f(yt,d,Critique)[3]。"
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "RAG-Sequence的Thorough Decoding对未出现在某文档beam中的候选y，会额外运行一次前向传播，将该生成器概率与pη(z|x)相乘，再跨beam求和得到边缘概率[7]。",
+              "reason": "完整回答了缺席候选的打分方式：对该文档额外前向传播、生成器概率与pη(z|x)相乘、跨beam求和得边缘概率，与[7]原文一致。",
+              "citations": [
+                {
+                  "number": 7,
+                  "quote": "To estimate the probability of an hypothesis y we run an additional forward pass for each document z for which y does not appear in the beam, multiply generator probability with pη(z|x) and then sum the probabilities across beams for the marginals. We refer to this decoding procedure as “Thorough Decoding.”"
+                }
+              ]
+            },
+            {
+              "id": "r2",
+              "verdict": "pass",
+              "answer_quote": "Self-RAG对每个critique token组G，以最理想反思token ˆr的生成概率sG t（即pt(ˆr)除以该组NG个token概率之和）按权重wG线性求和得到S(Critique)，再与生成概率相加得到分段得分f(yt,d,Critique)[3]。",
+              "reason": "准确说明sG t为最理想反思token ˆr的生成概率（pt(ˆr)除以该组NG个token概率之和），按权重wG线性求和得S(Critique)，再与生成概率相加得f(yt,d,Critique)，与[3]一致。",
+              "citations": [
+                {
+                  "number": 3,
+                  "quote": "For each critique token group G (e.g., ISREL ), we denote its score at timestamp t as sG t , and we compute a segment score as follows: f(yt, d, Critique ) = p(yt|x, d, y<t)) + S( Critique ), where (3) S( Critique ) = X G∈G wGsG t for G = { ISREL , ISSUP , ISUSE }, (4) where sG t = pt(ˆr) PNG i=1 pt(ri) stands for the generation probability of the most desirable reflection token ˆr (e.g., ISREL =Relevant) for the critique token type G with N G distinct tokens (that represent different possible values for G)."
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            3,
+            7
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 3,
+              "chunk_id": 996,
+              "source": "2310.11511v1.pdf",
+              "page": 6,
+              "text": "For each critique token group G (e.g., ISREL ), we denote its score at timestamp t as sG t , and we compute a segment score as follows: f(yt, d, Critique ) = p(yt|x, d, y<t)) + S( Critique ), where (3) S( Critique ) = X G∈G wGsG t for G = { ISREL , ISSUP , ISUSE }, (4) where sG t = pt(ˆr) PNG i=1 pt(ri) stands for the generation probability of the most desirable reflection token ˆr (e.g., ISREL =Relevant) for the critique token type G with N G distinct tokens (that represent different possible values for G)."
+            },
+            {
+              "citation": 7,
+              "chunk_id": 757,
+              "source": "2005.11401v4.pdf",
+              "page": 4,
+              "text": "To estimate the probability of an hypothesis y we run an additional forward pass for each document z for which y does not appear in the beam, multiply generator probability with pη(z|x) and then sum the probabilities across beams for the marginals. We refer to this decoding procedure as “Thorough Decoding.” For longer output sequences, |Y | can become large, requiring many forward passes."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "RAG-Sequence的Thorough Decoding对未出现在某文档beam中的候选y，会额外运行一次前向传播，将该生成器概率与pη(z|x)相乘，再跨beam求和得到边缘概率[7]。Self-RAG对每个critique token组G，以最理想反思token ˆr的生成概率sG t（即pt(ˆr)除以该组NG个token概率之和）按权重wG线性求和得到S(Critique)，再与生成概率相加得到分段得分f(yt,d,Critique)[3]。",
+    "citation_check": {
+      "cited_numbers": [
+        3,
+        7
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 3,
+          "chunk_id": 996,
+          "source": "2310.11511v1.pdf",
+          "page": 6,
+          "text": "For each critique token group G (e.g., ISREL ), we denote its score at timestamp t as sG t , and we compute a segment score as follows: f(yt, d, Critique ) = p(yt|x, d, y<t)) + S( Critique ), where (3) S( Critique ) = X G∈G wGsG t for G = { ISREL , ISSUP , ISUSE }, (4) where sG t = pt(ˆr) PNG i=1 pt(ri) stands for the generation probability of the most desirable reflection token ˆr (e.g., ISREL =Relevant) for the critique token type G with N G distinct tokens (that represent different possible values for G)."
+        },
+        {
+          "citation": 7,
+          "chunk_id": 757,
+          "source": "2005.11401v4.pdf",
+          "page": 4,
+          "text": "To estimate the probability of an hypothesis y we run an additional forward pass for each document z for which y does not appear in the beam, multiply generator probability with pη(z|x) and then sum the probabilities across beams for the marginals. We refer to this decoding procedure as “Thorough Decoding.” For longer output sequences, |Y | can become large, requiring many forward passes."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

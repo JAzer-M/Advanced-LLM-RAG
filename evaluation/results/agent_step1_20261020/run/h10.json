@@ -1,0 +1,128 @@
+{
+  "id": "h10",
+  "query": "For short-answer open-domain QA, how does the correctness criterion reported by RAG differ from the criterion used by Self-RAG for PopQA and TriviaQA?",
+  "kb_version": "all-papers-8-20261020",
+  "status": "completed",
+  "actions_executed": 0,
+  "semantic_correctness": "requires_manual_review",
+  "plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "RAG",
+        "need": "确定 RAG 在 short-answer open-domain QA 中报告的 correctness criterion 是什么",
+        "question_quote": "the correctness criterion reported by RAG"
+      },
+      {
+        "id": "r2",
+        "subject": "Self-RAG",
+        "need": "确定 Self-RAG 在 short-answer open-domain QA 中使用的 correctness criterion 是什么",
+        "question_quote": "the criterion used by Self-RAG"
+      },
+      {
+        "id": "r3",
+        "subject": "PopQA",
+        "need": "确定 RAG 与 Self-RAG 各自针对 PopQA 的 correctness criterion 是如何界定或应用的",
+        "question_quote": "for PopQA"
+      },
+      {
+        "id": "r4",
+        "subject": "TriviaQA",
+        "need": "确定 RAG 与 Self-RAG 各自针对 TriviaQA 的 correctness criterion 是如何界定或应用的",
+        "question_quote": "TriviaQA"
+      },
+      {
+        "id": "r5",
+        "subject": "RAG",
+        "need": "确定 RAG 的 correctness criterion 与 Self-RAG 的 criterion 之间的差异",
+        "question_quote": "how does the correctness criterion reported by RAG differ from the criterion used by Self-RAG"
+      }
+    ]
+  },
+  "assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "partial",
+        "evidence": [
+          {
+            "chunk_id": 763,
+            "quote": "We treat questions and answers as input-output text pairs (x, y) and train RAG by directly minimizing the negative log-likelihood of answers. We compare RAG to the popular extractive QA paradigm [5, 7, 31, 26], where answers are extracted spans from retrieved documents, relying primarily on non-parametric knowledge."
+          }
+        ],
+        "reason": "仅说明 RAG 将 QA 视为输入-输出文本对并以负对数似然训练，未明确给出其在 short-answer open-domain QA 中报告的 correctness criterion。",
+        "gap": "缺少 RAG 评估短答案 open-domain QA 时采用的正确性判定标准（如是否要求精确匹配或包含匹配）的表述。"
+      },
+      {
+        "id": "r2",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 1003,
+            "quote": "We evaluate performance based on whether gold answers are included in the model generations instead of strictly requiring exact matching, following Mallen et al."
+          }
+        ],
+        "reason": "明确 Self-RAG 以生成内容是否包含 gold answer（包含匹配）而非严格精确匹配为正确性判据。",
+        "gap": ""
+      },
+      {
+        "id": "r3",
+        "status": "partial",
+        "evidence": [
+          {
+            "chunk_id": 1003,
+            "quote": "For PopQA, we use the long-tail subset, consisting of 1,399 rare entity queries whose monthly Wikipedia page views are less than 100."
+          }
+        ],
+        "reason": "给出了 Self-RAG 的 PopQA 子集，并紧接说明其整体采用包含匹配判据；但未单独、明确地就 PopQA 说明 RAG 的正确性判据。",
+        "gap": "缺少 RAG 在 PopQA 上如何界定或应用 correctness criterion 的说明。"
+      },
+      {
+        "id": "r4",
+        "status": "partial",
+        "evidence": [
+          {
+            "chunk_id": 1003,
+            "quote": "As the TriviaQA-unfiltered (open) test set is not publicly available, we follow prior work’s validation and test split (Min et al., 2019; Guu et al., 2020), using 11,313 test queries for evaluation. We evaluate performance based on whether gold answers are included in the model generations instead of strictly requiring exact matching, following Mallen et al."
+          },
+          {
+            "chunk_id": 910,
+            "quote": "For TriviaQA, there are often many valid answers to a given question, some of which are not suitable training targets, such as emoji or spelling variants. For TriviaQA, we ﬁlter out answer candidates if they do not occur in top 1000 documents for the query."
+          }
+        ],
+        "reason": "Self-RAG 的 TriviaQA 使用包含匹配判据；RAG 的段落仅涉及 TriviaQA 答案候选过滤与训练数据处理，未说明其评估正确性判据。",
+        "gap": "缺少 RAG 在 TriviaQA 上如何界定或应用 correctness criterion 的说明。"
+      },
+      {
+        "id": "r5",
+        "status": "partial",
+        "evidence": [
+          {
+            "chunk_id": 1003,
+            "quote": "We evaluate performance based on whether gold answers are included in the model generations instead of strictly requiring exact matching, following Mallen et al."
+          },
+          {
+            "chunk_id": 763,
+            "quote": "We treat questions and answers as input-output text pairs (x, y) and train RAG by directly minimizing the negative log-likelihood of answers."
+          }
+        ],
+        "reason": "Self-RAG 的判据明确为包含匹配，但 RAG 一侧未给出可据以比较的正确性判据表述，无法完整建立两者差异。",
+        "gap": "缺少 RAG 报告的 correctness criterion 的具体表述，无法与 Self-RAG 的包含匹配判据形成完整差异对比。"
+      }
+    ],
+    "next_action": {
+      "type": "search",
+      "reason": "需要在 RAG 原始论文中查找其 short-answer open-domain QA（尤其 PopQA/TriviaQA）评估正确性判据的明确表述。",
+      "requirement_ids": [
+        "r1",
+        "r3",
+        "r4",
+        "r5"
+      ],
+      "query": "RAG 在 short-answer open-domain QA（PopQA、TriviaQA）评估中采用何种正确性判据（exact match 还是 answer inclusion）？",
+      "source": "2005.11401v4.pdf",
+      "chunk_id": null
+    }
+  },
+  "elapsed_seconds": 7.595
+}

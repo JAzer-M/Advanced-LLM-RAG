@@ -1,0 +1,792 @@
+{
+  "query": "Using only the supplied corpus, what hidden-layer count and context-window length does the Gemma 2 technical report specify for Gemma 2 9B?",
+  "knowledge_base": {
+    "version": "all-papers-8-20261020",
+    "chunk_count": 1397,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/manifest.json",
+    "manifest_sha256": "9c4e2c26b4f11fe7baf526595630cbee2d325416ec0e497f417975fbd60779ef",
+    "files": {
+      "faiss.index": "ff1f4a3e38e20c0275ba79d805e6475639b3cea7a7a583f9c18c67ec8e40a2ed",
+      "chunks.json": "3e63d75abbe164ff8e135b1d66fd6b02d9479b2e037e289a726e7c542464593a"
+    }
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 212,
+    "global_top_ids": [
+      767,
+      200,
+      31,
+      800,
+      51,
+      988,
+      1247,
+      1281,
+      139,
+      177
+    ],
+    "protected_ids": [
+      31,
+      616
+    ],
+    "sub_query_evidence": [
+      {
+        "query": "What hidden-layer count does the Gemma 2 technical report specify for Gemma 2 9B?",
+        "top_ids": [
+          31,
+          192,
+          51
+        ]
+      },
+      {
+        "query": "What context-window length does the Gemma 2 technical report specify for Gemma 2 9B?",
+        "top_ids": [
+          616,
+          55,
+          74
+        ]
+      }
+    ],
+    "retrieval_anchor_ids": [
+      46
+    ],
+    "evidence_completion": {
+      "requested_sources": [],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        767,
+        200,
+        31,
+        800,
+        51,
+        55,
+        46,
+        74,
+        192,
+        616
+      ],
+      "retained_local_ids": [
+        31,
+        51,
+        55,
+        74,
+        192,
+        616
+      ],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        767,
+        200,
+        31,
+        800,
+        51,
+        55,
+        46,
+        74,
+        192,
+        616
+      ],
+      "elapsed_seconds": 0.000219
+    }
+  },
+  "selected_ids": [
+    767,
+    200,
+    31,
+    800,
+    51,
+    55,
+    46,
+    74,
+    192,
+    616
+  ],
+  "context": "Original passages:\n[1] Source: 2005.11401v4.pdf | Page: 4 | Section: 3.2 Abstractive Question Answering\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nThe task consists of questions, ten gold passages retrieved from a search engine for each question, and a full sentence answer annotated from the retrieved passages. We do not use the supplied passages, only the questions and answers, to treat\n\n[2] Source: DCNN.pdf | Page: 7 | Section: 9. EPILOGUE\nBy 2015, better hardware, more hidden layers, and a host of technical advances reduced the error rate of deep convolutional neural nets by a further factor of three so that they are now quite close to human perfor- mance for static images.11, 31 Much of the credit for this revolu- tion should go to the pioneers who spent many years developing the technology of CNNs, but the essential missing ingredient was supplied by FeiFei et al.7 who put a huge effort into producing a labeled dataset that was finally large enough to show what neural networks could really do.\b References visual object classification.\n\n[3] Source: Attention is all you need.pdf | Page: 4 | Section: 3.2.1 Scaled Dot-Product Attention\nDot-product attention is identical to our algorithm, except for the scaling factor of 1 √dk . Additive attention computes the compatibility function using a feed-forward network with a single hidden layer. While the two are similar in theoretical complexity, dot-product attention is much faster and more space-efﬁcient in practice, since it can be implemented using highly optimized matrix multiplication code.\n\n[4] Source: 2005.11401v4.pdf | Page: 7 | Section: 4.4 Fact Veriﬁcation\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nRAG achieves an accuracy within 2.7% of this model, despite being supplied with only the claim and retrieving its own evidence. We also analyze whether documents retrieved by RAG correspond to documents annotated as gold evidence in FEVER. We calculate the overlap in article titles between the top k documents retrieved by RAG and gold evidence annotations.\n\n[5] Source: Attention is all you need.pdf | Page: 6 | Section: 4 Why Self-Attention\n4 Why Self-Attention In this section we compare various aspects of self-attention layers to the recurrent and convolu- tional layers commonly used for mapping one variable-length sequence of symbol representations (x1, ..., xn) to another sequence of equal length (z1, ..., zn), with xi, zi ∈Rd, such as a hidden layer in a typical sequence transduction encoder or decoder. Motivating our use of self-attention we consider three desiderata.\n\n[6] Source: Attention is all you need.pdf | Page: 6 | Section: 4 Why Self-Attention\nIn terms of computational complexity, self-attention layers are faster than recurrent layers when the sequence length n is smaller than the representation dimensionality d, which is most often the case with sentence representations used by state-of-the-art models in machine translations, such as word-piece [31] and byte-pair [25] representations.\n\n[7] Source: Attention is all you need.pdf | Page: 6 | Section: 3.5 Positional Encoding\nTable 1: Maximum path lengths, per-layer complexity and minimum number of sequential operations for different layer types. n is the sequence length, d is the representation dimension, k is the kernel size of convolutions and r the size of the neighborhood in restricted self-attention.\n\n[8] Source: Attention is all you need.pdf | Page: 8 | Section: 6.1 Machine Translation\nWe set the maximum output length during inference to input length + 50, but terminate early when possible [31]. Table 2 summarizes our results and compares our translation quality and training costs to other model architectures from the literature. We estimate the number of ﬂoating point operations used to train a model by multiplying the training time, the number of GPUs used, and an estimate of the sustained single-precision ﬂoating-point capacity of each GPU 5.\n\n[9] Source: DCNN.pdf | Page: 6 | Section: 7.1. Qualitative evaluations\nAnother way to probe the network’s visual knowledge is to consider the feature activations induced by an image at the last, 4096-dimensional hidden layer. If two images produce feature activation vectors with a small Euclidean separation, we can say that the higher levels of the neural network con- sider them to be similar. Figure 4 shows five images from the test set and the six images from the training set that are most similar to each of them according to this measure.\n\n[10] Source: 2004.12832v2.pdf | Page: 5 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nTo begin with, we exploit multiple GPUs, if available, for faster encoding of batches of documents in parallel. When batching, we pad all documents to the maximum length of a document within the batch.3 To make capping the sequence length on a per-batch basis more eﬀective, our indexer proceeds through documents in groups of B (e.g., B = 100,000) documents. It sorts these documents by length and then feeds batches of b (e.g., b = 128) documents of comparable length through our encoder.\n\n[11] Source: DCNN.pdf | Page: 7 | Section: 9. EPILOGUE\n9. EPILOGUE The response of the computer vision community to the suc- cess of SuperVision was impressive. Over the next year or two, they switched to using deep neural networks and these are now widely deployed by Google, Facebook, Microsoft, Baidu and many other companies.\n\n[12] Source: Attention is all you need.pdf | Page: 5 | Section: 3.5 Positional Encoding\n3.5 Positional Encoding Since our model contains no recurrence and no convolution, in order for the model to make use of the order of the sequence, we must inject some information about the relative or absolute position of the tokens in the sequence. To this end, we add \"positional encodings\" to the input embeddings at the\n\n[13] Source: 2004.12832v2.pdf | Page: 5 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nGiven a triple ⟨q,d+,d−⟩with query q, positive document d+ and negative document d−, ColBERT is used to produce a score for each document individually and is optimized via pairwise sofmax cross-entropy loss over the computed scores of d+ and d−. 3.4 Oﬀline Indexing: Computing & Storing Document Embeddings By design, ColBERT isolates almost all of the computations between queries and documents, largely to enable pre-computing document representations oﬄine.\n\nEvidence guidance:\n- Rule-based subject attribution: SuperVision; passage: “\b References visual object classification.” [2][11]\n- Rule-based subject attribution: ColBERT; passage: “To begin with, we exploit multiple GPUs, if available, for faster encoding of batches of documents in parallel.” [10][13]\n- Rule-based subject attribution: ColBERT; passage: “, b = 128) documents of comparable length through our encoder.” [10][13]",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": "The task consists of questions, ten gold passages retrieved from a search engine for each question, and a full sentence answer annotated from the retrieved passages.",
+        "evidence_start": 0,
+        "evidence_end": 165,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            767,
+            766
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 767,
+        "page": 4,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We do not use the supplied passages, only the questions and answers, to treat",
+        "evidence_start": 165,
+        "evidence_end": 243,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            767,
+            766
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 767,
+        "page": 4,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "\b References visual object classification.",
+        "evidence_start": 567,
+        "evidence_end": 609,
+        "subject": "SuperVision",
+        "identity": {
+          "subject": "SuperVision",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            200,
+            199
+          ],
+          "identity_quote": "9. EPILOGUE The response of the computer vision community to the suc- cess of SuperVision was impressive. Over the next year or two, they switched to using deep neural networks and these are now widely deployed by Google, Facebook, Microsoft, Baidu and many other companies.",
+          "identity_chunk_id": 199
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 200,
+        "page": 7,
+        "citations": [
+          2,
+          11
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Dot-product attention is identical to our algorithm, except for the scaling factor of 1 √dk .",
+        "evidence_start": 0,
+        "evidence_end": 93,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            31,
+            30,
+            29,
+            28,
+            27
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 31,
+        "page": 4,
+        "citations": [
+          3
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Additive attention computes the compatibility function using a feed-forward network with a single hidden layer.",
+        "evidence_start": 93,
+        "evidence_end": 205,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            31,
+            30,
+            29,
+            28,
+            27
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 31,
+        "page": 4,
+        "citations": [
+          3
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " While the two are similar in theoretical complexity, dot-product attention is much faster and more space-efﬁcient in practice, since it can be implemented using highly optimized matrix multiplication code.",
+        "evidence_start": 205,
+        "evidence_end": 411,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            31,
+            30,
+            29,
+            28,
+            27
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 31,
+        "page": 4,
+        "citations": [
+          3
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "7% of this model, despite being supplied with only the claim and retrieving its own evidence.",
+        "evidence_start": 34,
+        "evidence_end": 127,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            800,
+            799
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 800,
+        "page": 7,
+        "citations": [
+          4
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We also analyze whether documents retrieved by RAG correspond to documents annotated as gold evidence in FEVER.",
+        "evidence_start": 127,
+        "evidence_end": 239,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            800
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 800,
+        "page": 7,
+        "citations": [
+          4
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We calculate the overlap in article titles between the top k documents retrieved by RAG and gold evidence annotations.",
+        "evidence_start": 239,
+        "evidence_end": 358,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            800
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 800,
+        "page": 7,
+        "citations": [
+          4
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": ", zn), with xi, zi ∈Rd, such as a hidden layer in a typical sequence transduction encoder or decoder.",
+        "evidence_start": 272,
+        "evidence_end": 373,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            51
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 51,
+        "page": 6,
+        "citations": [
+          5
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Motivating our use of self-attention we consider three desiderata.",
+        "evidence_start": 373,
+        "evidence_end": 440,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            51
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 51,
+        "page": 6,
+        "citations": [
+          5
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "In terms of computational complexity, self-attention layers are faster than recurrent layers when the sequence length n is smaller than the representation dimensionality d, which is most often the case with sentence representations used by state-of-the-art models in machine translations, such as word-piece [31] and byte-pair [25] representations.",
+        "evidence_start": 0,
+        "evidence_end": 348,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            55,
+            54,
+            53,
+            52,
+            51
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 55,
+        "page": 6,
+        "citations": [
+          6
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Table 1: Maximum path lengths, per-layer complexity and minimum number of sequential operations for different layer types.",
+        "evidence_start": 0,
+        "evidence_end": 122,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            46,
+            45
+          ],
+          "identity_quote": "3.5 Positional Encoding Since our model contains no recurrence and no convolution, in order for the model to make use of the order of the sequence, we must inject some information about the relative or absolute position of the tokens in the sequence. To this end, we add \"positional encodings\" to the input embeddings at the",
+          "identity_chunk_id": 45
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 46,
+        "page": 6,
+        "citations": [
+          7,
+          12
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " n is the sequence length, d is the representation dimension, k is the kernel size of convolutions and r the size of the neighborhood in restricted self-attention.",
+        "evidence_start": 122,
+        "evidence_end": 285,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            46,
+            45
+          ],
+          "identity_quote": "3.5 Positional Encoding Since our model contains no recurrence and no convolution, in order for the model to make use of the order of the sequence, we must inject some information about the relative or absolute position of the tokens in the sequence. To this end, we add \"positional encodings\" to the input embeddings at the",
+          "identity_chunk_id": 45
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 46,
+        "page": 6,
+        "citations": [
+          7,
+          12
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "We set the maximum output length during inference to input length + 50, but terminate early when possible [31].",
+        "evidence_start": 0,
+        "evidence_end": 111,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            74,
+            73,
+            72
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 74,
+        "page": 8,
+        "citations": [
+          8
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Table 2 summarizes our results and compares our translation quality and training costs to other model architectures from the literature.",
+        "evidence_start": 111,
+        "evidence_end": 248,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            74,
+            73,
+            72
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 74,
+        "page": 8,
+        "citations": [
+          8
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We estimate the number of ﬂoating point operations used to train a model by multiplying the training time, the number of GPUs used, and an estimate of the sustained single-precision ﬂoating-point capacity of each GPU 5.",
+        "evidence_start": 248,
+        "evidence_end": 468,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            74,
+            73,
+            72
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 74,
+        "page": 8,
+        "citations": [
+          8
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Another way to probe the network’s visual knowledge is to consider the feature activations induced by an image at the last, 4096-dimensional hidden layer.",
+        "evidence_start": 0,
+        "evidence_end": 154,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            192,
+            191,
+            190,
+            189,
+            188
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 192,
+        "page": 6,
+        "citations": [
+          9
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " If two images produce feature activation vectors with a small Euclidean separation, we can say that the higher levels of the neural network con- sider them to be similar.",
+        "evidence_start": 154,
+        "evidence_end": 325,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            192,
+            191,
+            190,
+            189,
+            188
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 192,
+        "page": 6,
+        "citations": [
+          9
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Figure 4 shows five images from the test set and the six images from the training set that are most similar to each of them according to this measure.",
+        "evidence_start": 325,
+        "evidence_end": 476,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            192,
+            191,
+            190,
+            189,
+            188
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 192,
+        "page": 6,
+        "citations": [
+          9
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "To begin with, we exploit multiple GPUs, if available, for faster encoding of batches of documents in parallel.",
+        "evidence_start": 0,
+        "evidence_end": 111,
+        "subject": "ColBERT",
+        "identity": {
+          "subject": "ColBERT",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            616,
+            615,
+            614
+          ],
+          "identity_quote": "Given a triple ⟨q,d+,d−⟩with query q, positive document d+ and negative document d−, ColBERT is used to produce a score for each document individually and is optimized via pairwise sofmax cross-entropy loss over the computed scores of d+ and d−. 3.4 Oﬀline Indexing: Computing & Storing Document Embeddings By design, ColBERT isolates almost all of the computations between queries and documents, largely to enable pre-computing document representations oﬄine.",
+          "identity_chunk_id": 614
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 616,
+        "page": 5,
+        "citations": [
+          10,
+          13
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": ", b = 128) documents of comparable length through our encoder.",
+        "evidence_start": 428,
+        "evidence_end": 490,
+        "subject": "ColBERT",
+        "identity": {
+          "subject": "ColBERT",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            616,
+            615,
+            614
+          ],
+          "identity_quote": "Given a triple ⟨q,d+,d−⟩with query q, positive document d+ and negative document d−, ColBERT is used to produce a score for each document individually and is optimized via pairwise sofmax cross-entropy loss over the computed scores of d+ and d−. 3.4 Oﬀline Indexing: Computing & Storing Document Embeddings By design, ColBERT isolates almost all of the computations between queries and documents, largely to enable pre-computing document representations oﬄine.",
+          "identity_chunk_id": 614
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 616,
+        "page": 5,
+        "citations": [
+          10,
+          13
+        ],
+        "record_id": "E22"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 767,
+        "text": "The task consists of questions, ten gold passages retrieved from a search engine for each question, and a full sentence answer annotated from the retrieved passages. We do not use the supplied passages, only the questions and answers, to treat",
+        "source": "2005.11401v4.pdf",
+        "page": 4,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "3.2 Abstractive Question Answering"
+      },
+      {
+        "chunk_id": 200,
+        "text": "By 2015, better hardware, more hidden layers, and a host of technical advances reduced the error rate of deep convolutional neural nets by a further factor of three so that they are now quite close to human perfor- mance for static images.11, 31 Much of the credit for this revolu- tion should go to the pioneers who spent many years developing the technology of CNNs, but the essential missing ingredient was supplied by FeiFei et al.7 who put a huge effort into producing a labeled dataset that was finally large enough to show what neural networks could really do.\b References visual object classification.",
+        "source": "DCNN.pdf",
+        "page": 7,
+        "title": "DCNN",
+        "section": "9. EPILOGUE"
+      },
+      {
+        "chunk_id": 31,
+        "text": "Dot-product attention is identical to our algorithm, except for the scaling factor of 1 √dk . Additive attention computes the compatibility function using a feed-forward network with a single hidden layer. While the two are similar in theoretical complexity, dot-product attention is much faster and more space-efﬁcient in practice, since it can be implemented using highly optimized matrix multiplication code.",
+        "source": "Attention is all you need.pdf",
+        "page": 4,
+        "title": "Attention is All you Need",
+        "section": "3.2.1 Scaled Dot-Product Attention"
+      },
+      {
+        "chunk_id": 800,
+        "text": "RAG achieves an accuracy within 2.7% of this model, despite being supplied with only the claim and retrieving its own evidence. We also analyze whether documents retrieved by RAG correspond to documents annotated as gold evidence in FEVER. We calculate the overlap in article titles between the top k documents retrieved by RAG and gold evidence annotations.",
+        "source": "2005.11401v4.pdf",
+        "page": 7,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "4.4 Fact Veriﬁcation"
+      },
+      {
+        "chunk_id": 51,
+        "text": "4 Why Self-Attention In this section we compare various aspects of self-attention layers to the recurrent and convolu- tional layers commonly used for mapping one variable-length sequence of symbol representations (x1, ..., xn) to another sequence of equal length (z1, ..., zn), with xi, zi ∈Rd, such as a hidden layer in a typical sequence transduction encoder or decoder. Motivating our use of self-attention we consider three desiderata.",
+        "source": "Attention is all you need.pdf",
+        "page": 6,
+        "title": "Attention is All you Need",
+        "section": "4 Why Self-Attention"
+      },
+      {
+        "chunk_id": 55,
+        "text": "In terms of computational complexity, self-attention layers are faster than recurrent layers when the sequence length n is smaller than the representation dimensionality d, which is most often the case with sentence representations used by state-of-the-art models in machine translations, such as word-piece [31] and byte-pair [25] representations.",
+        "source": "Attention is all you need.pdf",
+        "page": 6,
+        "title": "Attention is All you Need",
+        "section": "4 Why Self-Attention"
+      },
+      {
+        "chunk_id": 46,
+        "text": "Table 1: Maximum path lengths, per-layer complexity and minimum number of sequential operations for different layer types. n is the sequence length, d is the representation dimension, k is the kernel size of convolutions and r the size of the neighborhood in restricted self-attention.",
+        "source": "Attention is all you need.pdf",
+        "page": 6,
+        "title": "Attention is All you Need",
+        "section": "3.5 Positional Encoding"
+      },
+      {
+        "chunk_id": 74,
+        "text": "We set the maximum output length during inference to input length + 50, but terminate early when possible [31]. Table 2 summarizes our results and compares our translation quality and training costs to other model architectures from the literature. We estimate the number of ﬂoating point operations used to train a model by multiplying the training time, the number of GPUs used, and an estimate of the sustained single-precision ﬂoating-point capacity of each GPU 5.",
+        "source": "Attention is all you need.pdf",
+        "page": 8,
+        "title": "Attention is All you Need",
+        "section": "6.1 Machine Translation"
+      },
+      {
+        "chunk_id": 192,
+        "text": "Another way to probe the network’s visual knowledge is to consider the feature activations induced by an image at the last, 4096-dimensional hidden layer. If two images produce feature activation vectors with a small Euclidean separation, we can say that the higher levels of the neural network con- sider them to be similar. Figure 4 shows five images from the test set and the six images from the training set that are most similar to each of them according to this measure.",
+        "source": "DCNN.pdf",
+        "page": 6,
+        "title": "DCNN",
+        "section": "7.1. Qualitative evaluations"
+      },
+      {
+        "chunk_id": 616,
+        "text": "To begin with, we exploit multiple GPUs, if available, for faster encoding of batches of documents in parallel. When batching, we pad all documents to the maximum length of a document within the batch.3 To make capping the sequence length on a per-batch basis more eﬀective, our indexer proceeds through documents in groups of B (e.g., B = 100,000) documents. It sorts these documents by length and then feeds batches of b (e.g., b = 128) documents of comparable length through our encoder.",
+        "source": "2004.12832v2.pdf",
+        "page": 5,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "3 COLBERT"
+      },
+      {
+        "chunk_id": 199,
+        "text": "9. EPILOGUE The response of the computer vision community to the suc- cess of SuperVision was impressive. Over the next year or two, they switched to using deep neural networks and these are now widely deployed by Google, Facebook, Microsoft, Baidu and many other companies.",
+        "source": "DCNN.pdf",
+        "page": 7,
+        "title": "DCNN",
+        "section": "9. EPILOGUE"
+      },
+      {
+        "chunk_id": 45,
+        "text": "3.5 Positional Encoding Since our model contains no recurrence and no convolution, in order for the model to make use of the order of the sequence, we must inject some information about the relative or absolute position of the tokens in the sequence. To this end, we add \"positional encodings\" to the input embeddings at the",
+        "source": "Attention is all you need.pdf",
+        "page": 5,
+        "title": "Attention is All you Need",
+        "section": "3.5 Positional Encoding"
+      },
+      {
+        "chunk_id": 614,
+        "text": "Given a triple ⟨q,d+,d−⟩with query q, positive document d+ and negative document d−, ColBERT is used to produce a score for each document individually and is optimized via pairwise sofmax cross-entropy loss over the computed scores of d+ and d−. 3.4 Oﬀline Indexing: Computing & Storing Document Embeddings By design, ColBERT isolates almost all of the computations between queries and documents, largely to enable pre-computing document representations oﬄine.",
+        "source": "2004.12832v2.pdf",
+        "page": 5,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "3 COLBERT"
+      }
+    ],
+    "selected_ids": [
+      767,
+      200,
+      31,
+      800,
+      51,
+      55,
+      46,
+      74,
+      192,
+      616
+    ]
+  },
+  "status": "retrieval_completed"
+}

@@ -1,0 +1,156 @@
+--- before/PROGRESS.md
++++ after/PROGRESS.md
+@@ -1,8 +1,8 @@
+ # Advanced-LLM-RAG 当前进度与交接
+ 
+-更新：2026-10-22（Asia/Shanghai）。工作区：`/Users/j/Desktop/Advanced-LLM-RAG`；Git 基点 `c2cd612`，已有大量未提交和未跟踪成果。本次在已完成反馈修复/P3.1工具的基础上接通P3.2可选arXiv补证据；没有提交或推送。
++更新：2026-10-22（Asia/Shanghai）。工作区：`/Users/j/Desktop/Advanced-LLM-RAG`；Git 基点 `c2cd612`，已有大量未提交和未跟踪成果。本轮完成P3六题Agent关闭/开启arXiv对照及两题Auto次级验收，生产代码冻结；没有提交或推送。
+ 
+-**结论：P3.2已接通显式开启的“本地缺源→arXiv定位/固定版本读取→外部原文登记→回答/复核”流程，291项离线测试通过。真实工程验证保留首次搜索不足、后续失败及开发复验，详见[P3.2报告](evaluation/results/p3_integration_20261022/report.md)。独立新题的联网补证收益及Agent/Auto总体质量收益仍未证明，P4未开始。**
++**结论：P3.2流程已接通，最新六题小样本对照完成：Agent关闭/开启arXiv为4/6、5/6，Auto两道缺源题为1/2。两个缺源正例补齐，但original/paper修饰词导致标题匹配误拒绝，新增一条Agent失败和一条Auto降级；联网稳定性验收未通过，优先修复后再讨论P4。开启路径token为关闭的2.532倍，不能据六题声称总体更优。[本轮报告](evaluation/results/p3_validation_20261022/report.md)。最近291项离线回归通过的生产代码未变，本轮未重跑整套旧测试。**
+ 
+ 本页负责当前状态、约束与下一步；多轮原始交接转入[完整历史](docs/history/PROGRESS_THROUGH_2026-10-22.md)，包括全部失败、调用量、实验口径和复现命令。各实验原始文件及路径保留，[实验索引](evaluation/results/README.md)可逐轮查阅。桌面《RAG项目全流程与进度总览.md》与 [PROJECT_WORKFLOW](docs/PROJECT_WORKFLOW.md)内容一致，二者只描述预期路线，不表示实际完成。
+ 
+@@ -15,9 +15,9 @@
+ | P1 评测基线 | 检索指标、小规模12题固定 RAG 回答/拒答/成本记录 | 同助手出题审阅，非第三方盲评或大规模泛化 |
+ | P2.1～P2.4 | 需求绑定、证据判断、搜索/邻段、预算循环、生成与有限复核 | 早期h10/h11属于已知开发验收，不能覆盖最新版失败 |
+ | main 接入 | `rag`、`agent`、`auto` 共用初检与资源，保留各模式记录 | 函数默认rag；CLI默认auto；历史“尚未接main”已过时 |
+-| P2.5 对照与收尾 | 首轮12题 RAG/Agent、第一版Auto的8题三路径对照及原文审阅 | 实验完成与质量收益通过是两个状态；最新版尚无独立新题总成绩 |
+-| 最新 Agent/Auto 改进 | RAG优先Auto、输入隔离及反馈状态保留/重新打开规则；含P3.2共291项离线回归通过 | 旧h10真实失败保留；本轮只离线机制验收，隐性漏答与新题总体收益待验 |
+-| P3 / P4 | P3.1工具及P3.2可选路由/原文登记/回答复核已接通；P4未开始 | 默认关闭arXiv；仅限一篇固定版本论文；独立新题补证收益待验收 |
++| P2.5 对照与收尾 | 首轮12题 RAG/Agent、第一版Auto的8题三路径对照及原文审阅 | 旧12/8题成绩保持版本边界；最新P3六题Agent对照与两题Auto次级验收另列，非总体收益证明 |
++| 最新 Agent/Auto 改进 | RAG优先Auto、输入隔离及反馈状态保留/重新打开规则；含P3.2共291项离线回归通过 | 旧h10真实失败保留，反馈修复仅作离线机制验收；隐性漏答和总体收益未证明 |
++| P3 / P4 | P3.1/P3.2接通，六题对照及两题Auto次级运行完成；P4未开始 | 题目收益/成本混合，名称修饰词匹配误拒绝待修；默认关闭arXiv，每题最多一篇 |
+ 
+ ## 2. 当前三条执行路径
+ 
+@@ -33,11 +33,17 @@
+ 
+ ## 3. 已有质量与成本证据
+ 
+-**最新P3.2工程验收（2026-10-22）：** main新增默认关闭的`allow_network`/`--allow-network`，独立`src/arxiv_evidence.py`在本地正常缺源停止后最多定位/读一篇arXiv原论文。搜索题录不进事实白名单；固定版本、PDF哈希及重解析原文通过校验后，BGE选最多6段追加，保留本地证据、页码、独立ID和连续原文位置，再复用原逐项检查与有限回答复核。无新依赖，agent.py/原检索/原回答/工具代码保持；新增19项入口、失败和预算测试，共291项离线通过、网络尝试0。
++**最新P3六题对照（2026-10-22）：** 先冻结2本地可答/2缺原论文正例/2原论文未报告精确数值反例及评分，六题各跑真实main Agent关闭/开启arXiv；n03/n04另预注册Auto开启，共14路径。只复用CPU资源，各路径真实分解/生成；Gold不传给模型、参考PDF不加入知识库。六题初检上下文在两组Agent中逐字节一致，后续行动有模型差异。全程生产代码冻结，失败没有调提示重跑。
++
++Agent-off/on任务完整且严格事实/引用通过4/6、5/6；正例完整2/4→4/4，必答点5/10→10/10，反例正确拒答2/2→1/2。RoFormer位置编码和FlashAttention IO机制均有实际原文/页码支持；但n06-agent-on主体original FlashAttention paper、n04-auto主体original FlashAttention，正确标题不含修饰词而被词法匹配拒绝。前者failed无答案，后者degraded保留初检缺口，均计分母；不是HTTP故障。Auto次级1/2，不与六题总体比较。
++
++主对照23→39模型请求、40867→103484 token（2.532倍、多62617）；Auto另14请求/32875 token。实际合计76次chat/POST、177226 token（输入167220/输出10006），全stop，模型HTTP失败/usage缺失/自动重试0；8次运行arXiv GET均HTTP200，Gold预核验另2次。n04-agent-on首次review引用登记不合格，有限修订/再复核多2调用，最终答案文字未变。不是事实纠错收益。顺序预加载CPU耗时非并发/P95，不估算金额。[完整报告](evaluation/results/p3_validation_20261022/report.md) · [逐题原文审阅](evaluation/results/p3_validation_20261022/manual_review.md) · [汇总](evaluation/results/p3_validation_20261022/summary.json) · [失败诊断](evaluation/results/p3_validation_20261022/failure_diagnosis.json)
++
++**此前P3.2工程验收（2026-10-22）：** main新增默认关闭的`allow_network`/`--allow-network`，独立`src/arxiv_evidence.py`在本地正常缺源停止后最多定位/读一篇arXiv原论文。搜索题录不进事实白名单；固定版本、PDF哈希及重解析原文通过校验后，BGE选最多6段追加，保留本地证据、页码、独立ID和连续原文位置，再复用原逐项检查与有限回答复核。无新依赖，agent.py/原检索/原回答/工具代码保持；新增19项入口、失败和预算测试，共291项离线通过、网络尝试0。
+ 
+ 真实工程验证首次两题：s01回答Adam并核对第7页、无arXiv；s02只返回后续论文，安全拒答，预期联网回答未通过。第一次同题开发复验仍因自由检索式带入abstract且返回不支持的旧式ID而失败；最终收紧为“模型给完整书目标题、Python构造标题查询”后，s02完整定位Mamba `2312.00752v2`、读取36页、引用第1页摘要回答5×吞吐量，并复核第2/15页补充。最终上下文11段本地+6段外部、10687字符，本地原文全保留；没有自动入库。
+ 
+-初次10请求+失败开发4+最终开发8=**22次模型POST、44253 token（输入42202/输出2051）**，全stop，HTTP模型失败/usage缺失/自动重试0；另4次arXiv GET均HTTP200，其中一次后续解析校验失败。首次自动审批在请求前拦截，明确告知目的地/数据/费用并获用户授权后才运行，拦截本身0调用；总模型请求低于批准28上限。最终s02单次41.852秒、8请求/24030 token，CPU预加载顺序单次，非P95；不推算货币费用。两题及开发复验属于工程验收，不是独立泛化成绩；Auto真实联网、新题总体收益尚未测。[完整流程与失败](evaluation/results/p3_integration_20261022/report.md) · [原文审阅](evaluation/results/p3_integration_20261022/manual_review.md) · [合并账本](evaluation/results/p3_integration_20261022/smoke_summary.json)
++初次10请求+失败开发4+最终开发8=**22次模型POST、44253 token（输入42202/输出2051）**，全stop，HTTP模型失败/usage缺失/自动重试0；另4次arXiv GET均HTTP200，其中一次后续解析校验失败。首次自动审批在请求前拦截，明确告知目的地/数据/费用并获用户授权后才运行，拦截本身0调用；总模型请求低于批准28上限。最终s02单次41.852秒、8请求/24030 token，CPU预加载顺序单次，非P95；不推算货币费用。两题及开发复验属于当时工程验收，不是独立泛化成绩；该轮尚未测Auto真实联网和新题总体收益，后续六题结果见上。[完整流程与失败](evaluation/results/p3_integration_20261022/report.md) · [原文审阅](evaluation/results/p3_integration_20261022/manual_review.md) · [合并账本](evaluation/results/p3_integration_20261022/smoke_summary.json)
+ 
+ **此前反馈修复（2026-10-22）：** 工具反馈始终复查未完成需求；已supported项只有遇到同源新段或明确提及其主体的原文才重新检查。其余保留上一份已校验状态和引文，额外返回的未授权状态更新不应用；合并后仍执行原完整状态/主体/引文/行动校验。相关新反证可重新打开，非法partial不自动改supported；单步/循环/改选沿用同一次修正额度。只改agent.py两处原函数、新增feedback_scope，main/检索/回答代码不改。
+ 
+@@ -72,7 +78,7 @@
+ 
+ 原反馈状态P1的已知机制已修复：保留无关已完成项，同源/明确主体新证据触发复查，真实冲突可以重新打开。相关性规则保守，无法保证识别所有隐含跨来源反证，也不自动修正初始语义误判；最终版本独立新题质量仍未验收。旧h10不继续付费调试，旧32/68/61次请求无需重跑。
+ 
+-用户已授权修复后进入P3，并明确先接arXiv。P3.1独立工具及P3.2最小闭环现已接通：默认不做arXiv GET，仅在Agent/Auto显式允许且本地正常缺源停止后，定位一篇原论文、登记原文、复用回答复核。模型提出完整论文标题，Python构造一次标题查询；标题仍需用搜索结果和实际PDF核验。下一步应冻结独立必答/补充与联网缺口题，同条件量化补证收益和成本；本轮两题工程验证及开发复验不替代该评估，不拼接成新准确率。P4未开始。
++P3六题新题对照现已完成，观察到补证收益及明确成本/失败。下一步优先修复书目身份匹配：保留原题需求边界，仅在论文名称核对中处理original/paper等来源修饰词，保留错论文拒绝；当前两个失败可离线复现。离线回归通过后，如需真实复验只列为已知开发回归，保留本轮4/6、5/6、1/2原成绩；后续新题另建，不用原96上限剩余额度重跑拼分。P4展示/交付未开始，当前联网稳定性未通过。
+ 
+ 完整性仍按上述三层标准，不为背景细节满分调试；不根据新运行回改旧冻结成绩。
+ 
+@@ -115,7 +121,7 @@
+ 
+ Top-20 Recall增加4.37个百分点，未达当时预定5点门槛，默认10。逐题nP=`H/min(K,G)`，整体=`sum(H)/sum(min(K,G))`，不能平均逐题值；本集81条Gold均G≤K，整体nP等于micro recall，原Recall是macro。Gold非穷尽，不代表其他段落无用；检索覆盖、回答质量和成本分开报告。[量化入口](docs/PROJECT_METRICS.md) · [nP口径](docs/NORMALIZED_PRECISION_2026-10-20.md)
+ 
+-本次最终通过291项离线测试、网络尝试0；另按用户明确授权执行两题真实模型/原文工程验证及必要开发复验，模型账单与公开arXiv GET分开，失败全部保留。不重建索引或重跑旧评测。此前清理的251项与文件核验属于当时记录，见[清理记录](docs/CLEANUP_LOG_2026-10-22.md)。此前受控线程可稳定运行，但批量退出139根因仍未定位；完整实验已有结果不重复跑。
++最近生产版本的291项离线回归通过记录保留，源码哈希与该版本一致；本轮没有重跑全套旧测试。新增评测驱动的14路径/输入隔离/预算/旧目录保护离线检查实际通过，网络/模型调用0。真实六题对照及两题Auto合计76模型请求，另8次运行GET和2次Gold GET，模型账单与公网获取分开。没有重建索引或重跑旧评测。此前清理的251项与文件核验属于当时记录，见[清理记录](docs/CLEANUP_LOG_2026-10-22.md)。此前受控线程可稳定运行，但批量退出139根因仍未定位；完整实验已有结果不重复跑。
+ 
+ ```bash
+ PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
+--- before/README.md
++++ after/README.md
+@@ -2,7 +2,7 @@
+ 
+ 面向科研论文的问答项目：PDF 解析、Semantic 分块、Dense/BM25 混合检索、RRF 融合、问题分解、BGE 重排和带引用回答；本地 Agent 可按证据缺口搜索与读取邻段。
+ 
+-**当前：main三模式及P3.2有预算arXiv补证据已接通，291项离线测试通过。Agent/Auto显式开启后，可在本地缺源停止时搜索、读取一篇固定版本论文，登记原文并生成、复核带出处的回答；整体质量收益仍待独立新题验收。** CLI默认auto，Python函数默认rag；固定RAG继续作为基线。[反馈修复](evaluation/results/agent_feedback_fix_20261022/report.md) · [P3.2流程与验证](evaluation/results/p3_integration_20261022/report.md)。
++**当前：P3.2可选arXiv补证据已接通；最新六题Agent关闭/开启对照为4/6、5/6，Auto两道缺源题为1/2。补证据有小样本收益，但来源修饰词导致正确标题误拒绝，稳定性待修；整体收益未证明。** 最近291项离线回归通过的生产代码未变。CLI默认auto，Python函数默认rag；固定RAG继续作为基线。[最新新题结果与失败](evaluation/results/p3_validation_20261022/report.md) · [P3.2流程](evaluation/results/p3_integration_20261022/report.md)。
+ 
+ [当前进度与下一步](PROGRESS.md) · [文档导航](docs/README.md) · [量化结果](docs/PROJECT_METRICS.md) · [实验目录](evaluation/results/README.md) · [预期全流程](docs/PROJECT_WORKFLOW.md)
+ 
+@@ -32,6 +32,8 @@
+ `--allow-network`仅开放arXiv补证据，默认关闭；Python对应`allow_network=True`，只支持Agent/Auto。它在本地正常缺源停止后，最多做3次联网决策、1次搜索和1次PDF读取；全部模型请求上限Agent为14、Auto为16。搜索最多3篇，选读1篇，追加最多6段，合并原文仍限32段/24000字符；未找到原论文则保留缺口，不使用摘要或后续论文替代原文。外部材料只用于本轮，不自动入库；失败不自动重试。[实现与取舍](evaluation/results/p3_integration_20261022/design.md)。
+ 
+ ## 当前结果怎么理解
++
++最新六题为冻结后一次运行的Agent-off/on对照：两道本地题保持、两道缺源正例补齐，一道反例因标题匹配异常失败，任务完整且事实/引用通过4/6→5/6。开启路径token为关闭的2.532倍。Auto只预注册两道缺源题，1/2；不与六题总体比较，不把同助手小样本当通用准确率。修复original/paper名称修饰词匹配前，P3稳定性尚未通过。[逐题原文核对](evaluation/results/p3_validation_20261022/manual_review.md)。
+ 
+ | 实验版本 | 固定 RAG | Agent | Auto |
+ | --- | --- | --- | --- |
+--- before/docs/CODE_READING_GUIDE.md
++++ after/docs/CODE_READING_GUIDE.md
+@@ -44,6 +44,10 @@
+ P3.1先读`src/arxiv_tools.py`的`search_arxiv()`与`read_arxiv_paper()`：题录定位与固定版本原文分开，复用原PDF解析器；独立证据ID、原文/页码/网址/哈希与请求记录都保留。[工具设计/边界](../evaluation/results/p3_arxiv_tools_20261022/design.md)。
+ 
+ P3.2再读`src/arxiv_evidence.py`：`run_arxiv_followup()`最多做路由、选论文、重查证据三次决策；`validate_download()`核对版本、文件哈希并重解析实际PDF；`select_passages()`从连续原文窗口预选120段、用已有BGE取最多6段。新段保留`origin=arxiv`、独立`evidence_id`、版本、页码、网址、PDF哈希与字符偏移，仅为兼容现有校验分配临时整数ID，不写入本地索引。合并后复用`assess_evidence()`和`answer_with_review()`，外部来源链接由实际被引用的登记表生成。[接入流程、首次搜索不足与验证](../evaluation/results/p3_integration_20261022/report.md)。
++
++## P3新题验收暴露的名称边界
++
++最新六题主对照Agent-off/on为4/6、5/6，Auto次级1/2，生产代码全程冻结。两条失败集中在`src/arxiv_evidence.py`的外部标题核对：规划主体可以合法含original/paper，随后`agent.names_subject()`却将整个短语当成书目名称，正确标题因此被拒绝。应保留原题需求约束，下一步仅修复书目名称与来源修饰词的区分，并保留错论文拒绝；本轮未改代码或重跑。[逐题验收](../evaluation/results/p3_validation_20261022/report.md)、[诊断](../evaluation/results/p3_validation_20261022/failure_diagnosis.json)。
+ 
+ ## 2. 怎样阅读 agent.py
+ 
+--- before/docs/PROJECT_METRICS.md
++++ after/docs/PROJECT_METRICS.md
+@@ -1,10 +1,34 @@
+ # 项目量化指标与证据入口
+ 
+-更新：2026-10-22（Asia/Shanghai）。P3.2可选arXiv闭环已接通，291项离线测试通过；两题工程验证及同题开发复验见下。新版本总体质量收益和独立新题仍未验收，旧分数按版本保留。
++更新：2026-10-22（Asia/Shanghai）。最新六题Agent-off/on对照4/6、5/6，Auto次级两题1/2；有补证收益及名称匹配失败，稳定性未通过。生产代码保持最近291项离线通过版本，六题不当作总体收益证明，旧分数按版本保留。
+ 
+ 最终项目的量化数据应同时交代版本、题集、分母、比较条件、质量与成本。每次修复保留旧结果，新题转为开发回归后另建留出，不能把调试后的成绩继续称为新题泛化。
+ 
+-## 最新P3.2工程接入与真实验证
++## 最新P3六题对照与Auto次级验收
++
++2本地/2缺原论文正例/2精确数值未报告反例，问题/Gold/评分/代码先冻结，随后一次运行真实main的Agent关闭/开启arXiv；n03/n04另跑Auto开启。各路径独立模型请求，只有CPU资源共享。六题初检在Agent两组中完全相同，后续本地行动仍有差异。
++
++| 指标 | Agent-off，6题 | Agent-on，6题 | Auto-on，仅2缺源正例 |
++| --- | ---: | ---: | ---: |
++| 任务完整且严格事实/引用通过 | 4/6 | 5/6 | 1/2 |
++| 正例完整回答 | 2/4 | 4/4 | 1/2 |
++| 必答点micro | 5/10 | 10/10 | 2/5 |
++| 正例macro覆盖 | 50% | 100% | 50% |
++| 反例正确拒答 | 2/2 | 1/2 | 未计划反例 |
++| 程序completed/degraded/failed | 6/0/0 | 5/0/1 | 1/1/0 |
++| 实际模型请求 | 23 | 39 | 14 |
++| 输入/输出/总token | 38002/2865/40867 | 98175/5309/103484 | 31043/1832/32875 |
++| 实际arXiv GET | 0 | 6 | 2 |
++
++Agent-on净多完成1题（本样本+16.67个百分点），两个缺源正例均恢复，但新增一条无交付失败；多16模型请求/62617 token，token为关闭的2.532倍。Auto只测试预注册两正例，不能拿1/2与完整六题整体作收益比较。
++
++n04-auto及n06-agent-on的主体含original/paper，正确书目标题没有这些修饰词而被词法校验误拒绝，均在搜索前失败。前者degraded、后者failed，计入分母。n04-agent-on首次复核错误登记了answer_quote里没有的引用，有限修订多2请求，最终答案文字未变；不是事实纠错收益。
++
++全轮76次chat/POST、177226 token（输入167220/输出10006），全stop、模型HTTP失败/usage缺失/自动重试0；运行8GET均HTTP200，Gold预核验另2GET。没有模型judge或货币估价。顺序单次CPU预加载中位耗时Agent-off/on为27.029/36.462秒，非冷启动、并发或P95。四次实际PDF哈希均与冻结Gold一致，全部外部偏移/本地登记有效；数据和历史分数保持。
++
++同助手出题/审阅、6题小样本，外部原文不在原索引，不能称为Recall@10提升或总体泛化证明。生产代码冻结，旧失败未调提示重跑；P3稳定性未通过，P4尚未开始。[完整报告](../evaluation/results/p3_validation_20261022/report.md)、[人工原文核对](../evaluation/results/p3_validation_20261022/manual_review.md)、[汇总JSON](../evaluation/results/p3_validation_20261022/summary.json)、[标题失败诊断](../evaluation/results/p3_validation_20261022/failure_diagnosis.json)。
++
++## 此前P3.2工程接入与真实验证
+ 
+ 新增19项main路径、原文身份、拒答、失败、预算和引用回归；全套291项通过、网络尝试0。显式开启arXiv时，独立网络决策最多3、公开工具最多2（搜索/读一篇），含原流程Agent/Auto模型上限为14/16；默认不增加arXiv请求，未开启仍11/13。
+ 
+--- before/docs/README.md
++++ after/docs/README.md
+@@ -19,6 +19,7 @@
+ 
+ | 工作 | 报告 |
+ | --- | --- |
++| 最新P3六题对照及两题Auto，名称匹配误拒绝待修 | [报告](../evaluation/results/p3_validation_20261022/report.md)、[原文审阅](../evaluation/results/p3_validation_20261022/manual_review.md)、[失败诊断](../evaluation/results/p3_validation_20261022/failure_diagnosis.json) |
+ | P3.2可选arXiv补证据、外部引用与回答复核 | [流程与真实验证](../evaluation/results/p3_integration_20261022/report.md)、[设计/预算](../evaluation/results/p3_integration_20261022/design.md) |
+ | 最新反馈状态修复、旧h10离线回放与边界 | [修复报告](../evaluation/results/agent_feedback_fix_20261022/report.md) |
+ | P3.1独立arXiv搜索/固定版本原文读取工具 | [设计](../evaluation/results/p3_arxiv_tools_20261022/design.md)、[实测与失败](../evaluation/results/p3_arxiv_tools_20261022/report.md) |
+--- before/evaluation/results/README.md
++++ after/evaluation/results/README.md
+@@ -6,6 +6,7 @@
+ 
+ | 目录 | 内容与结论边界 |
+ | --- | --- |
++| [p3_validation_20261022](p3_validation_20261022/report.md) | 六题冻结Agent-off/on为4/6、5/6，Auto次级1/2；76请求，来源修饰词导致2路径失败/降级，稳定性未通过，未调提示重跑 |
+ | [p3_integration_20261022](p3_integration_20261022/report.md) | P3.2显式开启的联网闭环、291项离线回归与两题工程验证；保留首次搜索不足和开发复验，不作独立泛化分数 |
+ | [agent_feedback_fix_20261022](agent_feedback_fix_20261022/report.md) | 反馈状态保留/相关新反证复查，11项新增回归；旧响应注入不作真实模型验收 |
+ | [p3_arxiv_tools_20261022](p3_arxiv_tools_20261022/report.md) | P3.1独立arXiv只读工具、离线边界及真实GET；该轮未接自动联网与外部引用 |

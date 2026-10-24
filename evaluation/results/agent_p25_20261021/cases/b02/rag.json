@@ -1,0 +1,944 @@
+{
+  "query": "How does DCNN initialize neuron biases in different layers, and why does it use positive biases in selected layers?",
+  "decomposition": {
+    "needs_decomposition": true,
+    "sub_queries": [
+      "How does DCNN initialize neuron biases in different layers?",
+      "Why does DCNN use positive biases in selected layers?"
+    ],
+    "status": "accepted",
+    "proposed_count": 2
+  },
+  "knowledge_base": {
+    "version": "all-papers-8-20261020",
+    "chunk_count": 1397,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/manifest.json",
+    "manifest_sha256": "9c4e2c26b4f11fe7baf526595630cbee2d325416ec0e497f417975fbd60779ef",
+    "files": {
+      "faiss.index": "ff1f4a3e38e20c0275ba79d805e6475639b3cea7a7a583f9c18c67ec8e40a2ed",
+      "chunks.json": "3e63d75abbe164ff8e135b1d66fd6b02d9479b2e037e289a726e7c542464593a"
+    }
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 187,
+    "global_top_ids": [
+      177,
+      178,
+      139,
+      173,
+      156,
+      144,
+      152,
+      102,
+      147,
+      103
+    ],
+    "protected_ids": [
+      178,
+      177
+    ],
+    "sub_query_evidence": [
+      {
+        "query": "How does DCNN initialize neuron biases in different layers?",
+        "top_ids": [
+          178,
+          177,
+          173
+        ]
+      },
+      {
+        "query": "Why does DCNN use positive biases in selected layers?",
+        "top_ids": [
+          177,
+          178,
+          121
+        ]
+      }
+    ],
+    "retrieval_anchor_ids": [
+      177
+    ],
+    "evidence_completion": {
+      "requested_sources": [
+        "DCNN.pdf"
+      ],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        177,
+        178,
+        139,
+        173,
+        156,
+        144,
+        152,
+        102,
+        147,
+        121
+      ],
+      "retained_local_ids": [
+        177,
+        178,
+        173,
+        121
+      ],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        177,
+        178,
+        139,
+        173,
+        156,
+        144,
+        152,
+        102,
+        147,
+        121
+      ],
+      "elapsed_seconds": 0.000202
+    }
+  },
+  "selected_ids": [
+    177,
+    178,
+    139,
+    173,
+    156,
+    144,
+    152,
+    102,
+    147,
+    121
+  ],
+  "context": "[1] Source: DCNN.pdf | Page: 5 | Section: 6. DETAILS OF LEARNING\nWe initialized the weights in each layer from a zero-mean Gaussian distribution with standard deviation 0.01. We ini- tialized the neuron biases in the second, fourth, and fifth convolutional layers, as well as in the fully connected hidden layers, with the constant 1. This initialization accelerates the early stages of learning by providing the ReLUs with positive inputs.\n\n[2] Source: DCNN.pdf | Page: 5 | Section: 6. DETAILS OF LEARNING\nWe initialized the neuron biases in the remaining lay- ers with the constant 0. We used an equal learning rate for all layers, which we adjusted manually throughout training. The heuristic which we followed was to divide the learning rate by 10 when the vali- dation error rate stopped improving with the current learning rate. The learning rate was initialized at 0.01 and reduced three times prior to termination.\n\n[3] Source: DCNN.pdf | Page: 3 | Section: 4.2. Training on multiple GPUs\nThe parallelization scheme that we employ essentially puts half of the kernels (or neurons) on each GPU, with one addi- tional trick: the GPUs communicate only in certain layers. This means that, for example, the kernels of layer 3 take input from all kernel maps in layer 2. However, kernels in layer 4 take input only from those kernel maps in layer 3 which reside on the same GPU.\n\n[4] Source: DCNN.pdf | Page: 5 | Section: 5.2. Dropout\nThis technique reduces complex co adaptations of neurons, since a neuron cannot rely on the presence of particular other neurons. It is, therefore, forced to learn more robust features that are useful in conjunction with many different random subsets of the other neurons. At test time, we use all the neu- rons but multiply their outputs by 0.5, which is a reasonable approximation to taking the geometric mean of the predic- tive distributions produced by the exponentially-many drop- out networks.\n\n[5] Source: DCNN.pdf | Page: 4 | Section: 4.5. Overall architecture\nThe kernels of the second, fourth, and fifth convolutional layers are connected only to those kernel maps in the previous layer which reside on the same GPU (see Figure 2). The ker- nels of the third convolutional layer are connected to all ker- nel maps in the second layer. The neurons in the fully-connected layers are connected to all neurons in the previous layer. Response-normalization layers follow the first and second convolutional layers.\n\n[6] Source: DCNN.pdf | Page: 3 | Section: 4.3. Local response normalization\nThis sort of response normalization implements a form of lateral inhibi- tion inspired by the type found in real neurons, creating com- petition for big activities among neuron outputs computed 40 using different kernels.\n\n[7] Source: DCNN.pdf | Page: 4 | Section: 4.4. Overlapping pooling\nThe network’s input is 150,528-dimensional, and the number of neurons in the network’s remaining layers is given by 290,400–186,624– 64,896–64,896–43,264–4096–4096–1000. 3 5 3 5 3 11 48 11 128 27 55 13 3 5 3 224 5 13 27 3 11 3 55 11 Max Max 224 Stride 128 pooling pooling of 4 3 48 pooling.\n\n[8] Source: DCNN.pdf | Page: 1 | Section: None\nOn the test data, we achieved top-1 and top-5 error rates of 37.5% and 17.0%, respectively, which is considerably better than the previous state-of-the-art. The neural network, which has 60 million parameters and 650,000 neurons, con- sists of five convolutional layers, some of which are followed by max-pooling layers, and three fully connected layers with a final 1000-way softmax.\n\n[9] Source: DCNN.pdf | Page: 3 | Section: 4.4. Overlapping pooling\n4.4. Overlapping pooling Pooling layers in CNNs summarize the outputs of neighbor- ing groups of neurons in the same kernel map. Traditionally, the neighborhoods summarized by adjacent pooling units do not overlap (e.g., Refs.5, 13, 20). To be more precise, a pooling layer can be thought of as consisting of a grid of pooling units spaced s pixels apart, each summarizing a neighborhood of size z × z centered at the location of the pooling unit.\n\n[10] Source: DCNN.pdf | Page: 2 | Section: 2. INTRODUCTION\nWe wrote a highly optimized GPU implementation of 2D convolution and all the other opera- tions inherent in training CNNs, which we make available publicly.a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4. The size of our network made overfitting a significant problem, even with 1.2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 5. Our final network contains five convo- lutional and three fully connected layers, and this depth seems to be important: we found that removing any convolu- tional layer (each of which contains no more than 1% of the model’s parameters) resulted in inferior performance.\n\n[11] Source: DCNN.pdf | Page: 4 | Section: 4.5. Overall architecture\nOur net- work maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.\n\n[12] Source: DCNN.pdf | Page: 4 | Section: 4.4. Overlapping pooling\nFigure 2. An illustration of the architecture of our CNN, explicitly showing the delineation of responsibilities between the two GPUs. One GPU runs the layer-parts at the top of the figure while the other runs the layer-parts at the bottom. The GPUs communicate only at certain layers.",
+  "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\n[1] Source: DCNN.pdf | Page: 5 | Section: 6. DETAILS OF LEARNING\nWe initialized the weights in each layer from a zero-mean Gaussian distribution with standard deviation 0.01. We ini- tialized the neuron biases in the second, fourth, and fifth convolutional layers, as well as in the fully connected hidden layers, with the constant 1. This initialization accelerates the early stages of learning by providing the ReLUs with positive inputs.\n\n[2] Source: DCNN.pdf | Page: 5 | Section: 6. DETAILS OF LEARNING\nWe initialized the neuron biases in the remaining lay- ers with the constant 0. We used an equal learning rate for all layers, which we adjusted manually throughout training. The heuristic which we followed was to divide the learning rate by 10 when the vali- dation error rate stopped improving with the current learning rate. The learning rate was initialized at 0.01 and reduced three times prior to termination.\n\n[3] Source: DCNN.pdf | Page: 3 | Section: 4.2. Training on multiple GPUs\nThe parallelization scheme that we employ essentially puts half of the kernels (or neurons) on each GPU, with one addi- tional trick: the GPUs communicate only in certain layers. This means that, for example, the kernels of layer 3 take input from all kernel maps in layer 2. However, kernels in layer 4 take input only from those kernel maps in layer 3 which reside on the same GPU.\n\n[4] Source: DCNN.pdf | Page: 5 | Section: 5.2. Dropout\nThis technique reduces complex co adaptations of neurons, since a neuron cannot rely on the presence of particular other neurons. It is, therefore, forced to learn more robust features that are useful in conjunction with many different random subsets of the other neurons. At test time, we use all the neu- rons but multiply their outputs by 0.5, which is a reasonable approximation to taking the geometric mean of the predic- tive distributions produced by the exponentially-many drop- out networks.\n\n[5] Source: DCNN.pdf | Page: 4 | Section: 4.5. Overall architecture\nThe kernels of the second, fourth, and fifth convolutional layers are connected only to those kernel maps in the previous layer which reside on the same GPU (see Figure 2). The ker- nels of the third convolutional layer are connected to all ker- nel maps in the second layer. The neurons in the fully-connected layers are connected to all neurons in the previous layer. Response-normalization layers follow the first and second convolutional layers.\n\n[6] Source: DCNN.pdf | Page: 3 | Section: 4.3. Local response normalization\nThis sort of response normalization implements a form of lateral inhibi- tion inspired by the type found in real neurons, creating com- petition for big activities among neuron outputs computed 40 using different kernels.\n\n[7] Source: DCNN.pdf | Page: 4 | Section: 4.4. Overlapping pooling\nThe network’s input is 150,528-dimensional, and the number of neurons in the network’s remaining layers is given by 290,400–186,624– 64,896–64,896–43,264–4096–4096–1000. 3 5 3 5 3 11 48 11 128 27 55 13 3 5 3 224 5 13 27 3 11 3 55 11 Max Max 224 Stride 128 pooling pooling of 4 3 48 pooling.\n\n[8] Source: DCNN.pdf | Page: 1 | Section: None\nOn the test data, we achieved top-1 and top-5 error rates of 37.5% and 17.0%, respectively, which is considerably better than the previous state-of-the-art. The neural network, which has 60 million parameters and 650,000 neurons, con- sists of five convolutional layers, some of which are followed by max-pooling layers, and three fully connected layers with a final 1000-way softmax.\n\n[9] Source: DCNN.pdf | Page: 3 | Section: 4.4. Overlapping pooling\n4.4. Overlapping pooling Pooling layers in CNNs summarize the outputs of neighbor- ing groups of neurons in the same kernel map. Traditionally, the neighborhoods summarized by adjacent pooling units do not overlap (e.g., Refs.5, 13, 20). To be more precise, a pooling layer can be thought of as consisting of a grid of pooling units spaced s pixels apart, each summarizing a neighborhood of size z × z centered at the location of the pooling unit.\n\n[10] Source: DCNN.pdf | Page: 2 | Section: 2. INTRODUCTION\nWe wrote a highly optimized GPU implementation of 2D convolution and all the other opera- tions inherent in training CNNs, which we make available publicly.a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4. The size of our network made overfitting a significant problem, even with 1.2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 5. Our final network contains five convo- lutional and three fully connected layers, and this depth seems to be important: we found that removing any convolu- tional layer (each of which contains no more than 1% of the model’s parameters) resulted in inferior performance.\n\n[11] Source: DCNN.pdf | Page: 4 | Section: 4.5. Overall architecture\nOur net- work maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.\n\n[12] Source: DCNN.pdf | Page: 4 | Section: 4.4. Overlapping pooling\nFigure 2. An illustration of the architecture of our CNN, explicitly showing the delineation of responsibilities between the two GPUs. One GPU runs the layer-parts at the top of the figure while the other runs the layer-parts at the bottom. The GPUs communicate only at certain layers.\n\nQuestion:\nHow does DCNN initialize neuron biases in different layers, and why does it use positive biases in selected layers?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": " We ini- tialized the neuron biases in the second, fourth, and fifth convolutional layers, as well as in the fully connected hidden layers, with the constant 1.",
+        "evidence_start": 109,
+        "evidence_end": 269,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            177,
+            176,
+            175
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 177,
+        "page": 5,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " This initialization accelerates the early stages of learning by providing the ReLUs with positive inputs.",
+        "evidence_start": 269,
+        "evidence_end": 375,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            177,
+            176,
+            175
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 177,
+        "page": 5,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "We initialized the neuron biases in the remaining lay- ers with the constant 0.",
+        "evidence_start": 0,
+        "evidence_end": 79,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            178,
+            177,
+            176,
+            175
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 178,
+        "page": 5,
+        "citations": [
+          2
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We used an equal learning rate for all layers, which we adjusted manually throughout training.",
+        "evidence_start": 79,
+        "evidence_end": 174,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            178,
+            177,
+            176,
+            175
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 178,
+        "page": 5,
+        "citations": [
+          2
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The heuristic which we followed was to divide the learning rate by 10 when the vali- dation error rate stopped improving with the current learning rate.",
+        "evidence_start": 174,
+        "evidence_end": 327,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            178,
+            177,
+            176,
+            175
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 178,
+        "page": 5,
+        "citations": [
+          2
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "01 and reduced three times prior to termination.",
+        "evidence_start": 367,
+        "evidence_end": 415,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            178,
+            177,
+            176,
+            175
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 178,
+        "page": 5,
+        "citations": [
+          2
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "The parallelization scheme that we employ essentially puts half of the kernels (or neurons) on each GPU, with one addi- tional trick: the GPUs communicate only in certain layers.",
+        "evidence_start": 0,
+        "evidence_end": 178,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            139
+          ],
+          "identity_quote": "The parallelization scheme that we employ essentially puts half of the kernels (or neurons) on each GPU, with one addi- tional trick: the GPUs communicate only in certain layers. This means that, for example, the kernels of layer 3 take input from all kernel maps in layer 2. However, kernels in layer 4 take input only from those kernel maps in layer 3 which reside on the same GPU.",
+          "identity_chunk_id": 139
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 139,
+        "page": 3,
+        "citations": [
+          3
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " This means that, for example, the kernels of layer 3 take input from all kernel maps in layer 2.",
+        "evidence_start": 178,
+        "evidence_end": 275,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            139
+          ],
+          "identity_quote": "The parallelization scheme that we employ essentially puts half of the kernels (or neurons) on each GPU, with one addi- tional trick: the GPUs communicate only in certain layers.",
+          "identity_chunk_id": 139
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 139,
+        "page": 3,
+        "citations": [
+          3
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " However, kernels in layer 4 take input only from those kernel maps in layer 3 which reside on the same GPU.",
+        "evidence_start": 275,
+        "evidence_end": 383,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            139
+          ],
+          "identity_quote": "The parallelization scheme that we employ essentially puts half of the kernels (or neurons) on each GPU, with one addi- tional trick: the GPUs communicate only in certain layers. This means that, for example, the kernels of layer 3 take input from all kernel maps in layer 2.",
+          "identity_chunk_id": 139
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 139,
+        "page": 3,
+        "citations": [
+          3
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "This technique reduces complex co adaptations of neurons, since a neuron cannot rely on the presence of particular other neurons.",
+        "evidence_start": 0,
+        "evidence_end": 129,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            173,
+            172,
+            171
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 173,
+        "page": 5,
+        "citations": [
+          4
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " It is, therefore, forced to learn more robust features that are useful in conjunction with many different random subsets of the other neurons.",
+        "evidence_start": 129,
+        "evidence_end": 272,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            173,
+            172,
+            171
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 173,
+        "page": 5,
+        "citations": [
+          4
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "5, which is a reasonable approximation to taking the geometric mean of the predic- tive distributions produced by the exponentially-many drop- out networks.",
+        "evidence_start": 344,
+        "evidence_end": 500,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            173
+          ],
+          "identity_quote": "This technique reduces complex co adaptations of neurons, since a neuron cannot rely on the presence of particular other neurons. It is, therefore, forced to learn more robust features that are useful in conjunction with many different random subsets of the other neurons. At test time, we use all the neu- rons but multiply their outputs by 0.",
+          "identity_chunk_id": 173
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 173,
+        "page": 5,
+        "citations": [
+          4
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "The kernels of the second, fourth, and fifth convolutional layers are connected only to those kernel maps in the previous layer which reside on the same GPU (see Figure 2).",
+        "evidence_start": 0,
+        "evidence_end": 172,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            156,
+            155
+          ],
+          "identity_quote": "Our net- work maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.",
+          "identity_chunk_id": 155
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 156,
+        "page": 4,
+        "citations": [
+          5,
+          11
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The ker- nels of the third convolutional layer are connected to all ker- nel maps in the second layer.",
+        "evidence_start": 172,
+        "evidence_end": 275,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            156,
+            155
+          ],
+          "identity_quote": "Our net- work maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.",
+          "identity_chunk_id": 155
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 156,
+        "page": 4,
+        "citations": [
+          5,
+          11
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The neurons in the fully-connected layers are connected to all neurons in the previous layer.",
+        "evidence_start": 275,
+        "evidence_end": 369,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            156,
+            155
+          ],
+          "identity_quote": "Our net- work maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.",
+          "identity_chunk_id": 155
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 156,
+        "page": 4,
+        "citations": [
+          5,
+          11
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Response-normalization layers follow the first and second convolutional layers.",
+        "evidence_start": 369,
+        "evidence_end": 449,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            156,
+            155
+          ],
+          "identity_quote": "Our net- work maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.",
+          "identity_chunk_id": 155
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 156,
+        "page": 4,
+        "citations": [
+          5,
+          11
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "This sort of response normalization implements a form of lateral inhibi- tion inspired by the type found in real neurons, creating com- petition for big activities among neuron outputs computed 40 using different kernels.",
+        "evidence_start": 0,
+        "evidence_end": 221,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            144,
+            143,
+            142
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 144,
+        "page": 3,
+        "citations": [
+          6
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "The network’s input is 150,528-dimensional, and the number of neurons in the network’s remaining layers is given by 290,400–186,624– 64,896–64,896–43,264–4096–4096–1000.",
+        "evidence_start": 0,
+        "evidence_end": 169,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            152,
+            151
+          ],
+          "identity_quote": "Figure 2. An illustration of the architecture of our CNN, explicitly showing the delineation of responsibilities between the two GPUs. One GPU runs the layer-parts at the top of the figure while the other runs the layer-parts at the bottom. The GPUs communicate only at certain layers.",
+          "identity_chunk_id": 151
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 152,
+        "page": 4,
+        "citations": [
+          7,
+          12
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " 3 5 3 5 3 11 48 11 128 27 55 13 3 5 3 224 5 13 27 3 11 3 55 11 Max Max 224 Stride 128 pooling pooling of 4 3 48 pooling.",
+        "evidence_start": 169,
+        "evidence_end": 290,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            152,
+            151
+          ],
+          "identity_quote": "Figure 2. An illustration of the architecture of our CNN, explicitly showing the delineation of responsibilities between the two GPUs. One GPU runs the layer-parts at the top of the figure while the other runs the layer-parts at the bottom. The GPUs communicate only at certain layers.",
+          "identity_chunk_id": 151
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 152,
+        "page": 4,
+        "citations": [
+          7,
+          12
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "0%, respectively, which is considerably better than the previous state-of-the-art.",
+        "evidence_start": 74,
+        "evidence_end": 156,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            102,
+            101
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 102,
+        "page": 1,
+        "citations": [
+          8
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The neural network, which has 60 million parameters and 650,000 neurons, con- sists of five convolutional layers, some of which are followed by max-pooling layers, and three fully connected layers with a final 1000-way softmax.",
+        "evidence_start": 156,
+        "evidence_end": 384,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            102,
+            101
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 102,
+        "page": 1,
+        "citations": [
+          8
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Overlapping pooling Pooling layers in CNNs summarize the outputs of neighbor- ing groups of neurons in the same kernel map.",
+        "evidence_start": 4,
+        "evidence_end": 128,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            147
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 147,
+        "page": 3,
+        "citations": [
+          9
+        ],
+        "record_id": "E22"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " To be more precise, a pooling layer can be thought of as consisting of a grid of pooling units spaced s pixels apart, each summarizing a neighborhood of size z × z centered at the location of the pooling unit.",
+        "evidence_start": 237,
+        "evidence_end": 447,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            147
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 147,
+        "page": 3,
+        "citations": [
+          9
+        ],
+        "record_id": "E23"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4.",
+        "evidence_start": 156,
+        "evidence_end": 308,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            121
+          ],
+          "identity_quote": "We wrote a highly optimized GPU implementation of 2D convolution and all the other opera- tions inherent in training CNNs, which we make available publicly.a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4. The size of our network made overfitting a significant problem, even with 1.2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 5. Our final network contains five convo- lutional and three fully connected layers, and this depth seems to be important: we found that removing any convolu- tional layer (each of which contains no more than 1% of the model’s parameters) resulted in inferior performance.",
+          "identity_chunk_id": 121
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 121,
+        "page": 2,
+        "citations": [
+          10
+        ],
+        "record_id": "E24"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 5.",
+        "evidence_start": 385,
+        "evidence_end": 523,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            121
+          ],
+          "identity_quote": "We wrote a highly optimized GPU implementation of 2D convolution and all the other opera- tions inherent in training CNNs, which we make available publicly.a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4. The size of our network made overfitting a significant problem, even with 1.",
+          "identity_chunk_id": 121
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 121,
+        "page": 2,
+        "citations": [
+          10
+        ],
+        "record_id": "E25"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Our final network contains five convo- lutional and three fully connected layers, and this depth seems to be important: we found that removing any convolu- tional layer (each of which contains no more than 1% of the model’s parameters) resulted in inferior performance.",
+        "evidence_start": 523,
+        "evidence_end": 793,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            121
+          ],
+          "identity_quote": "We wrote a highly optimized GPU implementation of 2D convolution and all the other opera- tions inherent in training CNNs, which we make available publicly.a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4. The size of our network made overfitting a significant problem, even with 1.2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 5.",
+          "identity_chunk_id": 121
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 121,
+        "page": 2,
+        "citations": [
+          10
+        ],
+        "record_id": "E26"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 177,
+        "text": "We initialized the weights in each layer from a zero-mean Gaussian distribution with standard deviation 0.01. We ini- tialized the neuron biases in the second, fourth, and fifth convolutional layers, as well as in the fully connected hidden layers, with the constant 1. This initialization accelerates the early stages of learning by providing the ReLUs with positive inputs.",
+        "source": "DCNN.pdf",
+        "page": 5,
+        "title": "DCNN",
+        "section": "6. DETAILS OF LEARNING"
+      },
+      {
+        "chunk_id": 178,
+        "text": "We initialized the neuron biases in the remaining lay- ers with the constant 0. We used an equal learning rate for all layers, which we adjusted manually throughout training. The heuristic which we followed was to divide the learning rate by 10 when the vali- dation error rate stopped improving with the current learning rate. The learning rate was initialized at 0.01 and reduced three times prior to termination.",
+        "source": "DCNN.pdf",
+        "page": 5,
+        "title": "DCNN",
+        "section": "6. DETAILS OF LEARNING"
+      },
+      {
+        "chunk_id": 139,
+        "text": "The parallelization scheme that we employ essentially puts half of the kernels (or neurons) on each GPU, with one addi- tional trick: the GPUs communicate only in certain layers. This means that, for example, the kernels of layer 3 take input from all kernel maps in layer 2. However, kernels in layer 4 take input only from those kernel maps in layer 3 which reside on the same GPU.",
+        "source": "DCNN.pdf",
+        "page": 3,
+        "title": "DCNN",
+        "section": "4.2. Training on multiple GPUs"
+      },
+      {
+        "chunk_id": 173,
+        "text": "This technique reduces complex co adaptations of neurons, since a neuron cannot rely on the presence of particular other neurons. It is, therefore, forced to learn more robust features that are useful in conjunction with many different random subsets of the other neurons. At test time, we use all the neu- rons but multiply their outputs by 0.5, which is a reasonable approximation to taking the geometric mean of the predic- tive distributions produced by the exponentially-many drop- out networks.",
+        "source": "DCNN.pdf",
+        "page": 5,
+        "title": "DCNN",
+        "section": "5.2. Dropout"
+      },
+      {
+        "chunk_id": 156,
+        "text": "The kernels of the second, fourth, and fifth convolutional layers are connected only to those kernel maps in the previous layer which reside on the same GPU (see Figure 2). The ker- nels of the third convolutional layer are connected to all ker- nel maps in the second layer. The neurons in the fully-connected layers are connected to all neurons in the previous layer. Response-normalization layers follow the first and second convolutional layers.",
+        "source": "DCNN.pdf",
+        "page": 4,
+        "title": "DCNN",
+        "section": "4.5. Overall architecture"
+      },
+      {
+        "chunk_id": 144,
+        "text": "This sort of response normalization implements a form of lateral inhibi- tion inspired by the type found in real neurons, creating com- petition for big activities among neuron outputs computed 40 using different kernels.",
+        "source": "DCNN.pdf",
+        "page": 3,
+        "title": "DCNN",
+        "section": "4.3. Local response normalization"
+      },
+      {
+        "chunk_id": 152,
+        "text": "The network’s input is 150,528-dimensional, and the number of neurons in the network’s remaining layers is given by 290,400–186,624– 64,896–64,896–43,264–4096–4096–1000. 3 5 3 5 3 11 48 11 128 27 55 13 3 5 3 224 5 13 27 3 11 3 55 11 Max Max 224 Stride 128 pooling pooling of 4 3 48 pooling.",
+        "source": "DCNN.pdf",
+        "page": 4,
+        "title": "DCNN",
+        "section": "4.4. Overlapping pooling"
+      },
+      {
+        "chunk_id": 102,
+        "text": "On the test data, we achieved top-1 and top-5 error rates of 37.5% and 17.0%, respectively, which is considerably better than the previous state-of-the-art. The neural network, which has 60 million parameters and 650,000 neurons, con- sists of five convolutional layers, some of which are followed by max-pooling layers, and three fully connected layers with a final 1000-way softmax.",
+        "source": "DCNN.pdf",
+        "page": 1,
+        "title": "DCNN",
+        "section": null
+      },
+      {
+        "chunk_id": 147,
+        "text": "4.4. Overlapping pooling Pooling layers in CNNs summarize the outputs of neighbor- ing groups of neurons in the same kernel map. Traditionally, the neighborhoods summarized by adjacent pooling units do not overlap (e.g., Refs.5, 13, 20). To be more precise, a pooling layer can be thought of as consisting of a grid of pooling units spaced s pixels apart, each summarizing a neighborhood of size z × z centered at the location of the pooling unit.",
+        "source": "DCNN.pdf",
+        "page": 3,
+        "title": "DCNN",
+        "section": "4.4. Overlapping pooling"
+      },
+      {
+        "chunk_id": 121,
+        "text": "We wrote a highly optimized GPU implementation of 2D convolution and all the other opera- tions inherent in training CNNs, which we make available publicly.a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4. The size of our network made overfitting a significant problem, even with 1.2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 5. Our final network contains five convo- lutional and three fully connected layers, and this depth seems to be important: we found that removing any convolu- tional layer (each of which contains no more than 1% of the model’s parameters) resulted in inferior performance.",
+        "source": "DCNN.pdf",
+        "page": 2,
+        "title": "DCNN",
+        "section": "2. INTRODUCTION"
+      },
+      {
+        "chunk_id": 155,
+        "text": "Our net- work maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.",
+        "source": "DCNN.pdf",
+        "page": 4,
+        "title": "DCNN",
+        "section": "4.5. Overall architecture"
+      },
+      {
+        "chunk_id": 151,
+        "text": "Figure 2. An illustration of the architecture of our CNN, explicitly showing the delineation of responsibilities between the two GPUs. One GPU runs the layer-parts at the top of the figure while the other runs the layer-parts at the bottom. The GPUs communicate only at certain layers.",
+        "source": "DCNN.pdf",
+        "page": 4,
+        "title": "DCNN",
+        "section": "4.4. Overlapping pooling"
+      }
+    ],
+    "selected_ids": [
+      177,
+      178,
+      139,
+      173,
+      156,
+      144,
+      152,
+      102,
+      147,
+      121
+    ]
+  },
+  "answer": "DCNN 将第二、第四、第五卷积层以及全连接隐藏层的神经元偏置初始化为常数 1 [1]；其余层的神经元偏置初始化为常数 0 [2]。使用正偏置的目的是为 ReLU 提供正输入，从而加速学习初期阶段 [1]。",
+  "original_answer": "DCNN 将第二、第四、第五卷积层以及全连接隐藏层的神经元偏置初始化为常数 1 [1]；其余层的神经元偏置初始化为常数 0 [2]。使用正偏置的目的是为 ReLU 提供正输入，从而加速学习初期阶段 [1]。",
+  "citation_validation": {
+    "answer": "DCNN 将第二、第四、第五卷积层以及全连接隐藏层的神经元偏置初始化为常数 1 [1]；其余层的神经元偏置初始化为常数 0 [2]。使用正偏置的目的是为 ReLU 提供正输入，从而加速学习初期阶段 [1]。",
+    "original_answer": "DCNN 将第二、第四、第五卷积层以及全连接隐藏层的神经元偏置初始化为常数 1 [1]；其余层的神经元偏置初始化为常数 0 [2]。使用正偏置的目的是为 ReLU 提供正输入，从而加速学习初期阶段 [1]。",
+    "repair_candidate": null,
+    "initial_check": {
+      "cited_numbers": [
+        1,
+        2
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 177,
+          "source": "DCNN.pdf",
+          "page": 5,
+          "text": "We initialized the weights in each layer from a zero-mean Gaussian distribution with standard deviation 0.01. We ini- tialized the neuron biases in the second, fourth, and fifth convolutional layers, as well as in the fully connected hidden layers, with the constant 1. This initialization accelerates the early stages of learning by providing the ReLUs with positive inputs."
+        },
+        {
+          "citation": 2,
+          "chunk_id": 178,
+          "source": "DCNN.pdf",
+          "page": 5,
+          "text": "We initialized the neuron biases in the remaining lay- ers with the constant 0. We used an equal learning rate for all layers, which we adjusted manually throughout training. The heuristic which we followed was to divide the learning rate by 10 when the vali- dation error rate stopped improving with the current learning rate. The learning rate was initialized at 0.01 and reduced three times prior to termination."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "final_check": {
+      "cited_numbers": [
+        1,
+        2
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 177,
+          "source": "DCNN.pdf",
+          "page": 5,
+          "text": "We initialized the weights in each layer from a zero-mean Gaussian distribution with standard deviation 0.01. We ini- tialized the neuron biases in the second, fourth, and fifth convolutional layers, as well as in the fully connected hidden layers, with the constant 1. This initialization accelerates the early stages of learning by providing the ReLUs with positive inputs."
+        },
+        {
+          "citation": 2,
+          "chunk_id": 178,
+          "source": "DCNN.pdf",
+          "page": 5,
+          "text": "We initialized the neuron biases in the remaining lay- ers with the constant 0. We used an equal learning rate for all layers, which we adjusted manually throughout training. The heuristic which we followed was to divide the learning rate by 10 when the vali- dation error rate stopped improving with the current learning rate. The learning rate was initialized at 0.01 and reduced three times prior to termination."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "repair_attempted": false,
+    "normalization_applied": false,
+    "repair_applied": false,
+    "repair_response": null,
+    "repair_prompt": null,
+    "unresolved_blocks": [],
+    "status": "not_needed",
+    "note": "Citation structure only; source relevance and claim meaning are not automatically verified."
+  },
+  "status": "completed"
+}

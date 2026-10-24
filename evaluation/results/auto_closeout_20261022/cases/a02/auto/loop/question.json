@@ -1,0 +1,177 @@
+{
+  "id": "question",
+  "query": "What k, n, alpha, and beta values does DCNN use for local response normalization, and is that normalization applied before or after ReLU?",
+  "kb_version": "all-papers-8-20261020",
+  "status": "completed",
+  "actions_executed": 0,
+  "semantic_correctness": "requires_manual_review",
+  "plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "DCNN",
+        "question_quote": "What k, n, alpha, and beta values does DCNN use for local response normalization, and is that normalization applied before or after ReLU?",
+        "need": "What k, n, alpha, and beta values does DCNN use for local response normalization, and is that normalization applied before or after ReLU?"
+      }
+    ]
+  },
+  "assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 145,
+            "quote": "The constants k, n, α, and β are hyper- parameters whose values are determined using a validation set; we used k = 2, n = 5, α = 10−4, and β = 0.75. We applied this normalization after applying the ReLU nonlinearity in cer- tain layers (see Section 4.5)."
+          }
+        ],
+        "supported_part": "DCNN使用的LRN参数为k=2、n=5、α=10−4、β=0.75，且该归一化在某些层中于ReLU非线性之后应用。",
+        "reason": "该段落直接给出四个超参数取值，并说明归一化在ReLU之后应用，完整覆盖需求。",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "answer",
+      "reason": "唯一需求已由DCNN原文段落完整支撑。",
+      "requirement_ids": [],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "引用段落仅涉及DCNN的LRN参数与相对ReLU的应用顺序，未超出该需求范围。"
+    }
+  },
+  "steps": [],
+  "evidence_after": [
+    {
+      "chunk_id": 145,
+      "source": "DCNN.pdf",
+      "page": 3,
+      "title": "DCNN",
+      "text": "The constants k, n, α, and β are hyper- parameters whose values are determined using a validation set; we used k = 2, n = 5, α = 10−4, and β = 0.75. We applied this normalization after applying the ReLU nonlinearity in cer- tain layers (see Section 4.5). This scheme bears some resemblance to the local contrast normalization scheme of Jarrett et al.,13 but ours would be more correctly termed “brightness normalization,” since we do not subtract the mean activity.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 143,
+      "source": "DCNN.pdf",
+      "page": 3,
+      "title": "DCNN",
+      "text": "Denoting by ai puted by applying kernel i at position (x, y) and then applying x, y the ReLU nonlinearity, the response-normalized activity bi is given by the expression where the sum runs over n “adjacent” kernel maps at the same spatial position, and N is the total number of kernels in the layer. The ordering of the kernel maps is of course arbi- trary and determined before training begins.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 157,
+      "source": "DCNN.pdf",
+      "page": 4,
+      "title": "DCNN",
+      "text": "Max-pooling layers, of the kind described in Section 4.4, follow both response-normal- ization layers as well as the fifth convolutional layer. The ReLU non linearity is applied to the output of every convolu- tional and fully connected layer. The first convolutional layer filters the 224 × 224 × 3 input image with 96 kernels of size 11 × 11 × 3 with a stride of 4 pixels (this is the distance between the receptive field centers of neighboring neurons in a kernel map).",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 142,
+      "source": "DCNN.pdf",
+      "page": 3,
+      "title": "DCNN",
+      "text": "4.3. Local response normalization ReLUs have the desirable property that they do not require input normalization to prevent them from saturating. If at least some training examples produce a positive input to a ReLU, learning will happen in that neuron. However, we still find that the following local normalization scheme aids gen- x, y the activity of a neuron com- eralization.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 134,
+      "source": "DCNN.pdf",
+      "page": 2,
+      "title": "DCNN",
+      "text": "For example, Jarrett et al.13 claim that the nonlinearity f(x) = |tanh(x)| works particularly well with their type of contrast normalization followed by local",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 235,
+      "source": "VGG.pdf",
+      "page": 2,
+      "title": "VGG",
+      "text": "The conﬁguration of the fully connected layers is the same in all networks. All hidden layers are equipped with the rectiﬁcation (ReLU (Krizhevsky et al., 2012)) non-linearity. We note that none of our networks (except for one) contain Local Response Normalisation (LRN) normalisation (Krizhevsky et al., 2012): as will be shown in Sect. 4, such normalisation does not improve the performance on the ILSVRC dataset, but leads to increased memory con- sumption and computation time.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 177,
+      "source": "DCNN.pdf",
+      "page": 5,
+      "title": "DCNN",
+      "text": "We initialized the weights in each layer from a zero-mean Gaussian distribution with standard deviation 0.01. We ini- tialized the neuron biases in the second, fourth, and fifth convolutional layers, as well as in the fully connected hidden layers, with the constant 1. This initialization accelerates the early stages of learning by providing the ReLUs with positive inputs.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 144,
+      "source": "DCNN.pdf",
+      "page": 3,
+      "title": "DCNN",
+      "text": "This sort of response normalization implements a form of lateral inhibi- tion inspired by the type found in real neurons, creating com- petition for big activities among neuron outputs computed 40 using different kernels.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 131,
+      "source": "DCNN.pdf",
+      "page": 2,
+      "title": "DCNN",
+      "text": "4.1. Rectified Linear Unit nonlinearity The standard way to model a neuron’s output f as a function of its input x is with f(x) = tanh(x) or f(x) = (1 + e−x)−1. In terms of training time with gradient descent, these saturating nonlinearities are much slower than the non-saturating nonlinearity f(x) = max(0, x). Following Nair and Hinton,24 we refer to neurons with this non linearity as Rectified Linear Units (ReLUs).",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 156,
+      "source": "DCNN.pdf",
+      "page": 4,
+      "title": "DCNN",
+      "text": "The kernels of the second, fourth, and fifth convolutional layers are connected only to those kernel maps in the previous layer which reside on the same GPU (see Figure 2). The ker- nels of the third convolutional layer are connected to all ker- nel maps in the second layer. The neurons in the fully-connected layers are connected to all neurons in the previous layer. Response-normalization layers follow the first and second convolutional layers.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 155,
+      "source": "DCNN.pdf",
+      "page": 4,
+      "title": "DCNN",
+      "text": "Our net- work maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 233,
+      "source": "VGG.pdf",
+      "page": 2,
+      "title": "VGG",
+      "text": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.",
+      "kb_version": "all-papers-8-20261020"
+    }
+  ],
+  "halt_reason": "answer_ready",
+  "final_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 145,
+            "quote": "The constants k, n, α, and β are hyper- parameters whose values are determined using a validation set; we used k = 2, n = 5, α = 10−4, and β = 0.75. We applied this normalization after applying the ReLU nonlinearity in cer- tain layers (see Section 4.5)."
+          }
+        ],
+        "supported_part": "DCNN使用的LRN参数为k=2、n=5、α=10−4、β=0.75，且该归一化在某些层中于ReLU非线性之后应用。",
+        "reason": "该段落直接给出四个超参数取值，并说明归一化在ReLU之后应用，完整覆盖需求。",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "answer",
+      "reason": "唯一需求已由DCNN原文段落完整支撑。",
+      "requirement_ids": [],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "引用段落仅涉及DCNN的LRN参数与相对ReLU的应用顺序，未超出该需求范围。"
+    }
+  },
+  "elapsed_seconds": 4.843
+}

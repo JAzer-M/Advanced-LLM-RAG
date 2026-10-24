@@ -1,0 +1,966 @@
+[
+  {
+    "id": "q1",
+    "question": "Why does VGG use small 3x3 convolutional filters?",
+    "type": "single_document",
+    "reference_answer": "VGG uses small 3x3 convolutional filters to increase network depth while controlling the number of parameters. Stacking multiple 3x3 filters produces larger effective receptive fields, such as 5x5 or 7x7. Compared with a single large filter, multiple small filters introduce additional nonlinear transformations and reduce the number of parameters, making the decision function more discriminative.",
+    "gold_evidence": [
+      {
+        "source": "VGG.pdf",
+        "page": 1,
+        "quote": "small (3 × 3) convolution filters in all layers"
+      },
+      {
+        "source": "VGG.pdf",
+        "page": 3,
+        "quote": "which makes the decision function more discriminative"
+      },
+      {
+        "source": "VGG.pdf",
+        "page": 3,
+        "quote": "Second, we decrease the number of parameters"
+      },
+      {
+        "source": "VGG.pdf",
+        "page": 3,
+        "quote": "have a decomposition through the 3 × 3 filters"
+      },
+      {
+        "source": "VGG.pdf",
+        "page": 2,
+        "quote": "which is the smallest size to capture the notion of left/right"
+      },
+      {
+        "source": "VGG.pdf",
+        "page": 2,
+        "quote": "a stack of two 3 × 3 conv. layers (without spatial pooling in between) has an effective receptive field of 5 × 5"
+      },
+      {
+        "source": "VGG.pdf",
+        "page": 6,
+        "quote": "it is also important to capture spatial context by using conv. filters with non-trivial receptive fields"
+      }
+    ],
+    "cohort": "questions"
+  },
+  {
+    "id": "q2",
+    "question": "Why does the Transformer use positional encoding?",
+    "type": "single_document",
+    "reference_answer": "The Transformer uses positional encoding because it contains neither recurrence nor convolution. Therefore, positional information must be added to the token embeddings so that the model can use the relative or absolute positions of tokens in a sequence. The original Transformer uses sine and cosine functions of different frequencies to construct positional encodings.",
+    "gold_evidence": [
+      {
+        "source": "Attention is all you need.pdf",
+        "page": 5,
+        "quote": "Since our model contains no recurrence and no convolution"
+      },
+      {
+        "source": "Attention is all you need.pdf",
+        "page": 5,
+        "quote": "we must inject some information about the relative or absolute position"
+      }
+    ],
+    "cohort": "questions"
+  },
+  {
+    "id": "q3",
+    "question": "Why does the Transformer use scaled dot-product attention?",
+    "type": "single_document",
+    "reference_answer": "The Transformer uses scaled dot-product attention because dot-product attention is computationally efficient and can be implemented using optimized matrix multiplication. However, when the dimension of the keys becomes large, the dot products can have large magnitudes, pushing the softmax function into regions with extremely small gradients. Dividing the dot products by the square root of the key dimension helps prevent this problem.",
+    "gold_evidence": [
+      {
+        "source": "Attention is all you need.pdf",
+        "page": 4,
+        "quote": "much faster and more space-efficient in practice"
+      },
+      {
+        "source": "Attention is all you need.pdf",
+        "page": 4,
+        "quote": "the dot products grow large in magnitude"
+      },
+      {
+        "source": "Attention is all you need.pdf",
+        "page": 4,
+        "quote": "extremely small gradients"
+      }
+    ],
+    "cohort": "questions"
+  },
+  {
+    "id": "q4",
+    "question": "How does the DCNN paper use data augmentation to reduce overfitting?",
+    "type": "single_document",
+    "reference_answer": "The DCNN paper uses two main forms of data augmentation to reduce overfitting. First, it generates image translations and horizontal reflections by extracting random 224x224 patches from 256x256 images and applying horizontal flipping. Second, it modifies the RGB channel intensities using principal component analysis (PCA), introducing variations in image color and illumination. These transformations artificially increase the diversity of the training data and help reduce overfitting.",
+    "gold_evidence": [
+      {
+        "source": "DCNN.pdf",
+        "page": 4,
+        "quote": "image translations and horizontal reflections"
+      },
+      {
+        "source": "DCNN.pdf",
+        "page": 4,
+        "quote": "random 224 × 224 patches"
+      },
+      {
+        "source": "DCNN.pdf",
+        "page": 5,
+        "quote": "altering the intensities of the RGB channels in training images"
+      },
+      {
+        "source": "DCNN.pdf",
+        "page": 5,
+        "quote": "perform PCA on the set of RGB pixel values"
+      },
+      {
+        "source": "DCNN.pdf",
+        "page": 4,
+        "quote": "artificially enlarge the dataset"
+      }
+    ],
+    "cohort": "questions"
+  },
+  {
+    "id": "q5",
+    "question": "How do VGG and DCNN differ in their use of convolutional filter sizes?",
+    "type": "multi_document",
+    "reference_answer": "VGG primarily uses small 3x3 convolutional filters throughout its architecture, with some configurations also using 1x1 filters. Stacking multiple 3x3 filters allows VGG to increase network depth, introduce additional nonlinearities, and reduce parameters compared with using single larger filters. In contrast, the DCNN architecture uses larger filters in its early layers, including 11x11 filters in the first convolutional layer and 5x5 filters in the second layer, followed by 3x3 filters in the last three convolutional layers. Therefore, VGG emphasizes consistently small filters and greater depth, while DCNN uses a mixture of large and small filter sizes.",
+    "gold_evidence": [
+      {
+        "source": "VGG.pdf",
+        "page": 2,
+        "quote": "we use very small 3 × 3 receptive fields throughout the whole net"
+      },
+      {
+        "source": "VGG.pdf",
+        "page": 3,
+        "quote": "we decrease the number of parameters"
+      },
+      {
+        "source": "DCNN.pdf",
+        "page": 4,
+        "quote": "96 kernels of size 11 × 11 × 3"
+      },
+      {
+        "source": "DCNN.pdf",
+        "page": 4,
+        "quote": "256 kernels of size 5 × 5 × 48"
+      },
+      {
+        "source": "DCNN.pdf",
+        "page": 4,
+        "quote": "384 kernels of size 3 × 3 × 256"
+      },
+      {
+        "source": "VGG.pdf",
+        "page": 1,
+        "quote": "which is feasible due to the use of very small (3 × 3) convolution filters in all layers"
+      },
+      {
+        "source": "VGG.pdf",
+        "page": 3,
+        "quote": "we incorporate three non-linear rectification layers instead of a single one"
+      },
+      {
+        "source": "VGG.pdf",
+        "page": 6,
+        "quote": "the configuration C (which contains three 1 × 1 conv. layers), performs worse than the configuration D, which uses 3 × 3 conv. layers throughout the network"
+      }
+    ],
+    "cohort": "questions"
+  },
+  {
+    "id": "q6",
+    "question": "What was NVIDIA's stock price on October 10, 2026?",
+    "type": "unanswerable",
+    "cohort": "questions"
+  },
+  {
+    "id": "p1",
+    "question": "Which generator does the original RAG paper use, and how many parameters does it have?",
+    "type": "single_document",
+    "reference_answer": "BART-large，400M（4亿）参数。",
+    "gold_evidence": [
+      {
+        "source": "2005.11401v4.pdf",
+        "page": 3,
+        "quote": "We use BART-large"
+      },
+      {
+        "source": "2005.11401v4.pdf",
+        "page": 3,
+        "quote": "with 400M parameters"
+      }
+    ],
+    "original_chinese_question": "原始 RAG 论文采用什么生成器？其参数规模是多少？",
+    "cohort": "arxiv_pilot_questions_en"
+  },
+  {
+    "id": "p2",
+    "question": "What function does DPR use to compute similarity between question and passage vectors?",
+    "type": "single_document",
+    "reference_answer": "问题与段落各编码为一个向量，使用点积打分。",
+    "gold_evidence": [
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 3,
+        "quote": "using the dot product of their vectors"
+      }
+    ],
+    "original_chinese_question": "DPR 使用什么函数计算问题向量和段落向量的相似度？",
+    "cohort": "arxiv_pilot_questions_en"
+  },
+  {
+    "id": "p3",
+    "question": "How does ColBERT MaxSim aggregate query-document token similarities into a document relevance score?",
+    "type": "single_document",
+    "reference_answer": "对每个查询token取与文档token的最大相似度，再对查询token求和。",
+    "gold_evidence": [
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "quote": "maximum cosine similarity"
+      },
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "quote": "combine the outputs via summation"
+      }
+    ],
+    "original_chinese_question": "ColBERT 的 MaxSim 如何把查询词与文档词的相似度合成为文档得分？",
+    "cohort": "arxiv_pilot_questions_en"
+  },
+  {
+    "id": "p4",
+    "question": "What are the four types of reflection tokens in Self-RAG, and what does each type evaluate?",
+    "type": "single_document",
+    "reference_answer": "Retrieve决定是否检索，ISREL判断相关性，ISSUP判断支持程度，ISUSE判断有用程度。",
+    "gold_evidence": [
+      {
+        "source": "2310.11511v1.pdf",
+        "page": 4,
+        "quote": "Decides when to retrieve with"
+      },
+      {
+        "source": "2310.11511v1.pdf",
+        "page": 4,
+        "quote": "provides useful information to solve"
+      },
+      {
+        "source": "2310.11511v1.pdf",
+        "page": 4,
+        "quote": "All of the verification-worthy statement"
+      },
+      {
+        "source": "2310.11511v1.pdf",
+        "page": 4,
+        "quote": "is a useful response to"
+      }
+    ],
+    "original_chinese_question": "Self-RAG 的四类 reflection tokens 分别是什么，各负责判断什么？",
+    "cohort": "arxiv_pilot_questions_en"
+  },
+  {
+    "id": "p5",
+    "question": "What are the three confidence judgments from the CRAG retrieval evaluator that trigger subsequent actions?",
+    "type": "single_document",
+    "reference_answer": "Correct、Incorrect、Ambiguous。",
+    "gold_evidence": [
+      {
+        "source": "2401.15884v3.pdf",
+        "page": 3,
+        "quote": "{Correct, Incorrect, Ambiguous}"
+      }
+    ],
+    "original_chinese_question": "CRAG 的 retrieval evaluator 将检索质量划分为哪三种置信判断，用于触发后续行动？",
+    "cohort": "arxiv_pilot_questions_en"
+  },
+  {
+    "id": "p6",
+    "question": "How do DPR and ColBERT differ in question and document representations and relevance scoring?",
+    "type": "cross_document",
+    "reference_answer": "DPR为问题与段落各保留一个向量，点积打分；ColBERT保留token级多向量，对每个查询token取MaxSim后求和。",
+    "gold_evidence": [
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 3,
+        "quote": "using the dot product of their vectors"
+      },
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "quote": "maximum cosine similarity"
+      },
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "quote": "combine the outputs via summation"
+      }
+    ],
+    "original_chinese_question": "DPR 和 ColBERT 在问题／文档的向量表示以及相关性打分上有什么主要区别？",
+    "cohort": "arxiv_pilot_questions_en"
+  },
+  {
+    "id": "p7",
+    "question": "Which of these five methods responds fastest on this project's Mac? Give the latency in milliseconds for each method.",
+    "type": "unanswerable",
+    "reference_answer": "论文没有本项目这台Mac上五种方法的实测延迟，不能给出排名或毫秒数。",
+    "gold_evidence": [],
+    "cohort": "arxiv_pilot_questions_en"
+  },
+  {
+    "id": "v1",
+    "question": "Can RAG-Token use a different retrieved latent document for each generated token?",
+    "type": "single_document",
+    "gold_evidence": [
+      {
+        "source": "2005.11401v4.pdf",
+        "page": 3,
+        "quote": "a different latent document for each target token"
+      }
+    ],
+    "cohort": "arxiv_validation_questions_en"
+  },
+  {
+    "id": "v2",
+    "question": "How is Wikipedia segmented into the basic passage retrieval units used by DPR?",
+    "type": "single_document",
+    "gold_evidence": [
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 4,
+        "quote": "disjoint text blocks of 100 words"
+      }
+    ],
+    "cohort": "arxiv_validation_questions_en"
+  },
+  {
+    "id": "v3",
+    "question": "What query embedding count and embedding dimension are used in ColBERT's experimental setup?",
+    "type": "single_document",
+    "gold_evidence": [
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 6,
+        "quote": "number of embeddings per query"
+      },
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 6,
+        "quote": "embedding dimension m to be 128"
+      }
+    ],
+    "cohort": "arxiv_validation_questions_en"
+  },
+  {
+    "id": "v4",
+    "question": "How are reflection tokens added to the Self-RAG training corpus, and by which model?",
+    "type": "single_document",
+    "gold_evidence": [
+      {
+        "source": "2310.11511v1.pdf",
+        "page": 2,
+        "quote": "inserted offline into the original corpus by a trained critic model"
+      }
+    ],
+    "cohort": "arxiv_validation_questions_en"
+  },
+  {
+    "id": "v5",
+    "question": "Which component of CRAG evaluates the quality of retrieved documents, and what does it return?",
+    "type": "single_document",
+    "gold_evidence": [
+      {
+        "source": "2401.15884v3.pdf",
+        "page": 1,
+        "quote": "a lightweight retrieval evaluator"
+      },
+      {
+        "source": "2401.15884v3.pdf",
+        "page": 1,
+        "quote": "returning a confidence degree"
+      }
+    ],
+    "cohort": "arxiv_validation_questions_en"
+  },
+  {
+    "id": "n01",
+    "type": "single_document",
+    "question": "During training of the original RAG model, which retriever components are kept fixed and which components are fine-tuned?",
+    "gold_evidence": [
+      {
+        "source": "2005.11401v4.pdf",
+        "page": 4,
+        "quote": "keep the document encoder (and index)"
+      }
+    ],
+    "reference_points": [
+      "Document encoder and index stay fixed.",
+      "Query encoder and BART generator are fine-tuned."
+    ],
+    "cohort": "arxiv_next_questions_en"
+  },
+  {
+    "id": "n02",
+    "type": "single_document",
+    "question": "Which negative passage types does DPR consider, and which combination is used by its best model?",
+    "gold_evidence": [
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 3,
+        "quote": "We consider three different types of negatives"
+      }
+    ],
+    "reference_points": [
+      "Random, BM25, and Gold negatives.",
+      "Best model uses gold passages from the same mini-batch plus one BM25 negative."
+    ],
+    "cohort": "arxiv_next_questions_en"
+  },
+  {
+    "id": "n03",
+    "type": "single_document",
+    "question": "How does ColBERT augment a short query, and is the same augmentation applied to document inputs?",
+    "gold_evidence": [
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "quote": "special [mask] tokens up to length Nq"
+      },
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "quote": "we do not append [mask] tokens to documents"
+      }
+    ],
+    "reference_points": [
+      "Short queries are padded with BERT mask tokens up to Nq.",
+      "Document inputs do not receive mask-token padding."
+    ],
+    "cohort": "arxiv_next_questions_en"
+  },
+  {
+    "id": "n04",
+    "type": "single_document",
+    "question": "Does Self-RAG need its separate critic model at inference, and how is this requirement avoided during training?",
+    "gold_evidence": [
+      {
+        "source": "2310.11511v1.pdf",
+        "page": 4,
+        "quote": "without relying on the critic at inference time"
+      }
+    ],
+    "reference_points": [
+      "Critic annotates task outputs with reflection tokens offline.",
+      "Generator learns to emit reflection tokens itself using the conventional LM objective; separate critic not needed at inference."
+    ],
+    "cohort": "arxiv_next_questions_en"
+  },
+  {
+    "id": "n05",
+    "type": "cross_document",
+    "question": "Which BERT encoders are used by the original RAG retriever and DPR, and what representation does DPR extract from each encoder?",
+    "gold_evidence": [
+      {
+        "source": "2005.11401v4.pdf",
+        "page": 3,
+        "quote": "BERTBASE document encoder"
+      },
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 3,
+        "quote": "two independent BERT"
+      }
+    ],
+    "reference_points": [
+      "RAG retriever uses BERT-base query and document encoders.",
+      "DPR uses two independent BERT-base uncased networks.",
+      "DPR extracts the CLS-token representation; the 768 dimension is optional detail."
+    ],
+    "cohort": "arxiv_next_questions_en"
+  },
+  {
+    "id": "n06",
+    "type": "cross_document",
+    "question": "How do DPR and ColBERT form positive and negative training examples, and what losses do they optimize?",
+    "gold_evidence": [
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 3,
+        "quote": "negative log likelihood"
+      },
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 3,
+        "quote": "Our best model uses gold passages"
+      },
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 5,
+        "quote": "pairwise sofmax cross-entropy loss"
+      }
+    ],
+    "reference_points": [
+      "DPR trains question/positive/negative passage examples with negative log likelihood of the positive.",
+      "DPR best negative combination is in-batch gold and one BM25 negative.",
+      "ColBERT trains query-positive-negative triples with pairwise softmax cross-entropy."
+    ],
+    "cohort": "arxiv_next_questions_en"
+  },
+  {
+    "id": "n07",
+    "type": "cross_document",
+    "question": "What document representations are precomputed and stored for retrieval or indexing in RAG and ColBERT?",
+    "gold_evidence": [
+      {
+        "source": "2005.11401v4.pdf",
+        "page": 4,
+        "quote": "compute an embedding for each document"
+      },
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 5,
+        "quote": "storing the output embeddings per document"
+      }
+    ],
+    "reference_points": [
+      "RAG precomputes document encoder embeddings and builds a FAISS MIPS index.",
+      "ColBERT runs its document encoder offline in batches and stores output embeddings for each document."
+    ],
+    "cohort": "arxiv_next_questions_en"
+  },
+  {
+    "id": "n08",
+    "type": "cross_document",
+    "question": "How do Self-RAG and CRAG decide whether retrieval or additional knowledge is needed, and what happens when retrieval is unnecessary or judged incorrect?",
+    "gold_evidence": [
+      {
+        "source": "2310.11511v1.pdf",
+        "page": 4,
+        "quote": "If retrieval is not required"
+      },
+      {
+        "source": "2401.15884v3.pdf",
+        "page": 3,
+        "quote": "retrieved documents will be discarded"
+      },
+      {
+        "source": "2401.15884v3.pdf",
+        "page": 3,
+        "quote": "web searches are resorted to"
+      }
+    ],
+    "reference_points": [
+      "Self-RAG emits a retrieval token to judge retrieval utility.",
+      "When retrieval is not required, Self-RAG produces the next segment as a standard LM.",
+      "CRAG uses relevance/confidence to trigger Incorrect and discards retrieved documents.",
+      "CRAG then uses web search as complementary knowledge."
+    ],
+    "cohort": "arxiv_next_questions_en"
+  },
+  {
+    "id": "n09",
+    "type": "cross_document",
+    "question": "Which Wikipedia snapshot does DPR use, and how does CRAG extend retrieval beyond a static corpus?",
+    "gold_evidence": [
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 4,
+        "quote": "Dec. 20, 2018"
+      },
+      {
+        "source": "2401.15884v3.pdf",
+        "page": 2,
+        "quote": "large-scale web searches"
+      }
+    ],
+    "reference_points": [
+      "DPR uses English Wikipedia dump dated December 20, 2018.",
+      "CRAG adds large-scale web search when confidence is Incorrect or Ambiguous."
+    ],
+    "cohort": "arxiv_next_questions_en"
+  },
+  {
+    "id": "n10",
+    "type": "cross_document",
+    "question": "How do DPR and ColBERT mark or extract query and document representations before matching?",
+    "gold_evidence": [
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 3,
+        "quote": "representation at the [CLS] token"
+      },
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "quote": "“[Q]q0q1...ql##...#”"
+      },
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "quote": "“[D]d0d1...dn”"
+      }
+    ],
+    "reference_points": [
+      "DPR extracts one CLS representation for each query/passage encoder.",
+      "ColBERT marks query and document inputs with Q and D tokens and retains bags of token embeddings."
+    ],
+    "cohort": "arxiv_next_questions_en"
+  },
+  {
+    "id": "n11",
+    "type": "unanswerable",
+    "question": "What measured P95 end-to-end latency did this project achieve with Top-10 on an M3 Mac under eight concurrent users? Give the exact milliseconds.",
+    "gold_evidence": [],
+    "reference_points": [
+      "Cannot infer project-specific measurements from these papers; refuse to invent latency."
+    ],
+    "cohort": "arxiv_next_questions_en"
+  },
+  {
+    "id": "n12",
+    "type": "unanswerable",
+    "question": "What Recall@10 and P95 latency were measured for a combined Self-RAG plus CRAG implementation in this repository?",
+    "gold_evidence": [],
+    "reference_points": [
+      "These papers do not report measurements of a combined implementation in this repository."
+    ],
+    "cohort": "arxiv_next_questions_en"
+  },
+  {
+    "id": "a01",
+    "type": "single_document",
+    "cohort": "new_all_papers",
+    "question": "Where are residual connections and layer normalization placed relative to the encoder sub-layers in the Transformer?",
+    "gold_evidence": [
+      {
+        "source": "Attention is all you need.pdf",
+        "page": 3,
+        "quote": "residual connection"
+      },
+      {
+        "source": "Attention is all you need.pdf",
+        "page": 3,
+        "quote": "LayerNorm(x + Sublayer(x))"
+      }
+    ],
+    "reference_points": [
+      "Residual connection around each sub-layer, followed by layer normalization."
+    ]
+  },
+  {
+    "id": "a02",
+    "type": "single_document",
+    "cohort": "new_all_papers",
+    "question": "How did ReLU affect training speed relative to saturating neurons in the DCNN paper?",
+    "gold_evidence": [
+      {
+        "source": "DCNN.pdf",
+        "page": 3,
+        "quote": "networks with ReLUs consistently learn several times faster"
+      }
+    ],
+    "reference_points": [
+      "Networks with ReLU learn several times faster than equivalents with saturating neurons."
+    ]
+  },
+  {
+    "id": "a03",
+    "type": "single_document",
+    "cohort": "new_all_papers",
+    "question": "Why does VGG configuration C include 1x1 convolutional layers, and what happens to the receptive field?",
+    "gold_evidence": [
+      {
+        "source": "VGG.pdf",
+        "page": 3,
+        "quote": "increase the non- linearity of the decision function without affecting the receptive fields"
+      }
+    ],
+    "reference_points": [
+      "Adds nonlinearity through rectification without changing receptive fields."
+    ]
+  },
+  {
+    "id": "a04",
+    "type": "single_document",
+    "cohort": "new_all_papers",
+    "question": "Which indexing library and approximate nearest-neighbor structure are used for fast retrieval in the original RAG paper?",
+    "gold_evidence": [
+      {
+        "source": "2005.11401v4.pdf",
+        "page": 4,
+        "quote": "using FAISS"
+      },
+      {
+        "source": "2005.11401v4.pdf",
+        "page": 4,
+        "quote": "Hierarchical Navigable Small World"
+      }
+    ],
+    "reference_points": [
+      "FAISS with HNSW approximation for MIPS."
+    ]
+  },
+  {
+    "id": "a05",
+    "type": "single_document",
+    "cohort": "new_all_papers",
+    "question": "When does DPR encode and index all candidate passages, and which indexing library is used?",
+    "gold_evidence": [
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 3,
+        "quote": "index them using FAISS"
+      }
+    ],
+    "reference_points": [
+      "Passages are encoded and indexed offline using FAISS."
+    ]
+  },
+  {
+    "id": "a06",
+    "type": "single_document",
+    "cohort": "new_all_papers",
+    "question": "Which token embeddings does the ColBERT document encoder remove after projection, and why?",
+    "gold_evidence": [
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "quote": "punctuation symbols"
+      }
+    ],
+    "reference_points": [
+      "Removes punctuation embeddings to reduce document embedding count."
+    ]
+  },
+  {
+    "id": "a07",
+    "type": "single_document",
+    "cohort": "new_all_papers",
+    "question": "How does Self-RAG search over output segments and incorporate critique-token probabilities into segment scores?",
+    "gold_evidence": [
+      {
+        "source": "2310.11511v1.pdf",
+        "page": 6,
+        "quote": "segment-level beam search"
+      },
+      {
+        "source": "2310.11511v1.pdf",
+        "page": 6,
+        "quote": "linear weighted sum"
+      }
+    ],
+    "reference_points": [
+      "Segment beam search retains top-B continuations; adds a linear weighted sum of normalized critique probabilities."
+    ]
+  },
+  {
+    "id": "a08",
+    "type": "single_document",
+    "cohort": "new_all_papers",
+    "question": "How does CRAG aggregate document confidence scores to classify an entire retrieval as Correct or Incorrect?",
+    "gold_evidence": [
+      {
+        "source": "2401.15884v3.pdf",
+        "page": 5,
+        "quote": "at least one retrieved document"
+      },
+      {
+        "source": "2401.15884v3.pdf",
+        "page": 5,
+        "quote": "all retrieved documents are below the lower threshold"
+      }
+    ],
+    "reference_points": [
+      "Correct if at least one exceeds upper threshold; Incorrect if all fall below lower threshold."
+    ]
+  },
+  {
+    "id": "a09",
+    "type": "cross_document",
+    "cohort": "new_all_papers",
+    "question": "What output dimensionalities are used for Transformer sub-layers and embeddings, and for DPR question and passage vectors?",
+    "gold_evidence": [
+      {
+        "source": "Attention is all you need.pdf",
+        "page": 3,
+        "quote": "dmodel = 512"
+      },
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 3,
+        "quote": "d = 768"
+      }
+    ],
+    "reference_points": [
+      "Transformer 512; DPR 768."
+    ]
+  },
+  {
+    "id": "a10",
+    "type": "cross_document",
+    "cohort": "new_all_papers",
+    "question": "What pooling window sizes and strides are used in DCNN and VGG, and which one uses overlapping pooling?",
+    "gold_evidence": [
+      {
+        "source": "DCNN.pdf",
+        "page": 3,
+        "quote": "a neighborhood of size z × z"
+      },
+      {
+        "source": "DCNN.pdf",
+        "page": 4,
+        "quote": "s = 2 and z = 3"
+      },
+      {
+        "source": "VGG.pdf",
+        "page": 2,
+        "quote": "2 × 2 pixel window, with stride 2"
+      }
+    ],
+    "reference_points": [
+      "DCNN 3x3 stride 2 overlapping; VGG 2x2 stride 2."
+    ]
+  },
+  {
+    "id": "a11",
+    "type": "cross_document",
+    "cohort": "new_all_papers",
+    "question": "How does the original RAG paper index its Wikipedia document embeddings, and how can CRAG obtain evidence beyond a static corpus?",
+    "gold_evidence": [
+      {
+        "source": "2005.11401v4.pdf",
+        "page": 4,
+        "quote": "build a single MIPS index using FAISS"
+      },
+      {
+        "source": "2401.15884v3.pdf",
+        "page": 2,
+        "quote": "large-scale web searches"
+      }
+    ],
+    "reference_points": [
+      "RAG uses a FAISS HNSW MIPS index; CRAG adds web search for Incorrect/Ambiguous retrieval."
+    ]
+  },
+  {
+    "id": "a12",
+    "type": "cross_document",
+    "cohort": "new_all_papers",
+    "question": "Do DPR and ColBERT share BERT weights between their question or query encoder and document encoder?",
+    "gold_evidence": [
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 3,
+        "quote": "two independent BERT"
+      },
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "quote": "share a single BERT model"
+      }
+    ],
+    "reference_points": [
+      "DPR uses independent encoders; ColBERT shares one BERT model with Q/D markers."
+    ]
+  },
+  {
+    "id": "a13",
+    "type": "cross_document",
+    "cohort": "new_all_papers",
+    "question": "How are critique scores used to rank generated segments in Self-RAG, and how are confidence thresholds used to classify retrieval in CRAG?",
+    "gold_evidence": [
+      {
+        "source": "2310.11511v1.pdf",
+        "page": 6,
+        "quote": "linear weighted sum"
+      },
+      {
+        "source": "2401.15884v3.pdf",
+        "page": 5,
+        "quote": "at least one retrieved document"
+      },
+      {
+        "source": "2401.15884v3.pdf",
+        "page": 5,
+        "quote": "all retrieved documents are below the lower threshold"
+      }
+    ],
+    "reference_points": [
+      "Self-RAG scores beam segments with critique probabilities; CRAG applies upper/lower confidence thresholds to retrieved documents."
+    ]
+  },
+  {
+    "id": "a14",
+    "type": "cross_document",
+    "cohort": "new_all_papers",
+    "question": "How do DPR and the original RAG paper precompute and index passage or document representations for retrieval?",
+    "gold_evidence": [
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 3,
+        "quote": "index them using FAISS"
+      },
+      {
+        "source": "2005.11401v4.pdf",
+        "page": 4,
+        "quote": "compute an embedding for each document"
+      }
+    ],
+    "reference_points": [
+      "Both encode passages/documents offline and index in FAISS; RAG specifies a HNSW approximation for MIPS."
+    ]
+  },
+  {
+    "id": "a15",
+    "type": "cross_document",
+    "cohort": "new_all_papers",
+    "question": "Where is dropout applied in the Transformer and in the VGG training setup?",
+    "gold_evidence": [
+      {
+        "source": "Attention is all you need.pdf",
+        "page": 7,
+        "quote": "output of each sub-layer"
+      },
+      {
+        "source": "Attention is all you need.pdf",
+        "page": 7,
+        "quote": "sums of the embeddings and the positional encodings"
+      },
+      {
+        "source": "VGG.pdf",
+        "page": 4,
+        "quote": "first two fully-connected layers"
+      }
+    ],
+    "reference_points": [
+      "Transformer sub-layer outputs and embedding plus position sums; VGG first two FC layers with ratio 0.5."
+    ]
+  },
+  {
+    "id": "a16",
+    "type": "cross_document",
+    "cohort": "new_all_papers",
+    "question": "What batch sizes, momentum values, and weight-decay coefficients are used to train DCNN and VGG?",
+    "gold_evidence": [
+      {
+        "source": "DCNN.pdf",
+        "page": 5,
+        "quote": "batch size of 128 examples, momentum of 0.9, and weight decay of 0.0005"
+      },
+      {
+        "source": "VGG.pdf",
+        "page": 4,
+        "quote": "batch size was set to 256, momentum to 0.9"
+      },
+      {
+        "source": "VGG.pdf",
+        "page": 4,
+        "quote": "5·10−4"
+      }
+    ],
+    "reference_points": [
+      "DCNN batch 128, VGG batch 256; both momentum 0.9 and weight decay 0.0005."
+    ]
+  }
+]

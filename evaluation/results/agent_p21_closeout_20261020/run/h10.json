@@ -1,0 +1,70 @@
+{
+  "id": "h10",
+  "query": "For short-answer open-domain QA, how does the correctness criterion reported by RAG differ from the criterion used by Self-RAG for PopQA and TriviaQA?",
+  "kb_version": "all-papers-8-20261020",
+  "status": "completed",
+  "actions_executed": 0,
+  "semantic_correctness": "requires_manual_review",
+  "plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "RAG",
+        "question_quote": "how does the correctness criterion reported by RAG differ",
+        "need": "how does the correctness criterion reported by RAG differ"
+      },
+      {
+        "id": "r2",
+        "subject": "Self-RAG",
+        "question_quote": "the criterion used by Self-RAG for PopQA and TriviaQA",
+        "need": "the criterion used by Self-RAG for PopQA and TriviaQA"
+      }
+    ]
+  },
+  "assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "missing",
+        "evidence": [],
+        "supported_part": "",
+        "reason": "提供的段落中没有关于RAG所报告的correctness criterion的内容。chunk_id 910仅涉及TriviaQA训练目标过滤，chunk_id 763描述训练和比较，均未确立RAG的correctness评价准则。",
+        "gap": "缺少RAG在其评估中所使用的correctness criterion的描述。"
+      },
+      {
+        "id": "r2",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 1003,
+            "source": "2310.11511v1.pdf",
+            "quote": "We evaluate performance based on whether gold answers are included in the model generations instead of strictly requiring exact matching, following Mallen et al."
+          },
+          {
+            "chunk_id": 1002,
+            "source": "2310.11511v1.pdf",
+            "quote": "Short-form generations tasks include two open-domain question answering (QA) datasets, PopQA (Mallen et al., 2023) and TriviaQA-unfiltered (Joshi et al., 2017), where systems need to answer arbitrary questions about factual knowledge."
+          }
+        ],
+        "supported_part": "Self-RAG在PopQA和TriviaQA-unfiltered上的评估准则为：检查模型生成中是否包含标准答案，而非严格要求完全匹配。",
+        "reason": "chunk_id 1002将PopQA和TriviaQA-unfiltered确定为Short-form生成任务；chunk_id 1003说明性能评估基于标准答案是否包含在模型生成中，而非严格完全匹配。",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "search",
+      "reason": "r1尚未满足；使用其预计算的检索查询查找RAG的correctness criterion。",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": "RAG: how does the correctness criterion reported by RAG differ | how does the correctness criterion reported by RAG differ",
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "每项要求均根据其自身绑定的问题摘录进行检查；未将任何条件跨方法转移。"
+    }
+  },
+  "elapsed_seconds": 5.584
+}

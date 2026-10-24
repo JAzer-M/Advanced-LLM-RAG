@@ -1,0 +1,68 @@
+{
+  "entry": {
+    "number": 3,
+    "question_id": "h10_auto",
+    "stage": "auto",
+    "signature": "9488ee41ac7a5d339df7d1590ec906e6bf0f6b7eeaa862be777927e418e0a4f7",
+    "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\nOriginal passages:\n[1] Source: 2310.11511v1.pdf | Page: 20 | Section: 6 CONCLUSION\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nC RESULTS C.1 ANALYSIS Reliance on parametric- and non-parametric memories. We conduct analysis on how frequently model answers come from retrieved passages (non-parametric memories) or their own parametric memories. On two open-domain QA datasets, TriviaQA and PopQA, we conduct the following analysis: 1) sample query models successfully answer correctly, 2) for each query in this group, check whether the matched ground-truth answer is a sub-string of the retrieved passage or not.\n\n[2] Source: 2310.11511v1.pdf | Page: 7 | Section: 4.1 TASKS AND DATASETS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nFor PopQA, we use the long-tail subset, consisting of 1,399 rare entity queries whose monthly Wikipedia page views are less than 100. As the TriviaQA-unfiltered (open) test set is not publicly available, we follow prior work’s validation and test split (Min et al., 2019; Guu et al., 2020), using 11,313 test queries for evaluation. We evaluate performance based on whether gold answers are included in the model generations instead of strictly requiring exact matching, following Mallen et al.\n\n[3] Source: 2310.11511v1.pdf | Page: 7 | Section: 4.1 TASKS AND DATASETS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nChallenge; Clark et al. We use accuracy as an evaluation metric and report on the test set. We aggregate the answer probabilities of target classes for both of these datasets (Appendix Section B.2). Short-form generations tasks include two open-domain question answering (QA) datasets, PopQA (Mallen et al., 2023) and TriviaQA-unfiltered (Joshi et al., 2017), where systems need to answer arbitrary questions about factual knowledge.\n\n[4] Source: 2310.11511v1.pdf | Page: 10 | Section: 5.2 ANALYSIS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nWe then ask our annotators whether the model-predicted reflection tokens about ISREL and ISSUP match their inspections (e.g., whether the fully supported output is supported by the cited evidence). Human annotators find SELF-RAG answers are often plausible and supported by relevant passages with higher S&P scores on short-form PopQA, which is consistent with Menick et al. Human annotators also find ISREL and ISSUP reflection token predictions are mostly aligned with their assessments.\n\n[5] Source: 2005.11401v4.pdf | Page: 18 | Section: 6 Discussion\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nFor RAG, we also make use of multiple annotation examples for Natural Questions and WebQuestions by training the model with each (q, a) pair separately, leading to a small increase in accuracy. For TriviaQA, there are often many valid answers to a given question, some of which are not suitable training targets, such as emoji or spelling variants. For TriviaQA, we ﬁlter out answer candidates if they do not occur in top 1000 documents for the query.\n\n[6] Source: 2401.15884v3.pdf | Page: 8 | Section: 5.3 Results\nTitle: Corrective Retrieval Augmented Generation\nCompared with the current state-of-the- art Self-RAG, Self-CRAG outperformed it by margins of 20.0% accuracy on PopQA, 36.9% FactScore on Biography, and 4.0% accuracy on Arc-Challenge when based on LLaMA2-hf-7b, as well as by margins of 6.9% accuracy on PopQA, 5.0% FactScore on Biography, and 2.4% accuracy on PubHealth, when based on SelfRAG-LLaMA2- 7b. These results demonstrated the adaptability of CRAG which is plug-and-play and can be implemented into RAG-based approaches.\n\n[7] Source: 2401.15884v3.pdf | Page: 16 | Section: 6 Conclusion & Limitation\nTitle: Corrective Retrieval Augmented Generation\nTable 11: Ablation study for removing only a single action on the PopQA dataset in terms of accuracy. LLaMA2-hf-7b SelfRAG-LLaMA2-7b CRAG 54.9 59.8 only Correct 52.4 56.7 only Incorrect 47.0 48.5 only Ambiguous 52.7 58.0 Self-CRAG 49.0 61.8 only Correct 48.6 57.2 only Incorrect 40.8 53.3 only Ambiguous 44.9 59.8 is an advanced RAG approach that introduces a critic model to decide whether to retrieve and which retrieved document to be referred for generation.\n\n[8] Source: 2310.11511v1.pdf | Page: 8 | Section: 4.3 EXPERIMENTAL SETTINGS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nModels are sorted based on scale. FS, em, rg, mau, prec, rec denote FactScore (factuality); str-em, rouge (correctness); MAUVE (fluency); citation precision and recall, respectively.\n\n[9] Source: 2005.11401v4.pdf | Page: 4 | Section: 3.1 Open-domain Question Answering\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\n3.1 Open-domain Question Answering Open-domain question answering (QA) is an important real-world application and common testbed for knowledge-intensive tasks [20]. We treat questions and answers as input-output text pairs (x, y) and train RAG by directly minimizing the negative log-likelihood of answers. We compare RAG to the popular extractive QA paradigm [5, 7, 31, 26], where answers are extracted spans from retrieved documents, relying primarily on non-parametric knowledge.\n\n[10] Source: 2004.04906v3.pdf | Page: 8 | Section: 6.2 Results\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nsee that higher retriever accuracy typically leads to better ﬁnal QA results: in all cases except SQuAD, answers extracted from the passages retrieved by DPR are more likely to be correct, compared to those from BM25. For large datasets like NQ and TriviaQA, models trained using multiple datasets (Multi) perform comparably to those trained using the individual training set (Single). Conversely, on smaller datasets like WQ and TREC, the multi- dataset setting has a clear advantage.\n\nEvidence guidance:\n- Rule-based subject attribution: PopQA; passage: “Human annotators find SELF-RAG answers are often plausible and supported by relevant passages with higher S&P scores on short-form PopQA, which is consistent with Menick et al.” [4]\n\nQuestion:\nFor short-answer open-domain QA, how does the correctness criterion reported by RAG differ from the criterion used by Self-RAG for PopQA and TriviaQA?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+    "status": "completed",
+    "http_posts": 1,
+    "started_at_utc": "2026-10-22T04:04:43.771469+00:00",
+    "response": {
+      "answer": "根据提供的上下文，Self-RAG 在 PopQA 和 TriviaQA 上的正确性判定标准是“不严格要求精确匹配，只要 gold answer 出现在模型生成内容中即算正确”[2]。而 RAG 论文的上下文中**没有直接给出其在 PopQA/TriviaQA 上对应的正确性判定标准**——可检索到的 RAG 相关片段只说明其将问答视为输入-输出文本对并最小化答案负对数似然[9]，以及训练时会为 Natural Questions、WebQuestions 使用多个标注示例、对 TriviaQA 过滤未出现在前 1000 文档中的答案候选[5]，这些都不是关于最终评测正确性判据的陈述。\n\n因此，就问题所问的“RAG 报告的正确性判据与 Self-RAG 用于 PopQA/TriviaQA 的判据有何不同”，当前证据不足：缺少 RAG 在这两个数据集上评测正确性所用判据的直接说明，无法进行所要求的对比。",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 1920,
+        "cached_tokens": 1920,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 211,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.02,
+        "prompt_cache_hit_tokens": 1920,
+        "prompt_cache_miss_tokens": 187,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2107,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 1920,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2318
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 3.2
+  },
+  "origin": "evaluation/results/agent_auto_improvement_20261022/final/actual_chat_calls.json",
+  "origin_sha256": "1c648a0f20ce249b4d293a8292cb1c601cf08f2bef0cca6834fd85d6d622d14f",
+  "api_public_settings": {
+    "base_url": "http://127.0.0.1:7863/v1",
+    "model": "cn:deepseek-v4.1-flash",
+    "chat_options": {
+      "thinking": {
+        "type": "disabled"
+      },
+      "temperature": 0,
+      "max_tokens": 4096
+    }
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "frozen_at_utc": "2026-10-20T05:43:17.484661+00:00",
+  "stage": "P2 step 1 diagnostic replay",
+  "question_ids": [
+    "h01",
+    "h10",
+    "h11"
+  ],
+  "max_api_calls": 6,
+  "automatic_retries": 0,
+  "actions_executed": 0,
+  "fresh_retrieval": false,
+  "fresh_final_answers": false,
+  "model_inputs": "plan: question only; assess: question, generated plan, original saved passages and complete paper inventory. No P1 answers, Gold, reference_points, labels or review protocol.",
+  "manual_expectations": {
+    "h01": {
+      "all_requirements_supported": true,
+      "action": "answer",
+      "support": "value0.1 and perplexity/accuracy/BLEU direction in original chunks69/70"
+    },
+    "h10": {
+      "scope": "RAG criterion separate from Self-RAG on PopQA/TriviaQA; do not transfer PopQA to original RAG",
+      "rag_metric_missing": true,
+      "self_rag_criterion_supported": true,
+      "accepted_actions": [
+        "search",
+        "read_neighbors"
+      ],
+      "target_source": "2005.11401v4.pdf",
+      "do_not": "claim RAG Exact Match without evidence"
+    },
+    "h11": {
+      "paper_absent": "Mamba",
+      "facts_unestablished": [
+        "training-data size",
+        "hidden-state dimension"
+      ],
+      "action": "stop",
+      "numerical_values_invented": false
+    }
+  },
+  "success_criteria": [
+    "Every decision trace is preserved, even failures.",
+    "Program validates shape, chunk ID, quote membership, source and action arguments.",
+    "Assistant independently reviews semantics against saved evidence; not equivalent to model self-score.",
+    "No automatic follow-up retrieval or final answer; a tool proposal is not a completed Agent loop."
+  ],
+  "frozen_files": {
+    "candidate/agent.py": "dcc1d1be6475de80ce3066b114d7636929676bcef7fbae23d80ab83781fb9ae2",
+    "candidate/tests/test_agent_step1.py": "197bbd21e0136153849a5d35fe218ef144de31a7481d811d224b6429efe59099"
+  }
+}

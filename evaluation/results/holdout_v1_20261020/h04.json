@@ -1,0 +1,1145 @@
+{
+  "question_id": "h04",
+  "query": "For dense evaluation of an uncropped test image, how does VGG convert its fully connected layers, and how does it reduce the output to final image-level class scores?",
+  "run_provenance": "fresh full main pipeline",
+  "knowledge_base": {
+    "version": "all-papers-8-20261020",
+    "chunk_count": 1397,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/manifest.json",
+    "manifest_sha256": "9c4e2c26b4f11fe7baf526595630cbee2d325416ec0e497f417975fbd60779ef",
+    "files": {
+      "faiss.index": "ff1f4a3e38e20c0275ba79d805e6475639b3cea7a7a583f9c18c67ec8e40a2ed",
+      "chunks.json": "3e63d75abbe164ff8e135b1d66fd6b02d9479b2e037e289a726e7c542464593a"
+    }
+  },
+  "decomposition": {
+    "needs_decomposition": true,
+    "sub_queries": [
+      "According to the VGG paper, how are fully connected layers converted for dense evaluation of an uncropped test image?",
+      "According to the VGG paper, how is the output reduced to final image-level class scores in dense evaluation of an uncropped test image?"
+    ],
+    "status": "accepted",
+    "proposed_count": 2
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 198,
+    "global_top_ids": [
+      266,
+      336,
+      351,
+      335,
+      254,
+      298,
+      256,
+      234,
+      334,
+      353
+    ],
+    "protected_ids": [
+      266,
+      298
+    ],
+    "sub_query_evidence": [
+      {
+        "query": "According to the VGG paper, how are fully connected layers converted for dense evaluation of an uncropped test image?",
+        "top_ids": [
+          266,
+          336,
+          351
+        ]
+      },
+      {
+        "query": "According to the VGG paper, how is the output reduced to final image-level class scores in dense evaluation of an uncropped test image?",
+        "top_ids": [
+          298,
+          336,
+          267
+        ]
+      }
+    ],
+    "retrieval_anchor_ids": [
+      357
+    ],
+    "evidence_completion": {
+      "requested_sources": [
+        "VGG.pdf"
+      ],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        266,
+        336,
+        351,
+        335,
+        254,
+        298,
+        256,
+        234,
+        267,
+        357
+      ],
+      "retained_local_ids": [
+        266,
+        336,
+        351,
+        298,
+        267
+      ],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        266,
+        336,
+        351,
+        335,
+        254,
+        298,
+        256,
+        234,
+        267,
+        357
+      ],
+      "elapsed_seconds": 0.000239
+    }
+  },
+  "selected_ids": [
+    266,
+    336,
+    351,
+    335,
+    254,
+    298,
+    256,
+    234,
+    267,
+    357
+  ],
+  "context": "[1] Source: VGG.pdf | Page: 5 | Section: 3.2 TESTING\nThen, the network is applied densely over the rescaled test image in a way similar to (Sermanet et al., 2014). Namely, the fully-connected layers are ﬁrst converted to convolutional layers (the ﬁrst FC layer to a 7 × 7 conv. layer, the last two FC layers to 1 × 1 conv. The resulting fully-convolutional net is then applied to the whole (uncropped) image.\n\n[2] Source: VGG.pdf | Page: 10 | Section: 5 CONCLUSION\nThe second, fully-ﬂedged, testing procedure is based on the dense application of the localisation ConvNet to the whole image, similarly to the classiﬁcation task (Sect. The difference is that instead of the class score map, the output of the last fully-connected layer is a set of bounding box predictions. To come up with the ﬁnal prediction, we utilise the greedy merging procedure of Sermanet et al.\n\n[3] Source: VGG.pdf | Page: 12 | Section: 5 CONCLUSION\nIn this evaluation, we consider two models with the best classiﬁcation performance on ILSVRC (Sect. 4) – conﬁgurations “Net-D” and “Net-E” (which we made publicly available). To utilise the ConvNets, pre-trained on ILSVRC, for image classiﬁcation on other datasets, we remove the last fully-connected layer (which performs 1000-way ILSVRC classiﬁcation), and use 4096-D activations of the penultimate layer as image features, which are aggregated across multiple locations and scales.\n\n[4] Source: VGG.pdf | Page: 10 | Section: 5 CONCLUSION\nThe last fully-connected layer was initialised randomly and trained from scratch. We consider two testing protocols. The ﬁrst is used for comparing different network modiﬁcations on the validation set, and considers only the bounding box prediction for the ground truth class (to factor out the classiﬁcation errors). The bounding box is obtained by applying the network only to the central crop of the image.\n\n[5] Source: VGG.pdf | Page: 4 | Section: 3.1 TRAINING\nThe batch size was set to 256, momentum to 0.9. The training was regularised by weight decay (the L2 penalty multiplier set to 5·10−4) and dropout regularisation for the ﬁrst two fully-connected layers (dropout ratio set to 0.5). The learning rate was initially set to 10−2, and then decreased by a factor of 10 when the validation set accuracy stopped improving. In total, the learning rate was decreased 3 times, and the learning was stopped after 370K iterations (74 epochs).\n\n[6] Source: VGG.pdf | Page: 7 | Section: 4.4 CONVNET FUSION\nAfter the submission, we considered an ensemble of only two best-performing multi-scale models (conﬁgurations D and E), which reduced the test error to 7.0% using dense evaluation and 6.8% using combined dense and multi-crop evaluation. For reference, our best-performing single model achieves 7.1% error (model E, Table 5).\n\n[7] Source: VGG.pdf | Page: 4 | Section: 3.1 TRAINING\nTo circumvent this problem, we began with training the conﬁguration A (Table 1), shallow enough to be trained with random initialisation. Then, when training deeper architectures, we initialised the ﬁrst four convolutional layers and the last three fully- connected layers with the layers of net A (the intermediate layers were initialised randomly). We did not decrease the learning rate for the pre-initialised layers, allowing them to change during learning.\n\n[8] Source: VGG.pdf | Page: 2 | Section: 2.1 ARCHITECTURE\nlayers are followed by max-pooling). Max-pooling is performed over a 2 × 2 pixel window, with stride 2. A stack of convolutional layers (which has a different depth in different architectures) is followed by three Fully-Connected (FC) layers: the ﬁrst two have 4096 channels each, the third performs 1000- way ILSVRC classiﬁcation and thus contains 1000 channels (one for each class). The ﬁnal layer is the soft-max layer.\n\n[9] Source: VGG.pdf | Page: 5 | Section: 3.2 TESTING\nThe result is a class score map with the number of channels equal to the number of classes, and a variable spatial resolution, dependent on the input image size. Finally, to obtain a ﬁxed-size vector of class scores for the image, the class score map is spatially averaged (sum-pooled). We also augment the test set by horizontal ﬂipping of the images; the soft-max class posteriors of the original and ﬂipped images are averaged to obtain the ﬁnal scores for the image.\n\n[10] Source: VGG.pdf | Page: 12 | Section: 5 CONCLUSION\n(Wei et al., 2014) 81.5 (85.2∗) 81.7 (90.3∗) - - VGG Net-D (16 layers) 89.3 89.0 91.8 ± 1.0 85.0 ± 0.2 VGG Net-E (19 layers) 89.3 89.0 92.3 ± 0.5 85.1 ± 0.3 VGG Net-D & Net-E 89.7 89.3 92.7 ± 0.5 86.2 ± 0.3 Image Classiﬁcation on VOC-2007 and VOC-2012. We begin with the evaluation on the image classiﬁcation task of PASCAL VOC-2007 and VOC-2012 benchmarks (Everingham et al., 2015).\n\n[11] Source: VGG.pdf | Page: 10 | Section: 5 CONCLUSION\nApart from the last bounding box prediction layer, we use the ConvNet architecture D (Table 1), which contains 16 weight layers and was found to be the best-performing in the classiﬁcation task (Sect. Training of localisation ConvNets is similar to that of the classiﬁcation ConvNets (Sect. The main difference is that we replace the logistic regression objective with a Euclidean loss, which penalises the deviation of the predicted bounding box parameters from the ground-truth.\n\n[12] Source: VGG.pdf | Page: 2 | Section: 2.1 ARCHITECTURE\nIn one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.",
+  "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\n[1] Source: VGG.pdf | Page: 5 | Section: 3.2 TESTING\nThen, the network is applied densely over the rescaled test image in a way similar to (Sermanet et al., 2014). Namely, the fully-connected layers are ﬁrst converted to convolutional layers (the ﬁrst FC layer to a 7 × 7 conv. layer, the last two FC layers to 1 × 1 conv. The resulting fully-convolutional net is then applied to the whole (uncropped) image.\n\n[2] Source: VGG.pdf | Page: 10 | Section: 5 CONCLUSION\nThe second, fully-ﬂedged, testing procedure is based on the dense application of the localisation ConvNet to the whole image, similarly to the classiﬁcation task (Sect. The difference is that instead of the class score map, the output of the last fully-connected layer is a set of bounding box predictions. To come up with the ﬁnal prediction, we utilise the greedy merging procedure of Sermanet et al.\n\n[3] Source: VGG.pdf | Page: 12 | Section: 5 CONCLUSION\nIn this evaluation, we consider two models with the best classiﬁcation performance on ILSVRC (Sect. 4) – conﬁgurations “Net-D” and “Net-E” (which we made publicly available). To utilise the ConvNets, pre-trained on ILSVRC, for image classiﬁcation on other datasets, we remove the last fully-connected layer (which performs 1000-way ILSVRC classiﬁcation), and use 4096-D activations of the penultimate layer as image features, which are aggregated across multiple locations and scales.\n\n[4] Source: VGG.pdf | Page: 10 | Section: 5 CONCLUSION\nThe last fully-connected layer was initialised randomly and trained from scratch. We consider two testing protocols. The ﬁrst is used for comparing different network modiﬁcations on the validation set, and considers only the bounding box prediction for the ground truth class (to factor out the classiﬁcation errors). The bounding box is obtained by applying the network only to the central crop of the image.\n\n[5] Source: VGG.pdf | Page: 4 | Section: 3.1 TRAINING\nThe batch size was set to 256, momentum to 0.9. The training was regularised by weight decay (the L2 penalty multiplier set to 5·10−4) and dropout regularisation for the ﬁrst two fully-connected layers (dropout ratio set to 0.5). The learning rate was initially set to 10−2, and then decreased by a factor of 10 when the validation set accuracy stopped improving. In total, the learning rate was decreased 3 times, and the learning was stopped after 370K iterations (74 epochs).\n\n[6] Source: VGG.pdf | Page: 7 | Section: 4.4 CONVNET FUSION\nAfter the submission, we considered an ensemble of only two best-performing multi-scale models (conﬁgurations D and E), which reduced the test error to 7.0% using dense evaluation and 6.8% using combined dense and multi-crop evaluation. For reference, our best-performing single model achieves 7.1% error (model E, Table 5).\n\n[7] Source: VGG.pdf | Page: 4 | Section: 3.1 TRAINING\nTo circumvent this problem, we began with training the conﬁguration A (Table 1), shallow enough to be trained with random initialisation. Then, when training deeper architectures, we initialised the ﬁrst four convolutional layers and the last three fully- connected layers with the layers of net A (the intermediate layers were initialised randomly). We did not decrease the learning rate for the pre-initialised layers, allowing them to change during learning.\n\n[8] Source: VGG.pdf | Page: 2 | Section: 2.1 ARCHITECTURE\nlayers are followed by max-pooling). Max-pooling is performed over a 2 × 2 pixel window, with stride 2. A stack of convolutional layers (which has a different depth in different architectures) is followed by three Fully-Connected (FC) layers: the ﬁrst two have 4096 channels each, the third performs 1000- way ILSVRC classiﬁcation and thus contains 1000 channels (one for each class). The ﬁnal layer is the soft-max layer.\n\n[9] Source: VGG.pdf | Page: 5 | Section: 3.2 TESTING\nThe result is a class score map with the number of channels equal to the number of classes, and a variable spatial resolution, dependent on the input image size. Finally, to obtain a ﬁxed-size vector of class scores for the image, the class score map is spatially averaged (sum-pooled). We also augment the test set by horizontal ﬂipping of the images; the soft-max class posteriors of the original and ﬂipped images are averaged to obtain the ﬁnal scores for the image.\n\n[10] Source: VGG.pdf | Page: 12 | Section: 5 CONCLUSION\n(Wei et al., 2014) 81.5 (85.2∗) 81.7 (90.3∗) - - VGG Net-D (16 layers) 89.3 89.0 91.8 ± 1.0 85.0 ± 0.2 VGG Net-E (19 layers) 89.3 89.0 92.3 ± 0.5 85.1 ± 0.3 VGG Net-D & Net-E 89.7 89.3 92.7 ± 0.5 86.2 ± 0.3 Image Classiﬁcation on VOC-2007 and VOC-2012. We begin with the evaluation on the image classiﬁcation task of PASCAL VOC-2007 and VOC-2012 benchmarks (Everingham et al., 2015).\n\n[11] Source: VGG.pdf | Page: 10 | Section: 5 CONCLUSION\nApart from the last bounding box prediction layer, we use the ConvNet architecture D (Table 1), which contains 16 weight layers and was found to be the best-performing in the classiﬁcation task (Sect. Training of localisation ConvNets is similar to that of the classiﬁcation ConvNets (Sect. The main difference is that we replace the logistic regression objective with a Euclidean loss, which penalises the deviation of the predicted bounding box parameters from the ground-truth.\n\n[12] Source: VGG.pdf | Page: 2 | Section: 2.1 ARCHITECTURE\nIn one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.\n\nQuestion:\nFor dense evaluation of an uncropped test image, how does VGG convert its fully connected layers, and how does it reduce the output to final image-level class scores?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": " Namely, the fully-connected layers are ﬁrst converted to convolutional layers (the ﬁrst FC layer to a 7 × 7 conv.",
+        "evidence_start": 110,
+        "evidence_end": 224,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            266,
+            265
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 266,
+        "page": 5,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " layer, the last two FC layers to 1 × 1 conv.",
+        "evidence_start": 224,
+        "evidence_end": 269,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            266,
+            265
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 266,
+        "page": 5,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The resulting fully-convolutional net is then applied to the whole (uncropped) image.",
+        "evidence_start": 269,
+        "evidence_end": 355,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            266,
+            265
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 266,
+        "page": 5,
+        "citations": [
+          1
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "The second, fully-ﬂedged, testing procedure is based on the dense application of the localisation ConvNet to the whole image, similarly to the classiﬁcation task (Sect.",
+        "evidence_start": 0,
+        "evidence_end": 168,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            336,
+            335,
+            334,
+            333
+          ],
+          "identity_quote": "Apart from the last bounding box prediction layer, we use the ConvNet architecture D (Table 1), which contains 16 weight layers and was found to be the best-performing in the classiﬁcation task (Sect. Training of localisation ConvNets is similar to that of the classiﬁcation ConvNets (Sect. The main difference is that we replace the logistic regression objective with a Euclidean loss, which penalises the deviation of the predicted bounding box parameters from the ground-truth.",
+          "identity_chunk_id": 333
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 336,
+        "page": 10,
+        "citations": [
+          2,
+          11
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The difference is that instead of the class score map, the output of the last fully-connected layer is a set of bounding box predictions.",
+        "evidence_start": 168,
+        "evidence_end": 306,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            336,
+            335,
+            334,
+            333
+          ],
+          "identity_quote": "Apart from the last bounding box prediction layer, we use the ConvNet architecture D (Table 1), which contains 16 weight layers and was found to be the best-performing in the classiﬁcation task (Sect. Training of localisation ConvNets is similar to that of the classiﬁcation ConvNets (Sect. The main difference is that we replace the logistic regression objective with a Euclidean loss, which penalises the deviation of the predicted bounding box parameters from the ground-truth.",
+          "identity_chunk_id": 333
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 336,
+        "page": 10,
+        "citations": [
+          2,
+          11
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " To come up with the ﬁnal prediction, we utilise the greedy merging procedure of Sermanet et al.",
+        "evidence_start": 306,
+        "evidence_end": 402,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            336
+          ],
+          "identity_quote": "The second, fully-ﬂedged, testing procedure is based on the dense application of the localisation ConvNet to the whole image, similarly to the classiﬁcation task (Sect. The difference is that instead of the class score map, the output of the last fully-connected layer is a set of bounding box predictions. To come up with the ﬁnal prediction, we utilise the greedy merging procedure of Sermanet et al.",
+          "identity_chunk_id": 336
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 336,
+        "page": 10,
+        "citations": [
+          2
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "In this evaluation, we consider two models with the best classiﬁcation performance on ILSVRC (Sect.",
+        "evidence_start": 0,
+        "evidence_end": 99,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            351,
+            350,
+            349
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 351,
+        "page": 12,
+        "citations": [
+          3
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " 4) – conﬁgurations “Net-D” and “Net-E” (which we made publicly available).",
+        "evidence_start": 99,
+        "evidence_end": 174,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            351,
+            350,
+            349
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 351,
+        "page": 12,
+        "citations": [
+          3
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " To utilise the ConvNets, pre-trained on ILSVRC, for image classiﬁcation on other datasets, we remove the last fully-connected layer (which performs 1000-way ILSVRC classiﬁcation), and use 4096-D activations of the penultimate layer as image features, which are aggregated across multiple locations and scales.",
+        "evidence_start": 174,
+        "evidence_end": 484,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            351,
+            350,
+            349
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 351,
+        "page": 12,
+        "citations": [
+          3
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "The last fully-connected layer was initialised randomly and trained from scratch.",
+        "evidence_start": 0,
+        "evidence_end": 81,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            335,
+            334,
+            333
+          ],
+          "identity_quote": "Apart from the last bounding box prediction layer, we use the ConvNet architecture D (Table 1), which contains 16 weight layers and was found to be the best-performing in the classiﬁcation task (Sect. Training of localisation ConvNets is similar to that of the classiﬁcation ConvNets (Sect. The main difference is that we replace the logistic regression objective with a Euclidean loss, which penalises the deviation of the predicted bounding box parameters from the ground-truth.",
+          "identity_chunk_id": 333
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 335,
+        "page": 10,
+        "citations": [
+          4,
+          11
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We consider two testing protocols.",
+        "evidence_start": 81,
+        "evidence_end": 116,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            335,
+            334,
+            333
+          ],
+          "identity_quote": "Apart from the last bounding box prediction layer, we use the ConvNet architecture D (Table 1), which contains 16 weight layers and was found to be the best-performing in the classiﬁcation task (Sect. Training of localisation ConvNets is similar to that of the classiﬁcation ConvNets (Sect. The main difference is that we replace the logistic regression objective with a Euclidean loss, which penalises the deviation of the predicted bounding box parameters from the ground-truth.",
+          "identity_chunk_id": 333
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 335,
+        "page": 10,
+        "citations": [
+          4,
+          11
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The ﬁrst is used for comparing different network modiﬁcations on the validation set, and considers only the bounding box prediction for the ground truth class (to factor out the classiﬁcation errors).",
+        "evidence_start": 116,
+        "evidence_end": 317,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            335,
+            334,
+            333
+          ],
+          "identity_quote": "Apart from the last bounding box prediction layer, we use the ConvNet architecture D (Table 1), which contains 16 weight layers and was found to be the best-performing in the classiﬁcation task (Sect. Training of localisation ConvNets is similar to that of the classiﬁcation ConvNets (Sect. The main difference is that we replace the logistic regression objective with a Euclidean loss, which penalises the deviation of the predicted bounding box parameters from the ground-truth.",
+          "identity_chunk_id": 333
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 335,
+        "page": 10,
+        "citations": [
+          4,
+          11
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The bounding box is obtained by applying the network only to the central crop of the image.",
+        "evidence_start": 317,
+        "evidence_end": 409,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            335,
+            334,
+            333
+          ],
+          "identity_quote": "Apart from the last bounding box prediction layer, we use the ConvNet architecture D (Table 1), which contains 16 weight layers and was found to be the best-performing in the classiﬁcation task (Sect. Training of localisation ConvNets is similar to that of the classiﬁcation ConvNets (Sect. The main difference is that we replace the logistic regression objective with a Euclidean loss, which penalises the deviation of the predicted bounding box parameters from the ground-truth.",
+          "identity_chunk_id": 333
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 335,
+        "page": 10,
+        "citations": [
+          4,
+          11
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The learning rate was initially set to 10−2, and then decreased by a factor of 10 when the validation set accuracy stopped improving.",
+        "evidence_start": 229,
+        "evidence_end": 363,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            254,
+            253
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 254,
+        "page": 4,
+        "citations": [
+          5
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In total, the learning rate was decreased 3 times, and the learning was stopped after 370K iterations (74 epochs).",
+        "evidence_start": 363,
+        "evidence_end": 478,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            254,
+            253
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 254,
+        "page": 4,
+        "citations": [
+          5
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "8% using combined dense and multi-crop evaluation.",
+        "evidence_start": 186,
+        "evidence_end": 236,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            298,
+            297,
+            296,
+            295
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 298,
+        "page": 7,
+        "citations": [
+          6
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "To circumvent this problem, we began with training the conﬁguration A (Table 1), shallow enough to be trained with random initialisation.",
+        "evidence_start": 0,
+        "evidence_end": 137,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            256,
+            255,
+            254,
+            253
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 256,
+        "page": 4,
+        "citations": [
+          7
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Then, when training deeper architectures, we initialised the ﬁrst four convolutional layers and the last three fully- connected layers with the layers of net A (the intermediate layers were initialised randomly).",
+        "evidence_start": 137,
+        "evidence_end": 350,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            256,
+            255,
+            254,
+            253
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 256,
+        "page": 4,
+        "citations": [
+          7
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We did not decrease the learning rate for the pre-initialised layers, allowing them to change during learning.",
+        "evidence_start": 350,
+        "evidence_end": 461,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            256,
+            255,
+            254,
+            253
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 256,
+        "page": 4,
+        "citations": [
+          7
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "layers are followed by max-pooling).",
+        "evidence_start": 0,
+        "evidence_end": 36,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            234,
+            233
+          ],
+          "identity_quote": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.",
+          "identity_chunk_id": 233
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 234,
+        "page": 2,
+        "citations": [
+          8,
+          12
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Max-pooling is performed over a 2 × 2 pixel window, with stride 2.",
+        "evidence_start": 36,
+        "evidence_end": 103,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            234,
+            233
+          ],
+          "identity_quote": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.",
+          "identity_chunk_id": 233
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 234,
+        "page": 2,
+        "citations": [
+          8,
+          12
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " A stack of convolutional layers (which has a different depth in different architectures) is followed by three Fully-Connected (FC) layers: the ﬁrst two have 4096 channels each, the third performs 1000- way ILSVRC classiﬁcation and thus contains 1000 channels (one for each class).",
+        "evidence_start": 103,
+        "evidence_end": 384,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            234,
+            233
+          ],
+          "identity_quote": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.",
+          "identity_chunk_id": 233
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 234,
+        "page": 2,
+        "citations": [
+          8,
+          12
+        ],
+        "record_id": "E22"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The ﬁnal layer is the soft-max layer.",
+        "evidence_start": 384,
+        "evidence_end": 422,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            234,
+            233
+          ],
+          "identity_quote": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.",
+          "identity_chunk_id": 233
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 234,
+        "page": 2,
+        "citations": [
+          8,
+          12
+        ],
+        "record_id": "E23"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "The result is a class score map with the number of channels equal to the number of classes, and a variable spatial resolution, dependent on the input image size.",
+        "evidence_start": 0,
+        "evidence_end": 161,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            267,
+            266,
+            265
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 267,
+        "page": 5,
+        "citations": [
+          9
+        ],
+        "record_id": "E24"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Finally, to obtain a ﬁxed-size vector of class scores for the image, the class score map is spatially averaged (sum-pooled).",
+        "evidence_start": 161,
+        "evidence_end": 286,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            267,
+            266,
+            265
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 267,
+        "page": 5,
+        "citations": [
+          9
+        ],
+        "record_id": "E25"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We also augment the test set by horizontal ﬂipping of the images; the soft-max class posteriors of the original and ﬂipped images are averaged to obtain the ﬁnal scores for the image.",
+        "evidence_start": 286,
+        "evidence_end": 470,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            267,
+            266,
+            265
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 267,
+        "page": 5,
+        "citations": [
+          9
+        ],
+        "record_id": "E26"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "3 Image Classiﬁcation on VOC-2007 and VOC-2012.",
+        "evidence_start": 205,
+        "evidence_end": 252,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            357
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 357,
+        "page": 12,
+        "citations": [
+          10
+        ],
+        "record_id": "E27"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 266,
+        "text": "Then, the network is applied densely over the rescaled test image in a way similar to (Sermanet et al., 2014). Namely, the fully-connected layers are ﬁrst converted to convolutional layers (the ﬁrst FC layer to a 7 × 7 conv. layer, the last two FC layers to 1 × 1 conv. The resulting fully-convolutional net is then applied to the whole (uncropped) image.",
+        "source": "VGG.pdf",
+        "page": 5,
+        "title": "VGG",
+        "section": "3.2 TESTING"
+      },
+      {
+        "chunk_id": 336,
+        "text": "The second, fully-ﬂedged, testing procedure is based on the dense application of the localisation ConvNet to the whole image, similarly to the classiﬁcation task (Sect. The difference is that instead of the class score map, the output of the last fully-connected layer is a set of bounding box predictions. To come up with the ﬁnal prediction, we utilise the greedy merging procedure of Sermanet et al.",
+        "source": "VGG.pdf",
+        "page": 10,
+        "title": "VGG",
+        "section": "5 CONCLUSION"
+      },
+      {
+        "chunk_id": 351,
+        "text": "In this evaluation, we consider two models with the best classiﬁcation performance on ILSVRC (Sect. 4) – conﬁgurations “Net-D” and “Net-E” (which we made publicly available). To utilise the ConvNets, pre-trained on ILSVRC, for image classiﬁcation on other datasets, we remove the last fully-connected layer (which performs 1000-way ILSVRC classiﬁcation), and use 4096-D activations of the penultimate layer as image features, which are aggregated across multiple locations and scales.",
+        "source": "VGG.pdf",
+        "page": 12,
+        "title": "VGG",
+        "section": "5 CONCLUSION"
+      },
+      {
+        "chunk_id": 335,
+        "text": "The last fully-connected layer was initialised randomly and trained from scratch. We consider two testing protocols. The ﬁrst is used for comparing different network modiﬁcations on the validation set, and considers only the bounding box prediction for the ground truth class (to factor out the classiﬁcation errors). The bounding box is obtained by applying the network only to the central crop of the image.",
+        "source": "VGG.pdf",
+        "page": 10,
+        "title": "VGG",
+        "section": "5 CONCLUSION"
+      },
+      {
+        "chunk_id": 254,
+        "text": "The batch size was set to 256, momentum to 0.9. The training was regularised by weight decay (the L2 penalty multiplier set to 5·10−4) and dropout regularisation for the ﬁrst two fully-connected layers (dropout ratio set to 0.5). The learning rate was initially set to 10−2, and then decreased by a factor of 10 when the validation set accuracy stopped improving. In total, the learning rate was decreased 3 times, and the learning was stopped after 370K iterations (74 epochs).",
+        "source": "VGG.pdf",
+        "page": 4,
+        "title": "VGG",
+        "section": "3.1 TRAINING"
+      },
+      {
+        "chunk_id": 298,
+        "text": "After the submission, we considered an ensemble of only two best-performing multi-scale models (conﬁgurations D and E), which reduced the test error to 7.0% using dense evaluation and 6.8% using combined dense and multi-crop evaluation. For reference, our best-performing single model achieves 7.1% error (model E, Table 5).",
+        "source": "VGG.pdf",
+        "page": 7,
+        "title": "VGG",
+        "section": "4.4 CONVNET FUSION"
+      },
+      {
+        "chunk_id": 256,
+        "text": "To circumvent this problem, we began with training the conﬁguration A (Table 1), shallow enough to be trained with random initialisation. Then, when training deeper architectures, we initialised the ﬁrst four convolutional layers and the last three fully- connected layers with the layers of net A (the intermediate layers were initialised randomly). We did not decrease the learning rate for the pre-initialised layers, allowing them to change during learning.",
+        "source": "VGG.pdf",
+        "page": 4,
+        "title": "VGG",
+        "section": "3.1 TRAINING"
+      },
+      {
+        "chunk_id": 234,
+        "text": "layers are followed by max-pooling). Max-pooling is performed over a 2 × 2 pixel window, with stride 2. A stack of convolutional layers (which has a different depth in different architectures) is followed by three Fully-Connected (FC) layers: the ﬁrst two have 4096 channels each, the third performs 1000- way ILSVRC classiﬁcation and thus contains 1000 channels (one for each class). The ﬁnal layer is the soft-max layer.",
+        "source": "VGG.pdf",
+        "page": 2,
+        "title": "VGG",
+        "section": "2.1 ARCHITECTURE"
+      },
+      {
+        "chunk_id": 267,
+        "text": "The result is a class score map with the number of channels equal to the number of classes, and a variable spatial resolution, dependent on the input image size. Finally, to obtain a ﬁxed-size vector of class scores for the image, the class score map is spatially averaged (sum-pooled). We also augment the test set by horizontal ﬂipping of the images; the soft-max class posteriors of the original and ﬂipped images are averaged to obtain the ﬁnal scores for the image.",
+        "source": "VGG.pdf",
+        "page": 5,
+        "title": "VGG",
+        "section": "3.2 TESTING"
+      },
+      {
+        "chunk_id": 357,
+        "text": "(Wei et al., 2014) 81.5 (85.2∗) 81.7 (90.3∗) - - VGG Net-D (16 layers) 89.3 89.0 91.8 ± 1.0 85.0 ± 0.2 VGG Net-E (19 layers) 89.3 89.0 92.3 ± 0.5 85.1 ± 0.3 VGG Net-D & Net-E 89.7 89.3 92.7 ± 0.5 86.2 ± 0.3 Image Classiﬁcation on VOC-2007 and VOC-2012. We begin with the evaluation on the image classiﬁcation task of PASCAL VOC-2007 and VOC-2012 benchmarks (Everingham et al., 2015).",
+        "source": "VGG.pdf",
+        "page": 12,
+        "title": "VGG",
+        "section": "5 CONCLUSION"
+      },
+      {
+        "chunk_id": 333,
+        "text": "Apart from the last bounding box prediction layer, we use the ConvNet architecture D (Table 1), which contains 16 weight layers and was found to be the best-performing in the classiﬁcation task (Sect. Training of localisation ConvNets is similar to that of the classiﬁcation ConvNets (Sect. The main difference is that we replace the logistic regression objective with a Euclidean loss, which penalises the deviation of the predicted bounding box parameters from the ground-truth.",
+        "source": "VGG.pdf",
+        "page": 10,
+        "title": "VGG",
+        "section": "5 CONCLUSION"
+      },
+      {
+        "chunk_id": 233,
+        "text": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.",
+        "source": "VGG.pdf",
+        "page": 2,
+        "title": "VGG",
+        "section": "2.1 ARCHITECTURE"
+      }
+    ],
+    "selected_ids": [
+      266,
+      336,
+      351,
+      335,
+      254,
+      298,
+      256,
+      234,
+      267,
+      357
+    ]
+  },
+  "answer": "在 dense evaluation 中，VGG 将全连接层转换为卷积层：第一个 FC 层转为 7 × 7 卷积层，最后两个 FC 层转为 1 × 1 卷积层，随后将得到的全卷积网络应用于整张（未裁剪的）图像[1]。由于全卷积网络在整张图像上输出的是一个通道数等于类别数、空间分辨率随输入图像尺寸变化的 class score map[9]，为得到图像的固定大小类别分数向量，VGG 对该 class score map 进行空间平均（sum-pooling）[9]。",
+  "original_answer": "在 dense evaluation 中，VGG 将全连接层转换为卷积层：第一个 FC 层转为 7 × 7 卷积层，最后两个 FC 层转为 1 × 1 卷积层，随后将得到的全卷积网络应用于整张（未裁剪的）图像[1]。由于全卷积网络在整张图像上输出的是一个通道数等于类别数、空间分辨率随输入图像尺寸变化的 class score map[9]，为得到图像的固定大小类别分数向量，VGG 对该 class score map 进行空间平均（sum-pooling）[9]。",
+  "citation_validation": {
+    "answer": "在 dense evaluation 中，VGG 将全连接层转换为卷积层：第一个 FC 层转为 7 × 7 卷积层，最后两个 FC 层转为 1 × 1 卷积层，随后将得到的全卷积网络应用于整张（未裁剪的）图像[1]。由于全卷积网络在整张图像上输出的是一个通道数等于类别数、空间分辨率随输入图像尺寸变化的 class score map[9]，为得到图像的固定大小类别分数向量，VGG 对该 class score map 进行空间平均（sum-pooling）[9]。",
+    "original_answer": "在 dense evaluation 中，VGG 将全连接层转换为卷积层：第一个 FC 层转为 7 × 7 卷积层，最后两个 FC 层转为 1 × 1 卷积层，随后将得到的全卷积网络应用于整张（未裁剪的）图像[1]。由于全卷积网络在整张图像上输出的是一个通道数等于类别数、空间分辨率随输入图像尺寸变化的 class score map[9]，为得到图像的固定大小类别分数向量，VGG 对该 class score map 进行空间平均（sum-pooling）[9]。",
+    "repair_candidate": null,
+    "initial_check": {
+      "cited_numbers": [
+        1,
+        9
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 266,
+          "source": "VGG.pdf",
+          "page": 5,
+          "text": "Then, the network is applied densely over the rescaled test image in a way similar to (Sermanet et al., 2014). Namely, the fully-connected layers are ﬁrst converted to convolutional layers (the ﬁrst FC layer to a 7 × 7 conv. layer, the last two FC layers to 1 × 1 conv. The resulting fully-convolutional net is then applied to the whole (uncropped) image."
+        },
+        {
+          "citation": 9,
+          "chunk_id": 267,
+          "source": "VGG.pdf",
+          "page": 5,
+          "text": "The result is a class score map with the number of channels equal to the number of classes, and a variable spatial resolution, dependent on the input image size. Finally, to obtain a ﬁxed-size vector of class scores for the image, the class score map is spatially averaged (sum-pooled). We also augment the test set by horizontal ﬂipping of the images; the soft-max class posteriors of the original and ﬂipped images are averaged to obtain the ﬁnal scores for the image."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "final_check": {
+      "cited_numbers": [
+        1,
+        9
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 266,
+          "source": "VGG.pdf",
+          "page": 5,
+          "text": "Then, the network is applied densely over the rescaled test image in a way similar to (Sermanet et al., 2014). Namely, the fully-connected layers are ﬁrst converted to convolutional layers (the ﬁrst FC layer to a 7 × 7 conv. layer, the last two FC layers to 1 × 1 conv. The resulting fully-convolutional net is then applied to the whole (uncropped) image."
+        },
+        {
+          "citation": 9,
+          "chunk_id": 267,
+          "source": "VGG.pdf",
+          "page": 5,
+          "text": "The result is a class score map with the number of channels equal to the number of classes, and a variable spatial resolution, dependent on the input image size. Finally, to obtain a ﬁxed-size vector of class scores for the image, the class score map is spatially averaged (sum-pooled). We also augment the test set by horizontal ﬂipping of the images; the soft-max class posteriors of the original and ﬂipped images are averaged to obtain the ﬁnal scores for the image."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "repair_attempted": false,
+    "normalization_applied": false,
+    "repair_applied": false,
+    "repair_response": null,
+    "repair_prompt": null,
+    "unresolved_blocks": [],
+    "status": "not_needed",
+    "note": "Citation structure only; source relevance and claim meaning are not automatically verified."
+  },
+  "holdout_cached_chat_responses": 0,
+  "citation_structure": {
+    "cited_numbers": [
+      1,
+      9
+    ],
+    "invalid_numbers": [],
+    "malformed_markers": [],
+    "has_citations": true,
+    "require_citations": true,
+    "structure_passed": true,
+    "cited_sources": [
+      {
+        "citation": 1,
+        "chunk_id": 266,
+        "source": "VGG.pdf",
+        "page": 5,
+        "text": "Then, the network is applied densely over the rescaled test image in a way similar to (Sermanet et al., 2014). Namely, the fully-connected layers are ﬁrst converted to convolutional layers (the ﬁrst FC layer to a 7 × 7 conv. layer, the last two FC layers to 1 × 1 conv. The resulting fully-convolutional net is then applied to the whole (uncropped) image."
+      },
+      {
+        "citation": 9,
+        "chunk_id": 267,
+        "source": "VGG.pdf",
+        "page": 5,
+        "text": "The result is a class score map with the number of channels equal to the number of classes, and a variable spatial resolution, dependent on the input image size. Finally, to obtain a ﬁxed-size vector of class scores for the image, the class score map is spatially averaged (sum-pooled). We also augment the test set by horizontal ﬂipping of the images; the soft-max class posteriors of the original and ﬂipped images are averaged to obtain the ﬁnal scores for the image."
+      }
+    ],
+    "semantic_support": "requires_manual_review"
+  },
+  "status": "completed",
+  "api_calls": [
+    {
+      "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nFor dense evaluation of an uncropped test image, how does VGG convert its fully connected layers, and how does it reduce the output to final image-level class scores?\n",
+      "response": {
+        "answer": "{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, how are fully connected layers converted for dense evaluation of an uncropped test image?\",\n        \"According to the VGG paper, how is the output reduced to final image-level class scores in dense evaluation of an uncropped test image?\"\n    ]\n}",
+        "requested_model": "cn:deepseek-v4.1-flash",
+        "reported_model": "deepseek-v4.1-flash",
+        "usage": {
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 384,
+          "cached_tokens": 384,
+          "completion_thinking_tokens": 0,
+          "completion_tokens": 79,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "credit": 0.02,
+          "prompt_cache_hit_tokens": 384,
+          "prompt_cache_miss_tokens": 273,
+          "prompt_cache_write_tokens": 0,
+          "prompt_tokens": 657,
+          "prompt_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 384,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "total_tokens": 736
+        },
+        "finish_reason": "stop",
+        "request_parameters": {
+          "model": "cn:deepseek-v4.1-flash",
+          "stream": false,
+          "thinking": {
+            "type": "disabled"
+          },
+          "temperature": 0,
+          "max_tokens": 4096
+        }
+      },
+      "elapsed_seconds": 1.74
+    },
+    {
+      "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\n[1] Source: VGG.pdf | Page: 5 | Section: 3.2 TESTING\nThen, the network is applied densely over the rescaled test image in a way similar to (Sermanet et al., 2014). Namely, the fully-connected layers are ﬁrst converted to convolutional layers (the ﬁrst FC layer to a 7 × 7 conv. layer, the last two FC layers to 1 × 1 conv. The resulting fully-convolutional net is then applied to the whole (uncropped) image.\n\n[2] Source: VGG.pdf | Page: 10 | Section: 5 CONCLUSION\nThe second, fully-ﬂedged, testing procedure is based on the dense application of the localisation ConvNet to the whole image, similarly to the classiﬁcation task (Sect. The difference is that instead of the class score map, the output of the last fully-connected layer is a set of bounding box predictions. To come up with the ﬁnal prediction, we utilise the greedy merging procedure of Sermanet et al.\n\n[3] Source: VGG.pdf | Page: 12 | Section: 5 CONCLUSION\nIn this evaluation, we consider two models with the best classiﬁcation performance on ILSVRC (Sect. 4) – conﬁgurations “Net-D” and “Net-E” (which we made publicly available). To utilise the ConvNets, pre-trained on ILSVRC, for image classiﬁcation on other datasets, we remove the last fully-connected layer (which performs 1000-way ILSVRC classiﬁcation), and use 4096-D activations of the penultimate layer as image features, which are aggregated across multiple locations and scales.\n\n[4] Source: VGG.pdf | Page: 10 | Section: 5 CONCLUSION\nThe last fully-connected layer was initialised randomly and trained from scratch. We consider two testing protocols. The ﬁrst is used for comparing different network modiﬁcations on the validation set, and considers only the bounding box prediction for the ground truth class (to factor out the classiﬁcation errors). The bounding box is obtained by applying the network only to the central crop of the image.\n\n[5] Source: VGG.pdf | Page: 4 | Section: 3.1 TRAINING\nThe batch size was set to 256, momentum to 0.9. The training was regularised by weight decay (the L2 penalty multiplier set to 5·10−4) and dropout regularisation for the ﬁrst two fully-connected layers (dropout ratio set to 0.5). The learning rate was initially set to 10−2, and then decreased by a factor of 10 when the validation set accuracy stopped improving. In total, the learning rate was decreased 3 times, and the learning was stopped after 370K iterations (74 epochs).\n\n[6] Source: VGG.pdf | Page: 7 | Section: 4.4 CONVNET FUSION\nAfter the submission, we considered an ensemble of only two best-performing multi-scale models (conﬁgurations D and E), which reduced the test error to 7.0% using dense evaluation and 6.8% using combined dense and multi-crop evaluation. For reference, our best-performing single model achieves 7.1% error (model E, Table 5).\n\n[7] Source: VGG.pdf | Page: 4 | Section: 3.1 TRAINING\nTo circumvent this problem, we began with training the conﬁguration A (Table 1), shallow enough to be trained with random initialisation. Then, when training deeper architectures, we initialised the ﬁrst four convolutional layers and the last three fully- connected layers with the layers of net A (the intermediate layers were initialised randomly). We did not decrease the learning rate for the pre-initialised layers, allowing them to change during learning.\n\n[8] Source: VGG.pdf | Page: 2 | Section: 2.1 ARCHITECTURE\nlayers are followed by max-pooling). Max-pooling is performed over a 2 × 2 pixel window, with stride 2. A stack of convolutional layers (which has a different depth in different architectures) is followed by three Fully-Connected (FC) layers: the ﬁrst two have 4096 channels each, the third performs 1000- way ILSVRC classiﬁcation and thus contains 1000 channels (one for each class). The ﬁnal layer is the soft-max layer.\n\n[9] Source: VGG.pdf | Page: 5 | Section: 3.2 TESTING\nThe result is a class score map with the number of channels equal to the number of classes, and a variable spatial resolution, dependent on the input image size. Finally, to obtain a ﬁxed-size vector of class scores for the image, the class score map is spatially averaged (sum-pooled). We also augment the test set by horizontal ﬂipping of the images; the soft-max class posteriors of the original and ﬂipped images are averaged to obtain the ﬁnal scores for the image.\n\n[10] Source: VGG.pdf | Page: 12 | Section: 5 CONCLUSION\n(Wei et al., 2014) 81.5 (85.2∗) 81.7 (90.3∗) - - VGG Net-D (16 layers) 89.3 89.0 91.8 ± 1.0 85.0 ± 0.2 VGG Net-E (19 layers) 89.3 89.0 92.3 ± 0.5 85.1 ± 0.3 VGG Net-D & Net-E 89.7 89.3 92.7 ± 0.5 86.2 ± 0.3 Image Classiﬁcation on VOC-2007 and VOC-2012. We begin with the evaluation on the image classiﬁcation task of PASCAL VOC-2007 and VOC-2012 benchmarks (Everingham et al., 2015).\n\n[11] Source: VGG.pdf | Page: 10 | Section: 5 CONCLUSION\nApart from the last bounding box prediction layer, we use the ConvNet architecture D (Table 1), which contains 16 weight layers and was found to be the best-performing in the classiﬁcation task (Sect. Training of localisation ConvNets is similar to that of the classiﬁcation ConvNets (Sect. The main difference is that we replace the logistic regression objective with a Euclidean loss, which penalises the deviation of the predicted bounding box parameters from the ground-truth.\n\n[12] Source: VGG.pdf | Page: 2 | Section: 2.1 ARCHITECTURE\nIn one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.\n\nQuestion:\nFor dense evaluation of an uncropped test image, how does VGG convert its fully connected layers, and how does it reduce the output to final image-level class scores?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+      "response": {
+        "answer": "在 dense evaluation 中，VGG 将全连接层转换为卷积层：第一个 FC 层转为 7 × 7 卷积层，最后两个 FC 层转为 1 × 1 卷积层，随后将得到的全卷积网络应用于整张（未裁剪的）图像[1]。由于全卷积网络在整张图像上输出的是一个通道数等于类别数、空间分辨率随输入图像尺寸变化的 class score map[9]，为得到图像的固定大小类别分数向量，VGG 对该 class score map 进行空间平均（sum-pooling）[9]。",
+        "requested_model": "cn:deepseek-v4.1-flash",
+        "reported_model": "deepseek-v4.1-flash",
+        "usage": {
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 128,
+          "cached_tokens": 128,
+          "completion_thinking_tokens": 0,
+          "completion_tokens": 123,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "credit": 0.07,
+          "prompt_cache_hit_tokens": 128,
+          "prompt_cache_miss_tokens": 1937,
+          "prompt_cache_write_tokens": 0,
+          "prompt_tokens": 2065,
+          "prompt_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 128,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "total_tokens": 2188
+        },
+        "finish_reason": "stop",
+        "request_parameters": {
+          "model": "cn:deepseek-v4.1-flash",
+          "stream": false,
+          "thinking": {
+            "type": "disabled"
+          },
+          "temperature": 0,
+          "max_tokens": 4096
+        }
+      },
+      "elapsed_seconds": 2.56
+    }
+  ],
+  "model_calls": 2,
+  "evaluation_code_sha256": {
+    "main.py": "85b1f60ffd76b9c81e2336da79f903bb212b7cea7998cd50a863aae01d3439d6",
+    "llm.py": "b68fcd071621630f08ad2cbcb848a6757a6a5beca6b9e900d3a8c0bd61039861",
+    "evaluation/run_answer_evaluation.py": "bc512f96499b8cb196f8ab57c68408762acfc085aacc82673a685f02145f1650",
+    "src/api_llm.py": "2adea1ea9a8268d1260e0f8e2d7a80d9bff42143812b140e54f3003c62e2d2d4",
+    "src/bm25_retriever.py": "06a12c701da323963166a8c2a9206ead1281e59649efbbe0aff1293ace8c7e92",
+    "src/chunk_storage.py": "794ea2fa58826b895711a7d0f39a244f79e2a91aa39f99bec36955a235430630",
+    "src/chunking_recursive.py": "d4d6aae8d4f7b7f72503eadb440e72279e9d8fe1834b86cefd8f8d519fd1528f",
+    "src/chunking_semantic.py": "524e0c902cea605cfc5af30a15cdf5399b05807ad1ff49e2c16c94e0e29e22b8",
+    "src/citation_validation.py": "b9bd5c48a839a7bc62b79b38248889ade65fad1b3b654dc135c06cc4f9bb682b",
+    "src/embedding.py": "4b0e2699c9aeb23eb5db5585b64aa088ad9b1be4b01e33c95692f4f5f9624390",
+    "src/evidence_gap.py": "5e0405de84a6d4bd6268cb3270f75a5a217446d780ec35fabb0f008021198109",
+    "src/grounded_evidence.py": "78a7e63512970492f4e52050cb8b2312e2658281acfe979eb4476516ff8c2663",
+    "src/hybrid_retriever.py": "3306823530036b662f04e5790b1e74cb69b01051367385d33b388b87119fbe7d",
+    "src/hyde.py": "b0482baf2559e44d5d1d8c5a1bd31db046df279de53be70c7e8fb83bbcf32e72",
+    "src/knowledge_base.py": "dfb63dfafd00d463a194fe934d1c2f5a7a55d98b2ed5db95fc35b74606759474",
+    "src/numeric_evidence.py": "492fb546e6bc89b881843ece4b4582e533aec5aabbc58d61cd1cf158c4bac3d0",
+    "src/pdf_loader.py": "1f527ed51d318304858e4d95ffb85bd9c966961ef02157e9ce4f74b86f8fec64",
+    "src/query_decomposer.py": "52d3f2329e88d57ca8e4b150925710f13905d18d4b10d006ca523602e0aa41f2",
+    "src/query_rewriter.py": "404152aa9326445ecce721cd46be75fa14e19f99ff0a8fe7318e0c47f909d2c3",
+    "src/reranker.py": "36380b730f4bcfcbdd982cdd0f63a389d6a4172607f19f4cc7370df1f9666cba",
+    "src/retriever.py": "1382bbb41922a0bfe2da00e16a6d31e4448861e4a31544abdbfc171ec34cab3a",
+    "src/vector_store.py": "161d8c6597038788d195f034b3ea77ac391d7497e53c6dc1a7dbcf5f83a7fecf",
+    "/Users/j/.codex/.chatgpt-projects/g-p-6acc943a50508191b19cc746a2de0b5d/work/holdout-v1-20261020/candidate/holdout_v1_questions_en.json": "085367e8e613fddd247cf9cfc6a1b479b6e97fbaa0985ab338d29746595707aa",
+    "evaluation/answer_review_protocol.md": "614a18fe1babb3cffc96aa7aaa8956c3d84b94a1ca10f37234fd8cd00ed3bf27",
+    "data/processed/versions/all-papers-8-20261020/faiss.index": "ff1f4a3e38e20c0275ba79d805e6475639b3cea7a7a583f9c18c67ec8e40a2ed",
+    "data/processed/versions/all-papers-8-20261020/chunks.json": "3e63d75abbe164ff8e135b1d66fd6b02d9479b2e037e289a726e7c542464593a",
+    "data/processed/versions/all-papers-8-20261020/manifest.json": "9c4e2c26b4f11fe7baf526595630cbee2d325416ec0e497f417975fbd60779ef"
+  },
+  "elapsed_seconds": 28.88
+}

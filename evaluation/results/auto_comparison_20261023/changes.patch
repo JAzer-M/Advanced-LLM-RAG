@@ -1,0 +1,736 @@
+--- a/PROGRESS.md
++++ b/PROGRESS.md
+@@ -1,8 +1,8 @@
+ # Advanced-LLM-RAG 当前进度与交接
+ 
+-更新：2026-10-23（Asia/Shanghai，P4本地网页试验）。工作区：`/Users/j/Desktop/Advanced-LLM-RAG`；Git基点`c2cd612`，已有大量未提交成果。本轮新增独立的PaperLens本地网页原型，复用原后端并完成浏览器真实RAG提问：2模型请求/2805 token、约15.3秒、arXiv GET0、重试0。原生产后端未修改，与此前314项离线通过版本一致，没有提交或推送。
++更新：2026-10-23（Asia/Shanghai，Auto比较题/性能/网页恢复）。工作区：`/Users/j/Desktop/Advanced-LLM-RAG`；已有大量未提交成果。本轮针对用户实际VGG/RAG比较题修复意图与过度升级，最终实测30.98秒/2模型请求/4037 token，原101.85秒/8请求/28092 token。331项离线通过；五轮真实开发合计21请求/54187 token，失败和中间结果保留，没有提交或推送。
+ 
+-**结论：P4已开始，最小本地网页可以实际体验。启动`.venv/bin/python ui_prototype/app.py`后访问[本机工作台](http://127.0.0.1:8848)：可回放三个真实案例、实时提问、选择模式、查看引用/原文/运行过程和成本。历史与实时状态明确区分，回放不调用模型；联网默认关闭。浏览器真实VGG问答返回步长1/padding 1并引用第2页，工程冒烟通过。仍是单用户原型，尚未正式发布；arXiv可用性、Auto隐性漏答及独立新题质量边界保持，旧成绩不重算。[启动说明](ui_prototype/README.md) · [UI本轮验收](evaluation/results/ui_prototype_20261023/report.md) · [此前后端修复](evaluation/results/backend_reliability_20261023/report.md)。**
++**结论：主要比较与速度已改善，本地网页已恢复。** 用双方摘要支持独立事实比较，简单英语概览避免重复规则补查；显式强制补查、其他题型与原预算保留。最终核心原文核对通过，附带联合微调句的引用覆盖仍不全，不冒充全文严格语义通过。Mac可双击[启动文件](ui_prototype/start.command)，保持终端打开后访问[工作台](http://127.0.0.1:8848)。这是本题开发验证，非新独立成绩。[修复及全部成本](evaluation/results/auto_comparison_20261023/report.md) · [人工核对与残留](evaluation/results/auto_comparison_20261023/manual_review.json)。
+ 
+ 本页负责当前状态、约束与下一步；多轮原始交接转入[完整历史](docs/history/PROGRESS_THROUGH_2026-10-22.md)，包括全部失败、调用量、实验口径和复现命令。各实验原始文件及路径保留，[实验索引](evaluation/results/README.md)可逐轮查阅。桌面《RAG项目全流程与进度总览.md》与 [PROJECT_WORKFLOW](docs/PROJECT_WORKFLOW.md)内容一致，二者只描述预期路线，不表示实际完成。
+ 
+@@ -16,14 +16,14 @@
+ | P2.1～P2.4 | 需求绑定、证据判断、搜索/邻段、预算循环、生成与有限复核 | 早期h10/h11属于已知开发验收，不能覆盖最新版失败 |
+ | main 接入 | `rag`、`agent`、`auto` 共用初检与资源，保留各模式记录 | 函数默认rag；CLI默认auto；历史“尚未接main”已过时 |
+ | P2.5 对照与收尾 | 首轮12题 RAG/Agent、第一版Auto的8题三路径对照及原文审阅 | 旧12/8题成绩保持版本边界；最新P3六题Agent对照与两题Auto次级验收另列，非总体收益证明 |
+-| 最新 Agent/Auto 改进 | RAG优先Auto、反馈状态修复、书目修复及本轮故障交付；共314项离线回归通过 | 旧h10真实失败保留；隐性漏答和总体收益未证明 |
++| 最新 Agent/Auto 改进 | RAG优先Auto、反馈状态修复、书目修复及本轮故障交付；共331项离线回归通过 | 旧h10真实失败保留；隐性漏答和总体收益未证明 |
+ | P3 / P4 | P3.1/P3.2及故障交付已完成；P4本地网页原型已启动，真实RAG提问通过 | 单用户原型，未正式发布/持久会话；arXiv仍默认关闭、外部可用性未恢复 |
+ 
+ ## 2. 当前三条执行路径
+ 
+ - **固定 RAG**：分解 → Dense/BM25 → RRF → 全局BGE/子题局部证据 → 按来源信号最多两轮补查 → 生成 → 引用检查/必要时一次修复。常规完整问题通常为分解、回答两次调用。
+ - **固定 Agent**：共用一次初检后，独立规划需求、逐项检查，模型选择搜索/读取邻段/回答/停止，Python校验并执行；回答阶段逐项复核、必要时修订一次。
+-- **Auto**：先用固定RAG相同提示和证据生成/修复引用；出现明确缺口、无法回答或比较、引用失败才升级原Agent。普通路径没有额外门控调用。Agent事实输入只含问题、绑定需求、原文与论文目录，RAG草稿不作为事实证据。
++- **Auto**：先用固定RAG相同提示和证据生成/修复引用；出现明确缺口、无法回答或比较、引用失败才升级原Agent；简单英语概览中，已有引文事实后的未要求性能/直接实验比较说明不触发升级。普通路径没有额外门控调用。Agent事实输入只含问题、绑定需求、原文与论文目录，RAG草稿不作为事实证据。
+ 
+ `main(..., mode='rag')`保持Python原默认；命令行默认`--mode auto`。RAG未指定版本时读三篇激活指针；Auto/Agent仅支持八篇，不切换指针。同库比较必须让RAG显式使用八篇。运行命令见 [README](README.md)，保存记录模式见 [Agent 操作](docs/AGENT_REPLAY_GUIDE.md)。
+ 
+@@ -36,6 +36,8 @@
+ 三模式返回`status/answer/answer_status/stop_reason/ledger/selected_ids/actions/api_summary/network`；运行时故障返回可展示结果，参数/配置等请求前错误仍抛出。`completed`不是准确率标签；`source_unavailable`不算完整事实答复。评测采集已适配，避免将返回的failed/degraded重标为完成。[字段与处理顺序](docs/BACKEND_RESULT.md)
+ 
+ ## 3. 已有质量与成本证据
++
++**最新用户问题修复（2026-10-23）：** VGG/RAG比较由内部版本/无直接比较拒答，恢复为任务与机制的直接比较。原运行101.85秒/8模型请求/28092 token；最终30.98秒/2请求/4037 token、Auto直答、无arXiv、无自动重试。主要原文核对通过；联合微调句应补[7]、当前仅[19]，保留该瑕疵，不宣称全文引用覆盖全通过。新增17项后全套331项离线通过、网络尝试0。五轮真实开发共21请求/54187 token，包含拒答/降级、62秒中间版本及49秒仍过度升级，均保留。缓存单项测量65.028→50.712秒且原10个ID保持；最终概览路径追加双方摘要，默认规则补查0次。显式强制与具体方面问题仍走原补查，候选120/Top-10及上限不变。详情见[本轮报告](evaluation/results/auto_comparison_20261023/report.md)。
+ 
+ **最新P4本地网页试验（2026-10-23）：** 新增`ui_prototype/`，原生HTML/CSS/JS加Python标准库WSGI，无新增依赖或生产后端改动。固定用八篇1397段知识库，RAG显式指定该版本，不切换激活指针。启动与回放均不调用模型，点击实时运行才复用现有main，保留模型/联网预算；新运行写入`logs/ui_prototype/`。
+ 
+@@ -98,7 +100,7 @@
+ 
+ 原反馈状态P1的已知机制已修复：保留无关已完成项，同源/明确主体新证据触发复查，真实冲突可以重新打开。相关性规则保守，无法保证识别所有隐含跨来源反证，也不自动修正初始语义误判；最终版本独立新题质量仍未验收。旧h10不继续付费调试，旧32/68/61次请求无需重跑。
+ 
+-P4本地网页小版本已可体验，下一步根据用户反馈调整布局和交互，再决定是否做正式页面与会话保存。原后端314项离线验收边界及外部来源不稳定情况保持；不为界面试验扩展后端或重跑旧评测。
++P4本地网页已恢复访问，启动文件已补齐。下一步优先处理剩余附带训练句的引用覆盖，并观察其他实际问题；不为背景满分重跑旧评测。约31秒仍有CPU初检耗时，常驻模型/并发/正式会话保存尚未实施。此次是定向后端修复，不是独立质量总分，外部来源不稳定边界保持。
+ 
+ 完整性仍按上述三层标准，不为背景细节满分调试；不根据新运行回改旧冻结成绩。
+ 
+--- a/README.md
++++ b/README.md
+@@ -2,7 +2,7 @@
+ 
+ 面向科研论文的问答项目：PDF 解析、Semantic 分块、Dense/BM25 混合检索、RRF 融合、问题分解、BGE 重排和带引用回答；本地 Agent 可按证据缺口搜索与读取邻段。
+ 
+-**当前：后端故障交付、HTTP诊断及三模式结果字段已修复，314项离线回归通过。** 一次真实n06/Agent开发回归遇arXiv搜索超时，现在返回明确的未核实说明，保留本地证据和失败状态；4模型请求/4915 token、1GET，无重试、未读PDF。外部来源可用性仍未恢复，旧成绩保留；P4本地网页原型已开始，见下节。CLI默认auto，Python函数默认rag。[修复与效果](evaluation/results/backend_reliability_20261023/report.md) · [后端结果字段](docs/BACKEND_RESULT.md) · [此前功能与瑕疵](evaluation/results/p3_closeout_20261023/report.md)。
++**当前：Auto比较意图和过度升级已修复，331项离线回归通过。** 同一用户VGG/RAG问题从101.85秒/8请求/28092 token降到30.98秒/2请求/4037 token，主要任务与方法比较有原文支持；附带训练细节的引用仍待完善。网页已恢复，可双击[Mac启动文件](ui_prototype/start.command)。这是同题开发验证，不是独立准确率；五轮合计21请求/54187 token及失败均留档。CLI默认auto，Python函数默认rag。[修复与全部成本](evaluation/results/auto_comparison_20261023/report.md) · [后端结果字段](docs/BACKEND_RESULT.md) · [此前故障交付](evaluation/results/backend_reliability_20261023/report.md)。
+ 
+ [当前进度与下一步](PROGRESS.md) · [文档导航](docs/README.md) · [量化结果](docs/PROJECT_METRICS.md) · [实验目录](evaluation/results/README.md) · [预期全流程](docs/PROJECT_WORKFLOW.md)
+ 
+@@ -10,7 +10,7 @@
+ 
+ 在项目根目录运行`.venv/bin/python ui_prototype/app.py`，浏览器打开[http://127.0.0.1:8848](http://127.0.0.1:8848)。可以回放三个真实案例、输入问题、选择三种模式、查看答案/引用/运行过程和成本。回放不调用模型，点击实时运行才使用现有API；联网默认关闭，界面固定使用八篇库，不改变激活指针。
+ 
+-一条真实RAG提问已从网页完成：VGG步长和padding均为1像素，引用第2页；2模型请求、2805 token、约15.3秒，无arXiv请求。原型独立放置，生产后端没有修改；尚未做正式发布或持久会话。[启动说明](ui_prototype/README.md) · [本轮验收](evaluation/results/ui_prototype_20261023/report.md)
++一条真实RAG提问已从网页完成：VGG步长和padding均为1像素，引用第2页；2模型请求、2805 token、约15.3秒，无arXiv请求。这是首次界面验收记录；后续比较题后端改动见上方当前状态。尚未做正式发布或持久会话。[启动说明](ui_prototype/README.md) · [本轮验收](evaluation/results/ui_prototype_20261023/report.md)
+ 
+ ## 运行
+ 
+--- a/agent.py
++++ b/agent.py
+@@ -118,6 +118,21 @@
+         if (names_subject(subject, group.group())
+                 and all(names_subject(other, group.group()) for other in others)
+                 and not any(names_subject(other, rest) for other in others)):
++            # 将共享比较谓语转成逐方事实需求，避免要求某篇论文直接比较双方。
++            # 只变换比较运算词，共享的明确方面照原文保留；审计引文不改。
++            before, after = text[:group.start()], text[group.end():]
++            aspect = None
++            if re.fullmatch(r'what (?:is|are) (?:the )?differences? between\s*|compare\s*', before):
++                aspect = after
++            elif re.fullmatch(r'how (?:do|does)\s*', before) and re.match(r'\s*differ(?:s)?\b', after):
++                aspect = re.sub(r'^\s*differ(?:s)?\b', '', after)
++            elif not before.strip() and re.fullmatch(
++                    r'\s*(在[^，,；;。?!]{0,60}?)?(?:有(?:什么|哪些|何)?|的)?(?:区别|差异)[?。 ]*', after):
++                aspect = re.sub(r'(?:有(?:什么|哪些|何)?|的)?(?:区别|差异)[?。 ]*$', '', after)
++            if aspect is not None:
++                aspect = aspect.strip(' .?!。')
++                return (f"Describe {normalize(subject)} for the requested comparison"
++                        + (f", {aspect}" if aspect else '') + '.')
+             return text[:group.start()] + normalize(subject) + text[group.end():]
+     raise ValueError('A requirement scope cannot include another declared subject; extract separate clauses.')
+ 
+@@ -223,6 +238,8 @@
+ For directly coordinated subjects sharing one predicate, keep the exact shared
+ clause for each subject (e.g. "What do Atlas and Nova report about normalization").
+ The program projects ONLY that adjacent subject list to each individual subject.
++For an explicit symmetric comparison, keep both compared names in the excerpt;
++the program binds a per-subject description and preserves the requested shared aspect.
+ It also supports an explicit repeated-preposition prefix such as
+ "For Atlas on Orion and for Nova on Vega, what batch size is used in each?".
+ Keep the shared prefix in the excerpt; the program retains only that subject's own
+@@ -369,7 +386,10 @@
+ The program has anchored each need to a question excerpt. Check EACH requirement
+ INDEPENDENTLY against its operative need: subject, predicate, dataset, phase, conditions.
+ Only operative needs are supplied here; original audit spans are kept locally.
+-Use need for scope: other coordinated subjects and their conditions were projected out.
++Use need for scope: other coordinated subjects and their conditions were projected out,
++except an explicit symmetric comparison retains both names to identify its relation.
++For that comparison, establish this requirement's subject and requested characteristics;
++do not reinterpret it as differences between versions of that one subject.
+ Do not complete or reinterpret the overall comparison inside an individual check.
+ Evidence missing for a different requirement does NOT make this requirement partial.
+ Set scope_check.valid=false if a proposed action, supported_part or gap exceeds its
+--- a/docs/README.md
++++ b/docs/README.md
+@@ -8,6 +8,7 @@
+ | --- | --- |
+ | 当前已完成、限制和下一步 | [PROGRESS](../PROGRESS.md) |
+ | 本地网页试验版：案例回放、实时提问与引用查看 | [启动说明](../ui_prototype/README.md)、[界面验收](../evaluation/results/ui_prototype_20261023/report.md) |
++| Auto比较题偏题、耗时和网页访问修复 | [实际效果/成本/剩余引用瑕疵](../evaluation/results/auto_comparison_20261023/report.md) |
+ | 三模式启动、默认值、知识库选择 | [README](../README.md) |
+ | 功能分工与代码阅读顺序 | [代码阅读说明](CODE_READING_GUIDE.md) |
+ | Agent工具、保存记录诊断、单步/循环/回答 | [Agent操作](AGENT_REPLAY_GUIDE.md) |
+--- a/evaluation/results/README.md
++++ b/evaluation/results/README.md
+@@ -6,6 +6,7 @@
+ 
+ | 目录 | 内容与结论边界 |
+ | --- | --- |
++| [auto_comparison_20261023](auto_comparison_20261023/report.md) | 用户实际比较题修复与网页恢复；331项离线通过；最终30.98秒/2请求/4037 token，核心比较通过但附带训练句引用覆盖仍不全；五轮真实开发共21请求/54187 token，失败保留，无独立新分数 |
+ | [ui_prototype_20261023](ui_prototype_20261023/report.md) | P4本地网页小版本；三个真实历史案例、实时提问与引用展示；浏览器真实RAG检查2模型请求/2805 token，无arXiv，无新独立质量分数，生产后端未改 |
+ | [backend_reliability_20261023](backend_reliability_20261023/report.md) | 最新后端故障交付/诊断/统一结果修复；新增16项、全套314项离线通过；真实n06搜索超时后degraded并交付未核实说明，4模型POST/4915 token、1GET，无重试，无新独立分数 |
+ | [p3_closeout_20261023](p3_closeout_20261023/report.md) | 此前功能/瑕疵收尾与两条真实开发复验；均通过标题校验后遇搜索429，1降级/1失败，完整任务0/2；9模型POST/12278 token、2GET，未读PDF，原成绩不改 |
+--- a/main.py
++++ b/main.py
+@@ -31,6 +31,7 @@
+ from src.citation_validation import repair_citations_once
+ from src.embedding import load_embedding_model
+ from src.evidence_gap import complete_evidence as supplement_evidence
++from src.evidence_gap import named_sources
+ from src.hybrid_retriever import reciprocal_rank_fusion
+ from src.hyde import generate_hypothetical_document
+ from src.grounded_evidence import build_ledger, render_complete, render_guidance
+@@ -163,6 +164,16 @@
+         "when needed for the task. Optional background, stylistic preferences and "
+         "unasked exceptions are not completeness requirements. Failure to retrieve "
+         "a paper does not establish that the paper never reported a result.\n\n"
++        "15. For a comparison, synthesize separately supported facts about the "
++        "requested objects, citing each side. A literal sentence comparing both "
++        "papers is NOT required. Different purposes, inputs or mechanisms can be "
++        "contrasted from their respective descriptions. This does not establish "
++        "causality or which method performs better. Do not call the comparison "
++        "unsupported merely because no head-to-head experiment is provided.\n"
++        "16. Lead with the main difference the user asked about. For a broad "
++        "comparison, explain what each object does and its supported core approach; "
++        "do not replace this with differences between versions of each object, "
++        "benchmark tables or unasked numerical results.\n\n"
+         f"Context:\n{context}\n\n"
+         f"Question:\n{query}\n\n"
+         # 放在原文之后，避免模型照抄原文中的概括而漏掉另一段的限定。
+@@ -177,15 +188,42 @@
+         "and quantities, rather than leaving the equivalence implicit in "
+         "the phrase instead of.\n"
+         "- Omit unnecessary background and names absent from the passages. "
+-        "Do not repeat the same point or list unasked ablations and implementation details.\n\n"
++        "Do not repeat the same point or list unasked ablations and implementation details.\n"
++        "- For a broad difference-between question with no requested aspect, use "
++        "3-5 sentences: lead with the purposes, then the supported core methods. "
++        "Prefer primary-paper abstract/introductory definitions. Omit training/test "
++        "hyperparameters and unasked performance caveats.\n\n"
+         "Answer:"
+     )
+ 
+ 
++def comparison_introductions(query, chunks):
++    """只为无指定方面的两篇概念比较提供开头原文；不判断摘要是否已回答问题。"""
++    question = (query or '').strip().rstrip('?？.。')
++    overview = re.fullmatch(r'what (?:is|are) (?:the )?differences? between (.+)', question, re.I)
++    if overview and not re.search(r'\b(?:in|on|for|using|under|performance|accuracy|benchmark)\b', overview[1], re.I):
++        sources = named_sources(question, chunks)
++        if len(sources) == 2:
++            openings = [[c for c in chunks if c['source'] == source][:4] for source in sources]
++            if all(len(group) >= 2 and any(re.search(r'\babstract\b|摘要', c['text'], re.I)
++                                          for c in group) for group in openings):
++                return [c for group in openings for c in group]
++    return []
++
++
+ # 账本可补入主体识别所需的原文锚点，因此引用登记表可能比初选片段更多。
+-def build_evidence_context(chunks, results):
++def build_evidence_context(chunks, results, query=None):
+     """Preserve ranked raw passages and number any identity anchors consistently."""
+     ledger = build_ledger(chunks, [r['chunk_id'] for r in results])
++    seen = {c['chunk_id'] for c in ledger['citation_registry']}
++    added = []
++    for chunk in comparison_introductions(query, chunks):
++        if chunk['chunk_id'] not in seen:
++            ledger['citation_registry'].append(chunk)
++            seen.add(chunk['chunk_id'])
++            added.append(chunk['chunk_id'])
++    if added:
++        ledger['comparison_intro_ids'] = added
+     raw_context = build_context(ledger['citation_registry'])
+     guidance = render_guidance(ledger)
+     context = f"Original passages:\n{raw_context}\n\nEvidence guidance:\n{guidance}" if guidance else raw_context
+@@ -384,8 +422,11 @@
+         device=RERANKER_DEVICE,
+     )
+ 
++    # 同一请求内复用完全相同的模型/查询/原文分数，不减少候选、补查或证据预算。
++    score_cache = {}
+     global_ranking, sub_query_evidence = rank_evidence(
+-        query, unique_candidates, sub_query_results, reranker_model, SUB_QUERY_EVIDENCE_K)
++        query, unique_candidates, sub_query_results, reranker_model, SUB_QUERY_EVIDENCE_K,
++        score_cache=score_cache)
+     results = select_evidence(global_ranking, sub_query_evidence, RERANK_TOP_K,
+                               retrieval_anchor_ids)
+     retrieval_diagnostics = {
+@@ -398,11 +439,21 @@
+     }
+     # 此处调用固定规则补查；触发与停止不由 agent.py 的行动建议控制。
+     completion_enabled = USE_EVIDENCE_COMPLETION if complete_evidence is None else complete_evidence
+-    if completion_enabled:
++    introductions = comparison_introductions(query, chunks)
++    if completion_enabled and introductions and complete_evidence is None:
++        # 概念概览已有双方摘要，先生成；语义缺口仍由Auto升级处理。
++        # 显式complete_evidence=True仍强制原补查，两轮上限与其他题型不变。
++        retrieval_diagnostics['evidence_completion'] = {
++            'requested_sources': list(dict.fromkeys(c['source'] for c in introductions)),
++            'rounds': 0, 'supplement_queries': 0, 'max_rounds': completion_rounds,
++            'stop_reason': 'overview_introductions_available', 'coverage': 'heuristic_only',
++            'intro_ids': [c['chunk_id'] for c in introductions]}
++    elif completion_enabled:
+         results, completion = supplement_evidence(
+             query, global_ranking, sub_query_evidence, retrieval_anchor_ids,
+             embedding_model, index, chunks, bm25, reranker_model,
+-            top_k=RERANK_TOP_K, candidate_k=RETRIEVAL_TOP_K, max_rounds=completion_rounds)
++            top_k=RERANK_TOP_K, candidate_k=RETRIEVAL_TOP_K, max_rounds=completion_rounds,
++            score_cache=score_cache)
+         retrieval_diagnostics['evidence_completion'] = completion
+ 
+     print("Selected Chunk IDs:", [r["chunk_id"] for r in results])
+@@ -413,7 +464,7 @@
+     )
+ 
+     # 8. Add evidence guidance without dropping the original ranked passages.
+-    context, ledger = build_evidence_context(chunks, results)
++    context, ledger = build_evidence_context(chunks, results, query=query)
+ 
+     print("\n=== Evidence: parsed facts and source quotations ===")
+     print(render_complete(ledger)['answer'])
+@@ -461,6 +512,35 @@
+             'original_answer': original_answer, 'citation_validation': citation_validation}
+ 
+ 
++def has_evidence_gap(query, answer):
++    """保留真实缺口信号；未要求的同基准直接对比缺失不构成概念比较的缺口。"""
++    text = answer
++    quantitative = re.search(
++        r'performance|benchmark|accuracy|scores?|faster|slower|better|speed|latency|throughput|'
++        r'efficien|parameters?|cost|experiment|evaluation|dataset|实测|性能|指标|基准|准确|分数|更好|更快|速度|耗时|延迟|吞吐|效率|参数量|成本|多少|几倍|实验|评测|数据集',
++        query, re.I)
++    overview = re.fullmatch(r'what (?:is|are) (?:the )?differences? between (.+)', query.strip().rstrip('?？.。'), re.I)
++    if not quantitative and overview and not re.search(r'\b(?:in|on|for|using|under)\b', overview[1], re.I):
++        # 按说明的主题判断，避免依赖“未提供/未包含”等固定措辞。
++        # 只忽略已有引文之后的未要求评测说明；夹带核心事实缺口时仍保留信号。
++        kept, prefix = [], ''
++        for sentence in re.split(r'(?<=[。；\n.!?])', answer):
++            optional = re.search(r'性能|优劣|基准|胜负|直接(?:比较|对比)|head.to.head|benchmark|performance', sentence, re.I)
++            core_gap = re.search(
++                r'(?:不足|未说明|未提供|未给出|未包含|没有|缺少|缺失|无法|不能).{0,30}'
++                r'(?:架构|机制|用途|定义|原理|输入|输出|任务目标|介绍|关于.{0,12}的信息)', sentence)
++            if not (optional and re.search(r'\[\d+\]', prefix) and not core_gap):
++                kept.append(sentence)
++            prefix += sentence
++        text = ''.join(kept)
++    return bool(re.search(
++        r'(?:证据|上下文|资料|段落).{0,50}(?:不足|未说明|未包含|未给出|未提供|无法确认|无法确定)'
++        r'|(?:无法|不能).{0,30}(?:回答|比较|确定|核实)'
++        r'|\binsufficient (?:evidence|information)\b'
++        r'|\b(?:context|evidence|passages|sources)\b.{0,60}\b(?:does not|do not|cannot|lacks?|insufficient)\b',
++        text, re.I))
++
++
+ def _answer_with_agent(initial, resources, output, call, mode='agent', allow_network=False):
+     """把新初检原文白名单接入原循环/回答；返回实际最终引用，失败保持可见。"""
+     import agent
+@@ -489,11 +569,7 @@
+         signals=[]
+         if not checked['final_check']['structure_passed']:
+             signals.append('citation_repair_failed')
+-        if re.search(r'(?:证据|上下文|资料|段落).{0,50}(?:不足|未说明|未包含|未给出|未提供|无法确认|无法确定)'
+-                     r'|(?:无法|不能).{0,30}(?:回答|比较|确定|核实)'
+-                     r'|\binsufficient (?:evidence|information)\b'
+-                     r'|\b(?:context|evidence|passages|sources)\b.{0,60}\b(?:does not|do not|cannot|lacks?|insufficient)\b',
+-                     checked['answer'],re.I):
++        if has_evidence_gap(initial['query'], checked['answer']):
+             signals.append('explicit_evidence_gap')
+         route='agent' if signals else 'direct'
+         routing={'route':route,'strategy':'rag_first','trigger_signals':signals,'gate_decision_calls':0,
+--- a/src/agent_answer.py
++++ b/src/agent_answer.py
+@@ -46,6 +46,10 @@
+ Answer each bound requirement independently, retaining its own subject, task, dataset,
+ phase, numbers and conditions. Then explain a requested comparison if the separate
+ facts establish it. Do not transfer one method's condition to the other method.
++Lead with the main requested difference. Independently cited descriptions of each
++object's purpose or mechanism can establish a comparison; no literal head-to-head
++comparison sentence is required. Do not substitute within-method variants or benchmark
++tables for a broad comparison, or infer a performance ranking without comparable results.
+ Use each operative need for scope; original audit excerpts are kept outside this
+ model input so their other subjects cannot override these bound needs.
+ Use citations [n], where n is the supplied citation number, NOT chunk_id or a paper's
+@@ -82,6 +86,9 @@
+ a new answer. Check EVERY bound requirement and the whole answer, including comparisons.
+ Check coverage, correct subjects, exact numbers/units, task/dataset/phase conditions,
+ local citation support, absence of unsupported claims, and explicit remaining gaps.
++For comparisons, verify that the compared objects remain the ones requested. Separate
++supported descriptions can establish their differences without a head-to-head sentence;
++unasked within-method variants do not substitute for the requested comparison.
+ Audit extra assertions as strictly as required facts. A correct short answer with an
+ unsupported extra explanation still has a defect. A citation group does not justify
+ an unrelated source: report redundant/misattributed citations. A summation component
+--- a/src/evidence_gap.py
++++ b/src/evidence_gap.py
+@@ -77,10 +77,11 @@
+ # 保留基线已入选的局部证据，再按任务检索并在同一最终 K 内重新选择。
+ def complete_evidence(query, global_ranking, local_evidence, retrieval_anchor_ids,
+                       embedding_model, index, chunks, bm25, reranker_model,
+-                      top_k=10, candidate_k=60, max_rounds=1):
++                      top_k=10, candidate_k=60, max_rounds=1, score_cache=None):
+     """Deepen the same scoped searches for up to three passes, with early stops."""
+     if max_rounds not in (1, 2, 3):
+         raise ValueError('max_rounds must be 1, 2 or 3')
++    options = {} if score_cache is None else {'score_cache': score_cache}
+     started = time.perf_counter()
+     baseline = select_evidence(global_ranking, local_evidence, top_k, retrieval_anchor_ids)
+     local_ids = {cid for item in local_evidence for cid in item['top_ids']}
+@@ -143,12 +144,12 @@
+                 if chunk['chunk_id'] not in {c['chunk_id'] for c in canonical}:
+                     canonical.append(chunk)
+             task['scoped_top_ids'] = [c['chunk_id'] for c in rerank_results(
+-                task['query'], canonical, reranker_model, top_k=3, include_source=True)]
++                task['query'], canonical, reranker_model, top_k=3, include_source=True, **options)]
+ 
+         existing_ids = {c['chunk_id'] for c in global_ranking}
+         new_candidates = [c for cid, c in candidates.items() if cid not in existing_ids]
+         new_ranking = rerank_results(query, new_candidates, reranker_model,
+-                                     top_k=len(new_candidates), include_source=True)
++                                     top_k=len(new_candidates), include_source=True, **options)
+         merged = sorted([*global_ranking, *new_ranking], key=lambda c: -c['rerank_score'])
+         scoped_evidence = [{'query': t['query'], 'top_ids': t['scoped_top_ids']} for t in tasks]
+         selected = select_evidence(merged, [*local_evidence, *scoped_evidence], top_k,
+--- a/src/query_decomposer.py
++++ b/src/query_decomposer.py
+@@ -47,6 +47,9 @@
+ 7. If the original question compares multiple specific models,
+    methods, or papers, create separate sub-questions for each
+    specific entity being compared.
++   For an open-ended "difference between X and Y" question, retrieve each
++   entity's purpose and core approach. Do not replace it with comparisons
++   between versions of X or versions of Y, or request unasked benchmark scores.
+ 
+ 8. Each sub-question must explicitly mention the relevant entity.
+    Do not replace a specific entity with a generic term.
+--- a/src/reranker.py
++++ b/src/reranker.py
+@@ -8,6 +8,7 @@
+     model,
+     top_k=5,
+     include_source=True,
++    score_cache=None,
+ ):
+     # 检查候选文档是否为空
+     if not candidates:
+@@ -27,8 +28,15 @@
+         for candidate in candidates
+     ]
+ 
+-    # 使用cross-encoder计算相关性
+-    scores = model.predict(pairs)
++    # 缓存由请求方创建，只复用完全相同的输入；文档ID不是分数缓存键。
++    if score_cache is None:
++        scores = model.predict(pairs)
++    else:
++        missing = list(dict.fromkeys(pair for pair in pairs if (id(model), *pair) not in score_cache))
++        if missing:
++            score_cache.update(((id(model), *pair), float(score))
++                               for pair, score in zip(missing, model.predict(missing)))
++        scores = [score_cache[(id(model), *pair)] for pair in pairs]
+ 
+     # 将scores添加到chunks中
+     reranked_results = []
+@@ -52,10 +60,11 @@
+ 
+ 
+ # 全局按原题重排，子题各自找局部 Top-K；同原文候选映射回统一 chunk_id。
+-def rank_evidence(query, candidates, sub_query_results, model, sub_query_top_k=3):
++def rank_evidence(query, candidates, sub_query_results, model, sub_query_top_k=3, score_cache=None):
+     """Rank globally and locate subquestion evidence using the same candidates."""
++    options = {} if score_cache is None else {'score_cache': score_cache}
+     global_ranking = rerank_results(query, candidates, model, top_k=len(candidates),
+-                                  include_source=True)
++                                  include_source=True, **options)
+     canonical = {(c['source'], c['page'], c['text']): c for c in candidates}
+     sub_query_evidence = []
+     for item in sub_query_results:
+@@ -64,7 +73,7 @@
+             chunk = canonical[(candidate['source'], candidate['page'], candidate['text'])]
+             local.setdefault(chunk['chunk_id'], chunk)
+         ranked = rerank_results(item['query'], list(local.values()), model,
+-                                top_k=sub_query_top_k, include_source=True)
++                                top_k=sub_query_top_k, include_source=True, **options)
+         sub_query_evidence.append({'query': item['query'],
+                                    'top_ids': [c['chunk_id'] for c in ranked]})
+     return global_ranking, sub_query_evidence
+--- /dev/null
++++ b/tests/test_comparison_context.py
+@@ -0,0 +1,100 @@
++"""普通比较补充双方简介；未要求的直接性能实验不应触发Auto升级。"""
++import unittest
++from pathlib import Path
++from tempfile import TemporaryDirectory
++from unittest.mock import patch
++
++import main as pipeline
++from src import api_llm as api
++import test_main_agent as fixtures
++from test_agent_step1 import response
++
++
++class ComparisonContextTests(unittest.TestCase):
++    def chunks(self):
++        return [{'chunk_id': i, 'source': name + '.pdf', 'title': name,
++                 'page': 1 if i % 5 < 4 else 8, 'section': None,
++                 'text': ('Abstract ' if i % 5 == 0 else '') + f'{name} original passage {i}.'}
++                for i, name in enumerate(['Alpha'] * 5 + ['Beta'] * 5 + ['Gamma'] * 5)]
++
++    def test_overview_adds_opening_passages_without_replacing_selected_evidence(self):
++        chunks = self.chunks()
++        context, ledger = pipeline.build_evidence_context(chunks, [chunks[4], chunks[9]],
++            query='What is the difference between Alpha and Beta?')
++        self.assertEqual(ledger['selected_ids'], [4, 9])
++        self.assertEqual([c['chunk_id'] for c in ledger['citation_registry'][:2]], [4, 9])
++        self.assertEqual(set(ledger['comparison_intro_ids']), {0, 1, 2, 3, 5, 6, 7, 8})
++        self.assertNotIn('Gamma original', context)
++        for passage in ledger['citation_registry']:
++            self.assertEqual(passage['text'], chunks[passage['chunk_id']]['text'])
++
++    def test_specific_aspect_question_keeps_its_existing_context(self):
++        chunks = self.chunks()
++        for query in ('Compare Alpha and Beta on accuracy.', 'What does Alpha report?',
++                      'How does Alpha differ from Beta in filter sizes?'):
++            with self.subTest(query=query):
++                _, ledger = pipeline.build_evidence_context(chunks, [chunks[4], chunks[9]], query=query)
++                self.assertFalse(ledger.get('comparison_intro_ids'))
++
++    def test_missing_abstract_marker_keeps_the_normal_retrieval_path(self):
++        chunks = self.chunks()
++        chunks[5]['text'] = 'A bibliography entry.'
++        self.assertEqual(pipeline.comparison_introductions(
++            'What is the difference between Alpha and Beta?', chunks), [])
++
++    def test_optional_head_to_head_caveat_does_not_upgrade_a_broad_comparison(self):
++        for caveat in ('现有证据未提供二者在相同任务或基准上的直接对比。',
++                       '证据中未提供二者的直接对比实验。',
++                       '当前资料没有这两种方法的直接比较数据。',
++                       '所提供的证据未包含两者在统一任务或数据集上的直接对比，故无法据此判断性能优劣。',
++                       '上下文不足以判断二者性能优劣。'):
++            with self.subTest(caveat=caveat):
++                answer = 'Alpha 用于图像识别[1]，Beta 用于文本生成[2]。' + caveat
++                self.assertFalse(pipeline.has_evidence_gap('What is the difference between Alpha and Beta?', answer))
++
++    def test_required_performance_gap_still_upgrades(self):
++        answer = 'Alpha 用于图像识别[1]，Beta 用于文本生成[2]。现有证据未提供二者在同基准上的直接对比。'
++        self.assertTrue(pipeline.has_evidence_gap('Compare Alpha and Beta performance on the same benchmark.', answer))
++
++    def test_refusal_and_missing_requested_aspect_still_upgrade(self):
++        for answer in ('现有证据未提供直接对比，无法回答。',
++                       'Alpha 采用卷积[1]，但现有证据未说明 Beta 的机制，无法完整比较。',
++                       'Alpha 采用卷积[1]，现有证据未提供 Beta 的架构，因此无法直接比较。',
++                       'Alpha 采用卷积[1]，证据不足以说明 Beta 的用途，所以无法直接比较。',
++                       'Alpha 采用卷积[1]，证据没有关于 Beta 的信息，无法直接比较。'):
++            with self.subTest(answer=answer):
++                self.assertTrue(pipeline.has_evidence_gap('What is the difference between Alpha and Beta?', answer))
++
++
++class ComparisonRoutingTests(unittest.TestCase):
++    def setUp(self):
++        fixtures.MainAgentTests.setUp(self)
++
++    def invoke(self, complete_evidence):
++        with TemporaryDirectory() as temporary, \
++                patch.object(pipeline, 'comparison_introductions', return_value=self.fixture['chunks'][:2]), \
++                patch.object(pipeline, 'supplement_evidence', return_value=(
++                    self.fixture['chunks'][:1], {'rounds': 2})) as supplement, \
++                patch.object(api, 'chat_completion', side_effect=[response(fixtures.DECOMPOSE),
++                    {'answer': 'A 的用途与 B 不同[1]。', 'finish_reason': 'stop', 'usage': {}}]) as call:
++            result = pipeline.main('What is the difference between A and B?', mode='auto',
++                complete_evidence=complete_evidence, output_dir=Path(temporary) / 'run')
++            return result, supplement.call_count, call.call_count
++
++    def test_available_introductions_skip_automatic_repeated_completion(self):
++        result, supplements, calls = self.invoke(None)
++        self.assertEqual(result['status'], 'completed')
++        self.assertEqual(supplements, 0)
++        self.assertEqual(calls, 2)
++        self.assertEqual(result['retrieval_diagnostics']['evidence_completion']['max_rounds'], 2)
++
++    def test_explicit_completion_still_executes_the_original_pipeline(self):
++        result, supplements, calls = self.invoke(True)
++        self.assertEqual(result['status'], 'completed')
++        self.assertEqual(supplements, 1)
++        self.assertEqual(calls, 2)
++        self.assertEqual(result['retrieval_diagnostics']['evidence_completion']['rounds'], 2)
++
++
++if __name__ == '__main__':
++    unittest.main()
+--- /dev/null
++++ b/tests/test_comparison_intent.py
+@@ -0,0 +1,66 @@
++"""跨方法比较不能投影成“单个方法之间的区别”；使用真实失败规划作回归。"""
++from copy import deepcopy
++import unittest
++
++import agent
++
++
++class ComparisonIntentTests(unittest.TestCase):
++    def proposal(self, query, subjects=('Atlas', 'Nova')):
++        return {'requirements': [{'id': f'r{i}', 'subject': subject, 'question_quote': query}
++                                 for i, subject in enumerate(subjects, 1)]}
++
++    def test_actual_user_trace_keeps_both_objects_of_the_comparison(self):
++        # 逐项复现用户运行中的抽取，不依赖本机临时运行目录。
++        query = 'what is the difference between VGG and RAG?'
++        proposal = self.proposal(query, ('VGG', 'RAG'))
++        bound = agent.bind_requirements(proposal, query)
++        for row in bound['requirements']:
++            self.assertEqual(row['question_quote'], query)
++            self.assertTrue(agent.names_subject(row['subject'], row['need']))
++            other = 'RAG' if row['subject'] == 'VGG' else 'VGG'
++            self.assertFalse(agent.names_subject(other, row['need']))
++            self.assertNotIn('difference between vgg?', row['need'])
++            self.assertNotIn('difference between rag?', row['need'])
++
++    def test_symmetric_comparisons_retain_the_relation_and_requested_aspect(self):
++        for query in ('What is the difference between Atlas and Nova?',
++                      'How do Atlas and Nova differ in their filter sizes?',
++                      'Compare Atlas and Nova on representation.',
++                      'Atlas 和 Nova 有什么区别？',
++                      'Atlas 与 Nova 在表示方式上有何区别？'):
++            with self.subTest(query=query):
++                rows = agent.bind_requirements(self.proposal(query), query)['requirements']
++                for row in rows:
++                    self.assertEqual(row['question_quote'], query)
++                    self.assertTrue(agent.names_subject(row['subject'], row['need']))
++                    other = 'Nova' if row['subject'] == 'Atlas' else 'Atlas'
++                    self.assertFalse(agent.names_subject(other, row['need']))
++                    self.assertNotRegex(row['need'], r'difference between (?:atlas|nova)\?')
++                    for aspect in ('filter sizes', 'representation', '表示方式'):
++                        if aspect in query:
++                            self.assertIn(aspect, row['need'])
++
++    def test_corrupted_one_sided_comparative_need_is_rejected(self):
++        query = 'What is the difference between Atlas and Nova?'
++        bound = agent.bind_requirements(self.proposal(query), query)
++        bad = deepcopy(bound)
++        bad['requirements'][0]['need'] = 'what is the difference between atlas?'
++        with self.assertRaisesRegex(ValueError, 'bound question excerpt'):
++            agent.validate_plan(bad, query)
++
++    def test_noncomparative_shared_predicate_still_isolates_subjects(self):
++        query = 'What do Atlas and Nova report about normalization?'
++        rows = agent.bind_requirements(self.proposal(query), query)['requirements']
++        self.assertFalse(agent.names_subject('Nova', rows[0]['need']))
++        self.assertFalse(agent.names_subject('Atlas', rows[1]['need']))
++        self.assertTrue(all('report about normalization' in row['need'] for row in rows))
++
++    def test_asymmetric_later_conditions_still_cannot_be_merged(self):
++        query = 'How do Atlas and Nova differ, and what costs does Nova report on Orion?'
++        with self.assertRaisesRegex(ValueError, 'another declared subject'):
++            agent.bind_requirements(self.proposal(query), query)
++
++
++if __name__ == '__main__':
++    unittest.main()
+--- /dev/null
++++ b/tests/test_reranker_cache.py
+@@ -0,0 +1,77 @@
++"""缓存只复用同一请求内相同模型/查询/原文的分数；不减少候选或补查轮数。"""
++import unittest
++from unittest.mock import patch
++
++from src.evidence_gap import complete_evidence
++from src.reranker import rerank_results
++
++
++class CountingModel:
++    def __init__(self):
++        self.pairs = []
++
++    def predict(self, pairs):
++        self.pairs.extend(pairs)
++        return [float(sum(map(ord, query + text)) % 997) for query, text in pairs]
++
++
++class RerankerCacheTests(unittest.TestCase):
++    def chunks(self):
++        return [{'chunk_id': i, 'source': f'{name}.pdf', 'title': name.title(),
++                 'page': i + 1, 'section': None, 'text': f'Evidence {i}.', 'rerank_score': float(100 - i)}
++                for i, name in enumerate(['alpha'] * 8 + ['beta'] * 8)]
++
++    def test_same_pairs_across_overlapping_calls_are_scored_once(self):
++        model, cache = CountingModel(), {}
++        chunks = self.chunks()
++        rerank_results('query', chunks[:4], model, score_cache=cache)
++        actual = rerank_results('query', chunks[2:6], model, score_cache=cache)
++        expected = rerank_results('query', chunks[2:6], CountingModel())
++        self.assertEqual(actual, expected)
++        self.assertEqual(len(model.pairs), 6)
++
++    def test_queries_text_sources_and_models_have_separate_scores(self):
++        model, cache = CountingModel(), {}
++        chunk = self.chunks()[0]
++        for query, candidate in [('q', chunk), ('other', chunk),
++                                 ('q', {**chunk, 'text': 'Changed.'}),
++                                 ('q', {**chunk, 'source': 'other.pdf'})]:
++            rerank_results(query, [candidate], model, score_cache=cache)
++        other = CountingModel()
++        rerank_results('q', [chunk], other, score_cache=cache)
++        self.assertEqual(len(model.pairs), 4)
++        self.assertEqual(len(other.pairs), 1)
++
++    def test_repeated_rows_keep_their_own_metadata_and_order(self):
++        chunk = self.chunks()[0]
++        rows = [chunk, {**chunk, 'chunk_id': 999, 'page': 99}]
++        model = CountingModel()
++        actual = rerank_results('q', rows, model, score_cache={})
++        self.assertEqual([r['chunk_id'] for r in actual], [0, 999])
++        self.assertEqual(len(model.pairs), 1)
++        self.assertEqual(actual[0]['rerank_score'], actual[1]['rerank_score'])
++
++    def test_two_completion_rounds_keep_rankings_candidates_and_budget(self):
++        chunks = self.chunks()
++        local = [{'query': 'What does Alpha store?', 'top_ids': [8, 9, 10]},
++                 {'query': 'What does Beta store?', 'top_ids': [0, 1, 2]}]
++        results, traces, counts = [], [], []
++        for cache in (None, {}):
++            model = CountingModel()
++            with patch('src.evidence_gap.retrieve', return_value=chunks), \
++                    patch('src.evidence_gap.retrieve_bm25', return_value=chunks):
++                selected, trace = complete_evidence('Compare Alpha and Beta.', chunks, local, [],
++                    object(), object(), chunks, object(), model, candidate_k=2,
++                    max_rounds=2, score_cache=cache)
++            results.append(selected)
++            traces.append([{key: row[key] for key in ('candidate_depth', 'supplement_queries',
++                            'new_candidate_ids', 'selected_ids')} for row in trace['round_history']])
++            counts.append(len(model.pairs))
++        self.assertEqual(results[0], results[1])
++        self.assertEqual(traces[0], traces[1])
++        self.assertEqual(len(traces[1]), 2)
++        self.assertLess(counts[1], counts[0])
++
++
++if __name__ == '__main__':
++    unittest.main()
+--- a/tests/test_retention_regression.py
++++ b/tests/test_retention_regression.py
+@@ -38,7 +38,7 @@
+         def dense(*args, **kwargs):
+             return original if kwargs['query'] == 'Original question' else [chunks[11]]
+ 
+-        def context(all_chunks, selected):
++        def context(all_chunks, selected, query=None):
+             return 'Fixture context', {'citation_registry': selected}
+ 
+         with redirect_stdout(io.StringIO()), \
+--- a/tests/test_retrieval_coverage.py
++++ b/tests/test_retrieval_coverage.py
+@@ -24,7 +24,7 @@
+                 return [chunks[11], *chunks[:11]]
+             return chunks
+ 
+-        def rank(query, candidates, model, top_k, include_source):
++        def rank(query, candidates, model, top_k, include_source, **kwargs):
+             ordered = list(candidates)
+             if query not in targets:
+                 ordered.sort(key=lambda c: c['chunk_id'])
+--- a/ui_prototype/README.md
++++ b/ui_prototype/README.md
+@@ -1,6 +1,8 @@
+ # PaperLens 本地问答原型
+ 
+-这是P4的小型试验版，用来体验“提问 → 回答 → 引用原文 → 运行记录”。原型单独放置，现有生产后端没有改动；无需安装前端框架或新Python依赖。
++这是P4的小型试验版，用来体验“提问 → 回答 → 引用原文 → 运行记录”。原型复用现有Python后端，无需安装前端框架或新Python依赖。
++
++Mac上可以在Finder中双击同目录的[start.command](start.command)。它会在独立终端中启动服务；已有服务时只提示访问地址，不重复启动。保持启动终端打开，关闭终端会停止服务。网页地址本身不会启动Python，服务停止后需要重新运行此文件。
+ 
+ 在项目根目录启动：
+ 
+@@ -25,8 +27,11 @@
+ | 文件 | 作用 |
+ | --- | --- |
+ | `app.py` | 标准库WSGI服务、只读案例接口、内存任务、独立问答进程与展示字段筛选 |
++| `start.command` | Mac双击启动；不设置开机自启，不安装后台服务 |
+ | `index.html` / `style.css` / `app.js` | 原生网页、布局及交互，无构建步骤 |
+ 
+ 同一时刻只运行一个问题；模型运行放在独立进程，页面可以持续显示等待状态。实时记录保存在`logs/ui_prototype/`的新目录；Agent/Auto另保留原后端的完整pipeline账本。浏览器刷新恢复默认历史案例，不自动重新调用模型。
+ 
+ 这是本地单用户原型，尚未做安装包、多人访问、持久会话、上传论文和正式发布。arXiv限流/超时等后端边界沿用现有处理，不在界面中伪装为成功。[本轮实现与验收](../evaluation/results/ui_prototype_20261023/report.md)
++
++2026-10-23根据实际提问修复了比较意图、Auto的未要求性能说明误判，并为简单概念比较补充双方摘要、复用相同重排分数。每次实时提问仍是独立进程，复杂问题可能需要多步补查；普通补查失败与外部来源不可用分开显示。[修复记录与实际成本](../evaluation/results/auto_comparison_20261023/report.md)
+--- a/ui_prototype/app.js
++++ b/ui_prototype/app.js
+@@ -128,7 +128,7 @@
+   $('emptyState').hidden = true;
+   const warning = result.status !== 'completed';
+   $('resultStatus').className = `result-status ${result.status === 'failed' ? 'failed' : warning ? 'warning' : ''}`;
+-  $('resultStatus').innerHTML = `${icon(warning ? 'warning' : 'check')}<span>${{completed: '回答已完成', degraded: '部分完成 · 来源不可用', failed: '本次处理未完成'}[result.status] || result.status}</span>`;
++  $('resultStatus').innerHTML = `${icon(warning ? 'warning' : 'check')}<span>${{completed: '回答已完成', degraded: result.answer_status === 'source_unavailable' ? '部分完成 · 来源不可用' : '部分完成 · 补查未完成', failed: '本次处理未完成'}[result.status] || result.status}</span>`;
+   $('originLabel').textContent = result.origin === 'saved' ? '历史真实记录' : '本次实时运行';
+   $('runMeta').textContent = `${result.date || new Date().toLocaleDateString('zh-CN')} · ${result.mode.toUpperCase()} · ${result.network.papers_read ? '含外部原文' : '本地证据'}`;
+   $('answerLabel').textContent = warning ? '本次结果与待核实需求' : '基于论文原文的回答';
+--- /dev/null
++++ b/ui_prototype/start.command
+@@ -0,0 +1,8 @@
++#!/bin/zsh
++# Finder双击后在独立终端运行；关闭终端即停止，不设置开机自启。
++cd -- "${0:A:h}/.." || exit 1
++if curl --silent --fail --max-time 2 http://127.0.0.1:8848/api/meta > /dev/null; then
++    print -r -- '本地服务已在运行，请打开 http://127.0.0.1:8848'
++    exit 0
++fi
++exec .venv/bin/python -u ui_prototype/app.py

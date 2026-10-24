@@ -1,0 +1,137 @@
+{
+  "status": "closed_with_known_defects",
+  "reviewer": "assistant manual review against actual selected source passages; not independent blind review",
+  "scope": "Five development acceptance cases; no overall accuracy estimate",
+  "cases": {
+    "q2": {
+      "result": "core_complete",
+      "citation_support": "supported",
+      "evidence": [
+        {
+          "citation": 1,
+          "chunk_id": 45,
+          "source": "Attention is all you need.pdf",
+          "page": 5,
+          "supports": "No recurrence/convolution; inject relative or absolute positional information into embeddings."
+        }
+      ],
+      "retained_defects": []
+    },
+    "p3": {
+      "result": "core_complete",
+      "citation_support": "supported",
+      "evidence": [
+        {
+          "citation": 5,
+          "chunk_id": 573,
+          "source": "2004.12832v2.pdf",
+          "page": 2,
+          "supports": "Each query embedding takes maximum similarity against document embeddings; sum across query terms."
+        },
+        {
+          "citation": 8,
+          "chunk_id": 597,
+          "source": "2004.12832v2.pdf",
+          "page": 4,
+          "supports": "Maximum cosine similarity and summation; squared L2 also evaluated."
+        },
+        {
+          "citation": 9,
+          "chunk_id": 622,
+          "source": "2004.12832v2.pdf",
+          "page": 5,
+          "supports": "Max-pool over document terms, sum over query terms."
+        },
+        {
+          "citation": 6,
+          "chunk_id": 684,
+          "source": "2004.12832v2.pdf",
+          "page": 9,
+          "supports": "Average-similarity ablation and individual term matching."
+        },
+        {
+          "citation": 4,
+          "chunk_id": 600,
+          "source": "2004.12832v2.pdf",
+          "page": 4,
+          "supports": "Alternative aggregation less amenable to pruning."
+        }
+      ],
+      "retained_defects": [
+        "More supplementary comparison detail than the question requires."
+      ]
+    },
+    "n07": {
+      "result": "partial_answer",
+      "citation_support": "supported_for_stated_claims",
+      "evidence": [
+        {
+          "citation": 2,
+          "chunk_id": 618,
+          "source": "2004.12832v2.pdf",
+          "page": 5,
+          "supports": "Document representations saved to disk with 32-bit or 16-bit dimensions."
+        },
+        {
+          "citation": 3,
+          "chunk_id": 614,
+          "source": "2004.12832v2.pdf",
+          "page": 5,
+          "supports": "Offline pre-computation of document representations."
+        },
+        {
+          "citation": 6,
+          "chunk_id": 906,
+          "source": "2005.11401v4.pdf",
+          "page": 17,
+          "supports": "FAISS MIPS on CPU and document index vectors stored on CPU."
+        }
+      ],
+      "retained_defects": [
+        "RAG document encoder representation is not explained; the answer explicitly states evidence is insufficient.",
+        "ColBERT answer states offline document representations/storage but does not clearly identify its token-level embeddings.",
+        "0/2 designated Gold chunks selected; alternative ColBERT evidence supports the limited statements."
+      ]
+    },
+    "a12": {
+      "result": "facts_correct_with_unnecessary_comparison_abstention",
+      "citation_support": "supported_for_both_encoder_facts",
+      "evidence": [
+        {
+          "citation": 1,
+          "chunk_id": 601,
+          "source": "2004.12832v2.pdf",
+          "page": 4,
+          "supports": "Single shared BERT; Q/D markers distinguish query/document."
+        },
+        {
+          "citation": 3,
+          "chunk_id": 609,
+          "source": "2004.12832v2.pdf",
+          "page": 4,
+          "supports": "Similar document encoder architecture and D marker."
+        },
+        {
+          "citation": 10,
+          "chunk_id": 410,
+          "source": "2004.04906v3.pdf",
+          "page": 3,
+          "supports": "Two independent BERT networks for DPR question/passage encoders."
+        }
+      ],
+      "retained_defects": [
+        "Despite stating both supported facts, the last paragraph refuses the cross-paper comparison because no direct joint comparison is quoted.",
+        "2/2 designated Gold chunks selected; this remaining defect is in synthesis/abstention, not absence of these two evidence passages."
+      ]
+    },
+    "n11": {
+      "result": "appropriate_abstention",
+      "citation_support": "not_required_for_abstention",
+      "evidence": [],
+      "retained_defects": [],
+      "review_note": "Explicitly says no M3/eight-user/Top-10 P95 measurements were supplied; invents no milliseconds."
+    }
+  },
+  "decision": "Close the fixed-RAG baseline milestone under the user request; retain recorded defects without tuning or production fixes.",
+  "next_milestone": "P0: small-batch import, deduplication and failure recovery; not started in this run."
+}

@@ -1,0 +1,1286 @@
+{
+  "mode": "Offline, original-query retrieval pilot; no decomposition or generation API calls.",
+  "api_calls": 0,
+  "knowledge_base": {
+    "version": "semantic-mac-20261019",
+    "chunk_count": 378,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/semantic-mac-20261019/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/semantic-mac-20261019/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/semantic-mac-20261019/manifest.json",
+    "manifest_sha256": "e85032f0787eba6eb8b45292cf08f9b14bd41c165d7891b22b0ba7600a71ef14",
+    "files": {
+      "faiss.index": "4050e11d5ee03f93c456f2b84dc5dfbabbfaf3912f80d12b40d36c5a675f9d28",
+      "chunks.json": "7aad05f2f45f10c02b9b0b01ee7f3c492f4673efe876c47fc73dd19d4f8684b9"
+    }
+  },
+  "source_chunks": {
+    "Attention is all you need.pdf": 101,
+    "DCNN.pdf": 117,
+    "VGG.pdf": 160
+  },
+  "retrieval_top_k": 60,
+  "rrf_top_k": 60,
+  "rrf_k": 60,
+  "rerank_top_k": 10,
+  "code_and_inputs_sha256": {
+    "evaluation/run_arxiv_pilot.py": "89decc4608fbe05d7a9110fa0c0aa6099913f6a253e715ed4bfb6555e966c22b",
+    "main.py": "7cc68fefb494e74530c05a97b90f3b6f6c6d6cf546bdb54d97c8a0b399317e48",
+    "evaluation/questions.json": "824bff7d71ea4f71f0a262b42936b25fe5be28bb1bc629d3d01c252660abb7d5",
+    "src/api_llm.py": "2adea1ea9a8268d1260e0f8e2d7a80d9bff42143812b140e54f3003c62e2d2d4",
+    "src/bm25_retriever.py": "06a12c701da323963166a8c2a9206ead1281e59649efbbe0aff1293ace8c7e92",
+    "src/chunk_storage.py": "794ea2fa58826b895711a7d0f39a244f79e2a91aa39f99bec36955a235430630",
+    "src/chunking_recursive.py": "d4d6aae8d4f7b7f72503eadb440e72279e9d8fe1834b86cefd8f8d519fd1528f",
+    "src/chunking_semantic.py": "524e0c902cea605cfc5af30a15cdf5399b05807ad1ff49e2c16c94e0e29e22b8",
+    "src/citation_validation.py": "b9bd5c48a839a7bc62b79b38248889ade65fad1b3b654dc135c06cc4f9bb682b",
+    "src/embedding.py": "4b0e2699c9aeb23eb5db5585b64aa088ad9b1be4b01e33c95692f4f5f9624390",
+    "src/grounded_evidence.py": "78a7e63512970492f4e52050cb8b2312e2658281acfe979eb4476516ff8c2663",
+    "src/hybrid_retriever.py": "3306823530036b662f04e5790b1e74cb69b01051367385d33b388b87119fbe7d",
+    "src/hyde.py": "b0482baf2559e44d5d1d8c5a1bd31db046df279de53be70c7e8fb83bbcf32e72",
+    "src/knowledge_base.py": "dfb63dfafd00d463a194fe934d1c2f5a7a55d98b2ed5db95fc35b74606759474",
+    "src/numeric_evidence.py": "492fb546e6bc89b881843ece4b4582e533aec5aabbc58d61cd1cf158c4bac3d0",
+    "src/pdf_loader.py": "1f527ed51d318304858e4d95ffb85bd9c966961ef02157e9ce4f74b86f8fec64",
+    "src/query_decomposer.py": "6750d4e2f789b40891136db86ba4ba8bb1353a4b75c14db2c633b57b3128ec70",
+    "src/query_rewriter.py": "404152aa9326445ecce721cd46be75fa14e19f99ff0a8fe7318e0c47f909d2c3",
+    "src/reranker.py": "37c1ed2d5a5b9a4f2dccfbd663428a88212e450126a70bba797436de30f24d1e",
+    "src/retriever.py": "1382bbb41922a0bfe2da00e16a6d31e4448861e4a31544abdbfc171ec34cab3a",
+    "src/vector_store.py": "161d8c6597038788d195f034b3ea77ac391d7497e53c6dc1a7dbcf5f83a7fecf",
+    "data/processed/versions/semantic-mac-20261019/faiss.index": "4050e11d5ee03f93c456f2b84dc5dfbabbfaf3912f80d12b40d36c5a675f9d28",
+    "data/processed/versions/semantic-mac-20261019/chunks.json": "7aad05f2f45f10c02b9b0b01ee7f3c492f4673efe876c47fc73dd19d4f8684b9",
+    "data/processed/versions/semantic-mac-20261019/manifest.json": "e85032f0787eba6eb8b45292cf08f9b14bd41c165d7891b22b0ba7600a71ef14"
+  },
+  "questions": [
+    {
+      "id": "q1",
+      "query": "Why does VGG use small 3x3 convolutional filters?",
+      "type": "single_document",
+      "elapsed_seconds": 4.27,
+      "candidate_counts": {
+        "dense": 60,
+        "bm25": 60,
+        "rrf": 60,
+        "rerank": 10
+      },
+      "gold": [
+        {
+          "source": "VGG.pdf",
+          "page": 1,
+          "quote": "small (3 × 3) convolution filters in all layers",
+          "matching_chunk_ids": [
+            224
+          ],
+          "ranks": {
+            "dense": [
+              23
+            ],
+            "bm25": [
+              3
+            ],
+            "rrf": [
+              7
+            ],
+            "rerank": [
+              1
+            ]
+          }
+        },
+        {
+          "source": "VGG.pdf",
+          "page": 3,
+          "quote": "which makes the decision function more discriminative",
+          "matching_chunk_ids": [
+            245
+          ],
+          "ranks": {
+            "dense": [
+              9
+            ],
+            "bm25": [
+              46
+            ],
+            "rrf": [
+              19
+            ],
+            "rerank": [
+              10
+            ]
+          }
+        },
+        {
+          "source": "VGG.pdf",
+          "page": 3,
+          "quote": "Second, we decrease the number of parameters",
+          "matching_chunk_ids": [
+            246
+          ],
+          "ranks": {
+            "dense": [
+              3
+            ],
+            "bm25": [
+              7
+            ],
+            "rrf": [
+              1
+            ],
+            "rerank": [
+              6
+            ]
+          }
+        },
+        {
+          "source": "VGG.pdf",
+          "page": 3,
+          "quote": "have a decomposition through the 3 × 3 filters",
+          "matching_chunk_ids": [
+            246
+          ],
+          "ranks": {
+            "dense": [
+              3
+            ],
+            "bm25": [
+              7
+            ],
+            "rrf": [
+              1
+            ],
+            "rerank": [
+              6
+            ]
+          }
+        },
+        {
+          "source": "VGG.pdf",
+          "page": 2,
+          "quote": "which is the smallest size to capture the notion of left/right",
+          "matching_chunk_ids": [
+            232
+          ],
+          "ranks": {
+            "dense": [
+              32
+            ],
+            "bm25": [
+              1
+            ],
+            "rrf": [
+              10
+            ],
+            "rerank": [
+              4
+            ]
+          }
+        },
+        {
+          "source": "VGG.pdf",
+          "page": 2,
+          "quote": "a stack of two 3 × 3 conv. layers (without spatial pooling in between) has an effective receptive field of 5 × 5",
+          "matching_chunk_ids": [
+            242
+          ],
+          "ranks": {
+            "dense": [
+              12
+            ],
+            "bm25": [
+              27
+            ],
+            "rrf": [
+              15
+            ],
+            "rerank": []
+          }
+        },
+        {
+          "source": "VGG.pdf",
+          "page": 6,
+          "quote": "it is also important to capture spatial context by using conv. filters with non-trivial receptive fields",
+          "matching_chunk_ids": [
+            281
+          ],
+          "ranks": {
+            "dense": [
+              18
+            ],
+            "bm25": [
+              6
+            ],
+            "rrf": [
+              6
+            ],
+            "rerank": [
+              9
+            ]
+          }
+        }
+      ],
+      "top10": [
+        {
+          "chunk_id": 224,
+          "score": 0.02792120864410021,
+          "source": "VGG.pdf",
+          "page": 1,
+          "title": "VGG",
+          "section": "1 INTRODUCTION",
+          "text": "Another line of improvements dealt with training and testing the networks densely over the whole image and over multiple scales (Sermanet et al., 2014; Howard, 2014). In this paper, we address another important aspect of ConvNet architecture design – its depth. To this end, we ﬁx other parameters of the architecture, and steadily increase the depth of the network by adding more convolutional layers, which is feasible due to the use of very small (3 × 3) convolution ﬁlters in all layers.",
+          "rerank_score": 0.9957581162452698
+        },
+        {
+          "chunk_id": 219,
+          "score": 0.015384615384615385,
+          "source": "VGG.pdf",
+          "page": 1,
+          "title": "VGG",
+          "section": null,
+          "text": "Our main contribution is a thorough evaluation of networks of increasing depth using an architecture with very small (3 × 3) convolution ﬁlters, which shows that a signiﬁcant improvement on the prior-art conﬁgurations can be achieved by pushing the depth to 16–19 weight layers. These ﬁndings were the basis of our ImageNet Challenge 2014 submission, where our team secured the ﬁrst and the second places in the localisa- tion and classiﬁcation tracks respectively.",
+          "rerank_score": 0.9821111559867859
+        },
+        {
+          "chunk_id": 250,
+          "score": 0.02946236559139785,
+          "source": "VGG.pdf",
+          "page": 4,
+          "title": "VGG",
+          "section": "2.3 DISCUSSION",
+          "text": "Published as a conference paper at ICLR 2015 (22 weight layers) and small convolution ﬁlters (apart from 3 × 3, they also use 1 × 1 and 5 × 5 convolutions). Their network topology is, however, more complex than ours, and the spatial reso- lution of the feature maps is reduced more aggressively in the ﬁrst layers to decrease the amount of computation.",
+          "rerank_score": 0.9609083533287048
+        },
+        {
+          "chunk_id": 232,
+          "score": 0.027263007840342125,
+          "source": "VGG.pdf",
+          "page": 2,
+          "title": "VGG",
+          "section": "2.1 ARCHITECTURE",
+          "text": "2.1 ARCHITECTURE During training, the input to our ConvNets is a ﬁxed-size 224 × 224 RGB image. The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel. The image is passed through a stack of convolutional (conv.) layers, where we use ﬁlters with a very small receptive ﬁeld: 3 × 3 (which is the smallest size to capture the notion of left/right, up/down, center).",
+          "rerank_score": 0.9330407977104187
+        },
+        {
+          "chunk_id": 241,
+          "score": 0.026263297872340427,
+          "source": "VGG.pdf",
+          "page": 2,
+          "title": "VGG",
+          "section": "2.3 DISCUSSION",
+          "text": "lay- ers (e.g. 11 × 11 with stride 4 in (Krizhevsky et al., 2012), or 7 × 7 with stride 2 in (Zeiler & Fergus, 2013; Sermanet et al., 2014)), we use very small 3 × 3 receptive ﬁelds throughout the whole net, which are convolved with the input at every pixel (with stride 1).",
+          "rerank_score": 0.83741694688797
+        },
+        {
+          "chunk_id": 246,
+          "score": 0.030798389007344232,
+          "source": "VGG.pdf",
+          "page": 3,
+          "title": "VGG",
+          "section": "2.3 DISCUSSION",
+          "text": "Second, we decrease the number of parameters: assuming that both the input and the output of a three-layer 3 × 3 convolution stack has C channels, the stack is parametrised by 3 \u0000 32C2\u0001 = 27C2 weights; at the same time, a single 7 × 7 conv. layer would require 72C2 = 49C2 parameters, i.e. 81% more. This can be seen as imposing a regularisation on the 7 × 7 conv. ﬁlters, forcing them to have a decomposition through the 3 × 3 ﬁlters (with non-linearity injected in between).",
+          "rerank_score": 0.8291709423065186
+        },
+        {
+          "chunk_id": 248,
+          "score": 0.027799227799227798,
+          "source": "VGG.pdf",
+          "page": 3,
+          "title": "VGG",
+          "section": "2.3 DISCUSSION",
+          "text": "layers have recently been utilised in the “Network in Network” architecture of Lin et al. Small-size convolution ﬁlters have been previously used by Ciresan et al. (2011), but their nets are signiﬁcantly less deep than ours, and they did not evaluate on the large-scale ILSVRC dataset.",
+          "rerank_score": 0.8077324032783508
+        },
+        {
+          "chunk_id": 233,
+          "score": 0.029116045245077504,
+          "source": "VGG.pdf",
+          "page": 2,
+          "title": "VGG",
+          "section": "2.1 ARCHITECTURE",
+          "text": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.",
+          "rerank_score": 0.6433071494102478
+        },
+        {
+          "chunk_id": 281,
+          "score": 0.027972027972027972,
+          "source": "VGG.pdf",
+          "page": 6,
+          "title": "VGG",
+          "section": "4.1 SINGLE SCALE EVALUATION",
+          "text": "This indicates that while the additional non-linearity does help (C is better than B), it is also important to capture spatial context by using conv. ﬁlters with non-trivial receptive ﬁelds (D is better than C).",
+          "rerank_score": 0.5718522667884827
+        },
+        {
+          "chunk_id": 245,
+          "score": 0.02392671588733935,
+          "source": "VGG.pdf",
+          "page": 3,
+          "title": "VGG",
+          "section": "2.3 DISCUSSION",
+          "text": "Network A,A-LRN B C D E Number of parameters 133 133 134 138 144 such layers have a 7 × 7 effective receptive ﬁeld. So what have we gained by using, for instance, a stack of three 3×3 conv. layers instead of a single 7×7 layer? First, we incorporate three non-linear rectiﬁcation layers instead of a single one, which makes the decision function more discriminative.",
+          "rerank_score": 0.21907395124435425
+        }
+      ],
+      "all_gold_locatable": true,
+      "all_gold_in_top10": false
+    },
+    {
+      "id": "q2",
+      "query": "Why does the Transformer use positional encoding?",
+      "type": "single_document",
+      "elapsed_seconds": 2.34,
+      "candidate_counts": {
+        "dense": 60,
+        "bm25": 60,
+        "rrf": 60,
+        "rerank": 10
+      },
+      "gold": [
+        {
+          "source": "Attention is all you need.pdf",
+          "page": 5,
+          "quote": "Since our model contains no recurrence and no convolution",
+          "matching_chunk_ids": [
+            45
+          ],
+          "ranks": {
+            "dense": [
+              7
+            ],
+            "bm25": [
+              1
+            ],
+            "rrf": [
+              1
+            ],
+            "rerank": [
+              1
+            ]
+          }
+        },
+        {
+          "source": "Attention is all you need.pdf",
+          "page": 5,
+          "quote": "we must inject some information about the relative or absolute position",
+          "matching_chunk_ids": [
+            45
+          ],
+          "ranks": {
+            "dense": [
+              7
+            ],
+            "bm25": [
+              1
+            ],
+            "rrf": [
+              1
+            ],
+            "rerank": [
+              1
+            ]
+          }
+        }
+      ],
+      "top10": [
+        {
+          "chunk_id": 45,
+          "score": 0.03131881575727918,
+          "source": "Attention is all you need.pdf",
+          "page": 5,
+          "title": "Attention is All you Need",
+          "section": "3.5 Positional Encoding",
+          "text": "3.5 Positional Encoding Since our model contains no recurrence and no convolution, in order for the model to make use of the order of the sequence, we must inject some information about the relative or absolute position of the tokens in the sequence. To this end, we add \"positional encodings\" to the input embeddings at the",
+          "rerank_score": 0.8224189877510071
+        },
+        {
+          "chunk_id": 38,
+          "score": 0.0264957264957265,
+          "source": "Attention is all you need.pdf",
+          "page": 5,
+          "title": "Attention is All you Need",
+          "section": "3.2.3 Applications of Attention in our Model",
+          "text": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+          "rerank_score": 0.4196743071079254
+        },
+        {
+          "chunk_id": 81,
+          "score": 0.029551337359792925,
+          "source": "Attention is all you need.pdf",
+          "page": 9,
+          "title": "Attention is All you Need",
+          "section": "7 Conclusion",
+          "text": "7 Conclusion In this work, we presented the Transformer, the ﬁrst sequence transduction model based entirely on attention, replacing the recurrent layers most commonly used in encoder-decoder architectures with multi-headed self-attention. For translation tasks, the Transformer can be trained signiﬁcantly faster than architectures based on recurrent or convolutional layers. On both WMT 2014 English-to-German and WMT 2014 English-to-French translation tasks, we achieve a new state of the art.",
+          "rerank_score": 0.4036758244037628
+        },
+        {
+          "chunk_id": 48,
+          "score": 0.027118043247075507,
+          "source": "Attention is all you need.pdf",
+          "page": 6,
+          "title": "Attention is All you Need",
+          "section": "3.5 Positional Encoding",
+          "text": "In this work, we use sine and cosine functions of different frequencies: PE(pos,2i) = sin(pos/100002i/dmodel) PE(pos,2i+1) = cos(pos/100002i/dmodel) where pos is the position and i is the dimension. That is, each dimension of the positional encoding corresponds to a sinusoid. The wavelengths form a geometric progression from 2π to 10000 · 2π.",
+          "rerank_score": 0.2970433235168457
+        },
+        {
+          "chunk_id": 20,
+          "score": 0.028949545078577336,
+          "source": "Attention is all you need.pdf",
+          "page": 2,
+          "title": "Attention is All you Need",
+          "section": "3 Model Architecture",
+          "text": "The Transformer follows this overall architecture using stacked self-attention and point-wise, fully connected layers for both the encoder and decoder, shown in the left and right halves of Figure 1, respectively.",
+          "rerank_score": 0.09877745062112808
+        },
+        {
+          "chunk_id": 80,
+          "score": 0.015873015873015872,
+          "source": "Attention is all you need.pdf",
+          "page": 9,
+          "title": "Attention is All you Need",
+          "section": "6.2 Model Variations",
+          "text": "This suggests that determining compatibility is not easy and that a more sophisticated compatibility function than dot product may be beneﬁcial. We further observe in rows (C) and (D) that, as expected, bigger models are better, and dropout is very helpful in avoiding over-ﬁtting. In row (E) we replace our sinusoidal positional encoding with learned positional embeddings [8], and observe nearly identical results to the base model.",
+          "rerank_score": 0.042870573699474335
+        },
+        {
+          "chunk_id": 17,
+          "score": 0.03036576949620428,
+          "source": "Attention is all you need.pdf",
+          "page": 2,
+          "title": "Attention is All you Need",
+          "section": "2 Background",
+          "text": "To the best of our knowledge, however, the Transformer is the ﬁrst transduction model relying entirely on self-attention to compute representations of its input and output without using sequence- aligned RNNs or convolution. In the following sections, we will describe the Transformer, motivate self-attention and discuss its advantages over models such as [14, 15] and [8].",
+          "rerank_score": 0.029282065108418465
+        },
+        {
+          "chunk_id": 67,
+          "score": 0.02684684684684685,
+          "source": "Attention is all you need.pdf",
+          "page": 7,
+          "title": "Attention is All you Need",
+          "section": "5.4 Regularization",
+          "text": "5.4 Regularization We employ three types of regularization during training: Residual Dropout We apply dropout [27] to the output of each sub-layer, before it is added to the sub-layer input and normalized. In addition, we apply dropout to the sums of the embeddings and the positional encodings in both the encoder and decoder stacks.",
+          "rerank_score": 0.028340928256511688
+        },
+        {
+          "chunk_id": 12,
+          "score": 0.02904040404040404,
+          "source": "Attention is all you need.pdf",
+          "page": 2,
+          "title": "Attention is All you Need",
+          "section": "1 Introduction",
+          "text": "In this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output. The Transformer allows for signiﬁcantly more parallelization and can reach a new state of the art in translation quality after being trained for as little as twelve hours on eight P100 GPUs.",
+          "rerank_score": 0.022692352533340454
+        },
+        {
+          "chunk_id": 47,
+          "score": 0.025678061306371368,
+          "source": "Attention is all you need.pdf",
+          "page": 6,
+          "title": "Attention is All you Need",
+          "section": "3.5 Positional Encoding",
+          "text": "Layer Type Complexity per Layer Sequential Maximum Path Length Operations Self-Attention O(n2 · d) O(1) O(1) Recurrent O(n · d2) O(n) O(n) Convolutional O(k · n · d2) O(1) O(logk(n)) Self-Attention (restricted) O(r · n · d) O(1) O(n/r) bottoms of the encoder and decoder stacks. The positional encodings have the same dimension dmodel as the embeddings, so that the two can be summed. There are many choices of positional encodings, learned and ﬁxed [8].",
+          "rerank_score": 0.019067276269197464
+        }
+      ],
+      "all_gold_locatable": true,
+      "all_gold_in_top10": true
+    },
+    {
+      "id": "q3",
+      "query": "Why does the Transformer use scaled dot-product attention?",
+      "type": "single_document",
+      "elapsed_seconds": 2.07,
+      "candidate_counts": {
+        "dense": 60,
+        "bm25": 60,
+        "rrf": 60,
+        "rerank": 10
+      },
+      "gold": [
+        {
+          "source": "Attention is all you need.pdf",
+          "page": 4,
+          "quote": "much faster and more space-efficient in practice",
+          "matching_chunk_ids": [
+            31
+          ],
+          "ranks": {
+            "dense": [
+              2
+            ],
+            "bm25": [
+              6
+            ],
+            "rrf": [
+              2
+            ],
+            "rerank": [
+              4
+            ]
+          }
+        },
+        {
+          "source": "Attention is all you need.pdf",
+          "page": 4,
+          "quote": "the dot products grow large in magnitude",
+          "matching_chunk_ids": [
+            32
+          ],
+          "ranks": {
+            "dense": [
+              5
+            ],
+            "bm25": [
+              7
+            ],
+            "rrf": [
+              5
+            ],
+            "rerank": [
+              2
+            ]
+          }
+        },
+        {
+          "source": "Attention is all you need.pdf",
+          "page": 4,
+          "quote": "extremely small gradients",
+          "matching_chunk_ids": [
+            32
+          ],
+          "ranks": {
+            "dense": [
+              5
+            ],
+            "bm25": [
+              7
+            ],
+            "rrf": [
+              5
+            ],
+            "rerank": [
+              2
+            ]
+          }
+        }
+      ],
+      "top10": [
+        {
+          "chunk_id": 6,
+          "score": 0.030798389007344232,
+          "source": "Attention is all you need.pdf",
+          "page": 1,
+          "title": "Attention is All you Need",
+          "section": "1 Introduction",
+          "text": "Jakob proposed replacing RNNs with self-attention and started the effort to evaluate this idea. Ashish, with Illia, designed and implemented the ﬁrst Transformer models and has been crucially involved in every aspect of this work. Noam proposed scaled dot-product attention, multi-head attention and the parameter-free position representation and became the other person involved in nearly every detail.",
+          "rerank_score": 0.9877992868423462
+        },
+        {
+          "chunk_id": 32,
+          "score": 0.030309988518943745,
+          "source": "Attention is all you need.pdf",
+          "page": 4,
+          "title": "Attention is All you Need",
+          "section": "3.2.1 Scaled Dot-Product Attention",
+          "text": "While for small values of dk the two mechanisms perform similarly, additive attention outperforms dot product attention without scaling for larger values of dk [3]. We suspect that for large values of dk, the dot products grow large in magnitude, pushing the softmax function into regions where it has extremely small gradients 4. To counteract this effect, we scale the dot products by 1 √dk .",
+          "rerank_score": 0.9776458144187927
+        },
+        {
+          "chunk_id": 40,
+          "score": 0.026041666666666664,
+          "source": "Attention is all you need.pdf",
+          "page": 5,
+          "title": "Attention is All you Need",
+          "section": "3.2.3 Applications of Attention in our Model",
+          "text": "We need to prevent leftward information ﬂow in the decoder to preserve the auto-regressive property. We implement this inside of scaled dot-product attention by masking out (setting to −∞) all values in the input of the softmax which correspond to illegal connections.",
+          "rerank_score": 0.884694516658783
+        },
+        {
+          "chunk_id": 31,
+          "score": 0.03128054740957967,
+          "source": "Attention is all you need.pdf",
+          "page": 4,
+          "title": "Attention is All you Need",
+          "section": "3.2.1 Scaled Dot-Product Attention",
+          "text": "Dot-product attention is identical to our algorithm, except for the scaling factor of 1 √dk . Additive attention computes the compatibility function using a feed-forward network with a single hidden layer. While the two are similar in theoretical complexity, dot-product attention is much faster and more space-efﬁcient in practice, since it can be implemented using highly optimized matrix multiplication code.",
+          "rerank_score": 0.851146936416626
+        },
+        {
+          "chunk_id": 12,
+          "score": 0.02813852813852814,
+          "source": "Attention is all you need.pdf",
+          "page": 2,
+          "title": "Attention is All you Need",
+          "section": "1 Introduction",
+          "text": "In this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output. The Transformer allows for signiﬁcantly more parallelization and can reach a new state of the art in translation quality after being trained for as little as twelve hours on eight P100 GPUs.",
+          "rerank_score": 0.6379150748252869
+        },
+        {
+          "chunk_id": 29,
+          "score": 0.0304147465437788,
+          "source": "Attention is all you need.pdf",
+          "page": 4,
+          "title": "Attention is All you Need",
+          "section": "3.2.1 Scaled Dot-Product Attention",
+          "text": "Scaled Dot-Product Attention Multi-Head Attention Figure 2: (left) Scaled Dot-Product Attention. (right) Multi-Head Attention consists of several attention layers running in parallel.",
+          "rerank_score": 0.5059008598327637
+        },
+        {
+          "chunk_id": 15,
+          "score": 0.029906956136464335,
+          "source": "Attention is all you need.pdf",
+          "page": 2,
+          "title": "Attention is All you Need",
+          "section": "2 Background",
+          "text": "In the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as described in section 3.2. Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.",
+          "rerank_score": 0.39876341819763184
+        },
+        {
+          "chunk_id": 38,
+          "score": 0.027650648360030512,
+          "source": "Attention is all you need.pdf",
+          "page": 5,
+          "title": "Attention is All you Need",
+          "section": "3.2.3 Applications of Attention in our Model",
+          "text": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+          "rerank_score": 0.384530633687973
+        },
+        {
+          "chunk_id": 82,
+          "score": 0.025332691999358666,
+          "source": "Attention is all you need.pdf",
+          "page": 9,
+          "title": "Attention is All you Need",
+          "section": "7 Conclusion",
+          "text": "In the former task our best model outperforms even all previously reported ensembles. We are excited about the future of attention-based models and plan to apply them to other tasks. We plan to extend the Transformer to problems involving input and output modalities other than text and to investigate local, restricted attention mechanisms to efﬁciently handle large inputs and outputs such as images, audio and video. Making generation less sequential is another research goals of ours.",
+          "rerank_score": 0.2314581274986267
+        },
+        {
+          "chunk_id": 17,
+          "score": 0.030158730158730156,
+          "source": "Attention is all you need.pdf",
+          "page": 2,
+          "title": "Attention is All you Need",
+          "section": "2 Background",
+          "text": "To the best of our knowledge, however, the Transformer is the ﬁrst transduction model relying entirely on self-attention to compute representations of its input and output without using sequence- aligned RNNs or convolution. In the following sections, we will describe the Transformer, motivate self-attention and discuss its advantages over models such as [14, 15] and [8].",
+          "rerank_score": 0.21697619557380676
+        }
+      ],
+      "all_gold_locatable": true,
+      "all_gold_in_top10": true
+    },
+    {
+      "id": "q4",
+      "query": "How does the DCNN paper use data augmentation to reduce overfitting?",
+      "type": "single_document",
+      "elapsed_seconds": 2.51,
+      "candidate_counts": {
+        "dense": 60,
+        "bm25": 60,
+        "rrf": 60,
+        "rerank": 10
+      },
+      "gold": [
+        {
+          "source": "DCNN.pdf",
+          "page": 4,
+          "quote": "image translations and horizontal reflections",
+          "matching_chunk_ids": [
+            163
+          ],
+          "ranks": {
+            "dense": [],
+            "bm25": [
+              2
+            ],
+            "rrf": [
+              20
+            ],
+            "rerank": [
+              3
+            ]
+          }
+        },
+        {
+          "source": "DCNN.pdf",
+          "page": 4,
+          "quote": "random 224 × 224 patches",
+          "matching_chunk_ids": [
+            164
+          ],
+          "ranks": {
+            "dense": [
+              33
+            ],
+            "bm25": [],
+            "rrf": [
+              57
+            ],
+            "rerank": [
+              6
+            ]
+          }
+        },
+        {
+          "source": "DCNN.pdf",
+          "page": 5,
+          "quote": "altering the intensities of the RGB channels in training images",
+          "matching_chunk_ids": [
+            167
+          ],
+          "ranks": {
+            "dense": [
+              4
+            ],
+            "bm25": [
+              5
+            ],
+            "rrf": [
+              2
+            ],
+            "rerank": [
+              4
+            ]
+          }
+        },
+        {
+          "source": "DCNN.pdf",
+          "page": 5,
+          "quote": "perform PCA on the set of RGB pixel values",
+          "matching_chunk_ids": [
+            167
+          ],
+          "ranks": {
+            "dense": [
+              4
+            ],
+            "bm25": [
+              5
+            ],
+            "rrf": [
+              2
+            ],
+            "rerank": [
+              4
+            ]
+          }
+        },
+        {
+          "source": "DCNN.pdf",
+          "page": 4,
+          "quote": "artificially enlarge the dataset",
+          "matching_chunk_ids": [
+            162
+          ],
+          "ranks": {
+            "dense": [
+              1
+            ],
+            "bm25": [
+              1
+            ],
+            "rrf": [
+              1
+            ],
+            "rerank": [
+              1
+            ]
+          }
+        }
+      ],
+      "top10": [
+        {
+          "chunk_id": 162,
+          "score": 0.03278688524590164,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "title": "DCNN",
+          "section": "5.1. Data augmentation",
+          "text": "5.1. Data augmentation The easiest and most common method to reduce overfitting on image data is to artificially enlarge the dataset using label- preserving transformations (e.g., Refs.4, 5, 30). We employ two distinct forms of data augmentation, both of which allow transformed images to be produced from the original images with very little computation, so the transformed images do not need to be stored on disk.",
+          "rerank_score": 0.999638557434082
+        },
+        {
+          "chunk_id": 103,
+          "score": 0.029513888888888888,
+          "source": "DCNN.pdf",
+          "page": 1,
+          "title": "DCNN",
+          "section": null,
+          "text": "To make training faster, we used non- saturating neurons and a very efficient GPU implementation of the convolution operation. To reduce overfitting in the fully connected layers we employed a recently developed reg- ularization method called “dropout” that proved to be very effective. We also entered a variant of this model in the ILSVRC-2012 competition and achieved a winning top-5 test error rate of 15.3%, compared to 26.2% achieved by the sec- ond-best entry.",
+          "rerank_score": 0.9219281673431396
+        },
+        {
+          "chunk_id": 163,
+          "score": 0.016129032258064516,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "title": "DCNN",
+          "section": "5.1. Data augmentation",
+          "text": "In our implementation, the transformed images are generated in Python code on the CPU while the GPU is training on the previous batch of images. So these data augmentation schemes are, in effect, computa- tionally free. The first form of data augmentation consists of generating image translations and horizontal reflections.",
+          "rerank_score": 0.902449369430542
+        },
+        {
+          "chunk_id": 167,
+          "score": 0.031009615384615385,
+          "source": "DCNN.pdf",
+          "page": 5,
+          "title": "DCNN",
+          "section": "5.1. Data augmentation",
+          "text": "research highlights The second form of data augmentation consists of altering the intensities of the RGB channels in training images. Specifically, we perform PCA on the set of RGB pixel values throughout the ImageNet training set.",
+          "rerank_score": 0.8282376527786255
+        },
+        {
+          "chunk_id": 153,
+          "score": 0.014925373134328358,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "title": "DCNN",
+          "section": "4.4. Overlapping pooling",
+          "text": "This is what we use throughout our network, with s = 2 and z = 3. This scheme reduces the top-1 and top-5 error rates by 0.4% and 0.3%, respectively, as compared with the non overlapping scheme s = 2, z = 2, which produces output of equivalent dimensions. We generally observe during training that models with overlapping pooling find it slightly more dif- ficult to overfit.",
+          "rerank_score": 0.6325228214263916
+        },
+        {
+          "chunk_id": 164,
+          "score": 0.010752688172043012,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "title": "DCNN",
+          "section": "5.1. Data augmentation",
+          "text": "We do this by extracting random 224 × 224 patches (and their horizontal reflections) from the 256 × 256 images and training our net- work on these extracted patches.d This increases the size of our training set by a factor of 2048, though the resulting train- ing examples are, of course, highly inter dependent. Without this scheme, our network suffers from substantial overfit- ting, which would have forced us to use much smaller net- works.",
+          "rerank_score": 0.4787406325340271
+        },
+        {
+          "chunk_id": 121,
+          "score": 0.02946912242686891,
+          "source": "DCNN.pdf",
+          "page": 2,
+          "title": "DCNN",
+          "section": "2. INTRODUCTION",
+          "text": "We wrote a highly optimized GPU implementation of 2D convolution and all the other opera- tions inherent in training CNNs, which we make available publicly.a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4. The size of our network made overfitting a significant problem, even with 1.2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 5. Our final network contains five convo- lutional and three fully connected layers, and this depth seems to be important: we found that removing any convolu- tional layer (each of which contains no more than 1% of the model’s parameters) resulted in inferior performance.",
+          "rerank_score": 0.4177016019821167
+        },
+        {
+          "chunk_id": 174,
+          "score": 0.029386529386529386,
+          "source": "DCNN.pdf",
+          "page": 5,
+          "title": "DCNN",
+          "section": "5.2. Dropout",
+          "text": "We use dropout in the first two fully connected layers of Figure 2. Without dropout, our network exhibits substantial overfitting. Dropout roughly doubles the number of itera- tions required to converge.",
+          "rerank_score": 0.3445873260498047
+        },
+        {
+          "chunk_id": 114,
+          "score": 0.02371967654986523,
+          "source": "DCNN.pdf",
+          "page": 1,
+          "title": "DCNN",
+          "section": "2. INTRODUCTION",
+          "text": "And indeed, the shortcomings of small image datasets have been widely recognized (e.g., Ref.25), but it has only recently become possible to collect labeled datasets with millions of The original version of this paper was published in the Proceedings of the 25th International Conference on Neu- ral Information Processing Systems (Lake Tahoe, NV, Dec.",
+          "rerank_score": 0.24554453790187836
+        },
+        {
+          "chunk_id": 197,
+          "score": 0.024386724386724387,
+          "source": "DCNN.pdf",
+          "page": 7,
+          "title": "DCNN",
+          "section": "8. DISCUSSION",
+          "text": "So the depth really is important for achieving our results. To simplify our experiments, we did not use any unsuper- vised pre-training even though we expect that it will help, espe- cially if we obtain enough computational power to significantly increase the size of the network without obtaining a corre- sponding increase in the amount of labeled data.",
+          "rerank_score": 0.22331953048706055
+        }
+      ],
+      "all_gold_locatable": true,
+      "all_gold_in_top10": true
+    },
+    {
+      "id": "q5",
+      "query": "How do VGG and DCNN differ in their use of convolutional filter sizes?",
+      "type": "multi_document",
+      "elapsed_seconds": 3.98,
+      "candidate_counts": {
+        "dense": 60,
+        "bm25": 60,
+        "rrf": 60,
+        "rerank": 10
+      },
+      "gold": [
+        {
+          "source": "VGG.pdf",
+          "page": 2,
+          "quote": "we use very small 3 × 3 receptive fields throughout the whole net",
+          "matching_chunk_ids": [
+            241
+          ],
+          "ranks": {
+            "dense": [],
+            "bm25": [],
+            "rrf": [],
+            "rerank": []
+          }
+        },
+        {
+          "source": "VGG.pdf",
+          "page": 3,
+          "quote": "we decrease the number of parameters",
+          "matching_chunk_ids": [
+            246
+          ],
+          "ranks": {
+            "dense": [
+              2
+            ],
+            "bm25": [],
+            "rrf": [
+              22
+            ],
+            "rerank": []
+          }
+        },
+        {
+          "source": "DCNN.pdf",
+          "page": 4,
+          "quote": "96 kernels of size 11 × 11 × 3",
+          "matching_chunk_ids": [
+            157
+          ],
+          "ranks": {
+            "dense": [
+              9
+            ],
+            "bm25": [
+              41
+            ],
+            "rrf": [
+              8
+            ],
+            "rerank": [
+              7
+            ]
+          }
+        },
+        {
+          "source": "DCNN.pdf",
+          "page": 4,
+          "quote": "256 kernels of size 5 × 5 × 48",
+          "matching_chunk_ids": [
+            158
+          ],
+          "ranks": {
+            "dense": [
+              23
+            ],
+            "bm25": [
+              46
+            ],
+            "rrf": [
+              18
+            ],
+            "rerank": [
+              3
+            ]
+          }
+        },
+        {
+          "source": "DCNN.pdf",
+          "page": 4,
+          "quote": "384 kernels of size 3 × 3 × 256",
+          "matching_chunk_ids": [
+            159
+          ],
+          "ranks": {
+            "dense": [
+              56
+            ],
+            "bm25": [],
+            "rrf": [],
+            "rerank": []
+          }
+        },
+        {
+          "source": "VGG.pdf",
+          "page": 1,
+          "quote": "which is feasible due to the use of very small (3 × 3) convolution filters in all layers",
+          "matching_chunk_ids": [
+            224
+          ],
+          "ranks": {
+            "dense": [
+              37
+            ],
+            "bm25": [
+              13
+            ],
+            "rrf": [
+              10
+            ],
+            "rerank": [
+              5
+            ]
+          }
+        },
+        {
+          "source": "VGG.pdf",
+          "page": 3,
+          "quote": "we incorporate three non-linear rectification layers instead of a single one",
+          "matching_chunk_ids": [
+            245
+          ],
+          "ranks": {
+            "dense": [
+              4
+            ],
+            "bm25": [],
+            "rrf": [
+              24
+            ],
+            "rerank": []
+          }
+        },
+        {
+          "source": "VGG.pdf",
+          "page": 6,
+          "quote": "the configuration C (which contains three 1 × 1 conv. layers), performs worse than the configuration D, which uses 3 × 3 conv. layers throughout the network",
+          "matching_chunk_ids": [
+            280
+          ],
+          "ranks": {
+            "dense": [
+              8
+            ],
+            "bm25": [
+              60
+            ],
+            "rrf": [
+              14
+            ],
+            "rerank": []
+          }
+        }
+      ],
+      "top10": [
+        {
+          "chunk_id": 238,
+          "score": 0.028309409888357256,
+          "source": "VGG.pdf",
+          "page": 2,
+          "title": "VGG",
+          "section": "2.2 CONFIGURATIONS",
+          "text": "2.1, and differ only in the depth: from 11 weight layers in the network A (8 conv. and 3 FC layers) to 19 weight layers in the network E (16 conv. and 3 FC layers). The width of conv. layers (the number of channels) is rather small, starting from 64 in the ﬁrst layer and then increasing by a factor of 2 after each max-pooling layer, until it reaches 512. In Table 2 we report the number of parameters for each conﬁguration.",
+          "rerank_score": 0.9863142967224121
+        },
+        {
+          "chunk_id": 250,
+          "score": 0.03007688828584351,
+          "source": "VGG.pdf",
+          "page": 4,
+          "title": "VGG",
+          "section": "2.3 DISCUSSION",
+          "text": "Published as a conference paper at ICLR 2015 (22 weight layers) and small convolution ﬁlters (apart from 3 × 3, they also use 1 × 1 and 5 × 5 convolutions). Their network topology is, however, more complex than ours, and the spatial reso- lution of the feature maps is reduced more aggressively in the ﬁrst layers to decrease the amount of computation.",
+          "rerank_score": 0.9739848375320435
+        },
+        {
+          "chunk_id": 158,
+          "score": 0.021482155035235283,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "title": "DCNN",
+          "section": "4.5. Overall architecture",
+          "text": "The sec- ond convolutional layer takes as input the (response-nor- malized and pooled) output of the first convolutional layer and filters it with 256 kernels of size 5 × 5 × 48. The third, fourth, and fifth convolutional layers are connected to one another without any intervening pooling or normalization layers.",
+          "rerank_score": 0.9519252181053162
+        },
+        {
+          "chunk_id": 233,
+          "score": 0.015384615384615385,
+          "source": "VGG.pdf",
+          "page": 2,
+          "title": "VGG",
+          "section": "2.1 ARCHITECTURE",
+          "text": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.",
+          "rerank_score": 0.9219182729721069
+        },
+        {
+          "chunk_id": 224,
+          "score": 0.024007908487501763,
+          "source": "VGG.pdf",
+          "page": 1,
+          "title": "VGG",
+          "section": "1 INTRODUCTION",
+          "text": "Another line of improvements dealt with training and testing the networks densely over the whole image and over multiple scales (Sermanet et al., 2014; Howard, 2014). In this paper, we address another important aspect of ConvNet architecture design – its depth. To this end, we ﬁx other parameters of the architecture, and steadily increase the depth of the network by adding more convolutional layers, which is feasible due to the use of very small (3 × 3) convolution ﬁlters in all layers.",
+          "rerank_score": 0.8990497589111328
+        },
+        {
+          "chunk_id": 248,
+          "score": 0.025155279503105588,
+          "source": "VGG.pdf",
+          "page": 3,
+          "title": "VGG",
+          "section": "2.3 DISCUSSION",
+          "text": "layers have recently been utilised in the “Network in Network” architecture of Lin et al. Small-size convolution ﬁlters have been previously used by Ciresan et al. (2011), but their nets are signiﬁcantly less deep than ours, and they did not evaluate on the large-scale ILSVRC dataset.",
+          "rerank_score": 0.8922746777534485
+        },
+        {
+          "chunk_id": 157,
+          "score": 0.024393743722198307,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "title": "DCNN",
+          "section": "4.5. Overall architecture",
+          "text": "Max-pooling layers, of the kind described in Section 4.4, follow both response-normal- ization layers as well as the fifth convolutional layer. The ReLU non linearity is applied to the output of every convolu- tional and fully connected layer. The first convolutional layer filters the 224 × 224 × 3 input image with 96 kernels of size 11 × 11 × 3 with a stride of 4 pixels (this is the distance between the receptive field centers of neighboring neurons in a kernel map).",
+          "rerank_score": 0.8639687895774841
+        },
+        {
+          "chunk_id": 232,
+          "score": 0.02224666911135558,
+          "source": "VGG.pdf",
+          "page": 2,
+          "title": "VGG",
+          "section": "2.1 ARCHITECTURE",
+          "text": "2.1 ARCHITECTURE During training, the input to our ConvNets is a ﬁxed-size 224 × 224 RGB image. The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel. The image is passed through a stack of convolutional (conv.) layers, where we use ﬁlters with a very small receptive ﬁeld: 3 × 3 (which is the smallest size to capture the notion of left/right, up/down, center).",
+          "rerank_score": 0.8438131213188171
+        },
+        {
+          "chunk_id": 234,
+          "score": 0.011904761904761904,
+          "source": "VGG.pdf",
+          "page": 2,
+          "title": "VGG",
+          "section": "2.1 ARCHITECTURE",
+          "text": "layers are followed by max-pooling). Max-pooling is performed over a 2 × 2 pixel window, with stride 2. A stack of convolutional layers (which has a different depth in different architectures) is followed by three Fully-Connected (FC) layers: the ﬁrst two have 4096 channels each, the third performs 1000- way ILSVRC classiﬁcation and thus contains 1000 channels (one for each class). The ﬁnal layer is the soft-max layer.",
+          "rerank_score": 0.8152084946632385
+        },
+        {
+          "chunk_id": 117,
+          "score": 0.0237879767291532,
+          "source": "DCNN.pdf",
+          "page": 2,
+          "title": "DCNN",
+          "section": "2. INTRODUCTION",
+          "text": "Convolutional neural networks (CNNs) con- stitute one such class of models.9, 15, 17, 19, 21, 26, 32 Their capacity can be controlled by varying their depth and breadth, and they also make strong and mostly correct assumptions about the nature of images (namely, stationarity of statis- tics and locality of pixel dependencies).",
+          "rerank_score": 0.8116690516471863
+        }
+      ],
+      "all_gold_locatable": true,
+      "all_gold_in_top10": false
+    },
+    {
+      "id": "q6",
+      "query": "What was NVIDIA's stock price on October 10, 2026?",
+      "type": "unanswerable",
+      "elapsed_seconds": 2.96,
+      "candidate_counts": {
+        "dense": 60,
+        "bm25": 60,
+        "rrf": 60,
+        "rerank": 10
+      },
+      "gold": [],
+      "top10": [
+        {
+          "chunk_id": 310,
+          "score": 0.03278688524590164,
+          "source": "VGG.pdf",
+          "page": 8,
+          "title": "VGG",
+          "section": "5 CONCLUSION",
+          "text": "ACKNOWLEDGEMENTS This work was supported by ERC grant VisRec no. 228180. We gratefully acknowledge the support of NVIDIA Corporation with the donation of the GPUs used for this research.",
+          "rerank_score": 0.000906720757484436
+        },
+        {
+          "chunk_id": 179,
+          "score": 0.028309409888357256,
+          "source": "DCNN.pdf",
+          "page": 5,
+          "title": "DCNN",
+          "section": "6. DETAILS OF LEARNING",
+          "text": "We trained the network for roughly 90 cycles through the training set of 1.2 million images, which took 5–6 days on two NVIDIA GTX 580 3GB GPUs.",
+          "rerank_score": 0.000523295602761209
+        },
+        {
+          "chunk_id": 64,
+          "score": 0.03149801587301587,
+          "source": "Attention is all you need.pdf",
+          "page": 7,
+          "title": "Attention is All you Need",
+          "section": "5.2 Hardware and Schedule",
+          "text": "5.2 Hardware and Schedule We trained our models on one machine with 8 NVIDIA P100 GPUs.",
+          "rerank_score": 0.0005186590715311468
+        },
+        {
+          "chunk_id": 307,
+          "score": 0.014084507042253521,
+          "source": "VGG.pdf",
+          "page": 8,
+          "title": "VGG",
+          "section": "4.5 COMPARISON WITH THE STATE OF THE ART",
+          "text": "(Krizhevsky et al., 2012) (5 nets) 38.1 16.4 16.4 Krizhevsky et al. (Krizhevsky et al., 2012) (1 net) 40.7 18.2 -",
+          "rerank_score": 0.00020101509289816022
+        },
+        {
+          "chunk_id": 274,
+          "score": 0.024056467876692595,
+          "source": "VGG.pdf",
+          "page": 5,
+          "title": "VGG",
+          "section": "3.3 IMPLEMENTATION DETAILS",
+          "text": "While more sophisticated methods of speeding up ConvNet training have been recently pro- posed (Krizhevsky, 2014), which employ model and data parallelism for different layers of the net, we have found that our conceptually much simpler scheme already provides a speedup of 3.75 times on an off-the-shelf 4-GPU system, as compared to using a single GPU. On a system equipped with four NVIDIA Titan Black GPUs, training a single net took 2–3 weeks depending on the architecture.",
+          "rerank_score": 3.779080725507811e-05
+        },
+        {
+          "chunk_id": 200,
+          "score": 0.024922600619195046,
+          "source": "DCNN.pdf",
+          "page": 7,
+          "title": "DCNN",
+          "section": "9. EPILOGUE",
+          "text": "By 2015, better hardware, more hidden layers, and a host of technical advances reduced the error rate of deep convolutional neural nets by a further factor of three so that they are now quite close to human perfor- mance for static images.11, 31 Much of the credit for this revolu- tion should go to the pioneers who spent many years developing the technology of CNNs, but the essential missing ingredient was supplied by FeiFei et al.7 who put a huge effort into producing a labeled dataset that was finally large enough to show what neural networks could really do.\b References visual object classification.",
+          "rerank_score": 3.745970388990827e-05
+        },
+        {
+          "chunk_id": 178,
+          "score": 0.024322344322344324,
+          "source": "DCNN.pdf",
+          "page": 5,
+          "title": "DCNN",
+          "section": "6. DETAILS OF LEARNING",
+          "text": "We initialized the neuron biases in the remaining lay- ers with the constant 0. We used an equal learning rate for all layers, which we adjusted manually throughout training. The heuristic which we followed was to divide the learning rate by 10 when the vali- dation error rate stopped improving with the current learning rate. The learning rate was initialized at 0.01 and reduced three times prior to termination.",
+          "rerank_score": 3.7454916309798136e-05
+        },
+        {
+          "chunk_id": 153,
+          "score": 0.025451688923802042,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "title": "DCNN",
+          "section": "4.4. Overlapping pooling",
+          "text": "This is what we use throughout our network, with s = 2 and z = 3. This scheme reduces the top-1 and top-5 error rates by 0.4% and 0.3%, respectively, as compared with the non overlapping scheme s = 2, z = 2, which produces output of equivalent dimensions. We generally observe during training that models with overlapping pooling find it slightly more dif- ficult to overfit.",
+          "rerank_score": 3.744598870980553e-05
+        },
+        {
+          "chunk_id": 361,
+          "score": 0.020422824302134646,
+          "source": "VGG.pdf",
+          "page": 13,
+          "title": "VGG",
+          "section": "5 CONCLUSION",
+          "text": "It is worth noting though that the improvement over a smaller range of {256, 384, 512} was rather marginal (0.3%). The test set performance is reported and compared with other approaches in Table 11. Our networks “Net-D” and “Net-E” exhibit identical performance on VOC datasets, and their combination slightly improves the results. Our methods set the new state of the art across image representations, pre- trained on the ILSVRC dataset, outperforming the previous best result of Chatﬁeld et al.",
+          "rerank_score": 3.7442059692693874e-05
+        },
+        {
+          "chunk_id": 159,
+          "score": 0.013333333333333334,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "title": "DCNN",
+          "section": "4.5. Overall architecture",
+          "text": "The third convolutional layer has 384 kernels of size 3 × 3 × 256 connected to the (normalized, pooled) outputs 3 3 3 3 dense 2048 2048 192 192 128 13 13 3 3 3 dense dense 13 13 3 1000 Max 192 192 128 2048 2048 pooling of the second convolutional layer. The fourth convolu- tional layer has 384 kernels of size 3 × 3 × 192, and the fifth convolutional layer has 256 kernels of size 3 × 3 × 192. The fully connected layers have 4096 neurons each.",
+          "rerank_score": 3.7439844163600355e-05
+        }
+      ],
+      "all_gold_locatable": null,
+      "all_gold_in_top10": null
+    }
+  ],
+  "reranker_override": {
+    "source": "/Users/j/Desktop/Advanced-LLM-RAG/evaluation/results/decomposition_fix_20261019/before_reranker.py",
+    "sha256": "d002ffda057534351ed6f0a3440e71a91ba0c45570e1be1e3789a0a630bf5de3"
+  },
+  "provenance": "Old three-paper original-query retrieval regression, zero API calls."
+}

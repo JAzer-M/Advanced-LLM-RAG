@@ -1,0 +1,117 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "What k, n, alpha, and beta values does DCNN use for local response normalization, and is that normalization applied before or after ReLU?",
+  "kb_version": "all-papers-8-20261020",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": false,
+    "drafts": [
+      "DCNN使用k=2、n=5、α=10⁻⁴、β=0.75的局部响应归一化[1]，并在ReLU非线性之后应用该归一化[1]。归一化后的响应b由对同一空间位置上n个相邻核映射求和得到[2]，且该响应归一化层位于第一和第二个卷积层之后[10]。"
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "DCNN使用k=2、n=5、α=10⁻⁴、β=0.75的局部响应归一化[1]，并在ReLU非线性之后应用该归一化[1]。",
+              "reason": "答案完整回答了DCNN局部响应归一化的k=2、n=5、α=10⁻⁴、β=0.75四个参数，并明确指出在ReLU非线性之后应用，主体与问题一致，数值和单位正确。",
+              "citations": [
+                {
+                  "number": 1,
+                  "quote": "we used k = 2, n = 5, α = 10−4, and β = 0.75. We applied this normalization after applying the ReLU nonlinearity in cer- tain layers"
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            1,
+            2,
+            10
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 1,
+              "chunk_id": 145,
+              "source": "DCNN.pdf",
+              "page": 3,
+              "text": "The constants k, n, α, and β are hyper- parameters whose values are determined using a validation set; we used k = 2, n = 5, α = 10−4, and β = 0.75. We applied this normalization after applying the ReLU nonlinearity in cer- tain layers (see Section 4.5). This scheme bears some resemblance to the local contrast normalization scheme of Jarrett et al.,13 but ours would be more correctly termed “brightness normalization,” since we do not subtract the mean activity."
+            },
+            {
+              "citation": 2,
+              "chunk_id": 143,
+              "source": "DCNN.pdf",
+              "page": 3,
+              "text": "Denoting by ai puted by applying kernel i at position (x, y) and then applying x, y the ReLU nonlinearity, the response-normalized activity bi is given by the expression where the sum runs over n “adjacent” kernel maps at the same spatial position, and N is the total number of kernels in the layer. The ordering of the kernel maps is of course arbi- trary and determined before training begins."
+            },
+            {
+              "citation": 10,
+              "chunk_id": 156,
+              "source": "DCNN.pdf",
+              "page": 4,
+              "text": "The kernels of the second, fourth, and fifth convolutional layers are connected only to those kernel maps in the previous layer which reside on the same GPU (see Figure 2). The ker- nels of the third convolutional layer are connected to all ker- nel maps in the second layer. The neurons in the fully-connected layers are connected to all neurons in the previous layer. Response-normalization layers follow the first and second convolutional layers."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "DCNN使用k=2、n=5、α=10⁻⁴、β=0.75的局部响应归一化[1]，并在ReLU非线性之后应用该归一化[1]。归一化后的响应b由对同一空间位置上n个相邻核映射求和得到[2]，且该响应归一化层位于第一和第二个卷积层之后[10]。",
+    "citation_check": {
+      "cited_numbers": [
+        1,
+        2,
+        10
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 145,
+          "source": "DCNN.pdf",
+          "page": 3,
+          "text": "The constants k, n, α, and β are hyper- parameters whose values are determined using a validation set; we used k = 2, n = 5, α = 10−4, and β = 0.75. We applied this normalization after applying the ReLU nonlinearity in cer- tain layers (see Section 4.5). This scheme bears some resemblance to the local contrast normalization scheme of Jarrett et al.,13 but ours would be more correctly termed “brightness normalization,” since we do not subtract the mean activity."
+        },
+        {
+          "citation": 2,
+          "chunk_id": 143,
+          "source": "DCNN.pdf",
+          "page": 3,
+          "text": "Denoting by ai puted by applying kernel i at position (x, y) and then applying x, y the ReLU nonlinearity, the response-normalized activity bi is given by the expression where the sum runs over n “adjacent” kernel maps at the same spatial position, and N is the total number of kernels in the layer. The ordering of the kernel maps is of course arbi- trary and determined before training begins."
+        },
+        {
+          "citation": 10,
+          "chunk_id": 156,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "text": "The kernels of the second, fourth, and fifth convolutional layers are connected only to those kernel maps in the previous layer which reside on the same GPU (see Figure 2). The ker- nels of the third convolutional layer are connected to all ker- nel maps in the second layer. The neurons in the fully-connected layers are connected to all neurons in the previous layer. Response-normalization layers follow the first and second convolutional layers."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

@@ -1,0 +1,1050 @@
+{
+  "id": "question",
+  "query": "For short-answer open-domain QA, how does the correctness criterion reported by RAG differ from the criterion used by Self-RAG for PopQA and TriviaQA?",
+  "kb_version": "all-papers-8-20261020",
+  "status": "running",
+  "actions_executed": 2,
+  "semantic_correctness": "requires_manual_review",
+  "plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "RAG",
+        "question_quote": "how does the correctness criterion reported by RAG differ",
+        "need": "how does the correctness criterion reported by RAG differ"
+      },
+      {
+        "id": "r2",
+        "subject": "Self-RAG",
+        "question_quote": "from the criterion used by Self-RAG for PopQA and TriviaQA",
+        "need": "from the criterion used by Self-RAG for PopQA and TriviaQA"
+      }
+    ]
+  },
+  "validation_repairs": [
+    {
+      "phase": "assess",
+      "error": "gap must be a nonempty string."
+    }
+  ],
+  "assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "missing",
+        "evidence": [],
+        "supported_part": "",
+        "reason": "全部所给段落中，chunk 763 仅描述 RAG 的训练目标与抽取式 QA 范式对比，未给出 RAG 报告的正确性评价准则；其余 RAG 论文段落（910）仅涉及训练数据过滤，均未建立该需求。",
+        "gap": "缺少 RAG 在其评估中报告 correctness 准则的具体说明（例如其评价生成答案正确性的指标或判定方式）。"
+      },
+      {
+        "id": "r2",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 1003,
+            "quote": "We evaluate performance based on whether gold answers are included in the model generations instead of strictly requiring exact matching, following Mallen et al."
+          }
+        ],
+        "supported_part": "Self-RAG 对 PopQA 与 TriviaQA 的评价准则是看 gold answer 是否包含在模型生成中，而非严格要求精确匹配。",
+        "reason": "chunk 1003 明确建立了 Self-RAG 在这两个短答案开放域 QA 数据集上使用的正确性判定准则，本侧事实完整成立；RAG 一侧的缺失属于 r1，不影响本需求自身完整性。",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "search",
+      "reason": "r1 所需的 RAG 正确性评价准则尚未由任何段落建立，需在 RAG 论文中检索其评估指标/正确性判定相关内容。",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": "RAG: how does the correctness criterion reported by RAG differ | how does the correctness criterion reported by RAG differ",
+      "source": "2005.11401v4.pdf",
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "逐项按各自绑定的题干摘录独立核查，未合并或扩展义务，未把 RAG 一侧缺失转嫁到 r2。"
+    }
+  },
+  "steps": [
+    {
+      "number": 1,
+      "action": {
+        "type": "search",
+        "reason": "r1 所需的 RAG 正确性评价准则尚未由任何段落建立，需在 RAG 论文中检索其评估指标/正确性判定相关内容。",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": "RAG: how does the correctness criterion reported by RAG differ | how does the correctness criterion reported by RAG differ",
+        "source": "2005.11401v4.pdf",
+        "chunk_id": null
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "search",
+        "status": "executed",
+        "query_context": "For short-answer open-domain QA",
+        "tool_result": {
+          "query": "For short-answer open-domain QA: RAG: how does the correctness criterion reported by RAG differ | how does the correctness criterion reported by RAG differ",
+          "source": "2005.11401v4.pdf",
+          "knowledge_base": {
+            "version": "all-papers-8-20261020",
+            "chunk_count": 1397,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/manifest.json",
+            "manifest_sha256": "9c4e2c26b4f11fe7baf526595630cbee2d325416ec0e497f417975fbd60779ef",
+            "files": {
+              "faiss.index": "ff1f4a3e38e20c0275ba79d805e6475639b3cea7a7a583f9c18c67ec8e40a2ed",
+              "chunks.json": "3e63d75abbe164ff8e135b1d66fd6b02d9479b2e037e289a726e7c542464593a"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 902,
+              "score": 0.030117753623188408,
+              "source": "2005.11401v4.pdf",
+              "page": 17,
+              "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+              "section": "6 Discussion",
+              "text": "Appendices for Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks A Implementation Details For Open-domain QA we report test numbers using 15 retrieved documents for RAG-Token models. For RAG-Sequence models, we report test results using 50 retrieved documents, and we use the Thorough Decoding approach since answers are generally short. We use greedy decoding for QA as we did not ﬁnd beam search improved results.",
+              "rerank_score": 0.5945317149162292,
+              "kb_version": "all-papers-8-20261020"
+            },
+            {
+              "chunk_id": 763,
+              "score": 0.03225806451612903,
+              "source": "2005.11401v4.pdf",
+              "page": 4,
+              "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+              "section": "3.1 Open-domain Question Answering",
+              "text": "3.1 Open-domain Question Answering Open-domain question answering (QA) is an important real-world application and common testbed for knowledge-intensive tasks [20]. We treat questions and answers as input-output text pairs (x, y) and train RAG by directly minimizing the negative log-likelihood of answers. We compare RAG to the popular extractive QA paradigm [5, 7, 31, 26], where answers are extracted spans from retrieved documents, relying primarily on non-parametric knowledge.",
+              "rerank_score": 0.5780079364776611,
+              "kb_version": "all-papers-8-20261020"
+            },
+            {
+              "chunk_id": 778,
+              "score": 0.03278688524590164,
+              "source": "2005.11401v4.pdf",
+              "page": 5,
+              "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+              "section": "4.1 Open-domain Question Answering",
+              "text": "4.1 Open-domain Question Answering Table 1 shows results for RAG along with state-of-the-art models. On all four open-domain QA tasks, RAG sets a new state of the art (only on the T5-comparable split for TQA). RAG combines the generation ﬂexibility of the “closed-book” (parametric only) approaches and the performance of \"open-book\" retrieval-based approaches. Unlike REALM and T5+SSM, RAG enjoys strong results without expensive, specialized “salient span masking” pre-training [20].",
+              "rerank_score": 0.4841338098049164,
+              "kb_version": "all-papers-8-20261020"
+            },
+            {
+              "chunk_id": 770,
+              "score": 0.030309988518943745,
+              "source": "2005.11401v4.pdf",
+              "page": 5,
+              "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+              "section": "3.3 Jeopardy Question Generation",
+              "text": "3.3 Jeopardy Question Generation To evaluate RAG’s generation abilities in a non-QA setting, we study open-domain question gen- eration. Rather than use questions from standard open-domain QA tasks, which typically consist of short, simple questions, we propose the more demanding task of generating Jeopardy questions. Jeopardy is an unusual format that consists of trying to guess an entity from a fact about that entity.",
+              "rerank_score": 0.45616206526756287,
+              "kb_version": "all-papers-8-20261020"
+            },
+            {
+              "chunk_id": 827,
+              "score": 0.030330882352941176,
+              "source": "2005.11401v4.pdf",
+              "page": 9,
+              "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+              "section": "6 Discussion",
+              "text": "6 Discussion In this work, we presented hybrid generation models with access to parametric and non-parametric memory. We showed that our RAG models obtain state of the art results on open-domain QA. We found that people prefer RAG’s generation over purely parametric BART, ﬁnding RAG more factual and speciﬁc.",
+              "rerank_score": 0.3297852873802185,
+              "kb_version": "all-papers-8-20261020"
+            },
+            {
+              "chunk_id": 783,
+              "score": 0.02007992007992008,
+              "source": "2005.11401v4.pdf",
+              "page": 6,
+              "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+              "section": "4.1 Open-domain Question Answering",
+              "text": "Model Jeopardy MSMARCO FVR3 FVR2 B-1 QB-1 R-L B-1 Label Acc. SotA - - 49.8* 49.9* 76.8 92.2* BART 15.1 19.7 38.2 41.6 64.0 81.1 RAG-Tok. 17.3 22.2 40.1 41.5 72.5 89.5 RAG-Seq. 14.7 21.4 40.8 44.2 to more effective marginalization over documents. Furthermore, RAG can generate correct answers even when the correct answer is not in any retrieved document, achieving 11.8% accuracy in such cases for NQ, where an extractive model would score 0%.",
+              "rerank_score": 0.2905677855014801,
+              "kb_version": "all-papers-8-20261020"
+            },
+            {
+              "chunk_id": 764,
+              "score": 0.029236022193768675,
+              "source": "2005.11401v4.pdf",
+              "page": 4,
+              "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+              "section": "3.1 Open-domain Question Answering",
+              "text": "We also compare to “Closed-Book QA” approaches [52], which, like RAG, generate answers, but which do not exploit retrieval, instead relying purely on parametric knowledge. We consider four popular open-domain QA datasets: Natural Questions (NQ) [29], TriviaQA (TQA) [24]. WebQuestions (WQ) [3] and CuratedTrec (CT) [2]. As CT and WQ are small, we follow DPR [26] by initializing CT and WQ models with our NQ RAG model.",
+              "rerank_score": 0.19571469724178314,
+              "kb_version": "all-papers-8-20261020"
+            },
+            {
+              "chunk_id": 779,
+              "score": 0.024877149877149878,
+              "source": "2005.11401v4.pdf",
+              "page": 5,
+              "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+              "section": "4.1 Open-domain Question Answering",
+              "text": "It is worth noting that RAG’s retriever is initialized using DPR’s retriever, which uses retrieval supervision on Natural Questions and TriviaQA. RAG compares favourably to the DPR QA system, which uses a BERT-based “cross- encoder” to re-rank documents, along with an extractive reader. RAG demonstrates that neither a re-ranker nor extractive reader is necessary for state-of-the-art performance. There are several advantages to generating answers even when it is possible to extract them.",
+              "rerank_score": 0.19011275470256805,
+              "kb_version": "all-papers-8-20261020"
+            },
+            {
+              "chunk_id": 805,
+              "score": 0.021910919540229883,
+              "source": "2005.11401v4.pdf",
+              "page": 7,
+              "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+              "section": "4.5 Additional Results",
+              "text": "For FEVER, BM25 performs best, perhaps since FEVER claims are heavily entity-centric and thus well-suited for word overlap-based retrieval. Differentiable retrieval improves results on all other tasks, especially for Open-Domain QA, where it is crucial. Index hot-swapping An advantage of non-parametric memory models like RAG is that knowledge can be easily updated at test time. Parametric-only models like T5 or BART need further training to update their behavior as the world changes.",
+              "rerank_score": 0.17963197827339172,
+              "kb_version": "all-papers-8-20261020"
+            },
+            {
+              "chunk_id": 720,
+              "score": 0.02667140825035562,
+              "source": "2005.11401v4.pdf",
+              "page": 1,
+              "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+              "section": null,
+              "text": "We ﬁne-tune and evaluate our models on a wide range of knowledge- intensive NLP tasks and set the state of the art on three open domain QA tasks, outperforming parametric seq2seq models and task-speciﬁc retrieve-and-extract architectures. For language generation tasks, we ﬁnd that RAG models generate more speciﬁc, diverse and factual language than a state-of-the-art parametric-only seq2seq baseline.",
+              "rerank_score": 0.1397264450788498,
+              "kb_version": "all-papers-8-20261020"
+            }
+          ],
+          "trace": {
+            "retrieval_depth": 1397,
+            "candidate_k": 120,
+            "rrf_k": 60,
+            "result_k": 10,
+            "dense_ids": [
+              778,
+              763,
+              766,
+              827,
+              784,
+              764,
+              770,
+              813,
+              902,
+              787,
+              862,
+              793,
+              781,
+              779,
+              788,
+              720,
+              774,
+              922,
+              786,
+              909,
+              760,
+              910,
+              808,
+              831,
+              740,
+              903,
+              809,
+              920,
+              802,
+              800,
+              783,
+              755,
+              776,
+              725,
+              899,
+              805,
+              769,
+              919,
+              917,
+              737,
+              803,
+              804,
+              727,
+              826,
+              811,
+              733,
+              880,
+              768,
+              815,
+              858,
+              806,
+              814,
+              789,
+              889,
+              924,
+              918,
+              734,
+              719,
+              736,
+              777,
+              782,
+              812,
+              810,
+              738,
+              832,
+              873,
+              915,
+              866,
+              796,
+              825,
+              718,
+              911,
+              729,
+              828,
+              877,
+              780,
+              742,
+              756,
+              767,
+              834,
+              913,
+              843,
+              817,
+              908,
+              731,
+              925,
+              895,
+              775,
+              860,
+              721,
+              893,
+              717,
+              739,
+              912,
+              746,
+              732,
+              785,
+              730,
+              772,
+              852,
+              871,
+              916,
+              820,
+              839,
+              883,
+              724,
+              722,
+              829,
+              824,
+              892,
+              896,
+              851,
+              818,
+              752,
+              754,
+              830,
+              857,
+              821,
+              836,
+              723
+            ],
+            "bm25_ids": [
+              778,
+              763,
+              909,
+              902,
+              770,
+              813,
+              793,
+              827,
+              922,
+              781,
+              764,
+              784,
+              766,
+              720,
+              756,
+              800,
+              788,
+              799,
+              768,
+              834,
+              797,
+              913,
+              742,
+              746,
+              883,
+              798,
+              805,
+              779,
+              792,
+              923,
+              903,
+              912,
+              803,
+              862,
+              831,
+              915,
+              910,
+              908,
+              754,
+              719,
+              802,
+              740,
+              919,
+              739,
+              744,
+              757,
+              814,
+              811,
+              795,
+              783,
+              808,
+              736,
+              838,
+              737,
+              804,
+              828,
+              924,
+              812,
+              755,
+              806,
+              733,
+              869,
+              920,
+              829,
+              796,
+              789,
+              729,
+              810,
+              738,
+              780,
+              771,
+              911,
+              832,
+              776,
+              790,
+              791,
+              787,
+              767,
+              880,
+              727,
+              786,
+              842,
+              728,
+              745,
+              774,
+              769,
+              809,
+              731,
+              895,
+              782,
+              825,
+              826,
+              821,
+              822,
+              917,
+              918,
+              760,
+              851,
+              773,
+              775,
+              725,
+              907,
+              916,
+              836,
+              732,
+              730,
+              718,
+              747,
+              735,
+              741,
+              818,
+              749,
+              893,
+              905,
+              751,
+              858,
+              815,
+              865,
+              888,
+              765
+            ],
+            "candidate_ids": [
+              778,
+              763,
+              827,
+              770,
+              902,
+              813,
+              766,
+              784,
+              764,
+              793,
+              909,
+              781,
+              922,
+              720,
+              788,
+              779,
+              862,
+              800,
+              903,
+              910,
+              831,
+              768,
+              805,
+              787,
+              740,
+              802,
+              808,
+              803,
+              756,
+              783,
+              919,
+              774,
+              786,
+              834,
+              920,
+              742,
+              913,
+              755,
+              811,
+              737,
+              760,
+              804,
+              719,
+              746,
+              809,
+              915,
+              814,
+              776,
+              883,
+              733,
+              912,
+              806,
+              736,
+              924,
+              769,
+              908,
+              727,
+              725,
+              789,
+              812,
+              917,
+              880,
+              826,
+              739,
+              828,
+              810,
+              738,
+              754,
+              796,
+              832,
+              729,
+              911,
+              780,
+              918,
+              782,
+              815,
+              858,
+              767,
+              825,
+              829,
+              731,
+              718,
+              895,
+              775,
+              799,
+              732,
+              893,
+              730,
+              797,
+              916,
+              821,
+              851,
+              836,
+              818,
+              798,
+              792,
+              923,
+              899,
+              744,
+              757,
+              795,
+              838,
+              889,
+              734,
+              777,
+              869,
+              873,
+              866,
+              771,
+              877,
+              790,
+              791,
+              843,
+              842,
+              817,
+              728,
+              745,
+              925,
+              860,
+              721
+            ],
+            "selected_ids": [
+              902,
+              763,
+              778,
+              770,
+              827,
+              783,
+              764,
+              779,
+              805,
+              720
+            ],
+            "elapsed_seconds": 7.024774,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        902,
+        778,
+        770,
+        827,
+        783,
+        764,
+        779,
+        805,
+        720
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          902,
+          778,
+          770,
+          827,
+          783,
+          764,
+          779,
+          805,
+          720
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": [
+          "r2"
+        ]
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "missing",
+            "evidence": [],
+            "supported_part": "",
+            "reason": "提供的RAG段落仅涉及训练细节、数据集介绍、检索器对比及总体性能结论，没有任何段落说明RAG所报告的正确性判定标准（如是否精确匹配、是否包含答案等）。",
+            "gap": "缺少RAG在开放域QA中用于判定答案正确性的具体评价标准。"
+          },
+          {
+            "id": "r2",
+            "status": "supported",
+            "evidence": [
+              {
+                "chunk_id": 1003,
+                "quote": "We evaluate performance based on whether gold answers are included in the model generations instead of strictly requiring exact matching, following Mallen et al."
+              }
+            ],
+            "supported_part": "Self-RAG 对 PopQA 与 TriviaQA 的评价准则是看 gold answer 是否包含在模型生成中，而非严格要求精确匹配。",
+            "reason": "chunk 1003 明确建立了 Self-RAG 在这两个短答案开放域 QA 数据集上使用的正确性判定准则，本侧事实完整成立；RAG 一侧的缺失属于 r1，不影响本需求自身完整性。",
+            "gap": ""
+          }
+        ],
+        "next_action": {
+          "type": "search",
+          "reason": "r1仍缺少RAG在短答案开放域QA中所报告的正确性判定标准，现有段落均为训练、数据集或整体性能描述，需针对RAG的评估指标/正确性标准进一步检索。",
+          "requirement_ids": [
+            "r1"
+          ],
+          "query": "RAG: how does the correctness criterion reported by RAG differ | how does the correctness criterion reported by RAG differ",
+          "source": "2005.11401v4.pdf",
+          "chunk_id": null
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "逐项核对操作需求：r1仅评估RAG一侧的正确性标准差异，r2仅评估Self-RAG在PopQA和TriviaQA上的判定标准；证据与缺失部分均未超出各自摘录范围。"
+        }
+      }
+    },
+    {
+      "number": 2,
+      "action": {
+        "type": "read_neighbors",
+        "query": null,
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 763,
+        "requirement_ids": [
+          "r1"
+        ],
+        "reason": "本地规则：改读同篇论文、匹配原题公共任务的未展开章节区域。"
+      },
+      "action_origin": "neighbor_fallback",
+      "status": "executed",
+      "execution": {
+        "type": "read_neighbors",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "chunk_id": 763,
+          "source": "2005.11401v4.pdf",
+          "knowledge_base": {
+            "version": "all-papers-8-20261020",
+            "chunk_count": 1397,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/manifest.json",
+            "manifest_sha256": "9c4e2c26b4f11fe7baf526595630cbee2d325416ec0e497f417975fbd60779ef",
+            "files": {
+              "faiss.index": "ff1f4a3e38e20c0275ba79d805e6475639b3cea7a7a583f9c18c67ec8e40a2ed",
+              "chunks.json": "3e63d75abbe164ff8e135b1d66fd6b02d9479b2e037e289a726e7c542464593a"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 761,
+              "text": "Following Lee et al. [31] and Karpukhin et al. [26], we use the December 2018 dump. Each Wikipedia article is split into disjoint 100-word chunks, to make a total of 21M documents. We use the document encoder to compute an embedding for each document, and build a single MIPS index using FAISS [23] with a Hierarchical Navigable Small World approximation for fast retrieval [37]. During training, we retrieve the top k documents for each query.",
+              "source": "2005.11401v4.pdf",
+              "page": 4,
+              "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+              "section": "3 Experiments",
+              "kb_version": "all-papers-8-20261020",
+              "offset": -2
+            },
+            {
+              "chunk_id": 762,
+              "text": "We consider k ∈{5, 10} for training and set k for test time using dev data. We now discuss experimental details for each task.",
+              "source": "2005.11401v4.pdf",
+              "page": 4,
+              "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+              "section": "3 Experiments",
+              "kb_version": "all-papers-8-20261020",
+              "offset": -1
+            },
+            {
+              "chunk_id": 763,
+              "text": "3.1 Open-domain Question Answering Open-domain question answering (QA) is an important real-world application and common testbed for knowledge-intensive tasks [20]. We treat questions and answers as input-output text pairs (x, y) and train RAG by directly minimizing the negative log-likelihood of answers. We compare RAG to the popular extractive QA paradigm [5, 7, 31, 26], where answers are extracted spans from retrieved documents, relying primarily on non-parametric knowledge.",
+              "source": "2005.11401v4.pdf",
+              "page": 4,
+              "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+              "section": "3.1 Open-domain Question Answering",
+              "kb_version": "all-papers-8-20261020",
+              "offset": 0
+            },
+            {
+              "chunk_id": 764,
+              "text": "We also compare to “Closed-Book QA” approaches [52], which, like RAG, generate answers, but which do not exploit retrieval, instead relying purely on parametric knowledge. We consider four popular open-domain QA datasets: Natural Questions (NQ) [29], TriviaQA (TQA) [24]. WebQuestions (WQ) [3] and CuratedTrec (CT) [2]. As CT and WQ are small, we follow DPR [26] by initializing CT and WQ models with our NQ RAG model.",
+              "source": "2005.11401v4.pdf",
+              "page": 4,
+              "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+              "section": "3.1 Open-domain Question Answering",
+              "kb_version": "all-papers-8-20261020",
+              "offset": 1
+            },
+            {
+              "chunk_id": 765,
+              "text": "We use the same train/dev/test splits as prior work [31, 26] and report Exact Match (EM) scores. For TQA, to compare with T5 [52], we also evaluate on the TQA Wiki test set.",
+              "source": "2005.11401v4.pdf",
+              "page": 4,
+              "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+              "section": "3.1 Open-domain Question Answering",
+              "kb_version": "all-papers-8-20261020",
+              "offset": 2
+            }
+          ],
+          "trace": {
+            "window": 2,
+            "max_window": 2,
+            "selected_ids": [
+              761,
+              762,
+              763,
+              764,
+              765
+            ],
+            "read_chars": 1643,
+            "elapsed_seconds": 3.1e-05,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        761,
+        762,
+        765
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          761,
+          762,
+          765
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": [
+          "r2"
+        ]
+      }
+    }
+  ],
+  "evidence_after": [
+    {
+      "chunk_id": 1138,
+      "source": "2310.11511v1.pdf",
+      "page": 20,
+      "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+      "text": "C RESULTS C.1 ANALYSIS Reliance on parametric- and non-parametric memories. We conduct analysis on how frequently model answers come from retrieved passages (non-parametric memories) or their own parametric memories. On two open-domain QA datasets, TriviaQA and PopQA, we conduct the following analysis: 1) sample query models successfully answer correctly, 2) for each query in this group, check whether the matched ground-truth answer is a sub-string of the retrieved passage or not.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 1003,
+      "source": "2310.11511v1.pdf",
+      "page": 7,
+      "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+      "text": "For PopQA, we use the long-tail subset, consisting of 1,399 rare entity queries whose monthly Wikipedia page views are less than 100. As the TriviaQA-unfiltered (open) test set is not publicly available, we follow prior work’s validation and test split (Min et al., 2019; Guu et al., 2020), using 11,313 test queries for evaluation. We evaluate performance based on whether gold answers are included in the model generations instead of strictly requiring exact matching, following Mallen et al.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 1002,
+      "source": "2310.11511v1.pdf",
+      "page": 7,
+      "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+      "text": "Challenge; Clark et al. We use accuracy as an evaluation metric and report on the test set. We aggregate the answer probabilities of target classes for both of these datasets (Appendix Section B.2). Short-form generations tasks include two open-domain question answering (QA) datasets, PopQA (Mallen et al., 2023) and TriviaQA-unfiltered (Joshi et al., 2017), where systems need to answer arbitrary questions about factual knowledge.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 1043,
+      "source": "2310.11511v1.pdf",
+      "page": 10,
+      "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+      "text": "We then ask our annotators whether the model-predicted reflection tokens about ISREL and ISSUP match their inspections (e.g., whether the fully supported output is supported by the cited evidence). Human annotators find SELF-RAG answers are often plausible and supported by relevant passages with higher S&P scores on short-form PopQA, which is consistent with Menick et al. Human annotators also find ISREL and ISSUP reflection token predictions are mostly aligned with their assessments.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 910,
+      "source": "2005.11401v4.pdf",
+      "page": 18,
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "text": "For RAG, we also make use of multiple annotation examples for Natural Questions and WebQuestions by training the model with each (q, a) pair separately, leading to a small increase in accuracy. For TriviaQA, there are often many valid answers to a given question, some of which are not suitable training targets, such as emoji or spelling variants. For TriviaQA, we ﬁlter out answer candidates if they do not occur in top 1000 documents for the query.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 1300,
+      "source": "2401.15884v3.pdf",
+      "page": 8,
+      "title": "Corrective Retrieval Augmented Generation",
+      "text": "Compared with the current state-of-the- art Self-RAG, Self-CRAG outperformed it by margins of 20.0% accuracy on PopQA, 36.9% FactScore on Biography, and 4.0% accuracy on Arc-Challenge when based on LLaMA2-hf-7b, as well as by margins of 6.9% accuracy on PopQA, 5.0% FactScore on Biography, and 2.4% accuracy on PubHealth, when based on SelfRAG-LLaMA2- 7b. These results demonstrated the adaptability of CRAG which is plug-and-play and can be implemented into RAG-based approaches.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 1393,
+      "source": "2401.15884v3.pdf",
+      "page": 16,
+      "title": "Corrective Retrieval Augmented Generation",
+      "text": "Table 11: Ablation study for removing only a single action on the PopQA dataset in terms of accuracy. LLaMA2-hf-7b SelfRAG-LLaMA2-7b CRAG 54.9 59.8 only Correct 52.4 56.7 only Incorrect 47.0 48.5 only Ambiguous 52.7 58.0 Self-CRAG 49.0 61.8 only Correct 48.6 57.2 only Incorrect 40.8 53.3 only Ambiguous 44.9 59.8 is an advanced RAG approach that introduces a critic model to decide whether to retrieve and which retrieved document to be referred for generation.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 1016,
+      "source": "2310.11511v1.pdf",
+      "page": 8,
+      "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+      "text": "Models are sorted based on scale. FS, em, rg, mau, prec, rec denote FactScore (factuality); str-em, rouge (correctness); MAUVE (fluency); citation precision and recall, respectively.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 763,
+      "source": "2005.11401v4.pdf",
+      "page": 4,
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "text": "3.1 Open-domain Question Answering Open-domain question answering (QA) is an important real-world application and common testbed for knowledge-intensive tasks [20]. We treat questions and answers as input-output text pairs (x, y) and train RAG by directly minimizing the negative log-likelihood of answers. We compare RAG to the popular extractive QA paradigm [5, 7, 31, 26], where answers are extracted spans from retrieved documents, relying primarily on non-parametric knowledge.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 475,
+      "source": "2004.04906v3.pdf",
+      "page": 8,
+      "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+      "text": "see that higher retriever accuracy typically leads to better ﬁnal QA results: in all cases except SQuAD, answers extracted from the passages retrieved by DPR are more likely to be correct, compared to those from BM25. For large datasets like NQ and TriviaQA, models trained using multiple datasets (Multi) perform comparably to those trained using the individual training set (Single). Conversely, on smaller datasets like WQ and TREC, the multi- dataset setting has a clear advantage.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 902,
+      "source": "2005.11401v4.pdf",
+      "page": 17,
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "text": "Appendices for Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks A Implementation Details For Open-domain QA we report test numbers using 15 retrieved documents for RAG-Token models. For RAG-Sequence models, we report test results using 50 retrieved documents, and we use the Thorough Decoding approach since answers are generally short. We use greedy decoding for QA as we did not ﬁnd beam search improved results.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 778,
+      "source": "2005.11401v4.pdf",
+      "page": 5,
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "text": "4.1 Open-domain Question Answering Table 1 shows results for RAG along with state-of-the-art models. On all four open-domain QA tasks, RAG sets a new state of the art (only on the T5-comparable split for TQA). RAG combines the generation ﬂexibility of the “closed-book” (parametric only) approaches and the performance of \"open-book\" retrieval-based approaches. Unlike REALM and T5+SSM, RAG enjoys strong results without expensive, specialized “salient span masking” pre-training [20].",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 770,
+      "source": "2005.11401v4.pdf",
+      "page": 5,
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "text": "3.3 Jeopardy Question Generation To evaluate RAG’s generation abilities in a non-QA setting, we study open-domain question gen- eration. Rather than use questions from standard open-domain QA tasks, which typically consist of short, simple questions, we propose the more demanding task of generating Jeopardy questions. Jeopardy is an unusual format that consists of trying to guess an entity from a fact about that entity.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 827,
+      "source": "2005.11401v4.pdf",
+      "page": 9,
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "text": "6 Discussion In this work, we presented hybrid generation models with access to parametric and non-parametric memory. We showed that our RAG models obtain state of the art results on open-domain QA. We found that people prefer RAG’s generation over purely parametric BART, ﬁnding RAG more factual and speciﬁc.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 783,
+      "source": "2005.11401v4.pdf",
+      "page": 6,
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "text": "Model Jeopardy MSMARCO FVR3 FVR2 B-1 QB-1 R-L B-1 Label Acc. SotA - - 49.8* 49.9* 76.8 92.2* BART 15.1 19.7 38.2 41.6 64.0 81.1 RAG-Tok. 17.3 22.2 40.1 41.5 72.5 89.5 RAG-Seq. 14.7 21.4 40.8 44.2 to more effective marginalization over documents. Furthermore, RAG can generate correct answers even when the correct answer is not in any retrieved document, achieving 11.8% accuracy in such cases for NQ, where an extractive model would score 0%.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 764,
+      "source": "2005.11401v4.pdf",
+      "page": 4,
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "text": "We also compare to “Closed-Book QA” approaches [52], which, like RAG, generate answers, but which do not exploit retrieval, instead relying purely on parametric knowledge. We consider four popular open-domain QA datasets: Natural Questions (NQ) [29], TriviaQA (TQA) [24]. WebQuestions (WQ) [3] and CuratedTrec (CT) [2]. As CT and WQ are small, we follow DPR [26] by initializing CT and WQ models with our NQ RAG model.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 779,
+      "source": "2005.11401v4.pdf",
+      "page": 5,
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "text": "It is worth noting that RAG’s retriever is initialized using DPR’s retriever, which uses retrieval supervision on Natural Questions and TriviaQA. RAG compares favourably to the DPR QA system, which uses a BERT-based “cross- encoder” to re-rank documents, along with an extractive reader. RAG demonstrates that neither a re-ranker nor extractive reader is necessary for state-of-the-art performance. There are several advantages to generating answers even when it is possible to extract them.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 805,
+      "source": "2005.11401v4.pdf",
+      "page": 7,
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "text": "For FEVER, BM25 performs best, perhaps since FEVER claims are heavily entity-centric and thus well-suited for word overlap-based retrieval. Differentiable retrieval improves results on all other tasks, especially for Open-Domain QA, where it is crucial. Index hot-swapping An advantage of non-parametric memory models like RAG is that knowledge can be easily updated at test time. Parametric-only models like T5 or BART need further training to update their behavior as the world changes.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 720,
+      "source": "2005.11401v4.pdf",
+      "page": 1,
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "text": "We ﬁne-tune and evaluate our models on a wide range of knowledge- intensive NLP tasks and set the state of the art on three open domain QA tasks, outperforming parametric seq2seq models and task-speciﬁc retrieve-and-extract architectures. For language generation tasks, we ﬁnd that RAG models generate more speciﬁc, diverse and factual language than a state-of-the-art parametric-only seq2seq baseline.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 761,
+      "source": "2005.11401v4.pdf",
+      "page": 4,
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "text": "Following Lee et al. [31] and Karpukhin et al. [26], we use the December 2018 dump. Each Wikipedia article is split into disjoint 100-word chunks, to make a total of 21M documents. We use the document encoder to compute an embedding for each document, and build a single MIPS index using FAISS [23] with a Hierarchical Navigable Small World approximation for fast retrieval [37]. During training, we retrieve the top k documents for each query.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 762,
+      "source": "2005.11401v4.pdf",
+      "page": 4,
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "text": "We consider k ∈{5, 10} for training and set k for test time using dev data. We now discuss experimental details for each task.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 765,
+      "source": "2005.11401v4.pdf",
+      "page": 4,
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "text": "We use the same train/dev/test splits as prior work [31, 26] and report Exact Match (EM) scores. For TQA, to compare with T5 [52], we also evaluate on the TQA Wiki test set.",
+      "kb_version": "all-papers-8-20261020"
+    }
+  ],
+  "action_attempts": 2,
+  "feedback_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "missing",
+        "evidence": [],
+        "supported_part": "",
+        "reason": "提供的RAG段落仅涉及训练细节、数据集介绍、检索器对比及总体性能结论，没有任何段落说明RAG所报告的正确性判定标准（如是否精确匹配、是否包含答案等）。",
+        "gap": "缺少RAG在开放域QA中用于判定答案正确性的具体评价标准。"
+      },
+      {
+        "id": "r2",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 1003,
+            "quote": "We evaluate performance based on whether gold answers are included in the model generations instead of strictly requiring exact matching, following Mallen et al."
+          }
+        ],
+        "supported_part": "Self-RAG 对 PopQA 与 TriviaQA 的评价准则是看 gold answer 是否包含在模型生成中，而非严格要求精确匹配。",
+        "reason": "chunk 1003 明确建立了 Self-RAG 在这两个短答案开放域 QA 数据集上使用的正确性判定准则，本侧事实完整成立；RAG 一侧的缺失属于 r1，不影响本需求自身完整性。",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "search",
+      "reason": "r1仍缺少RAG在短答案开放域QA中所报告的正确性判定标准，现有段落均为训练、数据集或整体性能描述，需针对RAG的评估指标/正确性标准进一步检索。",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": "RAG: how does the correctness criterion reported by RAG differ | how does the correctness criterion reported by RAG differ",
+      "source": "2005.11401v4.pdf",
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "逐项核对操作需求：r1仅评估RAG一侧的正确性标准差异，r2仅评估Self-RAG在PopQA和TriviaQA上的判定标准；证据与缺失部分均未超出各自摘录范围。"
+    }
+  },
+  "action_overrides": [
+    {
+      "step": 2,
+      "proposed": {
+        "type": "search",
+        "reason": "r1仍缺少RAG在短答案开放域QA中所报告的正确性判定标准，现有段落均为训练、数据集或整体性能描述，需针对RAG的评估指标/正确性标准进一步检索。",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": "RAG: how does the correctness criterion reported by RAG differ | how does the correctness criterion reported by RAG differ",
+        "source": "2005.11401v4.pdf",
+        "chunk_id": null
+      },
+      "selected": {
+        "type": "read_neighbors",
+        "query": null,
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 763,
+        "requirement_ids": [
+          "r1"
+        ],
+        "reason": "本地规则：改读同篇论文、匹配原题公共任务的未展开章节区域。"
+      },
+      "reason": "repeated_action",
+      "section": "3.1 Open-domain Question Answering",
+      "matching_terms": [
+        "domain",
+        "open"
+      ],
+      "unread_ids": [
+        761,
+        762,
+        765
+      ]
+    }
+  ]
+}

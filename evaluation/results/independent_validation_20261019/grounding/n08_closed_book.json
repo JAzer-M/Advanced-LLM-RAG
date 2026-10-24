@@ -1,0 +1,63 @@
+{
+  "question_id": "n08",
+  "query": "How do Self-RAG and CRAG decide whether retrieval or additional knowledge is needed, and what happens when retrieval is unnecessary or judged incorrect?",
+  "condition": "closed_book",
+  "provenance": "closed_book",
+  "prompt": "Answer the research question in English from your own knowledge. Be precise and concise (at most 180 words). If a requested project-specific fact or measurement is unknown, say so rather than inventing it.\n\nQuestion:\nHow do Self-RAG and CRAG decide whether retrieval or additional knowledge is needed, and what happens when retrieval is unnecessary or judged incorrect?",
+  "source_ids": [],
+  "registry": [],
+  "status": "completed",
+  "response": {
+    "answer": "Self-RAG trains the LLM to emit reflection tokens—Retrieve (yes/no/continue), IsRel (relevant), IsSup (supported), and IsUse (useful)—so the model itself decides per segment whether retrieval is needed and judges retrieved passages. If retrieval is unnecessary, it skips retrieval and generates directly; irrelevant passages are ignored, and unsupported/ low-utility generations are revised or rejected via these tokens.\n\nCRAG adds a lightweight retrieval evaluator that scores retrieved documents as Correct, Incorrect, or Ambiguous. Correct documents are refined (decompose-then-recompose) and used; Incorrect ones trigger web search or are discarded; Ambiguous ones combine both. Thus CRAG decides by evaluator confidence rather than LLM self-reflection. Exact thresholds/implementation details for either method are not specified here.",
+    "requested_model": "cn:deepseek-v4.1-flash",
+    "reported_model": "deepseek-v4.1-flash",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cached_tokens": 0,
+      "completion_thinking_tokens": 0,
+      "completion_tokens": 170,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": 0,
+        "audio_tokens": 0,
+        "cached_tokens": 0,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": 0
+      },
+      "credit": 0.01,
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 75,
+      "prompt_cache_write_tokens": 0,
+      "prompt_tokens": 75,
+      "prompt_tokens_details": {
+        "accepted_prediction_tokens": 0,
+        "audio_tokens": 0,
+        "cached_tokens": 0,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": 0
+      },
+      "total_tokens": 245
+    },
+    "finish_reason": "stop",
+    "request_parameters": {
+      "model": "cn:deepseek-v4.1-flash",
+      "stream": false,
+      "thinking": {
+        "type": "disabled"
+      },
+      "temperature": 0,
+      "max_tokens": 4096
+    }
+  },
+  "citation_structure": {
+    "cited_numbers": [],
+    "invalid_numbers": [],
+    "malformed_markers": [],
+    "has_citations": false,
+    "require_citations": false,
+    "structure_passed": true,
+    "cited_sources": [],
+    "semantic_support": "requires_manual_review"
+  },
+  "elapsed_seconds": 3.101
+}

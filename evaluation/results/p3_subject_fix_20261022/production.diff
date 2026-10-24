@@ -1,0 +1,49 @@
+--- before/src/arxiv_evidence.py
++++ after/src/arxiv_evidence.py
+@@ -3,6 +3,7 @@
+ # 只追加本轮外部证据，不写知识库；元数据与模型理由不能作为事实证据。
+ import json
+ from pathlib import Path
++import re
+ 
+ from src import agent_answer, arxiv_tools
+ from src.bm25_retriever import build_bm25_index, retrieve_bm25
+@@ -17,6 +18,15 @@
+ EXTERNAL_CANDIDATES = 120
+ WINDOW_CHARS = 1200
+ WINDOW_OVERLAP = 160
++
++
++def paper_subject(subject):
++    """仅供书目匹配：去掉边缘来源描述，原subject/need仍完整用于证据检查与回答。"""
++    import agent
++    name = agent.normalize(subject)
++    name = re.sub(r'^(?:the\s+)?original(?:\s+|$)', '', name)
++    name = re.sub(r'(?:^|\s+)paper$', '', name)
++    return re.sub(r'^the(?:\s+|$)', '', name).strip()
+ 
+ 
+ def validate_download(record, paper, folder):
+@@ -146,7 +156,11 @@
+             raise ValueError('External route must bind one eligible unmet requirement and a bounded paper title.')
+         target = by_id[route['requirement_id']]
+         title = ' '.join(route['paper_title'].replace('"', ' ').split())
+-        if not agent.names_subject(target['subject'], title):
++        # 来源修饰词只影响书目查找，不改需求；仍沿用完整名称边界，保留连字符/版本数字。
++        lookup_subject = paper_subject(target['subject'])
++        result['subject_identity'] = {'bound_subject': target['subject'], 'lookup_subject': lookup_subject}
++        if not lookup_subject or not (agent.names_subject(target['subject'], title)
++                                      or agent.names_subject(lookup_subject, title)):
+             raise ValueError('External paper title must name the bound requirement subject.')
+         # 模型只提出书目标题；代码固定为标题查询，避免将abstract等任务词误加进搜索式。
+         result['search_query'] = f'ti:"{title}"'
+@@ -176,7 +190,8 @@
+         if choice['arxiv_id'] not in papers:
+             raise ValueError('Selected paper must be an actual returned version-pinned identity.')
+         paper = papers[choice['arxiv_id']]
+-        if not agent.names_subject(target['subject'], paper['title']):
++        if not (agent.names_subject(target['subject'], paper['title'])
++                or agent.names_subject(lookup_subject, paper['title'])):
+             raise ValueError('Selected primary-paper title does not identify the requested subject.')
+         if f"{paper['arxiv_id']}.pdf" in {p['source'] for p in inventory}:
+             result.update(status='skipped', reason='Selected primary source is already local; do not substitute a web reread.')

@@ -1,0 +1,105 @@
+{
+  "id": "b04",
+  "status": "completed",
+  "query": "After the token embeddings are projected in ColBERT, how are they normalized, and what equivalence and value range does this give to their dot products?",
+  "kb_version": "all-papers-8-20261020",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": false,
+    "drafts": [
+      "ColBERT 对投影后的 token 嵌入进行归一化，使每个嵌入的 L2 范数等于 1 [1][2]。由此，任意两个嵌入的点积等价于其余弦相似度，取值范围为 [−1, 1] [1]。"
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "ColBERT 对投影后的 token 嵌入进行归一化，使每个嵌入的 L2 范数等于 1 [1][2]。由此，任意两个嵌入的点积等价于其余弦相似度，取值范围为 [−1, 1] [1]。",
+              "reason": "问题要求说明ColBERT投影后token嵌入的归一化方式及其点积的等价关系和取值范围。回答涵盖全部三点：L2范数归一化为1、点积等价于余弦相似度、取值范围[-1,1]，主体与条件均正确。",
+              "citations": [
+                {
+                  "number": 1,
+                  "quote": "Finally, the output embeddings are normalized so each has L2 norm equal to one. Te result is that the dot-product of any two embeddings becomes equivalent to their cosine similarity, falling in the [−1, 1] range."
+                },
+                {
+                  "number": 2,
+                  "quote": "Eq := Normalize( CNN( BERT(“[Q]q0q1...ql##...#”) ) )"
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            1,
+            2
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 1,
+              "chunk_id": 608,
+              "source": "2004.12832v2.pdf",
+              "page": 4,
+              "text": "Finally, the output embeddings are normalized so each has L2 norm equal to one. Te result is that the dot-product of any two embeddings becomes equivalent to their cosine similarity, falling in the [−1, 1] range."
+            },
+            {
+              "citation": 2,
+              "chunk_id": 611,
+              "source": "2004.12832v2.pdf",
+              "page": 4,
+              "text": "In summary, given q = q0q1...ql and d = d0d1...dn, we compute the bags of embeddings Eq and Ed in the following manner, where # refers to the [mask] tokens: Eq := Normalize( CNN( BERT(“[Q]q0q1...ql##...#”) ) ) (1) Ed := Filter( Normalize( CNN( BERT(“[D]d0d1...dn”) ) ) ) (2) 3.3 Late Interaction Given the representation of a query q and a document d, the rel- evance score of d to q, denoted as Sq,d, is estimated via late in- teraction between their bags of contextualized embeddings."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "ColBERT 对投影后的 token 嵌入进行归一化，使每个嵌入的 L2 范数等于 1 [1][2]。由此，任意两个嵌入的点积等价于其余弦相似度，取值范围为 [−1, 1] [1]。",
+    "citation_check": {
+      "cited_numbers": [
+        1,
+        2
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 608,
+          "source": "2004.12832v2.pdf",
+          "page": 4,
+          "text": "Finally, the output embeddings are normalized so each has L2 norm equal to one. Te result is that the dot-product of any two embeddings becomes equivalent to their cosine similarity, falling in the [−1, 1] range."
+        },
+        {
+          "citation": 2,
+          "chunk_id": 611,
+          "source": "2004.12832v2.pdf",
+          "page": 4,
+          "text": "In summary, given q = q0q1...ql and d = d0d1...dn, we compute the bags of embeddings Eq and Ed in the following manner, where # refers to the [mask] tokens: Eq := Normalize( CNN( BERT(“[Q]q0q1...ql##...#”) ) ) (1) Ed := Filter( Normalize( CNN( BERT(“[D]d0d1...dn”) ) ) ) (2) 3.3 Late Interaction Given the representation of a query q and a document d, the rel- evance score of d to q, denoted as Sq,d, is estimated via late in- teraction between their bags of contextualized embeddings."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "goal": "Improve evidence retrieval, not generated answer fluency; primary labels frozen.",
+  "dataset": "evaluation/arxiv_pilot_questions_en.json",
+  "source": "Existing six English diagnostic translations; same Gold as Chinese; add translated unanswerable p7. Development set, not holdout.",
+  "metrics_k": [
+    5,
+    10,
+    20
+  ],
+  "candidate_budgets": [
+    20,
+    60
+  ],
+  "controls": [
+    "Same KB, embeddings, reranker, original Gold and metric formulas",
+    "Compare language at equal budget separately from algorithm and k changes",
+    "Do not use generated answers or an LLM judge as evidence retrieval scores",
+    "Freeze auxiliary queries once and reuse; no final answer API calls",
+    "Preserve old results and active default KB"
+  ],
+  "acceptance": [
+    "Per-stage Gold ranks and all four metrics saved",
+    "Evaluation current strategy calls same ranking and selection functions as main",
+    "At least one same-English/same-budget strategy improvement without hidden regressions",
+    "Top-k/latency tradeoff recorded; no promise of generalization from six development questions"
+  ],
+  "phase2_hypotheses": [
+    "Original RRF first hit lost in CE reranking: protect it within same final budget; should recover p1 without Gold-specific rules.",
+    "English two-entity/two-aspect comparison merged into two broad subqueries: make entity x aspect decomposition explicit, max four; should retrieve p6 evidence.",
+    "Validate original-query protection on separate English questions and original three-paper regression before retaining it."
+  ],
+  "phase2_controls": [
+    "Archive phase1 before changing ranking selection or decomposition prompt.",
+    "Generate only p6 decomposition again under revised prompt; keep five other queries and every rewrite frozen.",
+    "Report same-English, same-candidate, same-k no-anchor and global-only rows beside current strategy."
+  ]
+}

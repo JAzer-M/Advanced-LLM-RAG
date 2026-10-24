@@ -1,0 +1,278 @@
+[
+  {
+    "status": "completed",
+    "response": {
+      "answer": "Transformer 使用位置编码，是因为该模型既不含循环也不含卷积；为了让模型能够利用序列中 token 的顺序信息，必须注入关于 token 相对或绝对位置的信息，为此将“位置编码”加到输入嵌入上 [1]。",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 128,
+        "cached_tokens": 128,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 51,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.05,
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 1460,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 1588,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 128,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 1639
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.263
+  },
+  {
+    "status": "completed",
+    "response": {
+      "answer": "ColBERT 的 MaxSim 机制按以下方式将查询—文档 token 相似度聚合为文档相关性分数：\n\n**1. 每个查询嵌入与所有文档嵌入交互，取最大相似度**\n每个查询嵌入会与所有文档嵌入通过 MaxSim 算子交互，该算子计算最大相似度（例如余弦相似度）[5]。具体而言，对每个查询向量 v ∈ Eq，取它与 Ed 中向量的最大余弦相似度[8]。这相当于针对每个查询词 tq，在文档嵌入中\"软搜索\"，通过最大相似度分数来量化\"匹配\"强度[8]。\n\n**2. 对各查询词的最大相似度输出求和**\n这些 MaxSim 算子的标量输出会跨查询词求和[5]。在实现层面，先在文档词维度上做 max-pool（对应 MaxSim 的穷尽实现），再在查询词维度上求和[9]。最终按总分对 k 个文档排序[9]。\n\n**主要模式与例外**：相似度度量主要采用余弦相似度，但也评估了平方 L2 距离作为向量相似度的度量[8]。\n\n**替代方案的对比**：ColBERT 也用平均相似度替代最大相似度的模型 [B] 做过测试，结果显示最大相似度的个体词机制更重要，即查询中的个体词会特别关注文档中的特定词[6]。此外，其他廉价选择（例如用平均相似度分数求和替代最大相似度）虽可行，但许多不太适合剪枝[4]。",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 1792,
+        "cached_tokens": 1792,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 315,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.04,
+        "prompt_cache_hit_tokens": 1792,
+        "prompt_cache_miss_tokens": 162,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 1954,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 1792,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2269
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 3.382
+  },
+  {
+    "status": "completed",
+    "response": {
+      "answer": "当前证据仅能部分回答该问题。\n\n**ColBERT**：ColBERT 设计上将查询与文档之间几乎所有的计算隔离开，主要是为了能够离线预计算文档表示（document representations）[3]；这些表示在生成后会被保存到磁盘，每个维度使用 32 位或 16 位数值存储[2]。\n\n**RAG**：提供的上下文只说明 RAG 将文档索引向量（document index vectors）存储在 CPU 上，使用 FAISS 做最大内积搜索，为全部 Wikipedia 需要约 100 GB 的 CPU 内存[6]；但未具体说明这些文档索引向量由何种表示预计算而来，这部分证据不足。",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 896,
+        "cached_tokens": 896,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 145,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.05,
+        "prompt_cache_hit_tokens": 896,
+        "prompt_cache_miss_tokens": 1197,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2093,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 896,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2238
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.685
+  },
+  {
+    "status": "completed",
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 384,
+        "cached_tokens": 384,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 19,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.01,
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 269,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 653,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 384,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 672
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.724
+  },
+  {
+    "status": "completed",
+    "response": {
+      "answer": "当前证据不足：提供的上下文未包含 M3 Mac、八并发用户或 Top-10 条件下 P95 端到端延迟的任何测量数据。",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 256,
+        "cached_tokens": 256,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 32,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.07,
+        "prompt_cache_hit_tokens": 256,
+        "prompt_cache_miss_tokens": 2242,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2498,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 256,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2530
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.994
+  },
+  {
+    "status": "completed",
+    "response": {
+      "answer": "根据提供的证据，ColBERT 在查询编码器与文档编码器之间共享同一个 BERT 模型，并通过在输入前添加 [Q] 或 [D] 特殊 token 来区分查询与文档序列 [1]；其文档编码器采用与查询编码器“非常相似”的架构 [3]。\n\n关于 DPR 是否共享权重：证据显示 DPR 使用两个独立的 BERT 网络分别作为问题编码器和段落编码器 [10]。但现有上下文未直接说明 ColBERT 的共享权重是否与 DPR 的独立权重构成对比关系，也未提供 DPR 与 ColBERT 之间权重共享情况的直接比较证据，因此无法就“两者是否都共享”或“是否一致”作出有依据的判断。",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 1024,
+        "cached_tokens": 1024,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 159,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.05,
+        "prompt_cache_hit_tokens": 1024,
+        "prompt_cache_miss_tokens": 1134,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2158,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 1024,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2317
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.505
+  }
+]

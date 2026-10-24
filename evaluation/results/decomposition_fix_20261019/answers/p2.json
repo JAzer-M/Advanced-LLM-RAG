@@ -1,0 +1,1017 @@
+{
+  "question_id": "p2",
+  "query": "DPR 使用什么函数计算问题向量和段落向量的相似度？",
+  "run_provenance": "fresh full main pipeline",
+  "knowledge_base": {
+    "version": "arxiv-pilot-5-20261019",
+    "chunk_count": 1019,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/arxiv-pilot-5-20261019/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/arxiv-pilot-5-20261019/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/arxiv-pilot-5-20261019/manifest.json",
+    "manifest_sha256": "3629c41d73fd61d80c86880909c97de67c15088fe4ac2e5c2e6b49f3901aff0e",
+    "files": {
+      "faiss.index": "88a186f7ef0fe7cdf2f058c2074326b62f06f682f67c0cecf0bec172fc4f9888",
+      "chunks.json": "8df8a3ae53faa7544703ae8e9484ec089bad83754b9051d048dde9f0aa533c35"
+    }
+  },
+  "decomposition": {
+    "needs_decomposition": false,
+    "sub_queries": [],
+    "status": "not_needed"
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 60,
+    "global_top_ids": [
+      28,
+      151,
+      99,
+      103,
+      29,
+      41,
+      154,
+      61,
+      100,
+      97
+    ],
+    "protected_ids": [],
+    "sub_query_evidence": []
+  },
+  "selected_ids": [
+    28,
+    151,
+    99,
+    103,
+    29,
+    41,
+    154,
+    61,
+    100,
+    97
+  ],
+  "context": "Original passages:\n[1] Source: 2004.04906v3.pdf | Page: 3 | Section: 3.1 Overview\nAt run-time, DPR applies a different encoder EQ(·) that maps the input question to a d-dimensional vector, and retrieves k passages of which vectors are the closest to the question vector. We deﬁne the similarity between the question and the passage using the dot product of their vectors: sim(q, p) = EQ(q)⊺EP (p).\n\n[2] Source: 2004.04906v3.pdf | Page: 12 | Section: 8 Conclusion\nUsing the question and answer to- gether as the query, we run Lucene-BM25 and pick the top passage that contains the answer as the pos- itive passage. Table 5 shows the performance of DPR when trained using the original setting and the distant supervision setting. B Alternative Similarity Functions & Triplet Loss In addition to dot product (DP) and negative log- likelihood based on softmax (NLL), we also exper- iment with Euclidean distance (L2) and the triplet loss.\n\n[3] Source: 2004.04906v3.pdf | Page: 8 | Section: 6.2 Results\nWhile both methods include addi- tional pretraining tasks and employ an expensive end-to-end training regime, DPR manages to out- perform them on both NQ and TriviaQA, simply by focusing on learning a strong passage retrieval model using pairs of questions and answers. The additional pretraining tasks are likely more useful only when the target training sets are small.\n\n[4] Source: 2004.04906v3.pdf | Page: 8 | Section: 6.2 Results\nWhile DPR processes up to 100 passages for each question, the reader is able to ﬁt all of them into one batch on a sin- gle 32GB GPU, thus the latency remains almost identical to the single passage case (around 20ms). The exact impact on throughput is harder to mea- sure: ORQA uses 2-3x longer passages compared to DPR (288 word pieces compared to our 100 tokens) and the computational complexity is super- linear in passage length.\n\n[5] Source: 2004.04906v3.pdf | Page: 3 | Section: 3.1 Overview\nAlthough more expressive model forms for measur- ing the similarity between a question and a passage do exist, such as networks consisting of multiple layers of cross attentions, the similarity function needs to be decomposable so that the represen- tations of the collection of passages can be pre- computed. Most decomposable similarity functions are some transformations of Euclidean distance (L2).\n\n[6] Source: 2004.04906v3.pdf | Page: 3 | Section: 3.2 Training\nWe discuss this approach below. Assume that we have B In-batch negatives questions in a mini-batch and each one is asso- ciated with a relevant passage. Let Q and P be the (B×d) matrix of question and passage embeddings in a batch of size B. S = QPT is a (B × B) ma- trix of similarity scores, where each row of which corresponds to a question, paired with B passages. In this way, we reuse computation and effectively train on B2 (qi, pj) question/passage pairs in each batch.\n\n[7] Source: 2004.04906v3.pdf | Page: 12 | Section: 8 Conclusion\nMethods like BM25 are sensitive to highly selective keywords and phrases, but cannot capture lexical variations or se- mantic relationships well. In contrast, DPR excels at semantic representation, but might lack sufﬁcient capacity to represent salient phrases which appear rarely. Table 7 illustrates this phenomenon with two examples.\n\n[8] Source: 2004.04906v3.pdf | Page: 5 | Section: 5.1 Main Results\n5.1 Main Results Table 2 compares different passage retrieval sys- tems on ﬁve QA datasets, using the top-k accuracy (k ∈{20, 100}). With the exception of SQuAD, DPR performs consistently better than BM25 on all datasets. The gap is especially large when k is small (e.g., 78.4% vs. 59.1% for top-20 accuracy on Natural Questions). When training with mul- 8SQuAD is limited to a small set of Wikipedia documents and thus introduces unwanted bias.\n\n[9] Source: 2004.04906v3.pdf | Page: 8 | Section: 6.2 Results\nAl- though the results of DPR on WQ and TREC in the single-dataset setting are less competitive, adding more question–answer pairs helps boost the perfor- mance, achieving the new state of the art.\n\n[10] Source: 2004.04906v3.pdf | Page: 8 | Section: 6.2 Results\nsee that higher retriever accuracy typically leads to better ﬁnal QA results: in all cases except SQuAD, answers extracted from the passages retrieved by DPR are more likely to be correct, compared to those from BM25. For large datasets like NQ and TriviaQA, models trained using multiple datasets (Multi) perform comparably to those trained using the individual training set (Single). Conversely, on smaller datasets like WQ and TREC, the multi- dataset setting has a clear advantage.\n\nEvidence guidance:\n- Rule-based subject attribution: ORQA; passage: “The exact impact on throughput is harder to mea- sure: ORQA uses 2-3x longer passages compared to DPR (288 word pieces compared to our 100 tokens) and the computational complexity is super- linear in passage length.” [4]\n- Rule-based subject attribution: QPT; passage: “S = QPT is a (B × B) ma- trix of similarity scores, where each row of which corresponds to a question, paired with B passages.” [6]\n- Rule-based subject attribution: QPT; passage: “In this way, we reuse computation and effectively train on B2 (qi, pj) question/passage pairs in each batch.” [6]",
+  "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing.\n\nContext:\nOriginal passages:\n[1] Source: 2004.04906v3.pdf | Page: 3 | Section: 3.1 Overview\nAt run-time, DPR applies a different encoder EQ(·) that maps the input question to a d-dimensional vector, and retrieves k passages of which vectors are the closest to the question vector. We deﬁne the similarity between the question and the passage using the dot product of their vectors: sim(q, p) = EQ(q)⊺EP (p).\n\n[2] Source: 2004.04906v3.pdf | Page: 12 | Section: 8 Conclusion\nUsing the question and answer to- gether as the query, we run Lucene-BM25 and pick the top passage that contains the answer as the pos- itive passage. Table 5 shows the performance of DPR when trained using the original setting and the distant supervision setting. B Alternative Similarity Functions & Triplet Loss In addition to dot product (DP) and negative log- likelihood based on softmax (NLL), we also exper- iment with Euclidean distance (L2) and the triplet loss.\n\n[3] Source: 2004.04906v3.pdf | Page: 8 | Section: 6.2 Results\nWhile both methods include addi- tional pretraining tasks and employ an expensive end-to-end training regime, DPR manages to out- perform them on both NQ and TriviaQA, simply by focusing on learning a strong passage retrieval model using pairs of questions and answers. The additional pretraining tasks are likely more useful only when the target training sets are small.\n\n[4] Source: 2004.04906v3.pdf | Page: 8 | Section: 6.2 Results\nWhile DPR processes up to 100 passages for each question, the reader is able to ﬁt all of them into one batch on a sin- gle 32GB GPU, thus the latency remains almost identical to the single passage case (around 20ms). The exact impact on throughput is harder to mea- sure: ORQA uses 2-3x longer passages compared to DPR (288 word pieces compared to our 100 tokens) and the computational complexity is super- linear in passage length.\n\n[5] Source: 2004.04906v3.pdf | Page: 3 | Section: 3.1 Overview\nAlthough more expressive model forms for measur- ing the similarity between a question and a passage do exist, such as networks consisting of multiple layers of cross attentions, the similarity function needs to be decomposable so that the represen- tations of the collection of passages can be pre- computed. Most decomposable similarity functions are some transformations of Euclidean distance (L2).\n\n[6] Source: 2004.04906v3.pdf | Page: 3 | Section: 3.2 Training\nWe discuss this approach below. Assume that we have B In-batch negatives questions in a mini-batch and each one is asso- ciated with a relevant passage. Let Q and P be the (B×d) matrix of question and passage embeddings in a batch of size B. S = QPT is a (B × B) ma- trix of similarity scores, where each row of which corresponds to a question, paired with B passages. In this way, we reuse computation and effectively train on B2 (qi, pj) question/passage pairs in each batch.\n\n[7] Source: 2004.04906v3.pdf | Page: 12 | Section: 8 Conclusion\nMethods like BM25 are sensitive to highly selective keywords and phrases, but cannot capture lexical variations or se- mantic relationships well. In contrast, DPR excels at semantic representation, but might lack sufﬁcient capacity to represent salient phrases which appear rarely. Table 7 illustrates this phenomenon with two examples.\n\n[8] Source: 2004.04906v3.pdf | Page: 5 | Section: 5.1 Main Results\n5.1 Main Results Table 2 compares different passage retrieval sys- tems on ﬁve QA datasets, using the top-k accuracy (k ∈{20, 100}). With the exception of SQuAD, DPR performs consistently better than BM25 on all datasets. The gap is especially large when k is small (e.g., 78.4% vs. 59.1% for top-20 accuracy on Natural Questions). When training with mul- 8SQuAD is limited to a small set of Wikipedia documents and thus introduces unwanted bias.\n\n[9] Source: 2004.04906v3.pdf | Page: 8 | Section: 6.2 Results\nAl- though the results of DPR on WQ and TREC in the single-dataset setting are less competitive, adding more question–answer pairs helps boost the perfor- mance, achieving the new state of the art.\n\n[10] Source: 2004.04906v3.pdf | Page: 8 | Section: 6.2 Results\nsee that higher retriever accuracy typically leads to better ﬁnal QA results: in all cases except SQuAD, answers extracted from the passages retrieved by DPR are more likely to be correct, compared to those from BM25. For large datasets like NQ and TriviaQA, models trained using multiple datasets (Multi) perform comparably to those trained using the individual training set (Single). Conversely, on smaller datasets like WQ and TREC, the multi- dataset setting has a clear advantage.\n\nEvidence guidance:\n- Rule-based subject attribution: ORQA; passage: “The exact impact on throughput is harder to mea- sure: ORQA uses 2-3x longer passages compared to DPR (288 word pieces compared to our 100 tokens) and the computational complexity is super- linear in passage length.” [4]\n- Rule-based subject attribution: QPT; passage: “S = QPT is a (B × B) ma- trix of similarity scores, where each row of which corresponds to a question, paired with B passages.” [6]\n- Rule-based subject attribution: QPT; passage: “In this way, we reuse computation and effectively train on B2 (qi, pj) question/passage pairs in each batch.” [6]\n\nQuestion:\nDPR 使用什么函数计算问题向量和段落向量的相似度？\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages.\n\nAnswer:",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": "At run-time, DPR applies a different encoder EQ(·) that maps the input question to a d-dimensional vector, and retrieves k passages of which vectors are the closest to the question vector.",
+        "evidence_start": 0,
+        "evidence_end": 188,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            28
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 28,
+        "page": 3,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We deﬁne the similarity between the question and the passage using the dot product of their vectors: sim(q, p) = EQ(q)⊺EP (p).",
+        "evidence_start": 188,
+        "evidence_end": 315,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            28
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 28,
+        "page": 3,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Using the question and answer to- gether as the query, we run Lucene-BM25 and pick the top passage that contains the answer as the pos- itive passage.",
+        "evidence_start": 0,
+        "evidence_end": 150,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            151,
+            150
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 151,
+        "page": 12,
+        "citations": [
+          2
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Table 5 shows the performance of DPR when trained using the original setting and the distant supervision setting.",
+        "evidence_start": 150,
+        "evidence_end": 264,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            151,
+            150
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 151,
+        "page": 12,
+        "citations": [
+          2
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " B Alternative Similarity Functions & Triplet Loss In addition to dot product (DP) and negative log- likelihood based on softmax (NLL), we also exper- iment with Euclidean distance (L2) and the triplet loss.",
+        "evidence_start": 264,
+        "evidence_end": 471,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            151
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 151,
+        "page": 12,
+        "citations": [
+          2
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "While both methods include addi- tional pretraining tasks and employ an expensive end-to-end training regime, DPR manages to out- perform them on both NQ and TriviaQA, simply by focusing on learning a strong passage retrieval model using pairs of questions and answers.",
+        "evidence_start": 0,
+        "evidence_end": 269,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            99
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 99,
+        "page": 8,
+        "citations": [
+          3
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The additional pretraining tasks are likely more useful only when the target training sets are small.",
+        "evidence_start": 269,
+        "evidence_end": 371,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            99
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 99,
+        "page": 8,
+        "citations": [
+          3
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "While DPR processes up to 100 passages for each question, the reader is able to ﬁt all of them into one batch on a sin- gle 32GB GPU, thus the latency remains almost identical to the single passage case (around 20ms).",
+        "evidence_start": 0,
+        "evidence_end": 217,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            103,
+            102
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 103,
+        "page": 8,
+        "citations": [
+          4
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The exact impact on throughput is harder to mea- sure: ORQA uses 2-3x longer passages compared to DPR (288 word pieces compared to our 100 tokens) and the computational complexity is super- linear in passage length.",
+        "evidence_start": 217,
+        "evidence_end": 433,
+        "subject": "ORQA",
+        "identity": {
+          "subject": "ORQA",
+          "basis": "explicit_named_clause",
+          "context_chunk_ids": [
+            103
+          ],
+          "identity_quote": "While DPR processes up to 100 passages for each question, the reader is able to ﬁt all of them into one batch on a sin- gle 32GB GPU, thus the latency remains almost identical to the single passage case (around 20ms). The exact impact on throughput is harder to mea- sure: ORQA uses 2-3x longer passages compared to DPR (288 word pieces compared to our 100 tokens) and the computational complexity is super- linear in passage length.",
+          "identity_chunk_id": 103
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 103,
+        "page": 8,
+        "citations": [
+          4
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Although more expressive model forms for measur- ing the similarity between a question and a passage do exist, such as networks consisting of multiple layers of cross attentions, the similarity function needs to be decomposable so that the represen- tations of the collection of passages can be pre- computed.",
+        "evidence_start": 0,
+        "evidence_end": 309,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            29,
+            28
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 29,
+        "page": 3,
+        "citations": [
+          5
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Most decomposable similarity functions are some transformations of Euclidean distance (L2).",
+        "evidence_start": 309,
+        "evidence_end": 401,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            29,
+            28
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 29,
+        "page": 3,
+        "citations": [
+          5
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "We discuss this approach below.",
+        "evidence_start": 0,
+        "evidence_end": 31,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            41,
+            40,
+            39,
+            38,
+            37
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 41,
+        "page": 3,
+        "citations": [
+          6
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Assume that we have B In-batch negatives questions in a mini-batch and each one is asso- ciated with a relevant passage.",
+        "evidence_start": 31,
+        "evidence_end": 152,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            41,
+            40,
+            39,
+            38,
+            37
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 41,
+        "page": 3,
+        "citations": [
+          6
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Let Q and P be the (B×d) matrix of question and passage embeddings in a batch of size B.",
+        "evidence_start": 152,
+        "evidence_end": 241,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            41,
+            40,
+            39,
+            38,
+            37
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 41,
+        "page": 3,
+        "citations": [
+          6
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " S = QPT is a (B × B) ma- trix of similarity scores, where each row of which corresponds to a question, paired with B passages.",
+        "evidence_start": 241,
+        "evidence_end": 368,
+        "subject": "QPT",
+        "identity": {
+          "subject": "QPT",
+          "basis": "explicit_named_clause",
+          "context_chunk_ids": [
+            41
+          ],
+          "identity_quote": "We discuss this approach below. Assume that we have B In-batch negatives questions in a mini-batch and each one is asso- ciated with a relevant passage. Let Q and P be the (B×d) matrix of question and passage embeddings in a batch of size B. S = QPT is a (B × B) ma- trix of similarity scores, where each row of which corresponds to a question, paired with B passages. In this way, we reuse computation and effectively train on B2 (qi, pj) question/passage pairs in each batch.",
+          "identity_chunk_id": 41
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 41,
+        "page": 3,
+        "citations": [
+          6
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In this way, we reuse computation and effectively train on B2 (qi, pj) question/passage pairs in each batch.",
+        "evidence_start": 368,
+        "evidence_end": 477,
+        "subject": "QPT",
+        "identity": {
+          "subject": "QPT",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            41
+          ],
+          "identity_quote": "We discuss this approach below. Assume that we have B In-batch negatives questions in a mini-batch and each one is asso- ciated with a relevant passage. Let Q and P be the (B×d) matrix of question and passage embeddings in a batch of size B. S = QPT is a (B × B) ma- trix of similarity scores, where each row of which corresponds to a question, paired with B passages.",
+          "identity_chunk_id": 41
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 41,
+        "page": 3,
+        "citations": [
+          6
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Methods like BM25 are sensitive to highly selective keywords and phrases, but cannot capture lexical variations or se- mantic relationships well.",
+        "evidence_start": 0,
+        "evidence_end": 145,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            154,
+            153
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 154,
+        "page": 12,
+        "citations": [
+          7
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In contrast, DPR excels at semantic representation, but might lack sufﬁcient capacity to represent salient phrases which appear rarely.",
+        "evidence_start": 145,
+        "evidence_end": 281,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            154,
+            153
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 154,
+        "page": 12,
+        "citations": [
+          7
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Table 7 illustrates this phenomenon with two examples.",
+        "evidence_start": 281,
+        "evidence_end": 336,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            154,
+            153
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 154,
+        "page": 12,
+        "citations": [
+          7
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "1 Main Results Table 2 compares different passage retrieval sys- tems on ﬁve QA datasets, using the top-k accuracy (k ∈{20, 100}).",
+        "evidence_start": 2,
+        "evidence_end": 132,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            61
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 61,
+        "page": 5,
+        "citations": [
+          8
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " With the exception of SQuAD, DPR performs consistently better than BM25 on all datasets.",
+        "evidence_start": 132,
+        "evidence_end": 221,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            61
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 61,
+        "page": 5,
+        "citations": [
+          8
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "1% for top-20 accuracy on Natural Questions).",
+        "evidence_start": 286,
+        "evidence_end": 331,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            61
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 61,
+        "page": 5,
+        "citations": [
+          8
+        ],
+        "record_id": "E22"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " When training with mul- 8SQuAD is limited to a small set of Wikipedia documents and thus introduces unwanted bias.",
+        "evidence_start": 331,
+        "evidence_end": 446,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            61
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 61,
+        "page": 5,
+        "citations": [
+          8
+        ],
+        "record_id": "E23"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Al- though the results of DPR on WQ and TREC in the single-dataset setting are less competitive, adding more question–answer pairs helps boost the perfor- mance, achieving the new state of the art.",
+        "evidence_start": 0,
+        "evidence_end": 197,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            100
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 100,
+        "page": 8,
+        "citations": [
+          9
+        ],
+        "record_id": "E24"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "see that higher retriever accuracy typically leads to better ﬁnal QA results: in all cases except SQuAD, answers extracted from the passages retrieved by DPR are more likely to be correct, compared to those from BM25.",
+        "evidence_start": 0,
+        "evidence_end": 217,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            97
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 97,
+        "page": 8,
+        "citations": [
+          10
+        ],
+        "record_id": "E25"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " For large datasets like NQ and TriviaQA, models trained using multiple datasets (Multi) perform comparably to those trained using the individual training set (Single).",
+        "evidence_start": 217,
+        "evidence_end": 385,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            97
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 97,
+        "page": 8,
+        "citations": [
+          10
+        ],
+        "record_id": "E26"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Conversely, on smaller datasets like WQ and TREC, the multi- dataset setting has a clear advantage.",
+        "evidence_start": 385,
+        "evidence_end": 485,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            97
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 97,
+        "page": 8,
+        "citations": [
+          10
+        ],
+        "record_id": "E27"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 28,
+        "text": "At run-time, DPR applies a different encoder EQ(·) that maps the input question to a d-dimensional vector, and retrieves k passages of which vectors are the closest to the question vector. We deﬁne the similarity between the question and the passage using the dot product of their vectors: sim(q, p) = EQ(q)⊺EP (p).",
+        "source": "2004.04906v3.pdf",
+        "page": 3,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "3.1 Overview"
+      },
+      {
+        "chunk_id": 151,
+        "text": "Using the question and answer to- gether as the query, we run Lucene-BM25 and pick the top passage that contains the answer as the pos- itive passage. Table 5 shows the performance of DPR when trained using the original setting and the distant supervision setting. B Alternative Similarity Functions & Triplet Loss In addition to dot product (DP) and negative log- likelihood based on softmax (NLL), we also exper- iment with Euclidean distance (L2) and the triplet loss.",
+        "source": "2004.04906v3.pdf",
+        "page": 12,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "8 Conclusion"
+      },
+      {
+        "chunk_id": 99,
+        "text": "While both methods include addi- tional pretraining tasks and employ an expensive end-to-end training regime, DPR manages to out- perform them on both NQ and TriviaQA, simply by focusing on learning a strong passage retrieval model using pairs of questions and answers. The additional pretraining tasks are likely more useful only when the target training sets are small.",
+        "source": "2004.04906v3.pdf",
+        "page": 8,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "6.2 Results"
+      },
+      {
+        "chunk_id": 103,
+        "text": "While DPR processes up to 100 passages for each question, the reader is able to ﬁt all of them into one batch on a sin- gle 32GB GPU, thus the latency remains almost identical to the single passage case (around 20ms). The exact impact on throughput is harder to mea- sure: ORQA uses 2-3x longer passages compared to DPR (288 word pieces compared to our 100 tokens) and the computational complexity is super- linear in passage length.",
+        "source": "2004.04906v3.pdf",
+        "page": 8,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "6.2 Results"
+      },
+      {
+        "chunk_id": 29,
+        "text": "Although more expressive model forms for measur- ing the similarity between a question and a passage do exist, such as networks consisting of multiple layers of cross attentions, the similarity function needs to be decomposable so that the represen- tations of the collection of passages can be pre- computed. Most decomposable similarity functions are some transformations of Euclidean distance (L2).",
+        "source": "2004.04906v3.pdf",
+        "page": 3,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "3.1 Overview"
+      },
+      {
+        "chunk_id": 41,
+        "text": "We discuss this approach below. Assume that we have B In-batch negatives questions in a mini-batch and each one is asso- ciated with a relevant passage. Let Q and P be the (B×d) matrix of question and passage embeddings in a batch of size B. S = QPT is a (B × B) ma- trix of similarity scores, where each row of which corresponds to a question, paired with B passages. In this way, we reuse computation and effectively train on B2 (qi, pj) question/passage pairs in each batch.",
+        "source": "2004.04906v3.pdf",
+        "page": 3,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "3.2 Training"
+      },
+      {
+        "chunk_id": 154,
+        "text": "Methods like BM25 are sensitive to highly selective keywords and phrases, but cannot capture lexical variations or se- mantic relationships well. In contrast, DPR excels at semantic representation, but might lack sufﬁcient capacity to represent salient phrases which appear rarely. Table 7 illustrates this phenomenon with two examples.",
+        "source": "2004.04906v3.pdf",
+        "page": 12,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "8 Conclusion"
+      },
+      {
+        "chunk_id": 61,
+        "text": "5.1 Main Results Table 2 compares different passage retrieval sys- tems on ﬁve QA datasets, using the top-k accuracy (k ∈{20, 100}). With the exception of SQuAD, DPR performs consistently better than BM25 on all datasets. The gap is especially large when k is small (e.g., 78.4% vs. 59.1% for top-20 accuracy on Natural Questions). When training with mul- 8SQuAD is limited to a small set of Wikipedia documents and thus introduces unwanted bias.",
+        "source": "2004.04906v3.pdf",
+        "page": 5,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "5.1 Main Results"
+      },
+      {
+        "chunk_id": 100,
+        "text": "Al- though the results of DPR on WQ and TREC in the single-dataset setting are less competitive, adding more question–answer pairs helps boost the perfor- mance, achieving the new state of the art.",
+        "source": "2004.04906v3.pdf",
+        "page": 8,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "6.2 Results"
+      },
+      {
+        "chunk_id": 97,
+        "text": "see that higher retriever accuracy typically leads to better ﬁnal QA results: in all cases except SQuAD, answers extracted from the passages retrieved by DPR are more likely to be correct, compared to those from BM25. For large datasets like NQ and TriviaQA, models trained using multiple datasets (Multi) perform comparably to those trained using the individual training set (Single). Conversely, on smaller datasets like WQ and TREC, the multi- dataset setting has a clear advantage.",
+        "source": "2004.04906v3.pdf",
+        "page": 8,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "6.2 Results"
+      }
+    ],
+    "selected_ids": [
+      28,
+      151,
+      99,
+      103,
+      29,
+      41,
+      154,
+      61,
+      100,
+      97
+    ]
+  },
+  "answer": "DPR 使用点积（dot product）计算问题向量与段落向量的相似度，即 sim(q, p) = EQ(q)ᵀEP(p) [1]。此外，论文也实验了其他相似度函数与损失组合，包括欧氏距离（L2）和 triplet loss [2]。",
+  "original_answer": "DPR 使用点积（dot product）计算问题向量与段落向量的相似度，即 sim(q, p) = EQ(q)ᵀEP(p) [1]。此外，论文也实验了其他相似度函数与损失组合，包括欧氏距离（L2）和 triplet loss [2]。",
+  "citation_validation": {
+    "answer": "DPR 使用点积（dot product）计算问题向量与段落向量的相似度，即 sim(q, p) = EQ(q)ᵀEP(p) [1]。此外，论文也实验了其他相似度函数与损失组合，包括欧氏距离（L2）和 triplet loss [2]。",
+    "original_answer": "DPR 使用点积（dot product）计算问题向量与段落向量的相似度，即 sim(q, p) = EQ(q)ᵀEP(p) [1]。此外，论文也实验了其他相似度函数与损失组合，包括欧氏距离（L2）和 triplet loss [2]。",
+    "repair_candidate": null,
+    "initial_check": {
+      "cited_numbers": [
+        1,
+        2
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 28,
+          "source": "2004.04906v3.pdf",
+          "page": 3,
+          "text": "At run-time, DPR applies a different encoder EQ(·) that maps the input question to a d-dimensional vector, and retrieves k passages of which vectors are the closest to the question vector. We deﬁne the similarity between the question and the passage using the dot product of their vectors: sim(q, p) = EQ(q)⊺EP (p)."
+        },
+        {
+          "citation": 2,
+          "chunk_id": 151,
+          "source": "2004.04906v3.pdf",
+          "page": 12,
+          "text": "Using the question and answer to- gether as the query, we run Lucene-BM25 and pick the top passage that contains the answer as the pos- itive passage. Table 5 shows the performance of DPR when trained using the original setting and the distant supervision setting. B Alternative Similarity Functions & Triplet Loss In addition to dot product (DP) and negative log- likelihood based on softmax (NLL), we also exper- iment with Euclidean distance (L2) and the triplet loss."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "final_check": {
+      "cited_numbers": [
+        1,
+        2
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 28,
+          "source": "2004.04906v3.pdf",
+          "page": 3,
+          "text": "At run-time, DPR applies a different encoder EQ(·) that maps the input question to a d-dimensional vector, and retrieves k passages of which vectors are the closest to the question vector. We deﬁne the similarity between the question and the passage using the dot product of their vectors: sim(q, p) = EQ(q)⊺EP (p)."
+        },
+        {
+          "citation": 2,
+          "chunk_id": 151,
+          "source": "2004.04906v3.pdf",
+          "page": 12,
+          "text": "Using the question and answer to- gether as the query, we run Lucene-BM25 and pick the top passage that contains the answer as the pos- itive passage. Table 5 shows the performance of DPR when trained using the original setting and the distant supervision setting. B Alternative Similarity Functions & Triplet Loss In addition to dot product (DP) and negative log- likelihood based on softmax (NLL), we also exper- iment with Euclidean distance (L2) and the triplet loss."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "repair_attempted": false,
+    "repair_applied": false,
+    "repair_response": null,
+    "repair_prompt": null,
+    "unresolved_blocks": [],
+    "status": "not_needed",
+    "note": "Citation structure only; source relevance and claim meaning are not automatically verified."
+  },
+  "citation_structure": {
+    "cited_numbers": [
+      1,
+      2
+    ],
+    "invalid_numbers": [],
+    "malformed_markers": [],
+    "has_citations": true,
+    "require_citations": true,
+    "structure_passed": true,
+    "cited_sources": [
+      {
+        "citation": 1,
+        "chunk_id": 28,
+        "source": "2004.04906v3.pdf",
+        "page": 3,
+        "text": "At run-time, DPR applies a different encoder EQ(·) that maps the input question to a d-dimensional vector, and retrieves k passages of which vectors are the closest to the question vector. We deﬁne the similarity between the question and the passage using the dot product of their vectors: sim(q, p) = EQ(q)⊺EP (p)."
+      },
+      {
+        "citation": 2,
+        "chunk_id": 151,
+        "source": "2004.04906v3.pdf",
+        "page": 12,
+        "text": "Using the question and answer to- gether as the query, we run Lucene-BM25 and pick the top passage that contains the answer as the pos- itive passage. Table 5 shows the performance of DPR when trained using the original setting and the distant supervision setting. B Alternative Similarity Functions & Triplet Loss In addition to dot product (DP) and negative log- likelihood based on softmax (NLL), we also exper- iment with Euclidean distance (L2) and the triplet loss."
+      }
+    ],
+    "semantic_support": "requires_manual_review"
+  },
+  "status": "completed",
+  "api_calls": [
+    {
+      "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nDPR 使用什么函数计算问题向量和段落向量的相似度？\n",
+      "response": {
+        "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+        "requested_model": "cn:deepseek-v4.1-flash",
+        "reported_model": "deepseek-v4.1-flash",
+        "usage": {
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 256,
+          "cached_tokens": 256,
+          "completion_thinking_tokens": 0,
+          "completion_tokens": 19,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "credit": 0,
+          "prompt_cache_hit_tokens": 256,
+          "prompt_cache_miss_tokens": 258,
+          "prompt_cache_write_tokens": 0,
+          "prompt_tokens": 514,
+          "prompt_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 256,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "total_tokens": 533
+        },
+        "finish_reason": "stop",
+        "request_parameters": {
+          "model": "cn:deepseek-v4.1-flash",
+          "stream": false,
+          "thinking": {
+            "type": "disabled"
+          },
+          "temperature": 0,
+          "max_tokens": 4096
+        }
+      },
+      "elapsed_seconds": 1.82
+    },
+    {
+      "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing.\n\nContext:\nOriginal passages:\n[1] Source: 2004.04906v3.pdf | Page: 3 | Section: 3.1 Overview\nAt run-time, DPR applies a different encoder EQ(·) that maps the input question to a d-dimensional vector, and retrieves k passages of which vectors are the closest to the question vector. We deﬁne the similarity between the question and the passage using the dot product of their vectors: sim(q, p) = EQ(q)⊺EP (p).\n\n[2] Source: 2004.04906v3.pdf | Page: 12 | Section: 8 Conclusion\nUsing the question and answer to- gether as the query, we run Lucene-BM25 and pick the top passage that contains the answer as the pos- itive passage. Table 5 shows the performance of DPR when trained using the original setting and the distant supervision setting. B Alternative Similarity Functions & Triplet Loss In addition to dot product (DP) and negative log- likelihood based on softmax (NLL), we also exper- iment with Euclidean distance (L2) and the triplet loss.\n\n[3] Source: 2004.04906v3.pdf | Page: 8 | Section: 6.2 Results\nWhile both methods include addi- tional pretraining tasks and employ an expensive end-to-end training regime, DPR manages to out- perform them on both NQ and TriviaQA, simply by focusing on learning a strong passage retrieval model using pairs of questions and answers. The additional pretraining tasks are likely more useful only when the target training sets are small.\n\n[4] Source: 2004.04906v3.pdf | Page: 8 | Section: 6.2 Results\nWhile DPR processes up to 100 passages for each question, the reader is able to ﬁt all of them into one batch on a sin- gle 32GB GPU, thus the latency remains almost identical to the single passage case (around 20ms). The exact impact on throughput is harder to mea- sure: ORQA uses 2-3x longer passages compared to DPR (288 word pieces compared to our 100 tokens) and the computational complexity is super- linear in passage length.\n\n[5] Source: 2004.04906v3.pdf | Page: 3 | Section: 3.1 Overview\nAlthough more expressive model forms for measur- ing the similarity between a question and a passage do exist, such as networks consisting of multiple layers of cross attentions, the similarity function needs to be decomposable so that the represen- tations of the collection of passages can be pre- computed. Most decomposable similarity functions are some transformations of Euclidean distance (L2).\n\n[6] Source: 2004.04906v3.pdf | Page: 3 | Section: 3.2 Training\nWe discuss this approach below. Assume that we have B In-batch negatives questions in a mini-batch and each one is asso- ciated with a relevant passage. Let Q and P be the (B×d) matrix of question and passage embeddings in a batch of size B. S = QPT is a (B × B) ma- trix of similarity scores, where each row of which corresponds to a question, paired with B passages. In this way, we reuse computation and effectively train on B2 (qi, pj) question/passage pairs in each batch.\n\n[7] Source: 2004.04906v3.pdf | Page: 12 | Section: 8 Conclusion\nMethods like BM25 are sensitive to highly selective keywords and phrases, but cannot capture lexical variations or se- mantic relationships well. In contrast, DPR excels at semantic representation, but might lack sufﬁcient capacity to represent salient phrases which appear rarely. Table 7 illustrates this phenomenon with two examples.\n\n[8] Source: 2004.04906v3.pdf | Page: 5 | Section: 5.1 Main Results\n5.1 Main Results Table 2 compares different passage retrieval sys- tems on ﬁve QA datasets, using the top-k accuracy (k ∈{20, 100}). With the exception of SQuAD, DPR performs consistently better than BM25 on all datasets. The gap is especially large when k is small (e.g., 78.4% vs. 59.1% for top-20 accuracy on Natural Questions). When training with mul- 8SQuAD is limited to a small set of Wikipedia documents and thus introduces unwanted bias.\n\n[9] Source: 2004.04906v3.pdf | Page: 8 | Section: 6.2 Results\nAl- though the results of DPR on WQ and TREC in the single-dataset setting are less competitive, adding more question–answer pairs helps boost the perfor- mance, achieving the new state of the art.\n\n[10] Source: 2004.04906v3.pdf | Page: 8 | Section: 6.2 Results\nsee that higher retriever accuracy typically leads to better ﬁnal QA results: in all cases except SQuAD, answers extracted from the passages retrieved by DPR are more likely to be correct, compared to those from BM25. For large datasets like NQ and TriviaQA, models trained using multiple datasets (Multi) perform comparably to those trained using the individual training set (Single). Conversely, on smaller datasets like WQ and TREC, the multi- dataset setting has a clear advantage.\n\nEvidence guidance:\n- Rule-based subject attribution: ORQA; passage: “The exact impact on throughput is harder to mea- sure: ORQA uses 2-3x longer passages compared to DPR (288 word pieces compared to our 100 tokens) and the computational complexity is super- linear in passage length.” [4]\n- Rule-based subject attribution: QPT; passage: “S = QPT is a (B × B) ma- trix of similarity scores, where each row of which corresponds to a question, paired with B passages.” [6]\n- Rule-based subject attribution: QPT; passage: “In this way, we reuse computation and effectively train on B2 (qi, pj) question/passage pairs in each batch.” [6]\n\nQuestion:\nDPR 使用什么函数计算问题向量和段落向量的相似度？\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages.\n\nAnswer:",
+      "response": {
+        "answer": "DPR 使用点积（dot product）计算问题向量与段落向量的相似度，即 sim(q, p) = EQ(q)ᵀEP(p) [1]。此外，论文也实验了其他相似度函数与损失组合，包括欧氏距离（L2）和 triplet loss [2]。",
+        "requested_model": "cn:deepseek-v4.1-flash",
+        "reported_model": "deepseek-v4.1-flash",
+        "usage": {
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 128,
+          "cached_tokens": 128,
+          "completion_thinking_tokens": 0,
+          "completion_tokens": 67,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "credit": 0.03,
+          "prompt_cache_hit_tokens": 128,
+          "prompt_cache_miss_tokens": 1630,
+          "prompt_cache_write_tokens": 0,
+          "prompt_tokens": 1758,
+          "prompt_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 128,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "total_tokens": 1825
+        },
+        "finish_reason": "stop",
+        "request_parameters": {
+          "model": "cn:deepseek-v4.1-flash",
+          "stream": false,
+          "thinking": {
+            "type": "disabled"
+          },
+          "temperature": 0,
+          "max_tokens": 4096
+        }
+      },
+      "elapsed_seconds": 1.9
+    }
+  ],
+  "model_calls": 2,
+  "evaluation_code_sha256": {
+    "main.py": "74db46d3eecca4f158e89a745f995f8aa15fc1ef9d5e5bdc13c64e702875a43c",
+    "llm.py": "b68fcd071621630f08ad2cbcb848a6757a6a5beca6b9e900d3a8c0bd61039861",
+    "evaluation/run_answer_evaluation.py": "bc512f96499b8cb196f8ab57c68408762acfc085aacc82673a685f02145f1650",
+    "src/api_llm.py": "2adea1ea9a8268d1260e0f8e2d7a80d9bff42143812b140e54f3003c62e2d2d4",
+    "src/bm25_retriever.py": "06a12c701da323963166a8c2a9206ead1281e59649efbbe0aff1293ace8c7e92",
+    "src/chunk_storage.py": "794ea2fa58826b895711a7d0f39a244f79e2a91aa39f99bec36955a235430630",
+    "src/chunking_recursive.py": "d4d6aae8d4f7b7f72503eadb440e72279e9d8fe1834b86cefd8f8d519fd1528f",
+    "src/chunking_semantic.py": "524e0c902cea605cfc5af30a15cdf5399b05807ad1ff49e2c16c94e0e29e22b8",
+    "src/citation_validation.py": "bb377d824dab10a03889683c9805cf68c7fd4eb9a21a0754cd522a86e084b445",
+    "src/embedding.py": "4b0e2699c9aeb23eb5db5585b64aa088ad9b1be4b01e33c95692f4f5f9624390",
+    "src/grounded_evidence.py": "78a7e63512970492f4e52050cb8b2312e2658281acfe979eb4476516ff8c2663",
+    "src/hybrid_retriever.py": "3306823530036b662f04e5790b1e74cb69b01051367385d33b388b87119fbe7d",
+    "src/hyde.py": "b0482baf2559e44d5d1d8c5a1bd31db046df279de53be70c7e8fb83bbcf32e72",
+    "src/knowledge_base.py": "dfb63dfafd00d463a194fe934d1c2f5a7a55d98b2ed5db95fc35b74606759474",
+    "src/numeric_evidence.py": "492fb546e6bc89b881843ece4b4582e533aec5aabbc58d61cd1cf158c4bac3d0",
+    "src/pdf_loader.py": "1f527ed51d318304858e4d95ffb85bd9c966961ef02157e9ce4f74b86f8fec64",
+    "src/query_decomposer.py": "6750d4e2f789b40891136db86ba4ba8bb1353a4b75c14db2c633b57b3128ec70",
+    "src/query_rewriter.py": "404152aa9326445ecce721cd46be75fa14e19f99ff0a8fe7318e0c47f909d2c3",
+    "src/reranker.py": "37c1ed2d5a5b9a4f2dccfbd663428a88212e450126a70bba797436de30f24d1e",
+    "src/retriever.py": "1382bbb41922a0bfe2da00e16a6d31e4448861e4a31544abdbfc171ec34cab3a",
+    "src/vector_store.py": "161d8c6597038788d195f034b3ea77ac391d7497e53c6dc1a7dbcf5f83a7fecf",
+    "evaluation/arxiv_pilot_questions.json": "53d1a5b8055a4b1d969f58f7449fa8a13dcfdc6ecba50fd5ed229a198fb33280",
+    "evaluation/answer_review_protocol.md": "614a18fe1babb3cffc96aa7aaa8956c3d84b94a1ca10f37234fd8cd00ed3bf27",
+    "data/processed/versions/arxiv-pilot-5-20261019/faiss.index": "88a186f7ef0fe7cdf2f058c2074326b62f06f682f67c0cecf0bec172fc4f9888",
+    "data/processed/versions/arxiv-pilot-5-20261019/chunks.json": "8df8a3ae53faa7544703ae8e9484ec089bad83754b9051d048dde9f0aa533c35",
+    "data/processed/versions/arxiv-pilot-5-20261019/manifest.json": "3629c41d73fd61d80c86880909c97de67c15088fe4ac2e5c2e6b49f3901aff0e"
+  },
+  "elapsed_seconds": 8.87
+}

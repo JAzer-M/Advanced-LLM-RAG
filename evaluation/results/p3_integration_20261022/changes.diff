@@ -1,0 +1,320 @@
+--- before/PROGRESS.md
++++ after/PROGRESS.md
+@@ -1,8 +1,8 @@
+ # Advanced-LLM-RAG 当前进度与交接
+ 
+-更新：2026-10-22（Asia/Shanghai）。工作区：`/Users/j/Desktop/Advanced-LLM-RAG`；Git 基点 `c2cd612`，已有大量未提交和未跟踪成果。本次完成反馈状态修复，开始P3.1 arXiv只读工具；没有提交或推送。
++更新：2026-10-22（Asia/Shanghai）。工作区：`/Users/j/Desktop/Advanced-LLM-RAG`；Git 基点 `c2cd612`，已有大量未提交和未跟踪成果。本次在已完成反馈修复/P3.1工具的基础上接通P3.2可选arXiv补证据；没有提交或推送。
+ 
+-**结论：main三模式及P2两批对照已有；本轮修复无关新增证据导致已完成需求反复回退的问题，272项离线测试通过。按用户选择进入P3，当前只实现arXiv搜索/固定版本原文读取两个独立工具；自动联网、外部引用合并和新题收益验收尚未接通。Agent/Auto总体质量收益仍未证明，P4未开始。**
++**结论：P3.2已接通显式开启的“本地缺源→arXiv定位/固定版本读取→外部原文登记→回答/复核”流程，291项离线测试通过。真实工程验证保留首次搜索不足、后续失败及开发复验，详见[P3.2报告](evaluation/results/p3_integration_20261022/report.md)。独立新题的联网补证收益及Agent/Auto总体质量收益仍未证明，P4未开始。**
+ 
+ 本页负责当前状态、约束与下一步；多轮原始交接转入[完整历史](docs/history/PROGRESS_THROUGH_2026-10-22.md)，包括全部失败、调用量、实验口径和复现命令。各实验原始文件及路径保留，[实验索引](evaluation/results/README.md)可逐轮查阅。桌面《RAG项目全流程与进度总览.md》与 [PROJECT_WORKFLOW](docs/PROJECT_WORKFLOW.md)内容一致，二者只描述预期路线，不表示实际完成。
+ 
+@@ -16,8 +16,8 @@
+ | P2.1～P2.4 | 需求绑定、证据判断、搜索/邻段、预算循环、生成与有限复核 | 早期h10/h11属于已知开发验收，不能覆盖最新版失败 |
+ | main 接入 | `rag`、`agent`、`auto` 共用初检与资源，保留各模式记录 | 函数默认rag；CLI默认auto；历史“尚未接main”已过时 |
+ | P2.5 对照与收尾 | 首轮12题 RAG/Agent、第一版Auto的8题三路径对照及原文审阅 | 实验完成与质量收益通过是两个状态；最新版尚无独立新题总成绩 |
+-| 最新 Agent/Auto 改进 | RAG优先Auto、输入隔离及反馈状态保留/重新打开规则；272项离线回归通过 | 旧h10真实失败保留；本轮只离线机制验收，隐性漏答与新题总体收益待验 |
+-| P3 / P4 | P3.1已实现arXiv搜索/固定版本读取；P4未开始 | 工具真实可用性看本轮报告；P3.2路由/外部证据登记/回答复核与联网收益待验收 |
++| 最新 Agent/Auto 改进 | RAG优先Auto、输入隔离及反馈状态保留/重新打开规则；含P3.2共291项离线回归通过 | 旧h10真实失败保留；本轮只离线机制验收，隐性漏答与新题总体收益待验 |
++| P3 / P4 | P3.1工具及P3.2可选路由/原文登记/回答复核已接通；P4未开始 | 默认关闭arXiv；仅限一篇固定版本论文；独立新题补证收益待验收 |
+ 
+ ## 2. 当前三条执行路径
+ 
+@@ -27,13 +27,19 @@
+ 
+ `main(..., mode='rag')`保持Python原默认；命令行默认`--mode auto`。RAG未指定版本时读三篇激活指针；Auto/Agent仅支持八篇，不切换指针。同库比较必须让RAG显式使用八篇。运行命令见 [README](README.md)，保存记录模式见 [Agent 操作](docs/AGENT_REPLAY_GUIDE.md)。
+ 
+-**预算与失败：** 固定Agent最多1次分解+6次决策+4次回答=11请求；Auto另保留最多2次前置草稿/引用修复，最坏13请求。工具最多3行动，证据最多32段/24000字符；规划、状态修正或重复行动改选共用一次额度，不能因升级重置。回答最多初稿/复核/修订/再复核4次。全部missing时回答阶段本地说明缺口、0请求。网络/截断失败不自动重试，`finish_reason='length'`不能算完整输出。
++**预算与失败：** 未启用arXiv时，固定Agent最多1次分解+6次决策+4次回答=11请求；Auto另保留最多2次前置草稿/引用修复，最坏13请求。显式`--allow-network`另加最多3次联网决策，上限分别14/16；公网工具另限一次搜索/一次固定PDF读取，不重置本地预算。工具最多3行动，证据最多32段/24000字符；规划、状态修正或重复行动改选共用一次额度，不能因升级重置。回答最多初稿/复核/修订/再复核4次。全部missing时回答阶段本地说明缺口、0请求。网络/截断失败不自动重试，`finish_reason='length'`不能算完整输出。
+ 
+ Auto升级失败仅在原草稿引用结构合格时允许`degraded`保留，CLI非零；loop失败、草稿与原因均留档，不能计作完整成功或保证草稿事实正确。隐性漏答可能没有升级信号。新输出目录须为空，旧运行受输入/源码哈希约束，不强行覆盖或续写。
+ 
+ ## 3. 已有质量与成本证据
+ 
+-**本轮反馈修复（2026-10-22）：** 工具反馈始终复查未完成需求；已supported项只有遇到同源新段或明确提及其主体的原文才重新检查。其余保留上一份已校验状态和引文，额外返回的未授权状态更新不应用；合并后仍执行原完整状态/主体/引文/行动校验。相关新反证可重新打开，非法partial不自动改supported；单步/循环/改选沿用同一次修正额度。只改agent.py两处原函数、新增feedback_scope，main/检索/回答代码不改。
++**最新P3.2工程验收（2026-10-22）：** main新增默认关闭的`allow_network`/`--allow-network`，独立`src/arxiv_evidence.py`在本地正常缺源停止后最多定位/读一篇arXiv原论文。搜索题录不进事实白名单；固定版本、PDF哈希及重解析原文通过校验后，BGE选最多6段追加，保留本地证据、页码、独立ID和连续原文位置，再复用原逐项检查与有限回答复核。无新依赖，agent.py/原检索/原回答/工具代码保持；新增19项入口、失败和预算测试，共291项离线通过、网络尝试0。
++
++真实工程验证首次两题：s01回答Adam并核对第7页、无arXiv；s02只返回后续论文，安全拒答，预期联网回答未通过。第一次同题开发复验仍因自由检索式带入abstract且返回不支持的旧式ID而失败；最终收紧为“模型给完整书目标题、Python构造标题查询”后，s02完整定位Mamba `2312.00752v2`、读取36页、引用第1页摘要回答5×吞吐量，并复核第2/15页补充。最终上下文11段本地+6段外部、10687字符，本地原文全保留；没有自动入库。
++
++初次10请求+失败开发4+最终开发8=**22次模型POST、44253 token（输入42202/输出2051）**，全stop，HTTP模型失败/usage缺失/自动重试0；另4次arXiv GET均HTTP200，其中一次后续解析校验失败。首次自动审批在请求前拦截，明确告知目的地/数据/费用并获用户授权后才运行，拦截本身0调用；总模型请求低于批准28上限。最终s02单次41.852秒、8请求/24030 token，CPU预加载顺序单次，非P95；不推算货币费用。两题及开发复验属于工程验收，不是独立泛化成绩；Auto真实联网、新题总体收益尚未测。[完整流程与失败](evaluation/results/p3_integration_20261022/report.md) · [原文审阅](evaluation/results/p3_integration_20261022/manual_review.md) · [合并账本](evaluation/results/p3_integration_20261022/smoke_summary.json)
++
++**此前反馈修复（2026-10-22）：** 工具反馈始终复查未完成需求；已supported项只有遇到同源新段或明确提及其主体的原文才重新检查。其余保留上一份已校验状态和引文，额外返回的未授权状态更新不应用；合并后仍执行原完整状态/主体/引文/行动校验。相关新反证可重新打开，非法partial不自动改supported；单步/循环/改选沿用同一次修正额度。只改agent.py两处原函数、新增feedback_scope，main/检索/回答代码不改。
+ 
+ 新增11项反馈行为回归，全套先262项通过；P3.1另加10项后最终272项通过、网络尝试0。完整旧h10响应前缀在新提示下离线注入后不再因r2空gap重复失败，实际读取一次本地邻段；在需要未记录的新模型反馈前停止，不能当作完整h10通过或精确同提示缓存。本轮模型请求/token均0，旧成绩不重算。[修复流程](evaluation/results/agent_feedback_fix_20261022/report.md)、[回放边界](evaluation/results/agent_feedback_fix_20261022/saved_prefix_summary.json)。
+ 
+@@ -66,7 +72,7 @@
+ 
+ 原反馈状态P1的已知机制已修复：保留无关已完成项，同源/明确主体新证据触发复查，真实冲突可以重新打开。相关性规则保守，无法保证识别所有隐含跨来源反证，也不自动修正初始语义误判；最终版本独立新题质量仍未验收。旧h10不继续付费调试，旧32/68/61次请求无需重跑。
+ 
+-用户已授权修复后进入P3，并明确先接arXiv。本轮先完成P3.1独立工具；下一步P3.2再接“本地缺资料→联网定位/读取→外部原文登记→回答/复核”的最小闭环，分清公网GET与模型调用预算，保留失败和出处。之后冻结独立必答/补充与联网缺口题，同条件量化补证收益和成本。工具独立验证不替代P2.5收益或P3最终验收，P4未开始。
++用户已授权修复后进入P3，并明确先接arXiv。P3.1独立工具及P3.2最小闭环现已接通：默认不做arXiv GET，仅在Agent/Auto显式允许且本地正常缺源停止后，定位一篇原论文、登记原文、复用回答复核。模型提出完整论文标题，Python构造一次标题查询；标题仍需用搜索结果和实际PDF核验。下一步应冻结独立必答/补充与联网缺口题，同条件量化补证收益和成本；本轮两题工程验证及开发复验不替代该评估，不拼接成新准确率。P4未开始。
+ 
+ 完整性仍按上述三层标准，不为背景细节满分调试；不根据新运行回改旧冻结成绩。
+ 
+@@ -79,7 +85,7 @@
+ | 规则补查 / 增强 | main按来源覆盖信号最多2轮，候选深度120/240；rewrite/HyDE关闭 |
+ | 评估入口 | 候选默认120；补查需显式启用，CLI轮数默认1；不同K独立选证据与补查 |
+ | 生成API | 配置模型`cn:deepseek-v4.1-flash`；历史响应标识`deepseek-v4.1-flash`；标识不独立证明上游权重 |
+-| 生成选项 | `thinking.type=disabled`、`temperature=0`、`max_tokens=4096`；本次未请求API验证连通性 |
++| 生成选项 | `thinking.type=disabled`、`temperature=0`、`max_tokens=4096`；本轮真实模型请求/usage见P3.2报告 |
+ 
+ | 知识库版本 | 分块数 / 维度 | 使用状态 |
+ | --- | --- | --- |
+@@ -109,7 +115,7 @@
+ 
+ Top-20 Recall增加4.37个百分点，未达当时预定5点门槛，默认10。逐题nP=`H/min(K,G)`，整体=`sum(H)/sum(min(K,G))`，不能平均逐题值；本集81条Gold均G≤K，整体nP等于micro recall，原Recall是macro。Gold非穷尽，不代表其他段落无用；检索覆盖、回答质量和成本分开报告。[量化入口](docs/PROJECT_METRICS.md) · [nP口径](docs/NORMALIZED_PRECISION_2026-10-20.md)
+ 
+-本次重新通过272项离线测试、网络尝试0；没有模型生成、付费LLM请求、重建索引或重跑旧评测。P3工具另做公开arXiv GET验证，与模型账单分开。此前清理的251项与文件核验属于当时记录，见[清理记录](docs/CLEANUP_LOG_2026-10-22.md)。此前受控线程可稳定运行，但批量退出139根因仍未定位；完整实验已有结果不重复跑。
++本次最终通过291项离线测试、网络尝试0；另按用户明确授权执行两题真实模型/原文工程验证及必要开发复验，模型账单与公开arXiv GET分开，失败全部保留。不重建索引或重跑旧评测。此前清理的251项与文件核验属于当时记录，见[清理记录](docs/CLEANUP_LOG_2026-10-22.md)。此前受控线程可稳定运行，但批量退出139根因仍未定位；完整实验已有结果不重复跑。
+ 
+ ```bash
+ PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
+--- before/README.md
++++ after/README.md
+@@ -2,7 +2,7 @@
+ 
+ 面向科研论文的问答项目：PDF 解析、Semantic 分块、Dense/BM25 混合检索、RRF 融合、问题分解、BGE 重排和带引用回答；本地 Agent 可按证据缺口搜索与读取邻段。
+ 
+-**当前：main三模式已接通，P2反馈状态的已知机制问题已修复，272项离线测试通过。P3已按用户选择开始arXiv搜索/固定版本原文读取的独立工具；自动联网与外部引用闭环尚待接通，整体质量收益仍未证明。** CLI默认auto，Python函数默认rag；固定RAG继续作为基线。[反馈修复](evaluation/results/agent_feedback_fix_20261022/report.md) · [P3.1进度](evaluation/results/p3_arxiv_tools_20261022/report.md)。
++**当前：main三模式及P3.2有预算arXiv补证据已接通，291项离线测试通过。Agent/Auto显式开启后，可在本地缺源停止时搜索、读取一篇固定版本论文，登记原文并生成、复核带出处的回答；整体质量收益仍待独立新题验收。** CLI默认auto，Python函数默认rag；固定RAG继续作为基线。[反馈修复](evaluation/results/agent_feedback_fix_20261022/report.md) · [P3.2流程与验证](evaluation/results/p3_integration_20261022/report.md)。
+ 
+ [当前进度与下一步](PROGRESS.md) · [文档导航](docs/README.md) · [量化结果](docs/PROJECT_METRICS.md) · [实验目录](evaluation/results/README.md) · [预期全流程](docs/PROJECT_WORKFLOW.md)
+ 
+@@ -14,6 +14,9 @@
+ .venv/bin/python main.py --mode auto "What batch size does DPR use?"
+ .venv/bin/python main.py --mode agent "What batch size does DPR use?"
+ .venv/bin/python main.py --mode rag --kb-version all-papers-8-20261020 "What batch size does DPR use?"
++
++# 显式允许arXiv补证据；仍使用现有生成API，并产生相应调用。
++.venv/bin/python main.py --mode agent --allow-network "According to the Mamba paper, what inference throughput advantage over Transformers is stated in its abstract?"
+ ```
+ 
+ 不传问题则交互输入。Windows 使用 `.venv\Scripts\python.exe` 替换解释器；配置说明见 [PyCharm API 指南](docs/PYCHARM_API_GUIDE.md)和 [Mac 接续指南](docs/MAC_HANDOFF.md)。上述问答会调用 API。
+@@ -25,6 +28,8 @@
+ | `auto` | 先完成原 RAG；明确缺口、无法回答/比较或引用失败才升级原 Agent | 当前仅八篇库；直答通常2调用，升级最坏13调用 |
+ 
+ Auto/Agent 记录写入 `logs/auto_runs/`、`logs/agent_runs/`，或以 `--output-dir` 指定新的空目录。Python 入口为 `main(query, mode="auto")`，省略 `mode` 则固定 RAG。`degraded` 表示升级未完成，只保留引用结构合格的初检草稿，命令行退出码为1；该草稿仍可能存在事实错误。隐性漏答未必触发升级。
++
++`--allow-network`仅开放arXiv补证据，默认关闭；Python对应`allow_network=True`，只支持Agent/Auto。它在本地正常缺源停止后，最多做3次联网决策、1次搜索和1次PDF读取；全部模型请求上限Agent为14、Auto为16。搜索最多3篇，选读1篇，追加最多6段，合并原文仍限32段/24000字符；未找到原论文则保留缺口，不使用摘要或后续论文替代原文。外部材料只用于本轮，不自动入库；失败不自动重试。[实现与取舍](evaluation/results/p3_integration_20261022/design.md)。
+ 
+ ## 当前结果怎么理解
+ 
+--- before/docs/CODE_READING_GUIDE.md
++++ after/docs/CODE_READING_GUIDE.md
+@@ -1,6 +1,6 @@
+ # 代码阅读说明与 Agent 当前边界
+ 
+-更新：2026-10-22（Asia/Shanghai，Agent修复/RAG优先Auto）。当前272项离线测试通过；反馈状态保留/复查规则已修复，旧h10真实失败仍保留。P3.1已加入独立arXiv工具，未接入自动Agent网络路径。代码仍用普通函数、字典、列表，各实验版本快照保留。
++更新：2026-10-22（Asia/Shanghai，P3.2）。当前291项离线测试通过；反馈状态保留/复查规则已修复，旧h10真实失败仍保留。main已接可选arXiv补证据与外部引用复核；代码仍用普通函数、字典、列表，各实验版本快照保留。
+ 
+ ## 1. 当前做出了什么
+ 
+@@ -15,18 +15,21 @@
+ | `agent.py` | 抽取需求、检查原文，单步或有限循环执行本地工具 | LLM提出建议，本地校验/预算约束执行；有记录的章节规则可改选重复或重叠行动 |
+ | `src/agent_tools.py` | 搜索八篇库、读取同篇论文邻段，返回真实原文和轨迹 | 普通函数执行，由`agent.py`的执行入口分派 |
+ | `src/agent_answer.py` | 生成答案、逐项复核、最多修订一次；全缺失时直接说明缺口 | 模型判断内容，本地严格核对复核结构与逐字引文，预算约束执行 |
++| `src/arxiv_tools.py` | arXiv题录搜索、固定版本PDF读取与原文保存 | 普通函数执行有预算GET，题录不作为回答证据 |
++| `src/arxiv_evidence.py` | 本地缺源后路由/选论文、原文选段登记、复用检查与回答复核 | LLM仅在三个决策点提建议，Python核对来源、原文和预算 |
+ 
+ `agent.py`并非只做补查：它判断能否回答、应否停止及是否适合读邻段。默认模式保存建议，单步模式执行一次，循环模式最多执行三次；固定RAG的原有补查仍来自`main.py`调用的`evidence_gap.py`。
+ 
+ ## main新问题入口怎么读
+ 
+-1. `main()`函数默认rag、CLI默认auto。固定Agent分解/决策/回答上限1/6/4=11；Auto另加probe2，最坏13。全程预写账本，不重置循环预算。
++1. `main()`函数默认rag、CLI默认auto。原Agent分解/决策/回答上限1/6/4=11；Auto另加probe2，最坏13。显式`allow_network=True`另加最多3次network决策，分别为14/16。全程预写账本，不重置循环预算。
+ 2. `_run_pipeline()`共用原分解、混合检索、重排和规则补查。固定Agent不先生成RAG草稿；Auto的草稿在`_answer_with_agent()`内生成，原检索与五个辅助函数保持。
+ 3. `_answer_with_agent()`的Auto分支先调用原build_prompt/repair_citations_once，记录probe.json；无缺口则direct，Agent调用0。有明确缺口/引用失败则先写routing.json，再运行既有独立规划/判断和工具循环，最后原回答复核；草稿不进入Agent白名单。
+ 4. 循环失败时仅引用结构合格的初稿可标degraded保留；失败记录不抹掉，CLI非零。没有有效初稿则failed。原route_only暂停能力作为既有函数接口保留，最终Auto不依赖它；未采用的combined gate已删除。
+ 5. `cli()`支持三模式、版本、空审计目录及可选问题。Auto/Agent用八篇库，不切指针；日志在logs/auto_runs或agent_runs，原目录不重跑。
++6. `--allow-network`将本地正常`model_stop`接到`run_arxiv_followup()`，不改原本地动作协议。证据已齐、明确主论文已在库或未开启时不做arXiv GET；最终答案仍复用原复核。独立`agent.py`诊断入口不会因此自动联网。
+ 
+-最终Auto没有额外复杂度分类器，用RAG回答明确缺口及引用信号触发；不承认的隐性遗漏可能不升级。普通完整请求通常与RAG一样2调用；复杂题需额外草稿，最坏预算13。此前251测试、32新HTTP开发回归与各失败详见[改进报告](../evaluation/results/agent_auto_improvement_20261022/report.md)和[区别/选型](../evaluation/results/agent_auto_improvement_20261022/design.md)。旧68请求/8题及两题CLI冒烟分别见旧报告，不能归给当前策略。
++最终Auto没有额外复杂度分类器，用RAG回答明确缺口及引用信号触发；不承认的隐性遗漏可能不升级。普通完整请求通常与RAG一样2调用；复杂题需额外草稿，未开启arXiv时最坏预算13。此前251测试、32新HTTP开发回归与各失败详见[改进报告](../evaluation/results/agent_auto_improvement_20261022/report.md)和[区别/选型](../evaluation/results/agent_auto_improvement_20261022/design.md)。旧68请求/8题及两题CLI冒烟分别见旧报告，不能归给当前策略。
+ 
+ 新增绑定与输入隔离重点读`scoped_prefix()`、`isolate_need()`、`has_source_quote()`及`src.agent_answer.answer_input()`：原审计question_quote保存在文件里，模型的检查/生成/复核需求仅id/subject/need，减少混合原句诱发范围串用。字母间连字符后的排版空白仅影响原文引文匹配，不修改原文或需求摘录。
+ 
+@@ -38,7 +41,9 @@
+ 
+ 反馈状态的新入口是`feedback_scope()`：未完成项始终复查；已支持项遇到同源新段或明确主体时再复查，否则保留原已校验状态。`assess_evidence()`只应用复查ID的更新，合并后仍校验全部需求，循环/单步保存反馈范围。被复查项的非法状态仍失败，不把partial自动改supported。[修复报告](../evaluation/results/agent_feedback_fix_20261022/report.md)。
+ 
+-P3.1先读`src/arxiv_tools.py`的`search_arxiv()`与`read_arxiv_paper()`：题录定位与固定版本原文分开，复用原PDF解析器；独立证据ID、原文/页码/网址/哈希与请求记录都保留。它们还没有加入`execute_action()`，不会让原Agent自动联网。[设计/边界](../evaluation/results/p3_arxiv_tools_20261022/design.md)。
++P3.1先读`src/arxiv_tools.py`的`search_arxiv()`与`read_arxiv_paper()`：题录定位与固定版本原文分开，复用原PDF解析器；独立证据ID、原文/页码/网址/哈希与请求记录都保留。[工具设计/边界](../evaluation/results/p3_arxiv_tools_20261022/design.md)。
++
++P3.2再读`src/arxiv_evidence.py`：`run_arxiv_followup()`最多做路由、选论文、重查证据三次决策；`validate_download()`核对版本、文件哈希并重解析实际PDF；`select_passages()`从连续原文窗口预选120段、用已有BGE取最多6段。新段保留`origin=arxiv`、独立`evidence_id`、版本、页码、网址、PDF哈希与字符偏移，仅为兼容现有校验分配临时整数ID，不写入本地索引。合并后复用`assess_evidence()`和`answer_with_review()`，外部来源链接由实际被引用的登记表生成。[接入流程、首次搜索不足与验证](../evaluation/results/p3_integration_20261022/report.md)。
+ 
+ ## 2. 怎样阅读 agent.py
+ 
+@@ -69,7 +74,7 @@
+ 
+ `next_action.type=answer`本身只表示可以进入回答；显式`--finalize`才接回答阶段。循环可继续执行search/read_neighbors，单步模式保持只执行一次。[P2.3轨迹](../evaluation/results/agent_loop_20261020/novelty_followup/run/h10.json)与[报告](../evaluation/results/agent_loop_20261020/report.md)可直接阅读；此前单步失败和P2.1记录原样保留。
+ 
+-P2.2当时全部142项测试通过；单步增加16项、循环再增加22项后为180项。P2.4当时新增22项，共202项离线测试通过；规划修复当时再增15项为217项；main接入当时增13项为230项；第一版Auto再增9项为239；此前更新Auto并增范围/输入隔离检查时251项通过；本轮反馈/P3.1工具之后272项通过、网络尝试0。此前原题场景保留改善任务段排名，防止区域重叠后读到RAG的EM原文；第三次行动来自本地元数据规则。P2.4最终答案使用[26]对应765、[2]对应1003；1003原文自身也点名PopQA与TriviaQA，1002则补充短问答任务语境。新题与同条件对照已在P2.5完成首轮，结果见下文。
++P2.2当时全部142项测试通过；单步增加16项、循环再增加22项后为180项。P2.4当时新增22项，共202项离线测试通过；规划修复当时再增15项为217项；main接入当时增13项为230项；第一版Auto再增9项为239；此前更新Auto并增范围/输入隔离检查时251项通过；此前反馈/P3.1工具之后272项通过；P3.2新增19项后291项通过、网络尝试0。此前原题场景保留改善任务段排名，防止区域重叠后读到RAG的EM原文；第三次行动来自本地元数据规则。P2.4最终答案使用[26]对应765、[2]对应1003；1003原文自身也点名PopQA与TriviaQA，1002则补充短问答任务语境。新题与同条件对照已在P2.5完成首轮，结果见下文。
+ 
+ ### P2.4 怎么读
+ 
+--- before/docs/PROJECT_METRICS.md
++++ after/docs/PROJECT_METRICS.md
+@@ -1,10 +1,25 @@
+ # 项目量化指标与证据入口
+ 
+-更新：2026-10-22（Asia/Shanghai）。反馈状态机制已修复，272项离线测试通过；P3.1独立arXiv工具已实现。新版本总体质量收益、联网回答和独立新题仍未验收，旧分数按版本保留。
++更新：2026-10-22（Asia/Shanghai）。P3.2可选arXiv闭环已接通，291项离线测试通过；两题工程验证及同题开发复验见下。新版本总体质量收益和独立新题仍未验收，旧分数按版本保留。
+ 
+ 最终项目的量化数据应同时交代版本、题集、分母、比较条件、质量与成本。每次修复保留旧结果，新题转为开发回归后另建留出，不能把调试后的成绩继续称为新题泛化。
+ 
+-## 最新反馈修复与P3.1
++## 最新P3.2工程接入与真实验证
++
++新增19项main路径、原文身份、拒答、失败、预算和引用回归；全套291项通过、网络尝试0。显式开启arXiv时，独立网络决策最多3、公开工具最多2（搜索/读一篇），含原流程Agent/Auto模型上限为14/16；默认不增加arXiv请求，未开启仍11/13。
++
++| 运行 | 实际行为与验收 | 模型请求 | 输入/输出/总token | arXiv GET |
++| --- | --- | ---: | --- | ---: |
++| 首次s01 | 本地Adam答案及第7页引用通过 | 5 | 8687 / 464 / 9151 | 0 |
++| 首次s02 | 后续论文候选均拒绝；未完成预期联网回答 | 5 | 5841 / 396 / 6237 | 1 |
++| s02第一次开发复验 | 自由检索式带入任务词，旧式ID校验失败 | 4 | 4513 / 322 / 4835 | 1 |
++| s02最终开发复验 | 标题查询找到固定v2，第1页摘要5×及出处核验通过 | 8 | 23161 / 869 / 24030 | 2 |
++
++实际合计22次chat/22 POST、44253 token（输入42202/输出2051），全部stop；HTTP模型失败/usage缺失/自动重试0，另有一次搜索结果解析校验失败。4次公开GET均HTTP200；首次自动审批拦截未启动进程/模型，随后用户明确批准这两题、公开片段、现有反代/上游及最多28模型请求后才执行。没有计算货币费用。
++
++最终s02原文36页、134957字符，BM25预选120候选、BGE追加6段；合并17段/10687字符，11段本地全保留。实际耗时41.852秒为CPU资源预加载后的顺序单次，非P95。初次两题预期行为只有s01通过，后续仅是s02开发回归；不拼成当前版本2/2新题准确率，不重算旧检索分数。Auto真实联网、广泛缺源识别及独立补证收益未测。[报告](../evaluation/results/p3_integration_20261022/report.md)、[原文人工核对](../evaluation/results/p3_integration_20261022/manual_review.md)、[账本JSON](../evaluation/results/p3_integration_20261022/smoke_summary.json)。
++
++## 此前反馈修复与P3.1
+ 
+ 本轮11项反馈行为回归通过，262项全套通过；加入10项arXiv工具回归后最终272项通过、网络尝试0。旧h10四响应在新提示下离线注入，已支持需求不再被无关原文抹掉，循环推进到需要新反馈前暂停；不是精确同提示缓存、真实新模型或h10最终成功。新增LLM请求/token均0，不重算旧12/8题成绩。[修复报告](../evaluation/results/agent_feedback_fix_20261022/report.md)。
+ 
+--- before/docs/README.md
++++ after/docs/README.md
+@@ -19,8 +19,9 @@
+ 
+ | 工作 | 报告 |
+ | --- | --- |
++| P3.2可选arXiv补证据、外部引用与回答复核 | [流程与真实验证](../evaluation/results/p3_integration_20261022/report.md)、[设计/预算](../evaluation/results/p3_integration_20261022/design.md) |
+ | 最新反馈状态修复、旧h10离线回放与边界 | [修复报告](../evaluation/results/agent_feedback_fix_20261022/report.md) |
+-| P3.1 arXiv搜索/固定版本原文读取，尚未自动联网 | [设计](../evaluation/results/p3_arxiv_tools_20261022/design.md)、[实测与失败](../evaluation/results/p3_arxiv_tools_20261022/report.md) |
++| P3.1独立arXiv搜索/固定版本原文读取工具 | [设计](../evaluation/results/p3_arxiv_tools_20261022/design.md)、[实测与失败](../evaluation/results/p3_arxiv_tools_20261022/report.md) |
+ | 最新RAG优先Auto、已知题改善和h10降级 | [设计](../evaluation/results/agent_auto_improvement_20261022/design.md)、[实测与失败](../evaluation/results/agent_auto_improvement_20261022/report.md) |
+ | 第一版Auto的8题三路径对照，旧版本分数 | [报告](../evaluation/results/auto_closeout_20261022/report.md)、[人工原文核对](../evaluation/results/auto_closeout_20261022/manual_review.md) |
+ | main接入与两题真实CLI验证 | [接入报告](../evaluation/results/main_agent_integration_20261022/report.md) |
+--- before/evaluation/results/README.md
++++ after/evaluation/results/README.md
+@@ -6,8 +6,9 @@
+ 
+ | 目录 | 内容与结论边界 |
+ | --- | --- |
++| [p3_integration_20261022](p3_integration_20261022/report.md) | P3.2显式开启的联网闭环、291项离线回归与两题工程验证；保留首次搜索不足和开发复验，不作独立泛化分数 |
+ | [agent_feedback_fix_20261022](agent_feedback_fix_20261022/report.md) | 反馈状态保留/相关新反证复查，11项新增回归；旧响应注入不作真实模型验收 |
+-| [p3_arxiv_tools_20261022](p3_arxiv_tools_20261022/report.md) | P3.1独立arXiv只读工具、离线边界及真实GET；自动联网与外部引用待接 |
++| [p3_arxiv_tools_20261022](p3_arxiv_tools_20261022/report.md) | P3.1独立arXiv只读工具、离线边界及真实GET；该轮未接自动联网与外部引用 |
+ | [agent_auto_improvement_20261022](agent_auto_improvement_20261022/report.md) | 最新RAG优先Auto和已知题开发回归；h10仍降级，无总体收益结论 |
+ | [auto_closeout_20261022](auto_closeout_20261022/report.md) | 第一版Auto的冻结8题三路径对照，不能归给最新版策略 |
+ | [main_agent_integration_20261022](main_agent_integration_20261022/report.md) | main资源复用、预算和两题真实CLI冒烟 |
+--- before/main.py
++++ after/main.py
+@@ -193,7 +193,7 @@
+ 
+ # 主调用链从这里开始；传入 kb_version 可固定实验库，返回字典供评估保存。
+ def _run_pipeline(query=None, kb_version=None, complete_evidence=None, completion_rounds=2,
+-                  agent_output=None, agent_call=None, agent_mode='agent'):
++                  agent_output=None, agent_call=None, agent_mode='agent', agent_allow_network=False):
+     if completion_rounds not in (1, 2, 3):
+         raise ValueError('completion_rounds must be 1, 2 or 3')
+     # 1. Load the Semantic FAISS index and its corresponding chunks.
+@@ -423,7 +423,8 @@
+                    'selected_ids': [r['chunk_id'] for r in results], 'context': context, 'ledger': ledger}
+         resources = {'index': index, 'chunks': chunks, 'knowledge_base': knowledge_base,
+                      'embedding_model': embedding_model, 'bm25': bm25, 'reranker_model': reranker_model}
+-        return _answer_with_agent(initial, resources, agent_output, agent_call, mode=agent_mode)
++        return _answer_with_agent(initial, resources, agent_output, agent_call, mode=agent_mode,
++                                  allow_network=agent_allow_network)
+ 
+     # 9. Answer and any citation repair use the same configured API as decomposition.
+     # 实际生成调用；引用修复若触发，会额外消耗一次 API，相关性排序本身不调用生成 API。
+@@ -450,7 +451,7 @@
+             'original_answer': original_answer, 'citation_validation': citation_validation}
+ 
+ 
+-def _answer_with_agent(initial, resources, output, call, mode='agent'):
++def _answer_with_agent(initial, resources, output, call, mode='agent', allow_network=False):
+     """把新初检原文白名单接入原循环/回答；返回实际最终引用，失败保持可见。"""
+     import agent
+ 
+@@ -520,6 +521,22 @@
+         result['error'] = loop.get('error', 'Agent decision did not complete.')
+         print('Agent failed:', result['error'])
+         return preserve_initial_answer()
++    if allow_network and loop.get('halt_reason') == 'model_stop':
++        # 先完成本地缺口判断，再以独立预算补一篇外部原文；无需先付本地答案生成成本。
++        from src.arxiv_evidence import run_arxiv_followup
++        network = run_arxiv_followup(Path(__file__).resolve().parent, output / 'loop' / 'question.json',
++                                     output / 'network', resources, call)
++        result['network'] = {k: v for k, v in network.items() if k not in {'answer', 'passages', 'assessment'}}
++        if network['status'] == 'completed':
++            passages = network['passages']
++            result.update(status='completed', answer=network['answer'], answer_strategy='arxiv_evidence_reviewed',
++                          selected_ids=[p['chunk_id'] for p in passages], context=build_context(passages),
++                          ledger={'citation_registry': passages})
++            print('\n=== Agent: arXiv Evidence Answer ===');print(result['answer'])
++            return result
++        if network['status'] == 'failed':
++            result['error'] = network['error']
++            return preserve_initial_answer()
+     answer = agent.run_answer(Path(__file__).resolve().parent, output / 'loop' / 'question.json',
+                               output / 'answer', call=lambda prompt: call(prompt, 'answer'))
+     result['agent']['answer_summary'] = answer
+@@ -541,11 +558,15 @@
+ 
+ 
+ def main(query=None, kb_version=None, complete_evidence=None, completion_rounds=2,
+-         mode='rag', output_dir=None):
+-    """函数默认RAG；Agent最多11请求，Auto先RAG再升级、最多13，CLI默认Auto。"""
++         mode='rag', output_dir=None, allow_network=False):
++    """函数默认RAG；显式联网时Agent/Auto最多14/16模型请求，另最多两次公网工具。"""
++    if type(allow_network) is not bool:
++        raise ValueError('allow_network must be a boolean.')
+     if mode not in {'rag', 'agent', 'auto'}:
+         raise ValueError('mode must be rag, agent or auto.')
+     if mode == 'rag':
++        if allow_network:
++            raise ValueError('arXiv followup requires mode=agent or auto; fixed RAG remains the baseline.')
+         if output_dir is not None:
+             raise ValueError('output_dir is for Agent/Auto run logs; use mode=agent or auto.')
+         return _run_pipeline(query, kb_version, complete_evidence, completion_rounds)
+@@ -568,9 +589,12 @@
+     output.mkdir(parents=True, exist_ok=True)
+     public = {key: api.load_settings().get(key) for key in ('base_url', 'model', 'chat_options')}
+     limits = {'decompose': 1, 'decision': agent.MAX_API_CALLS, 'answer': agent.MAX_ANSWER_CALLS}
++    if allow_network:
++        from src.arxiv_evidence import MAX_NETWORK_DECISIONS
++        limits['network'] = MAX_NETWORK_DECISIONS
+     if mode=='auto':
+         limits['probe']=2  # 原RAG初稿及最多一次引用修复；与升级后的回答复核独立记账。
+-    protocol = {'stage': f'fresh main {mode} run', 'mode': mode, 'query': query,
++    protocol = {'stage': f'fresh main {mode} run', 'mode': mode, 'query': query, 'allow_network': allow_network,
+                 'kb_version': SEARCH_KB_VERSION, 'api_public_settings': public,
+                 'completion_rounds': completion_rounds, 'complete_evidence': complete_evidence,
+                 'stage_call_limits': limits, 'max_actual_attempts': sum(limits.values()),
+@@ -612,7 +636,8 @@
+     result = {'query': query, 'mode': mode, 'status': 'running', 'run_dir': str(output)}
+     try:
+         result = _run_pipeline(query, SEARCH_KB_VERSION, complete_evidence, completion_rounds,
+-                               agent_output=output, agent_call=audited_call, agent_mode=mode)
++                               agent_output=output, agent_call=audited_call, agent_mode=mode,
++                               agent_allow_network=allow_network)
+         return result
+     except Exception as exc:
+         result.update(status='failed', error=f'{type(exc).__name__}: {exc}')
+@@ -633,8 +658,10 @@
+     parser.add_argument('--mode', choices=('rag', 'agent', 'auto'), default='auto')
+     parser.add_argument('--kb-version', help='Explicit KB; Agent/Auto use the verified eight-paper version')
+     parser.add_argument('--output-dir', type=Path, help='New empty Agent/Auto audit directory')
++    parser.add_argument('--allow-network', action='store_true', help='Allow one bounded arXiv followup after a local missing-source stop')
+     args = parser.parse_args()
+-    result = main(args.query, kb_version=args.kb_version, mode=args.mode, output_dir=args.output_dir)
++    result = main(args.query, kb_version=args.kb_version, mode=args.mode, output_dir=args.output_dir,
++                  allow_network=args.allow_network)
+     if result is not None and result.get('status') in {'failed','degraded'}:
+         raise SystemExit(1)
+ 

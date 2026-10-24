@@ -1,0 +1,34 @@
+{
+  "tests": 313,
+  "failures": 6,
+  "errors": 0,
+  "skipped": 0,
+  "network_attempts": 0,
+  "successful": false,
+  "failures_and_errors": [
+    {
+      "test": "test_http_failure_remains_failed_with_one_attempt_and_saved_error (test_arxiv_integration.MainArxivIntegrationTests.test_http_failure_remains_failed_with_one_attempt_and_saved_error)",
+      "trace": "Traceback (most recent call last):\n  File \"/Users/j/Desktop/Advanced-LLM-RAG/tests/test_arxiv_integration.py\", line 204, in test_http_failure_remains_failed_with_one_attempt_and_saved_error\n    self.assertEqual(result['status'], 'failed')\nAssertionError: 'degraded' != 'failed'\n- degraded\n+ failed\n\n"
+    },
+    {
+      "test": "test_answer_evaluation_pins_version_across_questions (test_knowledge_base.KnowledgeBaseTests.test_answer_evaluation_pins_version_across_questions)",
+      "trace": "Traceback (most recent call last):\n  File \"/Users/j/Desktop/Advanced-LLM-RAG/tests/test_knowledge_base.py\", line 228, in test_answer_evaluation_pins_version_across_questions\n    self.assertEqual(kb.load_knowledge_base(self.processed)[2]['version'], 'second')\nAssertionError: 'first' != 'second'\n- first\n+ second\n\n"
+    },
+    {
+      "test": "test_invalid_planning_keeps_failure_without_generating_a_rag_fallback (test_main_agent.MainAgentTests.test_invalid_planning_keeps_failure_without_generating_a_rag_fallback)",
+      "trace": "Traceback (most recent call last):\n  File \"/Users/j/Desktop/Advanced-LLM-RAG/tests/test_main_agent.py\", line 154, in test_invalid_planning_keeps_failure_without_generating_a_rag_fallback\n    self.assertIsNone(result['answer'])\nAssertionError: '本轮处理未完成，暂时无法核实答案。具体错误已保留在运行记录中。' is not None\n"
+    },
+    {
+      "test": "test_truncated_decomposition_keeps_evidence_and_does_not_retry (test_main_agent.MainAgentTests.test_truncated_decomposition_keeps_evidence_and_does_not_retry)",
+      "trace": "Traceback (most recent call last):\n  File \"/Users/j/Desktop/Advanced-LLM-RAG/tests/test_main_agent.py\", line 183, in test_truncated_decomposition_keeps_evidence_and_does_not_retry\n    with self.assertRaises(api.IncompleteResponseError):\nAssertionError: IncompleteResponseError not raised\n"
+    },
+    {
+      "test": "test_invalid_probe_citations_cannot_be_used_as_a_fallback (test_main_auto.MainAutoTests.test_invalid_probe_citations_cannot_be_used_as_a_fallback)",
+      "trace": "Traceback (most recent call last):\n  File \"/Users/j/Desktop/Advanced-LLM-RAG/tests/test_main_auto.py\", line 80, in test_invalid_probe_citations_cannot_be_used_as_a_fallback\n    self.assertEqual(result['status'],'failed');self.assertIsNone(result['answer'])\n                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: '本轮处理未完成，暂时无法核实答案。具体错误已保留在运行记录中。' is not None\n"
+    },
+    {
+      "test": "test_probe_transport_failure_does_not_retry_or_invent_a_fallback (test_main_auto.MainAutoTests.test_probe_transport_failure_does_not_retry_or_invent_a_fallback)",
+      "trace": "Traceback (most recent call last):\n  File \"/Users/j/Desktop/Advanced-LLM-RAG/tests/test_main_auto.py\", line 111, in test_probe_transport_failure_does_not_retry_or_invent_a_fallback\n    with self.assertRaisesRegex(RuntimeError,'HTTP 503'):pipeline.main('Describe A.',mode='auto',output_dir=out)\nAssertionError: RuntimeError not raised\n"
+    }
+  ]
+}

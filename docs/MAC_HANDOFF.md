@@ -71,7 +71,7 @@ print(type(index).__name__, index.ntotal, index.d)
 PY
 ```
 
-首次迁移不运行构建脚本；它会覆盖已有索引。只有需要修改知识库时才先保存版本再重建。
+首次迁移优先核验已有快照。当前 Semantic 构建器已改为生成独立版本，默认不切换；版本、校验与回退步骤见 [知识库版本操作](KNOWLEDGE_BASE_VERSIONS.md)。版本目录与当前指针默认被 Git 忽略，迁移时另行核对。
 
 ## 4. API 与检索模型
 

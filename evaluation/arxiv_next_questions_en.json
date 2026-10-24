@@ -1,0 +1,234 @@
+[
+  {
+    "id": "n01",
+    "type": "single_document",
+    "question": "During training of the original RAG model, which retriever components are kept fixed and which components are fine-tuned?",
+    "gold_evidence": [
+      {
+        "source": "2005.11401v4.pdf",
+        "page": 4,
+        "quote": "keep the document encoder (and index)"
+      }
+    ],
+    "reference_points": [
+      "Document encoder and index stay fixed.",
+      "Query encoder and BART generator are fine-tuned."
+    ]
+  },
+  {
+    "id": "n02",
+    "type": "single_document",
+    "question": "Which negative passage types does DPR consider, and which combination is used by its best model?",
+    "gold_evidence": [
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 3,
+        "quote": "We consider three different types of negatives"
+      }
+    ],
+    "reference_points": [
+      "Random, BM25, and Gold negatives.",
+      "Best model uses gold passages from the same mini-batch plus one BM25 negative."
+    ]
+  },
+  {
+    "id": "n03",
+    "type": "single_document",
+    "question": "How does ColBERT augment a short query, and is the same augmentation applied to document inputs?",
+    "gold_evidence": [
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "quote": "special [mask] tokens up to length Nq"
+      },
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "quote": "we do not append [mask] tokens to documents"
+      }
+    ],
+    "reference_points": [
+      "Short queries are padded with BERT mask tokens up to Nq.",
+      "Document inputs do not receive mask-token padding."
+    ]
+  },
+  {
+    "id": "n04",
+    "type": "single_document",
+    "question": "Does Self-RAG need its separate critic model at inference, and how is this requirement avoided during training?",
+    "gold_evidence": [
+      {
+        "source": "2310.11511v1.pdf",
+        "page": 4,
+        "quote": "without relying on the critic at inference time"
+      }
+    ],
+    "reference_points": [
+      "Critic annotates task outputs with reflection tokens offline.",
+      "Generator learns to emit reflection tokens itself using the conventional LM objective; separate critic not needed at inference."
+    ]
+  },
+  {
+    "id": "n05",
+    "type": "cross_document",
+    "question": "Which BERT encoders are used by the original RAG retriever and DPR, and what representation does DPR extract from each encoder?",
+    "gold_evidence": [
+      {
+        "source": "2005.11401v4.pdf",
+        "page": 3,
+        "quote": "BERTBASE document encoder"
+      },
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 3,
+        "quote": "two independent BERT"
+      }
+    ],
+    "reference_points": [
+      "RAG retriever uses BERT-base query and document encoders.",
+      "DPR uses two independent BERT-base uncased networks.",
+      "DPR extracts the CLS-token representation; the 768 dimension is optional detail."
+    ]
+  },
+  {
+    "id": "n06",
+    "type": "cross_document",
+    "question": "How do DPR and ColBERT form positive and negative training examples, and what losses do they optimize?",
+    "gold_evidence": [
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 3,
+        "quote": "negative log likelihood"
+      },
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 3,
+        "quote": "Our best model uses gold passages"
+      },
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 5,
+        "quote": "pairwise sofmax cross-entropy loss"
+      }
+    ],
+    "reference_points": [
+      "DPR trains question/positive/negative passage examples with negative log likelihood of the positive.",
+      "DPR best negative combination is in-batch gold and one BM25 negative.",
+      "ColBERT trains query-positive-negative triples with pairwise softmax cross-entropy."
+    ]
+  },
+  {
+    "id": "n07",
+    "type": "cross_document",
+    "question": "What document representations are precomputed and stored for retrieval or indexing in RAG and ColBERT?",
+    "gold_evidence": [
+      {
+        "source": "2005.11401v4.pdf",
+        "page": 4,
+        "quote": "compute an embedding for each document"
+      },
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 5,
+        "quote": "storing the output embeddings per document"
+      }
+    ],
+    "reference_points": [
+      "RAG precomputes document encoder embeddings and builds a FAISS MIPS index.",
+      "ColBERT runs its document encoder offline in batches and stores output embeddings for each document."
+    ]
+  },
+  {
+    "id": "n08",
+    "type": "cross_document",
+    "question": "How do Self-RAG and CRAG decide whether retrieval or additional knowledge is needed, and what happens when retrieval is unnecessary or judged incorrect?",
+    "gold_evidence": [
+      {
+        "source": "2310.11511v1.pdf",
+        "page": 4,
+        "quote": "If retrieval is not required"
+      },
+      {
+        "source": "2401.15884v3.pdf",
+        "page": 3,
+        "quote": "retrieved documents will be discarded"
+      },
+      {
+        "source": "2401.15884v3.pdf",
+        "page": 3,
+        "quote": "web searches are resorted to"
+      }
+    ],
+    "reference_points": [
+      "Self-RAG emits a retrieval token to judge retrieval utility.",
+      "When retrieval is not required, Self-RAG produces the next segment as a standard LM.",
+      "CRAG uses relevance/confidence to trigger Incorrect and discards retrieved documents.",
+      "CRAG then uses web search as complementary knowledge."
+    ]
+  },
+  {
+    "id": "n09",
+    "type": "cross_document",
+    "question": "Which Wikipedia snapshot does DPR use, and how does CRAG extend retrieval beyond a static corpus?",
+    "gold_evidence": [
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 4,
+        "quote": "Dec. 20, 2018"
+      },
+      {
+        "source": "2401.15884v3.pdf",
+        "page": 2,
+        "quote": "large-scale web searches"
+      }
+    ],
+    "reference_points": [
+      "DPR uses English Wikipedia dump dated December 20, 2018.",
+      "CRAG adds large-scale web search when confidence is Incorrect or Ambiguous."
+    ]
+  },
+  {
+    "id": "n10",
+    "type": "cross_document",
+    "question": "How do DPR and ColBERT mark or extract query and document representations before matching?",
+    "gold_evidence": [
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 3,
+        "quote": "representation at the [CLS] token"
+      },
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "quote": "“[Q]q0q1...ql##...#”"
+      },
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "quote": "“[D]d0d1...dn”"
+      }
+    ],
+    "reference_points": [
+      "DPR extracts one CLS representation for each query/passage encoder.",
+      "ColBERT marks query and document inputs with Q and D tokens and retains bags of token embeddings."
+    ]
+  },
+  {
+    "id": "n11",
+    "type": "unanswerable",
+    "question": "What measured P95 end-to-end latency did this project achieve with Top-10 on an M3 Mac under eight concurrent users? Give the exact milliseconds.",
+    "gold_evidence": [],
+    "reference_points": [
+      "Cannot infer project-specific measurements from these papers; refuse to invent latency."
+    ]
+  },
+  {
+    "id": "n12",
+    "type": "unanswerable",
+    "question": "What Recall@10 and P95 latency were measured for a combined Self-RAG plus CRAG implementation in this repository?",
+    "gold_evidence": [],
+    "reference_points": [
+      "These papers do not report measurements of a combined implementation in this repository."
+    ]
+  }
+]

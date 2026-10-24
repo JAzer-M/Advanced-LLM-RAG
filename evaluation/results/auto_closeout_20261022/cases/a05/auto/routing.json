@@ -1,0 +1,45 @@
+{
+  "route": "direct",
+  "reason": "两个需求的批次大小与学习率均已由原文段落建立。",
+  "initial_action": {
+    "type": "answer",
+    "reason": "两个需求的批次大小与学习率均已由原文段落建立。",
+    "requirement_ids": [],
+    "query": null,
+    "source": null,
+    "chunk_id": null
+  },
+  "gate_decision_calls": 3,
+  "requirements": [
+    {
+      "id": "r1",
+      "status": "supported",
+      "evidence": [
+        {
+          "chunk_id": 435,
+          "quote": "The DPR model used in our main experiments is trained using the in-batch negative setting (Sec- tion 3.2) with a batch size of 128 and one additional BM25 negative passage per question."
+        },
+        {
+          "chunk_id": 436,
+          "quote": "We trained the question and passage encoders for up to 40 epochs for large datasets (NQ, TriviaQA, SQuAD) and 100 epochs for small datasets (TREC, WQ), with a learning rate of 10−5 using Adam, linear scheduling with warm-up and dropout rate 0.1."
+        }
+      ],
+      "supported_part": "主实验所用DPR检索器的训练批次大小为128，学习率为10−5。",
+      "reason": "chunk 435明确给出主实验DPR模型的批次大小为128；chunk 436给出问题与段落编码器训练的学习率为10−5，覆盖该需求的两项要素。",
+      "gap": ""
+    },
+    {
+      "id": "r2",
+      "status": "supported",
+      "evidence": [
+        {
+          "chunk_id": 641,
+          "quote": "Similar to [25], we ﬁne-tune all ColBERT models with learning rate 3 × 10−6 with a batch size 32."
+        }
+      ],
+      "supported_part": "ColBERT微调使用学习率3×10−6、批次大小32。",
+      "reason": "chunk 641直接陈述ColBERT所有模型的微调学习率与批次大小。",
+      "gap": ""
+    }
+  ]
+}

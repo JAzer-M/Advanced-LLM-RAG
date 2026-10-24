@@ -1,0 +1,566 @@
+[
+  {
+    "question_id": "p1",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nWhich generator does the original RAG paper use, and how many parameters does it have?\n",
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"Which generator does the original RAG paper use?\",\n        \"How many parameters does the generator used in the original RAG paper have?\"\n    ]\n}",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 256,
+        "cached_tokens": 256,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 51,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.01,
+        "prompt_cache_hit_tokens": 256,
+        "prompt_cache_miss_tokens": 260,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 516,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 256,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 567
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.896
+  },
+  {
+    "question_id": "p1",
+    "prompt": "\n    You are a retrieval query optimization assistant\n    for an academic research paper RAG system.\n\n    Your task is to rewrite the user's question into\n    a retrieval-optimized query for Dense and BM25 retrieval.\n\n    The goal is NOT to make the question sound more formal.\n    The goal is to improve the chance of matching relevant\n    technical terminology in academic papers.\n\n    Rules:\n    1. Preserve the original information need and intent.\n    2. Preserve all important entities, model names, paper names,\n       abbreviations, and technical concepts from the original question.\n    3. Keep the original important keywords whenever possible.\n    4. When a technical concept may be expressed using different\n       standard terminology in academic papers, add a concise\n       synonym or closely related terminology that preserves the\n       original meaning.\n    5. Prefer terminology that is likely to appear in scientific\n       papers, but do not invent specific facts, values, methods,\n       or conclusions.\n    6. Do not remove important technical terms from the original query.\n    7. Do not broaden or narrow the information need.\n    8. Do not answer the question.\n    9. Do not add explanations.\n    10. Return only ONE retrieval-optimized query.\n    11. Keep the rewritten query concise.\n\n    Example:\n\n    Original Question:\n    How do VGG and DCNN differ in their use of convolutional filter sizes?\n\n    Optimized Search Query:\n    VGG and DCNN convolutional filter sizes receptive field sizes\n\n    Incorrect:\n    VGG and DCNN architecture differences\n\n    Incorrect:\n    Why does VGG use small convolutional filters while DCNN uses large filters?\n\n    Original Question:\n    Which generator does the original RAG paper use, and how many parameters does it have?\n\n    Optimized Search Query:\n    ",
+    "response": {
+      "answer": "original RAG paper generator model parameters retriever generator architecture",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 128,
+        "cached_tokens": 128,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 12,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0,
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 247,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 375,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 128,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 387
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.433
+  },
+  {
+    "question_id": "p2",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nWhat function does DPR use to compute similarity between question and passage vectors?\n",
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 256,
+        "cached_tokens": 256,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 19,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0,
+        "prompt_cache_hit_tokens": 256,
+        "prompt_cache_miss_tokens": 257,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 513,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 256,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 532
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.496
+  },
+  {
+    "question_id": "p2",
+    "prompt": "\n    You are a retrieval query optimization assistant\n    for an academic research paper RAG system.\n\n    Your task is to rewrite the user's question into\n    a retrieval-optimized query for Dense and BM25 retrieval.\n\n    The goal is NOT to make the question sound more formal.\n    The goal is to improve the chance of matching relevant\n    technical terminology in academic papers.\n\n    Rules:\n    1. Preserve the original information need and intent.\n    2. Preserve all important entities, model names, paper names,\n       abbreviations, and technical concepts from the original question.\n    3. Keep the original important keywords whenever possible.\n    4. When a technical concept may be expressed using different\n       standard terminology in academic papers, add a concise\n       synonym or closely related terminology that preserves the\n       original meaning.\n    5. Prefer terminology that is likely to appear in scientific\n       papers, but do not invent specific facts, values, methods,\n       or conclusions.\n    6. Do not remove important technical terms from the original query.\n    7. Do not broaden or narrow the information need.\n    8. Do not answer the question.\n    9. Do not add explanations.\n    10. Return only ONE retrieval-optimized query.\n    11. Keep the rewritten query concise.\n\n    Example:\n\n    Original Question:\n    How do VGG and DCNN differ in their use of convolutional filter sizes?\n\n    Optimized Search Query:\n    VGG and DCNN convolutional filter sizes receptive field sizes\n\n    Incorrect:\n    VGG and DCNN architecture differences\n\n    Incorrect:\n    Why does VGG use small convolutional filters while DCNN uses large filters?\n\n    Original Question:\n    What function does DPR use to compute similarity between question and passage vectors?\n\n    Optimized Search Query:\n    ",
+    "response": {
+      "answer": "DPR similarity function question passage vectors dot product",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 128,
+        "cached_tokens": 128,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 9,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0,
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 244,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 372,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 128,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 381
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.452
+  },
+  {
+    "question_id": "p3",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nHow does ColBERT MaxSim aggregate query-document token similarities into a document relevance score?\n",
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 256,
+        "cached_tokens": 256,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 19,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0,
+        "prompt_cache_hit_tokens": 256,
+        "prompt_cache_miss_tokens": 260,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 516,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 256,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 535
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.738
+  },
+  {
+    "question_id": "p3",
+    "prompt": "\n    You are a retrieval query optimization assistant\n    for an academic research paper RAG system.\n\n    Your task is to rewrite the user's question into\n    a retrieval-optimized query for Dense and BM25 retrieval.\n\n    The goal is NOT to make the question sound more formal.\n    The goal is to improve the chance of matching relevant\n    technical terminology in academic papers.\n\n    Rules:\n    1. Preserve the original information need and intent.\n    2. Preserve all important entities, model names, paper names,\n       abbreviations, and technical concepts from the original question.\n    3. Keep the original important keywords whenever possible.\n    4. When a technical concept may be expressed using different\n       standard terminology in academic papers, add a concise\n       synonym or closely related terminology that preserves the\n       original meaning.\n    5. Prefer terminology that is likely to appear in scientific\n       papers, but do not invent specific facts, values, methods,\n       or conclusions.\n    6. Do not remove important technical terms from the original query.\n    7. Do not broaden or narrow the information need.\n    8. Do not answer the question.\n    9. Do not add explanations.\n    10. Return only ONE retrieval-optimized query.\n    11. Keep the rewritten query concise.\n\n    Example:\n\n    Original Question:\n    How do VGG and DCNN differ in their use of convolutional filter sizes?\n\n    Optimized Search Query:\n    VGG and DCNN convolutional filter sizes receptive field sizes\n\n    Incorrect:\n    VGG and DCNN architecture differences\n\n    Incorrect:\n    Why does VGG use small convolutional filters while DCNN uses large filters?\n\n    Original Question:\n    How does ColBERT MaxSim aggregate query-document token similarities into a document relevance score?\n\n    Optimized Search Query:\n    ",
+    "response": {
+      "answer": "ColBERT MaxSim aggregation query-document token similarities relevance score late interaction scoring mechanism",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 128,
+        "cached_tokens": 128,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 16,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0,
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 247,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 375,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 128,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 391
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.014
+  },
+  {
+    "question_id": "p4",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nWhat are the four types of reflection tokens in Self-RAG, and what does each type evaluate?\n",
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"What are the four types of reflection tokens in Self-RAG?\",\n        \"What does the Retrieval token type evaluate in Self-RAG?\",\n        \"What does the IsRel token type evaluate in Self-RAG?\",\n        \"What does the IsSup token type evaluate in Self-RAG?\",\n        \"What does the IsUse token type evaluate in Self-RAG?\"\n    ]\n}",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 256,
+        "cached_tokens": 256,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 100,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.01,
+        "prompt_cache_hit_tokens": 256,
+        "prompt_cache_miss_tokens": 262,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 518,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 256,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 618
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.009
+  },
+  {
+    "question_id": "p4",
+    "prompt": "\n    You are a retrieval query optimization assistant\n    for an academic research paper RAG system.\n\n    Your task is to rewrite the user's question into\n    a retrieval-optimized query for Dense and BM25 retrieval.\n\n    The goal is NOT to make the question sound more formal.\n    The goal is to improve the chance of matching relevant\n    technical terminology in academic papers.\n\n    Rules:\n    1. Preserve the original information need and intent.\n    2. Preserve all important entities, model names, paper names,\n       abbreviations, and technical concepts from the original question.\n    3. Keep the original important keywords whenever possible.\n    4. When a technical concept may be expressed using different\n       standard terminology in academic papers, add a concise\n       synonym or closely related terminology that preserves the\n       original meaning.\n    5. Prefer terminology that is likely to appear in scientific\n       papers, but do not invent specific facts, values, methods,\n       or conclusions.\n    6. Do not remove important technical terms from the original query.\n    7. Do not broaden or narrow the information need.\n    8. Do not answer the question.\n    9. Do not add explanations.\n    10. Return only ONE retrieval-optimized query.\n    11. Keep the rewritten query concise.\n\n    Example:\n\n    Original Question:\n    How do VGG and DCNN differ in their use of convolutional filter sizes?\n\n    Optimized Search Query:\n    VGG and DCNN convolutional filter sizes receptive field sizes\n\n    Incorrect:\n    VGG and DCNN architecture differences\n\n    Incorrect:\n    Why does VGG use small convolutional filters while DCNN uses large filters?\n\n    Original Question:\n    What are the four types of reflection tokens in Self-RAG, and what does each type evaluate?\n\n    Optimized Search Query:\n    ",
+    "response": {
+      "answer": "Self-RAG reflection tokens types retrieval critic question critique groundedness relevance support",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 128,
+        "cached_tokens": 128,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 14,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0,
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 249,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 377,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 128,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 391
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.69
+  },
+  {
+    "question_id": "p5",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nWhat are the three confidence judgments from the CRAG retrieval evaluator that trigger subsequent actions?\n",
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 256,
+        "cached_tokens": 256,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 19,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0,
+        "prompt_cache_hit_tokens": 256,
+        "prompt_cache_miss_tokens": 260,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 516,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 256,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 535
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.37
+  },
+  {
+    "question_id": "p5",
+    "prompt": "\n    You are a retrieval query optimization assistant\n    for an academic research paper RAG system.\n\n    Your task is to rewrite the user's question into\n    a retrieval-optimized query for Dense and BM25 retrieval.\n\n    The goal is NOT to make the question sound more formal.\n    The goal is to improve the chance of matching relevant\n    technical terminology in academic papers.\n\n    Rules:\n    1. Preserve the original information need and intent.\n    2. Preserve all important entities, model names, paper names,\n       abbreviations, and technical concepts from the original question.\n    3. Keep the original important keywords whenever possible.\n    4. When a technical concept may be expressed using different\n       standard terminology in academic papers, add a concise\n       synonym or closely related terminology that preserves the\n       original meaning.\n    5. Prefer terminology that is likely to appear in scientific\n       papers, but do not invent specific facts, values, methods,\n       or conclusions.\n    6. Do not remove important technical terms from the original query.\n    7. Do not broaden or narrow the information need.\n    8. Do not answer the question.\n    9. Do not add explanations.\n    10. Return only ONE retrieval-optimized query.\n    11. Keep the rewritten query concise.\n\n    Example:\n\n    Original Question:\n    How do VGG and DCNN differ in their use of convolutional filter sizes?\n\n    Optimized Search Query:\n    VGG and DCNN convolutional filter sizes receptive field sizes\n\n    Incorrect:\n    VGG and DCNN architecture differences\n\n    Incorrect:\n    Why does VGG use small convolutional filters while DCNN uses large filters?\n\n    Original Question:\n    What are the three confidence judgments from the CRAG retrieval evaluator that trigger subsequent actions?\n\n    Optimized Search Query:\n    ",
+    "response": {
+      "answer": "CRAG retrieval evaluator confidence judgments three categories actions Correct Incorrect Ambiguous",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 128,
+        "cached_tokens": 128,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 15,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0,
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 247,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 375,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 128,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 390
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.333
+  },
+  {
+    "question_id": "p6",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nHow do DPR and ColBERT differ in question and document representations and relevance scoring?\n",
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How does DPR represent questions and documents and compute relevance scoring?\",\n        \"How does ColBERT represent questions and documents and compute relevance scoring?\"\n    ]\n}",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 256,
+        "cached_tokens": 256,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 52,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.01,
+        "prompt_cache_hit_tokens": 256,
+        "prompt_cache_miss_tokens": 259,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 515,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 256,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 567
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.517
+  },
+  {
+    "question_id": "p6",
+    "prompt": "\n    You are a retrieval query optimization assistant\n    for an academic research paper RAG system.\n\n    Your task is to rewrite the user's question into\n    a retrieval-optimized query for Dense and BM25 retrieval.\n\n    The goal is NOT to make the question sound more formal.\n    The goal is to improve the chance of matching relevant\n    technical terminology in academic papers.\n\n    Rules:\n    1. Preserve the original information need and intent.\n    2. Preserve all important entities, model names, paper names,\n       abbreviations, and technical concepts from the original question.\n    3. Keep the original important keywords whenever possible.\n    4. When a technical concept may be expressed using different\n       standard terminology in academic papers, add a concise\n       synonym or closely related terminology that preserves the\n       original meaning.\n    5. Prefer terminology that is likely to appear in scientific\n       papers, but do not invent specific facts, values, methods,\n       or conclusions.\n    6. Do not remove important technical terms from the original query.\n    7. Do not broaden or narrow the information need.\n    8. Do not answer the question.\n    9. Do not add explanations.\n    10. Return only ONE retrieval-optimized query.\n    11. Keep the rewritten query concise.\n\n    Example:\n\n    Original Question:\n    How do VGG and DCNN differ in their use of convolutional filter sizes?\n\n    Optimized Search Query:\n    VGG and DCNN convolutional filter sizes receptive field sizes\n\n    Incorrect:\n    VGG and DCNN architecture differences\n\n    Incorrect:\n    Why does VGG use small convolutional filters while DCNN uses large filters?\n\n    Original Question:\n    How do DPR and ColBERT differ in question and document representations and relevance scoring?\n\n    Optimized Search Query:\n    ",
+    "response": {
+      "answer": "DPR ColBERT dense passage retrieval question document representations relevance scoring late interaction",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 128,
+        "cached_tokens": 128,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 14,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0,
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 246,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 374,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 128,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 388
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.875
+  }
+]

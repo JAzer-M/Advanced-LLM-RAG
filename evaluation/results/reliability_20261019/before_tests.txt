@@ -1,0 +1,254 @@
+test_empty_stopped_response_is_still_rejected (test_reliability.APICompletionTests.test_empty_stopped_response_is_still_rejected) ... ok
+test_evaluation_keeps_failure_evidence_without_publishing_answer (test_reliability.APICompletionTests.test_evaluation_keeps_failure_evidence_without_publishing_answer) ... FAIL
+test_length_is_rejected_with_partial_response_and_usage (test_reliability.APICompletionTests.test_length_is_rejected_with_partial_response_and_usage) ... FAIL
+test_main_and_shared_generation_entrypoints_propagate_truncation (test_reliability.APICompletionTests.test_main_and_shared_generation_entrypoints_propagate_truncation) ... 
+  test_main_and_shared_generation_entrypoints_propagate_truncation (test_reliability.APICompletionTests.test_main_and_shared_generation_entrypoints_propagate_truncation) (entrypoint=<function generate_final_answer at 0x101c86020>) ... FAIL
+  test_main_and_shared_generation_entrypoints_propagate_truncation (test_reliability.APICompletionTests.test_main_and_shared_generation_entrypoints_propagate_truncation) (entrypoint=<function generate_final_answer at 0x101c86020>) ... FAIL
+test_normal_response_is_preserved (test_reliability.APICompletionTests.test_normal_response_is_preserved) ... ok
+test_other_non_stopped_responses_are_not_complete_answers (test_reliability.APICompletionTests.test_other_non_stopped_responses_are_not_complete_answers) ... 
+  test_other_non_stopped_responses_are_not_complete_answers (test_reliability.APICompletionTests.test_other_non_stopped_responses_are_not_complete_answers) (finish_reason='content_filter') ... FAIL
+  test_other_non_stopped_responses_are_not_complete_answers (test_reliability.APICompletionTests.test_other_non_stopped_responses_are_not_complete_answers) (finish_reason='tool_calls') ... FAIL
+  test_other_non_stopped_responses_are_not_complete_answers (test_reliability.APICompletionTests.test_other_non_stopped_responses_are_not_complete_answers) (finish_reason=None) ... FAIL
+test_empty_sparse_branch_preserves_dense_order_in_rrf (test_reliability.SparseCandidateTests.test_empty_sparse_branch_preserves_dense_order_in_rrf) ... FAIL
+test_negative_scores_for_real_matches_are_preserved (test_reliability.SparseCandidateTests.test_negative_scores_for_real_matches_are_preserved) ... FAIL
+test_queries_without_usable_matches_return_no_candidates (test_reliability.SparseCandidateTests.test_queries_without_usable_matches_return_no_candidates) ... 
+  test_queries_without_usable_matches_return_no_candidates (test_reliability.SparseCandidateTests.test_queries_without_usable_matches_return_no_candidates) (query='为什么需要位置编码') ... FAIL
+  test_queries_without_usable_matches_return_no_candidates (test_reliability.SparseCandidateTests.test_queries_without_usable_matches_return_no_candidates) (query='!!!') ... FAIL
+  test_queries_without_usable_matches_return_no_candidates (test_reliability.SparseCandidateTests.test_queries_without_usable_matches_return_no_candidates) (query='unseenquerytoken') ... FAIL
+test_zero_score_padding_is_removed_and_mixed_query_still_matches (test_reliability.SparseCandidateTests.test_zero_score_padding_is_removed_and_mixed_query_still_matches) ... 
+  test_zero_score_padding_is_removed_and_mixed_query_still_matches (test_reliability.SparseCandidateTests.test_zero_score_padding_is_removed_and_mixed_query_still_matches) (query='positional encoding') ... FAIL
+  test_zero_score_padding_is_removed_and_mixed_query_still_matches (test_reliability.SparseCandidateTests.test_zero_score_padding_is_removed_and_mixed_query_still_matches) (query='什么是 positional encoding') ... FAIL
+
+======================================================================
+FAIL: test_evaluation_keeps_failure_evidence_without_publishing_answer (test_reliability.APICompletionTests.test_evaluation_keeps_failure_evidence_without_publishing_answer)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/j/Desktop/Advanced-LLM-RAG/tests/test_reliability.py", line 97, in test_evaluation_keeps_failure_evidence_without_publishing_answer
+    with self.assertRaises(SystemExit) as caught:
+AssertionError: SystemExit not raised
+
+======================================================================
+FAIL: test_length_is_rejected_with_partial_response_and_usage (test_reliability.APICompletionTests.test_length_is_rejected_with_partial_response_and_usage)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/j/Desktop/Advanced-LLM-RAG/tests/test_reliability.py", line 51, in test_length_is_rejected_with_partial_response_and_usage
+    with self.assertRaisesRegex(RuntimeError, "未完成.*length") as caught:
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_main_and_shared_generation_entrypoints_propagate_truncation (test_reliability.APICompletionTests.test_main_and_shared_generation_entrypoints_propagate_truncation) (entrypoint=<function generate_final_answer at 0x101c86020>)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/j/Desktop/Advanced-LLM-RAG/tests/test_reliability.py", line 75, in test_main_and_shared_generation_entrypoints_propagate_truncation
+    with self.assertRaisesRegex(RuntimeError, "未完成.*length"):
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_main_and_shared_generation_entrypoints_propagate_truncation (test_reliability.APICompletionTests.test_main_and_shared_generation_entrypoints_propagate_truncation) (entrypoint=<function generate_final_answer at 0x101c86020>)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/j/Desktop/Advanced-LLM-RAG/tests/test_reliability.py", line 75, in test_main_and_shared_generation_entrypoints_propagate_truncation
+    with self.assertRaisesRegex(RuntimeError, "未完成.*length"):
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_other_non_stopped_responses_are_not_complete_answers (test_reliability.APICompletionTests.test_other_non_stopped_responses_are_not_complete_answers) (finish_reason='content_filter')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/j/Desktop/Advanced-LLM-RAG/tests/test_reliability.py", line 61, in test_other_non_stopped_responses_are_not_complete_answers
+    with self.assertRaisesRegex(RuntimeError, "未完成"):
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_other_non_stopped_responses_are_not_complete_answers (test_reliability.APICompletionTests.test_other_non_stopped_responses_are_not_complete_answers) (finish_reason='tool_calls')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/j/Desktop/Advanced-LLM-RAG/tests/test_reliability.py", line 61, in test_other_non_stopped_responses_are_not_complete_answers
+    with self.assertRaisesRegex(RuntimeError, "未完成"):
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_other_non_stopped_responses_are_not_complete_answers (test_reliability.APICompletionTests.test_other_non_stopped_responses_are_not_complete_answers) (finish_reason=None)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/j/Desktop/Advanced-LLM-RAG/tests/test_reliability.py", line 61, in test_other_non_stopped_responses_are_not_complete_answers
+    with self.assertRaisesRegex(RuntimeError, "未完成"):
+AssertionError: RuntimeError not raised
+
+======================================================================
+FAIL: test_empty_sparse_branch_preserves_dense_order_in_rrf (test_reliability.SparseCandidateTests.test_empty_sparse_branch_preserves_dense_order_in_rrf)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/j/Desktop/Advanced-LLM-RAG/tests/test_reliability.py", line 140, in test_empty_sparse_branch_preserves_dense_order_in_rrf
+    self.assertEqual([r["chunk_id"] for r in fused], [2, 1])
+AssertionError: Lists differ: [2, 1, 0] != [2, 1]
+
+First list contains 1 additional elements.
+First extra element 2:
+0
+
+- [2, 1, 0]
+?      ---
+
++ [2, 1]
+
+======================================================================
+FAIL: test_negative_scores_for_real_matches_are_preserved (test_reliability.SparseCandidateTests.test_negative_scores_for_real_matches_are_preserved)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/j/Desktop/Advanced-LLM-RAG/tests/test_reliability.py", line 133, in test_negative_scores_for_real_matches_are_preserved
+    self.assertEqual([r["chunk_id"] for r in results], [0, 1, 2])
+AssertionError: Lists differ: [3, 0, 1, 2] != [0, 1, 2]
+
+First differing element 0:
+3
+0
+
+First list contains 1 additional elements.
+First extra element 3:
+2
+
+- [3, 0, 1, 2]
+?  ---
+
++ [0, 1, 2]
+
+======================================================================
+FAIL: test_queries_without_usable_matches_return_no_candidates (test_reliability.SparseCandidateTests.test_queries_without_usable_matches_return_no_candidates) (query='为什么需要位置编码')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/j/Desktop/Advanced-LLM-RAG/tests/test_reliability.py", line 121, in test_queries_without_usable_matches_return_no_candidates
+    self.assertEqual(retrieve_bm25(self.bm25, self.chunks, query, 3), [])
+AssertionError: Lists differ: [{'chunk_id': 0, 'score': 0.0, 'source': '[375 chars]ws'}] != []
+
+First list contains 3 additional elements.
+First extra element 0:
+{'chunk_id': 0, 'score': 0.0, 'source': 'paper-0.pdf', 'page': 1, 'title': 'Fixture', 'section': None, 'text': 'positional encoding order'}
+
++ []
+- [{'chunk_id': 0,
+-   'page': 1,
+-   'score': 0.0,
+-   'section': None,
+-   'source': 'paper-0.pdf',
+-   'text': 'positional encoding order',
+-   'title': 'Fixture'},
+-  {'chunk_id': 1,
+-   'page': 1,
+-   'score': 0.0,
+-   'section': None,
+-   'source': 'paper-1.pdf',
+-   'text': 'convolution kernels filters',
+-   'title': 'Fixture'},
+-  {'chunk_id': 2,
+-   'page': 1,
+-   'score': 0.0,
+-   'section': None,
+-   'source': 'paper-2.pdf',
+-   'text': 'pooling stride windows',
+-   'title': 'Fixture'}]
+
+======================================================================
+FAIL: test_queries_without_usable_matches_return_no_candidates (test_reliability.SparseCandidateTests.test_queries_without_usable_matches_return_no_candidates) (query='!!!')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/j/Desktop/Advanced-LLM-RAG/tests/test_reliability.py", line 121, in test_queries_without_usable_matches_return_no_candidates
+    self.assertEqual(retrieve_bm25(self.bm25, self.chunks, query, 3), [])
+AssertionError: Lists differ: [{'chunk_id': 0, 'score': 0.0, 'source': '[375 chars]ws'}] != []
+
+First list contains 3 additional elements.
+First extra element 0:
+{'chunk_id': 0, 'score': 0.0, 'source': 'paper-0.pdf', 'page': 1, 'title': 'Fixture', 'section': None, 'text': 'positional encoding order'}
+
++ []
+- [{'chunk_id': 0,
+-   'page': 1,
+-   'score': 0.0,
+-   'section': None,
+-   'source': 'paper-0.pdf',
+-   'text': 'positional encoding order',
+-   'title': 'Fixture'},
+-  {'chunk_id': 1,
+-   'page': 1,
+-   'score': 0.0,
+-   'section': None,
+-   'source': 'paper-1.pdf',
+-   'text': 'convolution kernels filters',
+-   'title': 'Fixture'},
+-  {'chunk_id': 2,
+-   'page': 1,
+-   'score': 0.0,
+-   'section': None,
+-   'source': 'paper-2.pdf',
+-   'text': 'pooling stride windows',
+-   'title': 'Fixture'}]
+
+======================================================================
+FAIL: test_queries_without_usable_matches_return_no_candidates (test_reliability.SparseCandidateTests.test_queries_without_usable_matches_return_no_candidates) (query='unseenquerytoken')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/j/Desktop/Advanced-LLM-RAG/tests/test_reliability.py", line 121, in test_queries_without_usable_matches_return_no_candidates
+    self.assertEqual(retrieve_bm25(self.bm25, self.chunks, query, 3), [])
+AssertionError: Lists differ: [{'chunk_id': 0, 'score': 0.0, 'source': '[375 chars]ws'}] != []
+
+First list contains 3 additional elements.
+First extra element 0:
+{'chunk_id': 0, 'score': 0.0, 'source': 'paper-0.pdf', 'page': 1, 'title': 'Fixture', 'section': None, 'text': 'positional encoding order'}
+
++ []
+- [{'chunk_id': 0,
+-   'page': 1,
+-   'score': 0.0,
+-   'section': None,
+-   'source': 'paper-0.pdf',
+-   'text': 'positional encoding order',
+-   'title': 'Fixture'},
+-  {'chunk_id': 1,
+-   'page': 1,
+-   'score': 0.0,
+-   'section': None,
+-   'source': 'paper-1.pdf',
+-   'text': 'convolution kernels filters',
+-   'title': 'Fixture'},
+-  {'chunk_id': 2,
+-   'page': 1,
+-   'score': 0.0,
+-   'section': None,
+-   'source': 'paper-2.pdf',
+-   'text': 'pooling stride windows',
+-   'title': 'Fixture'}]
+
+======================================================================
+FAIL: test_zero_score_padding_is_removed_and_mixed_query_still_matches (test_reliability.SparseCandidateTests.test_zero_score_padding_is_removed_and_mixed_query_still_matches) (query='positional encoding')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/j/Desktop/Advanced-LLM-RAG/tests/test_reliability.py", line 127, in test_zero_score_padding_is_removed_and_mixed_query_still_matches
+    self.assertEqual([r["chunk_id"] for r in results], [0])
+AssertionError: Lists differ: [0, 1, 2] != [0]
+
+First list contains 2 additional elements.
+First extra element 1:
+1
+
+- [0, 1, 2]
++ [0]
+
+======================================================================
+FAIL: test_zero_score_padding_is_removed_and_mixed_query_still_matches (test_reliability.SparseCandidateTests.test_zero_score_padding_is_removed_and_mixed_query_still_matches) (query='什么是 positional encoding')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/j/Desktop/Advanced-LLM-RAG/tests/test_reliability.py", line 127, in test_zero_score_padding_is_removed_and_mixed_query_still_matches
+    self.assertEqual([r["chunk_id"] for r in results], [0])
+AssertionError: Lists differ: [0, 1, 2] != [0]
+
+First list contains 2 additional elements.
+First extra element 1:
+1
+
+- [0, 1, 2]
++ [0]
+
+----------------------------------------------------------------------
+Ran 10 tests in 2.878s
+
+FAILED (failures=14)

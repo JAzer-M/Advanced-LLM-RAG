@@ -1,3 +1,6 @@
+# 关键词检索分支：正文分词并建 BM25 索引，再返回带原文/来源的排序候选。
+# 当前词项是英文和数字；纯中文可能没有有效词项，不能据此判断 Dense 检索也无结果。
+
 from rank_bm25 import BM25Okapi
 import re
 import unicodedata
@@ -37,12 +40,16 @@ def retrieve_bm25(bm25, chunks, query, top_k = 5):
     # 对用户询问进行 Tokenization
     query_tokens = tokenize(query)
 
+    # 没有有效稀疏词项时返回空列表，避免零分候选凭名次污染 RRF。
+    if not query_tokens:
+        return []
+
     # 计算所有chunks的BM25分数
     scores = bm25.get_scores(query_tokens)
 
-    # 按分数从高到低排序
+    # 剔除零分候选；真实词项匹配可能产生的负分仍保留。
     top_indices = sorted(
-        range(len(scores)),
+        (i for i, score in enumerate(scores) if score != 0),
         key = lambda i: scores[i],
         reverse = True
     )[:top_k]

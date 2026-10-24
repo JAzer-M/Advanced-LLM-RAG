@@ -1,0 +1,196 @@
+LLM: proxy API | Model: cn:deepseek-v4.1-flash
+Knowledge Base: all-papers-8-20261020
+Total Vectors: 1397
+Vector Dimensions: 384
+Total Chunks: 1397
+
+Original Query: According to the original FlashAttention paper, which two GPU memory levels are involved in the IO reduction, and which implementation technique reduces those transfers?
+Decomposition: {'needs_decomposition': True, 'sub_queries': ['According to the original FlashAttention paper, which two GPU memory levels are involved in the IO reduction?', 'According to the original FlashAttention paper, which implementation technique reduces those transfers?'], 'status': 'accepted', 'proposed_count': 2}
+Sub-Queries:
+- According to the original FlashAttention paper, which two GPU memory levels are involved in the IO reduction?
+- According to the original FlashAttention paper, which implementation technique reduces those transfers?
+Additional Retrieval Lists: 0
+HyDE Enabled: False
+
+=== Sub-Query: According to the original FlashAttention paper, which two GPU memory levels are involved in the IO reduction? (RRF Top-5) ===
+
+Rank: 1
+Source: DCNN.pdf
+Page: 3
+Section: 4.2. Training on multiple GPUs
+Text: 4.2. Training on multiple GPUs A single GTX 580 GPU has only 3GB of memory, which limits the maximum size of the networks that can be trained on it. It turns out that 1.2 million training examples are enough to train networks which are too big to fit on one GPU. Therefore we spread the net across two GPUs. Current GPUs are particularly well-suited to cross-GPU parallelization, as they are able to read from and write to one another’s mem- ory directly, without going through host machine memory.
+
+Rank: 2
+Source: 2310.11511v1.pdf
+Page: 11
+Section: 6 CONCLUSION
+Text: Flashattention: Fast and memory- efficient exact attention with io-awareness. In Advances in Neural Information Processing Systems, 2022. URL https://openreview.net/forum?id=H4DqfPSibmx. Shehzaad Dhuliawala, Mojtaba Komeili, Jing Xu, Roberta Raileanu, Xian Li, Asli Celikyilmaz, and Jason Weston. Chain-of-verification reduces hallucination in large language models.
+
+Rank: 3
+Source: DCNN.pdf
+Page: 6
+Section: 7.1. Qualitative evaluations
+Text: Notice the specialization exhibited by the two GPUs, a result of the restricted connectivity described in Section 4.5. The kernels on GPU 1 are largely color-agnostic, while the kernels on on GPU 2 are largely Figure 4. (Left) Eight ILSVRC-2010 test images and the five labels considered most probable by our model. The correct label is written under each image, and the probability assigned to the correct label is also shown with a red bar (if it happens to be in the top 5).
+
+Rank: 4
+Source: DCNN.pdf
+Page: 3
+Section: 4.2. Training on multiple GPUs
+Text: This scheme reduces our top-1 and top-5 error rates by 1.7% and 1.2%, respectively, as compared with a net with half as many kernels in each convolutional layer trained on one GPU. The two-GPU net takes slightly less time to train than the one-GPU net.b
+
+Rank: 5
+Source: 2310.11511v1.pdf
+Page: 19
+Section: 6 CONCLUSION
+Text: We use Deepspeed stage 3 (Rajbhandari et al., 2020) to conduct multi-GPU distributed training, with training precision Bfloat16 enabled. FlashAttention (Dao et al., 2022) is used to make the long-context training more efficient. We run inference of our trained models using 1-2 Quadro RTX 6000 GPUs with 24GB memory.
+
+=== Sub-Query: According to the original FlashAttention paper, which implementation technique reduces those transfers? (RRF Top-5) ===
+
+Rank: 1
+Source: 2310.11511v1.pdf
+Page: 19
+Section: 6 CONCLUSION
+Text: We use Deepspeed stage 3 (Rajbhandari et al., 2020) to conduct multi-GPU distributed training, with training precision Bfloat16 enabled. FlashAttention (Dao et al., 2022) is used to make the long-context training more efficient. We run inference of our trained models using 1-2 Quadro RTX 6000 GPUs with 24GB memory.
+
+Rank: 2
+Source: DCNN.pdf
+Page: 4
+Section: 5.1. Data augmentation
+Text: 5.1. Data augmentation The easiest and most common method to reduce overfitting on image data is to artificially enlarge the dataset using label- preserving transformations (e.g., Refs.4, 5, 30). We employ two distinct forms of data augmentation, both of which allow transformed images to be produced from the original images with very little computation, so the transformed images do not need to be stored on disk.
+
+Rank: 3
+Source: 2310.11511v1.pdf
+Page: 11
+Section: 6 CONCLUSION
+Text: Flashattention: Fast and memory- efficient exact attention with io-awareness. In Advances in Neural Information Processing Systems, 2022. URL https://openreview.net/forum?id=H4DqfPSibmx. Shehzaad Dhuliawala, Mojtaba Komeili, Jing Xu, Roberta Raileanu, Xian Li, Asli Celikyilmaz, and Jason Weston. Chain-of-verification reduces hallucination in large language models.
+
+Rank: 4
+Source: DCNN.pdf
+Page: 3
+Section: 4.2. Training on multiple GPUs
+Text: This scheme reduces our top-1 and top-5 error rates by 1.7% and 1.2%, respectively, as compared with a net with half as many kernels in each convolutional layer trained on one GPU. The two-GPU net takes slightly less time to train than the one-GPU net.b
+
+Rank: 5
+Source: DCNN.pdf
+Page: 1
+Section: None
+Text: To make training faster, we used non- saturating neurons and a very efficient GPU implementation of the convolution operation. To reduce overfitting in the fully connected layers we employed a recently developed reg- ularization method called “dropout” that proved to be very effective. We also entered a variant of this model in the ILSVRC-2012 competition and achieved a winning top-5 test error rate of 15.3%, compared to 26.2% achieved by the sec- ond-best entry.
+
+Candidate Pool Before Deduplication: 360
+Candidate Pool After Deduplication: 206
+Selected Chunk IDs: [1128, 1055, 103, 141, 173, 121, 138, 622, 15, 188]
+Sub-Query Evidence Selection: {'candidate_count': 206, 'global_top_ids': [1128, 1055, 103, 141, 173, 121, 138, 622, 15, 188], 'protected_ids': [1128], 'sub_query_evidence': [{'query': 'According to the original FlashAttention paper, which two GPU memory levels are involved in the IO reduction?', 'top_ids': [1128, 1055, 138]}, {'query': 'According to the original FlashAttention paper, which implementation technique reduces those transfers?', 'top_ids': [1128, 1055, 173]}], 'retrieval_anchor_ids': [141], 'evidence_completion': {'requested_sources': [], 'tasks': [], 'coverage': 'heuristic_only', 'rounds': 0, 'supplement_queries': 0, 'max_rounds': 2, 'completed_passes': 0, 'round_history': [], 'selected_ids_before': [1128, 1055, 103, 141, 173, 121, 138, 622, 15, 188], 'retained_local_ids': [1128, 1055, 173, 138], 'stop_reason': 'not_explicit_cross_paper', 'selected_ids_after': [1128, 1055, 103, 141, 173, 121, 138, 622, 15, 188], 'elapsed_seconds': 0.00023}}
+
+=== Retrieved Top-10 ===
+
+Rank: 1
+Source: 2310.11511v1.pdf
+Page: 19
+Section: 6 CONCLUSION
+Text: We use Deepspeed stage 3 (Rajbhandari et al., 2020) to conduct multi-GPU distributed training, with training precision Bfloat16 enabled. FlashAttention (Dao et al., 2022) is used to make the long-context training more efficient. We run inference of our trained models using 1-2 Quadro RTX 6000 GPUs with 24GB memory.
+
+Rank: 2
+Source: 2310.11511v1.pdf
+Page: 11
+Section: 6 CONCLUSION
+Text: Flashattention: Fast and memory- efficient exact attention with io-awareness. In Advances in Neural Information Processing Systems, 2022. URL https://openreview.net/forum?id=H4DqfPSibmx. Shehzaad Dhuliawala, Mojtaba Komeili, Jing Xu, Roberta Raileanu, Xian Li, Asli Celikyilmaz, and Jason Weston. Chain-of-verification reduces hallucination in large language models.
+
+Rank: 3
+Source: DCNN.pdf
+Page: 1
+Section: None
+Text: To make training faster, we used non- saturating neurons and a very efficient GPU implementation of the convolution operation. To reduce overfitting in the fully connected layers we employed a recently developed reg- ularization method called “dropout” that proved to be very effective. We also entered a variant of this model in the ILSVRC-2012 competition and achieved a winning top-5 test error rate of 15.3%, compared to 26.2% achieved by the sec- ond-best entry.
+
+Rank: 4
+Source: DCNN.pdf
+Page: 3
+Section: 4.2. Training on multiple GPUs
+Text: This scheme reduces our top-1 and top-5 error rates by 1.7% and 1.2%, respectively, as compared with a net with half as many kernels in each convolutional layer trained on one GPU. The two-GPU net takes slightly less time to train than the one-GPU net.b
+
+Rank: 5
+Source: DCNN.pdf
+Page: 5
+Section: 5.2. Dropout
+Text: This technique reduces complex co adaptations of neurons, since a neuron cannot rely on the presence of particular other neurons. It is, therefore, forced to learn more robust features that are useful in conjunction with many different random subsets of the other neurons. At test time, we use all the neu- rons but multiply their outputs by 0.5, which is a reasonable approximation to taking the geometric mean of the predic- tive distributions produced by the exponentially-many drop- out networks.
+
+Rank: 6
+Source: DCNN.pdf
+Page: 2
+Section: 2. INTRODUCTION
+Text: We wrote a highly optimized GPU implementation of 2D convolution and all the other opera- tions inherent in training CNNs, which we make available publicly.a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4. The size of our network made overfitting a significant problem, even with 1.2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 5. Our final network contains five convo- lutional and three fully connected layers, and this depth seems to be important: we found that removing any convolu- tional layer (each of which contains no more than 1% of the model’s parameters) resulted in inferior performance.
+
+Rank: 7
+Source: DCNN.pdf
+Page: 3
+Section: 4.2. Training on multiple GPUs
+Text: 4.2. Training on multiple GPUs A single GTX 580 GPU has only 3GB of memory, which limits the maximum size of the networks that can be trained on it. It turns out that 1.2 million training examples are enough to train networks which are too big to fit on one GPU. Therefore we spread the net across two GPUs. Current GPUs are particularly well-suited to cross-GPU parallelization, as they are able to read from and write to one another’s mem- ory directly, without going through host machine memory.
+
+Rank: 8
+Source: 2004.12832v2.pdf
+Page: 5
+Section: 3 COLBERT
+Text: On the GPU, we compute a batch dot-product of Eq and D, possibly over multiple mini-batches. Te output materializes a 3-dimensional tensor that is a collection of cross-match matrices between q and each document. To compute the score of each docu- ment, we reduce its matrix across document terms via a max-pool (i.e., representing an exhaustive implementation of our MaxSim computation) and reduce across query terms via a summation. Fi- nally, we sort the k documents by their total scores.
+
+Rank: 9
+Source: Attention is all you need.pdf
+Page: 2
+Section: 2 Background
+Text: In the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as described in section 3.2. Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.
+
+Rank: 10
+Source: DCNN.pdf
+Page: 6
+Section: 7.1. Qualitative evaluations
+Text: Notice the specialization exhibited by the two GPUs, a result of the restricted connectivity described in Section 4.5. The kernels on GPU 1 are largely color-agnostic, while the kernels on on GPU 2 are largely Figure 4. (Left) Eight ILSVRC-2010 test images and the five labels considered most probable by our model. The correct label is written under each image, and the probability assigned to the correct label is also shown with a red bar (if it happens to be in the top 5).
+
+=== Evidence: parsed facts and source quotations ===
+- Source quotation (2310.11511v1.pdf, p.19): “, 2020) to conduct multi-GPU distributed training, with training precision Bfloat16 enabled.” [1]
+- Source quotation (2310.11511v1.pdf, p.19): “, 2022) is used to make the long-context training more efficient.” [1]
+- Source quotation (2310.11511v1.pdf, p.19): “We run inference of our trained models using 1-2 Quadro RTX 6000 GPUs with 24GB memory.” [1]
+- Source quotation (2310.11511v1.pdf, p.11): “Flashattention: Fast and memory- efficient exact attention with io-awareness.” [2]
+- Source quotation (2310.11511v1.pdf, p.11): “In Advances in Neural Information Processing Systems, 2022.” [2]
+- Source quotation (2310.11511v1.pdf, p.11): “Shehzaad Dhuliawala, Mojtaba Komeili, Jing Xu, Roberta Raileanu, Xian Li, Asli Celikyilmaz, and Jason Weston.” [2]
+- Source quotation (2310.11511v1.pdf, p.11): “Chain-of-verification reduces hallucination in large language models.” [2]
+- Source quotation (DCNN.pdf, p.1): “To make training faster, we used non- saturating neurons and a very efficient GPU implementation of the convolution operation.” [3]
+- Source quotation (DCNN.pdf, p.1): “To reduce overfitting in the fully connected layers we employed a recently developed reg- ularization method called “dropout” that proved to be very effective.” [3]
+- Source quotation (DCNN.pdf, p.1): “2% achieved by the sec- ond-best entry.” [3]
+- Source quotation (DCNN.pdf, p.3): “2%, respectively, as compared with a net with half as many kernels in each convolutional layer trained on one GPU.” [4][11]
+- Source quotation (DCNN.pdf, p.5): “This technique reduces complex co adaptations of neurons, since a neuron cannot rely on the presence of particular other neurons.” [5]
+- Source quotation (DCNN.pdf, p.5): “It is, therefore, forced to learn more robust features that are useful in conjunction with many different random subsets of the other neurons.” [5]
+- Source quotation (DCNN.pdf, p.5): “5, which is a reasonable approximation to taking the geometric mean of the predic- tive distributions produced by the exponentially-many drop- out networks.” [5]
+- Source quotation (DCNN.pdf, p.2): “a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4.” [6]
+- Source quotation (DCNN.pdf, p.2): “2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 5.” [6]
+- Source quotation (DCNN.pdf, p.2): “Our final network contains five convo- lutional and three fully connected layers, and this depth seems to be important: we found that removing any convolu- tional layer (each of which contains no more than 1% of the model’s parameters) resulted in inferior performance.” [6]
+- Source quotation (DCNN.pdf, p.3): “Training on multiple GPUs A single GTX 580 GPU has only 3GB of memory, which limits the maximum size of the networks that can be trained on it.” [7]
+- Source quotation (DCNN.pdf, p.3): “2 million training examples are enough to train networks which are too big to fit on one GPU.” [7]
+- Source quotation (DCNN.pdf, p.3): “Therefore we spread the net across two GPUs.” [7]
+- Source quotation (DCNN.pdf, p.3): “Current GPUs are particularly well-suited to cross-GPU parallelization, as they are able to read from and write to one another’s mem- ory directly, without going through host machine memory.” [7]
+- Source quotation (2004.12832v2.pdf, p.5): “On the GPU, we compute a batch dot-product of Eq and D, possibly over multiple mini-batches.” [8]
+- Source quotation (2004.12832v2.pdf, p.5): “Te output materializes a 3-dimensional tensor that is a collection of cross-match matrices between q and each document.” [8]
+- Source quotation (2004.12832v2.pdf, p.5): “, representing an exhaustive implementation of our MaxSim computation) and reduce across query terms via a summation.” [8]
+- Source quotation (2004.12832v2.pdf, p.5): “Fi- nally, we sort the k documents by their total scores.” [8]
+- Source quotation (Attention is all you need.pdf, p.2): “Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.” [9]
+- Source quotation (DCNN.pdf, p.6): “The kernels on GPU 1 are largely color-agnostic, while the kernels on on GPU 2 are largely Figure 4.” [10]
+- Source quotation (DCNN.pdf, p.6): “(Left) Eight ILSVRC-2010 test images and the five labels considered most probable by our model.” [10]
+- Source quotation (DCNN.pdf, p.6): “The correct label is written under each image, and the probability assigned to the correct label is also shown with a red bar (if it happens to be in the top 5).” [10]
+
+=== Citation Sources ===
+[1] 2310.11511v1.pdf, p.19 (chunk 1128)
+[2] 2310.11511v1.pdf, p.11 (chunk 1055)
+[3] DCNN.pdf, p.1 (chunk 103)
+[4] DCNN.pdf, p.3 (chunk 141)
+[5] DCNN.pdf, p.5 (chunk 173)
+[6] DCNN.pdf, p.2 (chunk 121)
+[7] DCNN.pdf, p.3 (chunk 138)
+[8] 2004.12832v2.pdf, p.5 (chunk 622)
+[9] Attention is all you need.pdf, p.2 (chunk 15)
+[10] DCNN.pdf, p.6 (chunk 188)
+[11] DCNN.pdf, p.3 (chunk 139)
+question completed
+
+=== Agent: arXiv Evidence Answer ===
+原始 FlashAttention 论文指出，IO 减少涉及的 GPU 内存层级为 GPU 高带宽内存（HBM）与 GPU 片上 SRAM，并通过 tiling 技术减少这两者之间的内存读写/传输[12]。该论文进一步说明，tiling 可避免在（相对较慢的）GPU HBM 上物化大型 N×N 注意力矩阵[14]。
+
+来源：
+[12] 2205.14135v2.pdf，p.1；[固定版本PDF](https://arxiv.org/pdf/2205.14135v2)
+[14] 2205.14135v2.pdf，p.2；[固定版本PDF](https://arxiv.org/pdf/2205.14135v2)

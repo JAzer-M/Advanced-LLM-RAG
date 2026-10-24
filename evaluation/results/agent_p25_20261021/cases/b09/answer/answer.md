@@ -1,0 +1,1 @@
+RAG-Sequence的Thorough Decoding对未出现在某文档beam中的候选y，会额外运行一次前向传播，将该生成器概率与pη(z|x)相乘，再跨beam求和得到边缘概率[7]。Self-RAG对每个critique token组G，以最理想反思token ˆr的生成概率sG t（即pt(ˆr)除以该组NG个token概率之和）按权重wG线性求和得到S(Critique)，再与生成概率相加得到分段得分f(yt,d,Critique)[3]。

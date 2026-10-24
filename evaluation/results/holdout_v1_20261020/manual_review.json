@@ -1,0 +1,1339 @@
+{
+  "reviewer": "This assistant; semantic review of actual answers against provided original passages, not independent blind adjudication.",
+  "scoring": "Frozen reference_points; covered=1, partial/missing/wrong=0; macro over 10 answerable questions.",
+  "groups": {
+    "all_answerable": {
+      "planned": 10,
+      "executed_successfully": 10,
+      "strict_pass_count": 4,
+      "strict_pass_rate_planned": 0.4,
+      "strict_pass_rate_successful": 0.4,
+      "core_point_coverage_macro": 0.7,
+      "covered_core_points": 19,
+      "total_core_points": 27
+    },
+    "single_document": {
+      "planned": 4,
+      "executed_successfully": 4,
+      "strict_pass_count": 2,
+      "strict_pass_rate_planned": 0.5,
+      "strict_pass_rate_successful": 0.5,
+      "core_point_coverage_macro": 0.8333333333333333,
+      "covered_core_points": 8,
+      "total_core_points": 10
+    },
+    "cross_document": {
+      "planned": 6,
+      "executed_successfully": 6,
+      "strict_pass_count": 2,
+      "strict_pass_rate_planned": 0.3333333333333333,
+      "strict_pass_rate_successful": 0.3333333333333333,
+      "core_point_coverage_macro": 0.611111111111111,
+      "covered_core_points": 11,
+      "total_core_points": 17
+    },
+    "unanswerable": {
+      "planned": 2,
+      "executed_successfully": 2,
+      "strict_pass_count": 1,
+      "strict_pass_rate_planned": 0.5,
+      "strict_pass_rate_successful": 0.5
+    },
+    "all_questions": {
+      "planned": 12,
+      "executed_successfully": 12,
+      "strict_pass_count": 5,
+      "strict_pass_rate_planned": 0.4166666666666667,
+      "strict_pass_rate_successful": 0.4166666666666667,
+      "core_point_coverage_macro": 0.7,
+      "covered_core_points": 19,
+      "total_core_points": 27
+    }
+  },
+  "important_claim_support_counts": {
+    "supported": 41
+  },
+  "appropriate_refusals": 2,
+  "answerable_over_refusals": 0,
+  "partial_refusals_due_to_missing_context": 1,
+  "cases_with_citation_gaps": 1,
+  "cases": [
+    {
+      "id": "h01",
+      "type": "single_document",
+      "pipeline_status": "completed",
+      "core_points": [
+        {
+          "reference_point": "Label smoothing epsilon is 0.1.",
+          "status": "covered",
+          "answer_citation_numbers": [
+            1
+          ],
+          "reason": "明确 epsilon=0.1。"
+        },
+        {
+          "reference_point": "It hurts perplexity (the model is more unsure) but improves accuracy and BLEU.",
+          "status": "covered",
+          "answer_citation_numbers": [
+            2
+          ],
+          "reason": "明确 perplexity 变差，accuracy/BLEU 改善，并解释模型更不确定。"
+        }
+      ],
+      "covered": 2,
+      "total_core_points": 2,
+      "core_point_coverage": 1.0,
+      "important_claims": [
+        {
+          "claim": "epsilon=0.1",
+          "status": "supported",
+          "answer_citation_numbers": [
+            1
+          ],
+          "evidence": [
+            {
+              "citation": 1,
+              "chunk_id": 69,
+              "text": "Model BLEU Training Cost (FLOPs) EN-DE EN-FR EN-DE EN-FR ByteNet [15] 23.75 Deep-Att + PosUnk [32] 39.2 1.0 · 1020 GNMT + RL [31] 24.6 39.92 2.3 · 1019 1.4 · 1020 ConvS2S [8] 25.16 40.46 9.6 · 1018 1.5 · 1020 MoE [26] 26.03 40.56 2.0 · 1019 1.2 · 1020 Deep-Att + PosUnk Ensemble [32] 40.4 8.0 · 1020 GNMT + RL Ensemble [31] 26.30 41.16 1.8 · 1020 1.1 · 1021 ConvS2S Ensemble [8] 26.36 41.29 7.7 · 1019 1.2 · 1021 Transformer (base model) 27.3 38.1 3.3 · 1018 Transformer (big) 28.4 41.0 2.3 · 1019 Label Smoothing During training, we employed label smoothing of value ϵls = 0.1 [30].",
+              "source": "Attention is all you need.pdf",
+              "page": 8,
+              "title": "Attention is All you Need",
+              "section": "5.4 Regularization"
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "更不确定使 perplexity 受损",
+          "status": "supported",
+          "answer_citation_numbers": [
+            2
+          ],
+          "evidence": [
+            {
+              "citation": 2,
+              "chunk_id": 70,
+              "text": "This hurts perplexity, as the model learns to be more unsure, but improves accuracy and BLEU score.",
+              "source": "Attention is all you need.pdf",
+              "page": 8,
+              "title": "Attention is All you Need",
+              "section": "5.4 Regularization"
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "accuracy 与 BLEU 改善",
+          "status": "supported",
+          "answer_citation_numbers": [
+            2
+          ],
+          "evidence": [
+            {
+              "citation": 2,
+              "chunk_id": 70,
+              "text": "This hurts perplexity, as the model learns to be more unsure, but improves accuracy and BLEU score.",
+              "source": "Attention is all you need.pdf",
+              "page": 8,
+              "title": "Attention is All you Need",
+              "section": "5.4 Regularization"
+            }
+          ],
+          "uncited_context_evidence": []
+        }
+      ],
+      "strict_pass": true,
+      "over_refusal": false,
+      "appropriate_refusal": null,
+      "citation_gaps": [],
+      "partial_refusal_due_to_missing_context": false,
+      "unnecessary_insufficiency_caveat": false,
+      "failure_categories": [],
+      "note": "核心完整，无新增错误。"
+    },
+    {
+      "id": "h02",
+      "type": "single_document",
+      "pipeline_status": "completed",
+      "core_points": [
+        {
+          "reference_point": "A one- or two-sentence result is a strip; longer results are split into smaller units of a few sentences according to length.",
+          "status": "partial",
+          "answer_citation_numbers": [
+            1,
+            3
+          ],
+          "reason": "回答切成条带/独立信息，但缺少一两句结果保留为一条、长结果按几句切分的粒度规则。"
+        },
+        {
+          "reference_point": "The fine-tuned retrieval evaluator scores the relevance of each strip and filters irrelevant strips.",
+          "status": "covered",
+          "answer_citation_numbers": [
+            3
+          ],
+          "reason": "微调检索评估器逐条带打相关性分并过滤。"
+        },
+        {
+          "reference_point": "Relevant strips are concatenated in their original order to form internal knowledge.",
+          "status": "covered",
+          "answer_citation_numbers": [
+            3
+          ],
+          "reason": "相关条带按原顺序拼接为 internal knowledge。"
+        }
+      ],
+      "covered": 2,
+      "total_core_points": 3,
+      "core_point_coverage": 0.6666666666666666,
+      "important_claims": [
+        {
+          "claim": "Correct 后执行分解、过滤、重组",
+          "status": "supported",
+          "answer_citation_numbers": [
+            2
+          ],
+          "evidence": [
+            {
+              "citation": 2,
+              "chunk_id": 1251,
+              "text": "The relevance score is quantified into a total of three confidence degrees and then triggered the corresponding actions: {Correct, Incorrect, Ambiguous} (Section 4.3). If the action Correct is triggered, the retrieved documents will be re- fined into more precise knowledge strips. This refinement operation involves knowledge decom- position, filter, and recomposition (Section 4.4). If the action Incorrect is triggered, the retrieved documents will be discarded.",
+              "source": "2401.15884v3.pdf",
+              "page": 3,
+              "title": "Corrective Retrieval Augmented Generation",
+              "section": "4.1 Overview of Model Inference"
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "相关文档切成内部条带，每条假定含独立信息",
+          "status": "supported",
+          "answer_citation_numbers": [
+            1,
+            3
+          ],
+          "evidence": [
+            {
+              "citation": 1,
+              "chunk_id": 1278,
+              "text": "4.4 Knowledge Refinement Given a retrieved relevant document, a decompose- then-recompose knowledge refinement method is designed to further extract the most critical knowledge strips in it. To obtain fine-grained retrieval results, we segmented the retrieved results into internal strips.",
+              "source": "2401.15884v3.pdf",
+              "page": 6,
+              "title": "Corrective Retrieval Augmented Generation",
+              "section": "4.4 Knowledge Refinement"
+            },
+            {
+              "citation": 3,
+              "chunk_id": 1280,
+              "text": "The scale is assumed to include an independent piece of information, and the filtering is based on the segments. Then, the retrieval evaluator fine- tuned in Section 4.2 is employed to calculate the relevance score of each knowledge strip. Based on these scores, irrelevant knowledge strips are filtered out, while relevant ones are recomposed via concatenation in order, namely internal knowledge.",
+              "source": "2401.15884v3.pdf",
+              "page": 6,
+              "title": "Corrective Retrieval Augmented Generation",
+              "section": "4.4 Knowledge Refinement"
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "微调检索评估器计算每条带相关性并过滤无关条带",
+          "status": "supported",
+          "answer_citation_numbers": [
+            3
+          ],
+          "evidence": [
+            {
+              "citation": 3,
+              "chunk_id": 1280,
+              "text": "The scale is assumed to include an independent piece of information, and the filtering is based on the segments. Then, the retrieval evaluator fine- tuned in Section 4.2 is employed to calculate the relevance score of each knowledge strip. Based on these scores, irrelevant knowledge strips are filtered out, while relevant ones are recomposed via concatenation in order, namely internal knowledge.",
+              "source": "2401.15884v3.pdf",
+              "page": 6,
+              "title": "Corrective Retrieval Augmented Generation",
+              "section": "4.4 Knowledge Refinement"
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "相关条带按顺序拼接形成内部知识",
+          "status": "supported",
+          "answer_citation_numbers": [
+            3
+          ],
+          "evidence": [
+            {
+              "citation": 3,
+              "chunk_id": 1280,
+              "text": "The scale is assumed to include an independent piece of information, and the filtering is based on the segments. Then, the retrieval evaluator fine- tuned in Section 4.2 is employed to calculate the relevance score of each knowledge strip. Based on these scores, irrelevant knowledge strips are filtered out, while relevant ones are recomposed via concatenation in order, namely internal knowledge.",
+              "source": "2401.15884v3.pdf",
+              "page": 6,
+              "title": "Corrective Retrieval Augmented Generation",
+              "section": "4.4 Knowledge Refinement"
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "相关文档仍可能有噪声，精炼用于提取关键条带",
+          "status": "supported",
+          "answer_citation_numbers": [
+            4
+          ],
+          "evidence": [
+            {
+              "citation": 4,
+              "chunk_id": 1271,
+              "text": "However, even if a relevant document can be found, there is inevitably some noisy knowledge strips in this document. To extract the most critical knowledge strips within this document, a knowledge refinement method is further designed which will be elaborated in Section 4.4. Incorrect Besides, a retrieval is assumed Incorrect when the confidence scores of all retrieved documents are below the lower threshold.",
+              "source": "2401.15884v3.pdf",
+              "page": 5,
+              "title": "Corrective Retrieval Augmented Generation",
+              "section": "4.3 Action Trigger"
+            }
+          ],
+          "uncited_context_evidence": []
+        }
+      ],
+      "strict_pass": false,
+      "over_refusal": false,
+      "appropriate_refusal": null,
+      "citation_gaps": [],
+      "partial_refusal_due_to_missing_context": false,
+      "unnecessary_insufficiency_caveat": false,
+      "failure_categories": [
+        "initial_candidate_miss",
+        "incomplete_answer"
+      ],
+      "note": "漏答粒度。Gold 1279 不在初始候选，也未进最终/生成上下文；不能归咎为单纯生成遗漏。"
+    },
+    {
+      "id": "h03",
+      "type": "single_document",
+      "pipeline_status": "completed",
+      "core_points": [
+        {
+          "reference_point": "Documents are sorted by length in groups and encoded in batches of comparable lengths, padding only to the batch maximum.",
+          "status": "covered",
+          "answer_citation_numbers": [
+            7
+          ],
+          "reason": "组内按长度排序、相近长度组批、仅补到批内最大长度；B/b 示例也正确。"
+        },
+        {
+          "reference_point": "Independent text preprocessing, especially WordPiece tokenization, is parallelized across CPU cores.",
+          "status": "covered",
+          "answer_citation_numbers": [
+            2
+          ],
+          "reason": "明确 WordPiece 等独立预处理跨 CPU 核心并行。"
+        }
+      ],
+      "covered": 2,
+      "total_core_points": 2,
+      "core_point_coverage": 1.0,
+      "important_claims": [
+        {
+          "claim": "分组按长度排序并组相近长度的批，补到批最大长度；B=100000/b=128 为示例",
+          "status": "supported",
+          "answer_citation_numbers": [
+            7
+          ],
+          "evidence": [
+            {
+              "citation": 7,
+              "chunk_id": 616,
+              "text": "To begin with, we exploit multiple GPUs, if available, for faster encoding of batches of documents in parallel. When batching, we pad all documents to the maximum length of a document within the batch.3 To make capping the sequence length on a per-batch basis more eﬀective, our indexer proceeds through documents in groups of B (e.g., B = 100,000) documents. It sorts these documents by length and then feeds batches of b (e.g., b = 128) documents of comparable length through our encoder.",
+              "source": "2004.12832v2.pdf",
+              "page": 5,
+              "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+              "section": "3 COLBERT"
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "WordPiece 等独立预处理跨 CPU 核心并行",
+          "status": "supported",
+          "answer_citation_numbers": [
+            2
+          ],
+          "evidence": [
+            {
+              "citation": 2,
+              "chunk_id": 618,
+              "text": "Lastly, while most computations occur on the GPU, we found that a non-trivial portion of the indexing time is spent on pre-processing the text sequences, primarily BERT’s WordPiece to- kenization. Exploiting that these operations are independent across documents in a batch, we parallelize the pre-processing across the available CPU cores. Once the document representations are produced, they are saved to disk using 32-bit or 16-bit values to represent each dimension.",
+              "source": "2004.12832v2.pdf",
+              "page": 5,
+              "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+              "section": "3 COLBERT"
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "可用时多 GPU 并行编码文档批",
+          "status": "supported",
+          "answer_citation_numbers": [
+            7
+          ],
+          "evidence": [
+            {
+              "citation": 7,
+              "chunk_id": 616,
+              "text": "To begin with, we exploit multiple GPUs, if available, for faster encoding of batches of documents in parallel. When batching, we pad all documents to the maximum length of a document within the batch.3 To make capping the sequence length on a per-batch basis more eﬀective, our indexer proceeds through documents in groups of B (e.g., B = 100,000) documents. It sorts these documents by length and then feeds batches of b (e.g., b = 128) documents of comparable length through our encoder.",
+              "source": "2004.12832v2.pdf",
+              "page": 5,
+              "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+              "section": "3 COLBERT"
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "图6列有 per-batch maximum length 与 length-based bucketing 吞吐优化",
+          "status": "supported",
+          "answer_citation_numbers": [
+            3
+          ],
+          "evidence": [
+            {
+              "citation": 3,
+              "chunk_id": 685,
+              "text": "Similarly, the ﬁgure emphasizes the importance of our query augmentation mechanism: without query augmentation [C], ColBERT has a no- ticeably lower MRR@10. Lastly, we see the impact of end-to-end retrieval not only on recall but also on MRR@10. By retrieving directly from the full collection, ColBERT is able to retrieve to the top-10 documents missed entirely from BM25’s top-1000. Basic ColBERT Indexing +multi-GPU document processing +per-batch maximum sequence length +length-based bucketing +multi-core pre-processing 0 10000 20000 30000 40000 50000 Throughput (documents/minute) Figure 6: Eﬀect of ColBERT’s indexing optimizations on the oﬀline indexing throughput.",
+              "source": "2004.12832v2.pdf",
+              "page": 9,
+              "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+              "section": "4 EXPERIMENTAL EVALUATION"
+            }
+          ],
+          "uncited_context_evidence": []
+        }
+      ],
+      "strict_pass": true,
+      "over_refusal": false,
+      "appropriate_refusal": null,
+      "citation_gaps": [],
+      "partial_refusal_due_to_missing_context": false,
+      "unnecessary_insufficiency_caveat": false,
+      "failure_categories": [],
+      "note": "核心完整，额外多 GPU/图6信息也由实际引用支持。"
+    },
+    {
+      "id": "h04",
+      "type": "single_document",
+      "pipeline_status": "completed",
+      "core_points": [
+        {
+          "reference_point": "Convert the first fully connected layer to a 7x7 convolution and the final two to 1x1 convolutions, then apply the network to the whole uncropped image.",
+          "status": "covered",
+          "answer_citation_numbers": [
+            1
+          ],
+          "reason": "第一 FC->7x7，后两 FC->1x1，应用于整张未裁剪图像。"
+        },
+        {
+          "reference_point": "Spatially average (sum-pool, in the paper wording) the class score map to a fixed-size vector.",
+          "status": "covered",
+          "answer_citation_numbers": [
+            9
+          ],
+          "reason": "对类别分数图做空间平均，保留原文 sum-pooling 说法。"
+        },
+        {
+          "reference_point": "Average softmax class posteriors of the original and horizontally flipped images.",
+          "status": "missing",
+          "answer_citation_numbers": [],
+          "reason": "没有回答原图与水平翻转图的 softmax 类别概率平均。"
+        }
+      ],
+      "covered": 2,
+      "total_core_points": 3,
+      "core_point_coverage": 0.6666666666666666,
+      "important_claims": [
+        {
+          "claim": "FC 转为 7x7/1x1 卷积后应用整张未裁剪图像",
+          "status": "supported",
+          "answer_citation_numbers": [
+            1
+          ],
+          "evidence": [
+            {
+              "citation": 1,
+              "chunk_id": 266,
+              "text": "Then, the network is applied densely over the rescaled test image in a way similar to (Sermanet et al., 2014). Namely, the fully-connected layers are ﬁrst converted to convolutional layers (the ﬁrst FC layer to a 7 × 7 conv. layer, the last two FC layers to 1 × 1 conv. The resulting fully-convolutional net is then applied to the whole (uncropped) image.",
+              "source": "VGG.pdf",
+              "page": 5,
+              "title": "VGG",
+              "section": "3.2 TESTING"
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "分数图通道等于类别数、空间分辨率随输入大小变化",
+          "status": "supported",
+          "answer_citation_numbers": [
+            9
+          ],
+          "evidence": [
+            {
+              "citation": 9,
+              "chunk_id": 267,
+              "text": "The result is a class score map with the number of channels equal to the number of classes, and a variable spatial resolution, dependent on the input image size. Finally, to obtain a ﬁxed-size vector of class scores for the image, the class score map is spatially averaged (sum-pooled). We also augment the test set by horizontal ﬂipping of the images; the soft-max class posteriors of the original and ﬂipped images are averaged to obtain the ﬁnal scores for the image.",
+              "source": "VGG.pdf",
+              "page": 5,
+              "title": "VGG",
+              "section": "3.2 TESTING"
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "空间平均得到固定大小类别分数向量",
+          "status": "supported",
+          "answer_citation_numbers": [
+            9
+          ],
+          "evidence": [
+            {
+              "citation": 9,
+              "chunk_id": 267,
+              "text": "The result is a class score map with the number of channels equal to the number of classes, and a variable spatial resolution, dependent on the input image size. Finally, to obtain a ﬁxed-size vector of class scores for the image, the class score map is spatially averaged (sum-pooled). We also augment the test set by horizontal ﬂipping of the images; the soft-max class posteriors of the original and ﬂipped images are averaged to obtain the ﬁnal scores for the image.",
+              "source": "VGG.pdf",
+              "page": 5,
+              "title": "VGG",
+              "section": "3.2 TESTING"
+            }
+          ],
+          "uncited_context_evidence": []
+        }
+      ],
+      "strict_pass": false,
+      "over_refusal": false,
+      "appropriate_refusal": null,
+      "citation_gaps": [],
+      "partial_refusal_due_to_missing_context": false,
+      "unnecessary_insufficiency_caveat": false,
+      "failure_categories": [
+        "evidence_available_but_omitted"
+      ],
+      "note": "Gold 266/267 均在上下文，模型还实际引用了包含翻转平均的[9]，却漏答该核心点。"
+    },
+    {
+      "id": "h05",
+      "type": "cross_document",
+      "pipeline_status": "completed",
+      "core_points": [
+        {
+          "reference_point": "VGG first trains the shallower configuration A with random initialization, then copies its first four convolutional and last three fully connected layers into deeper networks; intermediate layers are random.",
+          "status": "partial",
+          "answer_citation_numbers": [
+            1
+          ],
+          "reason": "拷贝的层范围及中间层随机都正确，但未交代先随机初始化并训练浅层配置 A 这一前置步骤；按冻结的完整核心点记 partial。"
+        },
+        {
+          "reference_point": "The copied VGG layers continue learning without a reduced learning rate.",
+          "status": "covered",
+          "answer_citation_numbers": [
+            1
+          ],
+          "reason": "明确预初始化层不降低学习率并继续训练。"
+        },
+        {
+          "reference_point": "DCNN initializes weights in each layer from a zero-mean Gaussian with standard deviation 0.01.",
+          "status": "covered",
+          "answer_citation_numbers": [
+            2
+          ],
+          "reason": "DCNN 每层零均值 Gaussian、标准差0.01。"
+        }
+      ],
+      "covered": 2,
+      "total_core_points": 3,
+      "core_point_coverage": 0.6666666666666666,
+      "important_claims": [
+        {
+          "claim": "VGG 拷贝 A 的前四卷积层和后三全连接层，中间随机；拷贝层不降低学习率且继续学习",
+          "status": "supported",
+          "answer_citation_numbers": [
+            1
+          ],
+          "evidence": [
+            {
+              "citation": 1,
+              "chunk_id": 256,
+              "text": "To circumvent this problem, we began with training the conﬁguration A (Table 1), shallow enough to be trained with random initialisation. Then, when training deeper architectures, we initialised the ﬁrst four convolutional layers and the last three fully- connected layers with the layers of net A (the intermediate layers were initialised randomly). We did not decrease the learning rate for the pre-initialised layers, allowing them to change during learning.",
+              "source": "VGG.pdf",
+              "page": 4,
+              "title": "VGG",
+              "section": "3.1 TRAINING"
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "VGG 随机权重零均值、variance 10^-2，bias=0",
+          "status": "supported",
+          "answer_citation_numbers": [
+            7
+          ],
+          "evidence": [
+            {
+              "citation": 7,
+              "chunk_id": 257,
+              "text": "For random initialisation (where applicable), we sampled the weights from a normal distribution with the zero mean and 10−2 variance. The biases were initialised with zero.",
+              "source": "VGG.pdf",
+              "page": 4,
+              "title": "VGG",
+              "section": "3.1 TRAINING"
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "DCNN 每层零均值 Gaussian、标准差0.01",
+          "status": "supported",
+          "answer_citation_numbers": [
+            2
+          ],
+          "evidence": [
+            {
+              "citation": 2,
+              "chunk_id": 177,
+              "text": "We initialized the weights in each layer from a zero-mean Gaussian distribution with standard deviation 0.01. We ini- tialized the neuron biases in the second, fourth, and fifth convolutional layers, as well as in the fully connected hidden layers, with the constant 1. This initialization accelerates the early stages of learning by providing the ReLUs with positive inputs.",
+              "source": "DCNN.pdf",
+              "page": 5,
+              "title": "DCNN",
+              "section": "6. DETAILS OF LEARNING"
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "DCNN 第二/四/五卷积层与全连接隐藏层 bias=1，其余=0",
+          "status": "supported",
+          "answer_citation_numbers": [
+            2,
+            8
+          ],
+          "evidence": [
+            {
+              "citation": 2,
+              "chunk_id": 177,
+              "text": "We initialized the weights in each layer from a zero-mean Gaussian distribution with standard deviation 0.01. We ini- tialized the neuron biases in the second, fourth, and fifth convolutional layers, as well as in the fully connected hidden layers, with the constant 1. This initialization accelerates the early stages of learning by providing the ReLUs with positive inputs.",
+              "source": "DCNN.pdf",
+              "page": 5,
+              "title": "DCNN",
+              "section": "6. DETAILS OF LEARNING"
+            },
+            {
+              "citation": 8,
+              "chunk_id": 178,
+              "text": "We initialized the neuron biases in the remaining lay- ers with the constant 0. We used an equal learning rate for all layers, which we adjusted manually throughout training. The heuristic which we followed was to divide the learning rate by 10 when the vali- dation error rate stopped improving with the current learning rate. The learning rate was initialized at 0.01 and reduced three times prior to termination.",
+              "source": "DCNN.pdf",
+              "page": 5,
+              "title": "DCNN",
+              "section": "6. DETAILS OF LEARNING"
+            }
+          ],
+          "uncited_context_evidence": []
+        }
+      ],
+      "strict_pass": false,
+      "over_refusal": false,
+      "appropriate_refusal": null,
+      "citation_gaps": [],
+      "partial_refusal_due_to_missing_context": false,
+      "unnecessary_insufficiency_caveat": false,
+      "failure_categories": [
+        "evidence_available_but_omitted"
+      ],
+      "note": "主要初始化比较正确；保留 A 的前置训练步骤遗漏。VGG 原文确写 variance，不能凭常识把该回答记成标准差混淆。"
+    },
+    {
+      "id": "h06",
+      "type": "cross_document",
+      "pipeline_status": "completed",
+      "core_points": [
+        {
+          "reference_point": "DCNN places roughly half the kernels/neurons on each of two GPUs; communication is restricted to selected layers (layer 3 sees both GPUs, layer 4 only its own).",
+          "status": "covered",
+          "answer_citation_numbers": [
+            3,
+            5
+          ],
+          "reason": "DCNN 两 GPU 各放一半 kernel/神经元，只在部分层跨卡通信，第三/四层例子正确。"
+        },
+        {
+          "reference_point": "VGG uses data parallelism by splitting each image batch into GPU batches.",
+          "status": "covered",
+          "answer_citation_numbers": [
+            1
+          ],
+          "reason": "VGG 拆分图像 batch 做数据并行。"
+        },
+        {
+          "reference_point": "VGG synchronously averages GPU gradients to obtain the full-batch gradient, equivalent to the single-GPU computation.",
+          "status": "covered",
+          "answer_citation_numbers": [
+            1
+          ],
+          "reason": "同步平均各 GPU 梯度，得到整批梯度，与单 GPU 对应计算一致。"
+        }
+      ],
+      "covered": 3,
+      "total_core_points": 3,
+      "core_point_coverage": 1.0,
+      "important_claims": [
+        {
+          "claim": "DCNN 两 GPU 各一半 kernel/神经元，仅特定层通信；第三层跨卡、第四层同卡",
+          "status": "supported",
+          "answer_citation_numbers": [
+            3
+          ],
+          "evidence": [
+            {
+              "citation": 3,
+              "chunk_id": 139,
+              "text": "The parallelization scheme that we employ essentially puts half of the kernels (or neurons) on each GPU, with one addi- tional trick: the GPUs communicate only in certain layers. This means that, for example, the kernels of layer 3 take input from all kernel maps in layer 2. However, kernels in layer 4 take input only from those kernel maps in layer 3 which reside on the same GPU.",
+              "source": "DCNN.pdf",
+              "page": 3,
+              "title": "DCNN",
+              "section": "4.2. Training on multiple GPUs"
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "DCNN 图2上下两个层部件分属两 GPU",
+          "status": "supported",
+          "answer_citation_numbers": [
+            5
+          ],
+          "evidence": [
+            {
+              "citation": 5,
+              "chunk_id": 151,
+              "text": "Figure 2. An illustration of the architecture of our CNN, explicitly showing the delineation of responsibilities between the two GPUs. One GPU runs the layer-parts at the top of the figure while the other runs the layer-parts at the bottom. The GPUs communicate only at certain layers.",
+              "source": "DCNN.pdf",
+              "page": 4,
+              "title": "DCNN",
+              "section": "4.4. Overlapping pooling"
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "VGG 拆 batch 到各 GPU 并行，平均梯度为完整 batch 梯度",
+          "status": "supported",
+          "answer_citation_numbers": [
+            1
+          ],
+          "evidence": [
+            {
+              "citation": 1,
+              "chunk_id": 273,
+              "text": "Multi-GPU training exploits data parallelism, and is carried out by splitting each batch of training images into several GPU batches, processed in parallel on each GPU. After the GPU batch gradients are computed, they are averaged to obtain the gradient of the full batch. Gradient computation is synchronous across the GPUs, so the result is exactly the same as when training on a single GPU.",
+              "source": "VGG.pdf",
+              "page": 5,
+              "title": "VGG",
+              "section": "3.3 IMPLEMENTATION DETAILS"
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "VGG 梯度计算同步，结果与单 GPU 相同",
+          "status": "supported",
+          "answer_citation_numbers": [
+            1
+          ],
+          "evidence": [
+            {
+              "citation": 1,
+              "chunk_id": 273,
+              "text": "Multi-GPU training exploits data parallelism, and is carried out by splitting each batch of training images into several GPU batches, processed in parallel on each GPU. After the GPU batch gradients are computed, they are averaged to obtain the gradient of the full batch. Gradient computation is synchronous across the GPUs, so the result is exactly the same as when training on a single GPU.",
+              "source": "VGG.pdf",
+              "page": 5,
+              "title": "VGG",
+              "section": "3.3 IMPLEMENTATION DETAILS"
+            }
+          ],
+          "uncited_context_evidence": []
+        }
+      ],
+      "strict_pass": true,
+      "over_refusal": false,
+      "appropriate_refusal": null,
+      "citation_gaps": [],
+      "partial_refusal_due_to_missing_context": false,
+      "unnecessary_insufficiency_caveat": false,
+      "failure_categories": [],
+      "note": "跨篇综合完整。"
+    },
+    {
+      "id": "h07",
+      "type": "cross_document",
+      "pipeline_status": "completed",
+      "core_points": [
+        {
+          "reference_point": "Transformer increases the learning rate linearly during 4000 warmup steps.",
+          "status": "covered",
+          "answer_citation_numbers": [
+            1
+          ],
+          "reason": "线性 warmup 4000 步。"
+        },
+        {
+          "reference_point": "After warmup Transformer decreases learning rate proportionally to inverse square root of step number.",
+          "status": "covered",
+          "answer_citation_numbers": [
+            1
+          ],
+          "reason": "之后按 step_num 的平方根倒数下降，以训练步数控制。"
+        },
+        {
+          "reference_point": "DCNN manually divides the learning rate by 10 when validation error stops improving (starting at 0.01, reduced three times).",
+          "status": "covered",
+          "answer_citation_numbers": [
+            8
+          ],
+          "reason": "DCNN 验证误差停滞时手动除10，初值0.01、下降三次均给出。"
+        }
+      ],
+      "covered": 3,
+      "total_core_points": 3,
+      "core_point_coverage": 1.0,
+      "important_claims": [
+        {
+          "claim": "Transformer 前4000步线性增加，之后按步数平方根倒数下降",
+          "status": "supported",
+          "answer_citation_numbers": [
+            1
+          ],
+          "evidence": [
+            {
+              "citation": 1,
+              "chunk_id": 66,
+              "text": "5.3 Optimizer We used the Adam optimizer [17] with β1 = 0.9, β2 = 0.98 and ϵ = 10−9. We varied the learning rate over the course of training, according to the formula: lrate = d−0.5 model · min(step_num−0.5, step_num · warmup_steps−1.5) (3) This corresponds to increasing the learning rate linearly for the ﬁrst warmup_steps training steps, and decreasing it thereafter proportionally to the inverse square root of the step number. We used warmup_steps = 4000.",
+              "source": "Attention is all you need.pdf",
+              "page": 7,
+              "title": "Attention is All you Need",
+              "section": "5.3 Optimizer"
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "Transformer 调度由训练步数而非验证误差触发",
+          "status": "supported",
+          "answer_citation_numbers": [
+            1
+          ],
+          "evidence": [
+            {
+              "citation": 1,
+              "chunk_id": 66,
+              "text": "5.3 Optimizer We used the Adam optimizer [17] with β1 = 0.9, β2 = 0.98 and ϵ = 10−9. We varied the learning rate over the course of training, according to the formula: lrate = d−0.5 model · min(step_num−0.5, step_num · warmup_steps−1.5) (3) This corresponds to increasing the learning rate linearly for the ﬁrst warmup_steps training steps, and decreasing it thereafter proportionally to the inverse square root of the step number. We used warmup_steps = 4000.",
+              "source": "Attention is all you need.pdf",
+              "page": 7,
+              "title": "Attention is All you Need",
+              "section": "5.3 Optimizer"
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "DCNN 各层同学习率，验证误差停滞时手动除10，初值0.01、下调三次",
+          "status": "supported",
+          "answer_citation_numbers": [
+            8
+          ],
+          "evidence": [
+            {
+              "citation": 8,
+              "chunk_id": 178,
+              "text": "We initialized the neuron biases in the remaining lay- ers with the constant 0. We used an equal learning rate for all layers, which we adjusted manually throughout training. The heuristic which we followed was to divide the learning rate by 10 when the vali- dation error rate stopped improving with the current learning rate. The learning rate was initialized at 0.01 and reduced three times prior to termination.",
+              "source": "DCNN.pdf",
+              "page": 5,
+              "title": "DCNN",
+              "section": "6. DETAILS OF LEARNING"
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "两篇降学习率的控制依据不同",
+          "status": "supported",
+          "answer_citation_numbers": [
+            1,
+            8
+          ],
+          "evidence": [
+            {
+              "citation": 1,
+              "chunk_id": 66,
+              "text": "5.3 Optimizer We used the Adam optimizer [17] with β1 = 0.9, β2 = 0.98 and ϵ = 10−9. We varied the learning rate over the course of training, according to the formula: lrate = d−0.5 model · min(step_num−0.5, step_num · warmup_steps−1.5) (3) This corresponds to increasing the learning rate linearly for the ﬁrst warmup_steps training steps, and decreasing it thereafter proportionally to the inverse square root of the step number. We used warmup_steps = 4000.",
+              "source": "Attention is all you need.pdf",
+              "page": 7,
+              "title": "Attention is All you Need",
+              "section": "5.3 Optimizer"
+            },
+            {
+              "citation": 8,
+              "chunk_id": 178,
+              "text": "We initialized the neuron biases in the remaining lay- ers with the constant 0. We used an equal learning rate for all layers, which we adjusted manually throughout training. The heuristic which we followed was to divide the learning rate by 10 when the vali- dation error rate stopped improving with the current learning rate. The learning rate was initialized at 0.01 and reduced three times prior to termination.",
+              "source": "DCNN.pdf",
+              "page": 5,
+              "title": "DCNN",
+              "section": "6. DETAILS OF LEARNING"
+            }
+          ],
+          "uncited_context_evidence": []
+        }
+      ],
+      "strict_pass": true,
+      "over_refusal": false,
+      "appropriate_refusal": null,
+      "citation_gaps": [],
+      "partial_refusal_due_to_missing_context": false,
+      "unnecessary_insufficiency_caveat": true,
+      "failure_categories": [],
+      "note": "核心与比较完整。开头“仅能部分回答”和结尾对额外预热的保留措辞多余，但未拒绝或遗漏题目所需答案；不按关键词将其误计为实质过度拒答。"
+    },
+    {
+      "id": "h08",
+      "type": "cross_document",
+      "pipeline_status": "completed",
+      "core_points": [
+        {
+          "reference_point": "DPR uses an extractive reader and restricts answers to spans in retrieved passages.",
+          "status": "covered",
+          "answer_citation_numbers": [
+            6
+          ],
+          "reason": "DPR reader 从检索段落抽取答案片段，明确输出受段落 span 约束。"
+        },
+        {
+          "reference_point": "The reader scores passages and spans, then chooses the best span from the passage with the highest passage-selection score.",
+          "status": "partial",
+          "answer_citation_numbers": [
+            6
+          ],
+          "reason": "给出 passage-selection/span 两种评分，但缺少从 passage-selection 最高的段落选择其中最佳 span 的最终决策规则。"
+        },
+        {
+          "reference_point": "RAG supports free-form abstractive answer generation beyond copying a passage span.",
+          "status": "covered",
+          "answer_citation_numbers": [
+            2
+          ],
+          "reason": "RAG 可以自由形式抽象生成，不限于拷贝片段，文中明确说能力不同。"
+        }
+      ],
+      "covered": 2,
+      "total_core_points": 3,
+      "core_point_coverage": 0.6666666666666666,
+      "important_claims": [
+        {
+          "claim": "DPR 对至多100段给段落选择分及抽取 span 的分数",
+          "status": "supported",
+          "answer_citation_numbers": [
+            6
+          ],
+          "evidence": [
+            {
+              "citation": 6,
+              "chunk_id": 464,
+              "text": "6.1 End-to-end QA System We implement an end-to-end question answering system in which we can plug different retriever systems directly. Besides the retriever, our QA sys- tem consists of a neural reader that outputs the answer to the question. Given the top k retrieved passages (up to 100 in our experiments), the reader assigns a passage selection score to each passage. In addition, it extracts an answer span from each passage and assigns a span score.",
+              "source": "2004.04906v3.pdf",
+              "page": 7,
+              "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+              "section": "6.1 End-to-end QA System"
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "DPR 答案为检索段落中的 span",
+          "status": "supported",
+          "answer_citation_numbers": [
+            6
+          ],
+          "evidence": [
+            {
+              "citation": 6,
+              "chunk_id": 464,
+              "text": "6.1 End-to-end QA System We implement an end-to-end question answering system in which we can plug different retriever systems directly. Besides the retriever, our QA sys- tem consists of a neural reader that outputs the answer to the question. Given the top k retrieved passages (up to 100 in our experiments), the reader assigns a passage selection score to each passage. In addition, it extracts an answer span from each passage and assigns a span score.",
+              "source": "2004.04906v3.pdf",
+              "page": 7,
+              "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+              "section": "6.1 End-to-end QA System"
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "RAG 支持超越抽取的自由形式抽象生成",
+          "status": "supported",
+          "answer_citation_numbers": [
+            2
+          ],
+          "evidence": [
+            {
+              "citation": 2,
+              "chunk_id": 766,
+              "text": "3.2 Abstractive Question Answering RAG models can go beyond simple extractive QA and answer questions with free-form, abstractive text generation. To test RAG’s natural language generation (NLG) in a knowledge-intensive setting, we use the MSMARCO NLG task v2.1 [43].",
+              "source": "2005.11401v4.pdf",
+              "page": 4,
+              "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+              "section": "3.2 Abstractive Question Answering"
+            }
+          ],
+          "uncited_context_evidence": []
+        }
+      ],
+      "strict_pass": false,
+      "over_refusal": false,
+      "appropriate_refusal": null,
+      "citation_gaps": [],
+      "partial_refusal_due_to_missing_context": false,
+      "unnecessary_insufficiency_caveat": true,
+      "failure_categories": [
+        "selected_evidence_miss",
+        "incomplete_answer",
+        "unnecessary_comparison_caveat"
+      ],
+      "note": "缺少最终选择规则；Gold 465 未进上下文。末段强调缺少显式跨篇比较句，属于不必要的比较保留措辞；前文已实际说明输出约束差异，因此不把它算作完全拒绝比较。"
+    },
+    {
+      "id": "h09",
+      "type": "cross_document",
+      "pipeline_status": "completed",
+      "core_points": [
+        {
+          "reference_point": "DPR takes the union of top-2000 BM25 and top-2000 DPR passages and reranks by BM25(q,p) + lambda*sim(q,p), with lambda 1.1 selected on development accuracy.",
+          "status": "partial",
+          "answer_citation_numbers": [
+            1
+          ],
+          "reason": "top-2000各路、并集、线性公式正确，但未给出开发集选择 lambda=1.1 的细节。"
+        },
+        {
+          "reference_point": "ColBERT re-ranking scores candidates returned by another retriever, typically a term-based model.",
+          "status": "covered",
+          "answer_citation_numbers": [
+            8
+          ],
+          "reason": "重排另一检索器（通常基于词项）返回的候选。"
+        },
+        {
+          "reference_point": "ColBERT can alternatively retrieve directly from the full collection using a FAISS embedding index and approximate filtering followed by refinement.",
+          "status": "partial",
+          "answer_citation_numbers": [
+            9,
+            10
+          ],
+          "reason": "说明全库向量索引直接检索，但没有 FAISS 及近似过滤->精炼两个阶段。"
+        }
+      ],
+      "covered": 1,
+      "total_core_points": 3,
+      "core_point_coverage": 0.3333333333333333,
+      "important_claims": [
+        {
+          "claim": "DPR 合并 BM25/DPR 各自 top-2000，以 BM25+lambda*sim 重排并集",
+          "status": "supported",
+          "answer_citation_numbers": [
+            1
+          ],
+          "evidence": [
+            {
+              "citation": 1,
+              "chunk_id": 437,
+              "text": "To this end, we train a multi- dataset encoder by combining training data from all datasets excluding SQuAD.8 In addition to DPR, we also present the results of BM25, the traditional retrieval method9 and BM25+DPR, using a linear combination of their scores as the new ranking function. Speciﬁcally, we obtain two initial sets of top-2000 passages based on BM25 and DPR, respectively, and rerank the union of them using BM25(q,p) + λ · sim(q, p) as the ranking function.",
+              "source": "2004.04906v3.pdf",
+              "page": 5,
+              "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+              "section": "5 Experiments: Passage Retrieval"
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "ColBERT 可重排另一词项检索器候选或直接全库检索",
+          "status": "supported",
+          "answer_citation_numbers": [
+            8
+          ],
+          "evidence": [
+            {
+              "citation": 8,
+              "chunk_id": 619,
+              "text": "As we describe in §3.5 and 3.6, these representations are either simply loaded from disk for ranking or are subsequently indexed for vector-similarity search, respectively. 3.5 Top-k Re-ranking with ColBERT Recall that ColBERT can be used for re-ranking the output of an- other retrieval model, typically a term-based model, or directly for end-to-end retrieval from a document collection.",
+              "source": "2004.12832v2.pdf",
+              "page": 5,
+              "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+              "section": "3 COLBERT"
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "ColBERT 全库模式用向量相似度索引",
+          "status": "supported",
+          "answer_citation_numbers": [
+            9
+          ],
+          "evidence": [
+            {
+              "citation": 9,
+              "chunk_id": 549,
+              "text": "Beyond reducing the cost of re-ranking the documents retrieved by a traditional model, ColBERT’s pruning-friendly in- teraction mechanism enables leveraging vector-similarity indexes for end-to-end retrieval directly from a large document collection. We extensively evaluate ColBERT using two recent passage search datasets.",
+              "source": "2004.12832v2.pdf",
+              "page": 1,
+              "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+              "section": null
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "文中 MS MARCO 全库设置从8.8M文档直接取每题 top-1000",
+          "status": "supported",
+          "answer_citation_numbers": [
+            10
+          ],
+          "evidence": [
+            {
+              "citation": 10,
+              "chunk_id": 667,
+              "text": "Tese results directly mirror those with MS MARCO. 4.3 End-to-end Top-k Retrieval Beyond cheap re-ranking, ColBERT is amenable to top-k retrieval di- rectly from a full collection. Table 2 considers full retrieval, wherein each model retrieves the top-1000 documents directly from MS MARCO’s 8.8M documents per query.",
+              "source": "2004.12832v2.pdf",
+              "page": 8,
+              "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+              "section": "4 EXPERIMENTAL EVALUATION"
+            }
+          ],
+          "uncited_context_evidence": []
+        }
+      ],
+      "strict_pass": false,
+      "over_refusal": false,
+      "appropriate_refusal": null,
+      "citation_gaps": [],
+      "partial_refusal_due_to_missing_context": false,
+      "unnecessary_insufficiency_caveat": false,
+      "failure_categories": [
+        "selected_evidence_miss",
+        "incomplete_answer"
+      ],
+      "note": "高层区别正确且替代证据549/667支持全库检索，但冻结标准中的 lambda=1.1 与 FAISS 两阶段细节均遗漏。相应 Gold 438/627/628 未进入上下文。"
+    },
+    {
+      "id": "h10",
+      "type": "cross_document",
+      "pipeline_status": "completed",
+      "core_points": [
+        {
+          "reference_point": "RAG reports Exact Match scores for its open-domain QA evaluation.",
+          "status": "missing",
+          "answer_citation_numbers": [],
+          "reason": "未得到 RAG 的 Exact Match 判据；实际上下文没有 Gold 765。"
+        },
+        {
+          "reference_point": "Self-RAG judges whether a gold answer is included in the generated text instead of strictly requiring exact matching; the raw scores therefore have different criteria.",
+          "status": "partial",
+          "answer_citation_numbers": [
+            2
+          ],
+          "reason": "Self-RAG 的 gold-answer inclusion 与不要求 strict exact match 已答对，但完整核心点还要求说明两篇得分标准不同；答案明确表示无法比较，因此该复合点按冻结规则记 partial。"
+        }
+      ],
+      "covered": 0,
+      "total_core_points": 2,
+      "core_point_coverage": 0.0,
+      "important_claims": [
+        {
+          "claim": "Self-RAG 用 gold answer 是否包含在生成中，而非 strict exact matching",
+          "status": "supported",
+          "answer_citation_numbers": [
+            2
+          ],
+          "evidence": [
+            {
+              "citation": 2,
+              "chunk_id": 1003,
+              "text": "For PopQA, we use the long-tail subset, consisting of 1,399 rare entity queries whose monthly Wikipedia page views are less than 100. As the TriviaQA-unfiltered (open) test set is not publicly available, we follow prior work’s validation and test split (Min et al., 2019; Guu et al., 2020), using 11,313 test queries for evaluation. We evaluate performance based on whether gold answers are included in the model generations instead of strictly requiring exact matching, following Mallen et al.",
+              "source": "2310.11511v1.pdf",
+              "page": 7,
+              "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+              "section": "4.1 TASKS AND DATASETS"
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "所引 RAG [5] 只描述 TriviaQA 答案候选过滤",
+          "status": "supported",
+          "answer_citation_numbers": [
+            5
+          ],
+          "evidence": [
+            {
+              "citation": 5,
+              "chunk_id": 910,
+              "text": "For RAG, we also make use of multiple annotation examples for Natural Questions and WebQuestions by training the model with each (q, a) pair separately, leading to a small increase in accuracy. For TriviaQA, there are often many valid answers to a given question, some of which are not suitable training targets, such as emoji or spelling variants. For TriviaQA, we ﬁlter out answer candidates if they do not occur in top 1000 documents for the query.",
+              "source": "2005.11401v4.pdf",
+              "page": 18,
+              "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+              "section": "6 Discussion"
+            }
+          ],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "所引 RAG [9] 描述负对数似然训练及抽取式 QA 对比，未给出评测判据",
+          "status": "supported",
+          "answer_citation_numbers": [
+            9
+          ],
+          "evidence": [
+            {
+              "citation": 9,
+              "chunk_id": 763,
+              "text": "3.1 Open-domain Question Answering Open-domain question answering (QA) is an important real-world application and common testbed for knowledge-intensive tasks [20]. We treat questions and answers as input-output text pairs (x, y) and train RAG by directly minimizing the negative log-likelihood of answers. We compare RAG to the popular extractive QA paradigm [5, 7, 31, 26], where answers are extracted spans from retrieved documents, relying primarily on non-parametric knowledge.",
+              "source": "2005.11401v4.pdf",
+              "page": 4,
+              "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+              "section": "3.1 Open-domain Question Answering"
+            }
+          ],
+          "uncited_context_evidence": []
+        }
+      ],
+      "strict_pass": false,
+      "over_refusal": false,
+      "appropriate_refusal": null,
+      "citation_gaps": [],
+      "partial_refusal_due_to_missing_context": true,
+      "unnecessary_insufficiency_caveat": false,
+      "failure_categories": [
+        "decomposition_scope_drift",
+        "initial_candidate_miss",
+        "selected_evidence_miss",
+        "incomplete_answer"
+      ],
+      "note": "可答题部分拒答源于上下文缺少 RAG EM 原文，不是证据已齐的实质过度拒答。分解额外把 PopQA 绑定到原始 RAG（原题只把 PopQA/TriviaQA 指向 Self-RAG）；该漂移已观察到，但未做消融，不能宣称已证明因果。Gold 765 初始漏召、补查候选已有，最终仍未入选。"
+    },
+    {
+      "id": "h11",
+      "type": "unanswerable",
+      "pipeline_status": "completed",
+      "core_points": [
+        {
+          "reference_point": "State that the Mamba paper/model specification is absent from this corpus and the two requested values cannot be established; do not guess numbers.",
+          "status": "covered",
+          "answer_citation_numbers": [],
+          "reason": "明确八篇资料不含 Mamba/所需训练数据量与隐藏状态维度，未猜数字。"
+        }
+      ],
+      "covered": 1,
+      "total_core_points": 1,
+      "core_point_coverage": 1.0,
+      "important_claims": [
+        {
+          "claim": "当前八篇库中没有 Mamba 论文与所需模型规格，无法据此回答",
+          "status": "supported",
+          "answer_citation_numbers": [],
+          "evidence": [],
+          "uncited_context_evidence": []
+        }
+      ],
+      "strict_pass": true,
+      "over_refusal": false,
+      "appropriate_refusal": true,
+      "citation_gaps": [],
+      "partial_refusal_due_to_missing_context": false,
+      "unnecessary_insufficiency_caveat": false,
+      "failure_categories": [],
+      "note": "正确拒答；八篇 PDF 清单与全文 Mamba 扫描在运行前已核对，未依赖检索失败来定义不可答。"
+    },
+    {
+      "id": "h12",
+      "type": "unanswerable",
+      "pipeline_status": "completed",
+      "core_points": [
+        {
+          "reference_point": "Explain that the corpus does not report the requested controlled ImageNet experiment for the original Transformer; do not substitute a BLEU score, a VGG result, or a later vision Transformer result.",
+          "status": "covered",
+          "answer_citation_numbers": [],
+          "reason": "拒绝推断原始 Transformer 的同协议 ImageNet 准确率，没有拿 BLEU 或 VGG 数字替代所问结果。"
+        }
+      ],
+      "covered": 1,
+      "total_core_points": 1,
+      "core_point_coverage": 1.0,
+      "important_claims": [
+        {
+          "claim": "所给上下文没有所问原始 Transformer 同协议 ImageNet 结果，无法推断",
+          "status": "supported",
+          "answer_citation_numbers": [],
+          "evidence": [],
+          "uncited_context_evidence": []
+        },
+        {
+          "claim": "VGG D 在256尺度的 top-1 验证误差为27.0%",
+          "status": "supported",
+          "answer_citation_numbers": [],
+          "evidence": [],
+          "uncited_context_evidence": [
+            {
+              "chunk_id": 285,
+              "text": "(Table 1) smallest image side top-1 val. error (%) top-5 val. error (%) train (S) test (Q) A 256 256 29.6 10.4 A-LRN 256 256 29.7 10.5 B 256 256 28.7 9.9 C 256 256 28.1 9.4 384 384 28.1 9.3 [256;512] 384 27.3 8.8 D 256 256 27.0 8.8 384 384 26.8 8.7 [256;512] 384 25.6 8.1 E 256 256 27.3 9.0 384 384 26.9 8.7 [256;512] 384 25.5 8.0",
+              "source": "VGG.pdf",
+              "page": 6,
+              "title": "VGG",
+              "section": "4.1 SINGLE SCALE EVALUATION"
+            }
+          ]
+        },
+        {
+          "claim": "Transformer 翻译结果与 VGG 图像分类结果属于不同任务/数据集",
+          "status": "supported",
+          "answer_citation_numbers": [],
+          "evidence": [],
+          "uncited_context_evidence": [
+            {
+              "chunk_id": 81,
+              "text": "7 Conclusion In this work, we presented the Transformer, the ﬁrst sequence transduction model based entirely on attention, replacing the recurrent layers most commonly used in encoder-decoder architectures with multi-headed self-attention. For translation tasks, the Transformer can be trained signiﬁcantly faster than architectures based on recurrent or convolutional layers. On both WMT 2014 English-to-German and WMT 2014 English-to-French translation tasks, we achieve a new state of the art.",
+              "source": "Attention is all you need.pdf",
+              "page": 9,
+              "title": "Attention is All you Need",
+              "section": "7 Conclusion"
+            },
+            {
+              "chunk_id": 285,
+              "text": "(Table 1) smallest image side top-1 val. error (%) top-5 val. error (%) train (S) test (Q) A 256 256 29.6 10.4 A-LRN 256 256 29.7 10.5 B 256 256 28.7 9.9 C 256 256 28.1 9.4 384 384 28.1 9.3 [256;512] 384 27.3 8.8 D 256 256 27.0 8.8 384 384 26.8 8.7 [256;512] 384 25.6 8.1 E 256 256 27.3 9.0 384 384 26.9 8.7 [256;512] 384 25.5 8.0",
+              "source": "VGG.pdf",
+              "page": 6,
+              "title": "VGG",
+              "section": "4.1 SINGLE SCALE EVALUATION"
+            }
+          ]
+        }
+      ],
+      "strict_pass": false,
+      "over_refusal": false,
+      "appropriate_refusal": true,
+      "citation_gaps": [
+        "拒答后额外报告 VGG D 的27.0%验证误差及跨任务说明，却没有标注现成的上下文[2]/[1]；数值可证，但可追溯引用缺失。"
+      ],
+      "partial_refusal_due_to_missing_context": false,
+      "unnecessary_insufficiency_caveat": false,
+      "failure_categories": [
+        "uncited_additional_numeric_claim"
+      ],
+      "note": "拒答内容正确，附带的27.0%也由真实上下文285支持；保留追加数值缺引用的问题，严格引用标准下不通过，不把它误报成数值幻觉。"
+    }
+  ]
+}

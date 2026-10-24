@@ -1,0 +1,55 @@
+{
+  "date": "2026-10-20 Asia/Shanghai",
+  "goal": "Fix frozen original-query anchor and retain initially selected subquery Top-3 evidence through completion.",
+  "kb_version": "all-papers-8-20261020",
+  "questions": "evaluation/all_papers_questions_en.json",
+  "scored": 42,
+  "skipped_no_gold": 4,
+  "candidate_k": 120,
+  "completion_cap": 2,
+  "top_ks": [
+    10,
+    20
+  ],
+  "query_rewrite": false,
+  "hyde": false,
+  "api_calls_budget": 0,
+  "metrics": [
+    "precision",
+    "recall",
+    "map",
+    "mrr",
+    "full_gold",
+    "context_characters",
+    "elapsed_seconds"
+  ],
+  "comparisons": [
+    "old_selection_candidate120",
+    "fixed_selection_candidate120",
+    "fixed_selection_candidate60"
+  ],
+  "controls": "Same questions, source/page/quote Gold, 8-paper index and cached transformations; independent selection/completion for each final k.",
+  "fix_policy": "Freeze pre-augmentation RRF first hit. Retain initially selected subquery Top-3 IDs, then use shared select_evidence with original and source-scoped local evidence; never pass Gold to runtime.",
+  "adopt_top20_if": {
+    "recall_gain_min": 0.05,
+    "map_drop_max": 0.01,
+    "mrr_drop_max": 0.01,
+    "median_context_ratio_max": 2.2
+  },
+  "defaults": "Use two-pass cap and candidate120 as user requested. Choose final k after fixed comparison. Preserve active KB pointer; larger KB specified explicitly.",
+  "verification": [
+    "Failing call-site anchor test",
+    "Failing local-evidence retention test",
+    "Independent k10/k20 completion test",
+    "All existing tests",
+    "Independent four-metric recalculation",
+    "Actual main retrieval replay without answer API",
+    "Sanitized full visible conversation export and rewritten handoff"
+  ],
+  "limitations": [
+    "Same-corpus manual Gold; not blind benchmark.",
+    "No fresh final answers in this offline run.",
+    "Completion uses source/count heuristics, not semantic proof."
+  ],
+  "replay_control": "old_selection_candidate60: every common k10 row must exactly match the previous 42-question run."
+}

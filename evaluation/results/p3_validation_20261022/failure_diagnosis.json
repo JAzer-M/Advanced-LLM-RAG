@@ -1,0 +1,35 @@
+{
+  "failures": [
+    {
+      "id": "n04",
+      "arm": "auto_on",
+      "status": "degraded",
+      "error": "ValueError: External paper title must name the bound requirement subject.",
+      "failure_stage": "external route title validation before search; local planning and assessment completed",
+      "bound_subject": "original FlashAttention",
+      "model_proposed_paper_title": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",
+      "lexical_match": false,
+      "same_title_matches_paper_name_without_source_qualifier": true,
+      "actual_model_requests": 5,
+      "actual_public_gets": 0
+    },
+    {
+      "id": "n06",
+      "arm": "agent_on",
+      "status": "failed",
+      "error": "ValueError: External paper title must name the bound requirement subject.",
+      "failure_stage": "external route title validation before search; local planning and assessment completed",
+      "bound_subject": "original FlashAttention paper",
+      "model_proposed_paper_title": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",
+      "lexical_match": false,
+      "same_title_matches_paper_name_without_source_qualifier": true,
+      "actual_model_requests": 4,
+      "actual_public_gets": 0
+    }
+  ],
+  "interpretation": "The source modifier original was bound into the subject name; the real bibliographic title omits original, so the exact lexical identity check rejects it. These failures are not evidence of unavailable papers.",
+  "source_location": "src/arxiv_evidence.py:149 and agent.names_subject",
+  "production_modified": false,
+  "retest_model_calls": 0,
+  "next_fix_candidate": "Keep the full question binding; separate bibliographic names from non-name source qualifiers in the external identity check, retain wrong-paper rejection, then validate as development followup."
+}

@@ -1,0 +1,582 @@
+{
+  "q1": {
+    "query": "Why does VGG use small 3x3 convolutional filters?",
+    "decomposition": {
+      "needs_decomposition": false,
+      "sub_queries": [],
+      "status": "not_needed"
+    },
+    "decomposition_origin": "fresh API, current prompt",
+    "rewritten_query": "VGG small 3x3 convolutional filters receptive field size rationale",
+    "hypothetical_document": "VGG networks use small 3x3 convolutional filters to reduce the number of parameters while increasing the depth of the network. Stacking multiple 3x3 filters achieves the same effective receptive field as larger filters but with fewer weights and additional nonlinearities, improving representational capacity."
+  },
+  "q2": {
+    "query": "Why does the Transformer use positional encoding?",
+    "decomposition": {
+      "needs_decomposition": false,
+      "sub_queries": [],
+      "status": "not_needed"
+    },
+    "decomposition_origin": "fresh API, current prompt",
+    "rewritten_query": "Transformer positional encoding purpose self-attention order information",
+    "hypothetical_document": "The Transformer uses positional encoding because its architecture lacks recurrence and convolution, making it unable to inherently capture the order of tokens in a sequence. Positional encoding injects information about token positions, allowing the model to distinguish sequence order during processing."
+  },
+  "q3": {
+    "query": "Why does the Transformer use scaled dot-product attention?",
+    "decomposition": {
+      "needs_decomposition": false,
+      "sub_queries": [],
+      "status": "not_needed"
+    },
+    "decomposition_origin": "fresh API, current prompt",
+    "rewritten_query": "Transformer scaled dot-product attention rationale why use scaling factor softmax attention",
+    "hypothetical_document": "The Transformer employs scaled dot-product attention to compute attention weights by taking the dot product of queries and keys, then dividing by a scaling factor before applying a softmax. This scaling counteracts the tendency for dot products to grow large in magnitude, which would push the softmax into regions with extremely small gradients and impede learning."
+  },
+  "q4": {
+    "query": "How does the DCNN paper use data augmentation to reduce overfitting?",
+    "decomposition": {
+      "needs_decomposition": false,
+      "sub_queries": [],
+      "status": "not_needed"
+    },
+    "decomposition_origin": "fresh API, current prompt",
+    "rewritten_query": "DCNN data augmentation overfitting regularization",
+    "hypothetical_document": "The DCNN paper employs data augmentation as a regularization strategy to reduce overfitting during training. By artificially expanding the training set, the method discourages the model from memorizing specific samples. This helps the network learn more robust features and improves generalization."
+  },
+  "q5": {
+    "query": "How do VGG and DCNN differ in their use of convolutional filter sizes?",
+    "decomposition": {
+      "needs_decomposition": true,
+      "sub_queries": [
+        "According to the VGG paper, how are convolutional filter sizes used?",
+        "According to the DCNN paper, how are convolutional filter sizes used?"
+      ],
+      "status": "accepted",
+      "proposed_count": 2
+    },
+    "decomposition_origin": "fresh API, current prompt",
+    "rewritten_query": "VGG and DCNN convolutional filter sizes receptive field sizes",
+    "hypothetical_document": "The VGG and DCNN architectures differ in their convolutional filter sizes, with VGG typically employing small, uniform 3×3 filters throughout its convolutional layers, whereas DCNN designs may use larger or varying filter dimensions. This contrast in filter size choices affects the receptive field and parameter count of each model."
+  },
+  "p1": {
+    "query": "Which generator does the original RAG paper use, and how many parameters does it have?",
+    "decomposition": {
+      "needs_decomposition": true,
+      "sub_queries": [
+        "Which generator does the original RAG paper use?",
+        "How many parameters does the generator used in the original RAG paper have?"
+      ],
+      "status": "accepted",
+      "proposed_count": 2
+    },
+    "decomposition_origin": "evaluation/results/retrieval_optimization_20261019/auxiliary_final.json",
+    "rewritten_query": "Original RAG paper generator model parameters retrieval-augmented generation",
+    "hypothetical_document": "The original RAG paper’s retrieval-augmented generation setup uses a specific generator model, and the paper reports its parameter count. This evidence would identify which generator was selected and state the number of parameters it has."
+  },
+  "p2": {
+    "query": "What function does DPR use to compute similarity between question and passage vectors?",
+    "decomposition": {
+      "needs_decomposition": false,
+      "sub_queries": [],
+      "status": "not_needed"
+    },
+    "decomposition_origin": "evaluation/results/retrieval_optimization_20261019/auxiliary_final.json",
+    "rewritten_query": "DPR similarity function question passage vectors dense retrieval dot product",
+    "hypothetical_document": "The passage should describe the operation DPR applies to question and passage vectors to produce a similarity score, specifically the vector comparison function used for ranking. It should state that this function operates directly on the encoded vectors to yield the score."
+  },
+  "p3": {
+    "query": "How does ColBERT MaxSim aggregate query-document token similarities into a document relevance score?",
+    "decomposition": {
+      "needs_decomposition": false,
+      "sub_queries": [],
+      "status": "not_needed"
+    },
+    "decomposition_origin": "evaluation/results/retrieval_optimization_20261019/auxiliary_final.json",
+    "rewritten_query": "ColBERT MaxSim aggregation query-document token similarities document relevance score late interaction",
+    "hypothetical_document": "ColBERT computes a relevance score by applying a MaxSim operation over query-document token similarities. For each query token, it takes the maximum similarity across all document tokens, then sums these maximum values to aggregate the per-token matches into a single document relevance score."
+  },
+  "p4": {
+    "query": "What are the four types of reflection tokens in Self-RAG, and what does each type evaluate?",
+    "decomposition": {
+      "needs_decomposition": false,
+      "sub_queries": [],
+      "status": "rejected",
+      "reason": "sub_query_count_out_of_range",
+      "proposed_count": 5
+    },
+    "decomposition_origin": "evaluation/results/retrieval_optimization_20261019/auxiliary_final.json",
+    "rewritten_query": "Self-RAG reflection tokens types retrieval critique token categories what each evaluates",
+    "hypothetical_document": "Self-RAG defines four types of reflection tokens: retrieval, relevance, support, and utility. These tokens evaluate whether retrieval is needed, whether passages are relevant, whether output is supported by evidence, and overall response usefulness."
+  },
+  "p5": {
+    "query": "What are the three confidence judgments from the CRAG retrieval evaluator that trigger subsequent actions?",
+    "decomposition": {
+      "needs_decomposition": false,
+      "sub_queries": [],
+      "status": "not_needed"
+    },
+    "decomposition_origin": "evaluation/results/retrieval_optimization_20261019/auxiliary_final.json",
+    "rewritten_query": "CRAG retrieval evaluator three confidence judgments subsequent actions",
+    "hypothetical_document": "The CRAG retrieval evaluator produces three distinct confidence judgments that determine subsequent actions. These judgments are typically categorized as correct, incorrect, or ambiguous, each triggering a different downstream response."
+  },
+  "p6": {
+    "query": "How do DPR and ColBERT differ in question and document representations and relevance scoring?",
+    "decomposition": {
+      "needs_decomposition": true,
+      "sub_queries": [
+        "How does DPR represent questions and documents as vectors or embeddings?",
+        "How does DPR compute similarity or relevance scoring between question and document representations?",
+        "How does ColBERT represent questions and documents as vectors or embeddings?",
+        "How does ColBERT compute similarity or relevance scoring between question and document representations?"
+      ],
+      "status": "accepted",
+      "proposed_count": 4
+    },
+    "decomposition_origin": "evaluation/results/retrieval_optimization_20261019/auxiliary_final.json",
+    "rewritten_query": "DPR ColBERT dense passage retrieval question document representations relevance scoring late interaction dual encoder",
+    "hypothetical_document": "DPR represents questions and documents as single dense vectors and computes relevance via a simple dot product or cosine similarity between them. In contrast, ColBERT maintains separate representations for each query and document token, scoring relevance through fine-grained interactions between these token-level representations."
+  },
+  "v1": {
+    "query": "Can RAG-Token use a different retrieved latent document for each generated token?",
+    "decomposition": {
+      "needs_decomposition": false,
+      "sub_queries": [],
+      "status": "not_needed"
+    },
+    "decomposition_origin": "fresh API, current prompt",
+    "rewritten_query": "RAG-Token retrieved latent document per generated token token-specific document selection",
+    "hypothetical_document": "RAG-Token is designed to marginalize over retrieved latent documents at each generation step, allowing the model to attend to different retrieved passages for each individual token produced. This per-token document selection distinguishes it from approaches that commit to a single retrieved document for the entire output sequence."
+  },
+  "v2": {
+    "query": "How is Wikipedia segmented into the basic passage retrieval units used by DPR?",
+    "decomposition": {
+      "needs_decomposition": false,
+      "sub_queries": [],
+      "status": "not_needed"
+    },
+    "decomposition_origin": "fresh API, current prompt",
+    "rewritten_query": "DPR passage retrieval units Wikipedia segmentation passages chunks",
+    "hypothetical_document": "For dense passage retrieval, Wikipedia articles are typically divided into fixed-length, overlapping text chunks that serve as the basic passage units. This segmentation splits each article into shorter passages so retrieval models can match a query against passage-level representations rather than entire documents."
+  },
+  "v3": {
+    "query": "What query embedding count and embedding dimension are used in ColBERT's experimental setup?",
+    "decomposition": {
+      "needs_decomposition": false,
+      "sub_queries": [],
+      "status": "not_needed"
+    },
+    "decomposition_origin": "fresh API, current prompt",
+    "rewritten_query": "ColBERT query embedding count embedding dimension experimental setup hyperparameters",
+    "hypothetical_document": "The experimental setup for ColBERT specifies the query embedding count and embedding dimension used during evaluation. These configuration details define the scale of query representations and the dimensionality of the embedding space in the reported experiments."
+  },
+  "v4": {
+    "query": "How are reflection tokens added to the Self-RAG training corpus, and by which model?",
+    "decomposition": {
+      "needs_decomposition": true,
+      "sub_queries": [
+        "How are reflection tokens added to the Self-RAG training corpus?",
+        "Which model is used to add reflection tokens to the Self-RAG training corpus?"
+      ],
+      "status": "accepted",
+      "proposed_count": 2
+    },
+    "decomposition_origin": "fresh API, current prompt",
+    "rewritten_query": "reflection tokens Self-RAG training corpus insertion added by model generation",
+    "hypothetical_document": "Reflection tokens are added to the Self-RAG training corpus by using a generator model to produce them, rather than by manual annotation. The generator model creates these reflection tokens based on the input and output text, which are then used to train the Self-RAG model."
+  },
+  "v5": {
+    "query": "Which component of CRAG evaluates the quality of retrieved documents, and what does it return?",
+    "decomposition": {
+      "needs_decomposition": false,
+      "sub_queries": [],
+      "status": "not_needed"
+    },
+    "decomposition_origin": "fresh API, current prompt",
+    "rewritten_query": "CRAG evaluator retrieval evaluator document quality assessment retrieved documents returned score",
+    "hypothetical_document": "In CRAG, a dedicated evaluator component assesses the quality of retrieved documents. It returns a relevance judgment that classifies each retrieved document according to its quality, enabling the system to decide how to proceed."
+  },
+  "n01": {
+    "query": "During training of the original RAG model, which retriever components are kept fixed and which components are fine-tuned?",
+    "decomposition": {
+      "needs_decomposition": false,
+      "sub_queries": [],
+      "status": "not_needed"
+    },
+    "decomposition_origin": "evaluation/results/independent_validation_20261019/auxiliary.json",
+    "rewritten_query": "RA⁠G training retriever components fixed frozen parameters fine-tuned components",
+    "hypothetical_document": "During training of the original RAG model, the document retriever and query encoder components are typically kept fixed, while the generator is fine-tuned. This selective fine-tuning allows the retriever to remain frozen while the model learns to leverage retrieved passages for generation."
+  },
+  "n02": {
+    "query": "Which negative passage types does DPR consider, and which combination is used by its best model?",
+    "decomposition": {
+      "needs_decomposition": true,
+      "sub_queries": [
+        "What negative passage types does DPR consider?",
+        "Which combination of negative passage types is used by DPR's best model?"
+      ],
+      "status": "accepted",
+      "proposed_count": 2
+    },
+    "decomposition_origin": "evaluation/results/independent_validation_20261019/auxiliary.json",
+    "rewritten_query": "DPR negative passage types hard negatives in-batch negatives best model combination",
+    "hypothetical_document": "DPR considers several types of negative passages, including in-batch negatives, hard negatives mined from the same batch, and gold passages from other questions. Its best-performing model combines one gold passage from a different question with relevant hard negatives sampled from the same batch."
+  },
+  "n03": {
+    "query": "How does ColBERT augment a short query, and is the same augmentation applied to document inputs?",
+    "decomposition": {
+      "needs_decomposition": true,
+      "sub_queries": [
+        "How does ColBERT augment a short query?",
+        "Does ColBERT apply the same augmentation to document inputs?"
+      ],
+      "status": "accepted",
+      "proposed_count": 2
+    },
+    "decomposition_origin": "evaluation/results/independent_validation_20261019/auxiliary.json",
+    "rewritten_query": "ColBERT query augmentation query expansion document augmentation asymmetric augmentation",
+    "hypothetical_document": "ColBERT augments a short query by applying a specific augmentation procedure to expand its content. The research examines whether this same augmentation strategy is also applied to document inputs, or if documents are processed differently without augmentation."
+  },
+  "n04": {
+    "query": "Does Self-RAG need its separate critic model at inference, and how is this requirement avoided during training?",
+    "decomposition": {
+      "needs_decomposition": true,
+      "sub_queries": [
+        "Does Self-RAG need its separate critic model at inference?",
+        "How is the requirement for a separate critic model avoided during Self-RAG training?"
+      ],
+      "status": "accepted",
+      "proposed_count": 2
+    },
+    "decomposition_origin": "evaluation/results/independent_validation_20261019/auxiliary.json",
+    "rewritten_query": "Self-RAG separate critic model at inference avoided during training critic requirement",
+    "hypothetical_document": "Self-RAG typically requires a separate critic model at inference to evaluate retrieval and generation quality. During training, this requirement is avoided by using the critic only to generate reflection tokens that train the main model to critique itself, so no external critic is needed at inference."
+  },
+  "n05": {
+    "query": "Which BERT encoders are used by the original RAG retriever and DPR, and what representation does DPR extract from each encoder?",
+    "decomposition": {
+      "needs_decomposition": true,
+      "sub_queries": [
+        "Which BERT encoders are used by the original RAG retriever?",
+        "Which BERT encoders are used by DPR?",
+        "What representation does DPR extract from each BERT encoder?"
+      ],
+      "status": "accepted",
+      "proposed_count": 3
+    },
+    "decomposition_origin": "evaluation/results/independent_validation_20261019/auxiliary.json",
+    "rewritten_query": "BERT encoders original RAG retriever DPR representation extracted from each encoder DPR dense passage retrieval bi-encoder",
+    "hypothetical_document": "The original RAG retriever and DPR both rely on BERT encoders, with DPR typically employing separate query and passage encoders. From each BERT encoder, DPR extracts a single dense vector representation for the query or passage."
+  },
+  "n06": {
+    "query": "How do DPR and ColBERT form positive and negative training examples, and what losses do they optimize?",
+    "decomposition": {
+      "needs_decomposition": true,
+      "sub_queries": [
+        "How does DPR form positive and negative training examples?",
+        "How does DPR optimize its training loss?",
+        "How does ColBERT form positive and negative training examples?",
+        "How does ColBERT optimize its training loss?"
+      ],
+      "status": "accepted",
+      "proposed_count": 4
+    },
+    "decomposition_origin": "evaluation/results/independent_validation_20261019/auxiliary.json",
+    "rewritten_query": "DPR ColBERT positive negative training examples negative sampling contrastive loss training objective",
+    "hypothetical_document": "DPR and ColBERT construct positive training examples from relevant query-document pairs and negative examples from non-relevant or hard-negative passages. They optimize contrastive or ranking losses that push positive pairs closer while separating negatives in the representation space."
+  },
+  "n07": {
+    "query": "What document representations are precomputed and stored for retrieval or indexing in RAG and ColBERT?",
+    "decomposition": {
+      "needs_decomposition": true,
+      "sub_queries": [
+        "What document representations are precomputed and stored for retrieval or indexing in RAG?",
+        "What document representations are precomputed and stored for retrieval or indexing in ColBERT?"
+      ],
+      "status": "accepted",
+      "proposed_count": 2
+    },
+    "decomposition_origin": "evaluation/results/independent_validation_20261019/auxiliary.json",
+    "rewritten_query": "RAG ColBERT document representations precomputed stored retrieval indexing",
+    "hypothetical_document": "For RAG and ColBERT, the indexed representations are precomputed dense embeddings stored for each document unit. In RAG these are passage-level vectors for retrieval, while ColBERT stores per-token contextual embeddings for late interaction, all computed offline and persisted in the retrieval index."
+  },
+  "n08": {
+    "query": "How do Self-RAG and CRAG decide whether retrieval or additional knowledge is needed, and what happens when retrieval is unnecessary or judged incorrect?",
+    "decomposition": {
+      "needs_decomposition": true,
+      "sub_queries": [
+        "According to the Self-RAG paper, how does Self-RAG decide whether retrieval is needed?",
+        "According to the Self-RAG paper, what happens when retrieval is unnecessary or judged incorrect?",
+        "According to the CRAG paper, how does CRAG decide whether retrieval is needed?",
+        "According to the CRAG paper, what happens when retrieval is unnecessary or judged incorrect?"
+      ],
+      "status": "accepted",
+      "proposed_count": 4
+    },
+    "decomposition_origin": "evaluation/results/independent_validation_20261019/auxiliary.json",
+    "rewritten_query": "Self-RAG CRAG retrieval necessity decision adaptive retrieval when retrieval unnecessary or incorrect",
+    "hypothetical_document": "Self-RAG and CRAG use internal signals to decide if retrieval or extra knowledge is needed, triggering retrieval only when required. If retrieval is judged unnecessary or incorrect, the systems bypass or discard it, relying on their internal knowledge or alternative generation paths instead."
+  },
+  "n09": {
+    "query": "Which Wikipedia snapshot does DPR use, and how does CRAG extend retrieval beyond a static corpus?",
+    "decomposition": {
+      "needs_decomposition": true,
+      "sub_queries": [
+        "Which Wikipedia snapshot does DPR use?",
+        "How does CRAG extend retrieval beyond a static corpus?"
+      ],
+      "status": "accepted",
+      "proposed_count": 2
+    },
+    "decomposition_origin": "evaluation/results/independent_validation_20261019/auxiliary.json",
+    "rewritten_query": "DPR Wikipedia snapshot dump version; CRAG retrieval beyond static corpus dynamic web retrieval extension",
+    "hypothetical_document": "DPR typically uses a Wikipedia snapshot from December 2018 as its retrieval corpus. CRAG extends retrieval beyond this static corpus by incorporating web search and decomposing questions, enabling access to up-to-date and broader information than a fixed snapshot allows."
+  },
+  "n10": {
+    "query": "How do DPR and ColBERT mark or extract query and document representations before matching?",
+    "decomposition": {
+      "needs_decomposition": true,
+      "sub_queries": [
+        "How does DPR mark or extract query representations before matching?",
+        "How does DPR mark or extract document representations before matching?",
+        "How does ColBERT mark or extract query representations before matching?",
+        "How does ColBERT mark or extract document representations before matching?"
+      ],
+      "status": "accepted",
+      "proposed_count": 4
+    },
+    "decomposition_origin": "evaluation/results/independent_validation_20261019/auxiliary.json",
+    "rewritten_query": "DPR ColBERT query document representations extraction dense retrieval bi-encoder late interaction matching",
+    "hypothetical_document": "DPR and ColBERT extract query and document representations by encoding them separately into dense vectors before matching. DPR produces a single vector per query and document, while ColBERT generates token-level representations for finer-grained matching."
+  },
+  "a01": {
+    "query": "Where are residual connections and layer normalization placed relative to the encoder sub-layers in the Transformer?",
+    "decomposition": {
+      "needs_decomposition": true,
+      "sub_queries": [
+        "Where are residual connections placed relative to the encoder sub-layers in the Transformer?",
+        "Where is layer normalization placed relative to the encoder sub-layers in the Transformer?"
+      ],
+      "status": "accepted",
+      "proposed_count": 2
+    },
+    "decomposition_origin": "fresh API, current prompt",
+    "rewritten_query": "residual connections layer normalization placement encoder sub-layers Transformer architecture",
+    "hypothetical_document": "In the Transformer architecture, each encoder sub-layer is wrapped with a residual connection followed by layer normalization. The output of each sub-layer is thus normalized after the residual addition, with this arrangement applied around both the self-attention and feed-forward sub-layers."
+  },
+  "a02": {
+    "query": "How did ReLU affect training speed relative to saturating neurons in the DCNN paper?",
+    "decomposition": {
+      "needs_decomposition": false,
+      "sub_queries": [],
+      "status": "not_needed"
+    },
+    "decomposition_origin": "fresh API, current prompt",
+    "rewritten_query": "ReLU rectified linear unit training speed saturating neurons DCNN paper",
+    "hypothetical_document": "The paper compares ReLU units to saturating neurons with respect to optimization efficiency. It reports that ReLU facilitated faster training than saturating activation functions, attributing this speed advantage to the absence of saturation effects during gradient-based learning."
+  },
+  "a03": {
+    "query": "Why does VGG configuration C include 1x1 convolutional layers, and what happens to the receptive field?",
+    "decomposition": {
+      "needs_decomposition": true,
+      "sub_queries": [
+        "According to the VGG paper, why does configuration C include 1x1 convolutional layers?",
+        "According to the VGG paper, what happens to the receptive field when using 1x1 convolutional layers in configuration C?"
+      ],
+      "status": "accepted",
+      "proposed_count": 2
+    },
+    "decomposition_origin": "fresh API, current prompt",
+    "rewritten_query": "VGG configuration C 1x1 convolutional layers receptive field size",
+    "hypothetical_document": "VGG configuration C incorporates 1x1 convolutional layers to introduce additional non-linear transformations without altering the spatial dimensions of the feature maps. This design choice preserves the receptive field while increasing the network's representational capacity through extra rectified linear units."
+  },
+  "a04": {
+    "query": "Which indexing library and approximate nearest-neighbor structure are used for fast retrieval in the original RAG paper?",
+    "decomposition": {
+      "needs_decomposition": true,
+      "sub_queries": [
+        "Which indexing library is used for fast retrieval in the original RAG paper?",
+        "Which approximate nearest-neighbor structure is used for fast retrieval in the original RAG paper?"
+      ],
+      "status": "accepted",
+      "proposed_count": 2
+    },
+    "decomposition_origin": "fresh API, current prompt",
+    "rewritten_query": "Original RAG paper indexing library approximate nearest-neighbor ANN structure fast retrieval dense vectors FAISS",
+    "hypothetical_document": "The original RAG paper describes using a library for indexing to support fast retrieval, paired with an approximate nearest-neighbor structure for efficient search. These components enable quick matching of queries to relevant passages within the retrieval pipeline."
+  },
+  "a05": {
+    "query": "When does DPR encode and index all candidate passages, and which indexing library is used?",
+    "decomposition": {
+      "needs_decomposition": true,
+      "sub_queries": [
+        "When does DPR encode and index all candidate passages?",
+        "Which indexing library is used for indexing candidate passages in DPR?"
+      ],
+      "status": "accepted",
+      "proposed_count": 2
+    },
+    "decomposition_origin": "fresh API, current prompt",
+    "rewritten_query": "DPR encode index candidate passages indexing library",
+    "hypothetical_document": "DPR encodes and indexes all candidate passages during the offline preparation phase, before any query is issued. The passage vectors are stored in a dense index built with a specific indexing library, enabling efficient retrieval at query time."
+  },
+  "a06": {
+    "query": "Which token embeddings does the ColBERT document encoder remove after projection, and why?",
+    "decomposition": {
+      "needs_decomposition": false,
+      "sub_queries": [],
+      "status": "not_needed"
+    },
+    "decomposition_origin": "fresh API, current prompt",
+    "rewritten_query": "ColBERT document encoder token embeddings removed after projection why",
+    "hypothetical_document": "The ColBERT document encoder removes token embeddings corresponding to query terms after projection, specifically those that are not part of the query. This filtering is done because only query-relevant token embeddings are needed for scoring and storage."
+  },
+  "a07": {
+    "query": "How does Self-RAG search over output segments and incorporate critique-token probabilities into segment scores?",
+    "decomposition": {
+      "needs_decomposition": true,
+      "sub_queries": [
+        "How does Self-RAG search over output segments?",
+        "How does Self-RAG incorporate critique-token probabilities into segment scores?"
+      ],
+      "status": "accepted",
+      "proposed_count": 2
+    },
+    "decomposition_origin": "fresh API, current prompt",
+    "rewritten_query": "Self-RAG output segment retrieval critique token probabilities segment scoring critique tokens",
+    "hypothetical_document": "Self-RAG retrieves passages by searching over generated output segments, treating each segment as a retrieval query. It then incorporates critique-token probabilities into the segment scores, using these token-level signals to weight and rank the retrieved evidence for the final selection."
+  },
+  "a08": {
+    "query": "How does CRAG aggregate document confidence scores to classify an entire retrieval as Correct or Incorrect?",
+    "decomposition": {
+      "needs_decomposition": false,
+      "sub_queries": [],
+      "status": "not_needed"
+    },
+    "decomposition_origin": "fresh API, current prompt",
+    "rewritten_query": "CRAG document confidence scores aggregation classify retrieval Correct Incorrect retrieval evaluator",
+    "hypothetical_document": "CRAG aggregates document confidence scores to classify a retrieval as Correct or Incorrect by combining the individual scores assigned to each retrieved document. The overall retrieval classification depends on how these per-document confidence scores are summarized into a single judgment."
+  },
+  "a09": {
+    "query": "What output dimensionalities are used for Transformer sub-layers and embeddings, and for DPR question and passage vectors?",
+    "decomposition": {
+      "needs_decomposition": true,
+      "sub_queries": [
+        "What output dimensionalities are used for Transformer sub-layers and embeddings?",
+        "What output dimensionalities are used for DPR question vectors?",
+        "What output dimensionalities are used for DPR passage vectors?"
+      ],
+      "status": "accepted",
+      "proposed_count": 3
+    },
+    "decomposition_origin": "fresh API, current prompt",
+    "rewritten_query": "Transformer sub-layers embeddings output dimensionality DPR question passage vectors dimensionality",
+    "hypothetical_document": "Transformer sub-layers and embeddings typically employ a consistent model dimensionality, often denoted as d_model, which defines the width of hidden representations throughout the architecture. In contrast, DPR encodes questions and passages into fixed-length dense vectors whose dimensionality is likewise specified as a model hyperparameter, and these question and passage vectors are compared in that shared vector space."
+  },
+  "a10": {
+    "query": "What pooling window sizes and strides are used in DCNN and VGG, and which one uses overlapping pooling?",
+    "decomposition": {
+      "needs_decomposition": true,
+      "sub_queries": [
+        "According to the DCNN paper, what pooling window sizes are used?",
+        "According to the DCNN paper, what pooling strides are used?",
+        "According to the VGG paper, what pooling window sizes are used?",
+        "According to the VGG paper, what pooling strides are used?"
+      ],
+      "status": "accepted",
+      "proposed_count": 4
+    },
+    "decomposition_origin": "fresh API, current prompt",
+    "rewritten_query": "DCNN VGG pooling window size stride overlapping pooling",
+    "hypothetical_document": "The question concerns the specific pooling window sizes and strides used in DCNN and VGG architectures, and which of the two employs overlapping pooling. Relevant evidence would compare the pooling configurations of each model, noting the window size and stride values that create overlap versus non-overlapping pooling."
+  },
+  "a11": {
+    "query": "How does the original RAG paper index its Wikipedia document embeddings, and how can CRAG obtain evidence beyond a static corpus?",
+    "decomposition": {
+      "needs_decomposition": true,
+      "sub_queries": [
+        "How does the original RAG paper index its Wikipedia document embeddings?",
+        "How can CRAG obtain evidence beyond a static corpus?"
+      ],
+      "status": "accepted",
+      "proposed_count": 2
+    },
+    "decomposition_origin": "fresh API, current prompt",
+    "rewritten_query": "original RAG paper Wikipedia document embeddings index indexing CRAG evidence beyond static corpus retrieval-augmented generation",
+    "hypothetical_document": "The original RAG paper indexes its Wikipedia document embeddings using a specific retrieval index for efficient nearest-neighbor search. In contrast, CRAG moves beyond a static corpus by incorporating external evidence sources, enabling retrieval of information not contained in the fixed Wikipedia index."
+  },
+  "a12": {
+    "query": "Do DPR and ColBERT share BERT weights between their question or query encoder and document encoder?",
+    "decomposition": {
+      "needs_decomposition": true,
+      "sub_queries": [
+        "Does DPR share BERT weights between its question encoder and document encoder?",
+        "Does ColBERT share BERT weights between its query encoder and document encoder?"
+      ],
+      "status": "accepted",
+      "proposed_count": 2
+    },
+    "decomposition_origin": "fresh API, current prompt",
+    "rewritten_query": "DPR ColBERT BERT weights shared question encoder query encoder document encoder parameter sharing",
+    "hypothetical_document": "DPR and ColBERT differ in whether they share BERT weights between the question (query) encoder and the document encoder. This passage examines the parameter-sharing relationship between the query and document encoders in each model."
+  },
+  "a13": {
+    "query": "How are critique scores used to rank generated segments in Self-RAG, and how are confidence thresholds used to classify retrieval in CRAG?",
+    "decomposition": {
+      "needs_decomposition": true,
+      "sub_queries": [
+        "How are critique scores used to rank generated segments in Self-RAG?",
+        "How are confidence thresholds used to classify retrieval in CRAG?"
+      ],
+      "status": "accepted",
+      "proposed_count": 2
+    },
+    "decomposition_origin": "fresh API, current prompt",
+    "rewritten_query": "Self-RAG critique scores rank generated segments CRAG confidence thresholds classify retrieval",
+    "hypothetical_document": "In Self-RAG, critique scores assigned to generated segments are used to rank those segments, with higher-scoring candidates preferred during selection. In CRAG, confidence thresholds classify retrieval outcomes, determining whether retrieved information is judged reliable or requires correction based on threshold comparison."
+  },
+  "a14": {
+    "query": "How do DPR and the original RAG paper precompute and index passage or document representations for retrieval?",
+    "decomposition": {
+      "needs_decomposition": true,
+      "sub_queries": [
+        "According to the DPR paper, how are passage representations precomputed and indexed for retrieval?",
+        "According to the original RAG paper, how are document representations precomputed and indexed for retrieval?"
+      ],
+      "status": "accepted",
+      "proposed_count": 2
+    },
+    "decomposition_origin": "fresh API, current prompt",
+    "rewritten_query": "DPR RAG precompute index passage document representations retrieval dense passage retrieval indexing",
+    "hypothetical_document": "DPR and the original RAG paper both precompute dense representations of passages or documents offline and build an index over them for efficient retrieval at query time. The document encoder independently embeds each passage, and these fixed representations are stored in a searchable index rather than being recomputed during inference."
+  },
+  "a15": {
+    "query": "Where is dropout applied in the Transformer and in the VGG training setup?",
+    "decomposition": {
+      "needs_decomposition": true,
+      "sub_queries": [
+        "Where is dropout applied in the Transformer?",
+        "Where is dropout applied in the VGG training setup?"
+      ],
+      "status": "accepted",
+      "proposed_count": 2
+    },
+    "decomposition_origin": "fresh API, current prompt",
+    "rewritten_query": "Transformer dropout application where dropout applied VGG training setup dropout regularization",
+    "hypothetical_document": "Dropout is applied within the Transformer architecture, typically after specific sub-layers, while in the VGG training setup it is inserted between fully connected layers. The exact placement and configuration of dropout in each model determine its regularization effect."
+  },
+  "a16": {
+    "query": "What batch sizes, momentum values, and weight-decay coefficients are used to train DCNN and VGG?",
+    "decomposition": {
+      "needs_decomposition": true,
+      "sub_queries": [
+        "According to the DCNN paper, what batch sizes, momentum values, and weight-decay coefficients are used to train DCNN?",
+        "According to the VGG paper, what batch sizes, momentum values, and weight-decay coefficients are used to train VGG?"
+      ],
+      "status": "accepted",
+      "proposed_count": 2
+    },
+    "decomposition_origin": "fresh API, current prompt",
+    "rewritten_query": "DCNN and VGG training hyperparameters batch size momentum weight-decay coefficient weight decay",
+    "hypothetical_document": "The passage should specify the training hyperparameters for both DCNN and VGG architectures, focusing on batch size, momentum, and weight-decay coefficients. It should clarify whether these settings are shared or separately tuned for each model during optimization."
+  }
+}

@@ -1,0 +1,342 @@
+{
+  "query": "According to the original FlashAttention paper, what was the total measured energy consumption in kWh for all of its reported training experiments?",
+  "status": "degraded",
+  "decomposition": {
+    "needs_decomposition": false,
+    "sub_queries": [],
+    "status": "not_needed"
+  },
+  "knowledge_base": {
+    "version": "all-papers-8-20261020",
+    "chunk_count": 1397,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/manifest.json",
+    "manifest_sha256": "9c4e2c26b4f11fe7baf526595630cbee2d325416ec0e497f417975fbd60779ef",
+    "files": {
+      "faiss.index": "ff1f4a3e38e20c0275ba79d805e6475639b3cea7a7a583f9c18c67ec8e40a2ed",
+      "chunks.json": "3e63d75abbe164ff8e135b1d66fd6b02d9479b2e037e289a726e7c542464593a"
+    }
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 120,
+    "global_top_ids": [
+      1128,
+      293,
+      262,
+      197,
+      65,
+      82,
+      73,
+      254,
+      52,
+      1015
+    ],
+    "protected_ids": [],
+    "sub_query_evidence": [],
+    "retrieval_anchor_ids": [
+      254
+    ],
+    "evidence_completion": {
+      "requested_sources": [],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        1128,
+        293,
+        262,
+        197,
+        65,
+        82,
+        73,
+        254,
+        52,
+        1015
+      ],
+      "retained_local_ids": [],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        1128,
+        293,
+        262,
+        197,
+        65,
+        82,
+        73,
+        254,
+        52,
+        1015
+      ],
+      "elapsed_seconds": 0.000876
+    }
+  },
+  "selected_ids": [
+    1128,
+    293,
+    262,
+    197,
+    65,
+    82,
+    73,
+    254,
+    52,
+    1015
+  ],
+  "context": "[1] Source: 2310.11511v1.pdf | Page: 19 | Section: None\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nWe use Deepspeed stage 3 (Rajbhandari et al., 2020) to conduct multi-GPU distributed training, with training precision Bfloat16 enabled. FlashAttention (Dao et al., 2022) is used to make the long-context training more efficient. We run inference of our trained models using 1-2 Quadro RTX 6000 GPUs with 24GB memory.\n\n[2] Source: VGG.pdf | Page: 7 | Section: None\nAs noted above, we hypothesize that this is due to a different treatment of convolution boundary conditions. Table 5: ConvNet evaluation techniques comparison. In all experiments the training scale S was sampled from [256; 512], and three test scales Q were considered: {256, 384, 512}.\n\n[3] Source: VGG.pdf | Page: 4 | Section: None\nIn our experiments, we evaluated models trained at two ﬁxed scales: S = 256 (which has been widely used in the prior art (Krizhevsky et al., 2012; Zeiler & Fergus, 2013; Sermanet et al., 2014)) and S = 384. Given a ConvNet conﬁguration, we ﬁrst trained the network using S = 256. To speed-up training of the S = 384 network, it was initialised with the weights pre-trained with S = 256, and we used a smaller initial learning rate of 10−3. The second approach to setting S is multi-scale training, where each training image is individually rescaled by randomly sampling S from a certain range [Smin, Smax] (we used Smin = 256 and Smax = 512).\n\n[4] Source: DCNN.pdf | Page: 7 | Section: None\nSo the depth really is important for achieving our results. To simplify our experiments, we did not use any unsuper- vised pre-training even though we expect that it will help, espe- cially if we obtain enough computational power to significantly increase the size of the network without obtaining a corre- sponding increase in the amount of labeled data.\n\n[5] Source: Attention is all you need.pdf | Page: 7 | Section: None\nFor our base models using the hyperparameters described throughout the paper, each training step took about 0.4 seconds. We trained the base models for a total of 100,000 steps or 12 hours. For our big models,(described on the bottom line of table 3), step time was 1.0 seconds. The big models were trained for 300,000 steps (3.5 days).\n\n[6] Source: Attention is all you need.pdf | Page: 9 | Section: None\nIn the former task our best model outperforms even all previously reported ensembles. We are excited about the future of attention-based models and plan to apply them to other tasks. We plan to extend the Transformer to problems involving input and output modalities other than text and to investigate local, restricted attention mechanisms to efﬁciently handle large inputs and outputs such as images, audio and video. Making generation less sequential is another research goals of ours.\n\n[7] Source: Attention is all you need.pdf | Page: 8 | Section: None\nThe Transformer (big) model trained for English-to-French used dropout rate Pdrop = 0.1, instead of 0.3. For the base models, we used a single model obtained by averaging the last 5 checkpoints, which were written at 10-minute intervals. For the big models, we averaged the last 20 checkpoints. We used beam search with a beam size of 4 and length penalty α = 0.6 [31]. These hyperparameters were chosen after experimentation on the development set.\n\n[8] Source: VGG.pdf | Page: 4 | Section: None\nThe batch size was set to 256, momentum to 0.9. The training was regularised by weight decay (the L2 penalty multiplier set to 5·10−4) and dropout regularisation for the ﬁrst two fully-connected layers (dropout ratio set to 0.5). The learning rate was initially set to 10−2, and then decreased by a factor of 10 when the validation set accuracy stopped improving. In total, the learning rate was decreased 3 times, and the learning was stopped after 370K iterations (74 epochs).\n\n[9] Source: Attention is all you need.pdf | Page: 6 | Section: None\nOne is the total computational complexity per layer. Another is the amount of computation that can be parallelized, as measured by the minimum number of sequential operations required. The third is the path length between long-range dependencies in the network. Learning long-range dependencies is a key challenge in many sequence transduction tasks.\n\n[10] Source: 2310.11511v1.pdf | Page: 8 | Section: None\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nTable 2: Overall experiment results on six tasks. Bold numbers indicate the best performance among non-proprietary models, and gray-colored bold text indicates the best proprietary model when they outperforms all non-proprietary models. ∗indicates concurrent or recent results reported by concurrent work. – indicates numbers that are not reported by the original papers or are not applicable.",
+  "ledger": {
+    "citation_registry": [
+      {
+        "citation": 1,
+        "chunk_id": 1128,
+        "source": "2310.11511v1.pdf",
+        "page": 19,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "text": "We use Deepspeed stage 3 (Rajbhandari et al., 2020) to conduct multi-GPU distributed training, with training precision Bfloat16 enabled. FlashAttention (Dao et al., 2022) is used to make the long-context training more efficient. We run inference of our trained models using 1-2 Quadro RTX 6000 GPUs with 24GB memory.",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 2,
+        "chunk_id": 293,
+        "source": "VGG.pdf",
+        "page": 7,
+        "title": "VGG",
+        "text": "As noted above, we hypothesize that this is due to a different treatment of convolution boundary conditions. Table 5: ConvNet evaluation techniques comparison. In all experiments the training scale S was sampled from [256; 512], and three test scales Q were considered: {256, 384, 512}.",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 3,
+        "chunk_id": 262,
+        "source": "VGG.pdf",
+        "page": 4,
+        "title": "VGG",
+        "text": "In our experiments, we evaluated models trained at two ﬁxed scales: S = 256 (which has been widely used in the prior art (Krizhevsky et al., 2012; Zeiler & Fergus, 2013; Sermanet et al., 2014)) and S = 384. Given a ConvNet conﬁguration, we ﬁrst trained the network using S = 256. To speed-up training of the S = 384 network, it was initialised with the weights pre-trained with S = 256, and we used a smaller initial learning rate of 10−3. The second approach to setting S is multi-scale training, where each training image is individually rescaled by randomly sampling S from a certain range [Smin, Smax] (we used Smin = 256 and Smax = 512).",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 4,
+        "chunk_id": 197,
+        "source": "DCNN.pdf",
+        "page": 7,
+        "title": "DCNN",
+        "text": "So the depth really is important for achieving our results. To simplify our experiments, we did not use any unsuper- vised pre-training even though we expect that it will help, espe- cially if we obtain enough computational power to significantly increase the size of the network without obtaining a corre- sponding increase in the amount of labeled data.",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 5,
+        "chunk_id": 65,
+        "source": "Attention is all you need.pdf",
+        "page": 7,
+        "title": "Attention is All you Need",
+        "text": "For our base models using the hyperparameters described throughout the paper, each training step took about 0.4 seconds. We trained the base models for a total of 100,000 steps or 12 hours. For our big models,(described on the bottom line of table 3), step time was 1.0 seconds. The big models were trained for 300,000 steps (3.5 days).",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 6,
+        "chunk_id": 82,
+        "source": "Attention is all you need.pdf",
+        "page": 9,
+        "title": "Attention is All you Need",
+        "text": "In the former task our best model outperforms even all previously reported ensembles. We are excited about the future of attention-based models and plan to apply them to other tasks. We plan to extend the Transformer to problems involving input and output modalities other than text and to investigate local, restricted attention mechanisms to efﬁciently handle large inputs and outputs such as images, audio and video. Making generation less sequential is another research goals of ours.",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 7,
+        "chunk_id": 73,
+        "source": "Attention is all you need.pdf",
+        "page": 8,
+        "title": "Attention is All you Need",
+        "text": "The Transformer (big) model trained for English-to-French used dropout rate Pdrop = 0.1, instead of 0.3. For the base models, we used a single model obtained by averaging the last 5 checkpoints, which were written at 10-minute intervals. For the big models, we averaged the last 20 checkpoints. We used beam search with a beam size of 4 and length penalty α = 0.6 [31]. These hyperparameters were chosen after experimentation on the development set.",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 8,
+        "chunk_id": 254,
+        "source": "VGG.pdf",
+        "page": 4,
+        "title": "VGG",
+        "text": "The batch size was set to 256, momentum to 0.9. The training was regularised by weight decay (the L2 penalty multiplier set to 5·10−4) and dropout regularisation for the ﬁrst two fully-connected layers (dropout ratio set to 0.5). The learning rate was initially set to 10−2, and then decreased by a factor of 10 when the validation set accuracy stopped improving. In total, the learning rate was decreased 3 times, and the learning was stopped after 370K iterations (74 epochs).",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 9,
+        "chunk_id": 52,
+        "source": "Attention is all you need.pdf",
+        "page": 6,
+        "title": "Attention is All you Need",
+        "text": "One is the total computational complexity per layer. Another is the amount of computation that can be parallelized, as measured by the minimum number of sequential operations required. The third is the path length between long-range dependencies in the network. Learning long-range dependencies is a key challenge in many sequence transduction tasks.",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 10,
+        "chunk_id": 1015,
+        "source": "2310.11511v1.pdf",
+        "page": 8,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "text": "Table 2: Overall experiment results on six tasks. Bold numbers indicate the best performance among non-proprietary models, and gray-colored bold text indicates the best proprietary model when they outperforms all non-proprietary models. ∗indicates concurrent or recent results reported by concurrent work. – indicates numbers that are not reported by the original papers or are not applicable.",
+        "kb_version": "all-papers-8-20261020"
+      }
+    ]
+  },
+  "mode": "agent",
+  "answer": "arXiv请求超时，补查未完成。尚未取得所需原文，暂时无法核实；不能据此判断论文是否报告了所问内容。服务端未提供有效等待时间，本轮未自动重试。\n以下仅依据本地证据回答，仍保留未核实的需求：\n当前证据不足，无法可靠回答以下需求：\n- original FlashAttention paper：According to the original FlashAttention paper, what was the total measured energy consumption in kWh for all of its reported training experiments?；外部原文暂时无法获取，该需求尚未完整核实。",
+  "run_dir": "/Users/j/Desktop/Advanced-LLM-RAG/evaluation/results/backend_reliability_20261023/live/main",
+  "initial_selected_ids": [
+    1128,
+    293,
+    262,
+    197,
+    65,
+    82,
+    73,
+    254,
+    52,
+    1015
+  ],
+  "agent": {
+    "invoked": true,
+    "actions_executed": 0,
+    "decision_summary": {
+      "planned_cases": 1,
+      "completed_cases": 1,
+      "api_attempts": 2,
+      "failed_api_attempts": 0,
+      "automatic_retries": 0,
+      "actions_executed": 0,
+      "usage_missing_calls": [],
+      "reported_usage": {
+        "prompt_tokens": 3431,
+        "completion_tokens": 242,
+        "total_tokens": 3673
+      },
+      "proposed_actions": {
+        "question": {
+          "type": "stop",
+          "reason": "库存中不存在原 FlashAttention 论文（Dao et al. 2022），本地可检索的论文均非该原始论文，无法据其建立所需能耗事实。",
+          "requirement_ids": [
+            "r1"
+          ],
+          "query": null,
+          "source": null,
+          "chunk_id": null
+        }
+      },
+      "action_attempts": 0,
+      "reassessment_api_attempts": 0,
+      "reassessed_actions": {
+        "question": null
+      },
+      "final_answer_generations": 0,
+      "automatic_action_loop": true,
+      "validation_repair_attempts": 0,
+      "paused_cases": 0,
+      "halt_reasons": {
+        "question": "model_stop"
+      }
+    },
+    "halt_reason": "model_stop",
+    "answer_summary": {
+      "question_id": "question",
+      "status": "completed",
+      "answer_status": "insufficient_evidence",
+      "api_attempts": 0,
+      "failed_api_attempts": 0,
+      "automatic_retries": 0,
+      "repair_attempted": false,
+      "usage_missing_calls": [],
+      "reported_usage": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0
+      },
+      "semantic_correctness": "requires_manual_review"
+    }
+  },
+  "actions": [
+    {
+      "tool": "search_arxiv",
+      "status": "failed",
+      "trace": {
+        "http_attempts": 1,
+        "automatic_retries": 0,
+        "request_url": "https://export.arxiv.org/api/query?search_query=ti%3A%22FlashAttention%3A+Fast+and+Memory-Efficient+Exact+Attention+with+IO-Awareness%22&start=0&max_results=3",
+        "requested_at_utc": "2026-10-23T02:15:08.513660+00:00",
+        "failure_kind": "timeout",
+        "elapsed_seconds": 30.735
+      },
+      "error": "TimeoutError: The read operation timed out"
+    }
+  ],
+  "network": {
+    "status": "failed",
+    "network_decision_calls": 1,
+    "http_tool_calls": 1,
+    "papers_read": 0,
+    "automatic_retries": 0,
+    "permanent_kb_import": false,
+    "route": {
+      "route": "arxiv",
+      "requirement_id": "r1",
+      "paper_title": "FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness",
+      "reason": "本地清单中没有 FlashAttention 原论文，该需求明确指向原始 FlashAttention 论文；其完整标题为 “FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness”，属于可明确识别的缺失原始论文，因此选择 arxiv。"
+    },
+    "subject_identity": {
+      "bound_subject": "original FlashAttention paper",
+      "lookup_subject": "flashattention"
+    },
+    "search_query": "ti:\"FlashAttention: Fast and Memory-Efficient Exact Attention with IO-Awareness\"",
+    "error": "TimeoutError: The read operation timed out",
+    "failure": {
+      "stage": "search",
+      "kind": "timeout",
+      "trace": {
+        "http_attempts": 1,
+        "automatic_retries": 0,
+        "request_url": "https://export.arxiv.org/api/query?search_query=ti%3A%22FlashAttention%3A+Fast+and+Memory-Efficient+Exact+Attention+with+IO-Awareness%22&start=0&max_results=3",
+        "requested_at_utc": "2026-10-23T02:15:08.513660+00:00",
+        "failure_kind": "timeout",
+        "elapsed_seconds": 30.735
+      }
+    },
+    "actions": [
+      {
+        "tool": "search_arxiv",
+        "status": "failed",
+        "trace": {
+          "http_attempts": 1,
+          "automatic_retries": 0,
+          "request_url": "https://export.arxiv.org/api/query?search_query=ti%3A%22FlashAttention%3A+Fast+and+Memory-Efficient+Exact+Attention+with+IO-Awareness%22&start=0&max_results=3",
+          "requested_at_utc": "2026-10-23T02:15:08.513660+00:00",
+          "failure_kind": "timeout",
+          "elapsed_seconds": 30.735
+        },
+        "error": "TimeoutError: The read operation timed out"
+      }
+    ]
+  },
+  "error": "TimeoutError: The read operation timed out",
+  "answer_status": "source_unavailable",
+  "stop_reason": "external_timeout",
+  "answer_strategy": "local_evidence_after_network_failure",
+  "fallback": {
+    "reason": "TimeoutError: The read operation timed out",
+    "network_status": "failed",
+    "local_answer_status": "insufficient_evidence"
+  },
+  "api_summary": {
+    "attempts": 4,
+    "failed_attempts": 0,
+    "automatic_retries": 0,
+    "usage_missing_calls": [],
+    "reported_usage": {
+      "prompt_tokens": 4566,
+      "completion_tokens": 349,
+      "total_tokens": 4915
+    }
+  }
+}

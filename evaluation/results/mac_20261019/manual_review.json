@@ -1,0 +1,128 @@
+{
+  "reviewer": "assistant manual review against saved cited passages; not independent or blind",
+  "scope": "q2/q5/q6 existing development questions; no aggregate accuracy claim",
+  "questions": {
+    "q2": {
+      "core_facts_complete": true,
+      "strict_source_only_passed": true,
+      "semantic_status": "supported",
+      "review": "[1] 支撑模型无循环和卷积、需要注入顺序信息；[1][10] 支撑编码加到输入且维度相同；[4] 支撑正弦余弦与波长；[6] 支撑 learned positional embeddings 的近似结果。回答稍长，但未见无依据新增结论。",
+      "supporting_citations": [
+        1,
+        4,
+        6,
+        10
+      ],
+      "answer_sha256": "be0786fffc6bcdab9a05d5b6d5698ebbdadfb606f9436fcbb9289ce228f52efb",
+      "checked_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 45,
+          "source": "Attention is all you need.pdf",
+          "page": 5,
+          "text": "3.5 Positional Encoding Since our model contains no recurrence and no convolution, in order for the model to make use of the order of the sequence, we must inject some information about the relative or absolute position of the tokens in the sequence. To this end, we add \"positional encodings\" to the input embeddings at the"
+        },
+        {
+          "citation": 4,
+          "chunk_id": 48,
+          "source": "Attention is all you need.pdf",
+          "page": 6,
+          "text": "In this work, we use sine and cosine functions of different frequencies: PE(pos,2i) = sin(pos/100002i/dmodel) PE(pos,2i+1) = cos(pos/100002i/dmodel) where pos is the position and i is the dimension. That is, each dimension of the positional encoding corresponds to a sinusoid. The wavelengths form a geometric progression from 2π to 10000 · 2π."
+        },
+        {
+          "citation": 6,
+          "chunk_id": 80,
+          "source": "Attention is all you need.pdf",
+          "page": 9,
+          "text": "This suggests that determining compatibility is not easy and that a more sophisticated compatibility function than dot product may be beneﬁcial. We further observe in rows (C) and (D) that, as expected, bigger models are better, and dropout is very helpful in avoiding over-ﬁtting. In row (E) we replace our sinusoidal positional encoding with learned positional embeddings [8], and observe nearly identical results to the base model."
+        },
+        {
+          "citation": 10,
+          "chunk_id": 47,
+          "source": "Attention is all you need.pdf",
+          "page": 6,
+          "text": "Layer Type Complexity per Layer Sequential Maximum Path Length Operations Self-Attention O(n2 · d) O(1) O(1) Recurrent O(n · d2) O(n) O(n) Convolutional O(k · n · d2) O(1) O(logk(n)) Self-Attention (restricted) O(r · n · d) O(1) O(n/r) bottoms of the encoder and decoder stacks. The positional encodings have the same dimension dmodel as the embeddings, so that the two can be summed. There are many choices of positional encodings, learned and ﬁxed [8]."
+        }
+      ]
+    },
+    "q5": {
+      "core_facts_complete": true,
+      "strict_source_only_passed": false,
+      "semantic_status": "partial_scope_qualification",
+      "review": "DCNN 的第一层 11×11、第二层 5×5、后三层 3×3，以及核数量和通道数均由 [9][3][6] 直接支持。VGG 的主要 3×3 和一类配置的 1×1 例外均已提及并引用 [5][4]，但同句仍保留 in all layers，范围限定不够清楚；按严格口径记部分通过。",
+      "remaining_issue_quote": "VGG predominantly uses very small 3 × 3 convolution filters in all layers, with one configuration also utilizing 1 × 1 convolution filters",
+      "supporting_citations": [
+        3,
+        4,
+        5,
+        6,
+        9
+      ],
+      "answer_sha256": "b7bd5c5693619c1443262eb83da6ddd865650cd87c2d3d2e7029b4f3becc2c1c",
+      "checked_sources": [
+        {
+          "citation": 3,
+          "chunk_id": 158,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "text": "The sec- ond convolutional layer takes as input the (response-nor- malized and pooled) output of the first convolutional layer and filters it with 256 kernels of size 5 × 5 × 48. The third, fourth, and fifth convolutional layers are connected to one another without any intervening pooling or normalization layers."
+        },
+        {
+          "citation": 4,
+          "chunk_id": 233,
+          "source": "VGG.pdf",
+          "page": 2,
+          "text": "In one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv."
+        },
+        {
+          "citation": 5,
+          "chunk_id": 224,
+          "source": "VGG.pdf",
+          "page": 1,
+          "text": "Another line of improvements dealt with training and testing the networks densely over the whole image and over multiple scales (Sermanet et al., 2014; Howard, 2014). In this paper, we address another important aspect of ConvNet architecture design – its depth. To this end, we ﬁx other parameters of the architecture, and steadily increase the depth of the network by adding more convolutional layers, which is feasible due to the use of very small (3 × 3) convolution ﬁlters in all layers."
+        },
+        {
+          "citation": 6,
+          "chunk_id": 159,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "text": "The third convolutional layer has 384 kernels of size 3 × 3 × 256 connected to the (normalized, pooled) outputs 3 3 3 3 dense 2048 2048 192 192 128 13 13 3 3 3 dense dense 13 13 3 1000 Max 192 192 128 2048 2048 pooling of the second convolutional layer. The fourth convolu- tional layer has 384 kernels of size 3 × 3 × 192, and the fifth convolutional layer has 256 kernels of size 3 × 3 × 192. The fully connected layers have 4096 neurons each."
+        },
+        {
+          "citation": 9,
+          "chunk_id": 157,
+          "source": "DCNN.pdf",
+          "page": 4,
+          "text": "Max-pooling layers, of the kind described in Section 4.4, follow both response-normal- ization layers as well as the fifth convolutional layer. The ReLU non linearity is applied to the output of every convolu- tional and fully connected layer. The first convolutional layer filters the 224 × 224 × 3 input image with 96 kernels of size 11 × 11 × 3 with a stride of 4 pixels (this is the distance between the receptive field centers of neighboring neurons in a kernel map)."
+        }
+      ]
+    },
+    "q6": {
+      "core_facts_complete": true,
+      "strict_source_only_passed": true,
+      "semantic_status": "supported_refusal",
+      "review": "明确当前论文上下文没有 2026-10-10 股价，未编造价格。补充的四张 Titan Black 与八张 P100 信息分别得到 [5][3] 支撑，未将硬件信息当成股价证据。",
+      "supporting_citations": [
+        3,
+        5
+      ],
+      "answer_sha256": "b4cce45cc31f62472682b236b1fff4aaf0213ca21759ce90a0763cec47e3c3e8",
+      "checked_sources": [
+        {
+          "citation": 3,
+          "chunk_id": 64,
+          "source": "Attention is all you need.pdf",
+          "page": 7,
+          "text": "5.2 Hardware and Schedule We trained our models on one machine with 8 NVIDIA P100 GPUs."
+        },
+        {
+          "citation": 5,
+          "chunk_id": 274,
+          "source": "VGG.pdf",
+          "page": 5,
+          "text": "While more sophisticated methods of speeding up ConvNet training have been recently pro- posed (Krizhevsky, 2014), which employ model and data parallelism for different layers of the net, we have found that our conceptually much simpler scheme already provides a speedup of 3.75 times on an off-the-shelf 4-GPU system, as compared to using a single GPU. On a system equipped with four NVIDIA Titan Black GPUs, training a single net took 2–3 weeks depending on the architecture."
+        }
+      ]
+    }
+  }
+}

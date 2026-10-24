@@ -1,0 +1,903 @@
+{
+  "query": "For Transformer translation and for the original RAG paper's Open-MSMarco and Jeopardy generation experiments, what beam size is used in each, and how many documents are retrieved for those RAG experiments?",
+  "decomposition": {
+    "needs_decomposition": true,
+    "sub_queries": [
+      "What beam size is used for Transformer translation?",
+      "What beam size is used for the RAG paper's Open-MSMarco generation experiments?",
+      "What beam size is used for the RAG paper's Jeopardy generation experiments?",
+      "How many documents are retrieved for the RAG paper's Open-MSMarco and Jeopardy generation experiments?"
+    ],
+    "status": "accepted",
+    "proposed_count": 4
+  },
+  "knowledge_base": {
+    "version": "all-papers-8-20261020",
+    "chunk_count": 1397,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/manifest.json",
+    "manifest_sha256": "9c4e2c26b4f11fe7baf526595630cbee2d325416ec0e497f417975fbd60779ef",
+    "files": {
+      "faiss.index": "ff1f4a3e38e20c0275ba79d805e6475639b3cea7a7a583f9c18c67ec8e40a2ed",
+      "chunks.json": "3e63d75abbe164ff8e135b1d66fd6b02d9479b2e037e289a726e7c542464593a"
+    }
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 317,
+    "global_top_ids": [
+      903,
+      902,
+      795,
+      813,
+      1014,
+      1013,
+      812,
+      783,
+      1011,
+      814
+    ],
+    "protected_ids": [
+      73,
+      903
+    ],
+    "sub_query_evidence": [
+      {
+        "query": "What beam size is used for Transformer translation?",
+        "top_ids": [
+          73,
+          75,
+          995
+        ]
+      },
+      {
+        "query": "What beam size is used for the RAG paper's Open-MSMarco generation experiments?",
+        "top_ids": [
+          903,
+          995,
+          1013
+        ]
+      },
+      {
+        "query": "What beam size is used for the RAG paper's Jeopardy generation experiments?",
+        "top_ids": [
+          903,
+          1013,
+          995
+        ]
+      },
+      {
+        "query": "How many documents are retrieved for the RAG paper's Open-MSMarco and Jeopardy generation experiments?",
+        "top_ids": [
+          903,
+          1014,
+          1011
+        ]
+      }
+    ],
+    "retrieval_anchor_ids": [
+      903
+    ],
+    "evidence_completion": {
+      "requested_sources": [
+        "2005.11401v4.pdf"
+      ],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        903,
+        902,
+        795,
+        813,
+        1014,
+        1013,
+        1011,
+        73,
+        995,
+        75
+      ],
+      "retained_local_ids": [
+        903,
+        1014,
+        1013,
+        1011,
+        73,
+        995,
+        75
+      ],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        903,
+        902,
+        795,
+        813,
+        1014,
+        1013,
+        1011,
+        73,
+        995,
+        75
+      ],
+      "elapsed_seconds": 0.000253
+    }
+  },
+  "selected_ids": [
+    903,
+    902,
+    795,
+    813,
+    1014,
+    1013,
+    1011,
+    73,
+    995,
+    75
+  ],
+  "context": "[1] Source: 2005.11401v4.pdf | Page: 17 | Section: 6 Discussion\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nFor Open-MSMarco and Jeopardy question generation, we report test numbers using ten retrieved documents for both RAG-Token and RAG-Sequence, and we also train a BART-large model as a baseline. We use a beam size of four, and use the Fast Decoding approach for RAG-Sequence models, as Thorough Decoding did not improve performance. B Human Evaluation Figure 4: Annotation interface for human evaluation of factuality.\n\n[2] Source: 2005.11401v4.pdf | Page: 17 | Section: 6 Discussion\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nAppendices for Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks A Implementation Details For Open-domain QA we report test numbers using 15 retrieved documents for RAG-Token models. For RAG-Sequence models, we report test results using 50 retrieved documents, and we use the Thorough Decoding approach since answers are generally short. We use greedy decoding for QA as we did not ﬁnd beam search improved results.\n\n[3] Source: 2005.11401v4.pdf | Page: 7 | Section: 4.4 Fact Veriﬁcation\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nartists of the 1920s ”Lost Generation” expatriate community. His debut novel, ”The Sun Also Rises”, was published in 1926. BOS ” The Sun Also R ises ” is a novel by this authorof ” A Fare well to Arms” Doc 1 Doc 2 Doc 3 Doc 4 Doc 5 Figure 2: RAG-Token document posterior p(zi|x, yi, y−i) for each generated token for input “Hem- ingway\" for Jeopardy generation with 5 retrieved documents.\n\n[4] Source: 2005.11401v4.pdf | Page: 8 | Section: 4.5 Additional Results\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nFigure 3 (left) shows that retrieving more documents at test time monotonically improves Open-domain QA results for RAG-Sequence, but performance peaks for RAG-Token at 10 retrieved documents. Figure 3 (right) shows that retrieving more documents leads to higher Rouge-L for RAG-Token at the expense of Bleu-1, but the effect is less pronounced for RAG-Sequence.\n\n[5] Source: 2310.11511v1.pdf | Page: 7 | Section: 4.3 EXPERIMENTAL SETTINGS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nBy default, we use the top five documents from Contriever-MS MARCO (Izacard et al., 2022a); for biographies and open-domain QA, we use additional top five documents retrieved by a web search engine, following Luo et al. (2023); for ASQA, we use the author-provided top 5 documents by GTR-XXL (Ni et al., 2022) across all baselines for a fair comparison. 5https://github.com/princeton-nlp/ALCE 6We report numbers using the results reported in the paper as the implementations are not available.\n\n[6] Source: 2310.11511v1.pdf | Page: 7 | Section: 4.3 EXPERIMENTAL SETTINGS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nAt each segment level, we adopt a beam width of 2. For a token-level generation, we use greedy decoding.\n\n[7] Source: 2310.11511v1.pdf | Page: 7 | Section: 4.3 EXPERIMENTAL SETTINGS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nFor the retriever model R, we use off-the-shelf Contriever-MS MARCO (Izacard et al., 2022a) by default and retrieve up to ten documents for each input. More training details are in the Appendix Section B.1. Inference settings. As a default configuration, we assign the weight terms ISREL , ISSUP , ISUSE values of 1.0, 1.0 and 0.5, respectively. To encourage frequent retrieval, we set the retrieval threshold to 0.2 for most tasks and to 0 for ALCE (Gao et al., 2023) due to citation requirements.\n\n[8] Source: Attention is all you need.pdf | Page: 8 | Section: 6.1 Machine Translation\nThe Transformer (big) model trained for English-to-French used dropout rate Pdrop = 0.1, instead of 0.3. For the base models, we used a single model obtained by averaging the last 5 checkpoints, which were written at 10-minute intervals. For the big models, we averaged the last 20 checkpoints. We used beam search with a beam size of 4 and length penalty α = 0.6 [31]. These hyperparameters were chosen after experimentation on the development set.\n\n[9] Source: 2310.11511v1.pdf | Page: 6 | Section: 3.3 SELF-RAG INFERENCE\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nWe conduct a segment-level beam search (with the beam size=B) to obtain the top-B segment continuations at each timestamp t, and return the best sequence at the end of generation. The score of each segment yt with respect to passage d is updated with a critic score S that is the linear weighted sum of the normalized probability of each Critique token type.\n\n[10] Source: Attention is all you need.pdf | Page: 8 | Section: 6.2 Model Variations\n6.2 Model Variations To evaluate the importance of different components of the Transformer, we varied our base model in different ways, measuring the change in performance on English-to-German translation on the development set, newstest2013. We used beam search as described in the previous section, but no checkpoint averaging.",
+  "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\n[1] Source: 2005.11401v4.pdf | Page: 17 | Section: 6 Discussion\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nFor Open-MSMarco and Jeopardy question generation, we report test numbers using ten retrieved documents for both RAG-Token and RAG-Sequence, and we also train a BART-large model as a baseline. We use a beam size of four, and use the Fast Decoding approach for RAG-Sequence models, as Thorough Decoding did not improve performance. B Human Evaluation Figure 4: Annotation interface for human evaluation of factuality.\n\n[2] Source: 2005.11401v4.pdf | Page: 17 | Section: 6 Discussion\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nAppendices for Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks A Implementation Details For Open-domain QA we report test numbers using 15 retrieved documents for RAG-Token models. For RAG-Sequence models, we report test results using 50 retrieved documents, and we use the Thorough Decoding approach since answers are generally short. We use greedy decoding for QA as we did not ﬁnd beam search improved results.\n\n[3] Source: 2005.11401v4.pdf | Page: 7 | Section: 4.4 Fact Veriﬁcation\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nartists of the 1920s ”Lost Generation” expatriate community. His debut novel, ”The Sun Also Rises”, was published in 1926. BOS ” The Sun Also R ises ” is a novel by this authorof ” A Fare well to Arms” Doc 1 Doc 2 Doc 3 Doc 4 Doc 5 Figure 2: RAG-Token document posterior p(zi|x, yi, y−i) for each generated token for input “Hem- ingway\" for Jeopardy generation with 5 retrieved documents.\n\n[4] Source: 2005.11401v4.pdf | Page: 8 | Section: 4.5 Additional Results\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nFigure 3 (left) shows that retrieving more documents at test time monotonically improves Open-domain QA results for RAG-Sequence, but performance peaks for RAG-Token at 10 retrieved documents. Figure 3 (right) shows that retrieving more documents leads to higher Rouge-L for RAG-Token at the expense of Bleu-1, but the effect is less pronounced for RAG-Sequence.\n\n[5] Source: 2310.11511v1.pdf | Page: 7 | Section: 4.3 EXPERIMENTAL SETTINGS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nBy default, we use the top five documents from Contriever-MS MARCO (Izacard et al., 2022a); for biographies and open-domain QA, we use additional top five documents retrieved by a web search engine, following Luo et al. (2023); for ASQA, we use the author-provided top 5 documents by GTR-XXL (Ni et al., 2022) across all baselines for a fair comparison. 5https://github.com/princeton-nlp/ALCE 6We report numbers using the results reported in the paper as the implementations are not available.\n\n[6] Source: 2310.11511v1.pdf | Page: 7 | Section: 4.3 EXPERIMENTAL SETTINGS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nAt each segment level, we adopt a beam width of 2. For a token-level generation, we use greedy decoding.\n\n[7] Source: 2310.11511v1.pdf | Page: 7 | Section: 4.3 EXPERIMENTAL SETTINGS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nFor the retriever model R, we use off-the-shelf Contriever-MS MARCO (Izacard et al., 2022a) by default and retrieve up to ten documents for each input. More training details are in the Appendix Section B.1. Inference settings. As a default configuration, we assign the weight terms ISREL , ISSUP , ISUSE values of 1.0, 1.0 and 0.5, respectively. To encourage frequent retrieval, we set the retrieval threshold to 0.2 for most tasks and to 0 for ALCE (Gao et al., 2023) due to citation requirements.\n\n[8] Source: Attention is all you need.pdf | Page: 8 | Section: 6.1 Machine Translation\nThe Transformer (big) model trained for English-to-French used dropout rate Pdrop = 0.1, instead of 0.3. For the base models, we used a single model obtained by averaging the last 5 checkpoints, which were written at 10-minute intervals. For the big models, we averaged the last 20 checkpoints. We used beam search with a beam size of 4 and length penalty α = 0.6 [31]. These hyperparameters were chosen after experimentation on the development set.\n\n[9] Source: 2310.11511v1.pdf | Page: 6 | Section: 3.3 SELF-RAG INFERENCE\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nWe conduct a segment-level beam search (with the beam size=B) to obtain the top-B segment continuations at each timestamp t, and return the best sequence at the end of generation. The score of each segment yt with respect to passage d is updated with a critic score S that is the linear weighted sum of the normalized probability of each Critique token type.\n\n[10] Source: Attention is all you need.pdf | Page: 8 | Section: 6.2 Model Variations\n6.2 Model Variations To evaluate the importance of different components of the Transformer, we varied our base model in different ways, measuring the change in performance on English-to-German translation on the development set, newstest2013. We used beam search as described in the previous section, but no checkpoint averaging.\n\nQuestion:\nFor Transformer translation and for the original RAG paper's Open-MSMarco and Jeopardy generation experiments, what beam size is used in each, and how many documents are retrieved for those RAG experiments?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": "For Open-MSMarco and Jeopardy question generation, we report test numbers using ten retrieved documents for both RAG-Token and RAG-Sequence, and we also train a BART-large model as a baseline.",
+        "evidence_start": 0,
+        "evidence_end": 192,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            903
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 903,
+        "page": 17,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We use a beam size of four, and use the Fast Decoding approach for RAG-Sequence models, as Thorough Decoding did not improve performance.",
+        "evidence_start": 192,
+        "evidence_end": 330,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            903
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 903,
+        "page": 17,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " B Human Evaluation Figure 4: Annotation interface for human evaluation of factuality.",
+        "evidence_start": 330,
+        "evidence_end": 416,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            903
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 903,
+        "page": 17,
+        "citations": [
+          1
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Appendices for Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks A Implementation Details For Open-domain QA we report test numbers using 15 retrieved documents for RAG-Token models.",
+        "evidence_start": 0,
+        "evidence_end": 197,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            902
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 902,
+        "page": 17,
+        "citations": [
+          2
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " For RAG-Sequence models, we report test results using 50 retrieved documents, and we use the Thorough Decoding approach since answers are generally short.",
+        "evidence_start": 197,
+        "evidence_end": 352,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            902
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 902,
+        "page": 17,
+        "citations": [
+          2
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We use greedy decoding for QA as we did not ﬁnd beam search improved results.",
+        "evidence_start": 352,
+        "evidence_end": 430,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            902
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 902,
+        "page": 17,
+        "citations": [
+          2
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "artists of the 1920s ”Lost Generation” expatriate community.",
+        "evidence_start": 0,
+        "evidence_end": 60,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            795,
+            794,
+            793
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 795,
+        "page": 7,
+        "citations": [
+          3
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " His debut novel, ”The Sun Also Rises”, was published in 1926.",
+        "evidence_start": 60,
+        "evidence_end": 122,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            795,
+            794,
+            793
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 795,
+        "page": 7,
+        "citations": [
+          3
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " BOS ” The Sun Also R ises ” is a novel by this authorof ” A Fare well to Arms” Doc 1 Doc 2 Doc 3 Doc 4 Doc 5 Figure 2: RAG-Token document posterior p(zi|x, yi, y−i) for each generated token for input “Hem- ingway\" for Jeopardy generation with 5 retrieved documents.",
+        "evidence_start": 122,
+        "evidence_end": 388,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            795
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 795,
+        "page": 7,
+        "citations": [
+          3
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Figure 3 (left) shows that retrieving more documents at test time monotonically improves Open-domain QA results for RAG-Sequence, but performance peaks for RAG-Token at 10 retrieved documents.",
+        "evidence_start": 0,
+        "evidence_end": 192,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            813
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 813,
+        "page": 8,
+        "citations": [
+          4
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Figure 3 (right) shows that retrieving more documents leads to higher Rouge-L for RAG-Token at the expense of Bleu-1, but the effect is less pronounced for RAG-Sequence.",
+        "evidence_start": 192,
+        "evidence_end": 362,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            813
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 813,
+        "page": 8,
+        "citations": [
+          4
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": ", 2022a); for biographies and open-domain QA, we use additional top five documents retrieved by a web search engine, following Luo et al.",
+        "evidence_start": 82,
+        "evidence_end": 219,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            1014
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1014,
+        "page": 7,
+        "citations": [
+          5
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": ", 2022) across all baselines for a fair comparison.",
+        "evidence_start": 302,
+        "evidence_end": 353,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1014
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1014,
+        "page": 7,
+        "citations": [
+          5
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "com/princeton-nlp/ALCE 6We report numbers using the results reported in the paper as the implementations are not available.",
+        "evidence_start": 370,
+        "evidence_end": 493,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1014
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1014,
+        "page": 7,
+        "citations": [
+          5
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "At each segment level, we adopt a beam width of 2.",
+        "evidence_start": 0,
+        "evidence_end": 50,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1013,
+            1012,
+            1011
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1013,
+        "page": 7,
+        "citations": [
+          6
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " For a token-level generation, we use greedy decoding.",
+        "evidence_start": 50,
+        "evidence_end": 104,
+        "subject": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "identity": {
+          "subject": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            1013
+          ],
+          "identity_quote": "At each segment level, we adopt a beam width of 2. For a token-level generation, we use greedy decoding.",
+          "identity_chunk_id": 1013
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1013,
+        "page": 7,
+        "citations": [
+          6
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": ", 2022a) by default and retrieve up to ten documents for each input.",
+        "evidence_start": 83,
+        "evidence_end": 151,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1011
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1011,
+        "page": 7,
+        "citations": [
+          7
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": ", 2023) due to citation requirements.",
+        "evidence_start": 461,
+        "evidence_end": 498,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1011
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1011,
+        "page": 7,
+        "citations": [
+          7
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " For the base models, we used a single model obtained by averaging the last 5 checkpoints, which were written at 10-minute intervals.",
+        "evidence_start": 104,
+        "evidence_end": 237,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            73,
+            72
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 73,
+        "page": 8,
+        "citations": [
+          8
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " For the big models, we averaged the last 20 checkpoints.",
+        "evidence_start": 237,
+        "evidence_end": 294,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            73,
+            72
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 73,
+        "page": 8,
+        "citations": [
+          8
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " These hyperparameters were chosen after experimentation on the development set.",
+        "evidence_start": 369,
+        "evidence_end": 449,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            73,
+            72
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 73,
+        "page": 8,
+        "citations": [
+          8
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "We conduct a segment-level beam search (with the beam size=B) to obtain the top-B segment continuations at each timestamp t, and return the best sequence at the end of generation.",
+        "evidence_start": 0,
+        "evidence_end": 179,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            995,
+            994,
+            993
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 995,
+        "page": 6,
+        "citations": [
+          9
+        ],
+        "record_id": "E22"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The score of each segment yt with respect to passage d is updated with a critic score S that is the linear weighted sum of the normalized probability of each Critique token type.",
+        "evidence_start": 179,
+        "evidence_end": 358,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            995,
+            994,
+            993
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 995,
+        "page": 6,
+        "citations": [
+          9
+        ],
+        "record_id": "E23"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "2 Model Variations To evaluate the importance of different components of the Transformer, we varied our base model in different ways, measuring the change in performance on English-to-German translation on the development set, newstest2013.",
+        "evidence_start": 2,
+        "evidence_end": 242,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            75
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 75,
+        "page": 8,
+        "citations": [
+          10
+        ],
+        "record_id": "E24"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We used beam search as described in the previous section, but no checkpoint averaging.",
+        "evidence_start": 242,
+        "evidence_end": 329,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            75
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 75,
+        "page": 8,
+        "citations": [
+          10
+        ],
+        "record_id": "E25"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 903,
+        "text": "For Open-MSMarco and Jeopardy question generation, we report test numbers using ten retrieved documents for both RAG-Token and RAG-Sequence, and we also train a BART-large model as a baseline. We use a beam size of four, and use the Fast Decoding approach for RAG-Sequence models, as Thorough Decoding did not improve performance. B Human Evaluation Figure 4: Annotation interface for human evaluation of factuality.",
+        "source": "2005.11401v4.pdf",
+        "page": 17,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "6 Discussion"
+      },
+      {
+        "chunk_id": 902,
+        "text": "Appendices for Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks A Implementation Details For Open-domain QA we report test numbers using 15 retrieved documents for RAG-Token models. For RAG-Sequence models, we report test results using 50 retrieved documents, and we use the Thorough Decoding approach since answers are generally short. We use greedy decoding for QA as we did not ﬁnd beam search improved results.",
+        "source": "2005.11401v4.pdf",
+        "page": 17,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "6 Discussion"
+      },
+      {
+        "chunk_id": 795,
+        "text": "artists of the 1920s ”Lost Generation” expatriate community. His debut novel, ”The Sun Also Rises”, was published in 1926. BOS ” The Sun Also R ises ” is a novel by this authorof ” A Fare well to Arms” Doc 1 Doc 2 Doc 3 Doc 4 Doc 5 Figure 2: RAG-Token document posterior p(zi|x, yi, y−i) for each generated token for input “Hem- ingway\" for Jeopardy generation with 5 retrieved documents.",
+        "source": "2005.11401v4.pdf",
+        "page": 7,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "4.4 Fact Veriﬁcation"
+      },
+      {
+        "chunk_id": 813,
+        "text": "Figure 3 (left) shows that retrieving more documents at test time monotonically improves Open-domain QA results for RAG-Sequence, but performance peaks for RAG-Token at 10 retrieved documents. Figure 3 (right) shows that retrieving more documents leads to higher Rouge-L for RAG-Token at the expense of Bleu-1, but the effect is less pronounced for RAG-Sequence.",
+        "source": "2005.11401v4.pdf",
+        "page": 8,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "4.5 Additional Results"
+      },
+      {
+        "chunk_id": 1014,
+        "text": "By default, we use the top five documents from Contriever-MS MARCO (Izacard et al., 2022a); for biographies and open-domain QA, we use additional top five documents retrieved by a web search engine, following Luo et al. (2023); for ASQA, we use the author-provided top 5 documents by GTR-XXL (Ni et al., 2022) across all baselines for a fair comparison. 5https://github.com/princeton-nlp/ALCE 6We report numbers using the results reported in the paper as the implementations are not available.",
+        "source": "2310.11511v1.pdf",
+        "page": 7,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "4.3 EXPERIMENTAL SETTINGS"
+      },
+      {
+        "chunk_id": 1013,
+        "text": "At each segment level, we adopt a beam width of 2. For a token-level generation, we use greedy decoding.",
+        "source": "2310.11511v1.pdf",
+        "page": 7,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "4.3 EXPERIMENTAL SETTINGS"
+      },
+      {
+        "chunk_id": 1011,
+        "text": "For the retriever model R, we use off-the-shelf Contriever-MS MARCO (Izacard et al., 2022a) by default and retrieve up to ten documents for each input. More training details are in the Appendix Section B.1. Inference settings. As a default configuration, we assign the weight terms ISREL , ISSUP , ISUSE values of 1.0, 1.0 and 0.5, respectively. To encourage frequent retrieval, we set the retrieval threshold to 0.2 for most tasks and to 0 for ALCE (Gao et al., 2023) due to citation requirements.",
+        "source": "2310.11511v1.pdf",
+        "page": 7,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "4.3 EXPERIMENTAL SETTINGS"
+      },
+      {
+        "chunk_id": 73,
+        "text": "The Transformer (big) model trained for English-to-French used dropout rate Pdrop = 0.1, instead of 0.3. For the base models, we used a single model obtained by averaging the last 5 checkpoints, which were written at 10-minute intervals. For the big models, we averaged the last 20 checkpoints. We used beam search with a beam size of 4 and length penalty α = 0.6 [31]. These hyperparameters were chosen after experimentation on the development set.",
+        "source": "Attention is all you need.pdf",
+        "page": 8,
+        "title": "Attention is All you Need",
+        "section": "6.1 Machine Translation"
+      },
+      {
+        "chunk_id": 995,
+        "text": "We conduct a segment-level beam search (with the beam size=B) to obtain the top-B segment continuations at each timestamp t, and return the best sequence at the end of generation. The score of each segment yt with respect to passage d is updated with a critic score S that is the linear weighted sum of the normalized probability of each Critique token type.",
+        "source": "2310.11511v1.pdf",
+        "page": 6,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "3.3 SELF-RAG INFERENCE"
+      },
+      {
+        "chunk_id": 75,
+        "text": "6.2 Model Variations To evaluate the importance of different components of the Transformer, we varied our base model in different ways, measuring the change in performance on English-to-German translation on the development set, newstest2013. We used beam search as described in the previous section, but no checkpoint averaging.",
+        "source": "Attention is all you need.pdf",
+        "page": 8,
+        "title": "Attention is All you Need",
+        "section": "6.2 Model Variations"
+      }
+    ],
+    "selected_ids": [
+      903,
+      902,
+      795,
+      813,
+      1014,
+      1013,
+      1011,
+      73,
+      995,
+      75
+    ]
+  },
+  "answer": "Transformer 翻译实验使用 beam size 为 4（并配合长度惩罚 α = 0.6）[8]。原 RAG 论文针对 Open-MSMarco 和 Jeopardy 问题生成实验，RAG-Token 与 RAG-Sequence 均使用检索到的十篇文档，并使用 beam size 为 4[1]。",
+  "original_answer": "Transformer 翻译实验使用 beam size 为 4（并配合长度惩罚 α = 0.6）[8]。原 RAG 论文针对 Open-MSMarco 和 Jeopardy 问题生成实验，RAG-Token 与 RAG-Sequence 均使用检索到的十篇文档，并使用 beam size 为 4[1]。",
+  "citation_validation": {
+    "answer": "Transformer 翻译实验使用 beam size 为 4（并配合长度惩罚 α = 0.6）[8]。原 RAG 论文针对 Open-MSMarco 和 Jeopardy 问题生成实验，RAG-Token 与 RAG-Sequence 均使用检索到的十篇文档，并使用 beam size 为 4[1]。",
+    "original_answer": "Transformer 翻译实验使用 beam size 为 4（并配合长度惩罚 α = 0.6）[8]。原 RAG 论文针对 Open-MSMarco 和 Jeopardy 问题生成实验，RAG-Token 与 RAG-Sequence 均使用检索到的十篇文档，并使用 beam size 为 4[1]。",
+    "repair_candidate": null,
+    "initial_check": {
+      "cited_numbers": [
+        1,
+        8
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 903,
+          "source": "2005.11401v4.pdf",
+          "page": 17,
+          "text": "For Open-MSMarco and Jeopardy question generation, we report test numbers using ten retrieved documents for both RAG-Token and RAG-Sequence, and we also train a BART-large model as a baseline. We use a beam size of four, and use the Fast Decoding approach for RAG-Sequence models, as Thorough Decoding did not improve performance. B Human Evaluation Figure 4: Annotation interface for human evaluation of factuality."
+        },
+        {
+          "citation": 8,
+          "chunk_id": 73,
+          "source": "Attention is all you need.pdf",
+          "page": 8,
+          "text": "The Transformer (big) model trained for English-to-French used dropout rate Pdrop = 0.1, instead of 0.3. For the base models, we used a single model obtained by averaging the last 5 checkpoints, which were written at 10-minute intervals. For the big models, we averaged the last 20 checkpoints. We used beam search with a beam size of 4 and length penalty α = 0.6 [31]. These hyperparameters were chosen after experimentation on the development set."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "final_check": {
+      "cited_numbers": [
+        1,
+        8
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 903,
+          "source": "2005.11401v4.pdf",
+          "page": 17,
+          "text": "For Open-MSMarco and Jeopardy question generation, we report test numbers using ten retrieved documents for both RAG-Token and RAG-Sequence, and we also train a BART-large model as a baseline. We use a beam size of four, and use the Fast Decoding approach for RAG-Sequence models, as Thorough Decoding did not improve performance. B Human Evaluation Figure 4: Annotation interface for human evaluation of factuality."
+        },
+        {
+          "citation": 8,
+          "chunk_id": 73,
+          "source": "Attention is all you need.pdf",
+          "page": 8,
+          "text": "The Transformer (big) model trained for English-to-French used dropout rate Pdrop = 0.1, instead of 0.3. For the base models, we used a single model obtained by averaging the last 5 checkpoints, which were written at 10-minute intervals. For the big models, we averaged the last 20 checkpoints. We used beam search with a beam size of 4 and length penalty α = 0.6 [31]. These hyperparameters were chosen after experimentation on the development set."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "repair_attempted": false,
+    "normalization_applied": false,
+    "repair_applied": false,
+    "repair_response": null,
+    "repair_prompt": null,
+    "unresolved_blocks": [],
+    "status": "not_needed",
+    "note": "Citation structure only; source relevance and claim meaning are not automatically verified."
+  },
+  "status": "completed"
+}

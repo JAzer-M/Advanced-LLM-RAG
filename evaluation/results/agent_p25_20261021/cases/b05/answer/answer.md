@@ -1,0 +1,1 @@
+Transformer base模型平均最后5个checkpoint（以10分钟间隔写入），big模型平均最后20个checkpoint[1]。VGG则通过平均多个模型的soft-max类别后验概率来组合预测[2]，这与Transformer按时间顺序选取末尾checkpoint做权重的平均方式不同。

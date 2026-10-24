@@ -1,3 +1,6 @@
+# 递归分块的独立对照入口；当前主问答默认使用 Semantic 版本。
+# 此旧入口直接写入固定的 Recursive 索引/JSON 路径，重跑前应保留已有配对资产。
+
 from pathlib import Path
 
 from src.pdf_loader import load_pdfs

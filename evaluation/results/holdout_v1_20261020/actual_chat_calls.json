@@ -1,0 +1,1250 @@
+[
+  {
+    "number": 1,
+    "question_id": "h01",
+    "signature": "2c8172d972f1b3eccf6ac2ca9eac6f628a0eddb3b447b61a9964cbcc231d782c",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nWhat label-smoothing value does Attention Is All You Need use, and how does the paper say it affects perplexity versus accuracy and BLEU?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-20T02:49:09.296711+00:00",
+    "http_posts": 1,
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"What label-smoothing value does Attention Is All You Need use?\",\n        \"How does the paper say label smoothing affects perplexity?\",\n        \"How does the paper say label smoothing affects accuracy and BLEU?\"\n    ]\n}",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 384,
+        "cached_tokens": 384,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 68,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.02,
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 269,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 653,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 384,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 721
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.186
+  },
+  {
+    "number": 2,
+    "question_id": "h01",
+    "signature": "28373b4fed94a0803b1aa1641a96bb5885e8826bf26f251a27db04567bebe4da",
+    "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\n[1] Source: Attention is all you need.pdf | Page: 8 | Section: 5.4 Regularization\nModel BLEU Training Cost (FLOPs) EN-DE EN-FR EN-DE EN-FR ByteNet [15] 23.75 Deep-Att + PosUnk [32] 39.2 1.0 · 1020 GNMT + RL [31] 24.6 39.92 2.3 · 1019 1.4 · 1020 ConvS2S [8] 25.16 40.46 9.6 · 1018 1.5 · 1020 MoE [26] 26.03 40.56 2.0 · 1019 1.2 · 1020 Deep-Att + PosUnk Ensemble [32] 40.4 8.0 · 1020 GNMT + RL Ensemble [31] 26.30 41.16 1.8 · 1020 1.1 · 1021 ConvS2S Ensemble [8] 26.36 41.29 7.7 · 1019 1.2 · 1021 Transformer (base model) 27.3 38.1 3.3 · 1018 Transformer (big) 28.4 41.0 2.3 · 1019 Label Smoothing During training, we employed label smoothing of value ϵls = 0.1 [30].\n\n[2] Source: Attention is all you need.pdf | Page: 8 | Section: 5.4 Regularization\nThis hurts perplexity, as the model learns to be more unsure, but improves accuracy and BLEU score.\n\n[3] Source: Attention is all you need.pdf | Page: 8 | Section: 6.2 Model Variations\nWe present these results in Table 3. In Table 3 rows (A), we vary the number of attention heads and the attention key and value dimensions, keeping the amount of computation constant, as described in Section 3.2.2. While single-head attention is 0.9 BLEU worse than the best setting, quality also drops off with too many heads.\n\n[4] Source: Attention is all you need.pdf | Page: 2 | Section: 1 Introduction\nAttention mechanisms have become an integral part of compelling sequence modeling and transduc- tion models in various tasks, allowing modeling of dependencies without regard to their distance in the input or output sequences [2, 16]. In all but a few cases [22], however, such attention mechanisms are used in conjunction with a recurrent network.\n\n[5] Source: Attention is all you need.pdf | Page: 3 | Section: 3.2 Attention\n3.2 Attention An attention function can be described as mapping a query and a set of key-value pairs to an output, where the query, keys, values, and output are all vectors. The output is computed as a weighted sum of the values, where the weight assigned to each value is computed by a compatibility function of the query with the corresponding key.\n\n[6] Source: Attention is all you need.pdf | Page: 6 | Section: 4 Why Self-Attention\n4 Why Self-Attention In this section we compare various aspects of self-attention layers to the recurrent and convolu- tional layers commonly used for mapping one variable-length sequence of symbol representations (x1, ..., xn) to another sequence of equal length (z1, ..., zn), with xi, zi ∈Rd, such as a hidden layer in a typical sequence transduction encoder or decoder. Motivating our use of self-attention we consider three desiderata.\n\n[7] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\nWe need to prevent leftward information ﬂow in the decoder to preserve the auto-regressive property. We implement this inside of scaled dot-product attention by masking out (setting to −∞) all values in the input of the softmax which correspond to illegal connections.\n\n[8] Source: Attention is all you need.pdf | Page: 1 | Section: None\nExperiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring signiﬁcantly less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English- to-German translation task, improving over the existing best results, including ensembles, by over 2 BLEU.\n\n[9] Source: 2310.11511v1.pdf | Page: 7 | Section: 4.2 BASELINES\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nWe also report the result of retrieval-augmented baselines with LMs trained with private data: Ret-ChatGPT and Ret-Llama2-chat, which deploy the same augmentation technique above, as well as perplexity.ai, an InstructGPT-based production search system.\n\n[10] Source: 2401.15884v3.pdf | Page: 7 | Section: 5.2 Baselines\nTitle: Corrective Retrieval Augmented Generation\n(2) Self-RAG (Asai et al., 2024) that tuned the LLaMA2 on the instruction- tuning data comtaining several sets of reflection tokens which were labeled by GPT-4 (OpenAI, 2023). (3) Following Asai et al. (2024), we also cited the results of retrieval-augmented baselines trained with private data: Ret-ChatGPT and Ret- LLaMA-chat, which deploy the same augmenta- tion technique above, as well as perplexity.ai, an InstructGPT-based production search system.\n\n[11] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\n3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].\n\n[12] Source: Attention is all you need.pdf | Page: 1 | Section: None\nWe propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely.\n\nQuestion:\nWhat label-smoothing value does Attention Is All You Need use, and how does the paper say it affects perplexity versus accuracy and BLEU?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-20T02:49:40.334020+00:00",
+    "http_posts": 1,
+    "response": {
+      "answer": "Attention Is All You Need 使用的 label smoothing 值为 ϵls = 0.1 [1]。论文指出，这会使模型学会变得更不确定，从而损害 perplexity，但会提升 accuracy 和 BLEU 分数 [2]。",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 128,
+        "cached_tokens": 128,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 51,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.06,
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 1798,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 1926,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 128,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 1977
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.374
+  },
+  {
+    "number": 3,
+    "question_id": "h02",
+    "signature": "936a5875d288a364f49e00161cb516d6b04ea57e144bd13a6a0a75046dbc6cf8",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nIn CRAG knowledge refinement, how are knowledge strips formed, filtered, and recomposed after a document is judged relevant?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-20T02:49:42.731318+00:00",
+    "http_posts": 1,
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 384,
+        "cached_tokens": 384,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 19,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.01,
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 262,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 646,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 384,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 665
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.864
+  },
+  {
+    "number": 4,
+    "question_id": "h02",
+    "signature": "29dc950401745a25accb1d1a12d7f9badc0310d1b223f48aab5a27ec09272278",
+    "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\nOriginal passages:\n[1] Source: 2401.15884v3.pdf | Page: 6 | Section: 4.4 Knowledge Refinement\nTitle: Corrective Retrieval Augmented Generation\n4.4 Knowledge Refinement Given a retrieved relevant document, a decompose- then-recompose knowledge refinement method is designed to further extract the most critical knowledge strips in it. To obtain fine-grained retrieval results, we segmented the retrieved results into internal strips.\n\n[2] Source: 2401.15884v3.pdf | Page: 3 | Section: 4.1 Overview of Model Inference\nTitle: Corrective Retrieval Augmented Generation\nThe relevance score is quantified into a total of three confidence degrees and then triggered the corresponding actions: {Correct, Incorrect, Ambiguous} (Section 4.3). If the action Correct is triggered, the retrieved documents will be re- fined into more precise knowledge strips. This refinement operation involves knowledge decom- position, filter, and recomposition (Section 4.4). If the action Incorrect is triggered, the retrieved documents will be discarded.\n\n[3] Source: 2401.15884v3.pdf | Page: 6 | Section: 4.4 Knowledge Refinement\nTitle: Corrective Retrieval Augmented Generation\nThe scale is assumed to include an independent piece of information, and the filtering is based on the segments. Then, the retrieval evaluator fine- tuned in Section 4.2 is employed to calculate the relevance score of each knowledge strip. Based on these scores, irrelevant knowledge strips are filtered out, while relevant ones are recomposed via concatenation in order, namely internal knowledge.\n\n[4] Source: 2401.15884v3.pdf | Page: 5 | Section: 4.3 Action Trigger\nTitle: Corrective Retrieval Augmented Generation\nHowever, even if a relevant document can be found, there is inevitably some noisy knowledge strips in this document. To extract the most critical knowledge strips within this document, a knowledge refinement method is further designed which will be elaborated in Section 4.4. Incorrect Besides, a retrieval is assumed Incorrect when the confidence scores of all retrieved documents are below the lower threshold.\n\n[5] Source: 2401.15884v3.pdf | Page: 4 | Section: 4.2 Retrieval Evaluator\nTitle: Corrective Retrieval Augmented Generation\nCorrect Knowledge Correction Ambiguous Incorrect Correct + x kin Generation Figure 2: An overview of the proposed CRAG at inference. A retrieval evaluator is constructed to evaluate the relevance of the retrieved documents to the input, and estimate a confidence degree based on which different knowledge retrieval actions of {Correct, Incorrect, Ambiguous} can be triggered. Our objective is to correct the retrieved documents if they are irrelevant.\n\n[6] Source: 2401.15884v3.pdf | Page: 15 | Section: 6 Conclusion & Limitation\nTitle: Corrective Retrieval Augmented Generation\nThus an extra segmentation like the knowledge refinement is not required, related knowledge paragraphs can be directly selected with the evaluator similar to internal knowledge. In this way, the accuracy of the search outcomes can be ensured without compromising the quality and relevance of the information used for generation. Generator: As CRAG is a plug-and-play method, all generation models that can be uti- lized in RAG fit our approach as well.\n\n[7] Source: 2401.15884v3.pdf | Page: 10 | Section: 6 Conclusion & Limitation\nTitle: Corrective Retrieval Augmented Generation\nWith the further leverage of web search and optimized knowledge utilization, CRAG has significantly improved the ability of automatic self-correction and efficient utilization of retrieved documents. Experiments extensively demonstrate its adaptabil- ity to RAG-based approaches as well as general- izability across short- and long-form generation tasks.\n\n[8] Source: 2401.15884v3.pdf | Page: 6 | Section: 4.5 Web Search\nTitle: Corrective Retrieval Augmented Generation\nIn CRAG, a public and accessible commercial web search API is adopted to generate a series of URL links 3 Considering that knowledge for every query. from large-scale web searches could introduce biases or unreliable information, authoritative and regulated web pages like Wikipedia are preferred, which can significantly help mitigate these issues.\n\n[9] Source: 2401.15884v3.pdf | Page: 2 | Section: 1 Introduction\nTitle: Corrective Retrieval Augmented Generation\nIn summary, our contributions in this paper are three-fold: 1) This paper studies the scenarios where the retriever returns inaccurate results and, to the best of our knowledge, makes the first attempt to design corrective strategies for RAG to improve its robustness. 2) A plug-and-play method named CRAG is proposed to improve the ability of A automatic self-correction and efficient utilization of retrieved documents.\n\n[10] Source: 2401.15884v3.pdf | Page: 4 | Section: 4.2 Retrieval Evaluator\nTitle: Corrective Retrieval Augmented Generation\nWe utilized that as the relevance signals for fine-tuning the retrieval evaluator.2 On the other hand, the negative samples for fine-tuning were all randomly sampled from the retrieval results, which are rather similar to the input query but 2https://huggingface.co/datasets/akariasai/PopQA Retrieved Documents d1 d2 Knowledge Refinement strip1 d1 strip1 strip2 kin … stripk Recompose d2 Decompose Filter stripk Knowledge Searching k1 q: Death of a Batman; x k2 kex screenwriter; Wikipedia … Web Rewrite Select kn Search Incorrect Ambiguous + + + x x kin kex kex Generator not relevant.\n\n[11] Source: 2401.15884v3.pdf | Page: 15 | Section: 6 Conclusion & Limitation\nTitle: Corrective Retrieval Augmented Generation\nWe directly adopted the evaluator again for knowledge strips filtering, and the top-k is set to 5, filter threshold as -0.5. External Knowledge: Google Search API was adopted to search for the relevant URLs, top-k is set to 5, and pages from Wikipedia will be added preferentially. The searched web pages are generally in the form of HTML files, where content is split with special tokens like <p> and </p>.\n\nEvidence guidance:\n- Rule-based subject attribution: API; passage: “Thus an extra segmentation like the knowledge refinement is not required, related knowledge paragraphs can be directly selected with the evaluator similar to internal knowledge.” [6][11]\n- Rule-based subject attribution: API; passage: “In this way, the accuracy of the search outcomes can be ensured without compromising the quality and relevance of the information used for generation.” [6][11]\n- Rule-based subject attribution: CRAG; passage: “With the further leverage of web search and optimized knowledge utilization, CRAG has significantly improved the ability of automatic self-correction and efficient utilization of retrieved documents.” [7]\n- Rule-based subject attribution: CRAG; passage: “Experiments extensively demonstrate its adaptabil- ity to RAG-based approaches as well as general- izability across short- and long-form generation tasks.” [7]\n- Rule-based subject attribution: API; passage: “In CRAG, a public and accessible commercial web search API is adopted to generate a series of URL links 3 Considering that knowledge for every query.” [8]\n- Rule-based subject attribution: API; passage: “from large-scale web searches could introduce biases or unreliable information, authoritative and regulated web pages like Wikipedia are preferred, which can significantly help mitigate these issues.” [8]\n- Rule-based subject attribution: CRAG; passage: “2) A plug-and-play method named CRAG is proposed to improve the ability of A automatic self-correction and efficient utilization of retrieved documents.” [9]\n\nQuestion:\nIn CRAG knowledge refinement, how are knowledge strips formed, filtered, and recomposed after a document is judged relevant?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-20T02:49:50.180733+00:00",
+    "http_posts": 1,
+    "response": {
+      "answer": "在 CRAG 的知识精炼流程中，当检索文档被判为相关（Correct）后，会触发知识精炼操作，该操作包括知识分解、过滤和重组（knowledge decomposition, filter, and recomposition）[2]。\n\n**知识条带的形成（分解）**：给定检索到的相关文档，采用“先分解后重组”（decompose-then-recompose）的方法，将检索结果切分为内部条带（internal strips）[1]。每个条带被假定包含一条独立的信息[3]。\n\n**过滤**：使用在 4.2 节微调的检索评估器计算每个知识条带的相关性分数[3]。基于这些分数，过滤掉不相关的知识条带[3]。\n\n**重组**：相关的知识条带按顺序通过拼接（concatenation in order）进行重组，形成内部知识（internal knowledge）[3]。\n\n补充：该精炼设计的目的正是处理即使找到相关文档、文档中仍不可避免存在噪声知识条带的情况，以提取文档中最关键的知识条带[4]。",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 128,
+        "cached_tokens": 128,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 221,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.08,
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 2038,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2166,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 128,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2387
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.984
+  },
+  {
+    "number": 5,
+    "question_id": "h03",
+    "signature": "b6bdcc940f811b589bda62540176a6f8caae5ec233d2b33d89075ecce3f7a740",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nWhat batching and text-preprocessing optimizations does ColBERT use to reduce padding and WordPiece tokenization overhead during offline indexing?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-20T02:49:53.185823+00:00",
+    "http_posts": 1,
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"What batching optimizations does ColBERT use to reduce padding overhead during offline indexing?\",\n        \"What text-preprocessing optimizations does ColBERT use to reduce WordPiece tokenization overhead during offline indexing?\"\n    ]\n}",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 384,
+        "cached_tokens": 384,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 64,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.02,
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 264,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 648,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 384,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 712
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.634
+  },
+  {
+    "number": 6,
+    "question_id": "h03",
+    "signature": "5217e5b3f1e04e4706a07b5fcf3a73bd41809dc73acdf7411a93df2e6fe2f73a",
+    "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\nOriginal passages:\n[1] Source: 2004.12832v2.pdf | Page: 5 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nAt a high level, our indexing procedure is straight-forward: we proceed over the documents in the collection in batches, running our document encoder fD on each batch and storing the output embeddings per document. Although indexing a set of documents is an oﬄine process, we incorporate a few simple optimizations for enhancing the throughput of indexing. As we show in §4.5, these optimizations can considerably reduce the oﬄine cost of indexing.\n\n[2] Source: 2004.12832v2.pdf | Page: 5 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nLastly, while most computations occur on the GPU, we found that a non-trivial portion of the indexing time is spent on pre-processing the text sequences, primarily BERT’s WordPiece to- kenization. Exploiting that these operations are independent across documents in a batch, we parallelize the pre-processing across the available CPU cores. Once the document representations are produced, they are saved to disk using 32-bit or 16-bit values to represent each dimension.\n\n[3] Source: 2004.12832v2.pdf | Page: 9 | Section: 4 EXPERIMENTAL EVALUATION\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nSimilarly, the ﬁgure emphasizes the importance of our query augmentation mechanism: without query augmentation [C], ColBERT has a no- ticeably lower MRR@10. Lastly, we see the impact of end-to-end retrieval not only on recall but also on MRR@10. By retrieving directly from the full collection, ColBERT is able to retrieve to the top-10 documents missed entirely from BM25’s top-1000. Basic ColBERT Indexing +multi-GPU document processing +per-batch maximum sequence length +length-based bucketing +multi-core pre-processing 0 10000 20000 30000 40000 50000 Throughput (documents/minute) Figure 6: Eﬀect of ColBERT’s indexing optimizations on the oﬀline indexing throughput.\n\n[4] Source: 2004.12832v2.pdf | Page: 7 | Section: 4 EXPERIMENTAL EVALUATION\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nWe note that ColBERT’s latency and FLOPs can be considerably reduced by padding queries to a shorter length, using smaller vector dimensions (the MRR@10 of which is tested in §4.5), employing quantization of the document 6htps://github.com/mit-han-lab/torchproﬁle\n\n[5] Source: 2004.12832v2.pdf | Page: 5 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nGiven a triple ⟨q,d+,d−⟩with query q, positive document d+ and negative document d−, ColBERT is used to produce a score for each document individually and is optimized via pairwise sofmax cross-entropy loss over the computed scores of d+ and d−. 3.4 Oﬀline Indexing: Computing & Storing Document Embeddings By design, ColBERT isolates almost all of the computations between queries and documents, largely to enable pre-computing document representations oﬄine.\n\n[6] Source: 2004.12832v2.pdf | Page: 7 | Section: 4 EXPERIMENTAL EVALUATION\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nIn principle, the baselines can pre-compute the majority of this preprocessing (e.g., document tokenization) oﬄine and parallelize the rest across Re-ranking Latency (ms) FLOPs/query 16.5 - - 592M (0.085×) 19.8 3 159B (23×) 24.5 22 78B (11×) 27.7 28 97T (13,900×) - 10,700 97T (13,900×) - 10,700 340T (48,600×) 35.9 32,900 7B (1×) 34.9 61 Latency (ms) Recall@50 Recall@200 Recall@1000 - - - 81.4 62 59.2 73.8 85.7 85 64.4 77.9 89.1 62 (est.) 69 [2] 82 [2] 91 [2] 87 75.6 86.9 94.7 - 75.3 80.5 81.4 458 82.9 92.3 96.8 documents online, leaving only a negligible cost.\n\n[7] Source: 2004.12832v2.pdf | Page: 5 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nTo begin with, we exploit multiple GPUs, if available, for faster encoding of batches of documents in parallel. When batching, we pad all documents to the maximum length of a document within the batch.3 To make capping the sequence length on a per-batch basis more eﬀective, our indexer proceeds through documents in groups of B (e.g., B = 100,000) documents. It sorts these documents by length and then feeds batches of b (e.g., b = 128) documents of comparable length through our encoder.\n\n[8] Source: 2004.12832v2.pdf | Page: 3 | Section: 2 RELATED WORK\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nthey generally achieve signiﬁcantly smaller speedups than our re- designed architecture for IR, due to their generic nature, and more aggressive optimizations ofen come at the cost of lower quality. Eﬃcient NLU-based Models. Recently, a direction emerged that employs expensive NLU computation oﬄine. Tis includes doc2query [28] and DeepCT [2].\n\n[9] Source: 2004.12832v2.pdf | Page: 3 | Section: 2 RELATED WORK\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nMoreover, due to indexing docu- ment representations oﬄine and employing a MaxSim-based late interaction mechanism, ColBERT is much more scalable, enabling end-to-end retrieval which is not supported by TK.\n\n[10] Source: 2004.12832v2.pdf | Page: 7 | Section: 4 EXPERIMENTAL EVALUATION\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nWe also report the re-ranking latency, which we measure using a single Tesla V100 GPU, and the FLOPs per query for each neural ranking model. For ColBERT, our reported latency subsumes the entire computation from gathering the document representations, moving them to the GPU, tokenizing then encoding the query, and applying late interaction to compute document scores. For the baselines, we measure the scoring computations on the GPU and exclude the CPU-based text preprocessing (similar to [9]).\n\nEvidence guidance:\n- Rule-based subject attribution: ColBERT; passage: “At a high level, our indexing procedure is straight-forward: we proceed over the documents in the collection in batches, running our document encoder fD on each batch and storing the output embeddings per document.” [1][5]\n- Rule-based subject attribution: ColBERT; passage: “Although indexing a set of documents is an oﬄine process, we incorporate a few simple optimizations for enhancing the throughput of indexing.” [1][5]\n- Rule-based subject attribution: ColBERT; passage: “5, these optimizations can considerably reduce the oﬄine cost of indexing.” [1][5]\n- Rule-based subject attribution: ColBERT; passage: “Similarly, the ﬁgure emphasizes the importance of our query augmentation mechanism: without query augmentation [C], ColBERT has a no- ticeably lower MRR@10.” [3]\n- Rule-based subject attribution: ColBERT; passage: “Lastly, we see the impact of end-to-end retrieval not only on recall but also on MRR@10.” [3]\n- Rule-based subject attribution: ColBERT; passage: “By retrieving directly from the full collection, ColBERT is able to retrieve to the top-10 documents missed entirely from BM25’s top-1000.” [3]\n- Rule-based subject attribution: ColBERT; passage: “Basic ColBERT Indexing +multi-GPU document processing +per-batch maximum sequence length +length-based bucketing +multi-core pre-processing 0 10000 20000 30000 40000 50000 Throughput (documents/minute) Figure 6: Eﬀect of ColBERT’s indexing optimizations on the oﬀline indexing throughput.” [3]\n- Rule-based subject attribution: ColBERT; passage: “Given a triple ⟨q,d+,d−⟩with query q, positive document d+ and negative document d−, ColBERT is used to produce a score for each document individually and is optimized via pairwise sofmax cross-entropy loss over the computed scores of d+ and d−.” [5]\n- Rule-based subject attribution: ColBERT; passage: “4 Oﬀline Indexing: Computing & Storing Document Embeddings By design, ColBERT isolates almost all of the computations between queries and documents, largely to enable pre-computing document representations oﬄine.” [5]\n- Rule-based subject attribution: ColBERT; passage: “To begin with, we exploit multiple GPUs, if available, for faster encoding of batches of documents in parallel.” [7][5]\n- Rule-based subject attribution: ColBERT; passage: “, b = 128) documents of comparable length through our encoder.” [7][5]\n- Rule-based subject attribution: ColBERT; passage: “Moreover, due to indexing docu- ment representations oﬄine and employing a MaxSim-based late interaction mechanism, ColBERT is much more scalable, enabling end-to-end retrieval which is not supported by TK.” [9]\n\nQuestion:\nWhat batching and text-preprocessing optimizations does ColBERT use to reduce padding and WordPiece tokenization overhead during offline indexing?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-20T02:50:15.366278+00:00",
+    "http_posts": 1,
+    "response": {
+      "answer": "ColBERT 在离线索引时采用以下批处理与文本预处理优化来降低填充和 WordPiece 分词开销：\n\n- 按批处理文档时，将所有文档填充到该批内文档的最大长度；为让按批限制序列长度更有效，索引器以 B（如 100,000）个文档为一组，先按长度排序，再把长度相近的文档以每批 b（如 128）个送入编码器，从而减少填充。[7]\n- 预处理（主要是 BERT 的 WordPiece 分词）在批内各文档间相互独立，因此将其跨可用 CPU 核心并行化。[2]\n\n此外，索引器在可用时利用多个 GPU 并行编码文档批次以提升编码速度。[7] 索引优化中的“+per-batch maximum sequence length”和“+length-based bucketing”也被列为提升离线索引吞吐量的优化项。[3]",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 256,
+        "cached_tokens": 256,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 190,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.09,
+        "prompt_cache_hit_tokens": 256,
+        "prompt_cache_miss_tokens": 2510,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2766,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 256,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2956
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.875
+  },
+  {
+    "number": 7,
+    "question_id": "h04",
+    "signature": "e6022db3533f75fd5a6010ebd6c794ffbacaee1c8d6433e851cc195362ba4e06",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nFor dense evaluation of an uncropped test image, how does VGG convert its fully connected layers, and how does it reduce the output to final image-level class scores?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-20T02:50:18.265287+00:00",
+    "http_posts": 1,
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, how are fully connected layers converted for dense evaluation of an uncropped test image?\",\n        \"According to the VGG paper, how is the output reduced to final image-level class scores in dense evaluation of an uncropped test image?\"\n    ]\n}",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 384,
+        "cached_tokens": 384,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 79,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.02,
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 273,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 657,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 384,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 736
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.74
+  },
+  {
+    "number": 8,
+    "question_id": "h04",
+    "signature": "367a47987d8e978dc24a8582ff30a7fdd075c0ef610605bd03919e33ab17007a",
+    "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\n[1] Source: VGG.pdf | Page: 5 | Section: 3.2 TESTING\nThen, the network is applied densely over the rescaled test image in a way similar to (Sermanet et al., 2014). Namely, the fully-connected layers are ﬁrst converted to convolutional layers (the ﬁrst FC layer to a 7 × 7 conv. layer, the last two FC layers to 1 × 1 conv. The resulting fully-convolutional net is then applied to the whole (uncropped) image.\n\n[2] Source: VGG.pdf | Page: 10 | Section: 5 CONCLUSION\nThe second, fully-ﬂedged, testing procedure is based on the dense application of the localisation ConvNet to the whole image, similarly to the classiﬁcation task (Sect. The difference is that instead of the class score map, the output of the last fully-connected layer is a set of bounding box predictions. To come up with the ﬁnal prediction, we utilise the greedy merging procedure of Sermanet et al.\n\n[3] Source: VGG.pdf | Page: 12 | Section: 5 CONCLUSION\nIn this evaluation, we consider two models with the best classiﬁcation performance on ILSVRC (Sect. 4) – conﬁgurations “Net-D” and “Net-E” (which we made publicly available). To utilise the ConvNets, pre-trained on ILSVRC, for image classiﬁcation on other datasets, we remove the last fully-connected layer (which performs 1000-way ILSVRC classiﬁcation), and use 4096-D activations of the penultimate layer as image features, which are aggregated across multiple locations and scales.\n\n[4] Source: VGG.pdf | Page: 10 | Section: 5 CONCLUSION\nThe last fully-connected layer was initialised randomly and trained from scratch. We consider two testing protocols. The ﬁrst is used for comparing different network modiﬁcations on the validation set, and considers only the bounding box prediction for the ground truth class (to factor out the classiﬁcation errors). The bounding box is obtained by applying the network only to the central crop of the image.\n\n[5] Source: VGG.pdf | Page: 4 | Section: 3.1 TRAINING\nThe batch size was set to 256, momentum to 0.9. The training was regularised by weight decay (the L2 penalty multiplier set to 5·10−4) and dropout regularisation for the ﬁrst two fully-connected layers (dropout ratio set to 0.5). The learning rate was initially set to 10−2, and then decreased by a factor of 10 when the validation set accuracy stopped improving. In total, the learning rate was decreased 3 times, and the learning was stopped after 370K iterations (74 epochs).\n\n[6] Source: VGG.pdf | Page: 7 | Section: 4.4 CONVNET FUSION\nAfter the submission, we considered an ensemble of only two best-performing multi-scale models (conﬁgurations D and E), which reduced the test error to 7.0% using dense evaluation and 6.8% using combined dense and multi-crop evaluation. For reference, our best-performing single model achieves 7.1% error (model E, Table 5).\n\n[7] Source: VGG.pdf | Page: 4 | Section: 3.1 TRAINING\nTo circumvent this problem, we began with training the conﬁguration A (Table 1), shallow enough to be trained with random initialisation. Then, when training deeper architectures, we initialised the ﬁrst four convolutional layers and the last three fully- connected layers with the layers of net A (the intermediate layers were initialised randomly). We did not decrease the learning rate for the pre-initialised layers, allowing them to change during learning.\n\n[8] Source: VGG.pdf | Page: 2 | Section: 2.1 ARCHITECTURE\nlayers are followed by max-pooling). Max-pooling is performed over a 2 × 2 pixel window, with stride 2. A stack of convolutional layers (which has a different depth in different architectures) is followed by three Fully-Connected (FC) layers: the ﬁrst two have 4096 channels each, the third performs 1000- way ILSVRC classiﬁcation and thus contains 1000 channels (one for each class). The ﬁnal layer is the soft-max layer.\n\n[9] Source: VGG.pdf | Page: 5 | Section: 3.2 TESTING\nThe result is a class score map with the number of channels equal to the number of classes, and a variable spatial resolution, dependent on the input image size. Finally, to obtain a ﬁxed-size vector of class scores for the image, the class score map is spatially averaged (sum-pooled). We also augment the test set by horizontal ﬂipping of the images; the soft-max class posteriors of the original and ﬂipped images are averaged to obtain the ﬁnal scores for the image.\n\n[10] Source: VGG.pdf | Page: 12 | Section: 5 CONCLUSION\n(Wei et al., 2014) 81.5 (85.2∗) 81.7 (90.3∗) - - VGG Net-D (16 layers) 89.3 89.0 91.8 ± 1.0 85.0 ± 0.2 VGG Net-E (19 layers) 89.3 89.0 92.3 ± 0.5 85.1 ± 0.3 VGG Net-D & Net-E 89.7 89.3 92.7 ± 0.5 86.2 ± 0.3 Image Classiﬁcation on VOC-2007 and VOC-2012. We begin with the evaluation on the image classiﬁcation task of PASCAL VOC-2007 and VOC-2012 benchmarks (Everingham et al., 2015).\n\n[11] Source: VGG.pdf | Page: 10 | Section: 5 CONCLUSION\nApart from the last bounding box prediction layer, we use the ConvNet architecture D (Table 1), which contains 16 weight layers and was found to be the best-performing in the classiﬁcation task (Sect. Training of localisation ConvNets is similar to that of the classiﬁcation ConvNets (Sect. The main difference is that we replace the logistic regression objective with a Euclidean loss, which penalises the deviation of the predicted bounding box parameters from the ground-truth.\n\n[12] Source: VGG.pdf | Page: 2 | Section: 2.1 ARCHITECTURE\nIn one of the conﬁgurations we also utilise 1 × 1 convolution ﬁlters, which can be seen as a linear transformation of the input channels (followed by non-linearity). The convolution stride is ﬁxed to 1 pixel; the spatial padding of conv. layer input is such that the spatial resolution is preserved after convolution, i.e. the padding is 1 pixel for 3 × 3 conv. Spatial pooling is carried out by ﬁve max-pooling layers, which follow some of the conv. layers (not all the conv.\n\nQuestion:\nFor dense evaluation of an uncropped test image, how does VGG convert its fully connected layers, and how does it reduce the output to final image-level class scores?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-20T02:50:44.571119+00:00",
+    "http_posts": 1,
+    "response": {
+      "answer": "在 dense evaluation 中，VGG 将全连接层转换为卷积层：第一个 FC 层转为 7 × 7 卷积层，最后两个 FC 层转为 1 × 1 卷积层，随后将得到的全卷积网络应用于整张（未裁剪的）图像[1]。由于全卷积网络在整张图像上输出的是一个通道数等于类别数、空间分辨率随输入图像尺寸变化的 class score map[9]，为得到图像的固定大小类别分数向量，VGG 对该 class score map 进行空间平均（sum-pooling）[9]。",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 128,
+        "cached_tokens": 128,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 123,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.07,
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 1937,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2065,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 128,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2188
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.554
+  },
+  {
+    "number": 9,
+    "question_id": "h05",
+    "signature": "a23773768b4faf04fcf52ce5c43de2ea2f3fcf07ff0d09130654683242c32b7a",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nHow does VGG initialize deeper configurations from configuration A, and how does this differ from the per-layer weight initialization reported in DCNN?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-20T02:50:47.149037+00:00",
+    "http_posts": 1,
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, how are deeper configurations initialized from configuration A?\",\n        \"According to the DCNN paper, what is the per-layer weight initialization method?\"\n    ]\n}",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 384,
+        "cached_tokens": 384,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 58,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.01,
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 265,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 649,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 384,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 707
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.328
+  },
+  {
+    "number": 10,
+    "question_id": "h05",
+    "signature": "2b009b81b2ee2b07cf3d3ced24338005412bd81419402ce364cbbcef31464b17",
+    "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\nOriginal passages:\n[1] Source: VGG.pdf | Page: 4 | Section: 3.1 TRAINING\nTo circumvent this problem, we began with training the conﬁguration A (Table 1), shallow enough to be trained with random initialisation. Then, when training deeper architectures, we initialised the ﬁrst four convolutional layers and the last three fully- connected layers with the layers of net A (the intermediate layers were initialised randomly). We did not decrease the learning rate for the pre-initialised layers, allowing them to change during learning.\n\n[2] Source: DCNN.pdf | Page: 5 | Section: 6. DETAILS OF LEARNING\nWe initialized the weights in each layer from a zero-mean Gaussian distribution with standard deviation 0.01. We ini- tialized the neuron biases in the second, fourth, and fifth convolutional layers, as well as in the fully connected hidden layers, with the constant 1. This initialization accelerates the early stages of learning by providing the ReLUs with positive inputs.\n\n[3] Source: VGG.pdf | Page: 2 | Section: 2.2 CONFIGURATIONS\n2.1, and differ only in the depth: from 11 weight layers in the network A (8 conv. and 3 FC layers) to 19 weight layers in the network E (16 conv. and 3 FC layers). The width of conv. layers (the number of channels) is rather small, starting from 64 in the ﬁrst layer and then increasing by a factor of 2 after each max-pooling layer, until it reaches 512. In Table 2 we report the number of parameters for each conﬁguration.\n\n[4] Source: VGG.pdf | Page: 4 | Section: 3.1 TRAINING\nIn our experiments, we evaluated models trained at two ﬁxed scales: S = 256 (which has been widely used in the prior art (Krizhevsky et al., 2012; Zeiler & Fergus, 2013; Sermanet et al., 2014)) and S = 384. Given a ConvNet conﬁguration, we ﬁrst trained the network using S = 256. To speed-up training of the S = 384 network, it was initialised with the weights pre-trained with S = 256, and we used a smaller initial learning rate of 10−3. The second approach to setting S is multi-scale training, where each training image is individually rescaled by randomly sampling S from a certain range [Smin, Smax] (we used Smin = 256 and Smax = 512).\n\n[5] Source: VGG.pdf | Page: 4 | Section: 3.1 TRAINING\nWe conjecture that in spite of the larger number of parameters and the greater depth of our nets compared to (Krizhevsky et al., 2012), the nets required less epochs to converge due to (a) implicit regularisation imposed by greater depth and smaller conv. ﬁlter sizes; (b) pre-initialisation of certain layers. The initialisation of the network weights is important, since bad initialisation can stall learning due to the instability of gradient in deep nets.\n\n[6] Source: VGG.pdf | Page: 3 | Section: 2.3 DISCUSSION\nPublished as a conference paper at ICLR 2015 Table 1: ConvNet conﬁgurations (shown in columns). The depth of the conﬁgurations increases from the left (A) to the right (E), as more layers are added (the added layers are shown in bold). The convolutional layer parameters are denoted as “conv⟨receptive ﬁeld size⟩-⟨number of channels⟩”. The ReLU activation function is not shown for brevity.\n\n[7] Source: VGG.pdf | Page: 4 | Section: 3.1 TRAINING\nFor random initialisation (where applicable), we sampled the weights from a normal distribution with the zero mean and 10−2 variance. The biases were initialised with zero.\n\n[8] Source: DCNN.pdf | Page: 5 | Section: 6. DETAILS OF LEARNING\nWe initialized the neuron biases in the remaining lay- ers with the constant 0. We used an equal learning rate for all layers, which we adjusted manually throughout training. The heuristic which we followed was to divide the learning rate by 10 when the vali- dation error rate stopped improving with the current learning rate. The learning rate was initialized at 0.01 and reduced three times prior to termination.\n\n[9] Source: DCNN.pdf | Page: 4 | Section: 4.5. Overall architecture\nThe sec- ond convolutional layer takes as input the (response-nor- malized and pooled) output of the first convolutional layer and filters it with 256 kernels of size 5 × 5 × 48. The third, fourth, and fifth convolutional layers are connected to one another without any intervening pooling or normalization layers.\n\n[10] Source: DCNN.pdf | Page: 1 | Section: None\nTo make training faster, we used non- saturating neurons and a very efficient GPU implementation of the convolution operation. To reduce overfitting in the fully connected layers we employed a recently developed reg- ularization method called “dropout” that proved to be very effective. We also entered a variant of this model in the ILSVRC-2012 competition and achieved a winning top-5 test error rate of 15.3%, compared to 26.2% achieved by the sec- ond-best entry.\n\n[11] Source: VGG.pdf | Page: 2 | Section: 2.3 DISCUSSION\nlay- ers (e.g. 11 × 11 with stride 4 in (Krizhevsky et al., 2012), or 7 × 7 with stride 2 in (Zeiler & Fergus, 2013; Sermanet et al., 2014)), we use very small 3 × 3 receptive ﬁelds throughout the whole net, which are convolved with the input at every pixel (with stride 1).\n\n[12] Source: DCNN.pdf | Page: 4 | Section: 4.5. Overall architecture\nOur net- work maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.\n\nEvidence guidance:\n- DCNN: convolutional layer 2; spatial kernel size 5×5; 256 kernels; 48 channels per kernel. [9][12]\n\nQuestion:\nHow does VGG initialize deeper configurations from configuration A, and how does this differ from the per-layer weight initialization reported in DCNN?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-20T02:51:42.415243+00:00",
+    "http_posts": 1,
+    "response": {
+      "answer": "VGG 在训练更深架构时，用配置 A 的前四个卷积层和最后三个全连接层进行初始化（中间层随机初始化），且不为这些预初始化层降低学习率，允许它们在训练中变化[1]。对于随机初始化的层，权重采样自零均值、方差 10⁻² 的正态分布，偏置初始化为零[7]。\n\nDCNN 则对每一层的权重均从零均值、标准差 0.01 的高斯分布初始化[2]；其第二、第四、第五卷积层及全连接隐藏层的神经元偏置初始化为常数 1[2]，其余层偏置初始化为常数 0[8]。",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 128,
+        "cached_tokens": 128,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 142,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.07,
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 1780,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 1908,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 128,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2050
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.332
+  },
+  {
+    "number": 11,
+    "question_id": "h06",
+    "signature": "7e87815636eb4745fd8d2724a6631e057fb0a26f2973140710973a6eedbb24dc",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nHow do DCNN and VGG distribute training across multiple GPUs, and how do the GPUs exchange information in each scheme?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-20T02:51:44.772126+00:00",
+    "http_posts": 1,
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the DCNN paper, how is training distributed across multiple GPUs?\",\n        \"According to the DCNN paper, how do the GPUs exchange information in its multi-GPU scheme?\",\n        \"According to the VGG paper, how is training distributed across multiple GPUs?\",\n        \"According to the VGG paper, how do the GPUs exchange information in its multi-GPU scheme?\"\n    ]\n}",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 384,
+        "cached_tokens": 384,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 106,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.02,
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 264,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 648,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 384,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 754
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.014
+  },
+  {
+    "number": 12,
+    "question_id": "h06",
+    "signature": "aeb57da006fc32884644bd7ea512ebd68ac9f122b0abbf66f66760d3015001a4",
+    "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\nOriginal passages:\n[1] Source: VGG.pdf | Page: 5 | Section: 3.3 IMPLEMENTATION DETAILS\nMulti-GPU training exploits data parallelism, and is carried out by splitting each batch of training images into several GPU batches, processed in parallel on each GPU. After the GPU batch gradients are computed, they are averaged to obtain the gradient of the full batch. Gradient computation is synchronous across the GPUs, so the result is exactly the same as when training on a single GPU.\n\n[2] Source: DCNN.pdf | Page: 3 | Section: 4.2. Training on multiple GPUs\n4.2. Training on multiple GPUs A single GTX 580 GPU has only 3GB of memory, which limits the maximum size of the networks that can be trained on it. It turns out that 1.2 million training examples are enough to train networks which are too big to fit on one GPU. Therefore we spread the net across two GPUs. Current GPUs are particularly well-suited to cross-GPU parallelization, as they are able to read from and write to one another’s mem- ory directly, without going through host machine memory.\n\n[3] Source: DCNN.pdf | Page: 3 | Section: 4.2. Training on multiple GPUs\nThe parallelization scheme that we employ essentially puts half of the kernels (or neurons) on each GPU, with one addi- tional trick: the GPUs communicate only in certain layers. This means that, for example, the kernels of layer 3 take input from all kernel maps in layer 2. However, kernels in layer 4 take input only from those kernel maps in layer 3 which reside on the same GPU.\n\n[4] Source: DCNN.pdf | Page: 3 | Section: 4.2. Training on multiple GPUs\nThis scheme reduces our top-1 and top-5 error rates by 1.7% and 1.2%, respectively, as compared with a net with half as many kernels in each convolutional layer trained on one GPU. The two-GPU net takes slightly less time to train than the one-GPU net.b\n\n[5] Source: DCNN.pdf | Page: 4 | Section: 4.4. Overlapping pooling\nFigure 2. An illustration of the architecture of our CNN, explicitly showing the delineation of responsibilities between the two GPUs. One GPU runs the layer-parts at the top of the figure while the other runs the layer-parts at the bottom. The GPUs communicate only at certain layers.\n\n[6] Source: VGG.pdf | Page: 5 | Section: 3.3 IMPLEMENTATION DETAILS\nWhile more sophisticated methods of speeding up ConvNet training have been recently pro- posed (Krizhevsky, 2014), which employ model and data parallelism for different layers of the net, we have found that our conceptually much simpler scheme already provides a speedup of 3.75 times on an off-the-shelf 4-GPU system, as compared to using a single GPU. On a system equipped with four NVIDIA Titan Black GPUs, training a single net took 2–3 weeks depending on the architecture.\n\n[7] Source: DCNN.pdf | Page: 2 | Section: 2. INTRODUCTION\nWe wrote a highly optimized GPU implementation of 2D convolution and all the other opera- tions inherent in training CNNs, which we make available publicly.a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4. The size of our network made overfitting a significant problem, even with 1.2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 5. Our final network contains five convo- lutional and three fully connected layers, and this depth seems to be important: we found that removing any convolu- tional layer (each of which contains no more than 1% of the model’s parameters) resulted in inferior performance.\n\n[8] Source: VGG.pdf | Page: 5 | Section: 3.3 IMPLEMENTATION DETAILS\n3.3 IMPLEMENTATION DETAILS Our implementation is derived from the publicly available C++ Caffe toolbox (Jia, 2013) (branched out in December 2013), but contains a number of signiﬁcant modiﬁcations, allowing us to perform training and evaluation on multiple GPUs installed in a single system, as well as train and evaluate on full-size (uncropped) images at multiple scales (as described above).\n\n[9] Source: 2310.11511v1.pdf | Page: 19 | Section: 6 CONCLUSION\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nWe use Deepspeed stage 3 (Rajbhandari et al., 2020) to conduct multi-GPU distributed training, with training precision Bfloat16 enabled. FlashAttention (Dao et al., 2022) is used to make the long-context training more efficient. We run inference of our trained models using 1-2 Quadro RTX 6000 GPUs with 24GB memory.\n\n[10] Source: VGG.pdf | Page: 14 | Section: 5 CONCLUSION\nv1 Initial version. Presents the experiments carried out before the ILSVRC submission. v2 Adds post-submission ILSVRC experiments with training set augmentation using scale jittering, which improves the performance. v3 Adds generalisation experiments (Appendix B) on PASCAL VOC and Caltech image classiﬁca- tion datasets. The models used for these experiments are publicly available. v4 The paper is converted to ICLR-2015 submission format.\n\nEvidence guidance:\n- Rule-based subject attribution: FlashAttention; passage: “We run inference of our trained models using 1-2 Quadro RTX 6000 GPUs with 24GB memory.” [9]\n\nQuestion:\nHow do DCNN and VGG distribute training across multiple GPUs, and how do the GPUs exchange information in each scheme?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-20T02:53:02.968751+00:00",
+    "http_posts": 1,
+    "response": {
+      "answer": "DCNN 的做法是把网络分摊到两块 GPU 上：每块 GPU 放置一半的 kernel（或神经元），并且 GPU 之间只在某些层进行通信（[3]）。例如，第 3 层的 kernel 接收第 2 层所有 kernel map 的输入，但第 4 层的 kernel 只接收位于同一 GPU 上的第 3 层 kernel map 的输入（[3]）。这种划分方式在多 GPU 上的具体表现是：一块 GPU 运行图中上部的层部件，另一块运行下部的层部件，GPU 仅在特定层通信（[5]）。\n\nVGG 采用数据并行：将每批训练图像拆分为若干 GPU batch，在各 GPU 上并行处理；各 GPU 计算出梯度后对其取平均，得到完整 batch 的梯度（[1]）。其梯度计算在 GPU 间是同步的，因此结果与单 GPU 训练完全相同（[1]）。",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 128,
+        "cached_tokens": 128,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 201,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.07,
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 1657,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 1785,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 128,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 1986
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 3.006
+  },
+  {
+    "number": 13,
+    "question_id": "h07",
+    "signature": "7956630bcece381ed86648c91d032e52c17ad7f55c3b1fb40cd18a5703fa5f9a",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nHow does the learning-rate schedule in Attention Is All You Need differ from DCNN, including what triggers the decrease in each paper?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-20T02:53:06.000749+00:00",
+    "http_posts": 1,
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the Attention Is All You Need paper, what is the learning-rate schedule and what triggers the decrease?\",\n        \"According to the DCNN paper, what is the learning-rate schedule and what triggers the decrease?\"\n    ]\n}",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 384,
+        "cached_tokens": 384,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 67,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.02,
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 264,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 648,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 384,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 715
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.805
+  },
+  {
+    "number": 14,
+    "question_id": "h07",
+    "signature": "51245cb5e719c57548d6ab98bb8634bf4bcda0a3b2cc1e4add09496950426f30",
+    "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\n[1] Source: Attention is all you need.pdf | Page: 7 | Section: 5.3 Optimizer\n5.3 Optimizer We used the Adam optimizer [17] with β1 = 0.9, β2 = 0.98 and ϵ = 10−9. We varied the learning rate over the course of training, according to the formula: lrate = d−0.5 model · min(step_num−0.5, step_num · warmup_steps−1.5) (3) This corresponds to increasing the learning rate linearly for the ﬁrst warmup_steps training steps, and decreasing it thereafter proportionally to the inverse square root of the step number. We used warmup_steps = 4000.\n\n[2] Source: Attention is all you need.pdf | Page: 6 | Section: 4 Why Self-Attention\nOne is the total computational complexity per layer. Another is the amount of computation that can be parallelized, as measured by the minimum number of sequential operations required. The third is the path length between long-range dependencies in the network. Learning long-range dependencies is a key challenge in many sequence transduction tasks.\n\n[3] Source: Attention is all you need.pdf | Page: 7 | Section: 5.2 Hardware and Schedule\nFor our base models using the hyperparameters described throughout the paper, each training step took about 0.4 seconds. We trained the base models for a total of 100,000 steps or 12 hours. For our big models,(described on the bottom line of table 3), step time was 1.0 seconds. The big models were trained for 300,000 steps (3.5 days).\n\n[4] Source: Attention is all you need.pdf | Page: 4 | Section: 3.2.2 Multi-Head Attention\n3.2.2 Multi-Head Attention Instead of performing a single attention function with dmodel-dimensional keys, values and queries, we found it beneﬁcial to linearly project the queries, keys and values h times with different, learned linear projections to dk, dk and dv dimensions, respectively. On each of these projected versions of queries, keys and values we then perform the attention function in parallel, yielding dv-dimensional output values.\n\n[5] Source: Attention is all you need.pdf | Page: 7 | Section: 4 Why Self-Attention\nNot only do individual attention heads clearly learn to perform different tasks, many appear to exhibit behavior related to the syntactic and semantic structure of the sentences.\n\n[6] Source: Attention is all you need.pdf | Page: 2 | Section: 3.1 Encoder and Decoder Stacks\nThe ﬁrst is a multi-head self-attention mechanism, and the second is a simple, position-\n\n[7] Source: Attention is all you need.pdf | Page: 3 | Section: 3.2 Attention\n3.2 Attention An attention function can be described as mapping a query and a set of key-value pairs to an output, where the query, keys, values, and output are all vectors. The output is computed as a weighted sum of the values, where the weight assigned to each value is computed by a compatibility function of the query with the corresponding key.\n\n[8] Source: DCNN.pdf | Page: 5 | Section: 6. DETAILS OF LEARNING\nWe initialized the neuron biases in the remaining lay- ers with the constant 0. We used an equal learning rate for all layers, which we adjusted manually throughout training. The heuristic which we followed was to divide the learning rate by 10 when the vali- dation error rate stopped improving with the current learning rate. The learning rate was initialized at 0.01 and reduced three times prior to termination.\n\n[9] Source: DCNN.pdf | Page: 3 | Section: 4.1. Rectified Linear Unit nonlinearity\nresearch highlights Figure 1. A four-layer convolutional neural network with ReLUs (solid line) reaches a 25% training error rate on CIFAR-10 six times faster than an equivalent network with tanh neurons (dashed line). The learning rates for each network were chosen independently to make training as fast as possible. No regularization of any kind was employed.\n\n[10] Source: DCNN.pdf | Page: 5 | Section: 6. DETAILS OF LEARNING\nThe update rule for weight w was where i is the iteration index, u is the momentum variable, ε is wi〉Di is the average over the ith batch the learning rate, and 〈 Di of the derivative of the objective with respect to w, evaluated at wi.\n\n[11] Source: Attention is all you need.pdf | Page: 7 | Section: 4 Why Self-Attention\nSeparable convolutions [6], however, decrease the complexity considerably, to O(k · n · d + n · d2). Even with k = n, however, the complexity of a separable convolution is equal to the combination of a self-attention layer and a point-wise feed-forward layer, the approach we take in our model. As side beneﬁt, self-attention could yield more interpretable models. We inspect attention distributions from our models and present and discuss examples in the appendix.\n\nQuestion:\nHow does the learning-rate schedule in Attention Is All You Need differ from DCNN, including what triggers the decrease in each paper?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-20T02:53:47.423800+00:00",
+    "http_posts": 1,
+    "response": {
+      "answer": "当前证据仅能部分回答该问题。\n\n在《Attention Is All You Need》中，学习率按公式随训练过程变化：在前 warmup_steps 个训练步内线性增加，之后按步数的平方根倒数比例下降，所用 warmup_steps = 4000 [1]。这一变化由训练步数触发，而不是由验证误差触发 [1]。\n\n在 DCNN 论文中，所有层使用相同的学习率，并在训练过程中手动调整；其遵循的启发式规则是：当验证误差率在当前学习率下不再改善时，将学习率除以 10；学习率初始化为 0.01，并在终止前降低了三次 [8]。\n\n因此，两篇论文降低学习率的触发条件不同：《Attention Is All You Need》依据训练步数按预设公式调整 [1]，DCNN 则依据验证误差率停止改善而手动下调 [8]。关于 DCNN 是否也采用分阶段预热或其他调度公式，所给证据不足，无法判断。",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 128,
+        "cached_tokens": 128,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 210,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.07,
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 1490,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 1618,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 128,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 1828
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.688
+  },
+  {
+    "number": 15,
+    "question_id": "h08",
+    "signature": "32cf242d52ad4f5b0c4f7eeb0698e8cca33ea5a1d4039657402627ca89e56040",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nHow does the DPR end-to-end QA system select its final answer, and how does its output constraint differ from the abstractive QA capability described in RAG?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-20T02:53:50.135830+00:00",
+    "http_posts": 1,
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How does the DPR end-to-end QA system select its final answer?\",\n        \"What output constraint does the DPR end-to-end QA system have?\",\n        \"What abstractive QA capability is described in RAG?\"\n    ]\n}",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 384,
+        "cached_tokens": 384,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 69,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.02,
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 271,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 655,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 384,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 724
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.768
+  },
+  {
+    "number": 16,
+    "question_id": "h08",
+    "signature": "d96e3cd06bb0d02c405452fce5a6f5875a9db50512a44e6d54a1a264e73d8306",
+    "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\n[1] Source: 2005.11401v4.pdf | Page: 5 | Section: 4.1 Open-domain Question Answering\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nIt is worth noting that RAG’s retriever is initialized using DPR’s retriever, which uses retrieval supervision on Natural Questions and TriviaQA. RAG compares favourably to the DPR QA system, which uses a BERT-based “cross- encoder” to re-rank documents, along with an extractive reader. RAG demonstrates that neither a re-ranker nor extractive reader is necessary for state-of-the-art performance. There are several advantages to generating answers even when it is possible to extract them.\n\n[2] Source: 2005.11401v4.pdf | Page: 4 | Section: 3.2 Abstractive Question Answering\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\n3.2 Abstractive Question Answering RAG models can go beyond simple extractive QA and answer questions with free-form, abstractive text generation. To test RAG’s natural language generation (NLG) in a knowledge-intensive setting, we use the MSMARCO NLG task v2.1 [43].\n\n[3] Source: 2005.11401v4.pdf | Page: 6 | Section: 4.2 Abstractive Question Answering\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\n4.2 Abstractive Question Answering As shown in Table 2, RAG-Sequence outperforms BART on Open MS-MARCO NLG by 2.6 Bleu points and 2.6 Rouge-L points. RAG approaches state-of-the-art model performance, which is impressive given that (i) those models access gold passages with speciﬁc information required to generate the reference answer , (ii) many questions are unanswerable without the gold passages, and (iii) not all questions are answerable from Wikipedia alone.\n\n[4] Source: 2005.11401v4.pdf | Page: 4 | Section: 3.1 Open-domain Question Answering\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\n3.1 Open-domain Question Answering Open-domain question answering (QA) is an important real-world application and common testbed for knowledge-intensive tasks [20]. We treat questions and answers as input-output text pairs (x, y) and train RAG by directly minimizing the negative log-likelihood of answers. We compare RAG to the popular extractive QA paradigm [5, 7, 31, 26], where answers are extracted spans from retrieved documents, relying primarily on non-parametric knowledge.\n\n[5] Source: 2005.11401v4.pdf | Page: 2 | Section: 1 Introduction\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nOur results highlight the beneﬁts of combining parametric and non-parametric memory with genera- tion for knowledge-intensive tasks—tasks that humans could not reasonably be expected to perform without access to an external knowledge source. Our RAG models achieve state-of-the-art results on open Natural Questions [29], WebQuestions [3] and CuratedTrec [2] and strongly outperform recent approaches that use specialised pre-training objectives on TriviaQA [24].\n\n[6] Source: 2004.04906v3.pdf | Page: 7 | Section: 6.1 End-to-end QA System\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\n6.1 End-to-end QA System We implement an end-to-end question answering system in which we can plug different retriever systems directly. Besides the retriever, our QA sys- tem consists of a neural reader that outputs the answer to the question. Given the top k retrieved passages (up to 100 in our experiments), the reader assigns a passage selection score to each passage. In addition, it extracts an answer span from each passage and assigns a span score.\n\n[7] Source: 2004.04906v3.pdf | Page: 12 | Section: 8 Conclusion\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nA Distant Supervision When training our ﬁnal DPR model using Natural Questions, we use the passages in our collection that best match the gold context as the positive passages. As some QA datasets contain only the question and answer pairs, it is thus interesting to see when using the passages that contain the answers as positives (i.e., the distant supervision setting), whether there is a signiﬁcant performance degradation.\n\n[8] Source: 2004.04906v3.pdf | Page: 8 | Section: 6.2 Results\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nWhile both methods include addi- tional pretraining tasks and employ an expensive end-to-end training regime, DPR manages to out- perform them on both NQ and TriviaQA, simply by focusing on learning a strong passage retrieval model using pairs of questions and answers. The additional pretraining tasks are likely more useful only when the target training sets are small.\n\n[9] Source: 2005.11401v4.pdf | Page: 3 | Section: 2.2 Retriever: DPR\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\n2.2 Retriever: DPR The retrieval component pη(z|x) is based on DPR [26]. DPR follows a bi-encoder architecture: pη(z|x) ∝exp \u0000 d(z)⊤q(x) \u0001 d(z) = BERTd(z), q(x) = BERTq(x) where d(z) is a dense representation of a document produced by a BERTBASE document encoder [8], and q(x) a query representation produced by a query encoder, also based on BERTBASE.\n\n[10] Source: 2004.04906v3.pdf | Page: 1 | Section: None\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nWhen evaluated on a wide range of open-domain QA datasets, our dense retriever outperforms a strong Lucene- BM25 system greatly by 9%-19% absolute in terms of top-20 passage retrieval accuracy, and helps our end-to-end QA system establish new state-of-the-art on multiple open-domain QA benchmarks.1\n\nQuestion:\nHow does the DPR end-to-end QA system select its final answer, and how does its output constraint differ from the abstractive QA capability described in RAG?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-20T02:55:05.974197+00:00",
+    "http_posts": 1,
+    "response": {
+      "answer": "根据所提供证据，DPR 端到端 QA 系统的答案选择机制如下：在给定检索到的前 k 个段落（实验中最多 100 个）后，reader 会为每个段落分配一个段落选择分数，并从每个段落中抽取答案片段并分配片段分数[6]。因此，其输出受限于从检索段落中抽取的答案片段这一约束。\n\nRAG 的抽象式 QA 能力则不同：RAG 模型可以超越简单的抽取式 QA，以自由形式的抽象式文本生成来回答问题[2]。也就是说，RAG 的输出不局限于抽取片段，而可以是生成的自由文本。\n\n关于两者“输出约束差异”的直接对比，现有证据只能分别支持上述两点（DPR reader 抽取答案片段[6]；RAG 可进行抽象式生成[2]），并未直接给出两者约束差异的显式比较陈述。",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 128,
+        "cached_tokens": 128,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 186,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.07,
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 1759,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 1887,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 128,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2073
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 3.096
+  },
+  {
+    "number": 17,
+    "question_id": "h09",
+    "signature": "22a21b739047f7af6432e827dd7c115b8155140fbd7b714977dca4b262e03169",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nHow does the DPR paper combine BM25 and DPR scores, and how does ColBERT distinguish re-ranking another retriever's candidates from end-to-end collection retrieval?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-20T02:55:09.088762+00:00",
+    "http_posts": 1,
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"In the DPR paper, how are BM25 and DPR scores combined?\",\n        \"In ColBERT, how does re-ranking another retriever's candidates differ from end-to-end collection retrieval?\"\n    ]\n}",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 384,
+        "cached_tokens": 384,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 64,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.02,
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 273,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 657,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 384,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 721
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.767
+  },
+  {
+    "number": 18,
+    "question_id": "h09",
+    "signature": "d3e8fdd22f66815da9f87b116cef737aff8ed835a0d98b6faa6f2397e631ff3c",
+    "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\nOriginal passages:\n[1] Source: 2004.04906v3.pdf | Page: 5 | Section: 5 Experiments: Passage Retrieval\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nTo this end, we train a multi- dataset encoder by combining training data from all datasets excluding SQuAD.8 In addition to DPR, we also present the results of BM25, the traditional retrieval method9 and BM25+DPR, using a linear combination of their scores as the new ranking function. Speciﬁcally, we obtain two initial sets of top-2000 passages based on BM25 and DPR, respectively, and rerank the union of them using BM25(q,p) + λ · sim(q, p) as the ranking function.\n\n[2] Source: 2004.04906v3.pdf | Page: 5 | Section: 5 Experiments: Passage Retrieval\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nTraining Retriever Top-20 NQ TriviaQA WQ None BM25 59.1 66.9 55.0 78.4 79.4 73.2 DPR Single BM25 + DPR 76.6 79.8 71.0 79.4 75.0 DPR 78.8 Multi 79.9 BM25 + DPR 78.0 74.7 Table 2: Top-20 & Top-100 retrieval accuracy on test sets, measured as the percentage of top 20/100 retrieved passages that contain the answer. Single and Multi denote that our Dense Passage Retriever (DPR) was trained using individial or combined training datasets (all the datasets excluding SQuAD).\n\n[3] Source: 2004.12832v2.pdf | Page: 8 | Section: 4 EXPERIMENTAL EVALUATION\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nSince the oﬃcial BM25 ranking is not ordered, the initial top-k retrieval is conducted with Anserini’s BM25. Diving deeper into the quality–cost tradeoﬀbetween BERT and ColBERT, Figure 4 demonstrates the relationships between FLOPs and eﬀectiveness (MRR@10) as a function of the re-ranking depth k when re-ranking the top-k results by BM25, comparing ColBERT and BERTbase (our training). We conduct this experiment on MS MARCO (Dev).\n\n[4] Source: 2004.12832v2.pdf | Page: 8 | Section: 4 EXPERIMENTAL EVALUATION\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nFor DeepCT, we only estimate its latency using that of BM25 (as denoted by (est.) in the table), since DeepCT re-weighs BM25’s term frequency without modifying the index otherwise.8 As discussed in §4.1, we use ColBERTL2 for end-to- end retrieval, which employs negative squared L2 distance as its vector-similarity function. For its latency, we measure the time for faiss-based candidate ﬁltering and the subsequent re-ranking. In this experiment, faiss uses all available CPU cores.\n\n[5] Source: 2004.04906v3.pdf | Page: 7 | Section: 5.3 Qualitative Analysis\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\n5.3 Qualitative Analysis Although DPR performs better than BM25 in gen- eral, passages retrieved by these two methods dif- fer qualitatively. Term-matching methods like BM25 are sensitive to highly selective keywords and phrases, while DPR captures lexical variations or semantic relationships better.\n\n[6] Source: 2004.12832v2.pdf | Page: 7 | Section: 4 EXPERIMENTAL EVALUATION\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nTo obtain the end-to-end latency in Figure 1, we add the BM25 latency from Table 2. Method MRR@10 (Dev) MRR@10 (Local Eval) BM25 (oﬃcial) 16.7 - BM25 (Anserini) 18.7 19.5 21.5 22.8 doc2query 24.3 - DeepCT 27.7 28.4 docTTTTTquery ColBERTL2 (re-rank) 34.8 36.4 ColBERTL2 (end-to-end) 36.0 36.7 Table 2: End-to-end retrieval results on MS MARCO.\n\n[7] Source: 2004.04906v3.pdf | Page: 8 | Section: 6.2 Results\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nTraining Model Single BM25+BERT (Lee et al., 2019) Single ORQA (Lee et al., 2019) Single HardEM (Min et al., 2019a) Single GraphRetriever (Min et al., 2019b) Single PathRetriever (Asai et al., 2020) Single REALMWiki (Guu et al., 2020) Single REALMNews (Guu et al., 2020) BM25 Single DPR BM25+DPR DPR Multi BM25+DPR Table 4: End-to-end QA (Exact Match) Accuracy. The ﬁrst block of results are copied from their cited papers.\n\n[8] Source: 2004.12832v2.pdf | Page: 5 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nAs we describe in §3.5 and 3.6, these representations are either simply loaded from disk for ranking or are subsequently indexed for vector-similarity search, respectively. 3.5 Top-k Re-ranking with ColBERT Recall that ColBERT can be used for re-ranking the output of an- other retrieval model, typically a term-based model, or directly for end-to-end retrieval from a document collection.\n\n[9] Source: 2004.12832v2.pdf | Page: 1 | Section: None\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nBeyond reducing the cost of re-ranking the documents retrieved by a traditional model, ColBERT’s pruning-friendly in- teraction mechanism enables leveraging vector-similarity indexes for end-to-end retrieval directly from a large document collection. We extensively evaluate ColBERT using two recent passage search datasets.\n\n[10] Source: 2004.12832v2.pdf | Page: 8 | Section: 4 EXPERIMENTAL EVALUATION\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nTese results directly mirror those with MS MARCO. 4.3 End-to-end Top-k Retrieval Beyond cheap re-ranking, ColBERT is amenable to top-k retrieval di- rectly from a full collection. Table 2 considers full retrieval, wherein each model retrieves the top-1000 documents directly from MS MARCO’s 8.8M documents per query.\n\nEvidence guidance:\n- Rule-based subject attribution: ColBERT; passage: “3 End-to-end Top-k Retrieval Beyond cheap re-ranking, ColBERT is amenable to top-k retrieval di- rectly from a full collection.” [10]\n\nQuestion:\nHow does the DPR paper combine BM25 and DPR scores, and how does ColBERT distinguish re-ranking another retriever's candidates from end-to-end collection retrieval?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-20T02:56:08.529543+00:00",
+    "http_posts": 1,
+    "response": {
+      "answer": "DPR 将 BM25 与 DPR 的分数线性组合作为新的排序函数：先分别用 BM25 和 DPR 得到两个各含 top-2000 段落的初始集合，再用 BM25(q,p) + λ · sim(q,p) 对两者并集重新排序[1]。\n\nColBERT 支持两种检索模式：它可以对另一个检索模型（通常是基于词项的模型）的输出进行重排序，也可以直接从文档集合进行端到端检索[8]；其中端到端模式利用向量相似度索引从大规模文档集合直接检索[9]，例如在 MS MARCO 上每个查询直接从 8.8M 文档中检索 top-1000[10]。",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 128,
+        "cached_tokens": 128,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 150,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.07,
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 1994,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2122,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 128,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2272
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.643
+  },
+  {
+    "number": 19,
+    "question_id": "h10",
+    "signature": "670ed46ed8ddb8d84811163fc33c194863a7c11b6edf55d18ec9135e7321a60c",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nFor short-answer open-domain QA, how does the correctness criterion reported by RAG differ from the criterion used by Self-RAG for PopQA and TriviaQA?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-20T02:56:11.198603+00:00",
+    "http_posts": 1,
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the RAG paper, what correctness criterion is reported for short-answer open-domain QA on PopQA?\",\n        \"According to the RAG paper, what correctness criterion is reported for short-answer open-domain QA on TriviaQA?\",\n        \"According to the Self-RAG paper, what correctness criterion is used for PopQA?\",\n        \"According to the Self-RAG paper, what correctness criterion is used for TriviaQA?\"\n    ]\n}",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 384,
+        "cached_tokens": 384,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 114,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.02,
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 272,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 656,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 384,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 770
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.942
+  },
+  {
+    "number": 20,
+    "question_id": "h10",
+    "signature": "200ab897f8b8d32d36ca0e6cdd23d6aadc989090e254022af7b028efbb653253",
+    "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\nOriginal passages:\n[1] Source: 2310.11511v1.pdf | Page: 20 | Section: 6 CONCLUSION\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nC RESULTS C.1 ANALYSIS Reliance on parametric- and non-parametric memories. We conduct analysis on how frequently model answers come from retrieved passages (non-parametric memories) or their own parametric memories. On two open-domain QA datasets, TriviaQA and PopQA, we conduct the following analysis: 1) sample query models successfully answer correctly, 2) for each query in this group, check whether the matched ground-truth answer is a sub-string of the retrieved passage or not.\n\n[2] Source: 2310.11511v1.pdf | Page: 7 | Section: 4.1 TASKS AND DATASETS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nFor PopQA, we use the long-tail subset, consisting of 1,399 rare entity queries whose monthly Wikipedia page views are less than 100. As the TriviaQA-unfiltered (open) test set is not publicly available, we follow prior work’s validation and test split (Min et al., 2019; Guu et al., 2020), using 11,313 test queries for evaluation. We evaluate performance based on whether gold answers are included in the model generations instead of strictly requiring exact matching, following Mallen et al.\n\n[3] Source: 2310.11511v1.pdf | Page: 7 | Section: 4.1 TASKS AND DATASETS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nChallenge; Clark et al. We use accuracy as an evaluation metric and report on the test set. We aggregate the answer probabilities of target classes for both of these datasets (Appendix Section B.2). Short-form generations tasks include two open-domain question answering (QA) datasets, PopQA (Mallen et al., 2023) and TriviaQA-unfiltered (Joshi et al., 2017), where systems need to answer arbitrary questions about factual knowledge.\n\n[4] Source: 2310.11511v1.pdf | Page: 10 | Section: 5.2 ANALYSIS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nWe then ask our annotators whether the model-predicted reflection tokens about ISREL and ISSUP match their inspections (e.g., whether the fully supported output is supported by the cited evidence). Human annotators find SELF-RAG answers are often plausible and supported by relevant passages with higher S&P scores on short-form PopQA, which is consistent with Menick et al. Human annotators also find ISREL and ISSUP reflection token predictions are mostly aligned with their assessments.\n\n[5] Source: 2005.11401v4.pdf | Page: 18 | Section: 6 Discussion\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nFor RAG, we also make use of multiple annotation examples for Natural Questions and WebQuestions by training the model with each (q, a) pair separately, leading to a small increase in accuracy. For TriviaQA, there are often many valid answers to a given question, some of which are not suitable training targets, such as emoji or spelling variants. For TriviaQA, we ﬁlter out answer candidates if they do not occur in top 1000 documents for the query.\n\n[6] Source: 2401.15884v3.pdf | Page: 8 | Section: 5.3 Results\nTitle: Corrective Retrieval Augmented Generation\nCompared with the current state-of-the- art Self-RAG, Self-CRAG outperformed it by margins of 20.0% accuracy on PopQA, 36.9% FactScore on Biography, and 4.0% accuracy on Arc-Challenge when based on LLaMA2-hf-7b, as well as by margins of 6.9% accuracy on PopQA, 5.0% FactScore on Biography, and 2.4% accuracy on PubHealth, when based on SelfRAG-LLaMA2- 7b. These results demonstrated the adaptability of CRAG which is plug-and-play and can be implemented into RAG-based approaches.\n\n[7] Source: 2401.15884v3.pdf | Page: 16 | Section: 6 Conclusion & Limitation\nTitle: Corrective Retrieval Augmented Generation\nTable 11: Ablation study for removing only a single action on the PopQA dataset in terms of accuracy. LLaMA2-hf-7b SelfRAG-LLaMA2-7b CRAG 54.9 59.8 only Correct 52.4 56.7 only Incorrect 47.0 48.5 only Ambiguous 52.7 58.0 Self-CRAG 49.0 61.8 only Correct 48.6 57.2 only Incorrect 40.8 53.3 only Ambiguous 44.9 59.8 is an advanced RAG approach that introduces a critic model to decide whether to retrieve and which retrieved document to be referred for generation.\n\n[8] Source: 2310.11511v1.pdf | Page: 8 | Section: 4.3 EXPERIMENTAL SETTINGS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nModels are sorted based on scale. FS, em, rg, mau, prec, rec denote FactScore (factuality); str-em, rouge (correctness); MAUVE (fluency); citation precision and recall, respectively.\n\n[9] Source: 2005.11401v4.pdf | Page: 4 | Section: 3.1 Open-domain Question Answering\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\n3.1 Open-domain Question Answering Open-domain question answering (QA) is an important real-world application and common testbed for knowledge-intensive tasks [20]. We treat questions and answers as input-output text pairs (x, y) and train RAG by directly minimizing the negative log-likelihood of answers. We compare RAG to the popular extractive QA paradigm [5, 7, 31, 26], where answers are extracted spans from retrieved documents, relying primarily on non-parametric knowledge.\n\n[10] Source: 2004.04906v3.pdf | Page: 8 | Section: 6.2 Results\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nsee that higher retriever accuracy typically leads to better ﬁnal QA results: in all cases except SQuAD, answers extracted from the passages retrieved by DPR are more likely to be correct, compared to those from BM25. For large datasets like NQ and TriviaQA, models trained using multiple datasets (Multi) perform comparably to those trained using the individual training set (Single). Conversely, on smaller datasets like WQ and TREC, the multi- dataset setting has a clear advantage.\n\nEvidence guidance:\n- Rule-based subject attribution: PopQA; passage: “Human annotators find SELF-RAG answers are often plausible and supported by relevant passages with higher S&P scores on short-form PopQA, which is consistent with Menick et al.” [4]\n\nQuestion:\nFor short-answer open-domain QA, how does the correctness criterion reported by RAG differ from the criterion used by Self-RAG for PopQA and TriviaQA?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-20T02:58:24.575958+00:00",
+    "http_posts": 1,
+    "response": {
+      "answer": "当前证据不足以完整回答该问题。提供的上下文能说明 Self-RAG 在 PopQA 和 TriviaQA 上的评测口径：其依据是“金标准答案是否包含在模型生成中”，而非严格要求完全匹配 [2]。但对于 RAG 在短答案开放域 QA 上采用的具体正确性判据，上下文中没有直接描述；[5] 只提到对 TriviaQA 的答案候选进行过滤，[9] 只说明 RAG 以负对数似然训练并用抽取式问答作对比，均未给出可与之对比的正确性判定标准。因此，无法基于现有证据说明二者判据的差异。",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 256,
+        "cached_tokens": 256,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 138,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.07,
+        "prompt_cache_hit_tokens": 256,
+        "prompt_cache_miss_tokens": 1851,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2107,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 256,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2245
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.146
+  },
+  {
+    "number": 21,
+    "question_id": "h11",
+    "signature": "55aa874f8bc386f7488aeaae8547dc44a44b08c21765eeccd0598479d5576eef",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nUsing only the supplied eight-paper corpus, what training-data size and hidden-state dimension are specified for the Mamba model in the Mamba paper?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-20T02:58:26.754190+00:00",
+    "http_posts": 1,
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 384,
+        "cached_tokens": 384,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 19,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.01,
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 268,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 652,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 384,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 671
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.768
+  },
+  {
+    "number": 22,
+    "question_id": "h11",
+    "signature": "ef07ff2a0325cb5dccc57e1a1c73323eb7081f3e3f53c3334e522f7e282cfbf8",
+    "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\n[1] Source: 2310.11511v1.pdf | Page: 9 | Section: 5.2 ANALYSIS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\n4. In this ablation experiment, we use a training instance size of 50k for a more efficient exploration of training variations. Later in this section, we conduct an analysis of the effect of training data size. We conduct the ablation studies on three datasets, PopQA, PubHealth, and ASQA. On ASQA, we evaluate models on sampled 150 instances and exclude ablations involving adaptive or no retrieval processes. We show in Table 3a the ablation results.\n\n[2] Source: 2310.11511v1.pdf | Page: 10 | Section: 5.2 ANALYSIS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nOn one hand, performance deterioration by retrieving less is smaller on PubHealth but larger in PopQA. Effects of training data size. We conduct an analysis of how the data scale affects the model’s performance. In particular, we randomly sample 5k, 10k, 20k, and 50k instances from our original 150k training instances, and fine-tune four SELF-RAG 7B variants on those subsets.\n\n[3] Source: 2005.11401v4.pdf | Page: 4 | Section: 3.2 Abstractive Question Answering\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nThe task consists of questions, ten gold passages retrieved from a search engine for each question, and a full sentence answer annotated from the retrieved passages. We do not use the supplied passages, only the questions and answers, to treat\n\n[4] Source: 2004.04906v3.pdf | Page: 7 | Section: 6.1 End-to-end QA System\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nSpeciﬁcally, let Pi ∈RL×h (1 ≤i ≤k) be a BERT (base, uncased in our experiments) rep- resentation for the i-th passage, where L is the maximum length of the passage and h the hidden dimension. The probabilities of a token being the starting/ending positions of an answer span and a passage being selected are deﬁned as: \u0000 \u0001 Pstart,i(s) = softmax Piwstart s, (3) \u0000 \u0001 Pend,i(t) = softmax Piwend t, (4) \u0000ˆP⊺wselected \u0001 Pselected(i) = softmax i, (5) ] ∈Rh×k and where ˆP = [P[CLS] , .\n\n[5] Source: 2310.11511v1.pdf | Page: 10 | Section: 5.2 ANALYSIS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nAcross all datasets, increasing data size often shows upward trajectories and the improvements are significantly larger in PopQA and ASQA, while we do not observed such significant improvements on Llama2-FT7B when increasing the training data from 50k to 150k. These results also indicate that further expanding the training data of SELF-RAG may lead to further improvements, although in this work we limit our training data size to 150k. Human evaluations.\n\n[6] Source: Attention is all you need.pdf | Page: 2 | Section: 1 Introduction\nRecurrent models typically factor computation along the symbol positions of the input and output sequences. Aligning the positions to steps in computation time, they generate a sequence of hidden states ht, as a function of the previous hidden state ht−1 and the input for position t. This inherently sequential nature precludes parallelization within training examples, which becomes critical at longer sequence lengths, as memory constraints limit batching across examples.\n\n[7] Source: VGG.pdf | Page: 8 | Section: 4.5 COMPARISON WITH THE STATE OF THE ART\nOnly the results obtained without outside training data are reported. Method top-1 val. error (%) top-5 val.\n\n[8] Source: 2005.11401v4.pdf | Page: 12 | Section: 6 Discussion\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\n[20] Kelvin Guu, Kenton Lee, Zora Tung, Panupong Pasupat, and Ming-Wei Chang. REALM: Retrieval-augmented language model pre-training. ArXiv, abs/2002.08909, 2020. URL https: //arxiv.org/abs/2002.08909. [21] Tatsunori B Hashimoto, Kelvin Guu, Yonatan Oren, and Percy S Liang. A retrieve-and-edit framework for predicting structured outputs. Wallach, H. Larochelle, K. Grauman, N. Cesa-Bianchi, and R.\n\n[9] Source: Attention is all you need.pdf | Page: 7 | Section: 5.1 Training Data and Batching\n5.1 Training Data and Batching We trained on the standard WMT 2014 English-German dataset consisting of about 4.5 million sentence pairs.\n\n[10] Source: 2004.04906v3.pdf | Page: 2 | Section: 1 Introduction\nTitle: Dense Passage Retrieval for Open-Domain Question Answering\nIn this paper, we address the question: can we train a better dense embedding model using only pairs of questions and passages (or answers), with- out additional pretraining? By leveraging the now standard BERT pretrained model (Devlin et al., 2019) and a dual-encoder architecture (Bromley et al., 1994), we focus on developing the right training scheme using a relatively small number of question and passage pairs.\n\nQuestion:\nUsing only the supplied eight-paper corpus, what training-data size and hidden-state dimension are specified for the Mamba model in the Mamba paper?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-20T02:58:34.531679+00:00",
+    "http_posts": 1,
+    "response": {
+      "answer": "当前证据不足。提供的八篇论文上下文中没有 Mamba 论文，也没有关于 Mamba 模型训练数据规模或隐藏状态维度的信息。",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 128,
+        "cached_tokens": 128,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 32,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.05,
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 1648,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 1776,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 128,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 1808
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.057
+  },
+  {
+    "number": 23,
+    "question_id": "h12",
+    "signature": "a803a2b17d32bb0a537e9107264c836830af91e4bd1caf0b632f7fb2f3daeecd",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nWhat exact ImageNet-1k top-1 accuracy did the original Transformer in Attention Is All You Need achieve under the same training protocol as VGG configuration D?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-20T02:58:36.616140+00:00",
+    "http_posts": 1,
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 384,
+        "cached_tokens": 384,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 19,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.01,
+        "prompt_cache_hit_tokens": 384,
+        "prompt_cache_miss_tokens": 271,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 655,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 384,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 674
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.801
+  },
+  {
+    "number": 24,
+    "question_id": "h12",
+    "signature": "3bfda28deeaa61832725998a4fd5cd8b217f402fa0620da0903f6c54922ad923",
+    "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\n[1] Source: Attention is all you need.pdf | Page: 9 | Section: 7 Conclusion\n7 Conclusion In this work, we presented the Transformer, the ﬁrst sequence transduction model based entirely on attention, replacing the recurrent layers most commonly used in encoder-decoder architectures with multi-headed self-attention. For translation tasks, the Transformer can be trained signiﬁcantly faster than architectures based on recurrent or convolutional layers. On both WMT 2014 English-to-German and WMT 2014 English-to-French translation tasks, we achieve a new state of the art.\n\n[2] Source: VGG.pdf | Page: 6 | Section: 4.1 SINGLE SCALE EVALUATION\n(Table 1) smallest image side top-1 val. error (%) top-5 val. error (%) train (S) test (Q) A 256 256 29.6 10.4 A-LRN 256 256 29.7 10.5 B 256 256 28.7 9.9 C 256 256 28.1 9.4 384 384 28.1 9.3 [256;512] 384 27.3 8.8 D 256 256 27.0 8.8 384 384 26.8 8.7 [256;512] 384 25.6 8.1 E 256 256 27.3 9.0 384 384 26.9 8.7 [256;512] 384 25.5 8.0\n\n[3] Source: Attention is all you need.pdf | Page: 2 | Section: 1 Introduction\nIn this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output. The Transformer allows for signiﬁcantly more parallelization and can reach a new state of the art in translation quality after being trained for as little as twelve hours on eight P100 GPUs.\n\n[4] Source: Attention is all you need.pdf | Page: 2 | Section: 2 Background\nIn the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as described in section 3.2. Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.\n\n[5] Source: VGG.pdf | Page: 3 | Section: 2.3 DISCUSSION\nConvNet Conﬁguration A A-LRN B C D E 11 weight 11 weight 13 weight 16 weight 16 weight 19 weight layers layers layers layers layers layers input (224 × 224 RGB image) conv3-64 conv3-64 conv3-64 conv3-64 conv3-64 conv3-64 LRN conv3-64 conv3-64 conv3-64 conv3-64 maxpool conv3-128 conv3-128 conv3-128 conv3-128 conv3-128 conv3-128 conv3-128 conv3-128 conv3-128 conv3-128 maxpool conv3-256 conv3-256 conv3-256 conv3-256 conv3-256 conv3-256 conv3-256 conv3-256 conv3-256 conv3-256 conv3-256 conv3-256 conv1-256 conv3-256 conv3-256 conv3-256 maxpool conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv1-512 conv3-512 conv3-512 conv3-512 maxpool conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv1-512 conv3-512 conv3-512 conv3-512 maxpool FC-4096 FC-4096 FC-1000 soft-max Table 2: Number of parameters (in millions).\n\n[6] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.2 Multi-Head Attention\nMultiHead(Q, K, V ) = Concat(head1, ..., headh)W O where headi = Attention(QW Q i , KW K i , V W V i ) Where the projections are parameter matrices W Q i ∈Rdmodel×dk, W K i ∈Rdmodel×dk, W V i ∈Rdmodel×dv and W O ∈Rhdv×dmodel.\n\n[7] Source: Attention is all you need.pdf | Page: 9 | Section: 7 Conclusion\nIn the former task our best model outperforms even all previously reported ensembles. We are excited about the future of attention-based models and plan to apply them to other tasks. We plan to extend the Transformer to problems involving input and output modalities other than text and to investigate local, restricted attention mechanisms to efﬁciently handle large inputs and outputs such as images, audio and video. Making generation less sequential is another research goals of ours.\n\n[8] Source: Attention is all you need.pdf | Page: 2 | Section: 3.1 Encoder and Decoder Stacks\nThe ﬁrst is a multi-head self-attention mechanism, and the second is a simple, position-\n\n[9] Source: Attention is all you need.pdf | Page: 1 | Section: 1 Introduction\nJakob proposed replacing RNNs with self-attention and started the effort to evaluate this idea. Ashish, with Illia, designed and implemented the ﬁrst Transformer models and has been crucially involved in every aspect of this work. Noam proposed scaled dot-product attention, multi-head attention and the parameter-free position representation and became the other person involved in nearly every detail.\n\n[10] Source: VGG.pdf | Page: 4 | Section: 3.1 TRAINING\nIn our experiments, we evaluated models trained at two ﬁxed scales: S = 256 (which has been widely used in the prior art (Krizhevsky et al., 2012; Zeiler & Fergus, 2013; Sermanet et al., 2014)) and S = 384. Given a ConvNet conﬁguration, we ﬁrst trained the network using S = 256. To speed-up training of the S = 384 network, it was initialised with the weights pre-trained with S = 256, and we used a smaller initial learning rate of 10−3. The second approach to setting S is multi-scale training, where each training image is individually rescaled by randomly sampling S from a certain range [Smin, Smax] (we used Smin = 256 and Smax = 512).\n\n[11] Source: VGG.pdf | Page: 6 | Section: 4.1 SINGLE SCALE EVALUATION\nThe error rate of our architecture saturates when the depth reaches 19 layers, but even deeper models might be beneﬁcial for larger datasets. We also compared the net B with a shallow net with ﬁve 5 × 5 conv. layers, which was derived from B by replacing each pair of 3 × 3 conv. layers with a single 5 × 5 conv. layer (which has the same receptive ﬁeld as explained in Sect.\n\nQuestion:\nWhat exact ImageNet-1k top-1 accuracy did the original Transformer in Attention Is All You Need achieve under the same training protocol as VGG configuration D?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-20T02:59:18.562105+00:00",
+    "http_posts": 1,
+    "response": {
+      "answer": "当前证据不足。所提供的上下文未包含 Transformer 在 ImageNet-1k 上的 top-1 准确率，也未包含将其与 VGG 配置 D 采用相同训练协议进行比较的信息；现有 VGG 配置 D 的结果（如 256 尺度下 top-1 验证误差 27.0%）与 Transformer 的翻译任务结果分属不同任务与数据集，无法据此推断。",
+      "requested_model": "cn:deepseek-v4.1-flash",
+      "reported_model": "deepseek-v4.1-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 128,
+        "cached_tokens": 128,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 86,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.07,
+        "prompt_cache_hit_tokens": 128,
+        "prompt_cache_miss_tokens": 2002,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2130,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 128,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2216
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:deepseek-v4.1-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.302
+  }
+]

@@ -1,0 +1,225 @@
+{
+  "id": "question",
+  "query": "How do DCNN and VGG center RGB pixel values before the network, and from which data are their subtracted means computed?",
+  "kb_version": "all-papers-8-20261020",
+  "status": "completed",
+  "actions_executed": 0,
+  "semantic_correctness": "requires_manual_review",
+  "plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "DCNN",
+        "question_quote": "How do DCNN and VGG center RGB pixel values before the network, and from which data are their subtracted means computed?",
+        "need": "how do dcnn center rgb pixel values before the network, and from which data are their subtracted means computed?"
+      },
+      {
+        "id": "r2",
+        "subject": "VGG",
+        "question_quote": "How do DCNN and VGG center RGB pixel values before the network, and from which data are their subtracted means computed?",
+        "need": "how do vgg center rgb pixel values before the network, and from which data are their subtracted means computed?"
+      }
+    ]
+  },
+  "assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 128,
+            "quote": "We did not pre process the images in any other way, except for subtracting the mean activity over the training set from each pixel. So we trained our network on the (centered) raw RGB values of the pixels."
+          }
+        ],
+        "supported_part": "DCNN通过从每个像素减去训练集上的平均活动值来中心化原始RGB像素值，且该均值是在训练集上计算的。",
+        "reason": "该段落明确说明DCNN除从每个像素减去训练集上的平均活动值外未做其他预处理，并用中心化后的原始RGB像素值训练网络。",
+        "gap": ""
+      },
+      {
+        "id": "r2",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 232,
+            "quote": "The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel."
+          }
+        ],
+        "supported_part": "VGG通过从每个像素减去在训练集上计算的RGB均值来中心化RGB像素值。",
+        "reason": "该段落明确说明VGG唯一的预处理是从每个像素减去在训练集上计算的RGB均值。",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "answer",
+      "reason": "两个需求均已由各自论文段落支持。",
+      "requirement_ids": [],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "各引文均在本需求对应的问题摘录范围内，未合并或扩展其他方法的要求。"
+    }
+  },
+  "steps": [],
+  "evidence_after": [
+    {
+      "chunk_id": 232,
+      "source": "VGG.pdf",
+      "page": 2,
+      "title": "VGG",
+      "text": "2.1 ARCHITECTURE During training, the input to our ConvNets is a ﬁxed-size 224 × 224 RGB image. The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel. The image is passed through a stack of convolutional (conv.) layers, where we use ﬁlters with a very small receptive ﬁeld: 3 × 3 (which is the smallest size to capture the notion of left/right, up/down, center).",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 128,
+      "source": "DCNN.pdf",
+      "page": 2,
+      "title": "DCNN",
+      "text": "Therefore, we down-sampled the images to a fixed resolution of 256 × 256. Given a rectangular image, we first rescaled the image such that the shorter side was of length 256, and then cropped out the central 256 × 256 patch from the resulting image. We did not pre process the images in any other way, except for subtracting the mean activity over the training set from each pixel. So we trained our network on the (centered) raw RGB values of the pixels.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 168,
+      "source": "DCNN.pdf",
+      "page": 5,
+      "title": "DCNN",
+      "text": "To each training image, we add multiples of the found principal components, with magnitudes proportional to the corresponding eigen values times a random variable drawn from a Gaussian with mean 0 and standard deviation 0.1. Therefore to each RGB image pixel Ixy = [IR xy, IG xy, IB xy]T we add the following quantity: [p1, p2, p3] [α1λ1, α2λ2, α3λ3]T, where pi and λi are ith eigenvector and eigenvalue of the 3 × 3 covariance matrix of RGB pixel values, respectively, and αi is the aforementioned random variable.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 244,
+      "source": "VGG.pdf",
+      "page": 3,
+      "title": "VGG",
+      "text": "ConvNet Conﬁguration A A-LRN B C D E 11 weight 11 weight 13 weight 16 weight 16 weight 19 weight layers layers layers layers layers layers input (224 × 224 RGB image) conv3-64 conv3-64 conv3-64 conv3-64 conv3-64 conv3-64 LRN conv3-64 conv3-64 conv3-64 conv3-64 maxpool conv3-128 conv3-128 conv3-128 conv3-128 conv3-128 conv3-128 conv3-128 conv3-128 conv3-128 conv3-128 maxpool conv3-256 conv3-256 conv3-256 conv3-256 conv3-256 conv3-256 conv3-256 conv3-256 conv3-256 conv3-256 conv3-256 conv3-256 conv1-256 conv3-256 conv3-256 conv3-256 maxpool conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv1-512 conv3-512 conv3-512 conv3-512 maxpool conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv3-512 conv1-512 conv3-512 conv3-512 conv3-512 maxpool FC-4096 FC-4096 FC-1000 soft-max Table 2: Number of parameters (in millions).",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 355,
+      "source": "VGG.pdf",
+      "page": 12,
+      "title": "VGG",
+      "text": "We also assess late fusion of features, computed using two networks, which is performed by stacking their respective image descriptors. Table 11: Comparison with the state of the art in image classiﬁcation on VOC-2007, VOC-2012, Caltech-101, and Caltech-256. Our models are denoted as “VGG”. Results marked with * were achieved using ConvNets pre-trained on the extended ILSVRC dataset (2000 classes).",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 262,
+      "source": "VGG.pdf",
+      "page": 4,
+      "title": "VGG",
+      "text": "In our experiments, we evaluated models trained at two ﬁxed scales: S = 256 (which has been widely used in the prior art (Krizhevsky et al., 2012; Zeiler & Fergus, 2013; Sermanet et al., 2014)) and S = 384. Given a ConvNet conﬁguration, we ﬁrst trained the network using S = 256. To speed-up training of the S = 384 network, it was initialised with the weights pre-trained with S = 256, and we used a smaller initial learning rate of 10−3. The second approach to setting S is multi-scale training, where each training image is individually rescaled by randomly sampling S from a certain range [Smin, Smax] (we used Smin = 256 and Smax = 512).",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 301,
+      "source": "VGG.pdf",
+      "page": 8,
+      "title": "VGG",
+      "text": "24.0 7.1 7.0 (D/[256;512]/256,384,512), (E/[256;512]/256,384,512), multi-crop 23.9 7.2 - (D/[256;512]/256,384,512), (E/[256;512]/256,384,512), multi-crop & dense eval. 23.7 6.8 6.8 7.3% test error using an ensemble of 7 models. After the submission, we decreased the error rate to 6.8% using an ensemble of 2 models.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 122,
+      "source": "DCNN.pdf",
+      "page": 2,
+      "title": "DCNN",
+      "text": "In the end, the network’s size is limited mainly by the amount of memory available on current GPUs and by the amount of training time that we are willing to tolerate. Our network takes between 5 and 6 days to train on two GTX 580 3GB GPUs.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 167,
+      "source": "DCNN.pdf",
+      "page": 5,
+      "title": "DCNN",
+      "text": "research highlights The second form of data augmentation consists of altering the intensities of the RGB channels in training images. Specifically, we perform PCA on the set of RGB pixel values throughout the ImageNet training set.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 250,
+      "source": "VGG.pdf",
+      "page": 4,
+      "title": "VGG",
+      "text": "Published as a conference paper at ICLR 2015 (22 weight layers) and small convolution ﬁlters (apart from 3 × 3, they also use 1 × 1 and 5 × 5 convolutions). Their network topology is, however, more complex than ours, and the spatial reso- lution of the feature maps is reduced more aggressively in the ﬁrst layers to decrease the amount of computation.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 126,
+      "source": "DCNN.pdf",
+      "page": 2,
+      "title": "DCNN",
+      "text": "ILSVRC-2010 is the only version of ILSVRC for which the test set labels are available, so this is the version on which we performed most of our experiments. Since we also entered our model in the ILSVRC-2012 competition, in Section 7 we report our results on this version of the dataset as well, for which test set labels are unavailable.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 121,
+      "source": "DCNN.pdf",
+      "page": 2,
+      "title": "DCNN",
+      "text": "We wrote a highly optimized GPU implementation of 2D convolution and all the other opera- tions inherent in training CNNs, which we make available publicly.a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4. The size of our network made overfitting a significant problem, even with 1.2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 5. Our final network contains five convo- lutional and three fully connected layers, and this depth seems to be important: we found that removing any convolu- tional layer (each of which contains no more than 1% of the model’s parameters) resulted in inferior performance.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 164,
+      "source": "DCNN.pdf",
+      "page": 4,
+      "title": "DCNN",
+      "text": "We do this by extracting random 224 × 224 patches (and their horizontal reflections) from the 256 × 256 images and training our net- work on these extracted patches.d This increases the size of our training set by a factor of 2048, though the resulting train- ing examples are, of course, highly inter dependent. Without this scheme, our network suffers from substantial overfit- ting, which would have forced us to use much smaller net- works.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 249,
+      "source": "VGG.pdf",
+      "page": 3,
+      "title": "VGG",
+      "text": "(2014) applied deep ConvNets (11 weight layers) to the task of street number recognition, and showed that the increased depth led to better performance. GoogLeNet (Szegedy et al., 2014), a top-performing entry of the ILSVRC-2014 classiﬁcation task, was developed independently of our work, but is similar in that it is based on very deep ConvNets",
+      "kb_version": "all-papers-8-20261020"
+    }
+  ],
+  "halt_reason": "answer_ready",
+  "final_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 128,
+            "quote": "We did not pre process the images in any other way, except for subtracting the mean activity over the training set from each pixel. So we trained our network on the (centered) raw RGB values of the pixels."
+          }
+        ],
+        "supported_part": "DCNN通过从每个像素减去训练集上的平均活动值来中心化原始RGB像素值，且该均值是在训练集上计算的。",
+        "reason": "该段落明确说明DCNN除从每个像素减去训练集上的平均活动值外未做其他预处理，并用中心化后的原始RGB像素值训练网络。",
+        "gap": ""
+      },
+      {
+        "id": "r2",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 232,
+            "quote": "The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel."
+          }
+        ],
+        "supported_part": "VGG通过从每个像素减去在训练集上计算的RGB均值来中心化RGB像素值。",
+        "reason": "该段落明确说明VGG唯一的预处理是从每个像素减去在训练集上计算的RGB均值。",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "answer",
+      "reason": "两个需求均已由各自论文段落支持。",
+      "requirement_ids": [],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "各引文均在本需求对应的问题摘录范围内，未合并或扩展其他方法的要求。"
+    }
+  },
+  "elapsed_seconds": 4.996
+}

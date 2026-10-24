@@ -1,0 +1,950 @@
+{
+  "query": "According to the original Mistral 7B paper, how many training tokens were used and what context length was used?",
+  "status": "retrieval_completed",
+  "decomposition": {
+    "needs_decomposition": true,
+    "sub_queries": [
+      "According to the original Mistral 7B paper, how many training tokens were used?",
+      "According to the original Mistral 7B paper, what context length was used?"
+    ],
+    "status": "accepted",
+    "proposed_count": 2
+  },
+  "knowledge_base": {
+    "version": "all-papers-8-20261020",
+    "chunk_count": 1397,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/manifest.json",
+    "manifest_sha256": "9c4e2c26b4f11fe7baf526595630cbee2d325416ec0e497f417975fbd60779ef",
+    "files": {
+      "faiss.index": "ff1f4a3e38e20c0275ba79d805e6475639b3cea7a7a583f9c18c67ec8e40a2ed",
+      "chunks.json": "3e63d75abbe164ff8e135b1d66fd6b02d9479b2e037e289a726e7c542464593a"
+    }
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 226,
+    "global_top_ids": [
+      1127,
+      63,
+      1136,
+      1024,
+      739,
+      989,
+      782,
+      1132,
+      929,
+      602
+    ],
+    "protected_ids": [
+      63,
+      1127
+    ],
+    "sub_query_evidence": [
+      {
+        "query": "According to the original Mistral 7B paper, how many training tokens were used?",
+        "top_ids": [
+          63,
+          1127,
+          1024
+        ]
+      },
+      {
+        "query": "According to the original Mistral 7B paper, what context length was used?",
+        "top_ids": [
+          1127,
+          782,
+          1194
+        ]
+      }
+    ],
+    "retrieval_anchor_ids": [
+      63
+    ],
+    "evidence_completion": {
+      "requested_sources": [],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        1127,
+        63,
+        1136,
+        1024,
+        739,
+        989,
+        782,
+        1132,
+        929,
+        1194
+      ],
+      "retained_local_ids": [
+        1127,
+        63,
+        1024,
+        782,
+        1194
+      ],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        1127,
+        63,
+        1136,
+        1024,
+        739,
+        989,
+        782,
+        1132,
+        929,
+        1194
+      ],
+      "elapsed_seconds": 0.000249
+    }
+  },
+  "selected_ids": [
+    1127,
+    63,
+    1136,
+    1024,
+    739,
+    989,
+    782,
+    1132,
+    929,
+    1194
+  ],
+  "context": "Original passages:\n[1] Source: 2310.11511v1.pdf | Page: 19 | Section: 6 CONCLUSION\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nB EXPERIMENTAL DETAILS B.1 MORE DETAILS OF TRAINING More details of training and computations. We use 4 Nvidia A100 with 80GB memory to train our models. All models are trained for 3 epochs with a batch size of 128, a peak learning rate of 2e-5 with 3% warmup steps, and linear decay afterward. We set the maximum token length to be 2,048 for the 7B model, and 1,524 for the 13B model due to the memory constraint.\n\n[2] Source: Attention is all you need.pdf | Page: 7 | Section: 5.1 Training Data and Batching\nSentences were encoded using byte-pair encoding [3], which has a shared source- target vocabulary of about 37000 tokens. For English-French, we used the signiﬁcantly larger WMT 2014 English-French dataset consisting of 36M sentences and split tokens into a 32000 word-piece vocabulary [31]. Sentence pairs were batched together by approximate sequence length. Each training batch contained a set of sentence pairs containing approximately 25000 source tokens and 25000 target tokens.\n\n[3] Source: 2310.11511v1.pdf | Page: 20 | Section: 6 CONCLUSION\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nFor FactScore, we set the maximum new token length to 500 for baselines and 200 for SELF-RAG at each segment level. Task-specific instructions. Table 5 shows the list of the instructions used during evaluations.\n\n[4] Source: 2310.11511v1.pdf | Page: 9 | Section: 5.1 MAIN RESULTS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nPQA Med AS (acc) (acc) (em) SELF-RAG (50k) 45.5 73.5 32.1 Training No Retriever R 43.6 67.8 31.0 No Critic C 42.6 72.0 18.1 Test No retrieval 24.7 73.0 – Hard constraints 28.3 72.6 – Retrieve top1 41.8 73.1 28.6 Remove ISSUP 44.1 73.2 30.6 (a) Ablation 1 2 70.0 70.5 Precision 1 2 Weight for IsSupport 90 95 Mauve (b) Customization 0.0 0.2 0.4 0.6 0.98 0.99 0.99 1.00 Accuracy PubHealth 0.0 0.2 0.4 0.6 Retrieval Threshold 0.6 0.8 1.0 Accuracy PopQA 0.0 0.5 1.0 Frequency 0.25 0.50 0.75 1.00 Frequency (c) Retrieval Figure 3: Analysis on SELF-RAG: (a) Ablation studies for key components of SELF-RAG training and inference based on our 7B model.\n\n[5] Source: 2005.11401v4.pdf | Page: 3 | Section: 2 Methods\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nby θ that generates a current token based on a context of the previous i −1 tokens y1:i−1, the original input x and a retrieved passage z. To train the retriever and generator end-to-end, we treat the retrieved document as a latent variable. We propose two models that marginalize over the latent documents in different ways to produce a distribution over generated text. In one approach, RAG-Sequence, the model uses the same document to predict each target token.\n\n[6] Source: 2310.11511v1.pdf | Page: 5 | Section: 3.2.2 TRAINING THE GENERATOR MODEL\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nDuring training, we mask out the retrieved text chunks (surrounded by <p> and </p> in Figure 2) for loss calculation and expand the original vocabulary V with a set of reflection tokens { Critique , Retrieve }. Connections to prior work on learning with critique. Recent work incorporates additional critique (feedback) during training, e.g., RLHF (Ouyang et al.\n\n[7] Source: 2005.11401v4.pdf | Page: 6 | Section: 4.1 Open-domain Question Answering\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nSee Appendix D for further details. Model NQ TQA WQ CT Closed Book T5-11B [52] 34.5 - /50.1 37.4 - T5-11B+SSM[52] 36.6 - /60.5 44.7 - Open Book REALM [20] 40.4 - / - 40.7 46.8 DPR [26] 41.5 57.9/ - 41.1 50.6 RAG-Token 44.1 55.2/66.1 45.5 50.0 RAG-Seq. 44.5 56.8/68.0 45.2 52.2 Table 2: Generation and classiﬁcation Test Scores. MS-MARCO SotA is [4], FEVER-3 is [68] and FEVER-2 is [57] *Uses gold context/evidence. Best model without gold access underlined.\n\n[8] Source: 2310.11511v1.pdf | Page: 20 | Section: 6 CONCLUSION\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nAs this API only provides snippets, we retrieve Wikipedia introductory paragraphs for the corresponding entities. Detailed experimental settings for individual datasets. For OpenQA datasets, we set the max- imum new token number to 100 tokens. For closed-set tasks (PubHealth and ARC-C), we set the maximum new token length to 50 for all baselines.\n\n[9] Source: 2310.11511v1.pdf | Page: 1 | Section: None\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nGenerating reflection tokens makes the LM controllable during the inference phase, enabling it to tailor its behavior to diverse task requirements. Experiments show that SELF- RAG (7B and 13B parameters) significantly outperforms state-of-the-art LLMs and retrieval-augmented models on a diverse set of tasks.\n\n[10] Source: 2310.11511v1.pdf | Page: 27 | Section: 6 CONCLUSION\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nInstruction Explain the use of word embeddings in Natural Language Processing. Preceding sentences Word embeddings are one of the most powerful tools available for Natural Language Processing (NLP). They are mathematical representations of words or phrases in a vector space, allowing similarities between words and the context in which they are used to be measured.\n\n[11] Source: 2005.11401v4.pdf | Page: 2 | Section: 2 Methods\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nAs shown in Figure 1, our models leverage two components: (i) a retriever pη(z|x) with parameters η that returns (top-K truncated) distributions over text passages given a query x and (ii) a generator pθ(yi|x, z, y1:i−1) parametrized 1Code to run experiments with RAG has been open-sourced as part of the HuggingFace Transform- ers Library [66] and can be found at https://github.com/huggingface/transformers/blob/master/ examples/rag/.\n\nEvidence guidance:\n- Rule-based subject attribution: RAG; passage: “by θ that generates a current token based on a context of the previous i −1 tokens y1:i−1, the original input x and a retrieved passage z.” [5][11]\n- Rule-based subject attribution: RAG; passage: “To train the retriever and generator end-to-end, we treat the retrieved document as a latent variable.” [5][11]",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": "1 MORE DETAILS OF TRAINING More details of training and computations.",
+        "evidence_start": 25,
+        "evidence_end": 94,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            1127
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1127,
+        "page": 19,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We use 4 Nvidia A100 with 80GB memory to train our models.",
+        "evidence_start": 94,
+        "evidence_end": 153,
+        "subject": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "identity": {
+          "subject": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            1127
+          ],
+          "identity_quote": "B EXPERIMENTAL DETAILS B.1 MORE DETAILS OF TRAINING More details of training and computations. We use 4 Nvidia A100 with 80GB memory to train our models. All models are trained for 3 epochs with a batch size of 128, a peak learning rate of 2e-5 with 3% warmup steps, and linear decay afterward. We set the maximum token length to be 2,048 for the 7B model, and 1,524 for the 13B model due to the memory constraint.",
+          "identity_chunk_id": 1127
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1127,
+        "page": 19,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " All models are trained for 3 epochs with a batch size of 128, a peak learning rate of 2e-5 with 3% warmup steps, and linear decay afterward.",
+        "evidence_start": 153,
+        "evidence_end": 294,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1127
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1127,
+        "page": 19,
+        "citations": [
+          1
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We set the maximum token length to be 2,048 for the 7B model, and 1,524 for the 13B model due to the memory constraint.",
+        "evidence_start": 294,
+        "evidence_end": 414,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1127
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1127,
+        "page": 19,
+        "citations": [
+          1
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Sentences were encoded using byte-pair encoding [3], which has a shared source- target vocabulary of about 37000 tokens.",
+        "evidence_start": 0,
+        "evidence_end": 120,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            63,
+            62
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 63,
+        "page": 7,
+        "citations": [
+          2
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " For English-French, we used the signiﬁcantly larger WMT 2014 English-French dataset consisting of 36M sentences and split tokens into a 32000 word-piece vocabulary [31].",
+        "evidence_start": 120,
+        "evidence_end": 290,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            63,
+            62
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 63,
+        "page": 7,
+        "citations": [
+          2
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Sentence pairs were batched together by approximate sequence length.",
+        "evidence_start": 290,
+        "evidence_end": 359,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            63,
+            62
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 63,
+        "page": 7,
+        "citations": [
+          2
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Each training batch contained a set of sentence pairs containing approximately 25000 source tokens and 25000 target tokens.",
+        "evidence_start": 359,
+        "evidence_end": 483,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            63,
+            62
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 63,
+        "page": 7,
+        "citations": [
+          2
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "For FactScore, we set the maximum new token length to 500 for baselines and 200 for SELF-RAG at each segment level.",
+        "evidence_start": 0,
+        "evidence_end": 115,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            1136
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1136,
+        "page": 20,
+        "citations": [
+          3
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Table 5 shows the list of the instructions used during evaluations.",
+        "evidence_start": 143,
+        "evidence_end": 211,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1136
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1136,
+        "page": 20,
+        "citations": [
+          3
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "00 Frequency (c) Retrieval Figure 3: Analysis on SELF-RAG: (a) Ablation studies for key components of SELF-RAG training and inference based on our 7B model.",
+        "evidence_start": 489,
+        "evidence_end": 645,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            1024
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1024,
+        "page": 9,
+        "citations": [
+          4
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "by θ that generates a current token based on a context of the previous i −1 tokens y1:i−1, the original input x and a retrieved passage z.",
+        "evidence_start": 0,
+        "evidence_end": 138,
+        "subject": "RAG",
+        "identity": {
+          "subject": "RAG",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            739,
+            738,
+            737
+          ],
+          "identity_quote": "As shown in Figure 1, our models leverage two components: (i) a retriever pη(z|x) with parameters η that returns (top-K truncated) distributions over text passages given a query x and (ii) a generator pθ(yi|x, z, y1:i−1) parametrized 1Code to run experiments with RAG has been open-sourced as part of the HuggingFace Transform- ers Library [66] and can be found at https://github.com/huggingface/transformers/blob/master/ examples/rag/.",
+          "identity_chunk_id": 737
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 739,
+        "page": 3,
+        "citations": [
+          5,
+          11
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " To train the retriever and generator end-to-end, we treat the retrieved document as a latent variable.",
+        "evidence_start": 138,
+        "evidence_end": 241,
+        "subject": "RAG",
+        "identity": {
+          "subject": "RAG",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            739,
+            738,
+            737
+          ],
+          "identity_quote": "As shown in Figure 1, our models leverage two components: (i) a retriever pη(z|x) with parameters η that returns (top-K truncated) distributions over text passages given a query x and (ii) a generator pθ(yi|x, z, y1:i−1) parametrized 1Code to run experiments with RAG has been open-sourced as part of the HuggingFace Transform- ers Library [66] and can be found at https://github.com/huggingface/transformers/blob/master/ examples/rag/.",
+          "identity_chunk_id": 737
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 739,
+        "page": 3,
+        "citations": [
+          5,
+          11
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We propose two models that marginalize over the latent documents in different ways to produce a distribution over generated text.",
+        "evidence_start": 241,
+        "evidence_end": 371,
+        "subject": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "identity": {
+          "subject": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            739
+          ],
+          "identity_quote": "by θ that generates a current token based on a context of the previous i −1 tokens y1:i−1, the original input x and a retrieved passage z. To train the retriever and generator end-to-end, we treat the retrieved document as a latent variable. We propose two models that marginalize over the latent documents in different ways to produce a distribution over generated text. In one approach, RAG-Sequence, the model uses the same document to predict each target token.",
+          "identity_chunk_id": 739
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 739,
+        "page": 3,
+        "citations": [
+          5
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In one approach, RAG-Sequence, the model uses the same document to predict each target token.",
+        "evidence_start": 371,
+        "evidence_end": 465,
+        "subject": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "identity": {
+          "subject": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            739
+          ],
+          "identity_quote": "by θ that generates a current token based on a context of the previous i −1 tokens y1:i−1, the original input x and a retrieved passage z. To train the retriever and generator end-to-end, we treat the retrieved document as a latent variable. We propose two models that marginalize over the latent documents in different ways to produce a distribution over generated text.",
+          "identity_chunk_id": 739
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 739,
+        "page": 3,
+        "citations": [
+          5
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "During training, we mask out the retrieved text chunks (surrounded by <p> and </p> in Figure 2) for loss calculation and expand the original vocabulary V with a set of reflection tokens { Critique , Retrieve }.",
+        "evidence_start": 0,
+        "evidence_end": 210,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            989,
+            988,
+            987
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 989,
+        "page": 5,
+        "citations": [
+          6
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Connections to prior work on learning with critique.",
+        "evidence_start": 210,
+        "evidence_end": 263,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            989,
+            988,
+            987
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 989,
+        "page": 5,
+        "citations": [
+          6
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "See Appendix D for further details.",
+        "evidence_start": 0,
+        "evidence_end": 35,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            782,
+            781
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 782,
+        "page": 6,
+        "citations": [
+          7
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "2 Table 2: Generation and classiﬁcation Test Scores.",
+        "evidence_start": 275,
+        "evidence_end": 327,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            782
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 782,
+        "page": 6,
+        "citations": [
+          7
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " MS-MARCO SotA is [4], FEVER-3 is [68] and FEVER-2 is [57] *Uses gold context/evidence.",
+        "evidence_start": 327,
+        "evidence_end": 414,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            782
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 782,
+        "page": 6,
+        "citations": [
+          7
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Best model without gold access underlined.",
+        "evidence_start": 414,
+        "evidence_end": 457,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            782
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 782,
+        "page": 6,
+        "citations": [
+          7
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "As this API only provides snippets, we retrieve Wikipedia introductory paragraphs for the corresponding entities.",
+        "evidence_start": 0,
+        "evidence_end": 113,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1132,
+            1131
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1132,
+        "page": 20,
+        "citations": [
+          8
+        ],
+        "record_id": "E22"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Detailed experimental settings for individual datasets.",
+        "evidence_start": 113,
+        "evidence_end": 169,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1132,
+            1131
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1132,
+        "page": 20,
+        "citations": [
+          8
+        ],
+        "record_id": "E23"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " For OpenQA datasets, we set the max- imum new token number to 100 tokens.",
+        "evidence_start": 169,
+        "evidence_end": 243,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1132,
+            1131
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1132,
+        "page": 20,
+        "citations": [
+          8
+        ],
+        "record_id": "E24"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " For closed-set tasks (PubHealth and ARC-C), we set the maximum new token length to 50 for all baselines.",
+        "evidence_start": 243,
+        "evidence_end": 348,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            1132
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1132,
+        "page": 20,
+        "citations": [
+          8
+        ],
+        "record_id": "E25"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Generating reflection tokens makes the LM controllable during the inference phase, enabling it to tailor its behavior to diverse task requirements.",
+        "evidence_start": 0,
+        "evidence_end": 147,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            929,
+            928
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 929,
+        "page": 1,
+        "citations": [
+          9
+        ],
+        "record_id": "E26"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Experiments show that SELF- RAG (7B and 13B parameters) significantly outperforms state-of-the-art LLMs and retrieval-augmented models on a diverse set of tasks.",
+        "evidence_start": 147,
+        "evidence_end": 309,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            929
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 929,
+        "page": 1,
+        "citations": [
+          9
+        ],
+        "record_id": "E27"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Instruction Explain the use of word embeddings in Natural Language Processing.",
+        "evidence_start": 0,
+        "evidence_end": 78,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            1194,
+            1193,
+            1192,
+            1191,
+            1190
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1194,
+        "page": 27,
+        "citations": [
+          10
+        ],
+        "record_id": "E28"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Preceding sentences Word embeddings are one of the most powerful tools available for Natural Language Processing (NLP).",
+        "evidence_start": 78,
+        "evidence_end": 198,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            1194,
+            1193,
+            1192,
+            1191,
+            1190
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1194,
+        "page": 27,
+        "citations": [
+          10
+        ],
+        "record_id": "E29"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " They are mathematical representations of words or phrases in a vector space, allowing similarities between words and the context in which they are used to be measured.",
+        "evidence_start": 198,
+        "evidence_end": 366,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            1194,
+            1193,
+            1192,
+            1191,
+            1190
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1194,
+        "page": 27,
+        "citations": [
+          10
+        ],
+        "record_id": "E30"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 1127,
+        "text": "B EXPERIMENTAL DETAILS B.1 MORE DETAILS OF TRAINING More details of training and computations. We use 4 Nvidia A100 with 80GB memory to train our models. All models are trained for 3 epochs with a batch size of 128, a peak learning rate of 2e-5 with 3% warmup steps, and linear decay afterward. We set the maximum token length to be 2,048 for the 7B model, and 1,524 for the 13B model due to the memory constraint.",
+        "source": "2310.11511v1.pdf",
+        "page": 19,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "6 CONCLUSION"
+      },
+      {
+        "chunk_id": 63,
+        "text": "Sentences were encoded using byte-pair encoding [3], which has a shared source- target vocabulary of about 37000 tokens. For English-French, we used the signiﬁcantly larger WMT 2014 English-French dataset consisting of 36M sentences and split tokens into a 32000 word-piece vocabulary [31]. Sentence pairs were batched together by approximate sequence length. Each training batch contained a set of sentence pairs containing approximately 25000 source tokens and 25000 target tokens.",
+        "source": "Attention is all you need.pdf",
+        "page": 7,
+        "title": "Attention is All you Need",
+        "section": "5.1 Training Data and Batching"
+      },
+      {
+        "chunk_id": 1136,
+        "text": "For FactScore, we set the maximum new token length to 500 for baselines and 200 for SELF-RAG at each segment level. Task-specific instructions. Table 5 shows the list of the instructions used during evaluations.",
+        "source": "2310.11511v1.pdf",
+        "page": 20,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "6 CONCLUSION"
+      },
+      {
+        "chunk_id": 1024,
+        "text": "PQA Med AS (acc) (acc) (em) SELF-RAG (50k) 45.5 73.5 32.1 Training No Retriever R 43.6 67.8 31.0 No Critic C 42.6 72.0 18.1 Test No retrieval 24.7 73.0 – Hard constraints 28.3 72.6 – Retrieve top1 41.8 73.1 28.6 Remove ISSUP 44.1 73.2 30.6 (a) Ablation 1 2 70.0 70.5 Precision 1 2 Weight for IsSupport 90 95 Mauve (b) Customization 0.0 0.2 0.4 0.6 0.98 0.99 0.99 1.00 Accuracy PubHealth 0.0 0.2 0.4 0.6 Retrieval Threshold 0.6 0.8 1.0 Accuracy PopQA 0.0 0.5 1.0 Frequency 0.25 0.50 0.75 1.00 Frequency (c) Retrieval Figure 3: Analysis on SELF-RAG: (a) Ablation studies for key components of SELF-RAG training and inference based on our 7B model.",
+        "source": "2310.11511v1.pdf",
+        "page": 9,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "5.1 MAIN RESULTS"
+      },
+      {
+        "chunk_id": 739,
+        "text": "by θ that generates a current token based on a context of the previous i −1 tokens y1:i−1, the original input x and a retrieved passage z. To train the retriever and generator end-to-end, we treat the retrieved document as a latent variable. We propose two models that marginalize over the latent documents in different ways to produce a distribution over generated text. In one approach, RAG-Sequence, the model uses the same document to predict each target token.",
+        "source": "2005.11401v4.pdf",
+        "page": 3,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "2 Methods"
+      },
+      {
+        "chunk_id": 989,
+        "text": "During training, we mask out the retrieved text chunks (surrounded by <p> and </p> in Figure 2) for loss calculation and expand the original vocabulary V with a set of reflection tokens { Critique , Retrieve }. Connections to prior work on learning with critique. Recent work incorporates additional critique (feedback) during training, e.g., RLHF (Ouyang et al.",
+        "source": "2310.11511v1.pdf",
+        "page": 5,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "3.2.2 TRAINING THE GENERATOR MODEL"
+      },
+      {
+        "chunk_id": 782,
+        "text": "See Appendix D for further details. Model NQ TQA WQ CT Closed Book T5-11B [52] 34.5 - /50.1 37.4 - T5-11B+SSM[52] 36.6 - /60.5 44.7 - Open Book REALM [20] 40.4 - / - 40.7 46.8 DPR [26] 41.5 57.9/ - 41.1 50.6 RAG-Token 44.1 55.2/66.1 45.5 50.0 RAG-Seq. 44.5 56.8/68.0 45.2 52.2 Table 2: Generation and classiﬁcation Test Scores. MS-MARCO SotA is [4], FEVER-3 is [68] and FEVER-2 is [57] *Uses gold context/evidence. Best model without gold access underlined.",
+        "source": "2005.11401v4.pdf",
+        "page": 6,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "4.1 Open-domain Question Answering"
+      },
+      {
+        "chunk_id": 1132,
+        "text": "As this API only provides snippets, we retrieve Wikipedia introductory paragraphs for the corresponding entities. Detailed experimental settings for individual datasets. For OpenQA datasets, we set the max- imum new token number to 100 tokens. For closed-set tasks (PubHealth and ARC-C), we set the maximum new token length to 50 for all baselines.",
+        "source": "2310.11511v1.pdf",
+        "page": 20,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "6 CONCLUSION"
+      },
+      {
+        "chunk_id": 929,
+        "text": "Generating reflection tokens makes the LM controllable during the inference phase, enabling it to tailor its behavior to diverse task requirements. Experiments show that SELF- RAG (7B and 13B parameters) significantly outperforms state-of-the-art LLMs and retrieval-augmented models on a diverse set of tasks.",
+        "source": "2310.11511v1.pdf",
+        "page": 1,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": null
+      },
+      {
+        "chunk_id": 1194,
+        "text": "Instruction Explain the use of word embeddings in Natural Language Processing. Preceding sentences Word embeddings are one of the most powerful tools available for Natural Language Processing (NLP). They are mathematical representations of words or phrases in a vector space, allowing similarities between words and the context in which they are used to be measured.",
+        "source": "2310.11511v1.pdf",
+        "page": 27,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "6 CONCLUSION"
+      },
+      {
+        "chunk_id": 737,
+        "text": "As shown in Figure 1, our models leverage two components: (i) a retriever pη(z|x) with parameters η that returns (top-K truncated) distributions over text passages given a query x and (ii) a generator pθ(yi|x, z, y1:i−1) parametrized 1Code to run experiments with RAG has been open-sourced as part of the HuggingFace Transform- ers Library [66] and can be found at https://github.com/huggingface/transformers/blob/master/ examples/rag/.",
+        "source": "2005.11401v4.pdf",
+        "page": 2,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "2 Methods"
+      }
+    ],
+    "selected_ids": [
+      1127,
+      63,
+      1136,
+      1024,
+      739,
+      989,
+      782,
+      1132,
+      929,
+      1194
+    ]
+  }
+}

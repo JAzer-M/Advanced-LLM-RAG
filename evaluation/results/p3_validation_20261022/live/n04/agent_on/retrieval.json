@@ -1,0 +1,933 @@
+{
+  "query": "According to the original FlashAttention paper, which two GPU memory levels are involved in the IO reduction, and which implementation technique reduces those transfers?",
+  "status": "retrieval_completed",
+  "decomposition": {
+    "needs_decomposition": true,
+    "sub_queries": [
+      "According to the original FlashAttention paper, which two GPU memory levels are involved in the IO reduction?",
+      "According to the original FlashAttention paper, which implementation technique reduces those transfers?"
+    ],
+    "status": "accepted",
+    "proposed_count": 2
+  },
+  "knowledge_base": {
+    "version": "all-papers-8-20261020",
+    "chunk_count": 1397,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/manifest.json",
+    "manifest_sha256": "9c4e2c26b4f11fe7baf526595630cbee2d325416ec0e497f417975fbd60779ef",
+    "files": {
+      "faiss.index": "ff1f4a3e38e20c0275ba79d805e6475639b3cea7a7a583f9c18c67ec8e40a2ed",
+      "chunks.json": "3e63d75abbe164ff8e135b1d66fd6b02d9479b2e037e289a726e7c542464593a"
+    }
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 206,
+    "global_top_ids": [
+      1128,
+      1055,
+      103,
+      141,
+      173,
+      121,
+      138,
+      622,
+      15,
+      188
+    ],
+    "protected_ids": [
+      1128
+    ],
+    "sub_query_evidence": [
+      {
+        "query": "According to the original FlashAttention paper, which two GPU memory levels are involved in the IO reduction?",
+        "top_ids": [
+          1128,
+          1055,
+          138
+        ]
+      },
+      {
+        "query": "According to the original FlashAttention paper, which implementation technique reduces those transfers?",
+        "top_ids": [
+          1128,
+          1055,
+          173
+        ]
+      }
+    ],
+    "retrieval_anchor_ids": [
+      141
+    ],
+    "evidence_completion": {
+      "requested_sources": [],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        1128,
+        1055,
+        103,
+        141,
+        173,
+        121,
+        138,
+        622,
+        15,
+        188
+      ],
+      "retained_local_ids": [
+        1128,
+        1055,
+        173,
+        138
+      ],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        1128,
+        1055,
+        103,
+        141,
+        173,
+        121,
+        138,
+        622,
+        15,
+        188
+      ],
+      "elapsed_seconds": 0.00023
+    }
+  },
+  "selected_ids": [
+    1128,
+    1055,
+    103,
+    141,
+    173,
+    121,
+    138,
+    622,
+    15,
+    188
+  ],
+  "context": "Original passages:\n[1] Source: 2310.11511v1.pdf | Page: 19 | Section: 6 CONCLUSION\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nWe use Deepspeed stage 3 (Rajbhandari et al., 2020) to conduct multi-GPU distributed training, with training precision Bfloat16 enabled. FlashAttention (Dao et al., 2022) is used to make the long-context training more efficient. We run inference of our trained models using 1-2 Quadro RTX 6000 GPUs with 24GB memory.\n\n[2] Source: 2310.11511v1.pdf | Page: 11 | Section: 6 CONCLUSION\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nFlashattention: Fast and memory- efficient exact attention with io-awareness. In Advances in Neural Information Processing Systems, 2022. URL https://openreview.net/forum?id=H4DqfPSibmx. Shehzaad Dhuliawala, Mojtaba Komeili, Jing Xu, Roberta Raileanu, Xian Li, Asli Celikyilmaz, and Jason Weston. Chain-of-verification reduces hallucination in large language models.\n\n[3] Source: DCNN.pdf | Page: 1 | Section: None\nTo make training faster, we used non- saturating neurons and a very efficient GPU implementation of the convolution operation. To reduce overfitting in the fully connected layers we employed a recently developed reg- ularization method called “dropout” that proved to be very effective. We also entered a variant of this model in the ILSVRC-2012 competition and achieved a winning top-5 test error rate of 15.3%, compared to 26.2% achieved by the sec- ond-best entry.\n\n[4] Source: DCNN.pdf | Page: 3 | Section: 4.2. Training on multiple GPUs\nThis scheme reduces our top-1 and top-5 error rates by 1.7% and 1.2%, respectively, as compared with a net with half as many kernels in each convolutional layer trained on one GPU. The two-GPU net takes slightly less time to train than the one-GPU net.b\n\n[5] Source: DCNN.pdf | Page: 5 | Section: 5.2. Dropout\nThis technique reduces complex co adaptations of neurons, since a neuron cannot rely on the presence of particular other neurons. It is, therefore, forced to learn more robust features that are useful in conjunction with many different random subsets of the other neurons. At test time, we use all the neu- rons but multiply their outputs by 0.5, which is a reasonable approximation to taking the geometric mean of the predic- tive distributions produced by the exponentially-many drop- out networks.\n\n[6] Source: DCNN.pdf | Page: 2 | Section: 2. INTRODUCTION\nWe wrote a highly optimized GPU implementation of 2D convolution and all the other opera- tions inherent in training CNNs, which we make available publicly.a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4. The size of our network made overfitting a significant problem, even with 1.2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 5. Our final network contains five convo- lutional and three fully connected layers, and this depth seems to be important: we found that removing any convolu- tional layer (each of which contains no more than 1% of the model’s parameters) resulted in inferior performance.\n\n[7] Source: DCNN.pdf | Page: 3 | Section: 4.2. Training on multiple GPUs\n4.2. Training on multiple GPUs A single GTX 580 GPU has only 3GB of memory, which limits the maximum size of the networks that can be trained on it. It turns out that 1.2 million training examples are enough to train networks which are too big to fit on one GPU. Therefore we spread the net across two GPUs. Current GPUs are particularly well-suited to cross-GPU parallelization, as they are able to read from and write to one another’s mem- ory directly, without going through host machine memory.\n\n[8] Source: 2004.12832v2.pdf | Page: 5 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nOn the GPU, we compute a batch dot-product of Eq and D, possibly over multiple mini-batches. Te output materializes a 3-dimensional tensor that is a collection of cross-match matrices between q and each document. To compute the score of each docu- ment, we reduce its matrix across document terms via a max-pool (i.e., representing an exhaustive implementation of our MaxSim computation) and reduce across query terms via a summation. Fi- nally, we sort the k documents by their total scores.\n\n[9] Source: Attention is all you need.pdf | Page: 2 | Section: 2 Background\nIn the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as described in section 3.2. Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.\n\n[10] Source: DCNN.pdf | Page: 6 | Section: 7.1. Qualitative evaluations\nNotice the specialization exhibited by the two GPUs, a result of the restricted connectivity described in Section 4.5. The kernels on GPU 1 are largely color-agnostic, while the kernels on on GPU 2 are largely Figure 4. (Left) Eight ILSVRC-2010 test images and the five labels considered most probable by our model. The correct label is written under each image, and the probability assigned to the correct label is also shown with a red bar (if it happens to be in the top 5).\n\n[11] Source: DCNN.pdf | Page: 3 | Section: 4.2. Training on multiple GPUs\nThe parallelization scheme that we employ essentially puts half of the kernels (or neurons) on each GPU, with one addi- tional trick: the GPUs communicate only in certain layers. This means that, for example, the kernels of layer 3 take input from all kernel maps in layer 2. However, kernels in layer 4 take input only from those kernel maps in layer 3 which reside on the same GPU.\n\nEvidence guidance:\n- Rule-based subject attribution: FlashAttention; passage: “We run inference of our trained models using 1-2 Quadro RTX 6000 GPUs with 24GB memory.” [1]",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": ", 2020) to conduct multi-GPU distributed training, with training precision Bfloat16 enabled.",
+        "evidence_start": 44,
+        "evidence_end": 136,
+        "subject": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "identity": {
+          "subject": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            1128
+          ],
+          "identity_quote": "We use Deepspeed stage 3 (Rajbhandari et al.",
+          "identity_chunk_id": 1128
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1128,
+        "page": 19,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": ", 2022) is used to make the long-context training more efficient.",
+        "evidence_start": 163,
+        "evidence_end": 228,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1128
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1128,
+        "page": 19,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We run inference of our trained models using 1-2 Quadro RTX 6000 GPUs with 24GB memory.",
+        "evidence_start": 228,
+        "evidence_end": 316,
+        "subject": "FlashAttention",
+        "identity": {
+          "subject": "FlashAttention",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            1128
+          ],
+          "identity_quote": "We use Deepspeed stage 3 (Rajbhandari et al., 2020) to conduct multi-GPU distributed training, with training precision Bfloat16 enabled. FlashAttention (Dao et al., 2022) is used to make the long-context training more efficient.",
+          "identity_chunk_id": 1128
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1128,
+        "page": 19,
+        "citations": [
+          1
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Flashattention: Fast and memory- efficient exact attention with io-awareness.",
+        "evidence_start": 0,
+        "evidence_end": 77,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            1055,
+            1054,
+            1053,
+            1052,
+            1051
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1055,
+        "page": 11,
+        "citations": [
+          2
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In Advances in Neural Information Processing Systems, 2022.",
+        "evidence_start": 77,
+        "evidence_end": 137,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            1055,
+            1054,
+            1053,
+            1052,
+            1051
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1055,
+        "page": 11,
+        "citations": [
+          2
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Shehzaad Dhuliawala, Mojtaba Komeili, Jing Xu, Roberta Raileanu, Xian Li, Asli Celikyilmaz, and Jason Weston.",
+        "evidence_start": 186,
+        "evidence_end": 296,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            1055,
+            1054,
+            1053,
+            1052,
+            1051
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1055,
+        "page": 11,
+        "citations": [
+          2
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Chain-of-verification reduces hallucination in large language models.",
+        "evidence_start": 296,
+        "evidence_end": 366,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            1055,
+            1054,
+            1053,
+            1052,
+            1051
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1055,
+        "page": 11,
+        "citations": [
+          2
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "To make training faster, we used non- saturating neurons and a very efficient GPU implementation of the convolution operation.",
+        "evidence_start": 0,
+        "evidence_end": 126,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            103,
+            102,
+            101
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 103,
+        "page": 1,
+        "citations": [
+          3
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " To reduce overfitting in the fully connected layers we employed a recently developed reg- ularization method called “dropout” that proved to be very effective.",
+        "evidence_start": 126,
+        "evidence_end": 286,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            103,
+            102,
+            101
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 103,
+        "page": 1,
+        "citations": [
+          3
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "2% achieved by the sec- ond-best entry.",
+        "evidence_start": 428,
+        "evidence_end": 467,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            103,
+            102,
+            101
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 103,
+        "page": 1,
+        "citations": [
+          3
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "2%, respectively, as compared with a net with half as many kernels in each convolutional layer trained on one GPU.",
+        "evidence_start": 66,
+        "evidence_end": 180,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            141,
+            140,
+            139
+          ],
+          "identity_quote": "The parallelization scheme that we employ essentially puts half of the kernels (or neurons) on each GPU, with one addi- tional trick: the GPUs communicate only in certain layers. This means that, for example, the kernels of layer 3 take input from all kernel maps in layer 2. However, kernels in layer 4 take input only from those kernel maps in layer 3 which reside on the same GPU.",
+          "identity_chunk_id": 139
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 141,
+        "page": 3,
+        "citations": [
+          4,
+          11
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "This technique reduces complex co adaptations of neurons, since a neuron cannot rely on the presence of particular other neurons.",
+        "evidence_start": 0,
+        "evidence_end": 129,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            173,
+            172,
+            171
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 173,
+        "page": 5,
+        "citations": [
+          5
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " It is, therefore, forced to learn more robust features that are useful in conjunction with many different random subsets of the other neurons.",
+        "evidence_start": 129,
+        "evidence_end": 272,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            173,
+            172,
+            171
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 173,
+        "page": 5,
+        "citations": [
+          5
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "5, which is a reasonable approximation to taking the geometric mean of the predic- tive distributions produced by the exponentially-many drop- out networks.",
+        "evidence_start": 344,
+        "evidence_end": 500,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            173
+          ],
+          "identity_quote": "This technique reduces complex co adaptations of neurons, since a neuron cannot rely on the presence of particular other neurons. It is, therefore, forced to learn more robust features that are useful in conjunction with many different random subsets of the other neurons. At test time, we use all the neu- rons but multiply their outputs by 0.",
+          "identity_chunk_id": 173
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 173,
+        "page": 5,
+        "citations": [
+          5
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4.",
+        "evidence_start": 156,
+        "evidence_end": 308,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            121
+          ],
+          "identity_quote": "We wrote a highly optimized GPU implementation of 2D convolution and all the other opera- tions inherent in training CNNs, which we make available publicly.a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4. The size of our network made overfitting a significant problem, even with 1.2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 5. Our final network contains five convo- lutional and three fully connected layers, and this depth seems to be important: we found that removing any convolu- tional layer (each of which contains no more than 1% of the model’s parameters) resulted in inferior performance.",
+          "identity_chunk_id": 121
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 121,
+        "page": 2,
+        "citations": [
+          6
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 5.",
+        "evidence_start": 385,
+        "evidence_end": 523,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            121
+          ],
+          "identity_quote": "We wrote a highly optimized GPU implementation of 2D convolution and all the other opera- tions inherent in training CNNs, which we make available publicly.a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4. The size of our network made overfitting a significant problem, even with 1.",
+          "identity_chunk_id": 121
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 121,
+        "page": 2,
+        "citations": [
+          6
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Our final network contains five convo- lutional and three fully connected layers, and this depth seems to be important: we found that removing any convolu- tional layer (each of which contains no more than 1% of the model’s parameters) resulted in inferior performance.",
+        "evidence_start": 523,
+        "evidence_end": 793,
+        "subject": "DCNN",
+        "identity": {
+          "subject": "DCNN",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            121
+          ],
+          "identity_quote": "We wrote a highly optimized GPU implementation of 2D convolution and all the other opera- tions inherent in training CNNs, which we make available publicly.a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4. The size of our network made overfitting a significant problem, even with 1.2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 5.",
+          "identity_chunk_id": 121
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 121,
+        "page": 2,
+        "citations": [
+          6
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Training on multiple GPUs A single GTX 580 GPU has only 3GB of memory, which limits the maximum size of the networks that can be trained on it.",
+        "evidence_start": 4,
+        "evidence_end": 148,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            138
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 138,
+        "page": 3,
+        "citations": [
+          7
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "2 million training examples are enough to train networks which are too big to fit on one GPU.",
+        "evidence_start": 169,
+        "evidence_end": 262,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            138
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 138,
+        "page": 3,
+        "citations": [
+          7
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Therefore we spread the net across two GPUs.",
+        "evidence_start": 262,
+        "evidence_end": 307,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            138
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 138,
+        "page": 3,
+        "citations": [
+          7
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Current GPUs are particularly well-suited to cross-GPU parallelization, as they are able to read from and write to one another’s mem- ory directly, without going through host machine memory.",
+        "evidence_start": 307,
+        "evidence_end": 498,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            138
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 138,
+        "page": 3,
+        "citations": [
+          7
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "On the GPU, we compute a batch dot-product of Eq and D, possibly over multiple mini-batches.",
+        "evidence_start": 0,
+        "evidence_end": 92,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            622,
+            621,
+            620
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 622,
+        "page": 5,
+        "citations": [
+          8
+        ],
+        "record_id": "E22"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Te output materializes a 3-dimensional tensor that is a collection of cross-match matrices between q and each document.",
+        "evidence_start": 92,
+        "evidence_end": 212,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            622,
+            621,
+            620
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 622,
+        "page": 5,
+        "citations": [
+          8
+        ],
+        "record_id": "E23"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": ", representing an exhaustive implementation of our MaxSim computation) and reduce across query terms via a summation.",
+        "evidence_start": 317,
+        "evidence_end": 434,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            622,
+            621,
+            620
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 622,
+        "page": 5,
+        "citations": [
+          8
+        ],
+        "record_id": "E24"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Fi- nally, we sort the k documents by their total scores.",
+        "evidence_start": 434,
+        "evidence_end": 492,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            622,
+            621,
+            620
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 622,
+        "page": 5,
+        "citations": [
+          8
+        ],
+        "record_id": "E25"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.",
+        "evidence_start": 247,
+        "evidence_end": 426,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            15,
+            14
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 15,
+        "page": 2,
+        "citations": [
+          9
+        ],
+        "record_id": "E26"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The kernels on GPU 1 are largely color-agnostic, while the kernels on on GPU 2 are largely Figure 4.",
+        "evidence_start": 118,
+        "evidence_end": 219,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            188,
+            187
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 188,
+        "page": 6,
+        "citations": [
+          10
+        ],
+        "record_id": "E27"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " (Left) Eight ILSVRC-2010 test images and the five labels considered most probable by our model.",
+        "evidence_start": 219,
+        "evidence_end": 315,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            188
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 188,
+        "page": 6,
+        "citations": [
+          10
+        ],
+        "record_id": "E28"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The correct label is written under each image, and the probability assigned to the correct label is also shown with a red bar (if it happens to be in the top 5).",
+        "evidence_start": 315,
+        "evidence_end": 477,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            188
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 188,
+        "page": 6,
+        "citations": [
+          10
+        ],
+        "record_id": "E29"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 1128,
+        "text": "We use Deepspeed stage 3 (Rajbhandari et al., 2020) to conduct multi-GPU distributed training, with training precision Bfloat16 enabled. FlashAttention (Dao et al., 2022) is used to make the long-context training more efficient. We run inference of our trained models using 1-2 Quadro RTX 6000 GPUs with 24GB memory.",
+        "source": "2310.11511v1.pdf",
+        "page": 19,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "6 CONCLUSION"
+      },
+      {
+        "chunk_id": 1055,
+        "text": "Flashattention: Fast and memory- efficient exact attention with io-awareness. In Advances in Neural Information Processing Systems, 2022. URL https://openreview.net/forum?id=H4DqfPSibmx. Shehzaad Dhuliawala, Mojtaba Komeili, Jing Xu, Roberta Raileanu, Xian Li, Asli Celikyilmaz, and Jason Weston. Chain-of-verification reduces hallucination in large language models.",
+        "source": "2310.11511v1.pdf",
+        "page": 11,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "6 CONCLUSION"
+      },
+      {
+        "chunk_id": 103,
+        "text": "To make training faster, we used non- saturating neurons and a very efficient GPU implementation of the convolution operation. To reduce overfitting in the fully connected layers we employed a recently developed reg- ularization method called “dropout” that proved to be very effective. We also entered a variant of this model in the ILSVRC-2012 competition and achieved a winning top-5 test error rate of 15.3%, compared to 26.2% achieved by the sec- ond-best entry.",
+        "source": "DCNN.pdf",
+        "page": 1,
+        "title": "DCNN",
+        "section": null
+      },
+      {
+        "chunk_id": 141,
+        "text": "This scheme reduces our top-1 and top-5 error rates by 1.7% and 1.2%, respectively, as compared with a net with half as many kernels in each convolutional layer trained on one GPU. The two-GPU net takes slightly less time to train than the one-GPU net.b",
+        "source": "DCNN.pdf",
+        "page": 3,
+        "title": "DCNN",
+        "section": "4.2. Training on multiple GPUs"
+      },
+      {
+        "chunk_id": 173,
+        "text": "This technique reduces complex co adaptations of neurons, since a neuron cannot rely on the presence of particular other neurons. It is, therefore, forced to learn more robust features that are useful in conjunction with many different random subsets of the other neurons. At test time, we use all the neu- rons but multiply their outputs by 0.5, which is a reasonable approximation to taking the geometric mean of the predic- tive distributions produced by the exponentially-many drop- out networks.",
+        "source": "DCNN.pdf",
+        "page": 5,
+        "title": "DCNN",
+        "section": "5.2. Dropout"
+      },
+      {
+        "chunk_id": 121,
+        "text": "We wrote a highly optimized GPU implementation of 2D convolution and all the other opera- tions inherent in training CNNs, which we make available publicly.a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4. The size of our network made overfitting a significant problem, even with 1.2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 5. Our final network contains five convo- lutional and three fully connected layers, and this depth seems to be important: we found that removing any convolu- tional layer (each of which contains no more than 1% of the model’s parameters) resulted in inferior performance.",
+        "source": "DCNN.pdf",
+        "page": 2,
+        "title": "DCNN",
+        "section": "2. INTRODUCTION"
+      },
+      {
+        "chunk_id": 138,
+        "text": "4.2. Training on multiple GPUs A single GTX 580 GPU has only 3GB of memory, which limits the maximum size of the networks that can be trained on it. It turns out that 1.2 million training examples are enough to train networks which are too big to fit on one GPU. Therefore we spread the net across two GPUs. Current GPUs are particularly well-suited to cross-GPU parallelization, as they are able to read from and write to one another’s mem- ory directly, without going through host machine memory.",
+        "source": "DCNN.pdf",
+        "page": 3,
+        "title": "DCNN",
+        "section": "4.2. Training on multiple GPUs"
+      },
+      {
+        "chunk_id": 622,
+        "text": "On the GPU, we compute a batch dot-product of Eq and D, possibly over multiple mini-batches. Te output materializes a 3-dimensional tensor that is a collection of cross-match matrices between q and each document. To compute the score of each docu- ment, we reduce its matrix across document terms via a max-pool (i.e., representing an exhaustive implementation of our MaxSim computation) and reduce across query terms via a summation. Fi- nally, we sort the k documents by their total scores.",
+        "source": "2004.12832v2.pdf",
+        "page": 5,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "3 COLBERT"
+      },
+      {
+        "chunk_id": 15,
+        "text": "In the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as described in section 3.2. Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.",
+        "source": "Attention is all you need.pdf",
+        "page": 2,
+        "title": "Attention is All you Need",
+        "section": "2 Background"
+      },
+      {
+        "chunk_id": 188,
+        "text": "Notice the specialization exhibited by the two GPUs, a result of the restricted connectivity described in Section 4.5. The kernels on GPU 1 are largely color-agnostic, while the kernels on on GPU 2 are largely Figure 4. (Left) Eight ILSVRC-2010 test images and the five labels considered most probable by our model. The correct label is written under each image, and the probability assigned to the correct label is also shown with a red bar (if it happens to be in the top 5).",
+        "source": "DCNN.pdf",
+        "page": 6,
+        "title": "DCNN",
+        "section": "7.1. Qualitative evaluations"
+      },
+      {
+        "chunk_id": 139,
+        "text": "The parallelization scheme that we employ essentially puts half of the kernels (or neurons) on each GPU, with one addi- tional trick: the GPUs communicate only in certain layers. This means that, for example, the kernels of layer 3 take input from all kernel maps in layer 2. However, kernels in layer 4 take input only from those kernel maps in layer 3 which reside on the same GPU.",
+        "source": "DCNN.pdf",
+        "page": 3,
+        "title": "DCNN",
+        "section": "4.2. Training on multiple GPUs"
+      }
+    ],
+    "selected_ids": [
+      1128,
+      1055,
+      103,
+      141,
+      173,
+      121,
+      138,
+      622,
+      15,
+      188
+    ]
+  }
+}

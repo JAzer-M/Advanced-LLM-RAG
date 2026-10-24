@@ -1,0 +1,963 @@
+{
+  "question_id": "q2",
+  "query": "Why does the Transformer use positional encoding?",
+  "run_provenance": "fresh full main pipeline",
+  "decomposition": {
+    "needs_decomposition": false,
+    "sub_queries": []
+  },
+  "selected_ids": [
+    45,
+    38,
+    81,
+    48,
+    20,
+    80,
+    17,
+    67,
+    12,
+    47
+  ],
+  "context": "[1] Source: Attention is all you need.pdf | Page: 5 | Section: 3.5 Positional Encoding\n3.5 Positional Encoding Since our model contains no recurrence and no convolution, in order for the model to make use of the order of the sequence, we must inject some information about the relative or absolute position of the tokens in the sequence. To this end, we add \"positional encodings\" to the input embeddings at the\n\n[2] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\n3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].\n\n[3] Source: Attention is all you need.pdf | Page: 9 | Section: 7 Conclusion\n7 Conclusion In this work, we presented the Transformer, the ﬁrst sequence transduction model based entirely on attention, replacing the recurrent layers most commonly used in encoder-decoder architectures with multi-headed self-attention. For translation tasks, the Transformer can be trained signiﬁcantly faster than architectures based on recurrent or convolutional layers. On both WMT 2014 English-to-German and WMT 2014 English-to-French translation tasks, we achieve a new state of the art.\n\n[4] Source: Attention is all you need.pdf | Page: 6 | Section: 3.5 Positional Encoding\nIn this work, we use sine and cosine functions of different frequencies: PE(pos,2i) = sin(pos/100002i/dmodel) PE(pos,2i+1) = cos(pos/100002i/dmodel) where pos is the position and i is the dimension. That is, each dimension of the positional encoding corresponds to a sinusoid. The wavelengths form a geometric progression from 2π to 10000 · 2π.\n\n[5] Source: Attention is all you need.pdf | Page: 2 | Section: 3 Model Architecture\nThe Transformer follows this overall architecture using stacked self-attention and point-wise, fully connected layers for both the encoder and decoder, shown in the left and right halves of Figure 1, respectively.\n\n[6] Source: Attention is all you need.pdf | Page: 9 | Section: 6.2 Model Variations\nThis suggests that determining compatibility is not easy and that a more sophisticated compatibility function than dot product may be beneﬁcial. We further observe in rows (C) and (D) that, as expected, bigger models are better, and dropout is very helpful in avoiding over-ﬁtting. In row (E) we replace our sinusoidal positional encoding with learned positional embeddings [8], and observe nearly identical results to the base model.\n\n[7] Source: Attention is all you need.pdf | Page: 2 | Section: 2 Background\nTo the best of our knowledge, however, the Transformer is the ﬁrst transduction model relying entirely on self-attention to compute representations of its input and output without using sequence- aligned RNNs or convolution. In the following sections, we will describe the Transformer, motivate self-attention and discuss its advantages over models such as [14, 15] and [8].\n\n[8] Source: Attention is all you need.pdf | Page: 7 | Section: 5.4 Regularization\n5.4 Regularization We employ three types of regularization during training: Residual Dropout We apply dropout [27] to the output of each sub-layer, before it is added to the sub-layer input and normalized. In addition, we apply dropout to the sums of the embeddings and the positional encodings in both the encoder and decoder stacks.\n\n[9] Source: Attention is all you need.pdf | Page: 2 | Section: 1 Introduction\nIn this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output. The Transformer allows for signiﬁcantly more parallelization and can reach a new state of the art in translation quality after being trained for as little as twelve hours on eight P100 GPUs.\n\n[10] Source: Attention is all you need.pdf | Page: 6 | Section: 3.5 Positional Encoding\nLayer Type Complexity per Layer Sequential Maximum Path Length Operations Self-Attention O(n2 · d) O(1) O(1) Recurrent O(n · d2) O(n) O(n) Convolutional O(k · n · d2) O(1) O(logk(n)) Self-Attention (restricted) O(r · n · d) O(1) O(n/r) bottoms of the encoder and decoder stacks. The positional encodings have the same dimension dmodel as the embeddings, so that the two can be summed. There are many choices of positional encodings, learned and ﬁxed [8].",
+  "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\nContext:\n[1] Source: Attention is all you need.pdf | Page: 5 | Section: 3.5 Positional Encoding\n3.5 Positional Encoding Since our model contains no recurrence and no convolution, in order for the model to make use of the order of the sequence, we must inject some information about the relative or absolute position of the tokens in the sequence. To this end, we add \"positional encodings\" to the input embeddings at the\n\n[2] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\n3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].\n\n[3] Source: Attention is all you need.pdf | Page: 9 | Section: 7 Conclusion\n7 Conclusion In this work, we presented the Transformer, the ﬁrst sequence transduction model based entirely on attention, replacing the recurrent layers most commonly used in encoder-decoder architectures with multi-headed self-attention. For translation tasks, the Transformer can be trained signiﬁcantly faster than architectures based on recurrent or convolutional layers. On both WMT 2014 English-to-German and WMT 2014 English-to-French translation tasks, we achieve a new state of the art.\n\n[4] Source: Attention is all you need.pdf | Page: 6 | Section: 3.5 Positional Encoding\nIn this work, we use sine and cosine functions of different frequencies: PE(pos,2i) = sin(pos/100002i/dmodel) PE(pos,2i+1) = cos(pos/100002i/dmodel) where pos is the position and i is the dimension. That is, each dimension of the positional encoding corresponds to a sinusoid. The wavelengths form a geometric progression from 2π to 10000 · 2π.\n\n[5] Source: Attention is all you need.pdf | Page: 2 | Section: 3 Model Architecture\nThe Transformer follows this overall architecture using stacked self-attention and point-wise, fully connected layers for both the encoder and decoder, shown in the left and right halves of Figure 1, respectively.\n\n[6] Source: Attention is all you need.pdf | Page: 9 | Section: 6.2 Model Variations\nThis suggests that determining compatibility is not easy and that a more sophisticated compatibility function than dot product may be beneﬁcial. We further observe in rows (C) and (D) that, as expected, bigger models are better, and dropout is very helpful in avoiding over-ﬁtting. In row (E) we replace our sinusoidal positional encoding with learned positional embeddings [8], and observe nearly identical results to the base model.\n\n[7] Source: Attention is all you need.pdf | Page: 2 | Section: 2 Background\nTo the best of our knowledge, however, the Transformer is the ﬁrst transduction model relying entirely on self-attention to compute representations of its input and output without using sequence- aligned RNNs or convolution. In the following sections, we will describe the Transformer, motivate self-attention and discuss its advantages over models such as [14, 15] and [8].\n\n[8] Source: Attention is all you need.pdf | Page: 7 | Section: 5.4 Regularization\n5.4 Regularization We employ three types of regularization during training: Residual Dropout We apply dropout [27] to the output of each sub-layer, before it is added to the sub-layer input and normalized. In addition, we apply dropout to the sums of the embeddings and the positional encodings in both the encoder and decoder stacks.\n\n[9] Source: Attention is all you need.pdf | Page: 2 | Section: 1 Introduction\nIn this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output. The Transformer allows for signiﬁcantly more parallelization and can reach a new state of the art in translation quality after being trained for as little as twelve hours on eight P100 GPUs.\n\n[10] Source: Attention is all you need.pdf | Page: 6 | Section: 3.5 Positional Encoding\nLayer Type Complexity per Layer Sequential Maximum Path Length Operations Self-Attention O(n2 · d) O(1) O(1) Recurrent O(n · d2) O(n) O(n) Convolutional O(k · n · d2) O(1) O(logk(n)) Self-Attention (restricted) O(r · n · d) O(1) O(n/r) bottoms of the encoder and decoder stacks. The positional encodings have the same dimension dmodel as the embeddings, so that the two can be summed. There are many choices of positional encodings, learned and ﬁxed [8].\n\nQuestion:\nWhy does the Transformer use positional encoding?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages.\n\nAnswer:",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": "5 Positional Encoding Since our model contains no recurrence and no convolution, in order for the model to make use of the order of the sequence, we must inject some information about the relative or absolute position of the tokens in the sequence.",
+        "evidence_start": 2,
+        "evidence_end": 250,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            45
+          ],
+          "identity_quote": "3.5 Positional Encoding Since our model contains no recurrence and no convolution, in order for the model to make use of the order of the sequence, we must inject some information about the relative or absolute position of the tokens in the sequence. To this end, we add \"positional encodings\" to the input embeddings at the",
+          "identity_chunk_id": 45
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 45,
+        "page": 5,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " To this end, we add \"positional encodings\" to the input embeddings at the",
+        "evidence_start": 250,
+        "evidence_end": 324,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            45
+          ],
+          "identity_quote": "3.5 Positional Encoding Since our model contains no recurrence and no convolution, in order for the model to make use of the order of the sequence, we must inject some information about the relative or absolute position of the tokens in the sequence.",
+          "identity_chunk_id": 45
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 45,
+        "page": 5,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder.",
+        "evidence_start": 4,
+        "evidence_end": 270,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            38
+          ],
+          "identity_quote": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+          "identity_chunk_id": 38
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 38,
+        "page": 5,
+        "citations": [
+          2
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " This allows every position in the decoder to attend over all positions in the input sequence.",
+        "evidence_start": 270,
+        "evidence_end": 364,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            38
+          ],
+          "identity_quote": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder.",
+          "identity_chunk_id": 38
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 38,
+        "page": 5,
+        "citations": [
+          2
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+        "evidence_start": 364,
+        "evidence_end": 476,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            38
+          ],
+          "identity_quote": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence.",
+          "identity_chunk_id": 38
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 38,
+        "page": 5,
+        "citations": [
+          2
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "7 Conclusion In this work, we presented the Transformer, the ﬁrst sequence transduction model based entirely on attention, replacing the recurrent layers most commonly used in encoder-decoder architectures with multi-headed self-attention.",
+        "evidence_start": 0,
+        "evidence_end": 239,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            81
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 81,
+        "page": 9,
+        "citations": [
+          3
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " For translation tasks, the Transformer can be trained signiﬁcantly faster than architectures based on recurrent or convolutional layers.",
+        "evidence_start": 239,
+        "evidence_end": 376,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            81
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 81,
+        "page": 9,
+        "citations": [
+          3
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " On both WMT 2014 English-to-German and WMT 2014 English-to-French translation tasks, we achieve a new state of the art.",
+        "evidence_start": 376,
+        "evidence_end": 496,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            81
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 81,
+        "page": 9,
+        "citations": [
+          3
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "In this work, we use sine and cosine functions of different frequencies: PE(pos,2i) = sin(pos/100002i/dmodel) PE(pos,2i+1) = cos(pos/100002i/dmodel) where pos is the position and i is the dimension.",
+        "evidence_start": 0,
+        "evidence_end": 198,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            48
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 48,
+        "page": 6,
+        "citations": [
+          4
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " That is, each dimension of the positional encoding corresponds to a sinusoid.",
+        "evidence_start": 198,
+        "evidence_end": 276,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            48
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 48,
+        "page": 6,
+        "citations": [
+          4
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The wavelengths form a geometric progression from 2π to 10000 · 2π.",
+        "evidence_start": 276,
+        "evidence_end": 344,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            48
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 48,
+        "page": 6,
+        "citations": [
+          4
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "The Transformer follows this overall architecture using stacked self-attention and point-wise, fully connected layers for both the encoder and decoder, shown in the left and right halves of Figure 1, respectively.",
+        "evidence_start": 0,
+        "evidence_end": 213,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            20,
+            19,
+            18
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 20,
+        "page": 2,
+        "citations": [
+          5
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "This suggests that determining compatibility is not easy and that a more sophisticated compatibility function than dot product may be beneﬁcial.",
+        "evidence_start": 0,
+        "evidence_end": 144,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            80,
+            79
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 80,
+        "page": 9,
+        "citations": [
+          6
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We further observe in rows (C) and (D) that, as expected, bigger models are better, and dropout is very helpful in avoiding over-ﬁtting.",
+        "evidence_start": 144,
+        "evidence_end": 281,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            80,
+            79
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 80,
+        "page": 9,
+        "citations": [
+          6
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In row (E) we replace our sinusoidal positional encoding with learned positional embeddings [8], and observe nearly identical results to the base model.",
+        "evidence_start": 281,
+        "evidence_end": 434,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            80,
+            79
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 80,
+        "page": 9,
+        "citations": [
+          6
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "To the best of our knowledge, however, the Transformer is the ﬁrst transduction model relying entirely on self-attention to compute representations of its input and output without using sequence- aligned RNNs or convolution.",
+        "evidence_start": 0,
+        "evidence_end": 224,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            17,
+            16,
+            15,
+            14
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 17,
+        "page": 2,
+        "citations": [
+          7
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In the following sections, we will describe the Transformer, motivate self-attention and discuss its advantages over models such as [14, 15] and [8].",
+        "evidence_start": 224,
+        "evidence_end": 374,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            17,
+            16,
+            15,
+            14
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 17,
+        "page": 2,
+        "citations": [
+          7
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "4 Regularization We employ three types of regularization during training: Residual Dropout We apply dropout [27] to the output of each sub-layer, before it is added to the sub-layer input and normalized.",
+        "evidence_start": 2,
+        "evidence_end": 205,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            67
+          ],
+          "identity_quote": "5.4 Regularization We employ three types of regularization during training: Residual Dropout We apply dropout [27] to the output of each sub-layer, before it is added to the sub-layer input and normalized. In addition, we apply dropout to the sums of the embeddings and the positional encodings in both the encoder and decoder stacks.",
+          "identity_chunk_id": 67
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 67,
+        "page": 7,
+        "citations": [
+          8
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In addition, we apply dropout to the sums of the embeddings and the positional encodings in both the encoder and decoder stacks.",
+        "evidence_start": 205,
+        "evidence_end": 334,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            67
+          ],
+          "identity_quote": "5.4 Regularization We employ three types of regularization during training: Residual Dropout We apply dropout [27] to the output of each sub-layer, before it is added to the sub-layer input and normalized.",
+          "identity_chunk_id": 67
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 67,
+        "page": 7,
+        "citations": [
+          8
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "In this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output.",
+        "evidence_start": 0,
+        "evidence_end": 191,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            12
+          ],
+          "identity_quote": "In this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output. The Transformer allows for signiﬁcantly more parallelization and can reach a new state of the art in translation quality after being trained for as little as twelve hours on eight P100 GPUs.",
+          "identity_chunk_id": 12
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 12,
+        "page": 2,
+        "citations": [
+          9
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The Transformer allows for signiﬁcantly more parallelization and can reach a new state of the art in translation quality after being trained for as little as twelve hours on eight P100 GPUs.",
+        "evidence_start": 191,
+        "evidence_end": 382,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            12
+          ],
+          "identity_quote": "In this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output.",
+          "identity_chunk_id": 12
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 12,
+        "page": 2,
+        "citations": [
+          9
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Layer Type Complexity per Layer Sequential Maximum Path Length Operations Self-Attention O(n2 · d) O(1) O(1) Recurrent O(n · d2) O(n) O(n) Convolutional O(k · n · d2) O(1) O(logk(n)) Self-Attention (restricted) O(r · n · d) O(1) O(n/r) bottoms of the encoder and decoder stacks.",
+        "evidence_start": 0,
+        "evidence_end": 278,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            47,
+            46,
+            45
+          ],
+          "identity_quote": "3.5 Positional Encoding Since our model contains no recurrence and no convolution, in order for the model to make use of the order of the sequence, we must inject some information about the relative or absolute position of the tokens in the sequence. To this end, we add \"positional encodings\" to the input embeddings at the",
+          "identity_chunk_id": 45
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 47,
+        "page": 6,
+        "citations": [
+          10,
+          1
+        ],
+        "record_id": "E22"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The positional encodings have the same dimension dmodel as the embeddings, so that the two can be summed.",
+        "evidence_start": 278,
+        "evidence_end": 384,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            47,
+            46,
+            45
+          ],
+          "identity_quote": "3.5 Positional Encoding Since our model contains no recurrence and no convolution, in order for the model to make use of the order of the sequence, we must inject some information about the relative or absolute position of the tokens in the sequence. To this end, we add \"positional encodings\" to the input embeddings at the",
+          "identity_chunk_id": 45
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 47,
+        "page": 6,
+        "citations": [
+          10,
+          1
+        ],
+        "record_id": "E23"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " There are many choices of positional encodings, learned and ﬁxed [8].",
+        "evidence_start": 384,
+        "evidence_end": 454,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            47,
+            46,
+            45
+          ],
+          "identity_quote": "3.5 Positional Encoding Since our model contains no recurrence and no convolution, in order for the model to make use of the order of the sequence, we must inject some information about the relative or absolute position of the tokens in the sequence. To this end, we add \"positional encodings\" to the input embeddings at the",
+          "identity_chunk_id": 45
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 47,
+        "page": 6,
+        "citations": [
+          10,
+          1
+        ],
+        "record_id": "E24"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 45,
+        "text": "3.5 Positional Encoding Since our model contains no recurrence and no convolution, in order for the model to make use of the order of the sequence, we must inject some information about the relative or absolute position of the tokens in the sequence. To this end, we add \"positional encodings\" to the input embeddings at the",
+        "source": "Attention is all you need.pdf",
+        "page": 5,
+        "title": "Attention is All you Need",
+        "section": "3.5 Positional Encoding"
+      },
+      {
+        "chunk_id": 38,
+        "text": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+        "source": "Attention is all you need.pdf",
+        "page": 5,
+        "title": "Attention is All you Need",
+        "section": "3.2.3 Applications of Attention in our Model"
+      },
+      {
+        "chunk_id": 81,
+        "text": "7 Conclusion In this work, we presented the Transformer, the ﬁrst sequence transduction model based entirely on attention, replacing the recurrent layers most commonly used in encoder-decoder architectures with multi-headed self-attention. For translation tasks, the Transformer can be trained signiﬁcantly faster than architectures based on recurrent or convolutional layers. On both WMT 2014 English-to-German and WMT 2014 English-to-French translation tasks, we achieve a new state of the art.",
+        "source": "Attention is all you need.pdf",
+        "page": 9,
+        "title": "Attention is All you Need",
+        "section": "7 Conclusion"
+      },
+      {
+        "chunk_id": 48,
+        "text": "In this work, we use sine and cosine functions of different frequencies: PE(pos,2i) = sin(pos/100002i/dmodel) PE(pos,2i+1) = cos(pos/100002i/dmodel) where pos is the position and i is the dimension. That is, each dimension of the positional encoding corresponds to a sinusoid. The wavelengths form a geometric progression from 2π to 10000 · 2π.",
+        "source": "Attention is all you need.pdf",
+        "page": 6,
+        "title": "Attention is All you Need",
+        "section": "3.5 Positional Encoding"
+      },
+      {
+        "chunk_id": 20,
+        "text": "The Transformer follows this overall architecture using stacked self-attention and point-wise, fully connected layers for both the encoder and decoder, shown in the left and right halves of Figure 1, respectively.",
+        "source": "Attention is all you need.pdf",
+        "page": 2,
+        "title": "Attention is All you Need",
+        "section": "3 Model Architecture"
+      },
+      {
+        "chunk_id": 80,
+        "text": "This suggests that determining compatibility is not easy and that a more sophisticated compatibility function than dot product may be beneﬁcial. We further observe in rows (C) and (D) that, as expected, bigger models are better, and dropout is very helpful in avoiding over-ﬁtting. In row (E) we replace our sinusoidal positional encoding with learned positional embeddings [8], and observe nearly identical results to the base model.",
+        "source": "Attention is all you need.pdf",
+        "page": 9,
+        "title": "Attention is All you Need",
+        "section": "6.2 Model Variations"
+      },
+      {
+        "chunk_id": 17,
+        "text": "To the best of our knowledge, however, the Transformer is the ﬁrst transduction model relying entirely on self-attention to compute representations of its input and output without using sequence- aligned RNNs or convolution. In the following sections, we will describe the Transformer, motivate self-attention and discuss its advantages over models such as [14, 15] and [8].",
+        "source": "Attention is all you need.pdf",
+        "page": 2,
+        "title": "Attention is All you Need",
+        "section": "2 Background"
+      },
+      {
+        "chunk_id": 67,
+        "text": "5.4 Regularization We employ three types of regularization during training: Residual Dropout We apply dropout [27] to the output of each sub-layer, before it is added to the sub-layer input and normalized. In addition, we apply dropout to the sums of the embeddings and the positional encodings in both the encoder and decoder stacks.",
+        "source": "Attention is all you need.pdf",
+        "page": 7,
+        "title": "Attention is All you Need",
+        "section": "5.4 Regularization"
+      },
+      {
+        "chunk_id": 12,
+        "text": "In this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output. The Transformer allows for signiﬁcantly more parallelization and can reach a new state of the art in translation quality after being trained for as little as twelve hours on eight P100 GPUs.",
+        "source": "Attention is all you need.pdf",
+        "page": 2,
+        "title": "Attention is All you Need",
+        "section": "1 Introduction"
+      },
+      {
+        "chunk_id": 47,
+        "text": "Layer Type Complexity per Layer Sequential Maximum Path Length Operations Self-Attention O(n2 · d) O(1) O(1) Recurrent O(n · d2) O(n) O(n) Convolutional O(k · n · d2) O(1) O(logk(n)) Self-Attention (restricted) O(r · n · d) O(1) O(n/r) bottoms of the encoder and decoder stacks. The positional encodings have the same dimension dmodel as the embeddings, so that the two can be summed. There are many choices of positional encodings, learned and ﬁxed [8].",
+        "source": "Attention is all you need.pdf",
+        "page": 6,
+        "title": "Attention is All you Need",
+        "section": "3.5 Positional Encoding"
+      }
+    ],
+    "selected_ids": [
+      45,
+      38,
+      81,
+      48,
+      20,
+      80,
+      17,
+      67,
+      12,
+      47
+    ]
+  },
+  "answer": "The Transformer uses positional encoding because the model contains no recurrence and no convolution, so without injecting information about the relative or absolute position of tokens, it could not make use of the order of the sequence [1]. To this end, positional encodings are added to the input embeddings at the bottoms of the encoder and decoder stacks, and they have the same dimension dmodel as the embeddings so the two can be summed [1][10]. In this work, the positional encodings are sine and cosine functions of different frequencies, where each dimension corresponds to a sinusoid and the wavelengths form a geometric progression from 2π to 10000 · 2π [4]. As a model variation, replacing the sinusoidal positional encoding with learned positional embeddings produced nearly identical results to the base model [6].",
+  "original_answer": "The Transformer uses positional encoding because the model contains no recurrence and no convolution, so without injecting information about the relative or absolute position of tokens, it could not make use of the order of the sequence [1]. To this end, positional encodings are added to the input embeddings at the bottoms of the encoder and decoder stacks, and they have the same dimension dmodel as the embeddings so the two can be summed [1][10]. In this work, the positional encodings are sine and cosine functions of different frequencies, where each dimension corresponds to a sinusoid and the wavelengths form a geometric progression from 2π to 10000 · 2π [4]. As a model variation, replacing the sinusoidal positional encoding with learned positional embeddings produced nearly identical results to the base model [6].",
+  "citation_validation": {
+    "answer": "The Transformer uses positional encoding because the model contains no recurrence and no convolution, so without injecting information about the relative or absolute position of tokens, it could not make use of the order of the sequence [1]. To this end, positional encodings are added to the input embeddings at the bottoms of the encoder and decoder stacks, and they have the same dimension dmodel as the embeddings so the two can be summed [1][10]. In this work, the positional encodings are sine and cosine functions of different frequencies, where each dimension corresponds to a sinusoid and the wavelengths form a geometric progression from 2π to 10000 · 2π [4]. As a model variation, replacing the sinusoidal positional encoding with learned positional embeddings produced nearly identical results to the base model [6].",
+    "original_answer": "The Transformer uses positional encoding because the model contains no recurrence and no convolution, so without injecting information about the relative or absolute position of tokens, it could not make use of the order of the sequence [1]. To this end, positional encodings are added to the input embeddings at the bottoms of the encoder and decoder stacks, and they have the same dimension dmodel as the embeddings so the two can be summed [1][10]. In this work, the positional encodings are sine and cosine functions of different frequencies, where each dimension corresponds to a sinusoid and the wavelengths form a geometric progression from 2π to 10000 · 2π [4]. As a model variation, replacing the sinusoidal positional encoding with learned positional embeddings produced nearly identical results to the base model [6].",
+    "repair_candidate": null,
+    "initial_check": {
+      "cited_numbers": [
+        1,
+        4,
+        6,
+        10
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 45,
+          "source": "Attention is all you need.pdf",
+          "page": 5,
+          "text": "3.5 Positional Encoding Since our model contains no recurrence and no convolution, in order for the model to make use of the order of the sequence, we must inject some information about the relative or absolute position of the tokens in the sequence. To this end, we add \"positional encodings\" to the input embeddings at the"
+        },
+        {
+          "citation": 4,
+          "chunk_id": 48,
+          "source": "Attention is all you need.pdf",
+          "page": 6,
+          "text": "In this work, we use sine and cosine functions of different frequencies: PE(pos,2i) = sin(pos/100002i/dmodel) PE(pos,2i+1) = cos(pos/100002i/dmodel) where pos is the position and i is the dimension. That is, each dimension of the positional encoding corresponds to a sinusoid. The wavelengths form a geometric progression from 2π to 10000 · 2π."
+        },
+        {
+          "citation": 6,
+          "chunk_id": 80,
+          "source": "Attention is all you need.pdf",
+          "page": 9,
+          "text": "This suggests that determining compatibility is not easy and that a more sophisticated compatibility function than dot product may be beneﬁcial. We further observe in rows (C) and (D) that, as expected, bigger models are better, and dropout is very helpful in avoiding over-ﬁtting. In row (E) we replace our sinusoidal positional encoding with learned positional embeddings [8], and observe nearly identical results to the base model."
+        },
+        {
+          "citation": 10,
+          "chunk_id": 47,
+          "source": "Attention is all you need.pdf",
+          "page": 6,
+          "text": "Layer Type Complexity per Layer Sequential Maximum Path Length Operations Self-Attention O(n2 · d) O(1) O(1) Recurrent O(n · d2) O(n) O(n) Convolutional O(k · n · d2) O(1) O(logk(n)) Self-Attention (restricted) O(r · n · d) O(1) O(n/r) bottoms of the encoder and decoder stacks. The positional encodings have the same dimension dmodel as the embeddings, so that the two can be summed. There are many choices of positional encodings, learned and ﬁxed [8]."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "final_check": {
+      "cited_numbers": [
+        1,
+        4,
+        6,
+        10
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 45,
+          "source": "Attention is all you need.pdf",
+          "page": 5,
+          "text": "3.5 Positional Encoding Since our model contains no recurrence and no convolution, in order for the model to make use of the order of the sequence, we must inject some information about the relative or absolute position of the tokens in the sequence. To this end, we add \"positional encodings\" to the input embeddings at the"
+        },
+        {
+          "citation": 4,
+          "chunk_id": 48,
+          "source": "Attention is all you need.pdf",
+          "page": 6,
+          "text": "In this work, we use sine and cosine functions of different frequencies: PE(pos,2i) = sin(pos/100002i/dmodel) PE(pos,2i+1) = cos(pos/100002i/dmodel) where pos is the position and i is the dimension. That is, each dimension of the positional encoding corresponds to a sinusoid. The wavelengths form a geometric progression from 2π to 10000 · 2π."
+        },
+        {
+          "citation": 6,
+          "chunk_id": 80,
+          "source": "Attention is all you need.pdf",
+          "page": 9,
+          "text": "This suggests that determining compatibility is not easy and that a more sophisticated compatibility function than dot product may be beneﬁcial. We further observe in rows (C) and (D) that, as expected, bigger models are better, and dropout is very helpful in avoiding over-ﬁtting. In row (E) we replace our sinusoidal positional encoding with learned positional embeddings [8], and observe nearly identical results to the base model."
+        },
+        {
+          "citation": 10,
+          "chunk_id": 47,
+          "source": "Attention is all you need.pdf",
+          "page": 6,
+          "text": "Layer Type Complexity per Layer Sequential Maximum Path Length Operations Self-Attention O(n2 · d) O(1) O(1) Recurrent O(n · d2) O(n) O(n) Convolutional O(k · n · d2) O(1) O(logk(n)) Self-Attention (restricted) O(r · n · d) O(1) O(n/r) bottoms of the encoder and decoder stacks. The positional encodings have the same dimension dmodel as the embeddings, so that the two can be summed. There are many choices of positional encodings, learned and ﬁxed [8]."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "repair_attempted": false,
+    "repair_applied": false,
+    "repair_response": null,
+    "repair_prompt": null,
+    "unresolved_blocks": [],
+    "status": "not_needed",
+    "note": "Citation structure only; source relevance and claim meaning are not automatically verified."
+  },
+  "citation_structure": {
+    "cited_numbers": [
+      1,
+      4,
+      6,
+      10
+    ],
+    "invalid_numbers": [],
+    "malformed_markers": [],
+    "has_citations": true,
+    "require_citations": true,
+    "structure_passed": true,
+    "cited_sources": [
+      {
+        "citation": 1,
+        "chunk_id": 45,
+        "source": "Attention is all you need.pdf",
+        "page": 5,
+        "text": "3.5 Positional Encoding Since our model contains no recurrence and no convolution, in order for the model to make use of the order of the sequence, we must inject some information about the relative or absolute position of the tokens in the sequence. To this end, we add \"positional encodings\" to the input embeddings at the"
+      },
+      {
+        "citation": 4,
+        "chunk_id": 48,
+        "source": "Attention is all you need.pdf",
+        "page": 6,
+        "text": "In this work, we use sine and cosine functions of different frequencies: PE(pos,2i) = sin(pos/100002i/dmodel) PE(pos,2i+1) = cos(pos/100002i/dmodel) where pos is the position and i is the dimension. That is, each dimension of the positional encoding corresponds to a sinusoid. The wavelengths form a geometric progression from 2π to 10000 · 2π."
+      },
+      {
+        "citation": 6,
+        "chunk_id": 80,
+        "source": "Attention is all you need.pdf",
+        "page": 9,
+        "text": "This suggests that determining compatibility is not easy and that a more sophisticated compatibility function than dot product may be beneﬁcial. We further observe in rows (C) and (D) that, as expected, bigger models are better, and dropout is very helpful in avoiding over-ﬁtting. In row (E) we replace our sinusoidal positional encoding with learned positional embeddings [8], and observe nearly identical results to the base model."
+      },
+      {
+        "citation": 10,
+        "chunk_id": 47,
+        "source": "Attention is all you need.pdf",
+        "page": 6,
+        "text": "Layer Type Complexity per Layer Sequential Maximum Path Length Operations Self-Attention O(n2 · d) O(1) O(1) Recurrent O(n · d2) O(n) O(n) Convolutional O(k · n · d2) O(1) O(logk(n)) Self-Attention (restricted) O(r · n · d) O(1) O(n/r) bottoms of the encoder and decoder stacks. The positional encodings have the same dimension dmodel as the embeddings, so that the two can be summed. There are many choices of positional encodings, learned and ﬁxed [8]."
+      }
+    ],
+    "semantic_support": "requires_manual_review"
+  },
+  "status": "completed",
+  "api_calls": [
+    {
+      "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate exactly 2 or 3 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nWhy does the Transformer use positional encoding?\n",
+      "response": {
+        "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+        "requested_model": "cn:deepseek-v4.1-flash",
+        "reported_model": "deepseek-v4.1-flash",
+        "usage": {
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 256,
+          "cached_tokens": 256,
+          "completion_thinking_tokens": 0,
+          "completion_tokens": 19,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "credit": 0,
+          "prompt_cache_hit_tokens": 256,
+          "prompt_cache_miss_tokens": 250,
+          "prompt_cache_write_tokens": 0,
+          "prompt_tokens": 506,
+          "prompt_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 256,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "total_tokens": 525
+        },
+        "finish_reason": "stop",
+        "request_parameters": {
+          "model": "cn:deepseek-v4.1-flash",
+          "stream": false,
+          "thinking": {
+            "type": "disabled"
+          },
+          "temperature": 0,
+          "max_tokens": 4096
+        }
+      },
+      "elapsed_seconds": 1.77
+    },
+    {
+      "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\nContext:\n[1] Source: Attention is all you need.pdf | Page: 5 | Section: 3.5 Positional Encoding\n3.5 Positional Encoding Since our model contains no recurrence and no convolution, in order for the model to make use of the order of the sequence, we must inject some information about the relative or absolute position of the tokens in the sequence. To this end, we add \"positional encodings\" to the input embeddings at the\n\n[2] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\n3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].\n\n[3] Source: Attention is all you need.pdf | Page: 9 | Section: 7 Conclusion\n7 Conclusion In this work, we presented the Transformer, the ﬁrst sequence transduction model based entirely on attention, replacing the recurrent layers most commonly used in encoder-decoder architectures with multi-headed self-attention. For translation tasks, the Transformer can be trained signiﬁcantly faster than architectures based on recurrent or convolutional layers. On both WMT 2014 English-to-German and WMT 2014 English-to-French translation tasks, we achieve a new state of the art.\n\n[4] Source: Attention is all you need.pdf | Page: 6 | Section: 3.5 Positional Encoding\nIn this work, we use sine and cosine functions of different frequencies: PE(pos,2i) = sin(pos/100002i/dmodel) PE(pos,2i+1) = cos(pos/100002i/dmodel) where pos is the position and i is the dimension. That is, each dimension of the positional encoding corresponds to a sinusoid. The wavelengths form a geometric progression from 2π to 10000 · 2π.\n\n[5] Source: Attention is all you need.pdf | Page: 2 | Section: 3 Model Architecture\nThe Transformer follows this overall architecture using stacked self-attention and point-wise, fully connected layers for both the encoder and decoder, shown in the left and right halves of Figure 1, respectively.\n\n[6] Source: Attention is all you need.pdf | Page: 9 | Section: 6.2 Model Variations\nThis suggests that determining compatibility is not easy and that a more sophisticated compatibility function than dot product may be beneﬁcial. We further observe in rows (C) and (D) that, as expected, bigger models are better, and dropout is very helpful in avoiding over-ﬁtting. In row (E) we replace our sinusoidal positional encoding with learned positional embeddings [8], and observe nearly identical results to the base model.\n\n[7] Source: Attention is all you need.pdf | Page: 2 | Section: 2 Background\nTo the best of our knowledge, however, the Transformer is the ﬁrst transduction model relying entirely on self-attention to compute representations of its input and output without using sequence- aligned RNNs or convolution. In the following sections, we will describe the Transformer, motivate self-attention and discuss its advantages over models such as [14, 15] and [8].\n\n[8] Source: Attention is all you need.pdf | Page: 7 | Section: 5.4 Regularization\n5.4 Regularization We employ three types of regularization during training: Residual Dropout We apply dropout [27] to the output of each sub-layer, before it is added to the sub-layer input and normalized. In addition, we apply dropout to the sums of the embeddings and the positional encodings in both the encoder and decoder stacks.\n\n[9] Source: Attention is all you need.pdf | Page: 2 | Section: 1 Introduction\nIn this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output. The Transformer allows for signiﬁcantly more parallelization and can reach a new state of the art in translation quality after being trained for as little as twelve hours on eight P100 GPUs.\n\n[10] Source: Attention is all you need.pdf | Page: 6 | Section: 3.5 Positional Encoding\nLayer Type Complexity per Layer Sequential Maximum Path Length Operations Self-Attention O(n2 · d) O(1) O(1) Recurrent O(n · d2) O(n) O(n) Convolutional O(k · n · d2) O(1) O(logk(n)) Self-Attention (restricted) O(r · n · d) O(1) O(n/r) bottoms of the encoder and decoder stacks. The positional encodings have the same dimension dmodel as the embeddings, so that the two can be summed. There are many choices of positional encodings, learned and ﬁxed [8].\n\nQuestion:\nWhy does the Transformer use positional encoding?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages.\n\nAnswer:",
+      "response": {
+        "answer": "The Transformer uses positional encoding because the model contains no recurrence and no convolution, so without injecting information about the relative or absolute position of tokens, it could not make use of the order of the sequence [1]. To this end, positional encodings are added to the input embeddings at the bottoms of the encoder and decoder stacks, and they have the same dimension dmodel as the embeddings so the two can be summed [1][10]. In this work, the positional encodings are sine and cosine functions of different frequencies, where each dimension corresponds to a sinusoid and the wavelengths form a geometric progression from 2π to 10000 · 2π [4]. As a model variation, replacing the sinusoidal positional encoding with learned positional embeddings produced nearly identical results to the base model [6].",
+        "requested_model": "cn:deepseek-v4.1-flash",
+        "reported_model": "deepseek-v4.1-flash",
+        "usage": {
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 1280,
+          "cached_tokens": 1280,
+          "completion_thinking_tokens": 0,
+          "completion_tokens": 161,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "credit": 0.01,
+          "prompt_cache_hit_tokens": 1280,
+          "prompt_cache_miss_tokens": 154,
+          "prompt_cache_write_tokens": 0,
+          "prompt_tokens": 1434,
+          "prompt_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 1280,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "total_tokens": 1595
+        },
+        "finish_reason": "stop",
+        "request_parameters": {
+          "model": "cn:deepseek-v4.1-flash",
+          "stream": false,
+          "thinking": {
+            "type": "disabled"
+          },
+          "temperature": 0,
+          "max_tokens": 4096
+        }
+      },
+      "elapsed_seconds": 1.98
+    }
+  ],
+  "model_calls": 2,
+  "evaluation_code_sha256": {
+    "main.py": "e7e385c0238f501dffd204245f226d222742657d7c144a425d298fc0b9cc54fd",
+    "llm.py": "b68fcd071621630f08ad2cbcb848a6757a6a5beca6b9e900d3a8c0bd61039861",
+    "evaluation/run_answer_evaluation.py": "29c3362af51597133214a9ba4d4d14831fdb5a3715c3a0a5d1197f9b4082cee5",
+    "src/api_llm.py": "11aa14f5435a079e83671b031d1159fbbc0ee8c760c61c9c0cc7afd0db6ae0a7",
+    "src/bm25_retriever.py": "797da09fecdea22add83dee56cf9971070afcd59c7c20ee87243414edc672578",
+    "src/chunk_storage.py": "794ea2fa58826b895711a7d0f39a244f79e2a91aa39f99bec36955a235430630",
+    "src/chunking_recursive.py": "d4d6aae8d4f7b7f72503eadb440e72279e9d8fe1834b86cefd8f8d519fd1528f",
+    "src/chunking_semantic.py": "524e0c902cea605cfc5af30a15cdf5399b05807ad1ff49e2c16c94e0e29e22b8",
+    "src/citation_validation.py": "bb377d824dab10a03889683c9805cf68c7fd4eb9a21a0754cd522a86e084b445",
+    "src/embedding.py": "4b0e2699c9aeb23eb5db5585b64aa088ad9b1be4b01e33c95692f4f5f9624390",
+    "src/grounded_evidence.py": "78a7e63512970492f4e52050cb8b2312e2658281acfe979eb4476516ff8c2663",
+    "src/hybrid_retriever.py": "3306823530036b662f04e5790b1e74cb69b01051367385d33b388b87119fbe7d",
+    "src/hyde.py": "b0482baf2559e44d5d1d8c5a1bd31db046df279de53be70c7e8fb83bbcf32e72",
+    "src/numeric_evidence.py": "492fb546e6bc89b881843ece4b4582e533aec5aabbc58d61cd1cf158c4bac3d0",
+    "src/pdf_loader.py": "1f527ed51d318304858e4d95ffb85bd9c966961ef02157e9ce4f74b86f8fec64",
+    "src/query_decomposer.py": "52ecf1e6285c727065a67d96c5b67dfcb5630ed2cd412aecc4cbdc5289e916bd",
+    "src/query_rewriter.py": "404152aa9326445ecce721cd46be75fa14e19f99ff0a8fe7318e0c47f909d2c3",
+    "src/reranker.py": "d002ffda057534351ed6f0a3440e71a91ba0c45570e1be1e3789a0a630bf5de3",
+    "src/retriever.py": "1382bbb41922a0bfe2da00e16a6d31e4448861e4a31544abdbfc171ec34cab3a",
+    "src/vector_store.py": "161d8c6597038788d195f034b3ea77ac391d7497e53c6dc1a7dbcf5f83a7fecf",
+    "evaluation/questions.json": "824bff7d71ea4f71f0a262b42936b25fe5be28bb1bc629d3d01c252660abb7d5",
+    "evaluation/answer_review_protocol.md": "614a18fe1babb3cffc96aa7aaa8956c3d84b94a1ca10f37234fd8cd00ed3bf27",
+    "data/processed/chunks_semantic.json": "6bf158ec8cf2df07c438a7f3ff14806b2db6c6d7af4ce4fcb9fcf13a60603277",
+    "data/processed/faiss_semantic.index": "dd79e7f8afcc4daa09fbbdc1f85fb27c1d9641eff1003c1965a42343b8ad8b0b"
+  },
+  "elapsed_seconds": 7.76
+}

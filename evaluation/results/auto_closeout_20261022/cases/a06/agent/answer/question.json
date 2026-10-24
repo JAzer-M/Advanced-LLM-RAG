@@ -1,0 +1,113 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "How do DCNN and VGG center RGB pixel values before the network, and from which data are their subtracted means computed?",
+  "kb_version": "all-papers-8-20261020",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": false,
+    "drafts": [
+      "DCNN仅通过从每个像素减去在训练集上计算得到的平均活动值来中心化RGB像素值，并在中心化后的原始RGB值上训练网络[2]。VGG的预处理仅是从每个像素减去在训练集上计算得到的平均RGB值[1]。两者的相减均值均在训练集上计算，且均为逐像素减去；两项事实分别独立成立。"
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "DCNN仅通过从每个像素减去在训练集上计算得到的平均活动值来中心化RGB像素值，并在中心化后的原始RGB值上训练网络[2]。",
+              "reason": "答案明确说明DCNN是从每个像素减去在训练集上计算的平均活动值，并在中心化后的原始RGB值上训练，符合要求。",
+              "citations": [
+                {
+                  "number": 2,
+                  "quote": "We did not pre process the images in any other way, except for subtracting the mean activity over the training set from each pixel. So we trained our network on the (centered) raw RGB values of the pixels."
+                }
+              ]
+            },
+            {
+              "id": "r2",
+              "verdict": "pass",
+              "answer_quote": "VGG的预处理仅是从每个像素减去在训练集上计算得到的平均RGB值[1]。",
+              "reason": "答案明确说明VGG的预处理是从每个像素减去在训练集上计算的平均RGB值，符合要求。",
+              "citations": [
+                {
+                  "number": 1,
+                  "quote": "The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel."
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            1,
+            2
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 1,
+              "chunk_id": 232,
+              "source": "VGG.pdf",
+              "page": 2,
+              "text": "2.1 ARCHITECTURE During training, the input to our ConvNets is a ﬁxed-size 224 × 224 RGB image. The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel. The image is passed through a stack of convolutional (conv.) layers, where we use ﬁlters with a very small receptive ﬁeld: 3 × 3 (which is the smallest size to capture the notion of left/right, up/down, center)."
+            },
+            {
+              "citation": 2,
+              "chunk_id": 128,
+              "source": "DCNN.pdf",
+              "page": 2,
+              "text": "Therefore, we down-sampled the images to a fixed resolution of 256 × 256. Given a rectangular image, we first rescaled the image such that the shorter side was of length 256, and then cropped out the central 256 × 256 patch from the resulting image. We did not pre process the images in any other way, except for subtracting the mean activity over the training set from each pixel. So we trained our network on the (centered) raw RGB values of the pixels."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "DCNN仅通过从每个像素减去在训练集上计算得到的平均活动值来中心化RGB像素值，并在中心化后的原始RGB值上训练网络[2]。VGG的预处理仅是从每个像素减去在训练集上计算得到的平均RGB值[1]。两者的相减均值均在训练集上计算，且均为逐像素减去；两项事实分别独立成立。",
+    "citation_check": {
+      "cited_numbers": [
+        1,
+        2
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 232,
+          "source": "VGG.pdf",
+          "page": 2,
+          "text": "2.1 ARCHITECTURE During training, the input to our ConvNets is a ﬁxed-size 224 × 224 RGB image. The only pre- processing we do is subtracting the mean RGB value, computed on the training set, from each pixel. The image is passed through a stack of convolutional (conv.) layers, where we use ﬁlters with a very small receptive ﬁeld: 3 × 3 (which is the smallest size to capture the notion of left/right, up/down, center)."
+        },
+        {
+          "citation": 2,
+          "chunk_id": 128,
+          "source": "DCNN.pdf",
+          "page": 2,
+          "text": "Therefore, we down-sampled the images to a fixed resolution of 256 × 256. Given a rectangular image, we first rescaled the image such that the shorter side was of length 256, and then cropped out the central 256 × 256 patch from the resulting image. We did not pre process the images in any other way, except for subtracting the mean activity over the training set from each pixel. So we trained our network on the (centered) raw RGB values of the pixels."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

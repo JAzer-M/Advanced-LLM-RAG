@@ -1,3 +1,6 @@
+# 仅解析明确表达的卷积核数量、空间尺寸、通道和层号；每条结果保留原文及偏移。
+# 无法识别的字段保持未知，论文/模型主体归属由 grounded_evidence.py 另行处理。
+
 """Conservative parser for explicit English convolution-kernel specifications.
 
 No model calls or architecture defaults. Only ``N kernels of size H x W [x C]``
@@ -24,6 +27,7 @@ _BREAK = re.compile(r'[.!?;]\s+')
 _HYPHENATED = re.compile(r'(?<=[A-Za-z])-\s+(?=[a-z])')
 
 
+# 只在检索副本中合并 PDF 断词，同时保存映射，保证引文能还原到原文本位置。
 def _search_text(text):
     """Remove PDF word breaks in a shadow string, keeping a raw offset map."""
     removed = set()
@@ -33,6 +37,7 @@ def _search_text(text):
     return ''.join(text[index] for index in offsets), offsets
 
 
+# 按明确子句绑定卷积层号，避免把“上一层的输出”误当当前规格的主体。
 def _parse_prose(text):
     """Extract all supported specifications; unknown layers/channels stay None.
 
@@ -90,6 +95,7 @@ def _record(text, start, end, layer, count, h, w, channels):
             'evidence_quote': text[start:end]}
 
 
+# 只接受表头和数值格式均明确的四列表格，不能猜测任意 PDF 表格结构。
 def _parse_tables(text):
     lines = text.splitlines(keepends=True)
     offset, header_start, header = 0, None, None
@@ -113,6 +119,7 @@ def _parse_tables(text):
         offset += len(line)
 
 
+# 汇总三种支持格式的解析结果，未知层号/通道不按架构常识补全。
 def parse_convolution_specs(text):
     """Parse declared prose, labelled fields, and explicit Markdown tables.
 

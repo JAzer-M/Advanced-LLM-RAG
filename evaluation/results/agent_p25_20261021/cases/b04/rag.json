@@ -1,0 +1,814 @@
+{
+  "query": "After the token embeddings are projected in ColBERT, how are they normalized, and what equivalence and value range does this give to their dot products?",
+  "decomposition": {
+    "needs_decomposition": false,
+    "sub_queries": [],
+    "status": "not_needed"
+  },
+  "knowledge_base": {
+    "version": "all-papers-8-20261020",
+    "chunk_count": 1397,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/manifest.json",
+    "manifest_sha256": "9c4e2c26b4f11fe7baf526595630cbee2d325416ec0e497f417975fbd60779ef",
+    "files": {
+      "faiss.index": "ff1f4a3e38e20c0275ba79d805e6475639b3cea7a7a583f9c18c67ec8e40a2ed",
+      "chunks.json": "3e63d75abbe164ff8e135b1d66fd6b02d9479b2e037e289a726e7c542464593a"
+    }
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 120,
+    "global_top_ids": [
+      608,
+      611,
+      612,
+      605,
+      602,
+      580,
+      35,
+      683,
+      610,
+      641
+    ],
+    "protected_ids": [],
+    "sub_query_evidence": [],
+    "retrieval_anchor_ids": [
+      608
+    ],
+    "evidence_completion": {
+      "requested_sources": [
+        "2004.12832v2.pdf"
+      ],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        608,
+        611,
+        612,
+        605,
+        602,
+        580,
+        35,
+        683,
+        610,
+        641
+      ],
+      "retained_local_ids": [],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        608,
+        611,
+        612,
+        605,
+        602,
+        580,
+        35,
+        683,
+        610,
+        641
+      ],
+      "elapsed_seconds": 0.000207
+    }
+  },
+  "selected_ids": [
+    608,
+    611,
+    612,
+    605,
+    602,
+    580,
+    35,
+    683,
+    610,
+    641
+  ],
+  "context": "Original passages:\n[1] Source: 2004.12832v2.pdf | Page: 4 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nFinally, the output embeddings are normalized so each has L2 norm equal to one. Te result is that the dot-product of any two embeddings becomes equivalent to their cosine similarity, falling in the [−1, 1] range.\n\n[2] Source: 2004.12832v2.pdf | Page: 4 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nIn summary, given q = q0q1...ql and d = d0d1...dn, we compute the bags of embeddings Eq and Ed in the following manner, where # refers to the [mask] tokens: Eq := Normalize( CNN( BERT(“[Q]q0q1...ql##...#”) ) ) (1) Ed := Filter( Normalize( CNN( BERT(“[D]d0d1...dn”) ) ) ) (2) 3.3 Late Interaction Given the representation of a query q and a document d, the rel- evance score of d to q, denoted as Sq,d, is estimated via late in- teraction between their bags of contextualized embeddings.\n\n[3] Source: 2004.12832v2.pdf | Page: 4 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nAs mentioned before, this is conducted as a sum of maximum sim- ilarity computations, namely cosine similarity (implemented as dot-products due to the embedding normalization) or squared L2 distance.\n\n[4] Source: 2004.12832v2.pdf | Page: 4 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nGiven BERT’s representation of each token, our encoder passes the contextualized output representations through a linear layer with no activations. Tis layer serves to control the dimension of ColBERT’s embeddings, producing m-dimensional embeddings for the layer’s output size m. As we discuss later in more detail, we typically ﬁx m to be much smaller than BERT’s ﬁxed hidden dimension.\n\n[5] Source: 2004.12832v2.pdf | Page: 4 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nIf the query has fewer than a pre-deﬁned number of tokens Nq, we pad it with BERT’s special [mask] tokens up to length Nq (otherwise, we truncate it to the ﬁrst Nq tokens). Tis padded sequence of input tokens is then passed into BERT’s deep transformer architecture, which computes a contextualized representation of each token. We denote the padding with masked tokens as query augmen- tation, a step that allows BERT to produce query-based embeddings at the positions corresponding to these masks.\n\n[6] Source: 2004.12832v2.pdf | Page: 3 | Section: 2 RELATED WORK\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nIntroduced in 2018, ConvKNRM learns to match n- grams in the query and the document. Lastly, fastText+ConvKNRM (abbreviated fT+ConvKNRM) tackles the absence of rare words from typical word embeddings lists by adopting sub-word token embeddings.\n\n[7] Source: Attention is all you need.pdf | Page: 4 | Section: 3.2.2 Multi-Head Attention\n4To illustrate why the dot products get large, assume that the components of q and k are independent random variables with mean 0 and variance 1. Then their dot product, q · k = Pdk i=1 qiki, has mean 0 and variance dk.\n\n[8] Source: 2004.12832v2.pdf | Page: 9 | Section: 4 EXPERIMENTAL EVALUATION\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nModel [A] tackles this question: it uses BERT to produce a single embedding vector for the query and another for the document, extracted from BERT’s [CLS] contextualized embedding and expanded through a linear layer to dimension 4096 (which equals Nq × 128 = 32 × 128). Relevance is estimated as the inner product of the query’s and the document’s embeddings, which we found to perform beter than cosine similarity for single-vector re-ranking.\n\n[9] Source: 2004.12832v2.pdf | Page: 4 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nAf- ter passing this input sequence through BERT and the subsequent linear layer, the document encoder ﬁlters out the embeddings corre- sponding to punctuation symbols, determined via a pre-deﬁned list. Tis ﬁltering is meant to reduce the number of embeddings per doc- ument, as we hypothesize that (even contextualized) embeddings of punctuation are unnecessary for eﬀectiveness.\n\n[10] Source: 2004.12832v2.pdf | Page: 6 | Section: 4 EXPERIMENTAL EVALUATION\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nSimilar to [25], we ﬁne-tune all ColBERT models with learning rate 3 × 10−6 with a batch size 32. We ﬁx the number of embeddings per query at Nq = 32. We set our ColBERT embedding dimension m to be 128; §4.5 demonstrates ColBERT’s robustness to a wide range of embedding dimensions. For MS MARCO, we initialize the BERT components of the Col- BERT query and document encoders using Google’s oﬃcial pre- trained BERTbase model. Further, we train all models for 200k itera- tions.\n\n[11] Source: 2004.12832v2.pdf | Page: 6 | Section: 4 EXPERIMENTAL EVALUATION\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nTis amounts to roughly 3M queries generated by concatenating the title of a Wikipedia page with the heading of one of its sections. Tat section’s passages are marked as relevant to the corresponding query. Our evaluation is conducted on the test set used in TREC 2017 CAR, which contains 2,254 queries. Implementation. Our ColBERT models are implemented 4.1.2 using Python 3 and PyTorch 1. We use the popular transformers5 library for the pre-trained BERT model.\n\nEvidence guidance:\n- Rule-based subject attribution: CAR; passage: “Similar to [25], we ﬁne-tune all ColBERT models with learning rate 3 × 10−6 with a batch size 32.” [10][11]",
+  "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\nOriginal passages:\n[1] Source: 2004.12832v2.pdf | Page: 4 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nFinally, the output embeddings are normalized so each has L2 norm equal to one. Te result is that the dot-product of any two embeddings becomes equivalent to their cosine similarity, falling in the [−1, 1] range.\n\n[2] Source: 2004.12832v2.pdf | Page: 4 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nIn summary, given q = q0q1...ql and d = d0d1...dn, we compute the bags of embeddings Eq and Ed in the following manner, where # refers to the [mask] tokens: Eq := Normalize( CNN( BERT(“[Q]q0q1...ql##...#”) ) ) (1) Ed := Filter( Normalize( CNN( BERT(“[D]d0d1...dn”) ) ) ) (2) 3.3 Late Interaction Given the representation of a query q and a document d, the rel- evance score of d to q, denoted as Sq,d, is estimated via late in- teraction between their bags of contextualized embeddings.\n\n[3] Source: 2004.12832v2.pdf | Page: 4 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nAs mentioned before, this is conducted as a sum of maximum sim- ilarity computations, namely cosine similarity (implemented as dot-products due to the embedding normalization) or squared L2 distance.\n\n[4] Source: 2004.12832v2.pdf | Page: 4 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nGiven BERT’s representation of each token, our encoder passes the contextualized output representations through a linear layer with no activations. Tis layer serves to control the dimension of ColBERT’s embeddings, producing m-dimensional embeddings for the layer’s output size m. As we discuss later in more detail, we typically ﬁx m to be much smaller than BERT’s ﬁxed hidden dimension.\n\n[5] Source: 2004.12832v2.pdf | Page: 4 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nIf the query has fewer than a pre-deﬁned number of tokens Nq, we pad it with BERT’s special [mask] tokens up to length Nq (otherwise, we truncate it to the ﬁrst Nq tokens). Tis padded sequence of input tokens is then passed into BERT’s deep transformer architecture, which computes a contextualized representation of each token. We denote the padding with masked tokens as query augmen- tation, a step that allows BERT to produce query-based embeddings at the positions corresponding to these masks.\n\n[6] Source: 2004.12832v2.pdf | Page: 3 | Section: 2 RELATED WORK\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nIntroduced in 2018, ConvKNRM learns to match n- grams in the query and the document. Lastly, fastText+ConvKNRM (abbreviated fT+ConvKNRM) tackles the absence of rare words from typical word embeddings lists by adopting sub-word token embeddings.\n\n[7] Source: Attention is all you need.pdf | Page: 4 | Section: 3.2.2 Multi-Head Attention\n4To illustrate why the dot products get large, assume that the components of q and k are independent random variables with mean 0 and variance 1. Then their dot product, q · k = Pdk i=1 qiki, has mean 0 and variance dk.\n\n[8] Source: 2004.12832v2.pdf | Page: 9 | Section: 4 EXPERIMENTAL EVALUATION\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nModel [A] tackles this question: it uses BERT to produce a single embedding vector for the query and another for the document, extracted from BERT’s [CLS] contextualized embedding and expanded through a linear layer to dimension 4096 (which equals Nq × 128 = 32 × 128). Relevance is estimated as the inner product of the query’s and the document’s embeddings, which we found to perform beter than cosine similarity for single-vector re-ranking.\n\n[9] Source: 2004.12832v2.pdf | Page: 4 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nAf- ter passing this input sequence through BERT and the subsequent linear layer, the document encoder ﬁlters out the embeddings corre- sponding to punctuation symbols, determined via a pre-deﬁned list. Tis ﬁltering is meant to reduce the number of embeddings per doc- ument, as we hypothesize that (even contextualized) embeddings of punctuation are unnecessary for eﬀectiveness.\n\n[10] Source: 2004.12832v2.pdf | Page: 6 | Section: 4 EXPERIMENTAL EVALUATION\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nSimilar to [25], we ﬁne-tune all ColBERT models with learning rate 3 × 10−6 with a batch size 32. We ﬁx the number of embeddings per query at Nq = 32. We set our ColBERT embedding dimension m to be 128; §4.5 demonstrates ColBERT’s robustness to a wide range of embedding dimensions. For MS MARCO, we initialize the BERT components of the Col- BERT query and document encoders using Google’s oﬃcial pre- trained BERTbase model. Further, we train all models for 200k itera- tions.\n\n[11] Source: 2004.12832v2.pdf | Page: 6 | Section: 4 EXPERIMENTAL EVALUATION\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nTis amounts to roughly 3M queries generated by concatenating the title of a Wikipedia page with the heading of one of its sections. Tat section’s passages are marked as relevant to the corresponding query. Our evaluation is conducted on the test set used in TREC 2017 CAR, which contains 2,254 queries. Implementation. Our ColBERT models are implemented 4.1.2 using Python 3 and PyTorch 1. We use the popular transformers5 library for the pre-trained BERT model.\n\nEvidence guidance:\n- Rule-based subject attribution: CAR; passage: “Similar to [25], we ﬁne-tune all ColBERT models with learning rate 3 × 10−6 with a batch size 32.” [10][11]\n\nQuestion:\nAfter the token embeddings are projected in ColBERT, how are they normalized, and what equivalence and value range does this give to their dot products?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": "Finally, the output embeddings are normalized so each has L2 norm equal to one.",
+        "evidence_start": 0,
+        "evidence_end": 79,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            608,
+            607
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 608,
+        "page": 4,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Te result is that the dot-product of any two embeddings becomes equivalent to their cosine similarity, falling in the [−1, 1] range.",
+        "evidence_start": 79,
+        "evidence_end": 212,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            608,
+            607
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 608,
+        "page": 4,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "3 Late Interaction Given the representation of a query q and a document d, the rel- evance score of d to q, denoted as Sq,d, is estimated via late in- teraction between their bags of contextualized embeddings.",
+        "evidence_start": 277,
+        "evidence_end": 486,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            611,
+            610,
+            609
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 611,
+        "page": 4,
+        "citations": [
+          2
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "As mentioned before, this is conducted as a sum of maximum sim- ilarity computations, namely cosine similarity (implemented as dot-products due to the embedding normalization) or squared L2 distance.",
+        "evidence_start": 0,
+        "evidence_end": 199,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            612,
+            611,
+            610,
+            609
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 612,
+        "page": 4,
+        "citations": [
+          3
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Given BERT’s representation of each token, our encoder passes the contextualized output representations through a linear layer with no activations.",
+        "evidence_start": 0,
+        "evidence_end": 147,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            605,
+            604,
+            603,
+            602,
+            601
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 605,
+        "page": 4,
+        "citations": [
+          4
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Tis layer serves to control the dimension of ColBERT’s embeddings, producing m-dimensional embeddings for the layer’s output size m.",
+        "evidence_start": 147,
+        "evidence_end": 280,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            605,
+            604,
+            603,
+            602,
+            601
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 605,
+        "page": 4,
+        "citations": [
+          4
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " As we discuss later in more detail, we typically ﬁx m to be much smaller than BERT’s ﬁxed hidden dimension.",
+        "evidence_start": 280,
+        "evidence_end": 388,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            605
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 605,
+        "page": 4,
+        "citations": [
+          4
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "If the query has fewer than a pre-deﬁned number of tokens Nq, we pad it with BERT’s special [mask] tokens up to length Nq (otherwise, we truncate it to the ﬁrst Nq tokens).",
+        "evidence_start": 0,
+        "evidence_end": 172,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            602,
+            601
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 602,
+        "page": 4,
+        "citations": [
+          5
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Tis padded sequence of input tokens is then passed into BERT’s deep transformer architecture, which computes a contextualized representation of each token.",
+        "evidence_start": 172,
+        "evidence_end": 328,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            602,
+            601
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 602,
+        "page": 4,
+        "citations": [
+          5
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We denote the padding with masked tokens as query augmen- tation, a step that allows BERT to produce query-based embeddings at the positions corresponding to these masks.",
+        "evidence_start": 328,
+        "evidence_end": 499,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            602,
+            601
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 602,
+        "page": 4,
+        "citations": [
+          5
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Introduced in 2018, ConvKNRM learns to match n- grams in the query and the document.",
+        "evidence_start": 0,
+        "evidence_end": 84,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            580,
+            579
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 580,
+        "page": 3,
+        "citations": [
+          6
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Lastly, fastText+ConvKNRM (abbreviated fT+ConvKNRM) tackles the absence of rare words from typical word embeddings lists by adopting sub-word token embeddings.",
+        "evidence_start": 84,
+        "evidence_end": 244,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            580,
+            579
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 580,
+        "page": 3,
+        "citations": [
+          6
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "4To illustrate why the dot products get large, assume that the components of q and k are independent random variables with mean 0 and variance 1.",
+        "evidence_start": 0,
+        "evidence_end": 145,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            35,
+            34,
+            33
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 35,
+        "page": 4,
+        "citations": [
+          7
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Then their dot product, q · k = Pdk i=1 qiki, has mean 0 and variance dk.",
+        "evidence_start": 145,
+        "evidence_end": 219,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            35,
+            34,
+            33
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 35,
+        "page": 4,
+        "citations": [
+          7
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Model [A] tackles this question: it uses BERT to produce a single embedding vector for the query and another for the document, extracted from BERT’s [CLS] contextualized embedding and expanded through a linear layer to dimension 4096 (which equals Nq × 128 = 32 × 128).",
+        "evidence_start": 0,
+        "evidence_end": 269,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            683
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 683,
+        "page": 9,
+        "citations": [
+          8
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Relevance is estimated as the inner product of the query’s and the document’s embeddings, which we found to perform beter than cosine similarity for single-vector re-ranking.",
+        "evidence_start": 269,
+        "evidence_end": 444,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            683
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 683,
+        "page": 9,
+        "citations": [
+          8
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Af- ter passing this input sequence through BERT and the subsequent linear layer, the document encoder ﬁlters out the embeddings corre- sponding to punctuation symbols, determined via a pre-deﬁned list.",
+        "evidence_start": 0,
+        "evidence_end": 202,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            610,
+            609
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 610,
+        "page": 4,
+        "citations": [
+          9
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Tis ﬁltering is meant to reduce the number of embeddings per doc- ument, as we hypothesize that (even contextualized) embeddings of punctuation are unnecessary for eﬀectiveness.",
+        "evidence_start": 202,
+        "evidence_end": 380,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            610,
+            609
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 610,
+        "page": 4,
+        "citations": [
+          9
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Similar to [25], we ﬁne-tune all ColBERT models with learning rate 3 × 10−6 with a batch size 32.",
+        "evidence_start": 0,
+        "evidence_end": 97,
+        "subject": "CAR",
+        "identity": {
+          "subject": "CAR",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            641,
+            640
+          ],
+          "identity_quote": "Tis amounts to roughly 3M queries generated by concatenating the title of a Wikipedia page with the heading of one of its sections. Tat section’s passages are marked as relevant to the corresponding query. Our evaluation is conducted on the test set used in TREC 2017 CAR, which contains 2,254 queries. Implementation. Our ColBERT models are implemented 4.1.2 using Python 3 and PyTorch 1. We use the popular transformers5 library for the pre-trained BERT model.",
+          "identity_chunk_id": 640
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 641,
+        "page": 6,
+        "citations": [
+          10,
+          11
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We ﬁx the number of embeddings per query at Nq = 32.",
+        "evidence_start": 97,
+        "evidence_end": 150,
+        "subject": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "identity": {
+          "subject": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            641
+          ],
+          "identity_quote": "Similar to [25], we ﬁne-tune all ColBERT models with learning rate 3 × 10−6 with a batch size 32. We ﬁx the number of embeddings per query at Nq = 32. We set our ColBERT embedding dimension m to be 128; §4.5 demonstrates ColBERT’s robustness to a wide range of embedding dimensions. For MS MARCO, we initialize the BERT components of the Col- BERT query and document encoders using Google’s oﬃcial pre- trained BERTbase model. Further, we train all models for 200k itera- tions.",
+          "identity_chunk_id": 641
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 641,
+        "page": 6,
+        "citations": [
+          10
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "5 demonstrates ColBERT’s robustness to a wide range of embedding dimensions.",
+        "evidence_start": 206,
+        "evidence_end": 282,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            641
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 641,
+        "page": 6,
+        "citations": [
+          10
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " For MS MARCO, we initialize the BERT components of the Col- BERT query and document encoders using Google’s oﬃcial pre- trained BERTbase model.",
+        "evidence_start": 282,
+        "evidence_end": 426,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            641
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 641,
+        "page": 6,
+        "citations": [
+          10
+        ],
+        "record_id": "E22"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Further, we train all models for 200k itera- tions.",
+        "evidence_start": 426,
+        "evidence_end": 478,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            641
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 641,
+        "page": 6,
+        "citations": [
+          10
+        ],
+        "record_id": "E23"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 608,
+        "text": "Finally, the output embeddings are normalized so each has L2 norm equal to one. Te result is that the dot-product of any two embeddings becomes equivalent to their cosine similarity, falling in the [−1, 1] range.",
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "3 COLBERT"
+      },
+      {
+        "chunk_id": 611,
+        "text": "In summary, given q = q0q1...ql and d = d0d1...dn, we compute the bags of embeddings Eq and Ed in the following manner, where # refers to the [mask] tokens: Eq := Normalize( CNN( BERT(“[Q]q0q1...ql##...#”) ) ) (1) Ed := Filter( Normalize( CNN( BERT(“[D]d0d1...dn”) ) ) ) (2) 3.3 Late Interaction Given the representation of a query q and a document d, the rel- evance score of d to q, denoted as Sq,d, is estimated via late in- teraction between their bags of contextualized embeddings.",
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "3 COLBERT"
+      },
+      {
+        "chunk_id": 612,
+        "text": "As mentioned before, this is conducted as a sum of maximum sim- ilarity computations, namely cosine similarity (implemented as dot-products due to the embedding normalization) or squared L2 distance.",
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "3 COLBERT"
+      },
+      {
+        "chunk_id": 605,
+        "text": "Given BERT’s representation of each token, our encoder passes the contextualized output representations through a linear layer with no activations. Tis layer serves to control the dimension of ColBERT’s embeddings, producing m-dimensional embeddings for the layer’s output size m. As we discuss later in more detail, we typically ﬁx m to be much smaller than BERT’s ﬁxed hidden dimension.",
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "3 COLBERT"
+      },
+      {
+        "chunk_id": 602,
+        "text": "If the query has fewer than a pre-deﬁned number of tokens Nq, we pad it with BERT’s special [mask] tokens up to length Nq (otherwise, we truncate it to the ﬁrst Nq tokens). Tis padded sequence of input tokens is then passed into BERT’s deep transformer architecture, which computes a contextualized representation of each token. We denote the padding with masked tokens as query augmen- tation, a step that allows BERT to produce query-based embeddings at the positions corresponding to these masks.",
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "3 COLBERT"
+      },
+      {
+        "chunk_id": 580,
+        "text": "Introduced in 2018, ConvKNRM learns to match n- grams in the query and the document. Lastly, fastText+ConvKNRM (abbreviated fT+ConvKNRM) tackles the absence of rare words from typical word embeddings lists by adopting sub-word token embeddings.",
+        "source": "2004.12832v2.pdf",
+        "page": 3,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "2 RELATED WORK"
+      },
+      {
+        "chunk_id": 35,
+        "text": "4To illustrate why the dot products get large, assume that the components of q and k are independent random variables with mean 0 and variance 1. Then their dot product, q · k = Pdk i=1 qiki, has mean 0 and variance dk.",
+        "source": "Attention is all you need.pdf",
+        "page": 4,
+        "title": "Attention is All you Need",
+        "section": "3.2.2 Multi-Head Attention"
+      },
+      {
+        "chunk_id": 683,
+        "text": "Model [A] tackles this question: it uses BERT to produce a single embedding vector for the query and another for the document, extracted from BERT’s [CLS] contextualized embedding and expanded through a linear layer to dimension 4096 (which equals Nq × 128 = 32 × 128). Relevance is estimated as the inner product of the query’s and the document’s embeddings, which we found to perform beter than cosine similarity for single-vector re-ranking.",
+        "source": "2004.12832v2.pdf",
+        "page": 9,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "4 EXPERIMENTAL EVALUATION"
+      },
+      {
+        "chunk_id": 610,
+        "text": "Af- ter passing this input sequence through BERT and the subsequent linear layer, the document encoder ﬁlters out the embeddings corre- sponding to punctuation symbols, determined via a pre-deﬁned list. Tis ﬁltering is meant to reduce the number of embeddings per doc- ument, as we hypothesize that (even contextualized) embeddings of punctuation are unnecessary for eﬀectiveness.",
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "3 COLBERT"
+      },
+      {
+        "chunk_id": 641,
+        "text": "Similar to [25], we ﬁne-tune all ColBERT models with learning rate 3 × 10−6 with a batch size 32. We ﬁx the number of embeddings per query at Nq = 32. We set our ColBERT embedding dimension m to be 128; §4.5 demonstrates ColBERT’s robustness to a wide range of embedding dimensions. For MS MARCO, we initialize the BERT components of the Col- BERT query and document encoders using Google’s oﬃcial pre- trained BERTbase model. Further, we train all models for 200k itera- tions.",
+        "source": "2004.12832v2.pdf",
+        "page": 6,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "4 EXPERIMENTAL EVALUATION"
+      },
+      {
+        "chunk_id": 640,
+        "text": "Tis amounts to roughly 3M queries generated by concatenating the title of a Wikipedia page with the heading of one of its sections. Tat section’s passages are marked as relevant to the corresponding query. Our evaluation is conducted on the test set used in TREC 2017 CAR, which contains 2,254 queries. Implementation. Our ColBERT models are implemented 4.1.2 using Python 3 and PyTorch 1. We use the popular transformers5 library for the pre-trained BERT model.",
+        "source": "2004.12832v2.pdf",
+        "page": 6,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "4 EXPERIMENTAL EVALUATION"
+      }
+    ],
+    "selected_ids": [
+      608,
+      611,
+      612,
+      605,
+      602,
+      580,
+      35,
+      683,
+      610,
+      641
+    ]
+  },
+  "answer": "在 ColBERT 中，输出嵌入会被归一化，使每个嵌入的 L2 范数等于 1 [1]。这样任意两个嵌入的点积就等价于它们的余弦相似度，取值落在 [−1, 1] 区间内 [1]。",
+  "original_answer": "在 ColBERT 中，输出嵌入会被归一化，使每个嵌入的 L2 范数等于 1 [1]。这样任意两个嵌入的点积就等价于它们的余弦相似度，取值落在 [−1, 1] 区间内 [1]。",
+  "citation_validation": {
+    "answer": "在 ColBERT 中，输出嵌入会被归一化，使每个嵌入的 L2 范数等于 1 [1]。这样任意两个嵌入的点积就等价于它们的余弦相似度，取值落在 [−1, 1] 区间内 [1]。",
+    "original_answer": "在 ColBERT 中，输出嵌入会被归一化，使每个嵌入的 L2 范数等于 1 [1]。这样任意两个嵌入的点积就等价于它们的余弦相似度，取值落在 [−1, 1] 区间内 [1]。",
+    "repair_candidate": null,
+    "initial_check": {
+      "cited_numbers": [
+        1
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 608,
+          "source": "2004.12832v2.pdf",
+          "page": 4,
+          "text": "Finally, the output embeddings are normalized so each has L2 norm equal to one. Te result is that the dot-product of any two embeddings becomes equivalent to their cosine similarity, falling in the [−1, 1] range."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "final_check": {
+      "cited_numbers": [
+        1
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 608,
+          "source": "2004.12832v2.pdf",
+          "page": 4,
+          "text": "Finally, the output embeddings are normalized so each has L2 norm equal to one. Te result is that the dot-product of any two embeddings becomes equivalent to their cosine similarity, falling in the [−1, 1] range."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "repair_attempted": false,
+    "normalization_applied": false,
+    "repair_applied": false,
+    "repair_response": null,
+    "repair_prompt": null,
+    "unresolved_blocks": [],
+    "status": "not_needed",
+    "note": "Citation structure only; source relevance and claim meaning are not automatically verified."
+  },
+  "status": "completed"
+}

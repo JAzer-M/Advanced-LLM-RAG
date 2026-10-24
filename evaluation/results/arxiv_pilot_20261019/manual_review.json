@@ -1,0 +1,136 @@
+{
+  "basis": "Human review against the actual Top-10 passages, cited source text and six rendered PDF pages. Preselected Gold was not edited after retrieval. These are development examples, not a blind accuracy benchmark.",
+  "retrieval_review": [
+    {
+      "id": "p1",
+      "status": "sufficient_alternative_evidence",
+      "sources": [
+        {
+          "source": "2005.11401v4.pdf",
+          "page": 18,
+          "chunk_id": 542,
+          "rank": 9
+        }
+      ],
+      "note": "正文第3页Gold未召回，但第18页参数附录已召回：BART-large为406M。正文400M是另一处表述，回答应说明来源与精度；不能据Gold漏检判为无证据。"
+    },
+    {
+      "id": "p2",
+      "status": "sufficient",
+      "sources": [
+        {
+          "source": "2004.04906v3.pdf",
+          "page": 3,
+          "chunk_id": 28,
+          "rank": 1
+        }
+      ],
+      "note": "问题与段落向量点积有直接文字与公式依据。"
+    },
+    {
+      "id": "p3",
+      "status": "sufficient_alternative_evidence",
+      "sources": [
+        {
+          "source": "2004.12832v2.pdf",
+          "page": 2,
+          "chunk_id": 195,
+          "rank": 1
+        },
+        {
+          "source": "2004.12832v2.pdf",
+          "page": 4,
+          "chunk_id": 218,
+          "rank": 3
+        },
+        {
+          "source": "2004.12832v2.pdf",
+          "page": 5,
+          "chunk_id": 244,
+          "rank": 7
+        }
+      ],
+      "note": "预设第4页Gold片段219未入Top-10；第2页195和第5页244直接说明每查询token最大匹配后求和。"
+    },
+    {
+      "id": "p4",
+      "status": "sufficient",
+      "sources": [
+        {
+          "source": "2310.11511v1.pdf",
+          "page": 4,
+          "chunk_id": 587,
+          "rank": 2
+        }
+      ],
+      "note": "Table 1四种token及定义均保留在同一片段，四条预设Gold命中。"
+    },
+    {
+      "id": "p5",
+      "status": "sufficient_alternative_evidence",
+      "sources": [
+        {
+          "source": "2401.15884v3.pdf",
+          "page": 4,
+          "chunk_id": 877,
+          "rank": 1
+        }
+      ],
+      "note": "预设第3页Gold未入Top-10，第4页Figure 2图注直接给出三种判断及触发动作。"
+    },
+    {
+      "id": "p6",
+      "status": "partial",
+      "sources": [
+        {
+          "source": "2004.04906v3.pdf",
+          "page": 3,
+          "chunk_id": 28,
+          "rank": 2
+        },
+        {
+          "source": "2004.12832v2.pdf",
+          "page": 1,
+          "chunk_id": 170,
+          "rank": 4
+        },
+        {
+          "source": "2004.12832v2.pdf",
+          "page": 5,
+          "chunk_id": 235,
+          "rank": 7
+        }
+      ],
+      "note": "DPR点积可支持；ColBERT有late interaction概述，但缺少清晰MaxSim求和文字，片段235公式抽取乱序，跨论文要点不齐。"
+    },
+    {
+      "id": "p7",
+      "status": "no_positive_gold",
+      "note": "没有这台Mac上五种方法的实测延迟。不能把现有同一RAG程序的查询耗时或论文其他硬件数字当作五种算法的本机测速。"
+    }
+  ],
+  "answer_review": [
+    {
+      "id": "p3",
+      "verdict": "supported_complete",
+      "citations_checked": [
+        1,
+        3,
+        7
+      ],
+      "note": "最大匹配后求和及GPU实现细节均有对应原文；没有命中预设片段219不影响这些替代证据的有效性。"
+    },
+    {
+      "id": "p6",
+      "verdict": "supported_but_incomplete",
+      "note": "DPR部分有支持，ColBERT部分只概述延迟交互并明确缺少具体打分细节；另有BM25对比内容偏离重点。不是完整回答。",
+      "decomposition_diagnosis": "真实API返回needs_decomposition=true和4个子问题，超出代码要求2至3个后被静默回退为false；并非模型完全未识别比较题。"
+    },
+    {
+      "id": "p7",
+      "verdict": "correct_refusal_with_presentation_issues",
+      "note": "明确拒绝编造本机排名和毫秒数；引用的其他硬件数字有来源且明确不是本机结果，但答复切为英文，并增加了不必要的旁支数字。"
+    }
+  ],
+  "conclusion": "五道单篇题均有可用证据；本轮三道完整问答为单篇完整、跨篇部分完成、缺失证据题正确拒答并存在语言/简洁性问题。不能据此报告通用准确率。"
+}

@@ -1,0 +1,60 @@
+{
+  "query": "How do DPR and ColBERT differ in question and document representations and relevance scoring?",
+  "purpose": "One decomposition after offline terminology probe; no named scoring function or Gold injected.",
+  "code_sha256": "52d3f2329e88d57ca8e4b150925710f13905d18d4b10d006ca523602e0aa41f2",
+  "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nHow do DPR and ColBERT differ in question and document representations and relevance scoring?\n",
+  "response": {
+    "answer": "{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How does DPR represent questions and documents as vectors or embeddings?\",\n        \"How does DPR compute similarity or relevance scoring between question and document representations?\",\n        \"How does ColBERT represent questions and documents as vectors or embeddings?\",\n        \"How does ColBERT compute similarity or relevance scoring between question and document representations?\"\n    ]\n}",
+    "requested_model": "cn:deepseek-v4.1-flash",
+    "reported_model": "deepseek-v4.1-flash",
+    "usage": {
+      "cache_creation_input_tokens": 0,
+      "cache_read_input_tokens": 0,
+      "cached_tokens": 0,
+      "completion_thinking_tokens": 0,
+      "completion_tokens": 88,
+      "completion_tokens_details": {
+        "accepted_prediction_tokens": 0,
+        "audio_tokens": 0,
+        "cached_tokens": 0,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": 0
+      },
+      "credit": 0.01,
+      "prompt_cache_hit_tokens": 0,
+      "prompt_cache_miss_tokens": 639,
+      "prompt_cache_write_tokens": 0,
+      "prompt_tokens": 639,
+      "prompt_tokens_details": {
+        "accepted_prediction_tokens": 0,
+        "audio_tokens": 0,
+        "cached_tokens": 0,
+        "reasoning_tokens": 0,
+        "rejected_prediction_tokens": 0
+      },
+      "total_tokens": 727
+    },
+    "finish_reason": "stop",
+    "request_parameters": {
+      "model": "cn:deepseek-v4.1-flash",
+      "stream": false,
+      "thinking": {
+        "type": "disabled"
+      },
+      "temperature": 0,
+      "max_tokens": 4096
+    }
+  },
+  "elapsed_seconds": 2.303,
+  "validated_decomposition": {
+    "needs_decomposition": true,
+    "sub_queries": [
+      "How does DPR represent questions and documents as vectors or embeddings?",
+      "How does DPR compute similarity or relevance scoring between question and document representations?",
+      "How does ColBERT represent questions and documents as vectors or embeddings?",
+      "How does ColBERT compute similarity or relevance scoring between question and document representations?"
+    ],
+    "status": "accepted",
+    "proposed_count": 4
+  }
+}

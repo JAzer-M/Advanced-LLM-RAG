@@ -1,0 +1,40 @@
+{
+  "question_sets": [
+    "arxiv_next_questions_en.json",
+    "arxiv_pilot_questions_en.json",
+    "arxiv_validation_questions_en.json",
+    "questions.json"
+  ],
+  "knowledge_bases": [
+    "arxiv-pilot-5-20261019",
+    "semantic-mac-20261019"
+  ],
+  "candidate_k": 60,
+  "final_k": 10,
+  "max_supplement_rounds": 1,
+  "max_supplement_queries": 4,
+  "candidate_policies": 1,
+  "use_gold_in_retrieval": false,
+  "offline_api_calls": 0,
+  "conditional_generation_api_cap": 4,
+  "adoption_gates": {
+    "new_cross_recall_gain_at_least": 0.1,
+    "new_map_mrr_max_drop": 0.01,
+    "each_old_set_recall_max_drop": 0,
+    "each_old_set_map_mrr_max_drop": 0.01,
+    "warm_median_retrieval_time_ratio_max": 2.0
+  },
+  "fixed_cache": "Use stored decompositions and original rewrites per old set. Identity rewrite for new questions matches main.",
+  "stop": "One policy and one combined evaluation; do not tune using scores. Keep feature opt-in if any gate fails.",
+  "status": "frozen_before_implementation",
+  "policy": {
+    "name": "source_scoped_single_round",
+    "trigger": "At least two explicitly named papers; a subquestion has fewer than two source-matched local Top-3 passages selected, or a requested-paper global Top-10 passage was excluded. These are coverage heuristics, not semantic sufficiency.",
+    "paper_identity": "Unique aliases derived only from titles/source names: leading title label, full title and 2-4-word initialisms; do not match RAG inside Self-RAG or RAG-Token. No hand-coded paper names or Gold.",
+    "supplement": "For at most four affected tasks, retrieve Dense and BM25 scoped to that paper (60 each), fuse to 60, retain first-pass candidates, and rerank source-matched task candidates. No second round.",
+    "selection": "Reserve original-query global first half of budget, then original RRF first hit and each source-matched task first hit, fill remaining slots globally. Return original-query global order.",
+    "global_scores": "Reuse first-pass original-query Cross-Encoder scores; score only new IDs with that same query/model. Never compare scores from different subquestions.",
+    "non_trigger": "Return baseline IDs exactly.",
+    "timing": "Report measured completion overhead and evaluation retrieval time; ratio is an evaluation cost proxy, not production latency or P95."
+  }
+}

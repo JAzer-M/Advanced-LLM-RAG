@@ -1,0 +1,825 @@
+{
+  "query": "In VGG multi-scale training, how is the training scale S sampled, what crop size is used, and how is the multi-scale model initialized?",
+  "decomposition": {
+    "needs_decomposition": true,
+    "sub_queries": [
+      "In VGG multi-scale training, how is the training scale S sampled?",
+      "In VGG multi-scale training, what crop size is used?",
+      "In VGG multi-scale training, how is the multi-scale model initialized?"
+    ],
+    "status": "accepted",
+    "proposed_count": 3
+  },
+  "knowledge_base": {
+    "version": "all-papers-8-20261020",
+    "chunk_count": 1397,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/manifest.json",
+    "manifest_sha256": "9c4e2c26b4f11fe7baf526595630cbee2d325416ec0e497f417975fbd60779ef",
+    "files": {
+      "faiss.index": "ff1f4a3e38e20c0275ba79d805e6475639b3cea7a7a583f9c18c67ec8e40a2ed",
+      "chunks.json": "3e63d75abbe164ff8e135b1d66fd6b02d9479b2e037e289a726e7c542464593a"
+    }
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 190,
+    "global_top_ids": [
+      262,
+      260,
+      261,
+      264,
+      334,
+      293,
+      287,
+      288,
+      253,
+      283
+    ],
+    "protected_ids": [
+      262,
+      260
+    ],
+    "sub_query_evidence": [
+      {
+        "query": "In VGG multi-scale training, how is the training scale S sampled?",
+        "top_ids": [
+          262,
+          261,
+          293
+        ]
+      },
+      {
+        "query": "In VGG multi-scale training, what crop size is used?",
+        "top_ids": [
+          260,
+          259,
+          271
+        ]
+      },
+      {
+        "query": "In VGG multi-scale training, how is the multi-scale model initialized?",
+        "top_ids": [
+          262,
+          334,
+          264
+        ]
+      }
+    ],
+    "retrieval_anchor_ids": [
+      261
+    ],
+    "evidence_completion": {
+      "requested_sources": [
+        "VGG.pdf"
+      ],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        262,
+        260,
+        261,
+        264,
+        334,
+        293,
+        287,
+        288,
+        259,
+        271
+      ],
+      "retained_local_ids": [
+        262,
+        260,
+        261,
+        264,
+        334,
+        293,
+        259,
+        271
+      ],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        262,
+        260,
+        261,
+        264,
+        334,
+        293,
+        287,
+        288,
+        259,
+        271
+      ],
+      "elapsed_seconds": 0.000209
+    }
+  },
+  "selected_ids": [
+    262,
+    260,
+    261,
+    264,
+    334,
+    293,
+    287,
+    288,
+    259,
+    271
+  ],
+  "context": "[1] Source: VGG.pdf | Page: 4 | Section: 3.1 TRAINING\nIn our experiments, we evaluated models trained at two ﬁxed scales: S = 256 (which has been widely used in the prior art (Krizhevsky et al., 2012; Zeiler & Fergus, 2013; Sermanet et al., 2014)) and S = 384. Given a ConvNet conﬁguration, we ﬁrst trained the network using S = 256. To speed-up training of the S = 384 network, it was initialised with the weights pre-trained with S = 256, and we used a smaller initial learning rate of 10−3. The second approach to setting S is multi-scale training, where each training image is individually rescaled by randomly sampling S from a certain range [Smin, Smax] (we used Smin = 256 and Smax = 512).\n\n[2] Source: VGG.pdf | Page: 4 | Section: 3.1 TRAINING\nLet S be the smallest side of an isotropically-rescaled training image, from which the ConvNet input is cropped (we also refer to S as the training scale). While the crop size is ﬁxed to 224 × 224, in principle S can take on any value not less than 224: for S = 224 the crop will capture whole-image statistics, completely spanning the smallest side of a training image; for S ≫224 the crop will correspond to a small part of the image, containing a small object or an object part.\n\n[3] Source: VGG.pdf | Page: 4 | Section: 3.1 TRAINING\nWe consider two approaches for setting the training scale S. The ﬁrst is to ﬁx S, which corresponds to single-scale training (note that image content within the sampled crops can still represent multi- scale image statistics).\n\n[4] Source: VGG.pdf | Page: 5 | Section: 3.1 TRAINING\nPublished as a conference paper at ICLR 2015 model is trained to recognise objects over a wide range of scales. For speed reasons, we trained multi-scale models by ﬁne-tuning all layers of a single-scale model with the same conﬁguration, pre-trained with ﬁxed S = 384.\n\n[5] Source: VGG.pdf | Page: 10 | Section: 5 CONCLUSION\nWe trained two localisation models, each on a single scale: S = 256 and S = 384 (due to the time constraints, we did not use training scale jittering for our ILSVRC-2014 submission). Training was initialised with the corresponding classiﬁcation models (trained on the same scales), and the initial learning rate was set to 10−3. We explored both ﬁne-tuning all layers and ﬁne-tuning only the ﬁrst two fully-connected layers, as done in (Sermanet et al., 2014).\n\n[6] Source: VGG.pdf | Page: 7 | Section: 4.3 MULTI-CROP EVALUATION\nAs noted above, we hypothesize that this is due to a different treatment of convolution boundary conditions. Table 5: ConvNet evaluation techniques comparison. In all experiments the training scale S was sampled from [256; 512], and three test scales Q were considered: {256, 384, 512}.\n\n[7] Source: VGG.pdf | Page: 6 | Section: 4.2 MULTI-SCALE EVALUATION\nIt consists of running a model over several rescaled versions of a test image (corresponding to different values of Q), followed by averaging the resulting class posteriors. Considering that a large discrepancy between training and testing scales leads to a drop in performance, the models trained with ﬁxed S were evaluated over three test image sizes, close to the training one: Q = {S −32, S, S + 32}.\n\n[8] Source: VGG.pdf | Page: 6 | Section: 4.2 MULTI-SCALE EVALUATION\nAt the same time, scale jittering at training time allows the network to be applied to a wider range of scales at test time, so the model trained with variable S ∈[Smin; Smax] was evaluated over a larger range of sizes Q = {Smin, 0.5(Smin + Smax), Smax}.\n\n[9] Source: VGG.pdf | Page: 4 | Section: 3.1 TRAINING\nTo obtain the ﬁxed-size 224×224 ConvNet input images, they were randomly cropped from rescaled training images (one crop per image per SGD iteration). To further augment the training set, the crops underwent random horizontal ﬂipping and random RGB colour shift (Krizhevsky et al., 2012). Training image rescaling is explained below. Training image size.\n\n[10] Source: VGG.pdf | Page: 5 | Section: 3.2 TESTING\nWhile we believe that in practice the increased computation time of multiple crops does not justify the potential gains in accuracy, for reference we also evaluate our networks using 50 crops per scale (5 × 5 regular grid with 2 ﬂips), for a total of 150 crops over 3 scales, which is comparable to 144 crops over 4 scales used by Szegedy et al.\n\n[11] Source: VGG.pdf | Page: 10 | Section: 5 CONCLUSION\nApart from the last bounding box prediction layer, we use the ConvNet architecture D (Table 1), which contains 16 weight layers and was found to be the best-performing in the classiﬁcation task (Sect. Training of localisation ConvNets is similar to that of the classiﬁcation ConvNets (Sect. The main difference is that we replace the logistic regression objective with a Euclidean loss, which penalises the deviation of the predicted bounding box parameters from the ground-truth.",
+  "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\n[1] Source: VGG.pdf | Page: 4 | Section: 3.1 TRAINING\nIn our experiments, we evaluated models trained at two ﬁxed scales: S = 256 (which has been widely used in the prior art (Krizhevsky et al., 2012; Zeiler & Fergus, 2013; Sermanet et al., 2014)) and S = 384. Given a ConvNet conﬁguration, we ﬁrst trained the network using S = 256. To speed-up training of the S = 384 network, it was initialised with the weights pre-trained with S = 256, and we used a smaller initial learning rate of 10−3. The second approach to setting S is multi-scale training, where each training image is individually rescaled by randomly sampling S from a certain range [Smin, Smax] (we used Smin = 256 and Smax = 512).\n\n[2] Source: VGG.pdf | Page: 4 | Section: 3.1 TRAINING\nLet S be the smallest side of an isotropically-rescaled training image, from which the ConvNet input is cropped (we also refer to S as the training scale). While the crop size is ﬁxed to 224 × 224, in principle S can take on any value not less than 224: for S = 224 the crop will capture whole-image statistics, completely spanning the smallest side of a training image; for S ≫224 the crop will correspond to a small part of the image, containing a small object or an object part.\n\n[3] Source: VGG.pdf | Page: 4 | Section: 3.1 TRAINING\nWe consider two approaches for setting the training scale S. The ﬁrst is to ﬁx S, which corresponds to single-scale training (note that image content within the sampled crops can still represent multi- scale image statistics).\n\n[4] Source: VGG.pdf | Page: 5 | Section: 3.1 TRAINING\nPublished as a conference paper at ICLR 2015 model is trained to recognise objects over a wide range of scales. For speed reasons, we trained multi-scale models by ﬁne-tuning all layers of a single-scale model with the same conﬁguration, pre-trained with ﬁxed S = 384.\n\n[5] Source: VGG.pdf | Page: 10 | Section: 5 CONCLUSION\nWe trained two localisation models, each on a single scale: S = 256 and S = 384 (due to the time constraints, we did not use training scale jittering for our ILSVRC-2014 submission). Training was initialised with the corresponding classiﬁcation models (trained on the same scales), and the initial learning rate was set to 10−3. We explored both ﬁne-tuning all layers and ﬁne-tuning only the ﬁrst two fully-connected layers, as done in (Sermanet et al., 2014).\n\n[6] Source: VGG.pdf | Page: 7 | Section: 4.3 MULTI-CROP EVALUATION\nAs noted above, we hypothesize that this is due to a different treatment of convolution boundary conditions. Table 5: ConvNet evaluation techniques comparison. In all experiments the training scale S was sampled from [256; 512], and three test scales Q were considered: {256, 384, 512}.\n\n[7] Source: VGG.pdf | Page: 6 | Section: 4.2 MULTI-SCALE EVALUATION\nIt consists of running a model over several rescaled versions of a test image (corresponding to different values of Q), followed by averaging the resulting class posteriors. Considering that a large discrepancy between training and testing scales leads to a drop in performance, the models trained with ﬁxed S were evaluated over three test image sizes, close to the training one: Q = {S −32, S, S + 32}.\n\n[8] Source: VGG.pdf | Page: 6 | Section: 4.2 MULTI-SCALE EVALUATION\nAt the same time, scale jittering at training time allows the network to be applied to a wider range of scales at test time, so the model trained with variable S ∈[Smin; Smax] was evaluated over a larger range of sizes Q = {Smin, 0.5(Smin + Smax), Smax}.\n\n[9] Source: VGG.pdf | Page: 4 | Section: 3.1 TRAINING\nTo obtain the ﬁxed-size 224×224 ConvNet input images, they were randomly cropped from rescaled training images (one crop per image per SGD iteration). To further augment the training set, the crops underwent random horizontal ﬂipping and random RGB colour shift (Krizhevsky et al., 2012). Training image rescaling is explained below. Training image size.\n\n[10] Source: VGG.pdf | Page: 5 | Section: 3.2 TESTING\nWhile we believe that in practice the increased computation time of multiple crops does not justify the potential gains in accuracy, for reference we also evaluate our networks using 50 crops per scale (5 × 5 regular grid with 2 ﬂips), for a total of 150 crops over 3 scales, which is comparable to 144 crops over 4 scales used by Szegedy et al.\n\n[11] Source: VGG.pdf | Page: 10 | Section: 5 CONCLUSION\nApart from the last bounding box prediction layer, we use the ConvNet architecture D (Table 1), which contains 16 weight layers and was found to be the best-performing in the classiﬁcation task (Sect. Training of localisation ConvNets is similar to that of the classiﬁcation ConvNets (Sect. The main difference is that we replace the logistic regression objective with a Euclidean loss, which penalises the deviation of the predicted bounding box parameters from the ground-truth.\n\nQuestion:\nIn VGG multi-scale training, how is the training scale S sampled, what crop size is used, and how is the multi-scale model initialized?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": " Given a ConvNet conﬁguration, we ﬁrst trained the network using S = 256.",
+        "evidence_start": 206,
+        "evidence_end": 279,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            262,
+            261,
+            260,
+            259,
+            258
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 262,
+        "page": 4,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " To speed-up training of the S = 384 network, it was initialised with the weights pre-trained with S = 256, and we used a smaller initial learning rate of 10−3.",
+        "evidence_start": 279,
+        "evidence_end": 439,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            262,
+            261,
+            260,
+            259,
+            258
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 262,
+        "page": 4,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The second approach to setting S is multi-scale training, where each training image is individually rescaled by randomly sampling S from a certain range [Smin, Smax] (we used Smin = 256 and Smax = 512).",
+        "evidence_start": 439,
+        "evidence_end": 642,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            262,
+            261,
+            260,
+            259,
+            258
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 262,
+        "page": 4,
+        "citations": [
+          1
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Let S be the smallest side of an isotropically-rescaled training image, from which the ConvNet input is cropped (we also refer to S as the training scale).",
+        "evidence_start": 0,
+        "evidence_end": 155,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            260,
+            259,
+            258,
+            257,
+            256
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 260,
+        "page": 4,
+        "citations": [
+          2
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " While the crop size is ﬁxed to 224 × 224, in principle S can take on any value not less than 224: for S = 224 the crop will capture whole-image statistics, completely spanning the smallest side of a training image; for S ≫224 the crop will correspond to a small part of the image, containing a small object or an object part.",
+        "evidence_start": 155,
+        "evidence_end": 481,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            260,
+            259,
+            258,
+            257,
+            256
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 260,
+        "page": 4,
+        "citations": [
+          2
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "We consider two approaches for setting the training scale S.",
+        "evidence_start": 0,
+        "evidence_end": 60,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            261,
+            260,
+            259,
+            258,
+            257
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 261,
+        "page": 4,
+        "citations": [
+          3
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The ﬁrst is to ﬁx S, which corresponds to single-scale training (note that image content within the sampled crops can still represent multi- scale image statistics).",
+        "evidence_start": 60,
+        "evidence_end": 226,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            261,
+            260,
+            259,
+            258,
+            257
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 261,
+        "page": 4,
+        "citations": [
+          3
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Published as a conference paper at ICLR 2015 model is trained to recognise objects over a wide range of scales.",
+        "evidence_start": 0,
+        "evidence_end": 111,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            264,
+            263,
+            262,
+            261,
+            260
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 264,
+        "page": 5,
+        "citations": [
+          4
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " For speed reasons, we trained multi-scale models by ﬁne-tuning all layers of a single-scale model with the same conﬁguration, pre-trained with ﬁxed S = 384.",
+        "evidence_start": 111,
+        "evidence_end": 268,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            264,
+            263,
+            262,
+            261,
+            260
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 264,
+        "page": 5,
+        "citations": [
+          4
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "We trained two localisation models, each on a single scale: S = 256 and S = 384 (due to the time constraints, we did not use training scale jittering for our ILSVRC-2014 submission).",
+        "evidence_start": 0,
+        "evidence_end": 182,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            334,
+            333
+          ],
+          "identity_quote": "Apart from the last bounding box prediction layer, we use the ConvNet architecture D (Table 1), which contains 16 weight layers and was found to be the best-performing in the classiﬁcation task (Sect. Training of localisation ConvNets is similar to that of the classiﬁcation ConvNets (Sect. The main difference is that we replace the logistic regression objective with a Euclidean loss, which penalises the deviation of the predicted bounding box parameters from the ground-truth.",
+          "identity_chunk_id": 333
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 334,
+        "page": 10,
+        "citations": [
+          5,
+          11
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Training was initialised with the corresponding classiﬁcation models (trained on the same scales), and the initial learning rate was set to 10−3.",
+        "evidence_start": 182,
+        "evidence_end": 328,
+        "subject": "VGG",
+        "identity": {
+          "subject": "VGG",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            334,
+            333
+          ],
+          "identity_quote": "Apart from the last bounding box prediction layer, we use the ConvNet architecture D (Table 1), which contains 16 weight layers and was found to be the best-performing in the classiﬁcation task (Sect. Training of localisation ConvNets is similar to that of the classiﬁcation ConvNets (Sect. The main difference is that we replace the logistic regression objective with a Euclidean loss, which penalises the deviation of the predicted bounding box parameters from the ground-truth.",
+          "identity_chunk_id": 333
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 334,
+        "page": 10,
+        "citations": [
+          5,
+          11
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "As noted above, we hypothesize that this is due to a different treatment of convolution boundary conditions.",
+        "evidence_start": 0,
+        "evidence_end": 108,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            293,
+            292
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 293,
+        "page": 7,
+        "citations": [
+          6
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Table 5: ConvNet evaluation techniques comparison.",
+        "evidence_start": 108,
+        "evidence_end": 159,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            293,
+            292
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 293,
+        "page": 7,
+        "citations": [
+          6
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In all experiments the training scale S was sampled from [256; 512], and three test scales Q were considered: {256, 384, 512}.",
+        "evidence_start": 159,
+        "evidence_end": 286,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            293,
+            292
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 293,
+        "page": 7,
+        "citations": [
+          6
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "It consists of running a model over several rescaled versions of a test image (corresponding to different values of Q), followed by averaging the resulting class posteriors.",
+        "evidence_start": 0,
+        "evidence_end": 173,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            287,
+            286
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 287,
+        "page": 6,
+        "citations": [
+          7
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Considering that a large discrepancy between training and testing scales leads to a drop in performance, the models trained with ﬁxed S were evaluated over three test image sizes, close to the training one: Q = {S −32, S, S + 32}.",
+        "evidence_start": 173,
+        "evidence_end": 404,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            287,
+            286
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 287,
+        "page": 6,
+        "citations": [
+          7
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "To obtain the ﬁxed-size 224×224 ConvNet input images, they were randomly cropped from rescaled training images (one crop per image per SGD iteration).",
+        "evidence_start": 0,
+        "evidence_end": 150,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            259,
+            258,
+            257,
+            256,
+            255
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 259,
+        "page": 4,
+        "citations": [
+          9
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Training image rescaling is explained below.",
+        "evidence_start": 288,
+        "evidence_end": 333,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            259,
+            258,
+            257,
+            256,
+            255
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 259,
+        "page": 4,
+        "citations": [
+          9
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "While we believe that in practice the increased computation time of multiple crops does not justify the potential gains in accuracy, for reference we also evaluate our networks using 50 crops per scale (5 × 5 regular grid with 2 ﬂips), for a total of 150 crops over 3 scales, which is comparable to 144 crops over 4 scales used by Szegedy et al.",
+        "evidence_start": 0,
+        "evidence_end": 345,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            271,
+            270,
+            269,
+            268,
+            267
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 271,
+        "page": 5,
+        "citations": [
+          10
+        ],
+        "record_id": "E19"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 262,
+        "text": "In our experiments, we evaluated models trained at two ﬁxed scales: S = 256 (which has been widely used in the prior art (Krizhevsky et al., 2012; Zeiler & Fergus, 2013; Sermanet et al., 2014)) and S = 384. Given a ConvNet conﬁguration, we ﬁrst trained the network using S = 256. To speed-up training of the S = 384 network, it was initialised with the weights pre-trained with S = 256, and we used a smaller initial learning rate of 10−3. The second approach to setting S is multi-scale training, where each training image is individually rescaled by randomly sampling S from a certain range [Smin, Smax] (we used Smin = 256 and Smax = 512).",
+        "source": "VGG.pdf",
+        "page": 4,
+        "title": "VGG",
+        "section": "3.1 TRAINING"
+      },
+      {
+        "chunk_id": 260,
+        "text": "Let S be the smallest side of an isotropically-rescaled training image, from which the ConvNet input is cropped (we also refer to S as the training scale). While the crop size is ﬁxed to 224 × 224, in principle S can take on any value not less than 224: for S = 224 the crop will capture whole-image statistics, completely spanning the smallest side of a training image; for S ≫224 the crop will correspond to a small part of the image, containing a small object or an object part.",
+        "source": "VGG.pdf",
+        "page": 4,
+        "title": "VGG",
+        "section": "3.1 TRAINING"
+      },
+      {
+        "chunk_id": 261,
+        "text": "We consider two approaches for setting the training scale S. The ﬁrst is to ﬁx S, which corresponds to single-scale training (note that image content within the sampled crops can still represent multi- scale image statistics).",
+        "source": "VGG.pdf",
+        "page": 4,
+        "title": "VGG",
+        "section": "3.1 TRAINING"
+      },
+      {
+        "chunk_id": 264,
+        "text": "Published as a conference paper at ICLR 2015 model is trained to recognise objects over a wide range of scales. For speed reasons, we trained multi-scale models by ﬁne-tuning all layers of a single-scale model with the same conﬁguration, pre-trained with ﬁxed S = 384.",
+        "source": "VGG.pdf",
+        "page": 5,
+        "title": "VGG",
+        "section": "3.1 TRAINING"
+      },
+      {
+        "chunk_id": 334,
+        "text": "We trained two localisation models, each on a single scale: S = 256 and S = 384 (due to the time constraints, we did not use training scale jittering for our ILSVRC-2014 submission). Training was initialised with the corresponding classiﬁcation models (trained on the same scales), and the initial learning rate was set to 10−3. We explored both ﬁne-tuning all layers and ﬁne-tuning only the ﬁrst two fully-connected layers, as done in (Sermanet et al., 2014).",
+        "source": "VGG.pdf",
+        "page": 10,
+        "title": "VGG",
+        "section": "5 CONCLUSION"
+      },
+      {
+        "chunk_id": 293,
+        "text": "As noted above, we hypothesize that this is due to a different treatment of convolution boundary conditions. Table 5: ConvNet evaluation techniques comparison. In all experiments the training scale S was sampled from [256; 512], and three test scales Q were considered: {256, 384, 512}.",
+        "source": "VGG.pdf",
+        "page": 7,
+        "title": "VGG",
+        "section": "4.3 MULTI-CROP EVALUATION"
+      },
+      {
+        "chunk_id": 287,
+        "text": "It consists of running a model over several rescaled versions of a test image (corresponding to different values of Q), followed by averaging the resulting class posteriors. Considering that a large discrepancy between training and testing scales leads to a drop in performance, the models trained with ﬁxed S were evaluated over three test image sizes, close to the training one: Q = {S −32, S, S + 32}.",
+        "source": "VGG.pdf",
+        "page": 6,
+        "title": "VGG",
+        "section": "4.2 MULTI-SCALE EVALUATION"
+      },
+      {
+        "chunk_id": 288,
+        "text": "At the same time, scale jittering at training time allows the network to be applied to a wider range of scales at test time, so the model trained with variable S ∈[Smin; Smax] was evaluated over a larger range of sizes Q = {Smin, 0.5(Smin + Smax), Smax}.",
+        "source": "VGG.pdf",
+        "page": 6,
+        "title": "VGG",
+        "section": "4.2 MULTI-SCALE EVALUATION"
+      },
+      {
+        "chunk_id": 259,
+        "text": "To obtain the ﬁxed-size 224×224 ConvNet input images, they were randomly cropped from rescaled training images (one crop per image per SGD iteration). To further augment the training set, the crops underwent random horizontal ﬂipping and random RGB colour shift (Krizhevsky et al., 2012). Training image rescaling is explained below. Training image size.",
+        "source": "VGG.pdf",
+        "page": 4,
+        "title": "VGG",
+        "section": "3.1 TRAINING"
+      },
+      {
+        "chunk_id": 271,
+        "text": "While we believe that in practice the increased computation time of multiple crops does not justify the potential gains in accuracy, for reference we also evaluate our networks using 50 crops per scale (5 × 5 regular grid with 2 ﬂips), for a total of 150 crops over 3 scales, which is comparable to 144 crops over 4 scales used by Szegedy et al.",
+        "source": "VGG.pdf",
+        "page": 5,
+        "title": "VGG",
+        "section": "3.2 TESTING"
+      },
+      {
+        "chunk_id": 333,
+        "text": "Apart from the last bounding box prediction layer, we use the ConvNet architecture D (Table 1), which contains 16 weight layers and was found to be the best-performing in the classiﬁcation task (Sect. Training of localisation ConvNets is similar to that of the classiﬁcation ConvNets (Sect. The main difference is that we replace the logistic regression objective with a Euclidean loss, which penalises the deviation of the predicted bounding box parameters from the ground-truth.",
+        "source": "VGG.pdf",
+        "page": 10,
+        "title": "VGG",
+        "section": "5 CONCLUSION"
+      }
+    ],
+    "selected_ids": [
+      262,
+      260,
+      261,
+      264,
+      334,
+      293,
+      287,
+      288,
+      259,
+      271
+    ]
+  },
+  "answer": "在多尺度训练中，每张训练图像会通过对 S 在一定范围 [Smin, Smax] 内随机采样进行单独缩放，文中使用的范围是 Smin = 256、Smax = 512（[1]）。裁剪尺寸固定为 224 × 224（[2]）。多尺度模型主要是通过微调（fine-tuning）一个相同配置的单尺度模型的所有层来训练的，该单尺度模型以固定 S = 384 预训练（[4]）。",
+  "original_answer": "在多尺度训练中，每张训练图像会通过对 S 在一定范围 [Smin, Smax] 内随机采样进行单独缩放，文中使用的范围是 Smin = 256、Smax = 512（[1]）。裁剪尺寸固定为 224 × 224（[2]）。多尺度模型主要是通过微调（fine-tuning）一个相同配置的单尺度模型的所有层来训练的，该单尺度模型以固定 S = 384 预训练（[4]）。",
+  "citation_validation": {
+    "answer": "在多尺度训练中，每张训练图像会通过对 S 在一定范围 [Smin, Smax] 内随机采样进行单独缩放，文中使用的范围是 Smin = 256、Smax = 512（[1]）。裁剪尺寸固定为 224 × 224（[2]）。多尺度模型主要是通过微调（fine-tuning）一个相同配置的单尺度模型的所有层来训练的，该单尺度模型以固定 S = 384 预训练（[4]）。",
+    "original_answer": "在多尺度训练中，每张训练图像会通过对 S 在一定范围 [Smin, Smax] 内随机采样进行单独缩放，文中使用的范围是 Smin = 256、Smax = 512（[1]）。裁剪尺寸固定为 224 × 224（[2]）。多尺度模型主要是通过微调（fine-tuning）一个相同配置的单尺度模型的所有层来训练的，该单尺度模型以固定 S = 384 预训练（[4]）。",
+    "repair_candidate": null,
+    "initial_check": {
+      "cited_numbers": [
+        1,
+        2,
+        4
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 262,
+          "source": "VGG.pdf",
+          "page": 4,
+          "text": "In our experiments, we evaluated models trained at two ﬁxed scales: S = 256 (which has been widely used in the prior art (Krizhevsky et al., 2012; Zeiler & Fergus, 2013; Sermanet et al., 2014)) and S = 384. Given a ConvNet conﬁguration, we ﬁrst trained the network using S = 256. To speed-up training of the S = 384 network, it was initialised with the weights pre-trained with S = 256, and we used a smaller initial learning rate of 10−3. The second approach to setting S is multi-scale training, where each training image is individually rescaled by randomly sampling S from a certain range [Smin, Smax] (we used Smin = 256 and Smax = 512)."
+        },
+        {
+          "citation": 2,
+          "chunk_id": 260,
+          "source": "VGG.pdf",
+          "page": 4,
+          "text": "Let S be the smallest side of an isotropically-rescaled training image, from which the ConvNet input is cropped (we also refer to S as the training scale). While the crop size is ﬁxed to 224 × 224, in principle S can take on any value not less than 224: for S = 224 the crop will capture whole-image statistics, completely spanning the smallest side of a training image; for S ≫224 the crop will correspond to a small part of the image, containing a small object or an object part."
+        },
+        {
+          "citation": 4,
+          "chunk_id": 264,
+          "source": "VGG.pdf",
+          "page": 5,
+          "text": "Published as a conference paper at ICLR 2015 model is trained to recognise objects over a wide range of scales. For speed reasons, we trained multi-scale models by ﬁne-tuning all layers of a single-scale model with the same conﬁguration, pre-trained with ﬁxed S = 384."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "final_check": {
+      "cited_numbers": [
+        1,
+        2,
+        4
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 262,
+          "source": "VGG.pdf",
+          "page": 4,
+          "text": "In our experiments, we evaluated models trained at two ﬁxed scales: S = 256 (which has been widely used in the prior art (Krizhevsky et al., 2012; Zeiler & Fergus, 2013; Sermanet et al., 2014)) and S = 384. Given a ConvNet conﬁguration, we ﬁrst trained the network using S = 256. To speed-up training of the S = 384 network, it was initialised with the weights pre-trained with S = 256, and we used a smaller initial learning rate of 10−3. The second approach to setting S is multi-scale training, where each training image is individually rescaled by randomly sampling S from a certain range [Smin, Smax] (we used Smin = 256 and Smax = 512)."
+        },
+        {
+          "citation": 2,
+          "chunk_id": 260,
+          "source": "VGG.pdf",
+          "page": 4,
+          "text": "Let S be the smallest side of an isotropically-rescaled training image, from which the ConvNet input is cropped (we also refer to S as the training scale). While the crop size is ﬁxed to 224 × 224, in principle S can take on any value not less than 224: for S = 224 the crop will capture whole-image statistics, completely spanning the smallest side of a training image; for S ≫224 the crop will correspond to a small part of the image, containing a small object or an object part."
+        },
+        {
+          "citation": 4,
+          "chunk_id": 264,
+          "source": "VGG.pdf",
+          "page": 5,
+          "text": "Published as a conference paper at ICLR 2015 model is trained to recognise objects over a wide range of scales. For speed reasons, we trained multi-scale models by ﬁne-tuning all layers of a single-scale model with the same conﬁguration, pre-trained with ﬁxed S = 384."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "repair_attempted": false,
+    "normalization_applied": false,
+    "repair_applied": false,
+    "repair_response": null,
+    "repair_prompt": null,
+    "unresolved_blocks": [],
+    "status": "not_needed",
+    "note": "Citation structure only; source relevance and claim meaning are not automatically verified."
+  },
+  "status": "completed"
+}

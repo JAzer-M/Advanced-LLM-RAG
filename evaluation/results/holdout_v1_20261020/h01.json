@@ -1,0 +1,864 @@
+{
+  "question_id": "h01",
+  "query": "What label-smoothing value does Attention Is All You Need use, and how does the paper say it affects perplexity versus accuracy and BLEU?",
+  "run_provenance": "fresh full main pipeline",
+  "knowledge_base": {
+    "version": "all-papers-8-20261020",
+    "chunk_count": 1397,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/manifest.json",
+    "manifest_sha256": "9c4e2c26b4f11fe7baf526595630cbee2d325416ec0e497f417975fbd60779ef",
+    "files": {
+      "faiss.index": "ff1f4a3e38e20c0275ba79d805e6475639b3cea7a7a583f9c18c67ec8e40a2ed",
+      "chunks.json": "3e63d75abbe164ff8e135b1d66fd6b02d9479b2e037e289a726e7c542464593a"
+    }
+  },
+  "decomposition": {
+    "needs_decomposition": true,
+    "sub_queries": [
+      "What label-smoothing value does Attention Is All You Need use?",
+      "How does the paper say label smoothing affects perplexity?",
+      "How does the paper say label smoothing affects accuracy and BLEU?"
+    ],
+    "status": "accepted",
+    "proposed_count": 3
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 263,
+    "global_top_ids": [
+      69,
+      70,
+      76,
+      11,
+      26,
+      51,
+      13,
+      30,
+      33,
+      38
+    ],
+    "protected_ids": [
+      69,
+      70
+    ],
+    "sub_query_evidence": [
+      {
+        "query": "What label-smoothing value does Attention Is All You Need use?",
+        "top_ids": [
+          69,
+          40,
+          26
+        ]
+      },
+      {
+        "query": "How does the paper say label smoothing affects perplexity?",
+        "top_ids": [
+          70,
+          1008,
+          1296
+        ]
+      },
+      {
+        "query": "How does the paper say label smoothing affects accuracy and BLEU?",
+        "top_ids": [
+          70,
+          69,
+          3
+        ]
+      }
+    ],
+    "retrieval_anchor_ids": [
+      76
+    ],
+    "evidence_completion": {
+      "requested_sources": [
+        "Attention is all you need.pdf"
+      ],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        69,
+        70,
+        76,
+        11,
+        26,
+        51,
+        40,
+        3,
+        1008,
+        1296
+      ],
+      "retained_local_ids": [
+        69,
+        70,
+        26,
+        40,
+        3,
+        1008,
+        1296
+      ],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        69,
+        70,
+        76,
+        11,
+        26,
+        51,
+        40,
+        3,
+        1008,
+        1296
+      ],
+      "elapsed_seconds": 0.000889
+    }
+  },
+  "selected_ids": [
+    69,
+    70,
+    76,
+    11,
+    26,
+    51,
+    40,
+    3,
+    1008,
+    1296
+  ],
+  "context": "[1] Source: Attention is all you need.pdf | Page: 8 | Section: 5.4 Regularization\nModel BLEU Training Cost (FLOPs) EN-DE EN-FR EN-DE EN-FR ByteNet [15] 23.75 Deep-Att + PosUnk [32] 39.2 1.0 · 1020 GNMT + RL [31] 24.6 39.92 2.3 · 1019 1.4 · 1020 ConvS2S [8] 25.16 40.46 9.6 · 1018 1.5 · 1020 MoE [26] 26.03 40.56 2.0 · 1019 1.2 · 1020 Deep-Att + PosUnk Ensemble [32] 40.4 8.0 · 1020 GNMT + RL Ensemble [31] 26.30 41.16 1.8 · 1020 1.1 · 1021 ConvS2S Ensemble [8] 26.36 41.29 7.7 · 1019 1.2 · 1021 Transformer (base model) 27.3 38.1 3.3 · 1018 Transformer (big) 28.4 41.0 2.3 · 1019 Label Smoothing During training, we employed label smoothing of value ϵls = 0.1 [30].\n\n[2] Source: Attention is all you need.pdf | Page: 8 | Section: 5.4 Regularization\nThis hurts perplexity, as the model learns to be more unsure, but improves accuracy and BLEU score.\n\n[3] Source: Attention is all you need.pdf | Page: 8 | Section: 6.2 Model Variations\nWe present these results in Table 3. In Table 3 rows (A), we vary the number of attention heads and the attention key and value dimensions, keeping the amount of computation constant, as described in Section 3.2.2. While single-head attention is 0.9 BLEU worse than the best setting, quality also drops off with too many heads.\n\n[4] Source: Attention is all you need.pdf | Page: 2 | Section: 1 Introduction\nAttention mechanisms have become an integral part of compelling sequence modeling and transduc- tion models in various tasks, allowing modeling of dependencies without regard to their distance in the input or output sequences [2, 16]. In all but a few cases [22], however, such attention mechanisms are used in conjunction with a recurrent network.\n\n[5] Source: Attention is all you need.pdf | Page: 3 | Section: 3.2 Attention\n3.2 Attention An attention function can be described as mapping a query and a set of key-value pairs to an output, where the query, keys, values, and output are all vectors. The output is computed as a weighted sum of the values, where the weight assigned to each value is computed by a compatibility function of the query with the corresponding key.\n\n[6] Source: Attention is all you need.pdf | Page: 6 | Section: 4 Why Self-Attention\n4 Why Self-Attention In this section we compare various aspects of self-attention layers to the recurrent and convolu- tional layers commonly used for mapping one variable-length sequence of symbol representations (x1, ..., xn) to another sequence of equal length (z1, ..., zn), with xi, zi ∈Rd, such as a hidden layer in a typical sequence transduction encoder or decoder. Motivating our use of self-attention we consider three desiderata.\n\n[7] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\nWe need to prevent leftward information ﬂow in the decoder to preserve the auto-regressive property. We implement this inside of scaled dot-product attention by masking out (setting to −∞) all values in the input of the softmax which correspond to illegal connections.\n\n[8] Source: Attention is all you need.pdf | Page: 1 | Section: None\nExperiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring signiﬁcantly less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English- to-German translation task, improving over the existing best results, including ensembles, by over 2 BLEU.\n\n[9] Source: 2310.11511v1.pdf | Page: 7 | Section: 4.2 BASELINES\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nWe also report the result of retrieval-augmented baselines with LMs trained with private data: Ret-ChatGPT and Ret-Llama2-chat, which deploy the same augmentation technique above, as well as perplexity.ai, an InstructGPT-based production search system.\n\n[10] Source: 2401.15884v3.pdf | Page: 7 | Section: 5.2 Baselines\nTitle: Corrective Retrieval Augmented Generation\n(2) Self-RAG (Asai et al., 2024) that tuned the LLaMA2 on the instruction- tuning data comtaining several sets of reflection tokens which were labeled by GPT-4 (OpenAI, 2023). (3) Following Asai et al. (2024), we also cited the results of retrieval-augmented baselines trained with private data: Ret-ChatGPT and Ret- LLaMA-chat, which deploy the same augmenta- tion technique above, as well as perplexity.ai, an InstructGPT-based production search system.\n\n[11] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\n3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].\n\n[12] Source: Attention is all you need.pdf | Page: 1 | Section: None\nWe propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely.",
+  "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\n[1] Source: Attention is all you need.pdf | Page: 8 | Section: 5.4 Regularization\nModel BLEU Training Cost (FLOPs) EN-DE EN-FR EN-DE EN-FR ByteNet [15] 23.75 Deep-Att + PosUnk [32] 39.2 1.0 · 1020 GNMT + RL [31] 24.6 39.92 2.3 · 1019 1.4 · 1020 ConvS2S [8] 25.16 40.46 9.6 · 1018 1.5 · 1020 MoE [26] 26.03 40.56 2.0 · 1019 1.2 · 1020 Deep-Att + PosUnk Ensemble [32] 40.4 8.0 · 1020 GNMT + RL Ensemble [31] 26.30 41.16 1.8 · 1020 1.1 · 1021 ConvS2S Ensemble [8] 26.36 41.29 7.7 · 1019 1.2 · 1021 Transformer (base model) 27.3 38.1 3.3 · 1018 Transformer (big) 28.4 41.0 2.3 · 1019 Label Smoothing During training, we employed label smoothing of value ϵls = 0.1 [30].\n\n[2] Source: Attention is all you need.pdf | Page: 8 | Section: 5.4 Regularization\nThis hurts perplexity, as the model learns to be more unsure, but improves accuracy and BLEU score.\n\n[3] Source: Attention is all you need.pdf | Page: 8 | Section: 6.2 Model Variations\nWe present these results in Table 3. In Table 3 rows (A), we vary the number of attention heads and the attention key and value dimensions, keeping the amount of computation constant, as described in Section 3.2.2. While single-head attention is 0.9 BLEU worse than the best setting, quality also drops off with too many heads.\n\n[4] Source: Attention is all you need.pdf | Page: 2 | Section: 1 Introduction\nAttention mechanisms have become an integral part of compelling sequence modeling and transduc- tion models in various tasks, allowing modeling of dependencies without regard to their distance in the input or output sequences [2, 16]. In all but a few cases [22], however, such attention mechanisms are used in conjunction with a recurrent network.\n\n[5] Source: Attention is all you need.pdf | Page: 3 | Section: 3.2 Attention\n3.2 Attention An attention function can be described as mapping a query and a set of key-value pairs to an output, where the query, keys, values, and output are all vectors. The output is computed as a weighted sum of the values, where the weight assigned to each value is computed by a compatibility function of the query with the corresponding key.\n\n[6] Source: Attention is all you need.pdf | Page: 6 | Section: 4 Why Self-Attention\n4 Why Self-Attention In this section we compare various aspects of self-attention layers to the recurrent and convolu- tional layers commonly used for mapping one variable-length sequence of symbol representations (x1, ..., xn) to another sequence of equal length (z1, ..., zn), with xi, zi ∈Rd, such as a hidden layer in a typical sequence transduction encoder or decoder. Motivating our use of self-attention we consider three desiderata.\n\n[7] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\nWe need to prevent leftward information ﬂow in the decoder to preserve the auto-regressive property. We implement this inside of scaled dot-product attention by masking out (setting to −∞) all values in the input of the softmax which correspond to illegal connections.\n\n[8] Source: Attention is all you need.pdf | Page: 1 | Section: None\nExperiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring signiﬁcantly less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English- to-German translation task, improving over the existing best results, including ensembles, by over 2 BLEU.\n\n[9] Source: 2310.11511v1.pdf | Page: 7 | Section: 4.2 BASELINES\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nWe also report the result of retrieval-augmented baselines with LMs trained with private data: Ret-ChatGPT and Ret-Llama2-chat, which deploy the same augmentation technique above, as well as perplexity.ai, an InstructGPT-based production search system.\n\n[10] Source: 2401.15884v3.pdf | Page: 7 | Section: 5.2 Baselines\nTitle: Corrective Retrieval Augmented Generation\n(2) Self-RAG (Asai et al., 2024) that tuned the LLaMA2 on the instruction- tuning data comtaining several sets of reflection tokens which were labeled by GPT-4 (OpenAI, 2023). (3) Following Asai et al. (2024), we also cited the results of retrieval-augmented baselines trained with private data: Ret-ChatGPT and Ret- LLaMA-chat, which deploy the same augmenta- tion technique above, as well as perplexity.ai, an InstructGPT-based production search system.\n\n[11] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\n3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].\n\n[12] Source: Attention is all you need.pdf | Page: 1 | Section: None\nWe propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely.\n\nQuestion:\nWhat label-smoothing value does Attention Is All You Need use, and how does the paper say it affects perplexity versus accuracy and BLEU?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": "This hurts perplexity, as the model learns to be more unsure, but improves accuracy and BLEU score.",
+        "evidence_start": 0,
+        "evidence_end": 99,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            70,
+            69
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 70,
+        "page": 8,
+        "citations": [
+          2
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "We present these results in Table 3.",
+        "evidence_start": 0,
+        "evidence_end": 36,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            76,
+            75
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 76,
+        "page": 8,
+        "citations": [
+          3
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "9 BLEU worse than the best setting, quality also drops off with too many heads.",
+        "evidence_start": 248,
+        "evidence_end": 327,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            76,
+            75
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 76,
+        "page": 8,
+        "citations": [
+          3
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Attention mechanisms have become an integral part of compelling sequence modeling and transduc- tion models in various tasks, allowing modeling of dependencies without regard to their distance in the input or output sequences [2, 16].",
+        "evidence_start": 0,
+        "evidence_end": 234,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            11,
+            10,
+            9,
+            8
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 11,
+        "page": 2,
+        "citations": [
+          4
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In all but a few cases [22], however, such attention mechanisms are used in conjunction with a recurrent network.",
+        "evidence_start": 234,
+        "evidence_end": 348,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            11,
+            10,
+            9,
+            8
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 11,
+        "page": 2,
+        "citations": [
+          4
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "2 Attention An attention function can be described as mapping a query and a set of key-value pairs to an output, where the query, keys, values, and output are all vectors.",
+        "evidence_start": 2,
+        "evidence_end": 173,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            26
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 26,
+        "page": 3,
+        "citations": [
+          5
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The output is computed as a weighted sum of the values, where the weight assigned to each value is computed by a compatibility function of the query with the corresponding key.",
+        "evidence_start": 173,
+        "evidence_end": 350,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            26
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 26,
+        "page": 3,
+        "citations": [
+          5
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": ", zn), with xi, zi ∈Rd, such as a hidden layer in a typical sequence transduction encoder or decoder.",
+        "evidence_start": 272,
+        "evidence_end": 373,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            51
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 51,
+        "page": 6,
+        "citations": [
+          6
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Motivating our use of self-attention we consider three desiderata.",
+        "evidence_start": 373,
+        "evidence_end": 440,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            51
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 51,
+        "page": 6,
+        "citations": [
+          6
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "We need to prevent leftward information ﬂow in the decoder to preserve the auto-regressive property.",
+        "evidence_start": 0,
+        "evidence_end": 100,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            40,
+            39,
+            38
+          ],
+          "identity_quote": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+          "identity_chunk_id": 38
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 40,
+        "page": 5,
+        "citations": [
+          7,
+          11
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We implement this inside of scaled dot-product attention by masking out (setting to −∞) all values in the input of the softmax which correspond to illegal connections.",
+        "evidence_start": 100,
+        "evidence_end": 268,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            40,
+            39,
+            38
+          ],
+          "identity_quote": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+          "identity_chunk_id": 38
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 40,
+        "page": 5,
+        "citations": [
+          7,
+          11
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring signiﬁcantly less time to train.",
+        "evidence_start": 0,
+        "evidence_end": 167,
+        "subject": "Attention is All you Need",
+        "identity": {
+          "subject": "Attention is All you Need",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            3,
+            2
+          ],
+          "identity_quote": "We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely.",
+          "identity_chunk_id": 2
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 3,
+        "page": 1,
+        "citations": [
+          8,
+          12
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "4 BLEU on the WMT 2014 English- to-German translation task, improving over the existing best results, including ensembles, by over 2 BLEU.",
+        "evidence_start": 190,
+        "evidence_end": 328,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            3
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 3,
+        "page": 1,
+        "citations": [
+          8
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "ai, an InstructGPT-based production search system.",
+        "evidence_start": 202,
+        "evidence_end": 252,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1008,
+            1007
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1008,
+        "page": 7,
+        "citations": [
+          9
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": ", 2024) that tuned the LLaMA2 on the instruction- tuning data comtaining several sets of reflection tokens which were labeled by GPT-4 (OpenAI, 2023).",
+        "evidence_start": 25,
+        "evidence_end": 175,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            1296
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2401.15884v3.pdf",
+        "chunk_id": 1296,
+        "page": 7,
+        "citations": [
+          10
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "ai, an InstructGPT-based production search system.",
+        "evidence_start": 405,
+        "evidence_end": 455,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1296
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2401.15884v3.pdf",
+        "chunk_id": 1296,
+        "page": 7,
+        "citations": [
+          10
+        ],
+        "record_id": "E16"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 69,
+        "text": "Model BLEU Training Cost (FLOPs) EN-DE EN-FR EN-DE EN-FR ByteNet [15] 23.75 Deep-Att + PosUnk [32] 39.2 1.0 · 1020 GNMT + RL [31] 24.6 39.92 2.3 · 1019 1.4 · 1020 ConvS2S [8] 25.16 40.46 9.6 · 1018 1.5 · 1020 MoE [26] 26.03 40.56 2.0 · 1019 1.2 · 1020 Deep-Att + PosUnk Ensemble [32] 40.4 8.0 · 1020 GNMT + RL Ensemble [31] 26.30 41.16 1.8 · 1020 1.1 · 1021 ConvS2S Ensemble [8] 26.36 41.29 7.7 · 1019 1.2 · 1021 Transformer (base model) 27.3 38.1 3.3 · 1018 Transformer (big) 28.4 41.0 2.3 · 1019 Label Smoothing During training, we employed label smoothing of value ϵls = 0.1 [30].",
+        "source": "Attention is all you need.pdf",
+        "page": 8,
+        "title": "Attention is All you Need",
+        "section": "5.4 Regularization"
+      },
+      {
+        "chunk_id": 70,
+        "text": "This hurts perplexity, as the model learns to be more unsure, but improves accuracy and BLEU score.",
+        "source": "Attention is all you need.pdf",
+        "page": 8,
+        "title": "Attention is All you Need",
+        "section": "5.4 Regularization"
+      },
+      {
+        "chunk_id": 76,
+        "text": "We present these results in Table 3. In Table 3 rows (A), we vary the number of attention heads and the attention key and value dimensions, keeping the amount of computation constant, as described in Section 3.2.2. While single-head attention is 0.9 BLEU worse than the best setting, quality also drops off with too many heads.",
+        "source": "Attention is all you need.pdf",
+        "page": 8,
+        "title": "Attention is All you Need",
+        "section": "6.2 Model Variations"
+      },
+      {
+        "chunk_id": 11,
+        "text": "Attention mechanisms have become an integral part of compelling sequence modeling and transduc- tion models in various tasks, allowing modeling of dependencies without regard to their distance in the input or output sequences [2, 16]. In all but a few cases [22], however, such attention mechanisms are used in conjunction with a recurrent network.",
+        "source": "Attention is all you need.pdf",
+        "page": 2,
+        "title": "Attention is All you Need",
+        "section": "1 Introduction"
+      },
+      {
+        "chunk_id": 26,
+        "text": "3.2 Attention An attention function can be described as mapping a query and a set of key-value pairs to an output, where the query, keys, values, and output are all vectors. The output is computed as a weighted sum of the values, where the weight assigned to each value is computed by a compatibility function of the query with the corresponding key.",
+        "source": "Attention is all you need.pdf",
+        "page": 3,
+        "title": "Attention is All you Need",
+        "section": "3.2 Attention"
+      },
+      {
+        "chunk_id": 51,
+        "text": "4 Why Self-Attention In this section we compare various aspects of self-attention layers to the recurrent and convolu- tional layers commonly used for mapping one variable-length sequence of symbol representations (x1, ..., xn) to another sequence of equal length (z1, ..., zn), with xi, zi ∈Rd, such as a hidden layer in a typical sequence transduction encoder or decoder. Motivating our use of self-attention we consider three desiderata.",
+        "source": "Attention is all you need.pdf",
+        "page": 6,
+        "title": "Attention is All you Need",
+        "section": "4 Why Self-Attention"
+      },
+      {
+        "chunk_id": 40,
+        "text": "We need to prevent leftward information ﬂow in the decoder to preserve the auto-regressive property. We implement this inside of scaled dot-product attention by masking out (setting to −∞) all values in the input of the softmax which correspond to illegal connections.",
+        "source": "Attention is all you need.pdf",
+        "page": 5,
+        "title": "Attention is All you Need",
+        "section": "3.2.3 Applications of Attention in our Model"
+      },
+      {
+        "chunk_id": 3,
+        "text": "Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring signiﬁcantly less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English- to-German translation task, improving over the existing best results, including ensembles, by over 2 BLEU.",
+        "source": "Attention is all you need.pdf",
+        "page": 1,
+        "title": "Attention is All you Need",
+        "section": null
+      },
+      {
+        "chunk_id": 1008,
+        "text": "We also report the result of retrieval-augmented baselines with LMs trained with private data: Ret-ChatGPT and Ret-Llama2-chat, which deploy the same augmentation technique above, as well as perplexity.ai, an InstructGPT-based production search system.",
+        "source": "2310.11511v1.pdf",
+        "page": 7,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "4.2 BASELINES"
+      },
+      {
+        "chunk_id": 1296,
+        "text": "(2) Self-RAG (Asai et al., 2024) that tuned the LLaMA2 on the instruction- tuning data comtaining several sets of reflection tokens which were labeled by GPT-4 (OpenAI, 2023). (3) Following Asai et al. (2024), we also cited the results of retrieval-augmented baselines trained with private data: Ret-ChatGPT and Ret- LLaMA-chat, which deploy the same augmenta- tion technique above, as well as perplexity.ai, an InstructGPT-based production search system.",
+        "source": "2401.15884v3.pdf",
+        "page": 7,
+        "title": "Corrective Retrieval Augmented Generation",
+        "section": "5.2 Baselines"
+      },
+      {
+        "chunk_id": 38,
+        "text": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+        "source": "Attention is all you need.pdf",
+        "page": 5,
+        "title": "Attention is All you Need",
+        "section": "3.2.3 Applications of Attention in our Model"
+      },
+      {
+        "chunk_id": 2,
+        "text": "We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely.",
+        "source": "Attention is all you need.pdf",
+        "page": 1,
+        "title": "Attention is All you Need",
+        "section": null
+      }
+    ],
+    "selected_ids": [
+      69,
+      70,
+      76,
+      11,
+      26,
+      51,
+      40,
+      3,
+      1008,
+      1296
+    ]
+  },
+  "answer": "Attention Is All You Need 使用的 label smoothing 值为 ϵls = 0.1 [1]。论文指出，这会使模型学会变得更不确定，从而损害 perplexity，但会提升 accuracy 和 BLEU 分数 [2]。",
+  "original_answer": "Attention Is All You Need 使用的 label smoothing 值为 ϵls = 0.1 [1]。论文指出，这会使模型学会变得更不确定，从而损害 perplexity，但会提升 accuracy 和 BLEU 分数 [2]。",
+  "citation_validation": {
+    "answer": "Attention Is All You Need 使用的 label smoothing 值为 ϵls = 0.1 [1]。论文指出，这会使模型学会变得更不确定，从而损害 perplexity，但会提升 accuracy 和 BLEU 分数 [2]。",
+    "original_answer": "Attention Is All You Need 使用的 label smoothing 值为 ϵls = 0.1 [1]。论文指出，这会使模型学会变得更不确定，从而损害 perplexity，但会提升 accuracy 和 BLEU 分数 [2]。",
+    "repair_candidate": null,
+    "initial_check": {
+      "cited_numbers": [
+        1,
+        2
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 69,
+          "source": "Attention is all you need.pdf",
+          "page": 8,
+          "text": "Model BLEU Training Cost (FLOPs) EN-DE EN-FR EN-DE EN-FR ByteNet [15] 23.75 Deep-Att + PosUnk [32] 39.2 1.0 · 1020 GNMT + RL [31] 24.6 39.92 2.3 · 1019 1.4 · 1020 ConvS2S [8] 25.16 40.46 9.6 · 1018 1.5 · 1020 MoE [26] 26.03 40.56 2.0 · 1019 1.2 · 1020 Deep-Att + PosUnk Ensemble [32] 40.4 8.0 · 1020 GNMT + RL Ensemble [31] 26.30 41.16 1.8 · 1020 1.1 · 1021 ConvS2S Ensemble [8] 26.36 41.29 7.7 · 1019 1.2 · 1021 Transformer (base model) 27.3 38.1 3.3 · 1018 Transformer (big) 28.4 41.0 2.3 · 1019 Label Smoothing During training, we employed label smoothing of value ϵls = 0.1 [30]."
+        },
+        {
+          "citation": 2,
+          "chunk_id": 70,
+          "source": "Attention is all you need.pdf",
+          "page": 8,
+          "text": "This hurts perplexity, as the model learns to be more unsure, but improves accuracy and BLEU score."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "final_check": {
+      "cited_numbers": [
+        1,
+        2
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 69,
+          "source": "Attention is all you need.pdf",
+          "page": 8,
+          "text": "Model BLEU Training Cost (FLOPs) EN-DE EN-FR EN-DE EN-FR ByteNet [15] 23.75 Deep-Att + PosUnk [32] 39.2 1.0 · 1020 GNMT + RL [31] 24.6 39.92 2.3 · 1019 1.4 · 1020 ConvS2S [8] 25.16 40.46 9.6 · 1018 1.5 · 1020 MoE [26] 26.03 40.56 2.0 · 1019 1.2 · 1020 Deep-Att + PosUnk Ensemble [32] 40.4 8.0 · 1020 GNMT + RL Ensemble [31] 26.30 41.16 1.8 · 1020 1.1 · 1021 ConvS2S Ensemble [8] 26.36 41.29 7.7 · 1019 1.2 · 1021 Transformer (base model) 27.3 38.1 3.3 · 1018 Transformer (big) 28.4 41.0 2.3 · 1019 Label Smoothing During training, we employed label smoothing of value ϵls = 0.1 [30]."
+        },
+        {
+          "citation": 2,
+          "chunk_id": 70,
+          "source": "Attention is all you need.pdf",
+          "page": 8,
+          "text": "This hurts perplexity, as the model learns to be more unsure, but improves accuracy and BLEU score."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "repair_attempted": false,
+    "normalization_applied": false,
+    "repair_applied": false,
+    "repair_response": null,
+    "repair_prompt": null,
+    "unresolved_blocks": [],
+    "status": "not_needed",
+    "note": "Citation structure only; source relevance and claim meaning are not automatically verified."
+  },
+  "holdout_cached_chat_responses": 0,
+  "citation_structure": {
+    "cited_numbers": [
+      1,
+      2
+    ],
+    "invalid_numbers": [],
+    "malformed_markers": [],
+    "has_citations": true,
+    "require_citations": true,
+    "structure_passed": true,
+    "cited_sources": [
+      {
+        "citation": 1,
+        "chunk_id": 69,
+        "source": "Attention is all you need.pdf",
+        "page": 8,
+        "text": "Model BLEU Training Cost (FLOPs) EN-DE EN-FR EN-DE EN-FR ByteNet [15] 23.75 Deep-Att + PosUnk [32] 39.2 1.0 · 1020 GNMT + RL [31] 24.6 39.92 2.3 · 1019 1.4 · 1020 ConvS2S [8] 25.16 40.46 9.6 · 1018 1.5 · 1020 MoE [26] 26.03 40.56 2.0 · 1019 1.2 · 1020 Deep-Att + PosUnk Ensemble [32] 40.4 8.0 · 1020 GNMT + RL Ensemble [31] 26.30 41.16 1.8 · 1020 1.1 · 1021 ConvS2S Ensemble [8] 26.36 41.29 7.7 · 1019 1.2 · 1021 Transformer (base model) 27.3 38.1 3.3 · 1018 Transformer (big) 28.4 41.0 2.3 · 1019 Label Smoothing During training, we employed label smoothing of value ϵls = 0.1 [30]."
+      },
+      {
+        "citation": 2,
+        "chunk_id": 70,
+        "source": "Attention is all you need.pdf",
+        "page": 8,
+        "text": "This hurts perplexity, as the model learns to be more unsure, but improves accuracy and BLEU score."
+      }
+    ],
+    "semantic_support": "requires_manual_review"
+  },
+  "status": "completed",
+  "api_calls": [
+    {
+      "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nWhat label-smoothing value does Attention Is All You Need use, and how does the paper say it affects perplexity versus accuracy and BLEU?\n",
+      "response": {
+        "answer": "{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"What label-smoothing value does Attention Is All You Need use?\",\n        \"How does the paper say label smoothing affects perplexity?\",\n        \"How does the paper say label smoothing affects accuracy and BLEU?\"\n    ]\n}",
+        "requested_model": "cn:deepseek-v4.1-flash",
+        "reported_model": "deepseek-v4.1-flash",
+        "usage": {
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 384,
+          "cached_tokens": 384,
+          "completion_thinking_tokens": 0,
+          "completion_tokens": 68,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "credit": 0.02,
+          "prompt_cache_hit_tokens": 384,
+          "prompt_cache_miss_tokens": 269,
+          "prompt_cache_write_tokens": 0,
+          "prompt_tokens": 653,
+          "prompt_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 384,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "total_tokens": 721
+        },
+        "finish_reason": "stop",
+        "request_parameters": {
+          "model": "cn:deepseek-v4.1-flash",
+          "stream": false,
+          "thinking": {
+            "type": "disabled"
+          },
+          "temperature": 0,
+          "max_tokens": 4096
+        }
+      },
+      "elapsed_seconds": 2.19
+    },
+    {
+      "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\n[1] Source: Attention is all you need.pdf | Page: 8 | Section: 5.4 Regularization\nModel BLEU Training Cost (FLOPs) EN-DE EN-FR EN-DE EN-FR ByteNet [15] 23.75 Deep-Att + PosUnk [32] 39.2 1.0 · 1020 GNMT + RL [31] 24.6 39.92 2.3 · 1019 1.4 · 1020 ConvS2S [8] 25.16 40.46 9.6 · 1018 1.5 · 1020 MoE [26] 26.03 40.56 2.0 · 1019 1.2 · 1020 Deep-Att + PosUnk Ensemble [32] 40.4 8.0 · 1020 GNMT + RL Ensemble [31] 26.30 41.16 1.8 · 1020 1.1 · 1021 ConvS2S Ensemble [8] 26.36 41.29 7.7 · 1019 1.2 · 1021 Transformer (base model) 27.3 38.1 3.3 · 1018 Transformer (big) 28.4 41.0 2.3 · 1019 Label Smoothing During training, we employed label smoothing of value ϵls = 0.1 [30].\n\n[2] Source: Attention is all you need.pdf | Page: 8 | Section: 5.4 Regularization\nThis hurts perplexity, as the model learns to be more unsure, but improves accuracy and BLEU score.\n\n[3] Source: Attention is all you need.pdf | Page: 8 | Section: 6.2 Model Variations\nWe present these results in Table 3. In Table 3 rows (A), we vary the number of attention heads and the attention key and value dimensions, keeping the amount of computation constant, as described in Section 3.2.2. While single-head attention is 0.9 BLEU worse than the best setting, quality also drops off with too many heads.\n\n[4] Source: Attention is all you need.pdf | Page: 2 | Section: 1 Introduction\nAttention mechanisms have become an integral part of compelling sequence modeling and transduc- tion models in various tasks, allowing modeling of dependencies without regard to their distance in the input or output sequences [2, 16]. In all but a few cases [22], however, such attention mechanisms are used in conjunction with a recurrent network.\n\n[5] Source: Attention is all you need.pdf | Page: 3 | Section: 3.2 Attention\n3.2 Attention An attention function can be described as mapping a query and a set of key-value pairs to an output, where the query, keys, values, and output are all vectors. The output is computed as a weighted sum of the values, where the weight assigned to each value is computed by a compatibility function of the query with the corresponding key.\n\n[6] Source: Attention is all you need.pdf | Page: 6 | Section: 4 Why Self-Attention\n4 Why Self-Attention In this section we compare various aspects of self-attention layers to the recurrent and convolu- tional layers commonly used for mapping one variable-length sequence of symbol representations (x1, ..., xn) to another sequence of equal length (z1, ..., zn), with xi, zi ∈Rd, such as a hidden layer in a typical sequence transduction encoder or decoder. Motivating our use of self-attention we consider three desiderata.\n\n[7] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\nWe need to prevent leftward information ﬂow in the decoder to preserve the auto-regressive property. We implement this inside of scaled dot-product attention by masking out (setting to −∞) all values in the input of the softmax which correspond to illegal connections.\n\n[8] Source: Attention is all you need.pdf | Page: 1 | Section: None\nExperiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring signiﬁcantly less time to train. Our model achieves 28.4 BLEU on the WMT 2014 English- to-German translation task, improving over the existing best results, including ensembles, by over 2 BLEU.\n\n[9] Source: 2310.11511v1.pdf | Page: 7 | Section: 4.2 BASELINES\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nWe also report the result of retrieval-augmented baselines with LMs trained with private data: Ret-ChatGPT and Ret-Llama2-chat, which deploy the same augmentation technique above, as well as perplexity.ai, an InstructGPT-based production search system.\n\n[10] Source: 2401.15884v3.pdf | Page: 7 | Section: 5.2 Baselines\nTitle: Corrective Retrieval Augmented Generation\n(2) Self-RAG (Asai et al., 2024) that tuned the LLaMA2 on the instruction- tuning data comtaining several sets of reflection tokens which were labeled by GPT-4 (OpenAI, 2023). (3) Following Asai et al. (2024), we also cited the results of retrieval-augmented baselines trained with private data: Ret-ChatGPT and Ret- LLaMA-chat, which deploy the same augmenta- tion technique above, as well as perplexity.ai, an InstructGPT-based production search system.\n\n[11] Source: Attention is all you need.pdf | Page: 5 | Section: 3.2.3 Applications of Attention in our Model\n3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].\n\n[12] Source: Attention is all you need.pdf | Page: 1 | Section: None\nWe propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely.\n\nQuestion:\nWhat label-smoothing value does Attention Is All You Need use, and how does the paper say it affects perplexity versus accuracy and BLEU?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+      "response": {
+        "answer": "Attention Is All You Need 使用的 label smoothing 值为 ϵls = 0.1 [1]。论文指出，这会使模型学会变得更不确定，从而损害 perplexity，但会提升 accuracy 和 BLEU 分数 [2]。",
+        "requested_model": "cn:deepseek-v4.1-flash",
+        "reported_model": "deepseek-v4.1-flash",
+        "usage": {
+          "cache_creation_input_tokens": 0,
+          "cache_read_input_tokens": 128,
+          "cached_tokens": 128,
+          "completion_thinking_tokens": 0,
+          "completion_tokens": 51,
+          "completion_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 0,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "credit": 0.06,
+          "prompt_cache_hit_tokens": 128,
+          "prompt_cache_miss_tokens": 1798,
+          "prompt_cache_write_tokens": 0,
+          "prompt_tokens": 1926,
+          "prompt_tokens_details": {
+            "accepted_prediction_tokens": 0,
+            "audio_tokens": 0,
+            "cached_tokens": 128,
+            "reasoning_tokens": 0,
+            "rejected_prediction_tokens": 0
+          },
+          "total_tokens": 1977
+        },
+        "finish_reason": "stop",
+        "request_parameters": {
+          "model": "cn:deepseek-v4.1-flash",
+          "stream": false,
+          "thinking": {
+            "type": "disabled"
+          },
+          "temperature": 0,
+          "max_tokens": 4096
+        }
+      },
+      "elapsed_seconds": 2.38
+    }
+  ],
+  "model_calls": 2,
+  "evaluation_code_sha256": {
+    "main.py": "85b1f60ffd76b9c81e2336da79f903bb212b7cea7998cd50a863aae01d3439d6",
+    "llm.py": "b68fcd071621630f08ad2cbcb848a6757a6a5beca6b9e900d3a8c0bd61039861",
+    "evaluation/run_answer_evaluation.py": "bc512f96499b8cb196f8ab57c68408762acfc085aacc82673a685f02145f1650",
+    "src/api_llm.py": "2adea1ea9a8268d1260e0f8e2d7a80d9bff42143812b140e54f3003c62e2d2d4",
+    "src/bm25_retriever.py": "06a12c701da323963166a8c2a9206ead1281e59649efbbe0aff1293ace8c7e92",
+    "src/chunk_storage.py": "794ea2fa58826b895711a7d0f39a244f79e2a91aa39f99bec36955a235430630",
+    "src/chunking_recursive.py": "d4d6aae8d4f7b7f72503eadb440e72279e9d8fe1834b86cefd8f8d519fd1528f",
+    "src/chunking_semantic.py": "524e0c902cea605cfc5af30a15cdf5399b05807ad1ff49e2c16c94e0e29e22b8",
+    "src/citation_validation.py": "b9bd5c48a839a7bc62b79b38248889ade65fad1b3b654dc135c06cc4f9bb682b",
+    "src/embedding.py": "4b0e2699c9aeb23eb5db5585b64aa088ad9b1be4b01e33c95692f4f5f9624390",
+    "src/evidence_gap.py": "5e0405de84a6d4bd6268cb3270f75a5a217446d780ec35fabb0f008021198109",
+    "src/grounded_evidence.py": "78a7e63512970492f4e52050cb8b2312e2658281acfe979eb4476516ff8c2663",
+    "src/hybrid_retriever.py": "3306823530036b662f04e5790b1e74cb69b01051367385d33b388b87119fbe7d",
+    "src/hyde.py": "b0482baf2559e44d5d1d8c5a1bd31db046df279de53be70c7e8fb83bbcf32e72",
+    "src/knowledge_base.py": "dfb63dfafd00d463a194fe934d1c2f5a7a55d98b2ed5db95fc35b74606759474",
+    "src/numeric_evidence.py": "492fb546e6bc89b881843ece4b4582e533aec5aabbc58d61cd1cf158c4bac3d0",
+    "src/pdf_loader.py": "1f527ed51d318304858e4d95ffb85bd9c966961ef02157e9ce4f74b86f8fec64",
+    "src/query_decomposer.py": "52d3f2329e88d57ca8e4b150925710f13905d18d4b10d006ca523602e0aa41f2",
+    "src/query_rewriter.py": "404152aa9326445ecce721cd46be75fa14e19f99ff0a8fe7318e0c47f909d2c3",
+    "src/reranker.py": "36380b730f4bcfcbdd982cdd0f63a389d6a4172607f19f4cc7370df1f9666cba",
+    "src/retriever.py": "1382bbb41922a0bfe2da00e16a6d31e4448861e4a31544abdbfc171ec34cab3a",
+    "src/vector_store.py": "161d8c6597038788d195f034b3ea77ac391d7497e53c6dc1a7dbcf5f83a7fecf",
+    "/Users/j/.codex/.chatgpt-projects/g-p-6acc943a50508191b19cc746a2de0b5d/work/holdout-v1-20261020/candidate/holdout_v1_questions_en.json": "085367e8e613fddd247cf9cfc6a1b479b6e97fbaa0985ab338d29746595707aa",
+    "evaluation/answer_review_protocol.md": "614a18fe1babb3cffc96aa7aaa8956c3d84b94a1ca10f37234fd8cd00ed3bf27",
+    "data/processed/versions/all-papers-8-20261020/faiss.index": "ff1f4a3e38e20c0275ba79d805e6475639b3cea7a7a583f9c18c67ec8e40a2ed",
+    "data/processed/versions/all-papers-8-20261020/chunks.json": "3e63d75abbe164ff8e135b1d66fd6b02d9479b2e037e289a726e7c542464593a",
+    "data/processed/versions/all-papers-8-20261020/manifest.json": "9c4e2c26b4f11fe7baf526595630cbee2d325416ec0e497f417975fbd60779ef"
+  },
+  "elapsed_seconds": 33.43
+}

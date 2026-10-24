@@ -1,0 +1,111 @@
+{
+  "status": "review_passed",
+  "repair_attempted": false,
+  "drafts": [
+    "Mamba 的摘要指出，其推理吞吐量比 Transformer 高 5 倍[12]。论文后文也表述为：与规模相近的 Transformer 相比，Mamba 语言模型具有 5 倍的生成吞吐量[15]；在推理基准中，作为循环模型，Mamba 可实现比 Transformer 高 5 倍的吞吐量[14]。"
+  ],
+  "reviews": [
+    {
+      "review": {
+        "requirements": [
+          {
+            "id": "r1",
+            "verdict": "pass",
+            "answer_quote": "Mamba 的摘要指出，其推理吞吐量比 Transformer 高 5 倍[12]。",
+            "reason": "答案直接回答了摘要中的推理吞吐量优势：5倍，主体为Mamba、对比对象为Transformer，并引用了摘要原文所在段落[12]。补充引用的[15]和[14]分别支持相近规模语言模型的5倍生成吞吐量和推理基准中的5倍吞吐量，均属相关内容，无错误。",
+            "citations": [
+              {
+                "number": 12,
+                "quote": "Mamba enjoys fast\ninference (5× higher throughput than Transformers)"
+              }
+            ]
+          }
+        ],
+        "checks": {
+          "coverage": true,
+          "subjects": true,
+          "numbers": true,
+          "conditions": true,
+          "citations": true,
+          "unsupported_claims": true,
+          "gaps": true
+        },
+        "issues": []
+      },
+      "citation_check": {
+        "cited_numbers": [
+          12,
+          14,
+          15
+        ],
+        "invalid_numbers": [],
+        "malformed_markers": [],
+        "has_citations": true,
+        "require_citations": true,
+        "structure_passed": true,
+        "cited_sources": [
+          {
+            "citation": 12,
+            "chunk_id": 1398,
+            "source": "2312.00752v2.pdf",
+            "page": 1,
+            "text": "odel to selectively propagate or forget information along the\nsequence length dimension depending on the current token. Second, even though this change prevents the use of efficient\nconvolutions, we design a hardware-aware parallel algorithm in recurrent mode. We integrate these selective SSMs into a\nsimplified end-to-end neural network architecture without attention or even MLP blocks (Mamba). Mamba enjoys fast\ninference (5× higher throughput than Transformers) and linear scaling in sequence length, and its performance improves\non real data up to million-length sequences. As a general sequence model backbone, Mamba achieves state-of-the-art\nperformance across several modalities such as language, audio, and genomics. On language modeling, our Mamba-3B model\noutperforms Transformers of the same size and matches Transformers twice its size, both in pretraining and downstream\nevaluation.\n1\nIntroduction\nFoundation models (FMs), or large models pretrained on massive data then adapted for downstream tasks, have emerged\nas an effective paradigm in modern machine learning. The backbone of these FMs are often sequence models, operating on\narbitrary sequences of inputs from a wide variety of"
+          },
+          {
+            "citation": 14,
+            "chunk_id": 1456,
+            "source": "2312.00752v2.pdf",
+            "page": 15,
+            "text": "similar size, since without the\nKV cache it can use much higher batch sizes. For example, a Mamba-6.9B (untrained) would have higher inference\nthroughput than a 5× smaller Transformer-1.3B. Details in Appendix E.5, which additionally includes a benchmark of\nmemory consumption.\nScan vs Convolution vs Attention time (A100 80GB PCIe)\nFlashAttention-2\n1000\nConvolution\nScan (PyTorch)\n100\nScan (ours)\nTime (ms)\nOOM\n10\n1\n0.1\n512\n1k\n2k\n4k\n8k\n16k\n32k\n64k\n128k\n256k\nSequence length\nFigure 8: (Efficiency Benchmarks.) (Left) Training: our efficient scan is 40× faster than a standard implementation. (Right) Inference:\nas a recurrent model, Mamba can achieve 5× higher throughput than Transformers.\n4.6\nModel Ablations\nWe perform a series of detailed ablations on components of our model, focusing on the setting of language modeling with\nsize ≈350M models at Chinchilla token counts (same setting as Figure 4).\n4.6.1\nArchitecture\nTable 6 investigates the effects of the architecture (block) and its inner SSM layer (Figure 3). We find that\n• Among previous non-selective (LTI) SSMs, which are equivalent to global convolutions, performance is very similar.\n• Replacing the complex-valued S4 variant from pre"
+          },
+          {
+            "citation": 15,
+            "chunk_id": 1404,
+            "source": "2312.00752v2.pdf",
+            "page": 2,
+            "text": "on heads that have been proposed as being key to\nlarge language models, Mamba not only solves them easily but can extrapolate solutions indefinitely long (>1M tokens).\n• Audio and Genomics. Mamba out-performs prior state-of-the-art models such as SaShiMi, Hyena, and Transformers\non modeling audio waveforms and DNA sequences, both in pretraining quality and downstream metrics (e.g. reducing\nFID on a challenging speech generation dataset by more than half). In both settings, its performance improves with longer\ncontext up to million-length sequences.\n• Language Modeling. Mamba is the first linear-time sequence model that truly achieves Transformer-quality performance,\nboth in pretraining perplexity and downstream evaluations. With scaling laws up to 1B parameters, we show that Mamba\nexceeds the performance of a large range of baselines, including very strong modern Transformer training recipes based\non LLaMa (Touvron et al. 2023). Our Mamba language model has 5× generation throughput compared to Transformers\nof similar size, and Mamba-3B’s quality matches that of Transformers twice its size (e.g. 4 points higher avg. on common\nsense reasoning compared to Pythia-3B and even exceeding "
+          }
+        ],
+        "semantic_support": "requires_manual_review"
+      }
+    }
+  ],
+  "semantic_correctness": "requires_manual_review",
+  "answer": "Mamba 的摘要指出，其推理吞吐量比 Transformer 高 5 倍[12]。论文后文也表述为：与规模相近的 Transformer 相比，Mamba 语言模型具有 5 倍的生成吞吐量[15]；在推理基准中，作为循环模型，Mamba 可实现比 Transformer 高 5 倍的吞吐量[14]。",
+  "citation_check": {
+    "cited_numbers": [
+      12,
+      14,
+      15
+    ],
+    "invalid_numbers": [],
+    "malformed_markers": [],
+    "has_citations": true,
+    "require_citations": true,
+    "structure_passed": true,
+    "cited_sources": [
+      {
+        "citation": 12,
+        "chunk_id": 1398,
+        "source": "2312.00752v2.pdf",
+        "page": 1,
+        "text": "odel to selectively propagate or forget information along the\nsequence length dimension depending on the current token. Second, even though this change prevents the use of efficient\nconvolutions, we design a hardware-aware parallel algorithm in recurrent mode. We integrate these selective SSMs into a\nsimplified end-to-end neural network architecture without attention or even MLP blocks (Mamba). Mamba enjoys fast\ninference (5× higher throughput than Transformers) and linear scaling in sequence length, and its performance improves\non real data up to million-length sequences. As a general sequence model backbone, Mamba achieves state-of-the-art\nperformance across several modalities such as language, audio, and genomics. On language modeling, our Mamba-3B model\noutperforms Transformers of the same size and matches Transformers twice its size, both in pretraining and downstream\nevaluation.\n1\nIntroduction\nFoundation models (FMs), or large models pretrained on massive data then adapted for downstream tasks, have emerged\nas an effective paradigm in modern machine learning. The backbone of these FMs are often sequence models, operating on\narbitrary sequences of inputs from a wide variety of"
+      },
+      {
+        "citation": 14,
+        "chunk_id": 1456,
+        "source": "2312.00752v2.pdf",
+        "page": 15,
+        "text": "similar size, since without the\nKV cache it can use much higher batch sizes. For example, a Mamba-6.9B (untrained) would have higher inference\nthroughput than a 5× smaller Transformer-1.3B. Details in Appendix E.5, which additionally includes a benchmark of\nmemory consumption.\nScan vs Convolution vs Attention time (A100 80GB PCIe)\nFlashAttention-2\n1000\nConvolution\nScan (PyTorch)\n100\nScan (ours)\nTime (ms)\nOOM\n10\n1\n0.1\n512\n1k\n2k\n4k\n8k\n16k\n32k\n64k\n128k\n256k\nSequence length\nFigure 8: (Efficiency Benchmarks.) (Left) Training: our efficient scan is 40× faster than a standard implementation. (Right) Inference:\nas a recurrent model, Mamba can achieve 5× higher throughput than Transformers.\n4.6\nModel Ablations\nWe perform a series of detailed ablations on components of our model, focusing on the setting of language modeling with\nsize ≈350M models at Chinchilla token counts (same setting as Figure 4).\n4.6.1\nArchitecture\nTable 6 investigates the effects of the architecture (block) and its inner SSM layer (Figure 3). We find that\n• Among previous non-selective (LTI) SSMs, which are equivalent to global convolutions, performance is very similar.\n• Replacing the complex-valued S4 variant from pre"
+      },
+      {
+        "citation": 15,
+        "chunk_id": 1404,
+        "source": "2312.00752v2.pdf",
+        "page": 2,
+        "text": "on heads that have been proposed as being key to\nlarge language models, Mamba not only solves them easily but can extrapolate solutions indefinitely long (>1M tokens).\n• Audio and Genomics. Mamba out-performs prior state-of-the-art models such as SaShiMi, Hyena, and Transformers\non modeling audio waveforms and DNA sequences, both in pretraining quality and downstream metrics (e.g. reducing\nFID on a challenging speech generation dataset by more than half). In both settings, its performance improves with longer\ncontext up to million-length sequences.\n• Language Modeling. Mamba is the first linear-time sequence model that truly achieves Transformer-quality performance,\nboth in pretraining perplexity and downstream evaluations. With scaling laws up to 1B parameters, we show that Mamba\nexceeds the performance of a large range of baselines, including very strong modern Transformer training recipes based\non LLaMa (Touvron et al. 2023). Our Mamba language model has 5× generation throughput compared to Transformers\nof similar size, and Mamba-3B’s quality matches that of Transformers twice its size (e.g. 4 points higher avg. on common\nsense reasoning compared to Pythia-3B and even exceeding "
+      }
+    ],
+    "semantic_support": "requires_manual_review"
+  }
+}

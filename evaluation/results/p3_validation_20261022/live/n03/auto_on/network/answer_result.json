@@ -1,0 +1,159 @@
+{
+  "status": "review_passed",
+  "repair_attempted": false,
+  "drafts": [
+    "RoFormer 的 RoPE 用旋转矩阵编码绝对位置，同时在自注意力公式中引入显式的相对位置依赖[12][14]。与以往工作采用的加性位置嵌入不同，该方法是乘法式的；RoPE 通过旋转矩阵乘积自然地纳入相对位置信息，而不是在自注意力中修改加性位置编码展开式里的项[15][16]。其结论也说明，绝对位置信息通过旋转矩阵编码，相对位置可利用自注意力中的向量乘积自然表达[13]。"
+  ],
+  "reviews": [
+    {
+      "review": {
+        "requirements": [
+          {
+            "id": "r1",
+            "verdict": "pass",
+            "answer_quote": "RoFormer 的 RoPE 用旋转矩阵编码绝对位置，同时在自注意力公式中引入显式的相对位置依赖[12][14]。与以往工作采用的加性位置嵌入不同，该方法是乘法式的；RoPE 通过旋转矩阵乘积自然地纳入相对位置信息，而不是在自注意力中修改加性位置编码展开式里的项[15][16]。其结论也说明，绝对位置信息通过旋转矩阵编码，相对位置可利用自注意力中的向量乘积自然表达[13]。",
+            "reason": "答案准确覆盖了 RoFormer 的核心机制：用旋转矩阵编码绝对位置、在自注意力公式中引入显式相对位置依赖、乘法式而非加性的特性、以及通过旋转矩阵乘积/内积自然融入相对位置。所有引用[12][13][14][15][16]均为 RoFormer 原文，且与对应断言吻合。",
+            "citations": [
+              {
+                "number": 12,
+                "quote": "Specifically, RoPE encodes the absolute position with a rotation matrix\nand meanwhile incorporates the explicit relative position dependency in self-attention formulation."
+              },
+              {
+                "number": 13,
+                "quote": "Our theoretical analysis indicates that relative\nposition can be naturally formulated using vector production in self-attention, with absolution position information\nbeing encoded through a rotation matrix."
+              },
+              {
+                "number": 14,
+                "quote": "Specifically, the\nproposed RoPE encodes the absolute position with a rotation matrix and meanwhile incorporates\nthe explicit relative position dependency in self-attention formulation."
+              },
+              {
+                "number": 15,
+                "quote": "In contrast to the additive nature of position embedding method adopted in the previous works, i.e., Equations (3)\nto (10), our approach is multiplicative. Moreover, RoPE naturally incorporates relative position information through\nrotation matrix product"
+              },
+              {
+                "number": 16,
+                "quote": "multiplicative. Moreover, RoPE naturally incorporates relative position information through\nrotation matrix product instead of altering terms in the expanded formulation of additive position encoding when applied\nwith self-attention."
+              }
+            ]
+          }
+        ],
+        "checks": {
+          "coverage": true,
+          "subjects": true,
+          "numbers": true,
+          "conditions": true,
+          "citations": true,
+          "unsupported_claims": true,
+          "gaps": true
+        },
+        "issues": []
+      },
+      "citation_check": {
+        "cited_numbers": [
+          12,
+          13,
+          14,
+          15,
+          16
+        ],
+        "invalid_numbers": [],
+        "malformed_markers": [],
+        "has_citations": true,
+        "require_citations": true,
+        "structure_passed": true,
+        "cited_sources": [
+          {
+            "citation": 12,
+            "chunk_id": 1402,
+            "source": "2104.09864v5.pdf",
+            "page": 2,
+            "text": " encoding from the\nperspective of Neural ODE Chen et al. [2018a], and the authors of Wang et al. [2020] have proposed to model the\nposition information in complex space. Despite the effectiveness of these approaches, they commonly add the position\ninformation to the context representation and thus render them unsuitable for the linear self-attention architecture.\nIn this paper, we introduce a novel method, namely Rotary Position Embedding(RoPE), to leverage the positional\ninformation into the learning process of PLMS. Specifically, RoPE encodes the absolute position with a rotation matrix\nand meanwhile incorporates the explicit relative position dependency in self-attention formulation. Note that the\nproposed RoPE is prioritized over the existing methods through valuable properties, including the sequence length\nflexibility, decaying inter-token dependency with increasing relative distances, and the capability of equipping the\nlinear self-attention with relative position encoding. Experimental results on various long text classification benchmark\ndatasets show that the enhanced transformer with rotary position embedding, namely RoFormer, can give better\nperformance compared to base"
+          },
+          {
+            "citation": 13,
+            "chunk_id": 1456,
+            "source": "2104.09864v5.pdf",
+            "page": 12,
+            "text": "5\nConclusions\nIn this work, we proposed a new position embedding method that incorporates explicit relative position dependency in\nself-attention to enhance the performance of transformer architectures. Our theoretical analysis indicates that relative\nposition can be naturally formulated using vector production in self-attention, with absolution position information\nbeing encoded through a rotation matrix. In addition, we mathematically illustrated the advantageous properties of\nthe proposed method when applied to the Transformer. Finally, experiments on both English and Chinese benchmark\ndatasets demonstrate that our method encourages faster convergence in pre-training. The experimental results also show\nthat our proposed RoFormer can achieve better performance on long texts task.\nReferences\nJonas Gehring, Michael Auli, David Grangier, Denis Yarats, and Yann N Dauphin. Convolutional sequence to sequence\nlearning. In International Conference on Machine Learning, pages 1243–1252. PMLR, 2017.\nMd. Amirul Islam, Sen Jia, and Neil D. B. Bruce. How much position information do convolutional neural networks\nencode? ArXiv, abs/2001.08248, 2020.\nAshish Vaswani, Noam Shazeer, Niki Parmar, Ja"
+          },
+          {
+            "citation": 14,
+            "chunk_id": 1397,
+            "source": "2104.09864v5.pdf",
+            "page": 1,
+            "text": "ROFORMER: ENHANCED TRANSFORMER WITH ROTARY\nPOSITION EMBEDDING\nJianlin Su\nZhuiyi Technology Co., Ltd.\nZhuiyi Technology Co., Ltd.\nShenzhen\narXiv:2104.09864v5  [cs.CL]  8 Nov 2023\nbojonesu@wezhuiyi.com\njulianlu@wezhuiyi.com\nAhmed Murtadha\nZhuiyi Technology Co., Ltd.\nZhuiyi Technology Co., Ltd.\nShenzhen\nmengjiayi@wezhuiyi.com\nbrucewen@wezhuiyi.com\nNovember 9, 2023\nPosition encoding recently has shown effective in the transformer architecture. It enables valuable\nsupervision for dependency modeling between elements at different positions of the sequence. In\nthis paper, we first investigate various methods to integrate positional information into the learning\nprocess of transformer-based language models. Then, we propose a novel method named Rotary\nPosition Embedding(RoPE) to effectively leverage the positional information. Specifically, the\nproposed RoPE encodes the absolute position with a rotation matrix and meanwhile incorporates\nthe explicit relative position dependency in self-attention formulation. Notably, RoPE enables\nvaluable properties, including the flexibility of sequence length, decaying inter-token dependency\nwith increasing relative distances, and the capability of equip"
+          },
+          {
+            "citation": 15,
+            "chunk_id": 1418,
+            "source": "2104.09864v5.pdf",
+            "page": 5,
+            "text": "3.2.2\nGeneral form\nIn order to generalize our results in 2D to any xi ∈Rd where d is even, we divide the d-dimension space into d/2\nsub-spaces and combine them in the merit of the linearity of the inner product, turning f{q,k} into:\nf{q,k}(xm, m) = Rd\nwhere\n−sin mθ1\ncos mθ1\n\nsin mθ1\ncos mθ1\n\n0\n0\ncos mθ2\n\n\n0\n0\nsin mθ2\nRd\n\nΘ,m =\n\n...\n...\n\n\n\n0\n0\n\n0\n0\nis the rotary matrix with pre-defined parameters Θ = {θi = 10000−2(i−1)/d, i ∈[1, 2, ..., d/2]}. A graphic illustration\nof RoPE is shown in Figure (1). Applying our RoPE to self-attention in Equation (2), we obtain:\nΘ,mW qxm)⊺(Rd\nq⊺\nmkn = (Rd\nΘ,m)⊺Rd\nΘ,n−m = (Rd\nwhere Rd\nΘ,n. Note that Rd\nΘ is an orthogonal matrix, which ensures stability during the process of\nencoding position information. In addition, due to the sparsity of Rd\nEquation (16) is not computationally efficient; we provide another realization in theoretical explanation.\nIn contrast to the additive nature of position embedding method adopted in the previous works, i.e., Equations (3)\nto (10), our approach is multiplicative. Moreover, RoPE naturally incorporates relative position information through\nrotation matrix product instead of altering terms in the expanded fo"
+          },
+          {
+            "citation": 16,
+            "chunk_id": 1419,
+            "source": "2104.09864v5.pdf",
+            "page": 5,
+            "text": "multiplicative. Moreover, RoPE naturally incorporates relative position information through\nrotation matrix product instead of altering terms in the expanded formulation of additive position encoding when applied\nwith self-attention.\nθ1\nConstant\n(x1, x2)\nQuery / Key\nm\nPosition\nd=2\nθ1\nθ2\nθd/2-1 θd/2\nEnhanced\nTransformer\nwith\nRotary\nPosition\nEmbedding\nQuery / Key\nFigure 1: Implementation of Rotary Position Embedding(RoPE)."
+          }
+        ],
+        "semantic_support": "requires_manual_review"
+      }
+    }
+  ],
+  "semantic_correctness": "requires_manual_review",
+  "answer": "RoFormer 的 RoPE 用旋转矩阵编码绝对位置，同时在自注意力公式中引入显式的相对位置依赖[12][14]。与以往工作采用的加性位置嵌入不同，该方法是乘法式的；RoPE 通过旋转矩阵乘积自然地纳入相对位置信息，而不是在自注意力中修改加性位置编码展开式里的项[15][16]。其结论也说明，绝对位置信息通过旋转矩阵编码，相对位置可利用自注意力中的向量乘积自然表达[13]。",
+  "citation_check": {
+    "cited_numbers": [
+      12,
+      13,
+      14,
+      15,
+      16
+    ],
+    "invalid_numbers": [],
+    "malformed_markers": [],
+    "has_citations": true,
+    "require_citations": true,
+    "structure_passed": true,
+    "cited_sources": [
+      {
+        "citation": 12,
+        "chunk_id": 1402,
+        "source": "2104.09864v5.pdf",
+        "page": 2,
+        "text": " encoding from the\nperspective of Neural ODE Chen et al. [2018a], and the authors of Wang et al. [2020] have proposed to model the\nposition information in complex space. Despite the effectiveness of these approaches, they commonly add the position\ninformation to the context representation and thus render them unsuitable for the linear self-attention architecture.\nIn this paper, we introduce a novel method, namely Rotary Position Embedding(RoPE), to leverage the positional\ninformation into the learning process of PLMS. Specifically, RoPE encodes the absolute position with a rotation matrix\nand meanwhile incorporates the explicit relative position dependency in self-attention formulation. Note that the\nproposed RoPE is prioritized over the existing methods through valuable properties, including the sequence length\nflexibility, decaying inter-token dependency with increasing relative distances, and the capability of equipping the\nlinear self-attention with relative position encoding. Experimental results on various long text classification benchmark\ndatasets show that the enhanced transformer with rotary position embedding, namely RoFormer, can give better\nperformance compared to base"
+      },
+      {
+        "citation": 13,
+        "chunk_id": 1456,
+        "source": "2104.09864v5.pdf",
+        "page": 12,
+        "text": "5\nConclusions\nIn this work, we proposed a new position embedding method that incorporates explicit relative position dependency in\nself-attention to enhance the performance of transformer architectures. Our theoretical analysis indicates that relative\nposition can be naturally formulated using vector production in self-attention, with absolution position information\nbeing encoded through a rotation matrix. In addition, we mathematically illustrated the advantageous properties of\nthe proposed method when applied to the Transformer. Finally, experiments on both English and Chinese benchmark\ndatasets demonstrate that our method encourages faster convergence in pre-training. The experimental results also show\nthat our proposed RoFormer can achieve better performance on long texts task.\nReferences\nJonas Gehring, Michael Auli, David Grangier, Denis Yarats, and Yann N Dauphin. Convolutional sequence to sequence\nlearning. In International Conference on Machine Learning, pages 1243–1252. PMLR, 2017.\nMd. Amirul Islam, Sen Jia, and Neil D. B. Bruce. How much position information do convolutional neural networks\nencode? ArXiv, abs/2001.08248, 2020.\nAshish Vaswani, Noam Shazeer, Niki Parmar, Ja"
+      },
+      {
+        "citation": 14,
+        "chunk_id": 1397,
+        "source": "2104.09864v5.pdf",
+        "page": 1,
+        "text": "ROFORMER: ENHANCED TRANSFORMER WITH ROTARY\nPOSITION EMBEDDING\nJianlin Su\nZhuiyi Technology Co., Ltd.\nZhuiyi Technology Co., Ltd.\nShenzhen\narXiv:2104.09864v5  [cs.CL]  8 Nov 2023\nbojonesu@wezhuiyi.com\njulianlu@wezhuiyi.com\nAhmed Murtadha\nZhuiyi Technology Co., Ltd.\nZhuiyi Technology Co., Ltd.\nShenzhen\nmengjiayi@wezhuiyi.com\nbrucewen@wezhuiyi.com\nNovember 9, 2023\nPosition encoding recently has shown effective in the transformer architecture. It enables valuable\nsupervision for dependency modeling between elements at different positions of the sequence. In\nthis paper, we first investigate various methods to integrate positional information into the learning\nprocess of transformer-based language models. Then, we propose a novel method named Rotary\nPosition Embedding(RoPE) to effectively leverage the positional information. Specifically, the\nproposed RoPE encodes the absolute position with a rotation matrix and meanwhile incorporates\nthe explicit relative position dependency in self-attention formulation. Notably, RoPE enables\nvaluable properties, including the flexibility of sequence length, decaying inter-token dependency\nwith increasing relative distances, and the capability of equip"
+      },
+      {
+        "citation": 15,
+        "chunk_id": 1418,
+        "source": "2104.09864v5.pdf",
+        "page": 5,
+        "text": "3.2.2\nGeneral form\nIn order to generalize our results in 2D to any xi ∈Rd where d is even, we divide the d-dimension space into d/2\nsub-spaces and combine them in the merit of the linearity of the inner product, turning f{q,k} into:\nf{q,k}(xm, m) = Rd\nwhere\n−sin mθ1\ncos mθ1\n\nsin mθ1\ncos mθ1\n\n0\n0\ncos mθ2\n\n\n0\n0\nsin mθ2\nRd\n\nΘ,m =\n\n...\n...\n\n\n\n0\n0\n\n0\n0\nis the rotary matrix with pre-defined parameters Θ = {θi = 10000−2(i−1)/d, i ∈[1, 2, ..., d/2]}. A graphic illustration\nof RoPE is shown in Figure (1). Applying our RoPE to self-attention in Equation (2), we obtain:\nΘ,mW qxm)⊺(Rd\nq⊺\nmkn = (Rd\nΘ,m)⊺Rd\nΘ,n−m = (Rd\nwhere Rd\nΘ,n. Note that Rd\nΘ is an orthogonal matrix, which ensures stability during the process of\nencoding position information. In addition, due to the sparsity of Rd\nEquation (16) is not computationally efficient; we provide another realization in theoretical explanation.\nIn contrast to the additive nature of position embedding method adopted in the previous works, i.e., Equations (3)\nto (10), our approach is multiplicative. Moreover, RoPE naturally incorporates relative position information through\nrotation matrix product instead of altering terms in the expanded fo"
+      },
+      {
+        "citation": 16,
+        "chunk_id": 1419,
+        "source": "2104.09864v5.pdf",
+        "page": 5,
+        "text": "multiplicative. Moreover, RoPE naturally incorporates relative position information through\nrotation matrix product instead of altering terms in the expanded formulation of additive position encoding when applied\nwith self-attention.\nθ1\nConstant\n(x1, x2)\nQuery / Key\nm\nPosition\nd=2\nθ1\nθ2\nθd/2-1 θd/2\nEnhanced\nTransformer\nwith\nRotary\nPosition\nEmbedding\nQuery / Key\nFigure 1: Implementation of Rotary Position Embedding(RoPE)."
+      }
+    ],
+    "semantic_support": "requires_manual_review"
+  }
+}

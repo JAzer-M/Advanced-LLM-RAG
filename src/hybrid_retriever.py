@@ -1,3 +1,6 @@
+# RRF 融合不同检索列表的名次，避免直接相加量纲不同的 Dense/BM25 分数。
+# k 是名次平滑常数；top_k 才是返回候选条数。此阶段尚未执行 BGE 重排。
+
 def reciprocal_rank_fusion(
     dense_results,
     bm25_results,

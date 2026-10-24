@@ -1,0 +1,352 @@
+{
+  "reviewer": "assistant manual source review; not independent expert/holdout evaluation",
+  "rubric_source": "protocol.json created before new API calls",
+  "gold_unchanged": true,
+  "questions": [
+    {
+      "id": "p1",
+      "question": "原始 RAG 论文采用什么生成器？其参数规模是多少？",
+      "answer_source": "refined_answers/p1.json",
+      "run_provenance": "fixed evidence; generation only",
+      "core_points": "2/2",
+      "verdict": "core_complete_supported",
+      "note": "BART-large和406M有第18页参数附录直接支持；第3页正文约400M是另一处概述。最终引用为标准[6]。",
+      "citation_structure_passed": true,
+      "citations": [
+        {
+          "number": 6,
+          "chunk_id": 542,
+          "source": "2005.11401v4.pdf",
+          "page": 18
+        }
+      ],
+      "gold": [
+        {
+          "source": "2005.11401v4.pdf",
+          "page": 3,
+          "quote": "We use BART-large",
+          "matching_ids": [
+            372
+          ],
+          "selected": false,
+          "in_context": false
+        },
+        {
+          "source": "2005.11401v4.pdf",
+          "page": 3,
+          "quote": "with 400M parameters",
+          "matching_ids": [
+            372
+          ],
+          "selected": false,
+          "in_context": false
+        }
+      ]
+    },
+    {
+      "id": "p2",
+      "question": "DPR 使用什么函数计算问题向量和段落向量的相似度？",
+      "answer_source": "answers/p2.json",
+      "run_provenance": "fresh full main pipeline",
+      "core_points": "1/1",
+      "verdict": "core_complete_supported",
+      "note": "点积与公式有直接来源；额外提及L2和triplet loss也有来源，但并非提问必需。",
+      "citation_structure_passed": true,
+      "citations": [
+        {
+          "number": 1,
+          "chunk_id": 28,
+          "source": "2004.04906v3.pdf",
+          "page": 3
+        },
+        {
+          "number": 2,
+          "chunk_id": 151,
+          "source": "2004.04906v3.pdf",
+          "page": 12
+        }
+      ],
+      "gold": [
+        {
+          "source": "2004.04906v3.pdf",
+          "page": 3,
+          "quote": "using the dot product of their vectors",
+          "matching_ids": [
+            28
+          ],
+          "selected": true,
+          "in_context": true
+        }
+      ]
+    },
+    {
+      "id": "p3",
+      "question": "ColBERT 的 MaxSim 如何把查询词与文档词的相似度合成为文档得分？",
+      "answer_source": "refined_answers/p3.json",
+      "run_provenance": "fixed evidence; generation only",
+      "core_points": "2/2",
+      "verdict": "core_complete_supported",
+      "note": "每查询token取最大匹配并求和有直接来源，未再把独立的L2度量选项说成MaxSim规则的例外；仍含可省略的GPU实现细节。",
+      "citation_structure_passed": true,
+      "citations": [
+        {
+          "number": 1,
+          "chunk_id": 218,
+          "source": "2004.12832v2.pdf",
+          "page": 4
+        },
+        {
+          "number": 2,
+          "chunk_id": 195,
+          "source": "2004.12832v2.pdf",
+          "page": 2
+        },
+        {
+          "number": 3,
+          "chunk_id": 219,
+          "source": "2004.12832v2.pdf",
+          "page": 4
+        },
+        {
+          "number": 7,
+          "chunk_id": 244,
+          "source": "2004.12832v2.pdf",
+          "page": 5
+        }
+      ],
+      "gold": [
+        {
+          "source": "2004.12832v2.pdf",
+          "page": 4,
+          "quote": "maximum cosine similarity",
+          "matching_ids": [
+            219
+          ],
+          "selected": true,
+          "in_context": true
+        },
+        {
+          "source": "2004.12832v2.pdf",
+          "page": 4,
+          "quote": "combine the outputs via summation",
+          "matching_ids": [
+            219
+          ],
+          "selected": true,
+          "in_context": true
+        }
+      ]
+    },
+    {
+      "id": "p4",
+      "question": "Self-RAG 的四类 reflection tokens 分别是什么，各负责判断什么？",
+      "answer_source": "answers/p4.json",
+      "run_provenance": "fresh full main pipeline",
+      "core_points": "4/4",
+      "verdict": "core_complete_supported",
+      "note": "四类token与职责均对应Table 1，支持性与有用性未混淆。",
+      "citation_structure_passed": true,
+      "citations": [
+        {
+          "number": 1,
+          "chunk_id": 587,
+          "source": "2310.11511v1.pdf",
+          "page": 4
+        },
+        {
+          "number": 2,
+          "chunk_id": 556,
+          "source": "2310.11511v1.pdf",
+          "page": 1
+        },
+        {
+          "number": 4,
+          "chunk_id": 588,
+          "source": "2310.11511v1.pdf",
+          "page": 4
+        },
+        {
+          "number": 10,
+          "chunk_id": 583,
+          "source": "2310.11511v1.pdf",
+          "page": 3
+        }
+      ],
+      "gold": [
+        {
+          "source": "2310.11511v1.pdf",
+          "page": 4,
+          "quote": "Decides when to retrieve with",
+          "matching_ids": [
+            587
+          ],
+          "selected": true,
+          "in_context": true
+        },
+        {
+          "source": "2310.11511v1.pdf",
+          "page": 4,
+          "quote": "provides useful information to solve",
+          "matching_ids": [
+            587
+          ],
+          "selected": true,
+          "in_context": true
+        },
+        {
+          "source": "2310.11511v1.pdf",
+          "page": 4,
+          "quote": "All of the verification-worthy statement",
+          "matching_ids": [
+            587
+          ],
+          "selected": true,
+          "in_context": true
+        },
+        {
+          "source": "2310.11511v1.pdf",
+          "page": 4,
+          "quote": "is a useful response to",
+          "matching_ids": [
+            587
+          ],
+          "selected": true,
+          "in_context": true
+        }
+      ]
+    },
+    {
+      "id": "p5",
+      "question": "CRAG 的 retrieval evaluator 将检索质量划分为哪三种置信判断，用于触发后续行动？",
+      "answer_source": "answers/p5.json",
+      "run_provenance": "fresh full main pipeline",
+      "core_points": "3/3",
+      "verdict": "core_complete_supported",
+      "note": "Correct/Incorrect/Ambiguous及触发动作有第3页正文和第4页图注支持。",
+      "citation_structure_passed": true,
+      "citations": [
+        {
+          "number": 1,
+          "chunk_id": 877,
+          "source": "2401.15884v3.pdf",
+          "page": 4
+        },
+        {
+          "number": 2,
+          "chunk_id": 872,
+          "source": "2401.15884v3.pdf",
+          "page": 3
+        },
+        {
+          "number": 6,
+          "chunk_id": 873,
+          "source": "2401.15884v3.pdf",
+          "page": 3
+        }
+      ],
+      "gold": [
+        {
+          "source": "2401.15884v3.pdf",
+          "page": 3,
+          "quote": "{Correct, Incorrect, Ambiguous}",
+          "matching_ids": [
+            873
+          ],
+          "selected": true,
+          "in_context": true
+        }
+      ]
+    },
+    {
+      "id": "p6",
+      "question": "DPR 和 ColBERT 在问题／文档的向量表示以及相关性打分上有什么主要区别？",
+      "answer_source": "refined_answers/p6.json",
+      "run_provenance": "fixed evidence; generation only",
+      "core_points": "4/4",
+      "verdict": "core_complete_with_remaining_precision_and_scope_issues",
+      "note": "DPR单向量/点积与ColBERT多向量/MaxSim求和四点齐备，引用[5]/[2]/[9]/[4]可追溯。严格评价仍保留瑕疵：尾部增加未提问的维度缺证据说明；括号中的平方L2表述没有区分距离与相似度方向，不宜当作最大距离求和的结论。没有把该题标为严格无瑕疵通过。",
+      "citation_structure_passed": true,
+      "citations": [
+        {
+          "number": 2,
+          "chunk_id": 189,
+          "source": "2004.12832v2.pdf",
+          "page": 2
+        },
+        {
+          "number": 4,
+          "chunk_id": 219,
+          "source": "2004.12832v2.pdf",
+          "page": 4
+        },
+        {
+          "number": 5,
+          "chunk_id": 28,
+          "source": "2004.04906v3.pdf",
+          "page": 3
+        },
+        {
+          "number": 8,
+          "chunk_id": 170,
+          "source": "2004.12832v2.pdf",
+          "page": 1
+        },
+        {
+          "number": 9,
+          "chunk_id": 222,
+          "source": "2004.12832v2.pdf",
+          "page": 4
+        }
+      ],
+      "gold": [
+        {
+          "source": "2004.04906v3.pdf",
+          "page": 3,
+          "quote": "using the dot product of their vectors",
+          "matching_ids": [
+            28
+          ],
+          "selected": true,
+          "in_context": true
+        },
+        {
+          "source": "2004.12832v2.pdf",
+          "page": 4,
+          "quote": "maximum cosine similarity",
+          "matching_ids": [
+            219
+          ],
+          "selected": true,
+          "in_context": true
+        },
+        {
+          "source": "2004.12832v2.pdf",
+          "page": 4,
+          "quote": "combine the outputs via summation",
+          "matching_ids": [
+            219
+          ],
+          "selected": true,
+          "in_context": true
+        }
+      ]
+    },
+    {
+      "id": "p7",
+      "question": "这五种方法在本项目这台 Mac 上，哪一种响应最快？请给出各自的毫秒数。",
+      "answer_source": "refined_answers/p7.json",
+      "run_provenance": "fixed evidence; generation only",
+      "core_points": "2/2",
+      "verdict": "correct_concise_chinese_refusal",
+      "note": "明确没有这台Mac上的五种方法实测，未给排名或毫秒数，也未再附其他硬件数字；无须伪造引用。",
+      "citation_structure_passed": true,
+      "citations": [],
+      "gold": []
+    }
+  ],
+  "limits": [
+    "Core-point coverage is distinct from strict semantic correctness.",
+    "Single fixed development set of seven questions; not generalized accuracy.",
+    "Four final answers reuse fixed evidence; they are not another fresh full pipeline run."
+  ]
+}

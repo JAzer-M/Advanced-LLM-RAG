@@ -1,0 +1,35 @@
+{
+  "status": "frozen_before_implementation",
+  "caps": [
+    0,
+    1,
+    3
+  ],
+  "rewrite": false,
+  "hyde": false,
+  "final_k": 10,
+  "first_round": "Exact prior one-round policy, replay must preserve IDs and scores.",
+  "later_rounds": "Same original subquestions and paper scopes; deepen Dense/BM25/RRF per-paper candidate budget to min(60*round,paper_chunk_count), at most 4 tasks per pass. Score only new global candidates, rerank local scoped candidates. Final selection unchanged.",
+  "max_scoped_queries": 12,
+  "early_stop": [
+    "same query/source/effective-depth signature already attempted",
+    "no unique candidate added after later pass",
+    "no trigger for explicit cross-paper questions"
+  ],
+  "independent_variable_limit": "Rounds 2/3 increase candidate depth; gains cannot isolate round count from candidate budget. No LLM semantic gap checker.",
+  "sets": [
+    "new",
+    "old_core",
+    "old_validation",
+    "old_three_papers"
+  ],
+  "old_conditions": "Reuse each prior set cache/no-auxiliary conditions; no new rewrites. Historical old-core rewrite control uses cached text only, main rewriting stays off.",
+  "api_calls": 0,
+  "adoption_gates": {
+    "new_cross_recall_gain_vs_zero_at_least": 0.1,
+    "new_map_mrr_max_drop_vs_zero": 0.01,
+    "each_old_set_recall_max_drop_vs_zero": 0,
+    "each_old_set_map_mrr_max_drop_vs_zero": 0.01
+  },
+  "stop": "One fixed depth schedule, no tuning after scores; retain disabled default if any old-set gate fails. No paid generation in this round."
+}

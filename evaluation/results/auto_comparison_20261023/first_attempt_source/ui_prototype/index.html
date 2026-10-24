@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="基于论文原文的本地问答工作台">
+  <title>PaperLens · 论文问答工作台</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="/" aria-label="PaperLens首页"><span class="brand-mark" data-icon="layers"></span><span>PaperLens<span class="brand-sub">论文问答工作台</span></span></a>
+    <div class="workspace"><span class="eyebrow">研究空间</span><div class="workspace-name"><span data-icon="folder"></span>Advanced-LLM-RAG</div><div class="workspace-meta" id="kbSummary">正在读取本地知识库</div></div>
+    <button class="new-question" id="newQuestion"><span data-icon="plus"></span>开始新提问<span class="shortcut">⌘ ↵</span></button>
+    <div class="section-label">工作台</div>
+    <button class="nav-item active" id="workspaceButton"><span data-icon="chat"></span>论文问答<span class="nav-arrow">↗</span></button>
+    <button class="nav-item" id="catalogButton"><span data-icon="book"></span>我的知识库<span class="nav-count" id="paperCount">8</span></button>
+    <div class="history-heading"><span class="section-label">真实案例回放</span><span data-icon="history"></span></div>
+    <div id="exampleList" class="example-list"></div>
+    <div class="sidebar-bottom"><div class="local-note"><span class="live-dot"></span>仅在本机运行<span class="version">v0.1</span></div><button class="help-button" id="helpButton"><span data-icon="help"></span>使用说明<span>↗</span></button></div>
+  </aside>
+
+  <div class="app-shell">
+    <header class="topbar"><div class="breadcrumb"><span data-icon="panel"></span>研究空间<span>/</span><strong>论文问答</strong></div><div class="mobile-brand"><span data-icon="layers"></span>PaperLens</div><div class="topbar-right"><button class="mobile-catalog" id="mobileCatalog" aria-label="查看知识库" title="查看知识库"><span data-icon="book"></span></button><span class="prototype-badge">试验版</span><span class="connection"><span class="live-dot"></span>本地连接</span></div></header>
+    <main>
+      <section class="page-intro"><div class="intro-label"><span></span>FROM QUESTIONS TO EVIDENCE</div><h1>让每个回答，都有据可查<span>。</span></h1><p>向论文提问，追溯原文，让研究思路更清晰。</p></section>
+
+      <form class="composer" id="queryForm">
+        <label class="sr-only" for="query">你的论文问题</label>
+        <textarea id="query" rows="3" maxlength="2000" placeholder="你想从论文中了解什么？试试比较方法、解释机制，或核实一个实验结论。"></textarea>
+        <div class="composer-footer"><div class="composer-options"><div class="mode-control" role="group" aria-label="问答模式"><button type="button" data-mode="rag">RAG</button><button type="button" data-mode="auto" class="selected">Auto<span class="mode-dot"></span></button><button type="button" data-mode="agent">Agent</button></div><span class="option-divider"></span><label class="network-option"><input type="checkbox" id="allowNetwork"><span class="toggle-track"></span><span data-icon="globe"></span>联网补证据</label></div><button class="run-button" id="runButton" type="submit"><span data-icon="arrow-up"></span><span>运行问题</span></button></div>
+        <div class="composer-caption"><span id="modeDescription">先用本地证据回答，遇到明确缺口时再升级补查。</span><span>⌘ / Ctrl + Enter</span></div>
+      </form>
+
+      <div class="quick-examples"><span>先看看真实记录</span><button data-example="transformer"><span data-icon="book"></span>本地回答</button><button data-example="flash"><span data-icon="globe"></span>联网补证据</button><button data-example="unavailable"><span data-icon="shield"></span>来源不可用</button></div>
+      <div id="message" class="message" role="alert" hidden></div>
+      <section id="runningPanel" class="running-panel" hidden aria-live="polite"><div class="spinner"></div><div><strong>正在处理你的问题<span class="loading-dots"></span></strong><p>检索论文原文并组织回答，首次运行需要加载本地模型。</p></div><span id="runningTime">0.0s</span></section>
+
+      <section id="resultSection" hidden>
+        <div class="result-heading"><div class="result-title"><span class="result-status" id="resultStatus"></span><span class="replay-label" id="originLabel"></span></div><div class="run-meta" id="runMeta"></div></div>
+        <div class="result-grid">
+          <article class="answer-card"><div class="answer-tabs"><div role="tablist" aria-label="结果内容"><button class="active" id="answerTab" role="tab" aria-selected="true">回答</button><button id="activityTab" role="tab" aria-selected="false">运行过程<span id="activityCount"></span></button></div><button class="copy-button" id="copyAnswer" title="复制答案" aria-label="复制答案"><span data-icon="copy"></span></button></div>
+            <div id="answerView"><div class="answer-label"><span class="answer-emblem" data-icon="spark"></span><span id="answerLabel">基于论文原文的回答</span></div><div class="answer-body" id="answerBody"></div><div class="answer-disclaimer" id="answerNote"></div></div>
+            <div id="activityView" class="activity-view" hidden></div>
+            <div class="metrics" id="metrics"></div>
+          </article>
+          <aside class="evidence-panel"><div class="evidence-heading"><div><span data-icon="quote"></span><h2>证据原文</h2><span class="evidence-count" id="evidenceCount"></span></div><span class="evidence-status">可追溯</span></div><p class="evidence-hint">点击回答中的编号，定位对应原文。</p><div class="evidence-filter" role="group" aria-label="证据筛选"><button class="active" id="citedOnly">引用片段</button><button id="allEvidence">全部证据</button></div><div class="source-list" id="sourceList"></div><div class="evidence-footer" id="evidenceFooter"></div></aside>
+        </div>
+      </section>
+      <section class="empty-state" id="emptyState" hidden><span data-icon="search"></span><h2>一个问题，是研究的开始。</h2><p>输入你的问题，或选择一条真实案例，看看答案如何回到原文。</p></section>
+      <footer class="page-footer"><span>PaperLens<span class="footer-dot">·</span>Advanced-LLM-RAG</span><span>原文为据，有限回答。</span></footer>
+    </main>
+  </div>
+  <dialog id="infoDialog"><div class="dialog-header"><h2 id="dialogTitle"></h2><button id="closeDialog" aria-label="关闭弹窗">×</button></div><div id="dialogContent"></div></dialog>
+  <div class="toast" id="toast" hidden role="status"></div>
+</body>
+</html>

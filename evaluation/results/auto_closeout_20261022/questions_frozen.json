@@ -1,0 +1,210 @@
+[
+  {
+    "id": "a01",
+    "type": "single_document",
+    "question": "In Attention Is All You Need, which three transformations share a weight matrix, and how are those weights scaled in the embedding layers?",
+    "required_points": [
+      "The encoder/input embedding, decoder/output embedding, and pre-softmax linear transformation share the same weight matrix.",
+      "In the embedding layers the weights are multiplied by sqrt(d_model)."
+    ],
+    "supplementary_points": [
+      "Naming the cited predecessor paper or giving the numerical base-model dimension is optional."
+    ],
+    "gold_evidence": [
+      {
+        "source": "Attention is all you need.pdf",
+        "page": 5,
+        "quote": "we share the same weight matrix between the two embedding layers and the pre-softmax linear transformation"
+      }
+    ],
+    "novelty": "New question and required facts; same known corpus, not an unseen-knowledge claim.",
+    "gold_chunk_ids_at_freeze": [
+      44
+    ]
+  },
+  {
+    "id": "a02",
+    "type": "single_document",
+    "question": "What k, n, alpha, and beta values does DCNN use for local response normalization, and is that normalization applied before or after ReLU?",
+    "required_points": [
+      "The LRN hyperparameters are k=2, n=5, alpha=10^-4, and beta=0.75.",
+      "This normalization is applied after the ReLU nonlinearity in the selected layers."
+    ],
+    "supplementary_points": [
+      "Explaining the brightness-normalization name or reproducing the entire formula is optional."
+    ],
+    "gold_evidence": [
+      {
+        "source": "DCNN.pdf",
+        "page": 3,
+        "quote": "we used k = 2, n = 5, α = 10−4, and β = 0.75"
+      },
+      {
+        "source": "DCNN.pdf",
+        "page": 3,
+        "quote": "We applied this normalization after applying the ReLU nonlinearity"
+      }
+    ],
+    "novelty": "New question and required facts; same known corpus, not an unseen-knowledge claim.",
+    "gold_chunk_ids_at_freeze": [
+      145
+    ]
+  },
+  {
+    "id": "a03",
+    "type": "single_document",
+    "question": "What upper and lower retrieval-confidence thresholds does CRAG report for PopQA and for Biography?",
+    "required_points": [
+      "PopQA uses upper threshold 0.59 and lower threshold -0.99.",
+      "Biography uses upper threshold 0.95 and lower threshold -0.91."
+    ],
+    "supplementary_points": [
+      "The PubQA/ARC settings and a full explanation of all three action types are optional."
+    ],
+    "gold_evidence": [
+      {
+        "source": "2401.15884v3.pdf",
+        "page": 15,
+        "quote": "they were set as (0.59, -0.99) in PopQA"
+      },
+      {
+        "source": "2401.15884v3.pdf",
+        "page": 15,
+        "quote": "as well as (0.95, -0.91) in Biography"
+      }
+    ],
+    "novelty": "New question and required facts; same known corpus, not an unseen-knowledge claim.",
+    "gold_chunk_ids_at_freeze": [
+      1387
+    ]
+  },
+  {
+    "id": "a04",
+    "type": "cross_document",
+    "question": "For Transformer translation and for the original RAG paper's Open-MSMarco and Jeopardy generation experiments, what beam size is used in each, and how many documents are retrieved for those RAG experiments?",
+    "required_points": [
+      "Transformer translation uses beam size 4.",
+      "RAG uses beam size 4 for the specified generation experiments.",
+      "RAG uses ten retrieved documents for Open-MSMarco and Jeopardy generation (both RAG-Token and RAG-Sequence)."
+    ],
+    "supplementary_points": [
+      "Transformer length penalty and RAG Fast/Thorough decoding details are optional."
+    ],
+    "gold_evidence": [
+      {
+        "source": "Attention is all you need.pdf",
+        "page": 8,
+        "quote": "We used beam search with a beam size of 4"
+      },
+      {
+        "source": "2005.11401v4.pdf",
+        "page": 17,
+        "quote": "For Open-MSMarco and Jeopardy question generation, we report test numbers using ten retrieved documents"
+      },
+      {
+        "source": "2005.11401v4.pdf",
+        "page": 17,
+        "quote": "We use a beam size of four"
+      }
+    ],
+    "novelty": "New question and required facts; same known corpus, not an unseen-knowledge claim.",
+    "gold_chunk_ids_at_freeze": [
+      73,
+      903
+    ]
+  },
+  {
+    "id": "a05",
+    "type": "cross_document",
+    "question": "What training batch size and learning rate are reported for the main DPR retriever and for ColBERT fine-tuning?",
+    "required_points": [
+      "DPR main retriever training uses batch size 128.",
+      "DPR encoder training uses learning rate 10^-5.",
+      "ColBERT fine-tuning uses batch size 32.",
+      "ColBERT fine-tuning uses learning rate 3*10^-6."
+    ],
+    "supplementary_points": [
+      "Negative passage composition, epoch counts, warm-up and embedding dimensions are optional."
+    ],
+    "gold_evidence": [
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 5,
+        "quote": "with a batch size of 128"
+      },
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 5,
+        "quote": "with a learning rate of 10−5"
+      },
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 6,
+        "quote": "learning rate 3 × 10−6 with a batch size 32"
+      }
+    ],
+    "novelty": "New question and required facts; same known corpus, not an unseen-knowledge claim.",
+    "gold_chunk_ids_at_freeze": [
+      435,
+      436,
+      641
+    ]
+  },
+  {
+    "id": "a06",
+    "type": "cross_document",
+    "question": "How do DCNN and VGG center RGB pixel values before the network, and from which data are their subtracted means computed?",
+    "required_points": [
+      "DCNN subtracts the mean activity over the training set from each pixel and uses centered raw RGB values.",
+      "VGG subtracts the mean RGB value computed on the training set from each pixel."
+    ],
+    "supplementary_points": [
+      "Resizing/cropping dimensions, data augmentation and a stronger claim about spatial mean-image granularity are optional."
+    ],
+    "gold_evidence": [
+      {
+        "source": "DCNN.pdf",
+        "page": 2,
+        "quote": "subtracting the mean activity over the training set from each pixel"
+      },
+      {
+        "source": "VGG.pdf",
+        "page": 2,
+        "quote": "subtracting the mean RGB value, computed on the training set, from each pixel"
+      }
+    ],
+    "novelty": "New question and required facts; same known corpus, not an unseen-knowledge claim.",
+    "gold_chunk_ids_at_freeze": [
+      128,
+      232
+    ]
+  },
+  {
+    "id": "a07",
+    "type": "unanswerable",
+    "question": "Using only the supplied corpus, what hidden-layer count and context-window length does the Gemma 2 technical report specify for Gemma 2 9B?",
+    "required_points": [
+      "The Gemma 2 primary report is absent; the supplied corpus cannot establish either requested specification and neither value should be guessed."
+    ],
+    "supplementary_points": [
+      "An exhaustive inventory of the eight supplied papers is optional."
+    ],
+    "gold_evidence": [],
+    "novelty": "New question and required facts; same known corpus, not an unseen-knowledge claim.",
+    "gold_chunk_ids_at_freeze": []
+  },
+  {
+    "id": "a08",
+    "type": "unanswerable",
+    "question": "What exact monetary training bill in US dollars and energy consumption in kWh does the original DPR paper report for training its main retriever?",
+    "required_points": [
+      "The supplied DPR paper does not establish an exact USD training bill or kWh consumption; state both gaps without inventing either measurement."
+    ],
+    "supplementary_points": [
+      "Available GPU, epoch and batch-size details may be given as context but cannot substitute for dollars or kWh."
+    ],
+    "gold_evidence": [],
+    "novelty": "New question and required facts; same known corpus, not an unseen-knowledge claim.",
+    "gold_chunk_ids_at_freeze": []
+  }
+]

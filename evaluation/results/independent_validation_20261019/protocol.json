@@ -1,0 +1,61 @@
+{
+  "phase": "Frozen before retrieval or generation; all source references preselected from actual chunks.",
+  "question_file": "evaluation/arxiv_next_questions_en.json",
+  "question_sha256": "f36b70f65eba7399fbcd0c8279cee565b9cb46dfc18d635bb05bda67fc15c257",
+  "distribution": {
+    "single_document": 4,
+    "cross_document": 6,
+    "unanswerable": 2
+  },
+  "limitations": "New hand-authored questions from the same five papers, with correlated/overlapping evidence; not external blind data.",
+  "retrieval": {
+    "kb_version": "arxiv-pilot-5-20261019",
+    "candidate_k": 60,
+    "top_k": 10,
+    "auxiliary": "One fresh decomposition per answerable question; rewriting disabled to match main.py. No Gold/reference points in prompts."
+  },
+  "grounding": {
+    "question_ids": [
+      "n03",
+      "n05",
+      "n08",
+      "n11"
+    ],
+    "conditions": [
+      "closed_book",
+      "gold_evidence",
+      "irrelevant_evidence"
+    ],
+    "calls": 12,
+    "positive_control": "Curated actual Gold passages, explicitly oracle evidence; does not claim end-to-end retrieval answers. n11 Gold empty.",
+    "closed_book": "Own-knowledge instruction differs intentionally from evidence-only instruction; measures parametric factual baseline.",
+    "evidence_controls": "Gold vs irrelevant use identical evidence-only prompt. No citation repair or LLM judge. Evaluate factual points, citation support and refusal manually.",
+    "irrelevant_sources": {
+      "n03": "2310.11511v1.pdf",
+      "n05": "2401.15884v3.pdf",
+      "n08": "2004.12832v2.pdf",
+      "n11": "2004.04906v3.pdf"
+    }
+  },
+  "bounded_optimization": {
+    "max_rank_candidates": 2,
+    "no_new_models_or_reindex": true,
+    "candidate_A": "Reorder the already selected set by RRF votes from global CE ranking, original RRF ranking and per-subquery local evidence ranks; k=60 fixed.",
+    "candidate_B": "Original retrieval first hit, then subquery first hits, then remaining selected passages in global CE order.",
+    "adoption_gate": "Same selected IDs/Recall@10; new ten answerable questions MAP improves at least .03 and MRR at least .02; each old regression dataset MAP and MRR decline no more than .01. If neither qualifies, retain baseline.",
+    "cost_cap": "Ten new decomposition calls plus twelve controlled answer calls; ranking probes fully offline, no repeated sampling.",
+    "cross_guard_before_probes": "New cross-document MAP and MRR must not decline."
+  },
+  "pre_run_review": "Before any model call, scoring points made literal to question scope: no required unasked long-query truncation or dimension detail.",
+  "metadata_followup": {
+    "reason": "Positive controls n05/n08 lacked source titles; model explicitly denied paper identity despite correct passages. main.build_context also omitted existing title metadata.",
+    "change": "Add real existing paper title to source header; keep raw passages, question, Gold, model and evidence policy fixed.",
+    "calls": 2,
+    "question_ids": [
+      "n05",
+      "n08"
+    ],
+    "scope": "Targeted positive-control replay only. Initial 12 outputs retained as primary experiment; do not claim a fresh full matrix.",
+    "revised_auxiliary_and_answer_call_cap": 24
+  }
+}

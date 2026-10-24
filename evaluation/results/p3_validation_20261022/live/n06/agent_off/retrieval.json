@@ -1,0 +1,893 @@
+{
+  "query": "According to the original FlashAttention paper, what was the total measured energy consumption in kWh for all of its reported training experiments?",
+  "status": "retrieval_completed",
+  "decomposition": {
+    "needs_decomposition": false,
+    "sub_queries": [],
+    "status": "not_needed"
+  },
+  "knowledge_base": {
+    "version": "all-papers-8-20261020",
+    "chunk_count": 1397,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/manifest.json",
+    "manifest_sha256": "9c4e2c26b4f11fe7baf526595630cbee2d325416ec0e497f417975fbd60779ef",
+    "files": {
+      "faiss.index": "ff1f4a3e38e20c0275ba79d805e6475639b3cea7a7a583f9c18c67ec8e40a2ed",
+      "chunks.json": "3e63d75abbe164ff8e135b1d66fd6b02d9479b2e037e289a726e7c542464593a"
+    }
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 120,
+    "global_top_ids": [
+      1128,
+      293,
+      262,
+      197,
+      65,
+      82,
+      73,
+      254,
+      52,
+      1015
+    ],
+    "protected_ids": [],
+    "sub_query_evidence": [],
+    "retrieval_anchor_ids": [
+      254
+    ],
+    "evidence_completion": {
+      "requested_sources": [],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        1128,
+        293,
+        262,
+        197,
+        65,
+        82,
+        73,
+        254,
+        52,
+        1015
+      ],
+      "retained_local_ids": [],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        1128,
+        293,
+        262,
+        197,
+        65,
+        82,
+        73,
+        254,
+        52,
+        1015
+      ],
+      "elapsed_seconds": 0.00021
+    }
+  },
+  "selected_ids": [
+    1128,
+    293,
+    262,
+    197,
+    65,
+    82,
+    73,
+    254,
+    52,
+    1015
+  ],
+  "context": "Original passages:\n[1] Source: 2310.11511v1.pdf | Page: 19 | Section: 6 CONCLUSION\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nWe use Deepspeed stage 3 (Rajbhandari et al., 2020) to conduct multi-GPU distributed training, with training precision Bfloat16 enabled. FlashAttention (Dao et al., 2022) is used to make the long-context training more efficient. We run inference of our trained models using 1-2 Quadro RTX 6000 GPUs with 24GB memory.\n\n[2] Source: VGG.pdf | Page: 7 | Section: 4.3 MULTI-CROP EVALUATION\nAs noted above, we hypothesize that this is due to a different treatment of convolution boundary conditions. Table 5: ConvNet evaluation techniques comparison. In all experiments the training scale S was sampled from [256; 512], and three test scales Q were considered: {256, 384, 512}.\n\n[3] Source: VGG.pdf | Page: 4 | Section: 3.1 TRAINING\nIn our experiments, we evaluated models trained at two ﬁxed scales: S = 256 (which has been widely used in the prior art (Krizhevsky et al., 2012; Zeiler & Fergus, 2013; Sermanet et al., 2014)) and S = 384. Given a ConvNet conﬁguration, we ﬁrst trained the network using S = 256. To speed-up training of the S = 384 network, it was initialised with the weights pre-trained with S = 256, and we used a smaller initial learning rate of 10−3. The second approach to setting S is multi-scale training, where each training image is individually rescaled by randomly sampling S from a certain range [Smin, Smax] (we used Smin = 256 and Smax = 512).\n\n[4] Source: DCNN.pdf | Page: 7 | Section: 8. DISCUSSION\nSo the depth really is important for achieving our results. To simplify our experiments, we did not use any unsuper- vised pre-training even though we expect that it will help, espe- cially if we obtain enough computational power to significantly increase the size of the network without obtaining a corre- sponding increase in the amount of labeled data.\n\n[5] Source: Attention is all you need.pdf | Page: 7 | Section: 5.2 Hardware and Schedule\nFor our base models using the hyperparameters described throughout the paper, each training step took about 0.4 seconds. We trained the base models for a total of 100,000 steps or 12 hours. For our big models,(described on the bottom line of table 3), step time was 1.0 seconds. The big models were trained for 300,000 steps (3.5 days).\n\n[6] Source: Attention is all you need.pdf | Page: 9 | Section: 7 Conclusion\nIn the former task our best model outperforms even all previously reported ensembles. We are excited about the future of attention-based models and plan to apply them to other tasks. We plan to extend the Transformer to problems involving input and output modalities other than text and to investigate local, restricted attention mechanisms to efﬁciently handle large inputs and outputs such as images, audio and video. Making generation less sequential is another research goals of ours.\n\n[7] Source: Attention is all you need.pdf | Page: 8 | Section: 6.1 Machine Translation\nThe Transformer (big) model trained for English-to-French used dropout rate Pdrop = 0.1, instead of 0.3. For the base models, we used a single model obtained by averaging the last 5 checkpoints, which were written at 10-minute intervals. For the big models, we averaged the last 20 checkpoints. We used beam search with a beam size of 4 and length penalty α = 0.6 [31]. These hyperparameters were chosen after experimentation on the development set.\n\n[8] Source: VGG.pdf | Page: 4 | Section: 3.1 TRAINING\nThe batch size was set to 256, momentum to 0.9. The training was regularised by weight decay (the L2 penalty multiplier set to 5·10−4) and dropout regularisation for the ﬁrst two fully-connected layers (dropout ratio set to 0.5). The learning rate was initially set to 10−2, and then decreased by a factor of 10 when the validation set accuracy stopped improving. In total, the learning rate was decreased 3 times, and the learning was stopped after 370K iterations (74 epochs).\n\n[9] Source: Attention is all you need.pdf | Page: 6 | Section: 4 Why Self-Attention\nOne is the total computational complexity per layer. Another is the amount of computation that can be parallelized, as measured by the minimum number of sequential operations required. The third is the path length between long-range dependencies in the network. Learning long-range dependencies is a key challenge in many sequence transduction tasks.\n\n[10] Source: 2310.11511v1.pdf | Page: 8 | Section: 4.3 EXPERIMENTAL SETTINGS\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nTable 2: Overall experiment results on six tasks. Bold numbers indicate the best performance among non-proprietary models, and gray-colored bold text indicates the best proprietary model when they outperforms all non-proprietary models. ∗indicates concurrent or recent results reported by concurrent work. – indicates numbers that are not reported by the original papers or are not applicable.\n\nEvidence guidance:\n- Rule-based subject attribution: FlashAttention; passage: “We run inference of our trained models using 1-2 Quadro RTX 6000 GPUs with 24GB memory.” [1]",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": ", 2020) to conduct multi-GPU distributed training, with training precision Bfloat16 enabled.",
+        "evidence_start": 44,
+        "evidence_end": 136,
+        "subject": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "identity": {
+          "subject": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            1128
+          ],
+          "identity_quote": "We use Deepspeed stage 3 (Rajbhandari et al.",
+          "identity_chunk_id": 1128
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1128,
+        "page": 19,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": ", 2022) is used to make the long-context training more efficient.",
+        "evidence_start": 163,
+        "evidence_end": 228,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1128
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1128,
+        "page": 19,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We run inference of our trained models using 1-2 Quadro RTX 6000 GPUs with 24GB memory.",
+        "evidence_start": 228,
+        "evidence_end": 316,
+        "subject": "FlashAttention",
+        "identity": {
+          "subject": "FlashAttention",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            1128
+          ],
+          "identity_quote": "We use Deepspeed stage 3 (Rajbhandari et al., 2020) to conduct multi-GPU distributed training, with training precision Bfloat16 enabled. FlashAttention (Dao et al., 2022) is used to make the long-context training more efficient.",
+          "identity_chunk_id": 1128
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1128,
+        "page": 19,
+        "citations": [
+          1
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "As noted above, we hypothesize that this is due to a different treatment of convolution boundary conditions.",
+        "evidence_start": 0,
+        "evidence_end": 108,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            293,
+            292
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 293,
+        "page": 7,
+        "citations": [
+          2
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Table 5: ConvNet evaluation techniques comparison.",
+        "evidence_start": 108,
+        "evidence_end": 159,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            293,
+            292
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 293,
+        "page": 7,
+        "citations": [
+          2
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In all experiments the training scale S was sampled from [256; 512], and three test scales Q were considered: {256, 384, 512}.",
+        "evidence_start": 159,
+        "evidence_end": 286,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            293,
+            292
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 293,
+        "page": 7,
+        "citations": [
+          2
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Given a ConvNet conﬁguration, we ﬁrst trained the network using S = 256.",
+        "evidence_start": 206,
+        "evidence_end": 279,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            262,
+            261,
+            260,
+            259,
+            258
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 262,
+        "page": 4,
+        "citations": [
+          3
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " To speed-up training of the S = 384 network, it was initialised with the weights pre-trained with S = 256, and we used a smaller initial learning rate of 10−3.",
+        "evidence_start": 279,
+        "evidence_end": 439,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            262,
+            261,
+            260,
+            259,
+            258
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 262,
+        "page": 4,
+        "citations": [
+          3
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The second approach to setting S is multi-scale training, where each training image is individually rescaled by randomly sampling S from a certain range [Smin, Smax] (we used Smin = 256 and Smax = 512).",
+        "evidence_start": 439,
+        "evidence_end": 642,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            262,
+            261,
+            260,
+            259,
+            258
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 262,
+        "page": 4,
+        "citations": [
+          3
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "So the depth really is important for achieving our results.",
+        "evidence_start": 0,
+        "evidence_end": 59,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            197,
+            196
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 197,
+        "page": 7,
+        "citations": [
+          4
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " To simplify our experiments, we did not use any unsuper- vised pre-training even though we expect that it will help, espe- cially if we obtain enough computational power to significantly increase the size of the network without obtaining a corre- sponding increase in the amount of labeled data.",
+        "evidence_start": 59,
+        "evidence_end": 355,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            197,
+            196
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "DCNN.pdf",
+        "chunk_id": 197,
+        "page": 7,
+        "citations": [
+          4
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We trained the base models for a total of 100,000 steps or 12 hours.",
+        "evidence_start": 120,
+        "evidence_end": 189,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            65,
+            64
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 65,
+        "page": 7,
+        "citations": [
+          5
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "In the former task our best model outperforms even all previously reported ensembles.",
+        "evidence_start": 0,
+        "evidence_end": 85,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            82,
+            81
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 82,
+        "page": 9,
+        "citations": [
+          6
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We are excited about the future of attention-based models and plan to apply them to other tasks.",
+        "evidence_start": 85,
+        "evidence_end": 182,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            82,
+            81
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 82,
+        "page": 9,
+        "citations": [
+          6
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We plan to extend the Transformer to problems involving input and output modalities other than text and to investigate local, restricted attention mechanisms to efﬁciently handle large inputs and outputs such as images, audio and video.",
+        "evidence_start": 182,
+        "evidence_end": 419,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            82,
+            81
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 82,
+        "page": 9,
+        "citations": [
+          6
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Making generation less sequential is another research goals of ours.",
+        "evidence_start": 419,
+        "evidence_end": 488,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            82,
+            81
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 82,
+        "page": 9,
+        "citations": [
+          6
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " For the base models, we used a single model obtained by averaging the last 5 checkpoints, which were written at 10-minute intervals.",
+        "evidence_start": 104,
+        "evidence_end": 237,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            73,
+            72
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 73,
+        "page": 8,
+        "citations": [
+          7
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " For the big models, we averaged the last 20 checkpoints.",
+        "evidence_start": 237,
+        "evidence_end": 294,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            73,
+            72
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 73,
+        "page": 8,
+        "citations": [
+          7
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " These hyperparameters were chosen after experimentation on the development set.",
+        "evidence_start": 369,
+        "evidence_end": 449,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            73,
+            72
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 73,
+        "page": 8,
+        "citations": [
+          7
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The learning rate was initially set to 10−2, and then decreased by a factor of 10 when the validation set accuracy stopped improving.",
+        "evidence_start": 229,
+        "evidence_end": 363,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            254,
+            253
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 254,
+        "page": 4,
+        "citations": [
+          8
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In total, the learning rate was decreased 3 times, and the learning was stopped after 370K iterations (74 epochs).",
+        "evidence_start": 363,
+        "evidence_end": 478,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            254,
+            253
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "VGG.pdf",
+        "chunk_id": 254,
+        "page": 4,
+        "citations": [
+          8
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "One is the total computational complexity per layer.",
+        "evidence_start": 0,
+        "evidence_end": 52,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            52,
+            51
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 52,
+        "page": 6,
+        "citations": [
+          9
+        ],
+        "record_id": "E22"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Another is the amount of computation that can be parallelized, as measured by the minimum number of sequential operations required.",
+        "evidence_start": 52,
+        "evidence_end": 184,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            52,
+            51
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 52,
+        "page": 6,
+        "citations": [
+          9
+        ],
+        "record_id": "E23"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The third is the path length between long-range dependencies in the network.",
+        "evidence_start": 184,
+        "evidence_end": 261,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            52,
+            51
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 52,
+        "page": 6,
+        "citations": [
+          9
+        ],
+        "record_id": "E24"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Learning long-range dependencies is a key challenge in many sequence transduction tasks.",
+        "evidence_start": 261,
+        "evidence_end": 350,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            52,
+            51
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "Attention is all you need.pdf",
+        "chunk_id": 52,
+        "page": 6,
+        "citations": [
+          9
+        ],
+        "record_id": "E25"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Table 2: Overall experiment results on six tasks.",
+        "evidence_start": 0,
+        "evidence_end": 49,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1015,
+            1014
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1015,
+        "page": 8,
+        "citations": [
+          10
+        ],
+        "record_id": "E26"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Bold numbers indicate the best performance among non-proprietary models, and gray-colored bold text indicates the best proprietary model when they outperforms all non-proprietary models.",
+        "evidence_start": 49,
+        "evidence_end": 236,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1015,
+            1014
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1015,
+        "page": 8,
+        "citations": [
+          10
+        ],
+        "record_id": "E27"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " ∗indicates concurrent or recent results reported by concurrent work.",
+        "evidence_start": 236,
+        "evidence_end": 305,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1015,
+            1014
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1015,
+        "page": 8,
+        "citations": [
+          10
+        ],
+        "record_id": "E28"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " – indicates numbers that are not reported by the original papers or are not applicable.",
+        "evidence_start": 305,
+        "evidence_end": 393,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1015,
+            1014
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 1015,
+        "page": 8,
+        "citations": [
+          10
+        ],
+        "record_id": "E29"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 1128,
+        "text": "We use Deepspeed stage 3 (Rajbhandari et al., 2020) to conduct multi-GPU distributed training, with training precision Bfloat16 enabled. FlashAttention (Dao et al., 2022) is used to make the long-context training more efficient. We run inference of our trained models using 1-2 Quadro RTX 6000 GPUs with 24GB memory.",
+        "source": "2310.11511v1.pdf",
+        "page": 19,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "6 CONCLUSION"
+      },
+      {
+        "chunk_id": 293,
+        "text": "As noted above, we hypothesize that this is due to a different treatment of convolution boundary conditions. Table 5: ConvNet evaluation techniques comparison. In all experiments the training scale S was sampled from [256; 512], and three test scales Q were considered: {256, 384, 512}.",
+        "source": "VGG.pdf",
+        "page": 7,
+        "title": "VGG",
+        "section": "4.3 MULTI-CROP EVALUATION"
+      },
+      {
+        "chunk_id": 262,
+        "text": "In our experiments, we evaluated models trained at two ﬁxed scales: S = 256 (which has been widely used in the prior art (Krizhevsky et al., 2012; Zeiler & Fergus, 2013; Sermanet et al., 2014)) and S = 384. Given a ConvNet conﬁguration, we ﬁrst trained the network using S = 256. To speed-up training of the S = 384 network, it was initialised with the weights pre-trained with S = 256, and we used a smaller initial learning rate of 10−3. The second approach to setting S is multi-scale training, where each training image is individually rescaled by randomly sampling S from a certain range [Smin, Smax] (we used Smin = 256 and Smax = 512).",
+        "source": "VGG.pdf",
+        "page": 4,
+        "title": "VGG",
+        "section": "3.1 TRAINING"
+      },
+      {
+        "chunk_id": 197,
+        "text": "So the depth really is important for achieving our results. To simplify our experiments, we did not use any unsuper- vised pre-training even though we expect that it will help, espe- cially if we obtain enough computational power to significantly increase the size of the network without obtaining a corre- sponding increase in the amount of labeled data.",
+        "source": "DCNN.pdf",
+        "page": 7,
+        "title": "DCNN",
+        "section": "8. DISCUSSION"
+      },
+      {
+        "chunk_id": 65,
+        "text": "For our base models using the hyperparameters described throughout the paper, each training step took about 0.4 seconds. We trained the base models for a total of 100,000 steps or 12 hours. For our big models,(described on the bottom line of table 3), step time was 1.0 seconds. The big models were trained for 300,000 steps (3.5 days).",
+        "source": "Attention is all you need.pdf",
+        "page": 7,
+        "title": "Attention is All you Need",
+        "section": "5.2 Hardware and Schedule"
+      },
+      {
+        "chunk_id": 82,
+        "text": "In the former task our best model outperforms even all previously reported ensembles. We are excited about the future of attention-based models and plan to apply them to other tasks. We plan to extend the Transformer to problems involving input and output modalities other than text and to investigate local, restricted attention mechanisms to efﬁciently handle large inputs and outputs such as images, audio and video. Making generation less sequential is another research goals of ours.",
+        "source": "Attention is all you need.pdf",
+        "page": 9,
+        "title": "Attention is All you Need",
+        "section": "7 Conclusion"
+      },
+      {
+        "chunk_id": 73,
+        "text": "The Transformer (big) model trained for English-to-French used dropout rate Pdrop = 0.1, instead of 0.3. For the base models, we used a single model obtained by averaging the last 5 checkpoints, which were written at 10-minute intervals. For the big models, we averaged the last 20 checkpoints. We used beam search with a beam size of 4 and length penalty α = 0.6 [31]. These hyperparameters were chosen after experimentation on the development set.",
+        "source": "Attention is all you need.pdf",
+        "page": 8,
+        "title": "Attention is All you Need",
+        "section": "6.1 Machine Translation"
+      },
+      {
+        "chunk_id": 254,
+        "text": "The batch size was set to 256, momentum to 0.9. The training was regularised by weight decay (the L2 penalty multiplier set to 5·10−4) and dropout regularisation for the ﬁrst two fully-connected layers (dropout ratio set to 0.5). The learning rate was initially set to 10−2, and then decreased by a factor of 10 when the validation set accuracy stopped improving. In total, the learning rate was decreased 3 times, and the learning was stopped after 370K iterations (74 epochs).",
+        "source": "VGG.pdf",
+        "page": 4,
+        "title": "VGG",
+        "section": "3.1 TRAINING"
+      },
+      {
+        "chunk_id": 52,
+        "text": "One is the total computational complexity per layer. Another is the amount of computation that can be parallelized, as measured by the minimum number of sequential operations required. The third is the path length between long-range dependencies in the network. Learning long-range dependencies is a key challenge in many sequence transduction tasks.",
+        "source": "Attention is all you need.pdf",
+        "page": 6,
+        "title": "Attention is All you Need",
+        "section": "4 Why Self-Attention"
+      },
+      {
+        "chunk_id": 1015,
+        "text": "Table 2: Overall experiment results on six tasks. Bold numbers indicate the best performance among non-proprietary models, and gray-colored bold text indicates the best proprietary model when they outperforms all non-proprietary models. ∗indicates concurrent or recent results reported by concurrent work. – indicates numbers that are not reported by the original papers or are not applicable.",
+        "source": "2310.11511v1.pdf",
+        "page": 8,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "4.3 EXPERIMENTAL SETTINGS"
+      }
+    ],
+    "selected_ids": [
+      1128,
+      293,
+      262,
+      197,
+      65,
+      82,
+      73,
+      254,
+      52,
+      1015
+    ]
+  }
+}

@@ -1,3 +1,6 @@
+# 可选查询改写：通过 API 返回一个检索用字符串，保持原问题的实体和意图。
+# main.py 的 USE_MULTI_QUERY 名称沿用旧接口，目前对应单次改写且默认关闭。
+
 def rewrite_query(query):
     from llm import generate_answer
 

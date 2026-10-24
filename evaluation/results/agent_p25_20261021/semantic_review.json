@@ -1,0 +1,799 @@
+{
+  "_reviewer": "Same coding assistant; frozen rubric; manual semantic reading, not independent blind adjudication.",
+  "b01": {
+    "rag": {
+      "points": [
+        "covered",
+        "covered"
+      ],
+      "strict_pass": true,
+      "reason": "Adam及三个常数完整，引用[7]的66原文逐项支持。",
+      "citation_support_pass": true,
+      "citation_gaps": [],
+      "unsupported_claims": [],
+      "appropriate_refusal": false,
+      "over_refusal": false,
+      "failure_categories": [],
+      "answer_available": true,
+      "checked_citations": [
+        {
+          "number": 7,
+          "chunk_id": 66,
+          "source": "Attention is all you need.pdf",
+          "page": 7,
+          "quote": "5.3 Optimizer We used the Adam optimizer [17] with β1 = 0.9, β2 = 0.98 and ϵ = 10−9. We varied the learning rate over the course of training, according to the formula: lrate = d−0.5 model · min(step_num−0.5, step_num · warmup_steps−1.5) (3) This corresponds to increasing the learning rate linearly for the ﬁrst warmup_steps training steps, and decreasing it thereafter proportionally to the inverse square root of the step number. We used warmup_steps = 4000.",
+          "canonical_identity_verified": true
+        }
+      ]
+    },
+    "agent": {
+      "points": [
+        "covered",
+        "covered"
+      ],
+      "strict_pass": true,
+      "reason": "与固定RAG相同的事实与引用；复核通过不额外计分。",
+      "citation_support_pass": true,
+      "citation_gaps": [],
+      "unsupported_claims": [],
+      "appropriate_refusal": false,
+      "over_refusal": false,
+      "failure_categories": [],
+      "answer_available": true,
+      "checked_citations": [
+        {
+          "number": 7,
+          "chunk_id": 66,
+          "source": "Attention is all you need.pdf",
+          "page": 7,
+          "quote": "5.3 Optimizer We used the Adam optimizer [17] with β1 = 0.9, β2 = 0.98 and ϵ = 10−9. We varied the learning rate over the course of training, according to the formula: lrate = d−0.5 model · min(step_num−0.5, step_num · warmup_steps−1.5) (3) This corresponds to increasing the learning rate linearly for the ﬁrst warmup_steps training steps, and decreasing it thereafter proportionally to the inverse square root of the step number. We used warmup_steps = 4000.",
+          "canonical_identity_verified": true
+        }
+      ]
+    }
+  },
+  "b02": {
+    "rag": {
+      "points": [
+        "covered",
+        "covered",
+        "covered"
+      ],
+      "strict_pass": true,
+      "reason": "正确区分卷积2/4/5与FC隐藏层偏置1、其余0，并说明ReLU正输入促进早期学习；[1]/[2]对应177/178。",
+      "citation_support_pass": true,
+      "citation_gaps": [],
+      "unsupported_claims": [],
+      "appropriate_refusal": false,
+      "over_refusal": false,
+      "failure_categories": [],
+      "answer_available": true,
+      "checked_citations": [
+        {
+          "number": 1,
+          "chunk_id": 177,
+          "source": "DCNN.pdf",
+          "page": 5,
+          "quote": "We initialized the weights in each layer from a zero-mean Gaussian distribution with standard deviation 0.01. We ini- tialized the neuron biases in the second, fourth, and fifth convolutional layers, as well as in the fully connected hidden layers, with the constant 1. This initialization accelerates the early stages of learning by providing the ReLUs with positive inputs.",
+          "canonical_identity_verified": true
+        },
+        {
+          "number": 2,
+          "chunk_id": 178,
+          "source": "DCNN.pdf",
+          "page": 5,
+          "quote": "We initialized the neuron biases in the remaining lay- ers with the constant 0. We used an equal learning rate for all layers, which we adjusted manually throughout training. The heuristic which we followed was to divide the learning rate by 10 when the vali- dation error rate stopped improving with the current learning rate. The learning rate was initialized at 0.01 and reduced three times prior to termination.",
+          "canonical_identity_verified": true
+        }
+      ]
+    },
+    "agent": {
+      "points": [
+        "missing",
+        "missing",
+        "missing"
+      ],
+      "strict_pass": false,
+      "reason": "规划第二需求摘录why does it...，未包含DCNN主体；当前校验拒绝，未生成答案。",
+      "citation_support_pass": false,
+      "citation_gaps": [],
+      "unsupported_claims": [],
+      "appropriate_refusal": false,
+      "over_refusal": false,
+      "failure_categories": [
+        "planning_pronoun_scope_rejected"
+      ],
+      "answer_available": false,
+      "checked_citations": []
+    }
+  },
+  "b03": {
+    "rag": {
+      "points": [
+        "partial",
+        "covered",
+        "covered"
+      ],
+      "strict_pass": false,
+      "reason": "给出[256,512]、224x224与S=384初始化/微调所有层；冻结第1点同时要求说明S为等比例缩放后的最短边，实际未说明，按合取评分点记partial。",
+      "citation_support_pass": true,
+      "citation_gaps": [],
+      "unsupported_claims": [],
+      "appropriate_refusal": false,
+      "over_refusal": false,
+      "failure_categories": [
+        "incomplete_core_qualifier"
+      ],
+      "answer_available": true,
+      "checked_citations": [
+        {
+          "number": 1,
+          "chunk_id": 262,
+          "source": "VGG.pdf",
+          "page": 4,
+          "quote": "In our experiments, we evaluated models trained at two ﬁxed scales: S = 256 (which has been widely used in the prior art (Krizhevsky et al., 2012; Zeiler & Fergus, 2013; Sermanet et al., 2014)) and S = 384. Given a ConvNet conﬁguration, we ﬁrst trained the network using S = 256. To speed-up training of the S = 384 network, it was initialised with the weights pre-trained with S = 256, and we used a smaller initial learning rate of 10−3. The second approach to setting S is multi-scale training, where each training image is individually rescaled by randomly sampling S from a certain range [Smin, Smax] (we used Smin = 256 and Smax = 512).",
+          "canonical_identity_verified": true
+        },
+        {
+          "number": 2,
+          "chunk_id": 260,
+          "source": "VGG.pdf",
+          "page": 4,
+          "quote": "Let S be the smallest side of an isotropically-rescaled training image, from which the ConvNet input is cropped (we also refer to S as the training scale). While the crop size is ﬁxed to 224 × 224, in principle S can take on any value not less than 224: for S = 224 the crop will capture whole-image statistics, completely spanning the smallest side of a training image; for S ≫224 the crop will correspond to a small part of the image, containing a small object or an object part.",
+          "canonical_identity_verified": true
+        },
+        {
+          "number": 4,
+          "chunk_id": 264,
+          "source": "VGG.pdf",
+          "page": 5,
+          "quote": "Published as a conference paper at ICLR 2015 model is trained to recognise objects over a wide range of scales. For speed reasons, we trained multi-scale models by ﬁne-tuning all layers of a single-scale model with the same conﬁguration, pre-trained with ﬁxed S = 384.",
+          "canonical_identity_verified": true
+        }
+      ]
+    },
+    "agent": {
+      "points": [
+        "missing",
+        "missing",
+        "missing"
+      ],
+      "strict_pass": false,
+      "reason": "规划摘录不在原问题中，被逐字引文校验拒绝；未生成答案。",
+      "citation_support_pass": false,
+      "citation_gaps": [],
+      "unsupported_claims": [],
+      "appropriate_refusal": false,
+      "over_refusal": false,
+      "failure_categories": [
+        "planning_nonverbatim_question_quote"
+      ],
+      "answer_available": false,
+      "checked_citations": []
+    }
+  },
+  "b04": {
+    "rag": {
+      "points": [
+        "covered",
+        "covered"
+      ],
+      "strict_pass": true,
+      "reason": "单位L2范数、点积=余弦、[-1,1]均由[1]608支持。",
+      "citation_support_pass": true,
+      "citation_gaps": [],
+      "unsupported_claims": [],
+      "appropriate_refusal": false,
+      "over_refusal": false,
+      "failure_categories": [],
+      "answer_available": true,
+      "checked_citations": [
+        {
+          "number": 1,
+          "chunk_id": 608,
+          "source": "2004.12832v2.pdf",
+          "page": 4,
+          "quote": "Finally, the output embeddings are normalized so each has L2 norm equal to one. Te result is that the dot-product of any two embeddings becomes equivalent to their cosine similarity, falling in the [−1, 1] range.",
+          "canonical_identity_verified": true
+        }
+      ]
+    },
+    "agent": {
+      "points": [
+        "covered",
+        "covered"
+      ],
+      "strict_pass": true,
+      "reason": "同样完整；[1]608支持数值/相似度，[2]611的Normalize公式补充表示处理顺序。",
+      "citation_support_pass": true,
+      "citation_gaps": [],
+      "unsupported_claims": [],
+      "appropriate_refusal": false,
+      "over_refusal": false,
+      "failure_categories": [],
+      "answer_available": true,
+      "checked_citations": [
+        {
+          "number": 1,
+          "chunk_id": 608,
+          "source": "2004.12832v2.pdf",
+          "page": 4,
+          "quote": "Finally, the output embeddings are normalized so each has L2 norm equal to one. Te result is that the dot-product of any two embeddings becomes equivalent to their cosine similarity, falling in the [−1, 1] range.",
+          "canonical_identity_verified": true
+        },
+        {
+          "number": 2,
+          "chunk_id": 611,
+          "source": "2004.12832v2.pdf",
+          "page": 4,
+          "quote": "In summary, given q = q0q1...ql and d = d0d1...dn, we compute the bags of embeddings Eq and Ed in the following manner, where # refers to the [mask] tokens: Eq := Normalize( CNN( BERT(“[Q]q0q1...ql##...#”) ) ) (1) Ed := Filter( Normalize( CNN( BERT(“[D]d0d1...dn”) ) ) ) (2) 3.3 Late Interaction Given the representation of a query q and a document d, the rel- evance score of d to q, denoted as Sq,d, is estimated via late in- teraction between their bags of contextualized embeddings.",
+          "canonical_identity_verified": true
+        }
+      ]
+    }
+  },
+  "b05": {
+    "rag": {
+      "points": [
+        "covered",
+        "covered",
+        "covered"
+      ],
+      "strict_pass": true,
+      "reason": "5/20检查点与VGG多个模型softmax后验平均分别正确，句间则字表达操作对象差异；[1]/[2]为73/296。",
+      "citation_support_pass": true,
+      "citation_gaps": [],
+      "unsupported_claims": [],
+      "appropriate_refusal": false,
+      "over_refusal": false,
+      "failure_categories": [],
+      "answer_available": true,
+      "checked_citations": [
+        {
+          "number": 1,
+          "chunk_id": 73,
+          "source": "Attention is all you need.pdf",
+          "page": 8,
+          "quote": "The Transformer (big) model trained for English-to-French used dropout rate Pdrop = 0.1, instead of 0.3. For the base models, we used a single model obtained by averaging the last 5 checkpoints, which were written at 10-minute intervals. For the big models, we averaged the last 20 checkpoints. We used beam search with a beam size of 4 and length penalty α = 0.6 [31]. These hyperparameters were chosen after experimentation on the development set.",
+          "canonical_identity_verified": true
+        },
+        {
+          "number": 2,
+          "chunk_id": 296,
+          "source": "VGG.pdf",
+          "page": 7,
+          "quote": "In this part of the exper- iments, we combine the outputs of several models by averaging their soft-max class posteriors. This improves the performance due to complementarity of the models, and was used in the top ILSVRC submissions in 2012 (Krizhevsky et al., 2012) and 2013 (Zeiler & Fergus, 2013; Sermanet et al., 2014).",
+          "canonical_identity_verified": true
+        }
+      ]
+    },
+    "agent": {
+      "points": [
+        "covered",
+        "covered",
+        "covered"
+      ],
+      "strict_pass": true,
+      "reason": "5/20与类别后验平均正确，显式说明checkpoint权重平均和预测后验平均的区别，未编造跨任务性能优势。",
+      "citation_support_pass": true,
+      "citation_gaps": [],
+      "unsupported_claims": [],
+      "appropriate_refusal": false,
+      "over_refusal": false,
+      "failure_categories": [],
+      "answer_available": true,
+      "checked_citations": [
+        {
+          "number": 1,
+          "chunk_id": 73,
+          "source": "Attention is all you need.pdf",
+          "page": 8,
+          "quote": "The Transformer (big) model trained for English-to-French used dropout rate Pdrop = 0.1, instead of 0.3. For the base models, we used a single model obtained by averaging the last 5 checkpoints, which were written at 10-minute intervals. For the big models, we averaged the last 20 checkpoints. We used beam search with a beam size of 4 and length penalty α = 0.6 [31]. These hyperparameters were chosen after experimentation on the development set.",
+          "canonical_identity_verified": true
+        },
+        {
+          "number": 2,
+          "chunk_id": 296,
+          "source": "VGG.pdf",
+          "page": 7,
+          "quote": "In this part of the exper- iments, we combine the outputs of several models by averaging their soft-max class posteriors. This improves the performance due to complementarity of the models, and was used in the top ILSVRC submissions in 2012 (Krizhevsky et al., 2012) and 2013 (Zeiler & Fergus, 2013; Sermanet et al., 2014).",
+          "canonical_identity_verified": true
+        }
+      ]
+    }
+  },
+  "b06": {
+    "rag": {
+      "points": [
+        "covered",
+        "covered",
+        "covered"
+      ],
+      "strict_pass": true,
+      "reason": "DCNN错误率改善、VGG无收益且A-LRN例外、内存与时间开销均完整；末尾关于未提供其他成本的说明多余，但没有遗漏所问事实。",
+      "citation_support_pass": true,
+      "citation_gaps": [],
+      "unsupported_claims": [],
+      "appropriate_refusal": false,
+      "over_refusal": false,
+      "failure_categories": [],
+      "answer_available": true,
+      "checked_citations": [
+        {
+          "number": 3,
+          "chunk_id": 235,
+          "source": "VGG.pdf",
+          "page": 2,
+          "quote": "The conﬁguration of the fully connected layers is the same in all networks. All hidden layers are equipped with the rectiﬁcation (ReLU (Krizhevsky et al., 2012)) non-linearity. We note that none of our networks (except for one) contain Local Response Normalisation (LRN) normalisation (Krizhevsky et al., 2012): as will be shown in Sect. 4, such normalisation does not improve the performance on the ILSVRC dataset, but leads to increased memory con- sumption and computation time.",
+          "canonical_identity_verified": true
+        },
+        {
+          "number": 6,
+          "chunk_id": 146,
+          "source": "DCNN.pdf",
+          "page": 3,
+          "quote": "Response normalization reduces our top-1 and top-5 error rates by 1.4% and 1.2%, respectively. We also verified the effectiveness of this scheme on the CIFAR-10 dataset: a four-layer CNN achieved a 13% test error rate without normalization and 11% with normalization.c",
+          "canonical_identity_verified": true
+        },
+        {
+          "number": 10,
+          "chunk_id": 279,
+          "source": "VGG.pdf",
+          "page": 6,
+          "quote": "4.1 SINGLE SCALE EVALUATION We begin with evaluating the performance of individual ConvNet models at a single scale with the layer conﬁgurations described in Sect. 2.2. The test image size was set as follows: Q = S for ﬁxed S, and Q = 0.5(Smin + Smax) for jittered S ∈[Smin, Smax]. The results of are shown in Table 3. First, we note that using local response normalisation (A-LRN network) does not improve on the model A without any normalisation layers.",
+          "canonical_identity_verified": true
+        }
+      ]
+    },
+    "agent": {
+      "points": [
+        "missing",
+        "missing",
+        "missing"
+      ],
+      "strict_pass": false,
+      "reason": "模型为两方法各抽取同一What do DCNN and VGG...片段，包含另一已声明主体，被主体隔离校验拒绝。",
+      "citation_support_pass": false,
+      "citation_gaps": [],
+      "unsupported_claims": [],
+      "appropriate_refusal": false,
+      "over_refusal": false,
+      "failure_categories": [
+        "planning_joint_subject_scope_rejected"
+      ],
+      "answer_available": false,
+      "checked_citations": []
+    }
+  },
+  "b07": {
+    "rag": {
+      "points": [
+        "partial",
+        "covered",
+        "covered",
+        "covered"
+      ],
+      "strict_pass": false,
+      "reason": "ASQA三类指标完整；DPR回答复述表2注434的passages措辞，未明确第2节400定义的“以问题为单位、Top-k至少一段含答案跨度”，冻结第1点评partial。434表注本身措辞有歧义，这不是无来源编造；保留为评审敏感案例。",
+      "citation_support_pass": true,
+      "citation_gaps": [],
+      "unsupported_claims": [],
+      "appropriate_refusal": false,
+      "over_refusal": false,
+      "failure_categories": [
+        "metric_denominator_not_explicit",
+        "source_caption_ambiguity"
+      ],
+      "answer_available": true,
+      "checked_citations": [
+        {
+          "number": 1,
+          "chunk_id": 1004,
+          "source": "2310.11511v1.pdf",
+          "page": 7,
+          "quote": "(2023); Schick et al. Long-form generation tasks include a biography generation task (Min et al., 2023) and a long-form QA task ALCE-ASQA Gao et al. (2023); Stelmakh et al. We use FactScore (Min et al., 2023) to evaluate biographies, and we use official metrics of correctness (str-em), fluency based on MAUVE (Pillutla et al., 2021), and citation precision and recall (Gao et al., 2023) for ASQA.",
+          "canonical_identity_verified": true
+        },
+        {
+          "number": 8,
+          "chunk_id": 434,
+          "source": "2004.04906v3.pdf",
+          "page": 5,
+          "quote": "Training Retriever Top-20 NQ TriviaQA WQ None BM25 59.1 66.9 55.0 78.4 79.4 73.2 DPR Single BM25 + DPR 76.6 79.8 71.0 79.4 75.0 DPR 78.8 Multi 79.9 BM25 + DPR 78.0 74.7 Table 2: Top-20 & Top-100 retrieval accuracy on test sets, measured as the percentage of top 20/100 retrieved passages that contain the answer. Single and Multi denote that our Dense Passage Retriever (DPR) was trained using individial or combined training datasets (all the datasets excluding SQuAD).",
+          "canonical_identity_verified": true
+        }
+      ]
+    },
+    "agent": {
+      "points": [
+        "partial",
+        "covered",
+        "covered",
+        "covered"
+      ],
+      "strict_pass": false,
+      "reason": "与固定RAG相同：ASQA完整，DPR引用434却未澄清问题层面分母；复核通过不能消除此定义缺口。表注文字支持其表述，因此不标为凭空断言。",
+      "citation_support_pass": true,
+      "citation_gaps": [],
+      "unsupported_claims": [],
+      "appropriate_refusal": false,
+      "over_refusal": false,
+      "failure_categories": [
+        "metric_denominator_not_explicit",
+        "source_caption_ambiguity"
+      ],
+      "answer_available": true,
+      "checked_citations": [
+        {
+          "number": 1,
+          "chunk_id": 1004,
+          "source": "2310.11511v1.pdf",
+          "page": 7,
+          "quote": "(2023); Schick et al. Long-form generation tasks include a biography generation task (Min et al., 2023) and a long-form QA task ALCE-ASQA Gao et al. (2023); Stelmakh et al. We use FactScore (Min et al., 2023) to evaluate biographies, and we use official metrics of correctness (str-em), fluency based on MAUVE (Pillutla et al., 2021), and citation precision and recall (Gao et al., 2023) for ASQA.",
+          "canonical_identity_verified": true
+        },
+        {
+          "number": 8,
+          "chunk_id": 434,
+          "source": "2004.04906v3.pdf",
+          "page": 5,
+          "quote": "Training Retriever Top-20 NQ TriviaQA WQ None BM25 59.1 66.9 55.0 78.4 79.4 73.2 DPR Single BM25 + DPR 76.6 79.8 71.0 79.4 75.0 DPR 78.8 Multi 79.9 BM25 + DPR 78.0 74.7 Table 2: Top-20 & Top-100 retrieval accuracy on test sets, measured as the percentage of top 20/100 retrieved passages that contain the answer. Single and Multi denote that our Dense Passage Retriever (DPR) was trained using individial or combined training datasets (all the datasets excluding SQuAD).",
+          "canonical_identity_verified": true
+        }
+      ]
+    }
+  },
+  "b08": {
+    "rag": {
+      "points": [
+        "covered",
+        "covered"
+      ],
+      "strict_pass": true,
+      "reason": "Transformer base的8 P100/100000步/12小时与DCNN的2 GTX580 3GB/5-6天完整；额外90周期有179支持，未计算跨任务加速比。",
+      "citation_support_pass": true,
+      "citation_gaps": [],
+      "unsupported_claims": [],
+      "appropriate_refusal": false,
+      "over_refusal": false,
+      "failure_categories": [],
+      "answer_available": true,
+      "checked_citations": [
+        {
+          "number": 2,
+          "chunk_id": 122,
+          "source": "DCNN.pdf",
+          "page": 2,
+          "quote": "In the end, the network’s size is limited mainly by the amount of memory available on current GPUs and by the amount of training time that we are willing to tolerate. Our network takes between 5 and 6 days to train on two GTX 580 3GB GPUs.",
+          "canonical_identity_verified": true
+        },
+        {
+          "number": 3,
+          "chunk_id": 179,
+          "source": "DCNN.pdf",
+          "page": 5,
+          "quote": "We trained the network for roughly 90 cycles through the training set of 1.2 million images, which took 5–6 days on two NVIDIA GTX 580 3GB GPUs.",
+          "canonical_identity_verified": true
+        },
+        {
+          "number": 8,
+          "chunk_id": 12,
+          "source": "Attention is all you need.pdf",
+          "page": 2,
+          "quote": "In this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output. The Transformer allows for signiﬁcantly more parallelization and can reach a new state of the art in translation quality after being trained for as little as twelve hours on eight P100 GPUs.",
+          "canonical_identity_verified": true
+        },
+        {
+          "number": 9,
+          "chunk_id": 65,
+          "source": "Attention is all you need.pdf",
+          "page": 7,
+          "quote": "For our base models using the hyperparameters described throughout the paper, each training step took about 0.4 seconds. We trained the base models for a total of 100,000 steps or 12 hours. For our big models,(described on the bottom line of table 3), step time was 1.0 seconds. The big models were trained for 300,000 steps (3.5 days).",
+          "canonical_identity_verified": true
+        }
+      ]
+    },
+    "agent": {
+      "points": [
+        "covered",
+        "covered"
+      ],
+      "strict_pass": true,
+      "reason": "与固定RAG相同，12/65及122/179原文支持硬件、步数和训练时间；未作同条件速度排名。",
+      "citation_support_pass": true,
+      "citation_gaps": [],
+      "unsupported_claims": [],
+      "appropriate_refusal": false,
+      "over_refusal": false,
+      "failure_categories": [],
+      "answer_available": true,
+      "checked_citations": [
+        {
+          "number": 2,
+          "chunk_id": 122,
+          "source": "DCNN.pdf",
+          "page": 2,
+          "quote": "In the end, the network’s size is limited mainly by the amount of memory available on current GPUs and by the amount of training time that we are willing to tolerate. Our network takes between 5 and 6 days to train on two GTX 580 3GB GPUs.",
+          "canonical_identity_verified": true
+        },
+        {
+          "number": 3,
+          "chunk_id": 179,
+          "source": "DCNN.pdf",
+          "page": 5,
+          "quote": "We trained the network for roughly 90 cycles through the training set of 1.2 million images, which took 5–6 days on two NVIDIA GTX 580 3GB GPUs.",
+          "canonical_identity_verified": true
+        },
+        {
+          "number": 8,
+          "chunk_id": 12,
+          "source": "Attention is all you need.pdf",
+          "page": 2,
+          "quote": "In this work we propose the Transformer, a model architecture eschewing recurrence and instead relying entirely on an attention mechanism to draw global dependencies between input and output. The Transformer allows for signiﬁcantly more parallelization and can reach a new state of the art in translation quality after being trained for as little as twelve hours on eight P100 GPUs.",
+          "canonical_identity_verified": true
+        },
+        {
+          "number": 9,
+          "chunk_id": 65,
+          "source": "Attention is all you need.pdf",
+          "page": 7,
+          "quote": "For our base models using the hyperparameters described throughout the paper, each training step took about 0.4 seconds. We trained the base models for a total of 100,000 steps or 12 hours. For our big models,(described on the bottom line of table 3), step time was 1.0 seconds. The big models were trained for 300,000 steps (3.5 days).",
+          "canonical_identity_verified": true
+        }
+      ]
+    }
+  },
+  "b09": {
+    "rag": {
+      "points": [
+        "covered",
+        "covered",
+        "covered"
+      ],
+      "strict_pass": true,
+      "reason": "RAG遗漏beam候选的额外前向、检索概率加权边际及Self-RAG归一化critique加权/段级beam均完整；[7]757、[3]996、[4]946支持。",
+      "citation_support_pass": true,
+      "citation_gaps": [],
+      "unsupported_claims": [],
+      "appropriate_refusal": false,
+      "over_refusal": false,
+      "failure_categories": [],
+      "answer_available": true,
+      "checked_citations": [
+        {
+          "number": 3,
+          "chunk_id": 996,
+          "source": "2310.11511v1.pdf",
+          "page": 6,
+          "quote": "For each critique token group G (e.g., ISREL ), we denote its score at timestamp t as sG t , and we compute a segment score as follows: f(yt, d, Critique ) = p(yt|x, d, y<t)) + S( Critique ), where (3) S( Critique ) = X G∈G wGsG t for G = { ISREL , ISSUP , ISUSE }, (4) where sG t = pt(ˆr) PNG i=1 pt(ri) stands for the generation probability of the most desirable reflection token ˆr (e.g., ISREL =Relevant) for the critique token type G with N G distinct tokens (that represent different possible values for G).",
+          "canonical_identity_verified": true
+        },
+        {
+          "number": 4,
+          "chunk_id": 946,
+          "source": "2310.11511v1.pdf",
+          "page": 2,
+          "quote": "In particular, our inference-time algorithm enables us to (1) flexibly adjust retrieval frequency for different downstream applications and (2) customize models’ behaviors to user preferences by leveraging reflection tokens through segment-level beam search using the weighted linear sum of the reflection token probabilities as segment score.",
+          "canonical_identity_verified": true
+        },
+        {
+          "number": 7,
+          "chunk_id": 757,
+          "source": "2005.11401v4.pdf",
+          "page": 4,
+          "quote": "To estimate the probability of an hypothesis y we run an additional forward pass for each document z for which y does not appear in the beam, multiply generator probability with pη(z|x) and then sum the probabilities across beams for the marginals. We refer to this decoding procedure as “Thorough Decoding.” For longer output sequences, |Y | can become large, requiring many forward passes.",
+          "canonical_identity_verified": true
+        }
+      ]
+    },
+    "agent": {
+      "points": [
+        "covered",
+        "covered",
+        "partial"
+      ],
+      "strict_pass": false,
+      "reason": "RAG两个机制完整，Self-RAG归一化、加权和与生成概率相加的公式正确，但未提冻结第3点中的segment-level beam search；按主评分点记partial。此beam要求比题面直接问的score更细，另作公开的事后敏感性说明，不将其说成公式错误。",
+      "citation_support_pass": true,
+      "citation_gaps": [],
+      "unsupported_claims": [],
+      "appropriate_refusal": false,
+      "over_refusal": false,
+      "failure_categories": [
+        "incomplete_frozen_beam_context"
+      ],
+      "answer_available": true,
+      "checked_citations": [
+        {
+          "number": 3,
+          "chunk_id": 996,
+          "source": "2310.11511v1.pdf",
+          "page": 6,
+          "quote": "For each critique token group G (e.g., ISREL ), we denote its score at timestamp t as sG t , and we compute a segment score as follows: f(yt, d, Critique ) = p(yt|x, d, y<t)) + S( Critique ), where (3) S( Critique ) = X G∈G wGsG t for G = { ISREL , ISSUP , ISUSE }, (4) where sG t = pt(ˆr) PNG i=1 pt(ri) stands for the generation probability of the most desirable reflection token ˆr (e.g., ISREL =Relevant) for the critique token type G with N G distinct tokens (that represent different possible values for G).",
+          "canonical_identity_verified": true
+        },
+        {
+          "number": 7,
+          "chunk_id": 757,
+          "source": "2005.11401v4.pdf",
+          "page": 4,
+          "quote": "To estimate the probability of an hypothesis y we run an additional forward pass for each document z for which y does not appear in the beam, multiply generator probability with pη(z|x) and then sum the probabilities across beams for the marginals. We refer to this decoding procedure as “Thorough Decoding.” For longer output sequences, |Y | can become large, requiring many forward passes.",
+          "canonical_identity_verified": true
+        }
+      ]
+    }
+  },
+  "b10": {
+    "rag": {
+      "points": [
+        "covered",
+        "covered"
+      ],
+      "strict_pass": true,
+      "reason": "GPT-4生成反思监督并蒸馏入critic、CRAG用ChatGPT改写关键词两点完整；额外分组采样有982支持。无需托管critic的附带句沿用944原文，只限该文离线标注/生成器训练语境，不扩展为critic从不训练。",
+      "citation_support_pass": true,
+      "citation_gaps": [],
+      "unsupported_claims": [],
+      "appropriate_refusal": false,
+      "over_refusal": false,
+      "failure_categories": [],
+      "answer_available": true,
+      "checked_citations": [
+        {
+          "number": 2,
+          "chunk_id": 944,
+          "source": "2310.11511v1.pdf",
+          "page": 2,
+          "quote": "This eliminates the need to host a critic model during training, reducing overhead. The critic model, in part, is supervised on a dataset of input, output, and corresponding reflection tokens collected by prompting a propriety LM (i.e., GPT-4; OpenAI 2023).",
+          "canonical_identity_verified": true
+        },
+        {
+          "number": 5,
+          "chunk_id": 982,
+          "source": "2310.11511v1.pdf",
+          "page": 5,
+          "quote": "We create supervised data by prompting GPT-4 to generate reflection tokens and then distill their knowledge into an in-house C. For each group of reflection tokens, we randomly sample instances from the original training data: {Xsample, Y sample} ∼{X, Y }. As different reflection token groups have their own definitions and input, as shown in Table 1, we use different instruction prompts for them. Here, we use Retrieve as an example.",
+          "canonical_identity_verified": true
+        },
+        {
+          "number": 8,
+          "chunk_id": 1283,
+          "source": "2401.15884v3.pdf",
+          "page": 6,
+          "quote": "Since retrieval from static and limited corpora can only return sub-optimal documents in terms of scope and diversity, large-scale web searches (Piktus et al., 2021; Komeili et al., 2022) are integrated as a strategic extension of RAG. Specifically, the inputs are rewritten into queries composed of keywords by ChatGPT to mimic the daily usage of search engine. The prompt for rewriting is shown in Appendix A.",
+          "canonical_identity_verified": true
+        }
+      ]
+    },
+    "agent": {
+      "points": [
+        "covered",
+        "covered"
+      ],
+      "strict_pass": true,
+      "reason": "两种外部模型角色清晰，944/982/1113支持监督数据，1283支持关键词改写；无额外主体或条件转移。",
+      "citation_support_pass": true,
+      "citation_gaps": [],
+      "unsupported_claims": [],
+      "appropriate_refusal": false,
+      "over_refusal": false,
+      "failure_categories": [],
+      "answer_available": true,
+      "checked_citations": [
+        {
+          "number": 2,
+          "chunk_id": 944,
+          "source": "2310.11511v1.pdf",
+          "page": 2,
+          "quote": "This eliminates the need to host a critic model during training, reducing overhead. The critic model, in part, is supervised on a dataset of input, output, and corresponding reflection tokens collected by prompting a propriety LM (i.e., GPT-4; OpenAI 2023).",
+          "canonical_identity_verified": true
+        },
+        {
+          "number": 4,
+          "chunk_id": 1113,
+          "source": "2310.11511v1.pdf",
+          "page": 18,
+          "quote": "Algorithm 2 SELF-RAG Training 1: Input input-output data D = {X, Y }, generator M, C θ 2: Initialize C with a pre-trained LM 3: Sample data {Xsample, Y sample} ∼{X, Y } ▷Training Critic LM (Section 3.2.1) 4: for (x, y) ∈(Xsample, Y sample) do ▷Data collections for C 5: Prompt GPT-4 to collect a reflection token r for (x, y) 6: Add {(x, y, r)} to Dcritic 7: Update C with next token prediction loss ▷Critic learning; Eq.",
+          "canonical_identity_verified": true
+        },
+        {
+          "number": 5,
+          "chunk_id": 982,
+          "source": "2310.11511v1.pdf",
+          "page": 5,
+          "quote": "We create supervised data by prompting GPT-4 to generate reflection tokens and then distill their knowledge into an in-house C. For each group of reflection tokens, we randomly sample instances from the original training data: {Xsample, Y sample} ∼{X, Y }. As different reflection token groups have their own definitions and input, as shown in Table 1, we use different instruction prompts for them. Here, we use Retrieve as an example.",
+          "canonical_identity_verified": true
+        },
+        {
+          "number": 8,
+          "chunk_id": 1283,
+          "source": "2401.15884v3.pdf",
+          "page": 6,
+          "quote": "Since retrieval from static and limited corpora can only return sub-optimal documents in terms of scope and diversity, large-scale web searches (Piktus et al., 2021; Komeili et al., 2022) are integrated as a strategic extension of RAG. Specifically, the inputs are rewritten into queries composed of keywords by ChatGPT to mimic the daily usage of search engine. The prompt for rewriting is shown in Appendix A.",
+          "canonical_identity_verified": true
+        }
+      ]
+    }
+  },
+  "b11": {
+    "rag": {
+      "points": [
+        "covered"
+      ],
+      "strict_pass": true,
+      "reason": "明确当前语料不含Mistral7B论文及两项规格，不猜数值；运行前PDF清单不含该主论文。",
+      "citation_support_pass": true,
+      "citation_gaps": [],
+      "unsupported_claims": [],
+      "appropriate_refusal": true,
+      "over_refusal": false,
+      "failure_categories": [],
+      "answer_available": true,
+      "checked_citations": []
+    },
+    "agent": {
+      "points": [
+        "covered"
+      ],
+      "strict_pass": true,
+      "reason": "列出Mistral7B原文规格证据缺口，无训练token或窗口长度猜测；模型stop后在本地生成缺口说明，回答阶段0调用。",
+      "citation_support_pass": true,
+      "citation_gaps": [],
+      "unsupported_claims": [],
+      "appropriate_refusal": true,
+      "over_refusal": false,
+      "failure_categories": [],
+      "answer_available": true,
+      "checked_citations": []
+    }
+  },
+  "b12": {
+    "rag": {
+      "points": [
+        "covered"
+      ],
+      "strict_pass": true,
+      "reason": "明确缺少年度美元成本与固定刷新间隔，未把2016/2018索引快照差当刷新周期；额外快照/准确率描述分别由806/811支持。",
+      "citation_support_pass": true,
+      "citation_gaps": [],
+      "unsupported_claims": [],
+      "appropriate_refusal": true,
+      "over_refusal": false,
+      "failure_categories": [],
+      "answer_available": true,
+      "checked_citations": [
+        {
+          "number": 6,
+          "chunk_id": 811,
+          "source": "2005.11401v4.pdf",
+          "page": 8,
+          "quote": "RAG answers 70% correctly using the 2016 index for 2016 world leaders and 68% using the 2018 index for 2018 world leaders. Accuracy with mismatched indices is low (12% with the 2018 index and 2016 leaders, 4% with the 2016 index and 2018 leaders).",
+          "canonical_identity_verified": true
+        },
+        {
+          "number": 10,
+          "chunk_id": 806,
+          "source": "2005.11401v4.pdf",
+          "page": 7,
+          "quote": "To demonstrate, we build an index using the DrQA [5] Wikipedia dump from December 2016 and compare outputs from RAG using this index to the newer index from our main results (December 2018).",
+          "canonical_identity_verified": true
+        }
+      ]
+    },
+    "agent": {
+      "points": [
+        "covered"
+      ],
+      "strict_pass": true,
+      "reason": "限定RAG搜索新增7段，再读806邻段新增4段，最终missing/stop；本地零回答调用列出两项真实缺口，没有猜年费或刷新周期。",
+      "citation_support_pass": true,
+      "citation_gaps": [],
+      "unsupported_claims": [],
+      "appropriate_refusal": true,
+      "over_refusal": false,
+      "failure_categories": [],
+      "answer_available": true,
+      "checked_citations": []
+    }
+  }
+}

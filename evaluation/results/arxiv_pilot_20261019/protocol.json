@@ -1,0 +1,43 @@
+{
+  "scope": "5 hand-selected arXiv PDFs; local pilot, not representative accuracy benchmark",
+  "version": "arxiv-pilot-5-20261019",
+  "active_version_expected": "semantic-mac-20261019",
+  "python": "3.11.9 (v3.11.9:de54cf5be3, Apr  2 2024, 07:12:50) [Clang 13.0.0 (clang-1300.0.29.30)]",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "machine": "arm64",
+  "model_runtime": "CPU; torch threads=1 and interop_threads=1",
+  "environment": {
+    "OMP_NUM_THREADS": "1",
+    "OPENBLAS_NUM_THREADS": "1",
+    "MKL_NUM_THREADS": "1",
+    "VECLIB_MAXIMUM_THREADS": "1",
+    "TOKENIZERS_PARALLELISM": "false",
+    "HF_HUB_OFFLINE": "1",
+    "TRANSFORMERS_OFFLINE": "1"
+  },
+  "retrieval_mode": "7 Chinese original queries, no decomposition or API; Dense/BM2560, RRF60, BGE10",
+  "generation_questions": [
+    "p3",
+    "p6",
+    "p7"
+  ],
+  "generation_mode": "fresh production main pipeline including API decomposition, global reranking, evidence ledger, generation and citation checking",
+  "requested_model": "cn:deepseek-v4.1-flash",
+  "chat_options": {
+    "thinking": {
+      "type": "disabled"
+    },
+    "temperature": 0,
+    "max_tokens": 4096
+  },
+  "known_limits": [
+    "Default-thread Mac crash root cause remains open; controlled threads used.",
+    "Numeric chunk IDs are scoped by version; no cross-version stable chunk ID scheme.",
+    "Manual development pilot; no holdout or model comparison."
+  ],
+  "english_control": {
+    "questions": 6,
+    "purpose": "English translations after the Chinese pilot, same Gold and budgets, no answer keywords inserted and no generation API calls. Diagnostic development control, not an independent test set.",
+    "path_fix": "Only provenance path normalization changed between Chinese and successful English runs; Chinese original results retained."
+  }
+}

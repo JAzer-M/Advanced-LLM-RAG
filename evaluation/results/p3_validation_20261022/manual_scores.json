@@ -1,0 +1,244 @@
+{
+  "protocol": "review_protocol.md frozen before model requests",
+  "reviewer": "Same assistant; no model judge requests",
+  "scores": [
+    {
+      "id": "n01",
+      "arm": "agent_off",
+      "status": "completed",
+      "answerable": true,
+      "required_points": [
+        "two linear transformations",
+        "ReLU between the two transformations",
+        "inner-layer dimensionality d_ff = 2048"
+      ],
+      "point_pass": [
+        true,
+        true,
+        true
+      ],
+      "correct_refusal": null,
+      "task_pass": true,
+      "strict_task_fact_citation_pass": true,
+      "note": "3/3必答；附加512、逐位置分别且相同应用均有第5页原文。"
+    },
+    {
+      "id": "n01",
+      "arm": "agent_on",
+      "status": "completed",
+      "answerable": true,
+      "required_points": [
+        "two linear transformations",
+        "ReLU between the two transformations",
+        "inner-layer dimensionality d_ff = 2048"
+      ],
+      "point_pass": [
+        true,
+        true,
+        true
+      ],
+      "correct_refusal": null,
+      "task_pass": true,
+      "strict_task_fact_citation_pass": true,
+      "note": "3/3必答，第5页引用正确；arXiv未触发。"
+    },
+    {
+      "id": "n02",
+      "arm": "agent_on",
+      "status": "completed",
+      "answerable": true,
+      "required_points": [
+        "convolution stride 1 pixel",
+        "padding 1 pixel for 3x3 convolution"
+      ],
+      "point_pass": [
+        true,
+        true
+      ],
+      "correct_refusal": null,
+      "task_pass": true,
+      "strict_task_fact_citation_pass": true,
+      "note": "2/2必答；第2页引用正确，arXiv未触发。"
+    },
+    {
+      "id": "n02",
+      "arm": "agent_off",
+      "status": "completed",
+      "answerable": true,
+      "required_points": [
+        "convolution stride 1 pixel",
+        "padding 1 pixel for 3x3 convolution"
+      ],
+      "point_pass": [
+        true,
+        true
+      ],
+      "correct_refusal": null,
+      "task_pass": true,
+      "strict_task_fact_citation_pass": true,
+      "note": "2/2必答；stride/padding及空间分辨率解释均由第2页支持。"
+    },
+    {
+      "id": "n03",
+      "arm": "agent_off",
+      "status": "completed",
+      "answerable": true,
+      "required_points": [
+        "absolute position encoded with a rotation matrix",
+        "explicit relative-position dependency incorporated in self-attention"
+      ],
+      "point_pass": [
+        false,
+        false
+      ],
+      "correct_refusal": null,
+      "task_pass": false,
+      "strict_task_fact_citation_pass": false,
+      "note": "安全说明缺原论文，但未完成2项必答，记任务不通过。"
+    },
+    {
+      "id": "n03",
+      "arm": "agent_on",
+      "status": "completed",
+      "answerable": true,
+      "required_points": [
+        "absolute position encoded with a rotation matrix",
+        "explicit relative-position dependency incorporated in self-attention"
+      ],
+      "point_pass": [
+        true,
+        true
+      ],
+      "correct_refusal": null,
+      "task_pass": true,
+      "strict_task_fact_citation_pass": true,
+      "note": "2/2必答；第1/2页支持核心，第5/12页支持乘性/矩阵乘积及向量乘积的补充。"
+    },
+    {
+      "id": "n03",
+      "arm": "auto_on",
+      "status": "completed",
+      "answerable": true,
+      "required_points": [
+        "absolute position encoded with a rotation matrix",
+        "explicit relative-position dependency incorporated in self-attention"
+      ],
+      "point_pass": [
+        true,
+        true
+      ],
+      "correct_refusal": null,
+      "task_pass": true,
+      "strict_task_fact_citation_pass": true,
+      "note": "2/2必答；真实触发Agent和arXiv，第1/2/5/12页引用支持。"
+    },
+    {
+      "id": "n04",
+      "arm": "agent_on",
+      "status": "completed",
+      "answerable": true,
+      "required_points": [
+        "GPU high bandwidth memory (HBM)",
+        "GPU on-chip SRAM",
+        "tiling reduces reads and writes between them"
+      ],
+      "point_pass": [
+        true,
+        true,
+        true
+      ],
+      "correct_refusal": null,
+      "task_pass": true,
+      "strict_task_fact_citation_pass": true,
+      "note": "3/3必答；HBM、片上SRAM、tiling由第1页支持，避免物化NxN由第2页支持。首次review的answer_quote仅含[12]却登记[14]，触发校验拒绝和一次修订；答案文字实际上未变，新增2调用计费。"
+    },
+    {
+      "id": "n04",
+      "arm": "agent_off",
+      "status": "completed",
+      "answerable": true,
+      "required_points": [
+        "GPU high bandwidth memory (HBM)",
+        "GPU on-chip SRAM",
+        "tiling reduces reads and writes between them"
+      ],
+      "point_pass": [
+        false,
+        false,
+        false
+      ],
+      "correct_refusal": null,
+      "task_pass": false,
+      "strict_task_fact_citation_pass": false,
+      "note": "明确证据不足，无原文引用。gap中出现HBM/SRAM/tiling作为未核实候选例子，不能算有出处的完整回答；3项支持覆盖均0。"
+    },
+    {
+      "id": "n04",
+      "arm": "auto_on",
+      "status": "degraded",
+      "answerable": true,
+      "required_points": [
+        "GPU high bandwidth memory (HBM)",
+        "GPU on-chip SRAM",
+        "tiling reduces reads and writes between them"
+      ],
+      "point_pass": [
+        false,
+        false,
+        false
+      ],
+      "correct_refusal": null,
+      "task_pass": false,
+      "strict_task_fact_citation_pass": false,
+      "note": "真实标题被original修饰词匹配拒绝，未搜索；degraded初检只说明Self-RAG引用FlashAttention，无3项机制答案。失败计分母。"
+    },
+    {
+      "id": "n05",
+      "arm": "agent_off",
+      "status": "completed",
+      "answerable": false,
+      "required_points": null,
+      "point_pass": null,
+      "correct_refusal": true,
+      "task_pass": true,
+      "strict_task_fact_citation_pass": true,
+      "note": "明确无法给精确USD账单，未编造金额，正确拒答。"
+    },
+    {
+      "id": "n05",
+      "arm": "agent_on",
+      "status": "completed",
+      "answerable": false,
+      "required_points": null,
+      "point_pass": null,
+      "correct_refusal": true,
+      "task_pass": true,
+      "strict_task_fact_citation_pass": true,
+      "note": "已读原论文但所选段不足以建立精确USD账单，预算停止并拒答；没有声称费用为0或硬件推算。正确拒答，不当作穷尽论文缺失证明。"
+    },
+    {
+      "id": "n06",
+      "arm": "agent_on",
+      "status": "failed",
+      "answerable": false,
+      "required_points": null,
+      "point_pass": null,
+      "correct_refusal": false,
+      "task_pass": false,
+      "strict_task_fact_citation_pass": false,
+      "note": "主体original FlashAttention paper触发书目标题匹配误拒绝；failed且无交付答案，不能按正确拒答计分。"
+    },
+    {
+      "id": "n06",
+      "arm": "agent_off",
+      "status": "completed",
+      "answerable": false,
+      "required_points": null,
+      "point_pass": null,
+      "correct_refusal": true,
+      "task_pass": true,
+      "strict_task_fact_citation_pass": true,
+      "note": "明确现有证据没有所问精确kWh，未编造数值，正确拒答。"
+    }
+  ]
+}

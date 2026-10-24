@@ -1,0 +1,37 @@
+{
+  "requirements": [
+    {
+      "id": "r1",
+      "status": "supported",
+      "evidence": [
+        {
+          "chunk_id": 1397,
+          "quote": "We propose FlashAttention, an IO-aware exact attention algorithm that uses tiling to reduce the number of memory reads/writes between GPU high bandwidth memory (HBM) and GPU on-chip SRAM."
+        },
+        {
+          "chunk_id": 1401,
+          "quote": "FlashAttention uses tiling to prevent materialization of the large 𝑁× 𝑁attention matrix"
+        },
+        {
+          "chunk_id": 1401,
+          "quote": "FlashAttention does not read and write the large 𝑁× 𝑁attention matrix to HBM"
+        }
+      ],
+      "supported_part": "原始FlashAttention论文明确指出IO减少涉及的GPU内存层级为GPU高带宽内存(HBM)与GPU片上SRAM，并说明通过tiling技术减少这两者之间的内存读写/传输。",
+      "reason": "chunk_id 1397原文同时给出两个内存层级(HBM与on-chip SRAM)和实现技术(tiling)；chunk_id 1401再次确认tiling防止在HBM上物化注意力矩阵，直接支持问题的两个部分。",
+      "gap": ""
+    }
+  ],
+  "next_action": {
+    "type": "answer",
+    "reason": "r1的两个部分（HBM与SRAM两个内存层级、tiling技术）均已由原始FlashAttention论文的引文完整建立，无需进一步检索。",
+    "requirement_ids": [],
+    "query": null,
+    "source": null,
+    "chunk_id": null
+  },
+  "scope_check": {
+    "valid": true,
+    "reason": "引文均直接针对FlashAttention的IO减少内存层级与实现技术，未超出绑定问题摘录的范围。"
+  }
+}

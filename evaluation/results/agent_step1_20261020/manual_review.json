@@ -1,0 +1,39 @@
+{
+  "reviewer": "This assistant; manual comparison against original question, original saved evidence and inventory. Not independent blind evaluation.",
+  "program_completed_cases": 3,
+  "program_structure_and_quote_validation_passes": 3,
+  "semantic_case_passes": 2,
+  "planned_cases": 3,
+  "actions_executed": 0,
+  "ready_for_automatic_tool_execution": false,
+  "cases": [
+    {
+      "id": "h01",
+      "semantic_pass": true,
+      "scope_binding_pass": true,
+      "action_type_match": true,
+      "action_arguments_pass": true,
+      "note": "3项需求均按原题；69/70支持数值与指标影响，answer建议正确。"
+    },
+    {
+      "id": "h10",
+      "semantic_pass": false,
+      "scope_binding_pass": false,
+      "action_type_match": true,
+      "action_arguments_pass": false,
+      "note": "r3将仅绑定Self-RAG的PopQA扩展给RAG，并在搜索query中延续错误范围；r4另加逐数据集要求。识别RAG评测判据缺失、Self-RAG包含式判据已有证据，搜索源文件也正确，但不能据此判整体通过。r1引用RAG训练负对数似然并记partial，属于将背景材料过宽地算作评测判据的部分支持。",
+      "observed_bad_plan_requirement": "r3",
+      "observed_bad_search_query": "RAG 在 short-answer open-domain QA（PopQA、TriviaQA）评估中采用何种正确性判据（exact match 还是 answer inclusion）？",
+      "required_followup": "先修主体/条件范围绑定与缺口状态审查，再进入自动工具执行；本轮不追加API调用。",
+      "observed_search_source": "2005.11401v4.pdf"
+    },
+    {
+      "id": "h11",
+      "semantic_pass": true,
+      "scope_binding_pass": true,
+      "action_type_match": true,
+      "action_arguments_pass": true,
+      "note": "2项参数需求与来源可用性检查均为missing；Mamba原文不在八篇目录中，stop且不填数值正确。"
+    }
+  ]
+}

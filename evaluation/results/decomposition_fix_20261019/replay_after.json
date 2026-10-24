@@ -1,0 +1,871 @@
+{
+  "query": "DPR 和 ColBERT 在问题／文档的向量表示以及相关性打分上有什么主要区别？",
+  "decomposition": {
+    "needs_decomposition": true,
+    "sub_queries": [
+      "DPR 如何表示问题和文档的向量？",
+      "DPR 如何进行相关性打分？",
+      "ColBERT 如何表示问题和文档的向量？",
+      "ColBERT 如何进行相关性打分？"
+    ],
+    "status": "accepted",
+    "proposed_count": 4
+  },
+  "knowledge_base": {
+    "version": "arxiv-pilot-5-20261019",
+    "chunk_count": 1019,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/arxiv-pilot-5-20261019/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/arxiv-pilot-5-20261019/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/arxiv-pilot-5-20261019/manifest.json",
+    "manifest_sha256": "3629c41d73fd61d80c86880909c97de67c15088fe4ac2e5c2e6b49f3901aff0e",
+    "files": {
+      "faiss.index": "88a186f7ef0fe7cdf2f058c2074326b62f06f682f67c0cecf0bec172fc4f9888",
+      "chunks.json": "8df8a3ae53faa7544703ae8e9484ec089bad83754b9051d048dde9f0aa533c35"
+    }
+  },
+  "selected_ids": [
+    250,
+    189,
+    305,
+    219,
+    28,
+    352,
+    154,
+    170,
+    222,
+    83
+  ],
+  "context": "[1] Source: 2004.12832v2.pdf | Page: 5 | Section: 3 COLBERT\nBoth stages rely on ColBERT’s scoring: the ﬁrst is an approximate stage aimed at ﬁltering while the second is a reﬁnement stage. For the ﬁrst stage, we concurrently issue Nq vector-similarity queries (corresponding to each of the embeddings in Eq) onto our faiss in- dex. Tis retrieves the top-k′ (e.g., k′ = k/2) matches for that vector 4htps://github.com/facebookresearch/faiss\n\n[2] Source: 2004.12832v2.pdf | Page: 2 | Section: 1 INTRODUCTION\nUnder late interaction, q and d are separately encoded into two sets of contextual embeddings, and relevance is evaluated using cheap and pruning-friendly computations between both sets—that is, fast computations that enable ranking without exhaustively evaluating every possible candidate. Figure 2 contrasts our proposed late interaction approach with existing neural matching paradigms.\n\n[3] Source: 2004.12832v2.pdf | Page: 9 | Section: 4 EXPERIMENTAL EVALUATION\nModel [A] tackles this question: it uses BERT to produce a single embedding vector for the query and another for the document, extracted from BERT’s [CLS] contextualized embedding and expanded through a linear layer to dimension 4096 (which equals Nq × 128 = 32 × 128). Relevance is estimated as the inner product of the query’s and the document’s embeddings, which we found to perform beter than cosine similarity for single-vector re-ranking.\n\n[4] Source: 2004.12832v2.pdf | Page: 4 | Section: 3 COLBERT\nIn particular, we ﬁnd the maximum cosine similarity of each v ∈Eq with vectors in Ed, and combine the outputs via summation. Besides cosine, we also evaluate squared L2 distance as a measure of vector similarity. In- tuitively, this interaction mechanism sofly searches for each query term tq—in a manner that reﬂects its context in the query—against the document’s embeddings, quantifying the strength of the “match” via the largest similarity score between tq and a document term td.\n\n[5] Source: 2004.04906v3.pdf | Page: 3 | Section: 3.1 Overview\nAt run-time, DPR applies a different encoder EQ(·) that maps the input question to a d-dimensional vector, and retrieves k passages of which vectors are the closest to the question vector. We deﬁne the similarity between the question and the passage using the dot product of their vectors: sim(q, p) = EQ(q)⊺EP (p).\n\n[6] Source: 2005.11401v4.pdf | Page: 2 | Section: 1 Introduction\nThe retriever (Dense Passage Retriever [26], henceforth DPR) provides latent documents conditioned on the input, and the seq2seq model (BART [32]) then conditions on these latent documents together with the input to generate the output. We marginalize the latent documents with a top-K approximation, either on a per-output basis (assuming the same document is responsible for all tokens) or a per-token basis (where different documents are responsible for different tokens).\n\n[7] Source: 2004.04906v3.pdf | Page: 12 | Section: 8 Conclusion\nMethods like BM25 are sensitive to highly selective keywords and phrases, but cannot capture lexical variations or se- mantic relationships well. In contrast, DPR excels at semantic representation, but might lack sufﬁcient capacity to represent salient phrases which appear rarely. Table 7 illustrates this phenomenon with two examples.\n\n[8] Source: 2004.12832v2.pdf | Page: 1 | Section: None\nColBERT introduces a late interaction architecture that indepen- dently encodes the query and the document using BERT and then employs a cheap yet powerful interaction step that models their ﬁne-grained similarity. By delaying and yet retaining this ﬁne- granular interaction, ColBERT can leverage the expressiveness of deep LMs while simultaneously gaining the ability to pre-compute document representations oﬄine, considerably speeding up query processing.\n\n[9] Source: 2004.12832v2.pdf | Page: 4 | Section: 3 COLBERT\nOther cheap choices (e.g., a summation of average similarity scores, instead of maximum) are possible; however, many are less amenable to pruning. In §4.4, we conduct an extensive ablation study that empirically veriﬁes the ad- vantage of our MaxSim-based late interaction against alternatives. 3.2 Qery & Document Encoders Prior to late interaction, ColBERT encodes each query or document into a bag of embeddings, employing BERT-based encoders.\n\n[10] Source: 2004.04906v3.pdf | Page: 7 | Section: 5.4 Run-time Efﬁciency\nWith the help of FAISS in-memory index for real-valued vectors10, DPR can be made incredibly efﬁcient, processing 995.0 questions per second, returning top 100 pas- sages per question. In contrast, BM25/Lucene (im- plemented in Java, using ﬁle index) processes 23.7 questions per second per CPU thread.\n\n[11] Source: 2004.12832v2.pdf | Page: 5 | Section: 3 COLBERT\nFor this, we employ an oﬀ-the-shelf library for large-scale vector-similarity search, namely faiss [15] from Facebook.4In par- ticular, at the end of oﬄine indexing (§3.4), we maintain a mapping from each embedding to its document of origin and then index all document embeddings into faiss. Subsequently, when serving queries, we use a two-stage pro- cedure to retrieve the top-k documents from the entire collection.",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": "Both stages rely on ColBERT’s scoring: the ﬁrst is an approximate stage aimed at ﬁltering while the second is a reﬁnement stage.",
+        "evidence_start": 0,
+        "evidence_end": 128,
+        "subject": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "identity": {
+          "subject": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            250,
+            249
+          ],
+          "identity_quote": "For this, we employ an oﬀ-the-shelf library for large-scale vector-similarity search, namely faiss [15] from Facebook.4In par- ticular, at the end of oﬄine indexing (§3.4), we maintain a mapping from each embedding to its document of origin and then index all document embeddings into faiss. Subsequently, when serving queries, we use a two-stage pro- cedure to retrieve the top-k documents from the entire collection.",
+          "identity_chunk_id": 249
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 250,
+        "page": 5,
+        "citations": [
+          1,
+          11
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " For the ﬁrst stage, we concurrently issue Nq vector-similarity queries (corresponding to each of the embeddings in Eq) onto our faiss in- dex.",
+        "evidence_start": 128,
+        "evidence_end": 271,
+        "subject": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "identity": {
+          "subject": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            250,
+            249
+          ],
+          "identity_quote": "For this, we employ an oﬀ-the-shelf library for large-scale vector-similarity search, namely faiss [15] from Facebook.4In par- ticular, at the end of oﬄine indexing (§3.4), we maintain a mapping from each embedding to its document of origin and then index all document embeddings into faiss. Subsequently, when serving queries, we use a two-stage pro- cedure to retrieve the top-k documents from the entire collection.",
+          "identity_chunk_id": 249
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 250,
+        "page": 5,
+        "citations": [
+          1,
+          11
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Under late interaction, q and d are separately encoded into two sets of contextual embeddings, and relevance is evaluated using cheap and pruning-friendly computations between both sets—that is, fast computations that enable ranking without exhaustively evaluating every possible candidate.",
+        "evidence_start": 0,
+        "evidence_end": 290,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            189,
+            188
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 189,
+        "page": 2,
+        "citations": [
+          2
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Figure 2 contrasts our proposed late interaction approach with existing neural matching paradigms.",
+        "evidence_start": 290,
+        "evidence_end": 389,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            189,
+            188
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 189,
+        "page": 2,
+        "citations": [
+          2
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Model [A] tackles this question: it uses BERT to produce a single embedding vector for the query and another for the document, extracted from BERT’s [CLS] contextualized embedding and expanded through a linear layer to dimension 4096 (which equals Nq × 128 = 32 × 128).",
+        "evidence_start": 0,
+        "evidence_end": 269,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            305
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 305,
+        "page": 9,
+        "citations": [
+          3
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Relevance is estimated as the inner product of the query’s and the document’s embeddings, which we found to perform beter than cosine similarity for single-vector re-ranking.",
+        "evidence_start": 269,
+        "evidence_end": 444,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            305
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 305,
+        "page": 9,
+        "citations": [
+          3
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "In particular, we ﬁnd the maximum cosine similarity of each v ∈Eq with vectors in Ed, and combine the outputs via summation.",
+        "evidence_start": 0,
+        "evidence_end": 124,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            219,
+            218
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 219,
+        "page": 4,
+        "citations": [
+          4
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Besides cosine, we also evaluate squared L2 distance as a measure of vector similarity.",
+        "evidence_start": 124,
+        "evidence_end": 212,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            219,
+            218
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 219,
+        "page": 4,
+        "citations": [
+          4
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In- tuitively, this interaction mechanism sofly searches for each query term tq—in a manner that reﬂects its context in the query—against the document’s embeddings, quantifying the strength of the “match” via the largest similarity score between tq and a document term td.",
+        "evidence_start": 212,
+        "evidence_end": 485,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            219,
+            218
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 219,
+        "page": 4,
+        "citations": [
+          4
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "At run-time, DPR applies a different encoder EQ(·) that maps the input question to a d-dimensional vector, and retrieves k passages of which vectors are the closest to the question vector.",
+        "evidence_start": 0,
+        "evidence_end": 188,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            28
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 28,
+        "page": 3,
+        "citations": [
+          5
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We deﬁne the similarity between the question and the passage using the dot product of their vectors: sim(q, p) = EQ(q)⊺EP (p).",
+        "evidence_start": 188,
+        "evidence_end": 315,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            28
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 28,
+        "page": 3,
+        "citations": [
+          5
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "The retriever (Dense Passage Retriever [26], henceforth DPR) provides latent documents conditioned on the input, and the seq2seq model (BART [32]) then conditions on these latent documents together with the input to generate the output.",
+        "evidence_start": 0,
+        "evidence_end": 236,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            352
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 352,
+        "page": 2,
+        "citations": [
+          6
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We marginalize the latent documents with a top-K approximation, either on a per-output basis (assuming the same document is responsible for all tokens) or a per-token basis (where different documents are responsible for different tokens).",
+        "evidence_start": 236,
+        "evidence_end": 475,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            352
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 352,
+        "page": 2,
+        "citations": [
+          6
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Methods like BM25 are sensitive to highly selective keywords and phrases, but cannot capture lexical variations or se- mantic relationships well.",
+        "evidence_start": 0,
+        "evidence_end": 145,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            154,
+            153
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 154,
+        "page": 12,
+        "citations": [
+          7
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In contrast, DPR excels at semantic representation, but might lack sufﬁcient capacity to represent salient phrases which appear rarely.",
+        "evidence_start": 145,
+        "evidence_end": 281,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            154,
+            153
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 154,
+        "page": 12,
+        "citations": [
+          7
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Table 7 illustrates this phenomenon with two examples.",
+        "evidence_start": 281,
+        "evidence_end": 336,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            154,
+            153
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 154,
+        "page": 12,
+        "citations": [
+          7
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "ColBERT introduces a late interaction architecture that indepen- dently encodes the query and the document using BERT and then employs a cheap yet powerful interaction step that models their ﬁne-grained similarity.",
+        "evidence_start": 0,
+        "evidence_end": 214,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            170
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 170,
+        "page": 1,
+        "citations": [
+          8
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " By delaying and yet retaining this ﬁne- granular interaction, ColBERT can leverage the expressiveness of deep LMs while simultaneously gaining the ability to pre-compute document representations oﬄine, considerably speeding up query processing.",
+        "evidence_start": 214,
+        "evidence_end": 459,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            170
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 170,
+        "page": 1,
+        "citations": [
+          8
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": ", a summation of average similarity scores, instead of maximum) are possible; however, many are less amenable to pruning.",
+        "evidence_start": 25,
+        "evidence_end": 146,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            222,
+            221,
+            220,
+            219,
+            218
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 222,
+        "page": 4,
+        "citations": [
+          9
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "4, we conduct an extensive ablation study that empirically veriﬁes the ad- vantage of our MaxSim-based late interaction against alternatives.",
+        "evidence_start": 153,
+        "evidence_end": 294,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            222,
+            221,
+            220,
+            219,
+            218
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 222,
+        "page": 4,
+        "citations": [
+          9
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "2 Qery & Document Encoders Prior to late interaction, ColBERT encodes each query or document into a bag of embeddings, employing BERT-based encoders.",
+        "evidence_start": 297,
+        "evidence_end": 446,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            222
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 222,
+        "page": 4,
+        "citations": [
+          9
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "0 questions per second, returning top 100 pas- sages per question.",
+        "evidence_start": 118,
+        "evidence_end": 184,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            83
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 83,
+        "page": 7,
+        "citations": [
+          10
+        ],
+        "record_id": "E22"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "7 questions per second per CPU thread.",
+        "evidence_start": 264,
+        "evidence_end": 302,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            83
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.04906v3.pdf",
+        "chunk_id": 83,
+        "page": 7,
+        "citations": [
+          10
+        ],
+        "record_id": "E23"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 250,
+        "text": "Both stages rely on ColBERT’s scoring: the ﬁrst is an approximate stage aimed at ﬁltering while the second is a reﬁnement stage. For the ﬁrst stage, we concurrently issue Nq vector-similarity queries (corresponding to each of the embeddings in Eq) onto our faiss in- dex. Tis retrieves the top-k′ (e.g., k′ = k/2) matches for that vector 4htps://github.com/facebookresearch/faiss",
+        "source": "2004.12832v2.pdf",
+        "page": 5,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "3 COLBERT"
+      },
+      {
+        "chunk_id": 189,
+        "text": "Under late interaction, q and d are separately encoded into two sets of contextual embeddings, and relevance is evaluated using cheap and pruning-friendly computations between both sets—that is, fast computations that enable ranking without exhaustively evaluating every possible candidate. Figure 2 contrasts our proposed late interaction approach with existing neural matching paradigms.",
+        "source": "2004.12832v2.pdf",
+        "page": 2,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "1 INTRODUCTION"
+      },
+      {
+        "chunk_id": 305,
+        "text": "Model [A] tackles this question: it uses BERT to produce a single embedding vector for the query and another for the document, extracted from BERT’s [CLS] contextualized embedding and expanded through a linear layer to dimension 4096 (which equals Nq × 128 = 32 × 128). Relevance is estimated as the inner product of the query’s and the document’s embeddings, which we found to perform beter than cosine similarity for single-vector re-ranking.",
+        "source": "2004.12832v2.pdf",
+        "page": 9,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "4 EXPERIMENTAL EVALUATION"
+      },
+      {
+        "chunk_id": 219,
+        "text": "In particular, we ﬁnd the maximum cosine similarity of each v ∈Eq with vectors in Ed, and combine the outputs via summation. Besides cosine, we also evaluate squared L2 distance as a measure of vector similarity. In- tuitively, this interaction mechanism sofly searches for each query term tq—in a manner that reﬂects its context in the query—against the document’s embeddings, quantifying the strength of the “match” via the largest similarity score between tq and a document term td.",
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "3 COLBERT"
+      },
+      {
+        "chunk_id": 28,
+        "text": "At run-time, DPR applies a different encoder EQ(·) that maps the input question to a d-dimensional vector, and retrieves k passages of which vectors are the closest to the question vector. We deﬁne the similarity between the question and the passage using the dot product of their vectors: sim(q, p) = EQ(q)⊺EP (p).",
+        "source": "2004.04906v3.pdf",
+        "page": 3,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "3.1 Overview"
+      },
+      {
+        "chunk_id": 352,
+        "text": "The retriever (Dense Passage Retriever [26], henceforth DPR) provides latent documents conditioned on the input, and the seq2seq model (BART [32]) then conditions on these latent documents together with the input to generate the output. We marginalize the latent documents with a top-K approximation, either on a per-output basis (assuming the same document is responsible for all tokens) or a per-token basis (where different documents are responsible for different tokens).",
+        "source": "2005.11401v4.pdf",
+        "page": 2,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "1 Introduction"
+      },
+      {
+        "chunk_id": 154,
+        "text": "Methods like BM25 are sensitive to highly selective keywords and phrases, but cannot capture lexical variations or se- mantic relationships well. In contrast, DPR excels at semantic representation, but might lack sufﬁcient capacity to represent salient phrases which appear rarely. Table 7 illustrates this phenomenon with two examples.",
+        "source": "2004.04906v3.pdf",
+        "page": 12,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "8 Conclusion"
+      },
+      {
+        "chunk_id": 170,
+        "text": "ColBERT introduces a late interaction architecture that indepen- dently encodes the query and the document using BERT and then employs a cheap yet powerful interaction step that models their ﬁne-grained similarity. By delaying and yet retaining this ﬁne- granular interaction, ColBERT can leverage the expressiveness of deep LMs while simultaneously gaining the ability to pre-compute document representations oﬄine, considerably speeding up query processing.",
+        "source": "2004.12832v2.pdf",
+        "page": 1,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": null
+      },
+      {
+        "chunk_id": 222,
+        "text": "Other cheap choices (e.g., a summation of average similarity scores, instead of maximum) are possible; however, many are less amenable to pruning. In §4.4, we conduct an extensive ablation study that empirically veriﬁes the ad- vantage of our MaxSim-based late interaction against alternatives. 3.2 Qery & Document Encoders Prior to late interaction, ColBERT encodes each query or document into a bag of embeddings, employing BERT-based encoders.",
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "3 COLBERT"
+      },
+      {
+        "chunk_id": 83,
+        "text": "With the help of FAISS in-memory index for real-valued vectors10, DPR can be made incredibly efﬁcient, processing 995.0 questions per second, returning top 100 pas- sages per question. In contrast, BM25/Lucene (im- plemented in Java, using ﬁle index) processes 23.7 questions per second per CPU thread.",
+        "source": "2004.04906v3.pdf",
+        "page": 7,
+        "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+        "section": "5.4 Run-time Efﬁciency"
+      },
+      {
+        "chunk_id": 249,
+        "text": "For this, we employ an oﬀ-the-shelf library for large-scale vector-similarity search, namely faiss [15] from Facebook.4In par- ticular, at the end of oﬄine indexing (§3.4), we maintain a mapping from each embedding to its document of origin and then index all document embeddings into faiss. Subsequently, when serving queries, we use a two-stage pro- cedure to retrieve the top-k documents from the entire collection.",
+        "source": "2004.12832v2.pdf",
+        "page": 5,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "3 COLBERT"
+      }
+    ],
+    "selected_ids": [
+      250,
+      189,
+      305,
+      219,
+      28,
+      352,
+      154,
+      170,
+      222,
+      83
+    ]
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 141,
+    "global_top_ids": [
+      280,
+      250,
+      309,
+      189,
+      220,
+      228,
+      305,
+      292,
+      208,
+      81
+    ],
+    "protected_ids": [
+      28,
+      222,
+      250
+    ],
+    "sub_query_evidence": [
+      {
+        "query": "DPR 如何表示问题和文档的向量？",
+        "top_ids": [
+          28,
+          83,
+          352
+        ]
+      },
+      {
+        "query": "DPR 如何进行相关性打分？",
+        "top_ids": [
+          28,
+          154,
+          151
+        ]
+      },
+      {
+        "query": "ColBERT 如何表示问题和文档的向量？",
+        "top_ids": [
+          222,
+          170,
+          305
+        ]
+      },
+      {
+        "query": "ColBERT 如何进行相关性打分？",
+        "top_ids": [
+          250,
+          189,
+          219
+        ]
+      }
+    ]
+  },
+  "run_provenance": "Offline paired retrieval audit: captured API response, real models, no generation.",
+  "api_calls": 0,
+  "generation_run": false,
+  "gold": [
+    {
+      "source": "2004.04906v3.pdf",
+      "page": 3,
+      "quote": "using the dot product of their vectors",
+      "matching_ids": [
+        28
+      ],
+      "ranks": [
+        5
+      ]
+    },
+    {
+      "source": "2004.12832v2.pdf",
+      "page": 4,
+      "quote": "maximum cosine similarity",
+      "matching_ids": [
+        219
+      ],
+      "ranks": [
+        4
+      ]
+    },
+    {
+      "source": "2004.12832v2.pdf",
+      "page": 4,
+      "quote": "combine the outputs via summation",
+      "matching_ids": [
+        219
+      ],
+      "ranks": [
+        4
+      ]
+    }
+  ],
+  "top10": [
+    {
+      "chunk_id": 250,
+      "text": "Both stages rely on ColBERT’s scoring: the ﬁrst is an approximate stage aimed at ﬁltering while the second is a reﬁnement stage. For the ﬁrst stage, we concurrently issue Nq vector-similarity queries (corresponding to each of the embeddings in Eq) onto our faiss in- dex. Tis retrieves the top-k′ (e.g., k′ = k/2) matches for that vector 4htps://github.com/facebookresearch/faiss",
+      "source": "2004.12832v2.pdf",
+      "page": 5,
+      "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+      "section": "3 COLBERT"
+    },
+    {
+      "chunk_id": 189,
+      "text": "Under late interaction, q and d are separately encoded into two sets of contextual embeddings, and relevance is evaluated using cheap and pruning-friendly computations between both sets—that is, fast computations that enable ranking without exhaustively evaluating every possible candidate. Figure 2 contrasts our proposed late interaction approach with existing neural matching paradigms.",
+      "source": "2004.12832v2.pdf",
+      "page": 2,
+      "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+      "section": "1 INTRODUCTION"
+    },
+    {
+      "chunk_id": 305,
+      "text": "Model [A] tackles this question: it uses BERT to produce a single embedding vector for the query and another for the document, extracted from BERT’s [CLS] contextualized embedding and expanded through a linear layer to dimension 4096 (which equals Nq × 128 = 32 × 128). Relevance is estimated as the inner product of the query’s and the document’s embeddings, which we found to perform beter than cosine similarity for single-vector re-ranking.",
+      "source": "2004.12832v2.pdf",
+      "page": 9,
+      "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+      "section": "4 EXPERIMENTAL EVALUATION"
+    },
+    {
+      "chunk_id": 219,
+      "text": "In particular, we ﬁnd the maximum cosine similarity of each v ∈Eq with vectors in Ed, and combine the outputs via summation. Besides cosine, we also evaluate squared L2 distance as a measure of vector similarity. In- tuitively, this interaction mechanism sofly searches for each query term tq—in a manner that reﬂects its context in the query—against the document’s embeddings, quantifying the strength of the “match” via the largest similarity score between tq and a document term td.",
+      "source": "2004.12832v2.pdf",
+      "page": 4,
+      "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+      "section": "3 COLBERT"
+    },
+    {
+      "chunk_id": 28,
+      "text": "At run-time, DPR applies a different encoder EQ(·) that maps the input question to a d-dimensional vector, and retrieves k passages of which vectors are the closest to the question vector. We deﬁne the similarity between the question and the passage using the dot product of their vectors: sim(q, p) = EQ(q)⊺EP (p).",
+      "source": "2004.04906v3.pdf",
+      "page": 3,
+      "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+      "section": "3.1 Overview"
+    },
+    {
+      "chunk_id": 352,
+      "text": "The retriever (Dense Passage Retriever [26], henceforth DPR) provides latent documents conditioned on the input, and the seq2seq model (BART [32]) then conditions on these latent documents together with the input to generate the output. We marginalize the latent documents with a top-K approximation, either on a per-output basis (assuming the same document is responsible for all tokens) or a per-token basis (where different documents are responsible for different tokens).",
+      "source": "2005.11401v4.pdf",
+      "page": 2,
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "section": "1 Introduction"
+    },
+    {
+      "chunk_id": 154,
+      "text": "Methods like BM25 are sensitive to highly selective keywords and phrases, but cannot capture lexical variations or se- mantic relationships well. In contrast, DPR excels at semantic representation, but might lack sufﬁcient capacity to represent salient phrases which appear rarely. Table 7 illustrates this phenomenon with two examples.",
+      "source": "2004.04906v3.pdf",
+      "page": 12,
+      "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+      "section": "8 Conclusion"
+    },
+    {
+      "chunk_id": 170,
+      "text": "ColBERT introduces a late interaction architecture that indepen- dently encodes the query and the document using BERT and then employs a cheap yet powerful interaction step that models their ﬁne-grained similarity. By delaying and yet retaining this ﬁne- granular interaction, ColBERT can leverage the expressiveness of deep LMs while simultaneously gaining the ability to pre-compute document representations oﬄine, considerably speeding up query processing.",
+      "source": "2004.12832v2.pdf",
+      "page": 1,
+      "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+      "section": null
+    },
+    {
+      "chunk_id": 222,
+      "text": "Other cheap choices (e.g., a summation of average similarity scores, instead of maximum) are possible; however, many are less amenable to pruning. In §4.4, we conduct an extensive ablation study that empirically veriﬁes the ad- vantage of our MaxSim-based late interaction against alternatives. 3.2 Qery & Document Encoders Prior to late interaction, ColBERT encodes each query or document into a bag of embeddings, employing BERT-based encoders.",
+      "source": "2004.12832v2.pdf",
+      "page": 4,
+      "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+      "section": "3 COLBERT"
+    },
+    {
+      "chunk_id": 83,
+      "text": "With the help of FAISS in-memory index for real-valued vectors10, DPR can be made incredibly efﬁcient, processing 995.0 questions per second, returning top 100 pas- sages per question. In contrast, BM25/Lucene (im- plemented in Java, using ﬁle index) processes 23.7 questions per second per CPU thread.",
+      "source": "2004.04906v3.pdf",
+      "page": 7,
+      "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+      "section": "5.4 Run-time Efﬁciency"
+    }
+  ],
+  "elapsed_seconds": 19.46
+}

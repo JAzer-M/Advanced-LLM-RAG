@@ -1,0 +1,1399 @@
+--- a/evaluation/run_evaluation.py
++++ b/evaluation/run_evaluation.py
+@@ -495,6 +495,53 @@
+         api.chat_completion = original_chat
+ 
+ 
++def query_mode_name(mode, cap):
++    return f'Pipeline {mode} ({cap} rounds)'
++
++
++def evaluate_query_modes(query, auxiliary, dense, sparse, base_fused, base_ranking,
++                         local_evidence, sub_details, base_completion, completion_caps,
++                         embedding, index, chunks, bm25, reranker):
++    """Replay main.py's optional query lists, retaining real passages as evidence.
++
++    Decomposed queries are identical in all four modes. Their complete RRF lists
++    enter every candidate pool, so their local Top-3 rankings can be reused.
++    Gold is deliberately absent from this interface.
++    """
++    rewritten = auxiliary['rewritten_query']
++    rewrite_lists = list(retrieve_two_ways(rewritten, embedding, index, chunks, bm25)) if (
++        rewritten and rewritten != query) else []
++    hyde_results = retrieve(embedding, index, chunks, auxiliary['hypothetical_document'], top_k=CANDIDATE_K)
++    methods, traces = {}, {}
++    for mode, extra in [('base', []), ('rewrite', rewrite_lists), ('hyde', [hyde_results]),
++                         ('both', [*rewrite_lists, hyde_results])]:
++        started = time.perf_counter()
++        fused = base_fused if mode == 'base' else reciprocal_rank_fusion(
++            dense, sparse, k=RRF_K, top_k=RRF_TOP_K, extra_results=extra)
++        candidates = deduplicate_results([*fused, *(c for item in (sub_details or []) for c in item['rrf'])])
++        ranking = base_ranking if mode == 'base' else rerank_results(
++            query, candidates, reranker, top_k=len(candidates))
++        anchors = get_result_ids(fused[:1])
++        selected = select_evidence(ranking, local_evidence, FINAL_K, anchors)
++        methods[query_mode_name(mode, 0)] = get_result_ids(selected)
++        completion = None
++        if completion_caps:
++            if mode == 'base':
++                completion = base_completion
++            else:
++                _, completion = complete_evidence(
++                    query, ranking, local_evidence, anchors, embedding, index, chunks, bm25, reranker,
++                    top_k=FINAL_K, candidate_k=CANDIDATE_K, max_rounds=max(completion_caps))
++            for cap in completion_caps:
++                history = [r for r in completion['round_history'] if r['round'] <= cap]
++                methods[query_mode_name(mode, cap)] = history[-1]['selected_ids'] if history else get_result_ids(selected)
++        traces[mode] = {'rrf_ids': get_result_ids(fused), 'candidate_ids': get_result_ids(candidates),
++                        'global_ranking_ids': get_result_ids(ranking), 'retrieval_anchor_ids': anchors,
++                        'selected_ids_before': get_result_ids(selected), 'evidence_completion': completion,
++                        'mode_processing_seconds': round(time.perf_counter() - started, 6)}
++    return methods, traces
++
++
+ def main():
+     global FINAL_K, CANDIDATE_K, RRF_TOP_K, ENABLE_REWRITING, ENABLE_DECOMPOSITION
+     parser = argparse.ArgumentParser(description='按当前或指定知识库版本评价检索。')
+@@ -512,6 +559,8 @@
+                         help='额外评估一次限定论文的补检索；原方法与指标保留')
+     parser.add_argument('--completion-rounds', type=int, nargs='+', choices=(1, 2, 3), default=[1],
+                         help='补查轮数上限，例如 1 3；一次运行复用同一轮次轨迹')
++    parser.add_argument('--query-ablation', action='store_true',
++                        help='追加主流程对齐的 base/rewrite/HyDE/both 对照；须用含 HyDE 的冻结缓存')
+     args = parser.parse_args()
+     ks = sorted(set(args.top_k))
+     if min(ks) <= 0 or args.candidate_k < max(ks):
+@@ -526,6 +575,17 @@
+     if len({q['id'] for q in questions}) != len(questions):
+         parser.error('题目 ID 不能重复。')
+     cache = json.loads(args.auxiliary_cache.read_text(encoding='utf-8')) if args.auxiliary_cache else None
++    if args.query_ablation:
++        if args.no_auxiliary or cache is None or ks != [10]:
++            parser.error('query-ablation 需要 auxiliary-cache、启用辅助查询并固定 top-k=10。')
++        for question in questions:
++            if not question.get('gold_evidence'):
++                continue
++            saved = cache.get(question['id'], {})
++            if (saved.get('query') != question['question'] or not isinstance(saved.get('rewritten_query'), str)
++                    or not isinstance(saved.get('hypothetical_document'), str)
++                    or not saved['hypothetical_document'].strip()):
++                parser.error(f"查询增强缓存不完整：{question['id']}")
+     if cache is not None and not args.no_auxiliary:
+         for question in questions:
+             if question.get('gold_evidence') and (question['id'] not in cache
+@@ -550,6 +610,7 @@
+                                 'auxiliary_cache': str(args.auxiliary_cache) if args.auxiliary_cache else None,
+                                 'evidence_completion_enabled': args.complete_evidence,
+                                 'completion_rounds': sorted(set(args.completion_rounds)),
++                                'query_ablation': args.query_ablation,
+                                 'scoring': 'Original Gold chunks and metric formulas; no answers or LLM judge'},
+               'input_sha256': {str(p.resolve()): hashlib.sha256(p.read_bytes()).hexdigest() for p in tracked},
+               'questions': [], 'api_calls': [], 'metrics': {}}
+@@ -573,6 +634,9 @@
+                          for cap in sorted(set(args.completion_rounds))}
+     if args.complete_evidence:
+         names.extend(completion_names.values())
++    if args.query_ablation:
++        names.extend(query_mode_name(mode, cap) for mode in ('base', 'rewrite', 'hyde', 'both')
++                     for cap in ([0, *completion_names] if args.complete_evidence else [0]))
+     test_cases = {k: {name: [] for name in names} for k in ks}
+     save_report()
+     print('Questions:', args.questions, 'Knowledge Base:', knowledge_base['version'])
+@@ -649,6 +713,15 @@
+                                          for item in (details or [])], 'metrics_by_k': {}}
+             if completion is not None:
+                 entry['evidence_completion'] = completion
++            if args.query_ablation:
++                augmented_methods, mode_traces = evaluate_query_modes(
++                    query, auxiliary, dense, sparse, fused,
++                    info['global_ranking'] if info else ranking,
++                    info['sub_query_evidence'] if info else [], details, completion,
++                    list(completion_names) if args.complete_evidence else [],
++                    embedding, index, chunks, bm25, reranker)
++                methods.update(augmented_methods)
++                entry['query_modes'] = mode_traces
+             for k in ks:
+                 methods_k = {name: ids[:k] for name,ids in methods.items()}
+                 anchor_ids = get_result_ids(fused[:1])
+--- a/tests/test_evaluation_alignment.py
++++ b/tests/test_evaluation_alignment.py
+@@ -107,6 +107,49 @@
+         self.assertNotIn(19, [c['chunk_id'] for c in without_anchor])
+         self.assertEqual([c['chunk_id'] for c in with_anchor], [*range(9), 19])
+ 
++    def test_query_modes_add_real_candidates_without_inserting_hyde_text(self):
++        chunks = [{'chunk_id': i, 'text': f'Evidence passage {i}.', 'source': 'paper.pdf',
++                   'page': i + 1, 'title': 'Fixture', 'section': None} for i in range(14)]
++
++        class Model:
++            def predict(self, pairs):
++                return [1000 + cid if cid >= 12 else 100 - cid
++                        for _, text in pairs for cid in [int(re.search(r'passage (\d+)', text).group(1))]]
++
++        original = evaluation.rerank_results('Original question', chunks[:12], Model(), top_k=12)
++        auxiliary = {'rewritten_query': 'A rewrite', 'hypothetical_document': 'Synthetic non-evidence'}
++        with patch.object(evaluation, 'retrieve_two_ways', return_value=([chunks[12]], [])), \
++                patch.object(evaluation, 'retrieve', return_value=[chunks[13]]) as hyde:
++            methods, traces = evaluation.evaluate_query_modes(
++                'Original question', auxiliary, chunks[:12], [], chunks[:12], original,
++                [], [], None, [], object(), object(), chunks, object(), Model())
++        hyde.assert_called_once()
++        self.assertEqual(set(methods['Pipeline base (0 rounds)']), set(range(10)))
++        self.assertIn(12, methods['Pipeline rewrite (0 rounds)'])
++        self.assertNotIn(13, methods['Pipeline rewrite (0 rounds)'])
++        self.assertIn(13, methods['Pipeline hyde (0 rounds)'])
++        self.assertNotIn(12, methods['Pipeline hyde (0 rounds)'])
++        self.assertTrue({12, 13} <= set(methods['Pipeline both (0 rounds)']))
++        for mode, trace in traces.items():
++            self.assertTrue(set(trace['candidate_ids']) <= set(range(14)))
++            self.assertEqual(len(methods[evaluation.query_mode_name(mode, 0)]), 10)
++
++    def test_query_ablation_rejects_missing_hyde_before_loading_models(self):
++        with tempfile.TemporaryDirectory() as temporary:
++            root = Path(temporary)
++            questions = root / 'questions.json'
++            cache = root / 'auxiliary.json'
++            questions.write_text(json.dumps([{'id': 'fixture', 'question': 'Locate evidence.',
++                                             'gold_evidence': [{'quote': 'example'}]}]))
++            cache.write_text(json.dumps({'fixture': {'query': 'Locate evidence.', 'rewritten_query': 'Rewrite'}}))
++            with patch.object(sys, 'argv', ['run_evaluation', '--questions', str(questions),
++                    '--auxiliary-cache', str(cache), '--query-ablation']), \
++                    patch.object(evaluation, 'load_embedding_model') as load_model, \
++                    patch.object(evaluation.api, 'chat_completion', side_effect=AssertionError('API forbidden')), \
++                    self.assertRaises(SystemExit):
++                evaluation.main()
++            load_model.assert_not_called()
++
+ 
+ if __name__ == '__main__':
+     unittest.main()
+--- a/README.md
++++ b/README.md
+@@ -6,11 +6,13 @@
+ 
+ 问题分解支持 2～4 个有效子题，比较题按实体及维度拆分，并保留向量/相似度等检索术语。主流程与评估共用选证据函数，默认每路候选 60、最终 10；生成上下文补充已有真实论文标题，便于识别数字文件名对应的论文。
+ 
+-最新十二道英文新题验证中，十道可答题 Recall@10=0.4833、MAP@10=0.2144，其中跨篇召回仅 0.2222。两种离线排序候选没有稳定收益，已保留原排序；此前六道开发题 Gold 全覆盖不能代表泛化。闭卷/原文/无关证据对照及剩余过度拒答见 [新题与模型知识对照日志](docs/INDEPENDENT_VALIDATION_2026-10-19.md)。历史[英文优化](docs/RETRIEVAL_OPTIMIZATION_2026-10-19.md)及[分解修复](docs/DECOMPOSITION_EVALUATION_2026-10-19.md)保留。
++**2026-10-20 最新完整语料评估**：全部 8 篇、120 页、1,397 条，42 道英文可答题比较四种查询设置及 0/1/2 轮补查。原流程 Recall@10=0.7361、MAP@10=0.4899；重写 + HyDE + 两轮为 0.7242、0.4797，完整 Gold 27/42→25/42，未通过采用门槛，三个开关保持默认关闭。64 项测试、1,008 组指标独立重算、八次真实 main 选证据对齐通过；两道部分回答仍未恢复。数据、成本与下一步证据保留修复建议见 [全部论文评估日志](docs/ALL_PAPERS_EVALUATION_2026-10-20.md)。
++
++此前十二道英文新题验证中，十道可答题 Recall@10=0.4833、MAP@10=0.2144，其中跨篇召回仅 0.2222。两种离线排序候选没有稳定收益，已保留原排序；此前六道开发题 Gold 全覆盖不能代表泛化。闭卷/原文/无关证据对照及剩余过度拒答见 [新题与模型知识对照日志](docs/INDEPENDENT_VALIDATION_2026-10-19.md)。历史[英文优化](docs/RETRIEVAL_OPTIMIZATION_2026-10-19.md)及[分解修复](docs/DECOMPOSITION_EVALUATION_2026-10-19.md)保留。
+ 
+ 后续一轮限定论文补检索原型使同十道新题 Recall@10 达到 0.6000、跨篇达到 0.4167，但旧六题 Recall 从 1.0000 降到 0.9167，未通过采用门槛。默认流程保留；原型仅显式启用，量化入口为 `--complete-evidence`，最终固定 Top-10。实现、失败案例与零 API 调用记录见 [一轮补检索日志](docs/EVIDENCE_COMPLETION_2026-10-19.md)。
+ 
+-最新按用户授权比较 0/1/3 轮：同十题 Recall 为 0.4833/0.6000/0.5500，三轮 MAP=0.2252、MRR=0.3161，均低于一轮；旧六题三轮仍为 0.9167。三轮采用 60→120→180 的限定论文候选深度，增加候选没有恢复最终证据，保持补查默认关闭，重写与 HyDE 也继续关闭。显式调用可传 `completion_rounds=3`，evaluation 可加 `--completion-rounds 1 3`。完整结果、成本与局限见 [三轮补查日志](docs/COMPLETION_ROUNDS_2026-10-19.md)。
++此前按用户授权比较 0/1/3 轮：同十题 Recall 为 0.4833/0.6000/0.5500，三轮 MAP=0.2252、MRR=0.3161，均低于一轮；旧六题三轮仍为 0.9167。三轮采用 60→120→180 的限定论文候选深度，增加候选没有恢复最终证据，保持补查默认关闭，重写与 HyDE 也继续关闭。显式调用可传 `completion_rounds=3`，evaluation 可加 `--completion-rounds 1 3`。完整结果、成本与局限见 [三轮补查日志](docs/COMPLETION_ROUNDS_2026-10-19.md)。
+ 
+ ## 运行
+ 
+@@ -59,6 +61,14 @@
+ 
+ 只评估原问题、不调用辅助 API：加 `--no-auxiliary`。固定输入比较预算：用 `--auxiliary-cache 已保存的auxiliary.json`，同题查询不会重复生成。本轮固定缓存为 `evaluation/results/retrieval_optimization_20261019/auxiliary_final.json`；受控线程的 Mac 命令见优化日志。
+ 
++完整八篇语料的查询增强对照使用 `--query-ablation`：追加与 `main.py` 对齐的 base、rewrite、HyDE、both 四组，并可共用同一轨迹记录补查前及一/两轮后的分数。此模式固定 Top-10，必须提供含 `rewritten_query`、`hypothetical_document` 和分解结果的匹配缓存，离线回放不调用 API。2026-10-20 实验题集为 `evaluation/all_papers_questions_en.json`，独立库为 `all-papers-8-20261020`，辅助缓存为 `evaluation/results/all_papers_20261020/auxiliary.json`；旧库仍保留。
++
++```bash
++python -m evaluation.run_evaluation --questions evaluation/all_papers_questions_en.json --kb-version all-papers-8-20261020 --auxiliary-cache evaluation/results/all_papers_20261020/auxiliary.json --query-ablation --complete-evidence --completion-rounds 1 2 --output-dir evaluation/results/new_all_papers_run
++```
++
++该命令重新计算本地检索和重排；本次使用保存于结果目录中的分题驱动共享重复推理，完整产物保存后无需重复跑分。
++
+ 新题集可用 `python -m evaluation.run_answer_evaluation --questions 题集.json --question-id 题目ID --kb-version 版本名 --output-dir 结果目录`；默认仍使用已有六题。`evaluation.run_arxiv_pilot` 是五篇语料的离线原问题 Top-10 检查，跳过 API 分解与生成。
+ 
+ DeepSeek 已完成首次六题运行、固定证据调试及清理后的全流程复核。核心事实明显好于历史本地 2B；对绝对化措辞与配置例外的处理仍有瑕疵，不能宣称全面优于 Kimi。引用检查验证编号结构，语义支撑仍需人工核对。
+@@ -69,7 +79,7 @@
+ - [当前交接状态](PROGRESS.md)
+ - [历史实验概览](docs/experiments.md)与[历史结果归档](docs/history/README.md)
+ 
+-本地回归使用 `python -m unittest discover -s tests -v`，当前 62 项，覆盖 API 未完成状态、失败留档、BM25、版本发布/回退/固定、真实四子题响应、预算与评估对齐、缓存回放、RRF 证据保留、引用别名、生成标题元数据、旧上下文兼容性，以及限定论文补查的名称识别、多轮深度、预算、重复计划和无新增候选停止条件；这些检查不调用生成 API。
++本地回归使用 `python -m unittest discover -s tests -v`，当前 64 项，覆盖 API 未完成状态、失败留档、BM25、版本发布/回退/固定、真实四子题响应、预算与评估对齐、缓存回放、RRF 证据保留、引用别名、生成标题元数据、旧上下文兼容性、查询增强真实候选隔离与缺失缓存拒绝，以及限定论文补查的名称识别、多轮深度、预算、重复计划和无新增候选停止条件；这些检查不调用生成 API。
+ 
+ ## 代码结构
+ 
+--- a/PROGRESS.md
++++ b/PROGRESS.md
+@@ -1,6 +1,6 @@
+ # Advanced-LLM-RAG 项目进度与实习路线
+ 
+-更新日期：2026-10-19（Asia/Shanghai）。以当前工作树、源码和原始运行产物为准。本文保留接续开发需要的事实、决策和验收条件，实验细节见文末报告。
++更新日期：2026-10-20（Asia/Shanghai）。以当前工作树、源码和原始运行产物为准。本文保留接续开发需要的事实、决策和验收条件，实验细节见文末报告。
+ 
+ ## 1. 项目目标与当前阶段
+ 
+@@ -52,7 +52,17 @@
+ - **十二道英文新题与模型知识对照已完成，有限排序尝试不采用**：4 单篇、6 跨篇、2 无 Gold，十道可答题当前主流程 P@10=0.0700、Recall@10=0.4833、MAP@10=0.2144、MRR@10=0.3061；单篇召回 0.8750、跨篇 0.2222，完整 Gold 4/10，不能延用旧六题 100% 宣称泛化。两个离线排序候选新题 MAP 为 0.2111、0.1761，且有旧题退步，按事先门槛保留原排序。闭卷/标注原文/无关原文四题三条件表明模型确有论文知识，也有细节混淆；无关证据四题均拒答。正向实验暴露缺少论文身份元数据，生产仅补 `build_context` 的真实 title 头，兼容旧文件名；两题固定证据标题复核中 n08 恢复完整，n05 仍过度拒答，不继续采样。正确证据是 oracle 控制，不是实际检索生成验收。50 测试通过，旧 378 个上下文逐字相同，新 1019 个仅加标题；46 个登记文件哈希不变。共 24 次 API（10 分解、12 三条件回答、2 标题复核），12186 token，无自动重试；索引、Gold、默认库与私有配置未改。详见 [新题验证与有限优化日志](docs/INDEPENDENT_VALIDATION_2026-10-19.md)。
+ - **一轮来源定向补检索原型与原 evaluation 已完成**：只尝试一个预先固定方案，问题需明确涉及两篇以上论文，依据已有 title/source 映射与子题覆盖信号决定是否补查；最多一轮、四子题，最终仍 10，运行不接收 Gold。26 道新旧可答题全部调用原 `evaluation/run_evaluation.py` 评估，全部旧方法的逐题结果与冻结记录一致。新十题 Recall 0.4833→0.6000、MAP 0.2144→0.2367、MRR 0.3061→0.3272；跨篇 Recall 0.2222→0.4167，但完整 Gold 仍 4/10。旧六题 Recall 1.0000→0.9167、MAP 0.3998→0.3792，p6 丢失一段已覆盖 Gold；旧五验证题不变，三篇库五题 Recall 0.8417→0.8667。未通过旧题回归门槛，保留原默认流程，原型仅由 `main.main(..., complete_evidence=True)` 或评估 `--complete-evidence` 显式启用，不继续调参。58 项本地测试通过；检索评测 API 调用 0，未进行真实生成，不把检索分数称作回答正确率。详情见 [一轮补检索日志](docs/EVIDENCE_COMPLETION_2026-10-19.md)。
+ - **按新增授权完成三轮上限对照**：保留第一轮行为，第二/三轮将同一批来源任务候选深度由 60 扩到 120/180，最终仍 10，无新重写或 HyDE。原 evaluation 同次轨迹比较 0/1/3 轮，26 道可答题的旧方法及一轮结果逐项复现。新十题 Recall 0.4833/0.6000/0.5500、MAP 0.2144/0.2367/0.2252、MRR 0.3061/0.3272/0.3161；跨篇 Recall 0.2222/0.4167/0.3333。旧六题三轮仍 Recall 0.9167、MAP 0.3792，与一轮相同；旧验证题和三篇库三轮也与一轮相同。三轮没有任何最终题目指定 Gold 召回优于一轮，n07 从 1/2 降到 0/2，n06 排序下降。未通过旧题门槛，补查默认仍关闭，重写/HyDE 继续关闭。62 项测试通过，生成 API 调用 0；8 道触发题执行三次处理、共 60 次定向查询，额外两次处理耗时中位数约 57.13 秒。轮数与候选预算共同增加，不能单独归因轮数。详情见 [三轮日志](docs/COMPLETION_ROUNDS_2026-10-19.md)。
+-- 当前停止点：一轮有局部检索收益，三轮加深未进一步改善，已完成用户本次 0/1/3 轮实验并保留原默认流程。来源覆盖不能保证语义支持，已召回证据被丢掉仍是核心缺口；当前尚未完成独立跨篇和真实端到端生成验收。新题是手工同语料验证集，n08 有条件归属歧义，旧 Gold 与分数保留。默认线程崩溃根因未定位，继续受控线程；尚未实现完整 Agent、跨版本稳定 ID、通用内容去重及完整导入生命周期。
++- 三轮实验结束时的停止点：一轮有局部检索收益，三轮加深未进一步改善，已完成 0/1/3 轮实验并保留原默认流程。来源覆盖不能保证语义支持，已召回证据被丢掉仍是核心缺口；当时尚未完成独立跨篇和真实端到端生成验收。新题是手工同语料验证集，n08 有条件归属歧义，旧 Gold 与分数保留。默认线程崩溃根因未定位，继续受控线程；尚未实现完整 Agent、跨版本稳定 ID、通用内容去重及完整导入生命周期。
++
++### 1.4 全部论文与 rewrite / HyDE / 两轮补查（2026-10-20）
++
++- 用户在暂停后明确说“继续”，本轮按授权重新测试两个增强开关和两轮补查。遍历 `data` 实际共 **8 篇不同 PDF、120 页**，均与既有清单 SHA 相同；以已验证三篇 / 五篇库的原分块及原向量创建独立 `all-papers-8-20261020`，**1,397 条、384 维**，只有合并位置 ID 重映射。旧版本和当前默认三篇指针保留，未重新解析、改变 chunking 或声称实现通用导入生命周期。
++- 原 `evaluation/run_evaluation.py` 只增加显式 `--query-ablation`，保留旧对照及指标公式，统一比较 base / rewrite / HyDE / both × 补查上限 0/1/2，候选 60、最终 10。固定 42 道英文可答题（26 旧题不改、16 新题），另 4 道无 Gold 跳过、不计正确。新题引文逐条核对 PDF 页码，全部 42 题 Gold 按 source/page/quote 映射，无 Gold 进入生成或运行时判断。
++- **总体结果不支持采用全部增强。** 原流程 Recall@10=0.7361、MAP=0.4899、MRR=0.5693，完整 Gold 27/42；重写 + HyDE + 两轮为 **0.7242 / 0.4797 / 0.5690，25/42**。不开增强而只补查一轮 / 两轮，Recall 为 0.7520 / 0.7480，MAP 为 0.4922 / 0.4937，完整 Gold 均 26/42；旧六题仍有 p6 退步。新八道跨篇 Recall 0.5000→0.5417，未达到预设 +0.10；原六题 Recall 1.0→0.75。四项检索采用门槛全部未通过，**三个生产开关继续关闭**。
++- 定位到明确机制：p1 的 Gold 750 本在增强前 RRF 首条，融合增强后锚点换成 Self-RAG 986，Gold 虽在候选池却失去保护，Recall 1→0；p6 补查丢掉已覆盖 Gold 597；n07 第一轮选中 615，第二轮虽然 615、761 都在候选池，却又全部落选；a13 第二轮新增 995 仅使 Recall 到 1/3。a09/a15 的 Transformer 简称不能被现有来源别名识别，未触发双来源补查。本轮保持规则与 Gold，不因结果调参或改题。
++- 固定 p3/n07/a10/a12 跑 **8 次真实 main 回答**，查询增强重放真实 API 缓存，最终生成实际调用 API；八份选证据 ID 均与 evaluation 完全一致，引用结构 8/8、修复 0。人工逐条核对中，两组均 p3/a10 核心完整、n07/a12 部分回答，缺失 RAG 预计算 / DPR 独立编码器原文的问题未恢复。属于同语料小样本人工验收，不称总体回答准确率或盲测通过。
++- **64 项本地测试通过；1,008 组逐题分数及分组指标独立重算一致**；所有旧分块 / 向量逐条保留，九个迁移数据 SHA 匹配，默认指针、旧题 / Gold、私有配置、`main.py` 未改，日志无 Key。新增辅助 API 110 次（复用 16 旧分解，26 新分解、42 rewrite、42 HyDE）及最终回答 8 次，累计 **118 次、61,719 token**，全部 stop、失败 / 自动重试 / 修复均 0。共享重排重复分数后检索处理合计约 12.69 分钟，不是逐组服务延迟或 P95。详见 [全部论文评估日志](docs/ALL_PAPERS_EVALUATION_2026-10-20.md)，全部原始记录在 `evaluation/results/all_papers_20261020/`。
++- **当前停止点与下一步：本轮全部完成，保持原默认流程。** 下一项建议先固定增强前原查询锚点，再独立尝试补查对关键子题首条的保留；使用现有缓存和同一题集做一次有边界的离线复评，无需再次生成整批查询。不把这次实验升级为完整 Agent；仍缺独立盲测、语义覆盖判断、通用导入和服务级性能验证。
+ 
+ ## 2. 当前真实流程
+ 
+@@ -90,6 +100,7 @@
+ | 项目 | 当前设置 |
+ | --- | --- |
+ | 知识库 | Transformer、DCNN、VGG 三篇 PDF；378 Semantic chunks / vectors |
++| 独立实验库 | 五篇先导库 1,019 条；全部八篇库 `all-papers-8-20261020` 为 1,397 条，可显式指定版本；当前默认指针未切换 |
+ | Embedding | `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`，CPU |
+ | 检索与重排 | FAISS Dense + BM25 + RRF；每路候选 60，RRF 保留 60；BGE CPU 全局重排并保留子题证据，最终 Top-10 |
+ | 生成模型 | 请求 `cn:deepseek-v4.1-flash`，反代返回 `deepseek-v4.1-flash`；标识不能独立证明上游权重身份 |
+@@ -238,12 +249,15 @@
+ 
+ ## 7. 下一次开工任务
+ 
+-Mac 基线、API/BM25 修复、版本回退、首批五篇实验、分解/选证据修复、新题量化与模型知识对照，以及一轮和三轮补查对照均已完成。当前 62 项本地测试通过。一轮有局部收益但旧题退步，三轮分轮加深候选没有进一步改善，保持补查、重写与 HyDE 默认关闭。不要把原型分数替换为默认流程分数，也不要重复付费生成整个题集。完整结果及未通过的采用门槛见第 1.3 节和最新三轮日志。
++Mac 基线、API/BM25 修复、版本回退、五篇先导、分解 / 选证据修复、模型知识对照、一轮 / 三轮补查，以及 **2026-10-20 全部八篇、42 题的查询增强与两轮补查实验均已完成**。当前 64 项本地测试通过。最新原流程 Recall/MAP 为 0.7361/0.4899，全部增强 + 两轮为 0.7242/0.4797，未通过四项检索采用门槛；真实 main 八份验证没有改善两道部分回答。保持三个开关默认关闭及原三篇默认库，实验八篇版本和全部查询缓存可继续离线使用。完整结果见第 1.4 节及 [全部论文日志](docs/ALL_PAPERS_EVALUATION_2026-10-20.md)。
++
++下一项建议：先修复增强融合导致原检索锚点保护漂移，再单独验证补查是否保留关键子题证据，限定一次同缓存离线对照。用户目前仅授权完成本轮实验，下一项尚未实施。不要重复付费生成整套辅助查询，不拿不同库或不同分解设置的历史分数直接归因。仍未开始完整 Agent 开发。
+ 
+ 五篇实验的默认三篇库及所有既有证据仍保留；尚未做 Agent 开发，不把本次导入论文中的方法当成已实现能力。具体范围、用量与缺陷见第 1.3 节及先导报告。
+ 
+ ## 8. 证据、清理与本次文档更新记录
+ 
++- [全部八篇、查询重写 / HyDE 与两轮补查评估](docs/ALL_PAPERS_EVALUATION_2026-10-20.md)：42 题量化、八次真实 main、四项未通过门槛、118 次 API 和独立复核；保留默认，记录下一项证据保留修复建议。本轮遵循 Karpathy 技能做最小改动，未额外启动子代理或接入实习材料插件。
+ - [DeepSeek 调试日志](docs/DEEPSEEK_V41_DEBUG_LOG_2026-10-18.md)：六题、固定证据提示调试、API 失败和验证边界；原始结果在 `evaluation/results/deepseek_v41/`。
+ - [rewrite / HyDE 与本地对照报告](docs/REWRITE_HYDE_LOCAL_COMPARISON_2026-10-18.md)：三题、四组消融、本地重放、五题检索评估、引用修复；原始结果在 `evaluation/results/rewrite_hyde_20261018/`。旧运行哈希与失败状态保留，不冒充新代码运行。
+ - [清理日志](docs/CLEANUP_LOG_2026-10-18.md)与[清单](docs/CLEANUP_MANIFEST_2026-10-18.json)：删除范围、恢复路径和检查结果；未删除 `.venv`、原始论文、索引或本地配置。
+--- /dev/null
++++ b/evaluation/all_papers_questions_en.json
+@@ -0,0 +1,966 @@
++[
++  {
++    "id": "q1",
++    "question": "Why does VGG use small 3x3 convolutional filters?",
++    "type": "single_document",
++    "reference_answer": "VGG uses small 3x3 convolutional filters to increase network depth while controlling the number of parameters. Stacking multiple 3x3 filters produces larger effective receptive fields, such as 5x5 or 7x7. Compared with a single large filter, multiple small filters introduce additional nonlinear transformations and reduce the number of parameters, making the decision function more discriminative.",
++    "gold_evidence": [
++      {
++        "source": "VGG.pdf",
++        "page": 1,
++        "quote": "small (3 × 3) convolution filters in all layers"
++      },
++      {
++        "source": "VGG.pdf",
++        "page": 3,
++        "quote": "which makes the decision function more discriminative"
++      },
++      {
++        "source": "VGG.pdf",
++        "page": 3,
++        "quote": "Second, we decrease the number of parameters"
++      },
++      {
++        "source": "VGG.pdf",
++        "page": 3,
++        "quote": "have a decomposition through the 3 × 3 filters"
++      },
++      {
++        "source": "VGG.pdf",
++        "page": 2,
++        "quote": "which is the smallest size to capture the notion of left/right"
++      },
++      {
++        "source": "VGG.pdf",
++        "page": 2,
++        "quote": "a stack of two 3 × 3 conv. layers (without spatial pooling in between) has an effective receptive field of 5 × 5"
++      },
++      {
++        "source": "VGG.pdf",
++        "page": 6,
++        "quote": "it is also important to capture spatial context by using conv. filters with non-trivial receptive fields"
++      }
++    ],
++    "cohort": "questions"
++  },
++  {
++    "id": "q2",
++    "question": "Why does the Transformer use positional encoding?",
++    "type": "single_document",
++    "reference_answer": "The Transformer uses positional encoding because it contains neither recurrence nor convolution. Therefore, positional information must be added to the token embeddings so that the model can use the relative or absolute positions of tokens in a sequence. The original Transformer uses sine and cosine functions of different frequencies to construct positional encodings.",
++    "gold_evidence": [
++      {
++        "source": "Attention is all you need.pdf",
++        "page": 5,
++        "quote": "Since our model contains no recurrence and no convolution"
++      },
++      {
++        "source": "Attention is all you need.pdf",
++        "page": 5,
++        "quote": "we must inject some information about the relative or absolute position"
++      }
++    ],
++    "cohort": "questions"
++  },
++  {
++    "id": "q3",
++    "question": "Why does the Transformer use scaled dot-product attention?",
++    "type": "single_document",
++    "reference_answer": "The Transformer uses scaled dot-product attention because dot-product attention is computationally efficient and can be implemented using optimized matrix multiplication. However, when the dimension of the keys becomes large, the dot products can have large magnitudes, pushing the softmax function into regions with extremely small gradients. Dividing the dot products by the square root of the key dimension helps prevent this problem.",
++    "gold_evidence": [
++      {
++        "source": "Attention is all you need.pdf",
++        "page": 4,
++        "quote": "much faster and more space-efficient in practice"
++      },
++      {
++        "source": "Attention is all you need.pdf",
++        "page": 4,
++        "quote": "the dot products grow large in magnitude"
++      },
++      {
++        "source": "Attention is all you need.pdf",
++        "page": 4,
++        "quote": "extremely small gradients"
++      }
++    ],
++    "cohort": "questions"
++  },
++  {
++    "id": "q4",
++    "question": "How does the DCNN paper use data augmentation to reduce overfitting?",
++    "type": "single_document",
++    "reference_answer": "The DCNN paper uses two main forms of data augmentation to reduce overfitting. First, it generates image translations and horizontal reflections by extracting random 224x224 patches from 256x256 images and applying horizontal flipping. Second, it modifies the RGB channel intensities using principal component analysis (PCA), introducing variations in image color and illumination. These transformations artificially increase the diversity of the training data and help reduce overfitting.",
++    "gold_evidence": [
++      {
++        "source": "DCNN.pdf",
++        "page": 4,
++        "quote": "image translations and horizontal reflections"
++      },
++      {
++        "source": "DCNN.pdf",
++        "page": 4,
++        "quote": "random 224 × 224 patches"
++      },
++      {
++        "source": "DCNN.pdf",
++        "page": 5,
++        "quote": "altering the intensities of the RGB channels in training images"
++      },
++      {
++        "source": "DCNN.pdf",
++        "page": 5,
++        "quote": "perform PCA on the set of RGB pixel values"
++      },
++      {
++        "source": "DCNN.pdf",
++        "page": 4,
++        "quote": "artificially enlarge the dataset"
++      }
++    ],
++    "cohort": "questions"
++  },
++  {
++    "id": "q5",
++    "question": "How do VGG and DCNN differ in their use of convolutional filter sizes?",
++    "type": "multi_document",
++    "reference_answer": "VGG primarily uses small 3x3 convolutional filters throughout its architecture, with some configurations also using 1x1 filters. Stacking multiple 3x3 filters allows VGG to increase network depth, introduce additional nonlinearities, and reduce parameters compared with using single larger filters. In contrast, the DCNN architecture uses larger filters in its early layers, including 11x11 filters in the first convolutional layer and 5x5 filters in the second layer, followed by 3x3 filters in the last three convolutional layers. Therefore, VGG emphasizes consistently small filters and greater depth, while DCNN uses a mixture of large and small filter sizes.",
++    "gold_evidence": [
++      {
++        "source": "VGG.pdf",
++        "page": 2,
++        "quote": "we use very small 3 × 3 receptive fields throughout the whole net"
++      },
++      {
++        "source": "VGG.pdf",
++        "page": 3,
++        "quote": "we decrease the number of parameters"
++      },
++      {
++        "source": "DCNN.pdf",
++        "page": 4,
++        "quote": "96 kernels of size 11 × 11 × 3"
++      },
++      {
++        "source": "DCNN.pdf",
++        "page": 4,
++        "quote": "256 kernels of size 5 × 5 × 48"
++      },
++      {
++        "source": "DCNN.pdf",
++        "page": 4,
++        "quote": "384 kernels of size 3 × 3 × 256"
++      },
++      {
++        "source": "VGG.pdf",
++        "page": 1,
++        "quote": "which is feasible due to the use of very small (3 × 3) convolution filters in all layers"
++      },
++      {
++        "source": "VGG.pdf",
++        "page": 3,
++        "quote": "we incorporate three non-linear rectification layers instead of a single one"
++      },
++      {
++        "source": "VGG.pdf",
++        "page": 6,
++        "quote": "the configuration C (which contains three 1 × 1 conv. layers), performs worse than the configuration D, which uses 3 × 3 conv. layers throughout the network"
++      }
++    ],
++    "cohort": "questions"
++  },
++  {
++    "id": "q6",
++    "question": "What was NVIDIA's stock price on October 10, 2026?",
++    "type": "unanswerable",
++    "cohort": "questions"
++  },
++  {
++    "id": "p1",
++    "question": "Which generator does the original RAG paper use, and how many parameters does it have?",
++    "type": "single_document",
++    "reference_answer": "BART-large，400M（4亿）参数。",
++    "gold_evidence": [
++      {
++        "source": "2005.11401v4.pdf",
++        "page": 3,
++        "quote": "We use BART-large"
++      },
++      {
++        "source": "2005.11401v4.pdf",
++        "page": 3,
++        "quote": "with 400M parameters"
++      }
++    ],
++    "original_chinese_question": "原始 RAG 论文采用什么生成器？其参数规模是多少？",
++    "cohort": "arxiv_pilot_questions_en"
++  },
++  {
++    "id": "p2",
++    "question": "What function does DPR use to compute similarity between question and passage vectors?",
++    "type": "single_document",
++    "reference_answer": "问题与段落各编码为一个向量，使用点积打分。",
++    "gold_evidence": [
++      {
++        "source": "2004.04906v3.pdf",
++        "page": 3,
++        "quote": "using the dot product of their vectors"
++      }
++    ],
++    "original_chinese_question": "DPR 使用什么函数计算问题向量和段落向量的相似度？",
++    "cohort": "arxiv_pilot_questions_en"
++  },
++  {
++    "id": "p3",
++    "question": "How does ColBERT MaxSim aggregate query-document token similarities into a document relevance score?",
++    "type": "single_document",
++    "reference_answer": "对每个查询token取与文档token的最大相似度，再对查询token求和。",
++    "gold_evidence": [
++      {
++        "source": "2004.12832v2.pdf",
++        "page": 4,
++        "quote": "maximum cosine similarity"
++      },
++      {
++        "source": "2004.12832v2.pdf",
++        "page": 4,
++        "quote": "combine the outputs via summation"
++      }
++    ],
++    "original_chinese_question": "ColBERT 的 MaxSim 如何把查询词与文档词的相似度合成为文档得分？",
++    "cohort": "arxiv_pilot_questions_en"
++  },
++  {
++    "id": "p4",
++    "question": "What are the four types of reflection tokens in Self-RAG, and what does each type evaluate?",
++    "type": "single_document",
++    "reference_answer": "Retrieve决定是否检索，ISREL判断相关性，ISSUP判断支持程度，ISUSE判断有用程度。",
++    "gold_evidence": [
++      {
++        "source": "2310.11511v1.pdf",
++        "page": 4,
++        "quote": "Decides when to retrieve with"
++      },
++      {
++        "source": "2310.11511v1.pdf",
++        "page": 4,
++        "quote": "provides useful information to solve"
++      },
++      {
++        "source": "2310.11511v1.pdf",
++        "page": 4,
++        "quote": "All of the verification-worthy statement"
++      },
++      {
++        "source": "2310.11511v1.pdf",
++        "page": 4,
++        "quote": "is a useful response to"
++      }
++    ],
++    "original_chinese_question": "Self-RAG 的四类 reflection tokens 分别是什么，各负责判断什么？",
++    "cohort": "arxiv_pilot_questions_en"
++  },
++  {
++    "id": "p5",
++    "question": "What are the three confidence judgments from the CRAG retrieval evaluator that trigger subsequent actions?",
++    "type": "single_document",
++    "reference_answer": "Correct、Incorrect、Ambiguous。",
++    "gold_evidence": [
++      {
++        "source": "2401.15884v3.pdf",
++        "page": 3,
++        "quote": "{Correct, Incorrect, Ambiguous}"
++      }
++    ],
++    "original_chinese_question": "CRAG 的 retrieval evaluator 将检索质量划分为哪三种置信判断，用于触发后续行动？",
++    "cohort": "arxiv_pilot_questions_en"
++  },
++  {
++    "id": "p6",
++    "question": "How do DPR and ColBERT differ in question and document representations and relevance scoring?",
++    "type": "cross_document",
++    "reference_answer": "DPR为问题与段落各保留一个向量，点积打分；ColBERT保留token级多向量，对每个查询token取MaxSim后求和。",
++    "gold_evidence": [
++      {
++        "source": "2004.04906v3.pdf",
++        "page": 3,
++        "quote": "using the dot product of their vectors"
++      },
++      {
++        "source": "2004.12832v2.pdf",
++        "page": 4,
++        "quote": "maximum cosine similarity"
++      },
++      {
++        "source": "2004.12832v2.pdf",
++        "page": 4,
++        "quote": "combine the outputs via summation"
++      }
++    ],
++    "original_chinese_question": "DPR 和 ColBERT 在问题／文档的向量表示以及相关性打分上有什么主要区别？",
++    "cohort": "arxiv_pilot_questions_en"
++  },
++  {
++    "id": "p7",
++    "question": "Which of these five methods responds fastest on this project's Mac? Give the latency in milliseconds for each method.",
++    "type": "unanswerable",
++    "reference_answer": "论文没有本项目这台Mac上五种方法的实测延迟，不能给出排名或毫秒数。",
++    "gold_evidence": [],
++    "cohort": "arxiv_pilot_questions_en"
++  },
++  {
++    "id": "v1",
++    "question": "Can RAG-Token use a different retrieved latent document for each generated token?",
++    "type": "single_document",
++    "gold_evidence": [
++      {
++        "source": "2005.11401v4.pdf",
++        "page": 3,
++        "quote": "a different latent document for each target token"
++      }
++    ],
++    "cohort": "arxiv_validation_questions_en"
++  },
++  {
++    "id": "v2",
++    "question": "How is Wikipedia segmented into the basic passage retrieval units used by DPR?",
++    "type": "single_document",
++    "gold_evidence": [
++      {
++        "source": "2004.04906v3.pdf",
++        "page": 4,
++        "quote": "disjoint text blocks of 100 words"
++      }
++    ],
++    "cohort": "arxiv_validation_questions_en"
++  },
++  {
++    "id": "v3",
++    "question": "What query embedding count and embedding dimension are used in ColBERT's experimental setup?",
++    "type": "single_document",
++    "gold_evidence": [
++      {
++        "source": "2004.12832v2.pdf",
++        "page": 6,
++        "quote": "number of embeddings per query"
++      },
++      {
++        "source": "2004.12832v2.pdf",
++        "page": 6,
++        "quote": "embedding dimension m to be 128"
++      }
++    ],
++    "cohort": "arxiv_validation_questions_en"
++  },
++  {
++    "id": "v4",
++    "question": "How are reflection tokens added to the Self-RAG training corpus, and by which model?",
++    "type": "single_document",
++    "gold_evidence": [
++      {
++        "source": "2310.11511v1.pdf",
++        "page": 2,
++        "quote": "inserted offline into the original corpus by a trained critic model"
++      }
++    ],
++    "cohort": "arxiv_validation_questions_en"
++  },
++  {
++    "id": "v5",
++    "question": "Which component of CRAG evaluates the quality of retrieved documents, and what does it return?",
++    "type": "single_document",
++    "gold_evidence": [
++      {
++        "source": "2401.15884v3.pdf",
++        "page": 1,
++        "quote": "a lightweight retrieval evaluator"
++      },
++      {
++        "source": "2401.15884v3.pdf",
++        "page": 1,
++        "quote": "returning a confidence degree"
++      }
++    ],
++    "cohort": "arxiv_validation_questions_en"
++  },
++  {
++    "id": "n01",
++    "type": "single_document",
++    "question": "During training of the original RAG model, which retriever components are kept fixed and which components are fine-tuned?",
++    "gold_evidence": [
++      {
++        "source": "2005.11401v4.pdf",
++        "page": 4,
++        "quote": "keep the document encoder (and index)"
++      }
++    ],
++    "reference_points": [
++      "Document encoder and index stay fixed.",
++      "Query encoder and BART generator are fine-tuned."
++    ],
++    "cohort": "arxiv_next_questions_en"
++  },
++  {
++    "id": "n02",
++    "type": "single_document",
++    "question": "Which negative passage types does DPR consider, and which combination is used by its best model?",
++    "gold_evidence": [
++      {
++        "source": "2004.04906v3.pdf",
++        "page": 3,
++        "quote": "We consider three different types of negatives"
++      }
++    ],
++    "reference_points": [
++      "Random, BM25, and Gold negatives.",
++      "Best model uses gold passages from the same mini-batch plus one BM25 negative."
++    ],
++    "cohort": "arxiv_next_questions_en"
++  },
++  {
++    "id": "n03",
++    "type": "single_document",
++    "question": "How does ColBERT augment a short query, and is the same augmentation applied to document inputs?",
++    "gold_evidence": [
++      {
++        "source": "2004.12832v2.pdf",
++        "page": 4,
++        "quote": "special [mask] tokens up to length Nq"
++      },
++      {
++        "source": "2004.12832v2.pdf",
++        "page": 4,
++        "quote": "we do not append [mask] tokens to documents"
++      }
++    ],
++    "reference_points": [
++      "Short queries are padded with BERT mask tokens up to Nq.",
++      "Document inputs do not receive mask-token padding."
++    ],
++    "cohort": "arxiv_next_questions_en"
++  },
++  {
++    "id": "n04",
++    "type": "single_document",
++    "question": "Does Self-RAG need its separate critic model at inference, and how is this requirement avoided during training?",
++    "gold_evidence": [
++      {
++        "source": "2310.11511v1.pdf",
++        "page": 4,
++        "quote": "without relying on the critic at inference time"
++      }
++    ],
++    "reference_points": [
++      "Critic annotates task outputs with reflection tokens offline.",
++      "Generator learns to emit reflection tokens itself using the conventional LM objective; separate critic not needed at inference."
++    ],
++    "cohort": "arxiv_next_questions_en"
++  },
++  {
++    "id": "n05",
++    "type": "cross_document",
++    "question": "Which BERT encoders are used by the original RAG retriever and DPR, and what representation does DPR extract from each encoder?",
++    "gold_evidence": [
++      {
++        "source": "2005.11401v4.pdf",
++        "page": 3,
++        "quote": "BERTBASE document encoder"
++      },
++      {
++        "source": "2004.04906v3.pdf",
++        "page": 3,
++        "quote": "two independent BERT"
++      }
++    ],
++    "reference_points": [
++      "RAG retriever uses BERT-base query and document encoders.",
++      "DPR uses two independent BERT-base uncased networks.",
++      "DPR extracts the CLS-token representation; the 768 dimension is optional detail."
++    ],
++    "cohort": "arxiv_next_questions_en"
++  },
++  {
++    "id": "n06",
++    "type": "cross_document",
++    "question": "How do DPR and ColBERT form positive and negative training examples, and what losses do they optimize?",
++    "gold_evidence": [
++      {
++        "source": "2004.04906v3.pdf",
++        "page": 3,
++        "quote": "negative log likelihood"
++      },
++      {
++        "source": "2004.04906v3.pdf",
++        "page": 3,
++        "quote": "Our best model uses gold passages"
++      },
++      {
++        "source": "2004.12832v2.pdf",
++        "page": 5,
++        "quote": "pairwise sofmax cross-entropy loss"
++      }
++    ],
++    "reference_points": [
++      "DPR trains question/positive/negative passage examples with negative log likelihood of the positive.",
++      "DPR best negative combination is in-batch gold and one BM25 negative.",
++      "ColBERT trains query-positive-negative triples with pairwise softmax cross-entropy."
++    ],
++    "cohort": "arxiv_next_questions_en"
++  },
++  {
++    "id": "n07",
++    "type": "cross_document",
++    "question": "What document representations are precomputed and stored for retrieval or indexing in RAG and ColBERT?",
++    "gold_evidence": [
++      {
++        "source": "2005.11401v4.pdf",
++        "page": 4,
++        "quote": "compute an embedding for each document"
++      },
++      {
++        "source": "2004.12832v2.pdf",
++        "page": 5,
++        "quote": "storing the output embeddings per document"
++      }
++    ],
++    "reference_points": [
++      "RAG precomputes document encoder embeddings and builds a FAISS MIPS index.",
++      "ColBERT runs its document encoder offline in batches and stores output embeddings for each document."
++    ],
++    "cohort": "arxiv_next_questions_en"
++  },
++  {
++    "id": "n08",
++    "type": "cross_document",
++    "question": "How do Self-RAG and CRAG decide whether retrieval or additional knowledge is needed, and what happens when retrieval is unnecessary or judged incorrect?",
++    "gold_evidence": [
++      {
++        "source": "2310.11511v1.pdf",
++        "page": 4,
++        "quote": "If retrieval is not required"
++      },
++      {
++        "source": "2401.15884v3.pdf",
++        "page": 3,
++        "quote": "retrieved documents will be discarded"
++      },
++      {
++        "source": "2401.15884v3.pdf",
++        "page": 3,
++        "quote": "web searches are resorted to"
++      }
++    ],
++    "reference_points": [
++      "Self-RAG emits a retrieval token to judge retrieval utility.",
++      "When retrieval is not required, Self-RAG produces the next segment as a standard LM.",
++      "CRAG uses relevance/confidence to trigger Incorrect and discards retrieved documents.",
++      "CRAG then uses web search as complementary knowledge."
++    ],
++    "cohort": "arxiv_next_questions_en"
++  },
++  {
++    "id": "n09",
++    "type": "cross_document",
++    "question": "Which Wikipedia snapshot does DPR use, and how does CRAG extend retrieval beyond a static corpus?",
++    "gold_evidence": [
++      {
++        "source": "2004.04906v3.pdf",
++        "page": 4,
++        "quote": "Dec. 20, 2018"
++      },
++      {
++        "source": "2401.15884v3.pdf",
++        "page": 2,
++        "quote": "large-scale web searches"
++      }
++    ],
++    "reference_points": [
++      "DPR uses English Wikipedia dump dated December 20, 2018.",
++      "CRAG adds large-scale web search when confidence is Incorrect or Ambiguous."
++    ],
++    "cohort": "arxiv_next_questions_en"
++  },
++  {
++    "id": "n10",
++    "type": "cross_document",
++    "question": "How do DPR and ColBERT mark or extract query and document representations before matching?",
++    "gold_evidence": [
++      {
++        "source": "2004.04906v3.pdf",
++        "page": 3,
++        "quote": "representation at the [CLS] token"
++      },
++      {
++        "source": "2004.12832v2.pdf",
++        "page": 4,
++        "quote": "“[Q]q0q1...ql##...#”"
++      },
++      {
++        "source": "2004.12832v2.pdf",
++        "page": 4,
++        "quote": "“[D]d0d1...dn”"
++      }
++    ],
++    "reference_points": [
++      "DPR extracts one CLS representation for each query/passage encoder.",
++      "ColBERT marks query and document inputs with Q and D tokens and retains bags of token embeddings."
++    ],
++    "cohort": "arxiv_next_questions_en"
++  },
++  {
++    "id": "n11",
++    "type": "unanswerable",
++    "question": "What measured P95 end-to-end latency did this project achieve with Top-10 on an M3 Mac under eight concurrent users? Give the exact milliseconds.",
++    "gold_evidence": [],
++    "reference_points": [
++      "Cannot infer project-specific measurements from these papers; refuse to invent latency."
++    ],
++    "cohort": "arxiv_next_questions_en"
++  },
++  {
++    "id": "n12",
++    "type": "unanswerable",
++    "question": "What Recall@10 and P95 latency were measured for a combined Self-RAG plus CRAG implementation in this repository?",
++    "gold_evidence": [],
++    "reference_points": [
++      "These papers do not report measurements of a combined implementation in this repository."
++    ],
++    "cohort": "arxiv_next_questions_en"
++  },
++  {
++    "id": "a01",
++    "type": "single_document",
++    "cohort": "new_all_papers",
++    "question": "Where are residual connections and layer normalization placed relative to the encoder sub-layers in the Transformer?",
++    "gold_evidence": [
++      {
++        "source": "Attention is all you need.pdf",
++        "page": 3,
++        "quote": "residual connection"
++      },
++      {
++        "source": "Attention is all you need.pdf",
++        "page": 3,
++        "quote": "LayerNorm(x + Sublayer(x))"
++      }
++    ],
++    "reference_points": [
++      "Residual connection around each sub-layer, followed by layer normalization."
++    ]
++  },
++  {
++    "id": "a02",
++    "type": "single_document",
++    "cohort": "new_all_papers",
++    "question": "How did ReLU affect training speed relative to saturating neurons in the DCNN paper?",
++    "gold_evidence": [
++      {
++        "source": "DCNN.pdf",
++        "page": 3,
++        "quote": "networks with ReLUs consistently learn several times faster"
++      }
++    ],
++    "reference_points": [
++      "Networks with ReLU learn several times faster than equivalents with saturating neurons."
++    ]
++  },
++  {
++    "id": "a03",
++    "type": "single_document",
++    "cohort": "new_all_papers",
++    "question": "Why does VGG configuration C include 1x1 convolutional layers, and what happens to the receptive field?",
++    "gold_evidence": [
++      {
++        "source": "VGG.pdf",
++        "page": 3,
++        "quote": "increase the non- linearity of the decision function without affecting the receptive fields"
++      }
++    ],
++    "reference_points": [
++      "Adds nonlinearity through rectification without changing receptive fields."
++    ]
++  },
++  {
++    "id": "a04",
++    "type": "single_document",
++    "cohort": "new_all_papers",
++    "question": "Which indexing library and approximate nearest-neighbor structure are used for fast retrieval in the original RAG paper?",
++    "gold_evidence": [
++      {
++        "source": "2005.11401v4.pdf",
++        "page": 4,
++        "quote": "using FAISS"
++      },
++      {
++        "source": "2005.11401v4.pdf",
++        "page": 4,
++        "quote": "Hierarchical Navigable Small World"
++      }
++    ],
++    "reference_points": [
++      "FAISS with HNSW approximation for MIPS."
++    ]
++  },
++  {
++    "id": "a05",
++    "type": "single_document",
++    "cohort": "new_all_papers",
++    "question": "When does DPR encode and index all candidate passages, and which indexing library is used?",
++    "gold_evidence": [
++      {
++        "source": "2004.04906v3.pdf",
++        "page": 3,
++        "quote": "index them using FAISS"
++      }
++    ],
++    "reference_points": [
++      "Passages are encoded and indexed offline using FAISS."
++    ]
++  },
++  {
++    "id": "a06",
++    "type": "single_document",
++    "cohort": "new_all_papers",
++    "question": "Which token embeddings does the ColBERT document encoder remove after projection, and why?",
++    "gold_evidence": [
++      {
++        "source": "2004.12832v2.pdf",
++        "page": 4,
++        "quote": "punctuation symbols"
++      }
++    ],
++    "reference_points": [
++      "Removes punctuation embeddings to reduce document embedding count."
++    ]
++  },
++  {
++    "id": "a07",
++    "type": "single_document",
++    "cohort": "new_all_papers",
++    "question": "How does Self-RAG search over output segments and incorporate critique-token probabilities into segment scores?",
++    "gold_evidence": [
++      {
++        "source": "2310.11511v1.pdf",
++        "page": 6,
++        "quote": "segment-level beam search"
++      },
++      {
++        "source": "2310.11511v1.pdf",
++        "page": 6,
++        "quote": "linear weighted sum"
++      }
++    ],
++    "reference_points": [
++      "Segment beam search retains top-B continuations; adds a linear weighted sum of normalized critique probabilities."
++    ]
++  },
++  {
++    "id": "a08",
++    "type": "single_document",
++    "cohort": "new_all_papers",
++    "question": "How does CRAG aggregate document confidence scores to classify an entire retrieval as Correct or Incorrect?",
++    "gold_evidence": [
++      {
++        "source": "2401.15884v3.pdf",
++        "page": 5,
++        "quote": "at least one retrieved document"
++      },
++      {
++        "source": "2401.15884v3.pdf",
++        "page": 5,
++        "quote": "all retrieved documents are below the lower threshold"
++      }
++    ],
++    "reference_points": [
++      "Correct if at least one exceeds upper threshold; Incorrect if all fall below lower threshold."
++    ]
++  },
++  {
++    "id": "a09",
++    "type": "cross_document",
++    "cohort": "new_all_papers",
++    "question": "What output dimensionalities are used for Transformer sub-layers and embeddings, and for DPR question and passage vectors?",
++    "gold_evidence": [
++      {
++        "source": "Attention is all you need.pdf",
++        "page": 3,
++        "quote": "dmodel = 512"
++      },
++      {
++        "source": "2004.04906v3.pdf",
++        "page": 3,
++        "quote": "d = 768"
++      }
++    ],
++    "reference_points": [
++      "Transformer 512; DPR 768."
++    ]
++  },
++  {
++    "id": "a10",
++    "type": "cross_document",
++    "cohort": "new_all_papers",
++    "question": "What pooling window sizes and strides are used in DCNN and VGG, and which one uses overlapping pooling?",
++    "gold_evidence": [
++      {
++        "source": "DCNN.pdf",
++        "page": 3,
++        "quote": "a neighborhood of size z × z"
++      },
++      {
++        "source": "DCNN.pdf",
++        "page": 4,
++        "quote": "s = 2 and z = 3"
++      },
++      {
++        "source": "VGG.pdf",
++        "page": 2,
++        "quote": "2 × 2 pixel window, with stride 2"
++      }
++    ],
++    "reference_points": [
++      "DCNN 3x3 stride 2 overlapping; VGG 2x2 stride 2."
++    ]
++  },
++  {
++    "id": "a11",
++    "type": "cross_document",
++    "cohort": "new_all_papers",
++    "question": "How does the original RAG paper index its Wikipedia document embeddings, and how can CRAG obtain evidence beyond a static corpus?",
++    "gold_evidence": [
++      {
++        "source": "2005.11401v4.pdf",
++        "page": 4,
++        "quote": "build a single MIPS index using FAISS"
++      },
++      {
++        "source": "2401.15884v3.pdf",
++        "page": 2,
++        "quote": "large-scale web searches"
++      }
++    ],
++    "reference_points": [
++      "RAG uses a FAISS HNSW MIPS index; CRAG adds web search for Incorrect/Ambiguous retrieval."
++    ]
++  },
++  {
++    "id": "a12",
++    "type": "cross_document",
++    "cohort": "new_all_papers",
++    "question": "Do DPR and ColBERT share BERT weights between their question or query encoder and document encoder?",
++    "gold_evidence": [
++      {
++        "source": "2004.04906v3.pdf",
++        "page": 3,
++        "quote": "two independent BERT"
++      },
++      {
++        "source": "2004.12832v2.pdf",
++        "page": 4,
++        "quote": "share a single BERT model"
++      }
++    ],
++    "reference_points": [
++      "DPR uses independent encoders; ColBERT shares one BERT model with Q/D markers."
++    ]
++  },
++  {
++    "id": "a13",
++    "type": "cross_document",
++    "cohort": "new_all_papers",
++    "question": "How are critique scores used to rank generated segments in Self-RAG, and how are confidence thresholds used to classify retrieval in CRAG?",
++    "gold_evidence": [
++      {
++        "source": "2310.11511v1.pdf",
++        "page": 6,
++        "quote": "linear weighted sum"
++      },
++      {
++        "source": "2401.15884v3.pdf",
++        "page": 5,
++        "quote": "at least one retrieved document"
++      },
++      {
++        "source": "2401.15884v3.pdf",
++        "page": 5,
++        "quote": "all retrieved documents are below the lower threshold"
++      }
++    ],
++    "reference_points": [
++      "Self-RAG scores beam segments with critique probabilities; CRAG applies upper/lower confidence thresholds to retrieved documents."
++    ]
++  },
++  {
++    "id": "a14",
++    "type": "cross_document",
++    "cohort": "new_all_papers",
++    "question": "How do DPR and the original RAG paper precompute and index passage or document representations for retrieval?",
++    "gold_evidence": [
++      {
++        "source": "2004.04906v3.pdf",
++        "page": 3,
++        "quote": "index them using FAISS"
++      },
++      {
++        "source": "2005.11401v4.pdf",
++        "page": 4,
++        "quote": "compute an embedding for each document"
++      }
++    ],
++    "reference_points": [
++      "Both encode passages/documents offline and index in FAISS; RAG specifies a HNSW approximation for MIPS."
++    ]
++  },
++  {
++    "id": "a15",
++    "type": "cross_document",
++    "cohort": "new_all_papers",
++    "question": "Where is dropout applied in the Transformer and in the VGG training setup?",
++    "gold_evidence": [
++      {
++        "source": "Attention is all you need.pdf",
++        "page": 7,
++        "quote": "output of each sub-layer"
++      },
++      {
++        "source": "Attention is all you need.pdf",
++        "page": 7,
++        "quote": "sums of the embeddings and the positional encodings"
++      },
++      {
++        "source": "VGG.pdf",
++        "page": 4,
++        "quote": "first two fully-connected layers"
++      }
++    ],
++    "reference_points": [
++      "Transformer sub-layer outputs and embedding plus position sums; VGG first two FC layers with ratio 0.5."
++    ]
++  },
++  {
++    "id": "a16",
++    "type": "cross_document",
++    "cohort": "new_all_papers",
++    "question": "What batch sizes, momentum values, and weight-decay coefficients are used to train DCNN and VGG?",
++    "gold_evidence": [
++      {
++        "source": "DCNN.pdf",
++        "page": 5,
++        "quote": "batch size of 128 examples, momentum of 0.9, and weight decay of 0.0005"
++      },
++      {
++        "source": "VGG.pdf",
++        "page": 4,
++        "quote": "batch size was set to 256, momentum to 0.9"
++      },
++      {
++        "source": "VGG.pdf",
++        "page": 4,
++        "quote": "5·10−4"
++      }
++    ],
++    "reference_points": [
++      "DCNN batch 128, VGG batch 256; both momentum 0.9 and weight decay 0.0005."
++    ]
++  }
++]
+--- /dev/null
++++ b/docs/ALL_PAPERS_EVALUATION_2026-10-20.md
+@@ -0,0 +1,162 @@
++# 全部论文、查询重写 / HyDE 与两轮补查实验（2026-10-20）
++
++结论：已完成全部 8 篇论文、42 道英文可答题、四种查询增强设置及 0/1/2 轮补查对照。原流程 Recall@10=0.7361、MAP@10=0.4899；重写 + HyDE + 两轮补查为 0.7242、0.4797，完整 Gold 从 27/42 降到 25/42。**保持三项默认关闭，下一步优先修复证据保留。**
++
++八次真实主流程回答、独立指标复核与本地测试均完成。检索分数与回答语义分别验收。
++
++## 固定条件
++
++- 遍历 `data` 的全部 PDF：8 篇不同论文，共 120 页。三篇旧库与五篇先导库中的每个 PDF 均通过 SHA-256 核对，没有重复 PDF。
++- 独立合并版本 `all-papers-8-20261020`：1,397 条、384 维，精确复用已验证的分块和向量，仅重新分配合并位置 ID；不是重新解析或改变分块策略。原三篇默认库、五篇实验库及配置保留。
++- 42 道英文可答题：26 旧题原样保留，16 新题（8 单篇、8 跨篇）；共 26 单篇、16 跨篇。另 4 道无 Gold 题跳过检索计分，不算正确。新题引文已逐条核对 PDF 物理页。
++- 同一语料、同一题集、同一分解与查询增强输出，比较 base / rewrite / HyDE / both，以及补查上限 0 / 1 / 2。每路候选 60，最终 10；第二轮的来源候选深度为 120。
++- 原 `evaluation/run_evaluation.py` 增加 `--query-ablation`，额外输出与 `main.py` 对齐的四组条件；旧对照组与指标公式保留。运行检索时禁止 API。
++
++## 查询增强的实际含义
++
++rewrite 生成一个便于检索的改写，同时保留原问题的 Dense/BM25 候选；HyDE 生成短的假设回答，只将它用于 Dense 检索。真实论文片段经 RRF 融合、原问题全局重排与子题证据选择后，仍最多保留十条。假设回答本身不进入证据上下文。
++
++补查依据现有来源覆盖启发式决定是否执行，并非每题固定查两遍。第一轮候选深度 60、第二轮 120；题目必须能识别两个以上来源才会触发。未修改名称识别器、分解提示、重写 / HyDE 提示、重排模型或选证据规则。
++
++## 成本与运行边界
++
++已实际新增辅助 API 110 次：26 次分解、42 次重写、42 次 HyDE；复用 16 份旧分解。代理累计报告 43,785 token（输入 40,038、输出 3,747），无失败或自动重试。沿用请求 `cn:deepseek-v4.1-flash`，以审计记录中的报告模型和用量为准，不推算金额或独立证明上游权重。
++
++检索评估按题保存、复用模型实例和完全相同的 query-passage 重排分数，节省四组对照的重复计算。这一总耗时不是生产服务的逐组延迟或 P95。真实主流程抽测将另用未缓存的重排计算，查询增强输出固定，回答与必要的引用修复实际调用 API。
++
++一个复用的旧分解 p4 因返回五个子题而被原有校验拒绝，仍按历史缓存处理，没有为提高分数重新生成。准备阶段曾遇到 PDF 连字字符和旧库外题缺失 `gold_evidence` 字段：分别按既有 NFKC 匹配口径和缺失即无 Gold 修复；已完成的 API 输出复用，没有重复调用。
++
++这仍是人工构造的同语料验证，不是外部盲测。Gold 是指定段落集合，不穷尽全部正确证据；检索 Recall 不等于回答正确率。旧 n08 的条件归属歧义保留。
++
++## 完整量化结果
++
++使用用户指定的原 `evaluation/run_evaluation.py`，每题保留原方法并追加主流程四种查询设置。以下全部是在同一个八篇库、同一题集和同一最终 Top-10 内的对照；未拿不同语料的历史分数冒充改动收益。
++
++Precision 按十条为分母；Recall、AP、RR 按原 Gold 定义计算后逐题平均。完整覆盖指该题全部指定 Gold 都进入最终十条。指标直接比较真实检索片段 ID 与原文 Gold，不使用 DeepSeek 回答或 LLM judge 打分；增强查询文本本身仍由 DeepSeek API 生成。
++
++| 查询设置 | 补查上限 | P@10 | Recall@10 | MAP@10 | MRR@10 | 完整 Gold |
++| --- | ---: | ---: | ---: | ---: | ---: | ---: |
++| 原流程 | 0 | 0.1262 | 0.7361 | 0.4899 | 0.5693 | 27/42 |
++| 原流程 | 1 | 0.1310 | 0.7520 | 0.4922 | 0.5737 | 26/42 |
++| 原流程 | 2 | 0.1310 | 0.7480 | 0.4937 | 0.5830 | 26/42 |
++| 仅重写 | 0 | 0.1238 | 0.7123 | 0.4759 | 0.5554 | 26/42 |
++| 仅重写 | 1 | 0.1286 | 0.7282 | 0.4783 | 0.5598 | 25/42 |
++| 仅重写 | 2 | 0.1286 | 0.7242 | 0.4797 | 0.5690 | 25/42 |
++| 仅 HyDE | 0 | 0.1214 | 0.7083 | 0.4847 | 0.5655 | 26/42 |
++| 仅 HyDE | 1 | 0.1262 | 0.7242 | 0.4870 | 0.5699 | 25/42 |
++| 仅 HyDE | 2 | 0.1262 | 0.7202 | 0.4885 | 0.5792 | 25/42 |
++| 重写 + HyDE | 0 | 0.1238 | 0.7123 | 0.4759 | 0.5554 | 26/42 |
++| 重写 + HyDE | 1 | 0.1286 | 0.7282 | 0.4783 | 0.5598 | 25/42 |
++| 重写 + HyDE | 2 | 0.1286 | 0.7242 | 0.4797 | 0.5690 | 25/42 |
++
++原流程不补查的 Recall 为 0.7361、MAP 为 0.4899；用户要求的“同时开启重写、HyDE，最多两轮补查”为 0.7242、0.4797，完整 Gold 从 27/42 降到 25/42。不开增强时，一轮的 Recall 最高 0.7520；两轮 MAP 略高 0.4937，但完整覆盖仍低于原流程，且旧题退步。
++
++### 分组结果：原流程 vs 重写 + HyDE + 两轮
++
++| 题组 | 题数 | 原 Recall | 实验 Recall | 原 MAP | 实验 MAP | 原完整 Gold | 实验完整 Gold |
++| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
++| 全部旧题 | 26 | 0.7660 | 0.7340 | 0.4557 | 0.4329 | 17 | 15 |
++| 新增题 | 16 | 0.6875 | 0.7083 | 0.5455 | 0.5559 | 10 | 10 |
++| 全部单篇 | 26 | 0.9263 | 0.8878 | 0.6329 | 0.6104 | 22 | 21 |
++| 全部跨篇 | 16 | 0.4271 | 0.4583 | 0.2575 | 0.2674 | 5 | 4 |
++| 新增跨篇 | 8 | 0.5000 | 0.5417 | 0.3785 | 0.3993 | 3 | 3 |
++
++新增 16 题仅开启重写 / HyDE 时，各组聚合四项分数都与原流程相同；个别十条列表有变化，不能据此说检索完全相同。对全部跨篇题，四种增强设置在同一个补查上限下的聚合四项分数也相同。补查提供了有限新证据，增强文本没有带来额外量化收益。
++
++### 旧题回归：保持同一八篇库
++
++| 原题集 | 原 Recall | 实验 Recall | 原 MAP | 实验 MAP |
++| --- | ---: | ---: | ---: | ---: |
++| questions | 0.8167 | 0.8167 | 0.5609 | 0.5609 |
++| arxiv_pilot_questions_en | 1.0000 | 0.7500 | 0.4831 | 0.3625 |
++| arxiv_validation_questions_en | 1.0000 | 1.0000 | 0.8000 | 0.8000 |
++| arxiv_next_questions_en | 0.4833 | 0.5500 | 0.2144 | 0.2275 |
++
++“旧题”指问题与 Gold 未改；其中十题过去的部分对照禁用了分解，本轮为四组统一生成了分解，不能把它们与旧三篇 / 五篇库的历史指标直接比较并归因于扩库。p1～p6 和 n01～n10 的 16 份分解沿用历史缓存。
++
++## 具体失败机制
++
++1. **p1 的增强融合改变了保护锚点。** 该题询问 RAG 的生成器和参数量。Gold 750 在原流程候选中全局只排第 17，但正好是原始 RRF 首条，因此被保护到最终第十。开启增强后，融合首条变为 Self-RAG 的 986，750 虽仍在候选池，却失去保护并离开 Top-10，Recall 从 1 变成 0。这定位到锚点选择和证据保留，不是 API 没有返回内容。
++2. **p6 的补查移除了已覆盖的证据。** 两个指定 Gold 406、597 原本均在十条内；一轮和两轮后只保留 406。候选仍包含 597，问题出在最终选择。
++3. **n07 的新增候选没有变成完整上下文。** 合并库 Gold 为 615、761，分别对应原五篇库 237、383。原流程只召回 615 到候选但未选中；第一轮选中 615，Recall 到 1/2；第二轮两段都已在大候选池，却又全部落选，回到 0。四种增强设置均有这个现象。
++4. **第二轮也有有限收益。** 新 a13 在第二轮找到 Self-RAG 的段落 995 并保留，Recall 从 0 到 1/3，仍未覆盖 CRAG 的两段 Gold。DCNN/VGG 池化题 a10 一直为 3/3，没有因增强增加收益。
++5. **来源识别仍有缺口。** a09、a15 用 Transformer 简称，现有基于文件名和标题的别名规则未映射到 `Attention is all you need.pdf`，因此没有按双来源触发补查。这是实测边界，本轮未修改识别规则或题目措辞。
++
++## 采用门槛与下一步
++
++实验前固定的检索门槛全部未通过：总体 MAP 至少增加 0.01、八道新跨篇 Recall 至少增加 0.10、各旧题组 Recall 不下降、各旧题组 MAP/MRR 下降不超过 0.01。实际总体 MAP 下降约 0.0102，新跨篇 Recall 仅增加 0.0417，旧六题 Recall 1.0 降到 0.75。
++
++因此保留生产默认：重写关闭、HyDE 关闭、补查关闭，当前默认库仍是三篇版本。完整八篇库与显式实验入口保留，可以随时用同一组输入回放。
++
++下一步建议只做一轮有边界的证据保留修复：先保护**增强前**原问题的检索锚点，再单独验证补查是否保留每个子题的关键首条。沿用本轮全部缓存、同一题集与门槛离线复评；收益不稳定就保留当前流程。不要把 Gold 输入运行时作为选证据条件，也不将这次论文导入等同于已经实现这些论文的方法。
++
++## 运行成本与已验证边界补充
++
++- 四种模式各有 13 题触发补查，每组 26 次处理、50 次来源定向查询。其他题按启发式跳过；不是所有题固定运行两轮。
++- 实际重排推理为 14,379 对，重复的 45,364 对 query-passage 分数被共享复用。42 个分题的检索处理耗时合计 761.258 秒，约 12.69 分钟；不是逐组服务延迟。
++- 默认知识库指针、旧三篇和五篇配对资产、旧题 / Gold、私有配置及 `main.py` 未改。新增生产代码只扩展原 evaluation 的显式对照入口，新增两个本地行为测试；构建和实验脚本归档在本次结果目录。
++
++## 真实主流程与人工语义复核
++
++预先固定 p3、n07、a10、a12，逐题真实运行 `main.main` 的 base/0 和 both/2，共八次；只重放已生成的分解 / rewrite / HyDE，最终回答实际调用 API，没有用假答案代替。所有八次选证据编号都与 evaluation 相同，引用结构通过 8/8，没有触发引用修复。
++
++| 题目 | 原流程 | 重写 + HyDE + 两轮 | 人工核对 |
++| --- | --- | --- | --- |
++| p3 ColBERT MaxSim 聚合 | 核心答全 | 核心答全 | 每个查询 token 对文档 token 取最大相似度，再对查询 token 求和；有额外但受支持的距离度量说明 |
++| n07 RAG / ColBERT 预计算表示 | 部分回答 | 部分回答 | ColBERT 的替代原文可支撑；RAG 缺主要预计算段落，两轮后仅多了索引向量放在 CPU 的附录段落 |
++| a10 DCNN / VGG 池化 | 核心答全 | 核心答全 | 窗口、步幅及 DCNN 重叠池化正确；VGG 非重叠关系措辞保守，含少量未要求的补充 |
++| a12 DPR / ColBERT 权重共享 | 部分回答 | 部分回答 | ColBERT 共享 BERT 正确；未选中 DPR 独立编码器原文，两组均对 DPR 部分保留证据不足 |
++
++两种条件都是四题中两题核心完整、两题部分完成，没有观察到增强带来的完整回答提升。这是人工、同语料、小样本核对，不能称作总体准确率 50%；引用结构通过也不等于语义全对。运行时并未使用 Gold 或 reference_points。
++
++真实回答新增 API 8 次、17,934 token；整轮实际 chat 调用 **118 次、61,719 token**（输入 56,650、输出 5,069），全部 `finish_reason=stop`，失败 0、自动重试 0、引用修复 0。没有根据 token 推算代理账单金额。
++
++## 最终核验
++
++- 64 项单元 / 本地行为测试通过，新增真实候选隔离与不完整 HyDE 缓存拒绝检查。
++- 独立实现重新映射全部 42 道 Gold、重算 1,008 组逐题指标及所有分组汇总，全部一致。
++- 八次实际 main 选证据结果与 evaluation 完全一致；人工答案复核单独留档。
++- 合并前后的所有分块正文 / 元数据和向量逐条一致，仅新库的位置 ID 有映射；九个最早迁移数据文件仍与原清单 SHA 一致。
++- 旧三篇 / 五篇版本、当前指针、旧题与 Gold、私有配置、`main.py` 均保留；实验日志与快照未发现配置中的 Key。
++- 源码只扩展原 evaluation 的显式对照入口及两个对应测试；未提交或推送 Git。
++
++## 操作与产物
++
++检查已保存的 `comparison.json` 即可查看全部指标，无需再次付费。原 evaluation 的离线回放命令如下，重新执行仍会消耗本机 CPU，结果目录须使用新名称：
++
++```bash
++OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
++VECLIB_MAXIMUM_THREADS=1 TOKENIZERS_PARALLELISM=false \
++HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 \
++.venv/bin/python -m evaluation.run_evaluation \
++  --questions evaluation/all_papers_questions_en.json \
++  --kb-version all-papers-8-20261020 \
++  --auxiliary-cache evaluation/results/all_papers_20261020/auxiliary.json \
++  --query-ablation --complete-evidence --completion-rounds 1 2 \
++  --output-dir evaluation/results/new_all_papers_replay
++```
++
++本次分题驱动还在 Python 中设置了 torch intra/inter-op 单线程，复用同一组 Embedding/BGE 模型与相同 query-passage 分数；其入口和完整日志一起归档。
++
++在新的 Python 进程中临时查看“两个增强都开启、最多两轮”的真实问答，可使用下列调用；它会重新调用 API，当前无需重复执行：
++
++```python
++import torch
++torch.set_num_threads(1)
++torch.set_num_interop_threads(1)
++import main
++main.USE_MULTI_QUERY = True
++main.USE_HYDE = True
++main.main(
++    "Do DPR and ColBERT share BERT weights between their question or query encoder and document encoder?",
++    kb_version="all-papers-8-20261020",
++    complete_evidence=True,
++    completion_rounds=2,
++)
++```
++
++- [冻结协议](../evaluation/results/all_papers_20261020/protocol.json)、[全部 PDF 清单](../evaluation/results/all_papers_20261020/inventory.json)、[分块 ID 映射](../evaluation/results/all_papers_20261020/chunk_id_mapping.json)。
++- [完整英文题集](../evaluation/all_papers_questions_en.json)、[Gold 页码与映射预检](../evaluation/results/all_papers_20261020/gold_preflight.json)。
++- [全部逐题量化与汇总](../evaluation/results/all_papers_20261020/comparison.json)、[案例变化诊断](../evaluation/results/all_papers_20261020/diagnostics.json)。
++- [辅助 API 审计](../evaluation/results/all_papers_20261020/api_calls.json)、[真实回答 API 审计](../evaluation/results/all_papers_20261020/answer_probe/api_calls.json)、[人工答案复核](../evaluation/results/all_papers_20261020/answer_probe/review.json)。
++- [独立验证](../evaluation/results/all_papers_20261020/verification.json)、[测试日志](../evaluation/results/all_papers_20261020/tests_initial.log)、[本次文件差异](../evaluation/results/all_papers_20261020/task_changes.patch)。

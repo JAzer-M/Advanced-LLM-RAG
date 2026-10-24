@@ -1,0 +1,554 @@
+{
+  "reviewed_at_utc": "2026-10-22T03:25:58.378230+00:00",
+  "reviewer": "Same coding assistant, not independent or blind.",
+  "route_references_completed_before_reading_auto_final_answers": true,
+  "strict_standard": "Required points complete, delivered, no materially unsupported extra assertions, adequate adjacent citation support.",
+  "borderline_case": "a02 Agent extra formula explanation is conservatively marked partially supported; core-only pass is reported separately, so this judgment is visible.",
+  "dcnn_original_pdf": "data/raw/DCNN.pdf",
+  "dcnn_formula_visual_check": "dcnn_page3_review.png",
+  "cases": [
+    {
+      "id": "a01",
+      "arms": {
+        "rag": {
+          "required_statuses": [
+            "covered",
+            "covered"
+          ],
+          "citations_supported": true,
+          "unsupported_or_wrong_claims": [],
+          "correct_refusal": false,
+          "notes": "三条路径均用原文“两个嵌入层与pre-softmax”表述三方共享，并给sqrt(dmodel)。按语义接受原文表述，不额外要求解释encoder/decoder位置。",
+          "result_sha256": "3f050b1b9ac2b07473d345de53b54daf848a31e83e281134694ba0c1336bdccb",
+          "answer_sha256": "e7460cbabaaeea7e0065bb00524f3397b7c3e467522e45f0dd3012fc286c67e0",
+          "source_checks": [
+            {
+              "chunk_id": 44,
+              "purpose": "Weight sharing and embedding scale"
+            }
+          ]
+        },
+        "agent": {
+          "required_statuses": [
+            "covered",
+            "covered"
+          ],
+          "citations_supported": true,
+          "unsupported_or_wrong_claims": [],
+          "correct_refusal": false,
+          "notes": "三条路径均用原文“两个嵌入层与pre-softmax”表述三方共享，并给sqrt(dmodel)。按语义接受原文表述，不额外要求解释encoder/decoder位置。",
+          "result_sha256": "7e54c0e38d0e97827293771b208b856a8839f2b7481e73e464e1d30c6e05b834",
+          "answer_sha256": "4ec3a5f955d88bfcdc290db519ff78f5ce775f5f62f5a8d4189e66c6a703e75f",
+          "source_checks": [
+            {
+              "chunk_id": 44,
+              "purpose": "Weight sharing and embedding scale"
+            }
+          ]
+        },
+        "auto": {
+          "required_statuses": [
+            "covered",
+            "covered"
+          ],
+          "citations_supported": true,
+          "unsupported_or_wrong_claims": [],
+          "correct_refusal": false,
+          "notes": "三条路径均用原文“两个嵌入层与pre-softmax”表述三方共享，并给sqrt(dmodel)。按语义接受原文表述，不额外要求解释encoder/decoder位置。",
+          "result_sha256": "6313fd17f0e97e632e5037a2f6a93052560181c77165bfa7b735360e9f187b2c",
+          "answer_sha256": "66d2dd4eb7758ad19ae5fbb80490df60c0dfb00eeca90ed0abe0522243c74482",
+          "source_checks": [
+            {
+              "chunk_id": 44,
+              "purpose": "Weight sharing and embedding scale"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "a02",
+      "arms": {
+        "rag": {
+          "required_statuses": [
+            "covered",
+            "covered"
+          ],
+          "citations_supported": true,
+          "unsupported_or_wrong_claims": [],
+          "correct_refusal": false,
+          "notes": "必要的四参数和ReLU后位置均正确。固定Agent另外把完整归一化响应b说成邻域求和所得；原PDF p3公式为a_i除以含平方和的归一化因子，额外解释支撑不足。参数和位置核心点仍给满分。",
+          "result_sha256": "2840b57171a25d82ee00a9160982c9fff31d643fa2ab4fda5ec21ace53f5abc9",
+          "answer_sha256": "6f2910a7e5a79d33c65179137dd93547311c3fca744bbb42a472eb2c078ecfc7",
+          "source_checks": [
+            {
+              "chunk_id": 145,
+              "purpose": "LRN constants and after-ReLU order"
+            },
+            {
+              "chunk_id": 143,
+              "purpose": "Only the neighborhood summation component, not the full b formula"
+            },
+            {
+              "chunk_id": 156,
+              "purpose": "LRN follows convolutional layers 1 and 2"
+            }
+          ]
+        },
+        "agent": {
+          "required_statuses": [
+            "covered",
+            "covered"
+          ],
+          "citations_supported": false,
+          "unsupported_or_wrong_claims": [
+            "将b描述为求和所得，省去除法和含平方和的归一化因子；其[2]只支撑公式中的邻域求和部分。"
+          ],
+          "correct_refusal": false,
+          "notes": "必要的四参数和ReLU后位置均正确。固定Agent另外把完整归一化响应b说成邻域求和所得；原PDF p3公式为a_i除以含平方和的归一化因子，额外解释支撑不足。参数和位置核心点仍给满分。",
+          "result_sha256": "0b965fc5a64ea252572d42926db9733f6cdb9113ea06b78d767ccf3e1a1750cb",
+          "answer_sha256": "a4fe32bcd7eee4ba8dba469302b1b80bbf056d705a6acd6b8dfffe6d44a2157b",
+          "source_checks": [
+            {
+              "chunk_id": 145,
+              "purpose": "LRN constants and after-ReLU order"
+            },
+            {
+              "chunk_id": 143,
+              "purpose": "Only the neighborhood summation component, not the full b formula"
+            },
+            {
+              "chunk_id": 156,
+              "purpose": "LRN follows convolutional layers 1 and 2"
+            }
+          ]
+        },
+        "auto": {
+          "required_statuses": [
+            "covered",
+            "covered"
+          ],
+          "citations_supported": true,
+          "unsupported_or_wrong_claims": [],
+          "correct_refusal": false,
+          "notes": "必要的四参数和ReLU后位置均正确。固定Agent另外把完整归一化响应b说成邻域求和所得；原PDF p3公式为a_i除以含平方和的归一化因子，额外解释支撑不足。参数和位置核心点仍给满分。",
+          "result_sha256": "65fc88128c9d5c17499412b0063446ba0139a6fb8333718acd5294042f48a69e",
+          "answer_sha256": "bca78336a611d4cfe2c2458e57246788562dd625807e13ef2fea7391b6b63acd",
+          "source_checks": [
+            {
+              "chunk_id": 145,
+              "purpose": "LRN constants and after-ReLU order"
+            },
+            {
+              "chunk_id": 143,
+              "purpose": "Only the neighborhood summation component, not the full b formula"
+            },
+            {
+              "chunk_id": 156,
+              "purpose": "LRN follows convolutional layers 1 and 2"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "a03",
+      "arms": {
+        "rag": {
+          "required_statuses": [
+            "covered",
+            "covered"
+          ],
+          "citations_supported": true,
+          "unsupported_or_wrong_claims": [],
+          "correct_refusal": false,
+          "notes": "RAG/Agent数字和上下界顺序正确。Auto两次将原文Arc- Challenge改成Arc-Challenge，逐字引文校验拒绝；没有交付答案，计0。",
+          "result_sha256": "3ec6185360fc7f9de5a315e6d40899926b09ad319799d30240c45a6300234426",
+          "answer_sha256": "2ad361b78442d59a8f785f50217b73765ebcc8fc4d9612971d61c37b5e3bf347",
+          "source_checks": [
+            {
+              "chunk_id": 1387,
+              "purpose": "Two threshold pairs"
+            },
+            {
+              "chunk_id": 1268,
+              "purpose": "Upper/lower decision meaning"
+            }
+          ]
+        },
+        "agent": {
+          "required_statuses": [
+            "covered",
+            "covered"
+          ],
+          "citations_supported": true,
+          "unsupported_or_wrong_claims": [],
+          "correct_refusal": false,
+          "notes": "RAG/Agent数字和上下界顺序正确。Auto两次将原文Arc- Challenge改成Arc-Challenge，逐字引文校验拒绝；没有交付答案，计0。",
+          "result_sha256": "de2f2ae8da24f370d0774494d88b866863da850384442c38b0dfc0c12d7c7e6d",
+          "answer_sha256": "e4aa70e70fb47875af768e0ca203502d760e82c1f7a034409e59d1026ab355cb",
+          "source_checks": [
+            {
+              "chunk_id": 1387,
+              "purpose": "Two threshold pairs"
+            },
+            {
+              "chunk_id": 1268,
+              "purpose": "Upper/lower decision meaning"
+            }
+          ]
+        },
+        "auto": {
+          "required_statuses": [
+            "missing",
+            "missing"
+          ],
+          "citations_supported": false,
+          "unsupported_or_wrong_claims": [],
+          "correct_refusal": false,
+          "notes": "RAG/Agent数字和上下界顺序正确。Auto两次将原文Arc- Challenge改成Arc-Challenge，逐字引文校验拒绝；没有交付答案，计0。",
+          "result_sha256": "e23dda2967b0ebe77239a4d9bfc45b41c51e4845a391d60c7e6daf82b11da7e7",
+          "answer_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "source_checks": [
+            {
+              "chunk_id": 1387,
+              "purpose": "Two threshold pairs"
+            },
+            {
+              "chunk_id": 1268,
+              "purpose": "Upper/lower decision meaning"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "a04",
+      "arms": {
+        "rag": {
+          "required_statuses": [
+            "covered",
+            "covered",
+            "covered"
+          ],
+          "citations_supported": true,
+          "unsupported_or_wrong_claims": [],
+          "correct_refusal": false,
+          "notes": "RAG正确区分Transformer翻译与RAG指定生成任务，没有混入QA的greedy/15/50设置。Agent/Auto在复杂并列主体规划校验失败，未交付，计0。",
+          "result_sha256": "46fe8af31004ac715396f47365ba2043203a83656a8a0ee4e6c5d9c75fe46c3f",
+          "answer_sha256": "dfae8fbc41052236a4d2aa3ede76071bd094c3fb21bb4f7a2fb3a768daab31f6",
+          "source_checks": [
+            {
+              "chunk_id": 73,
+              "purpose": "Transformer beam4 and optional alpha0.6"
+            },
+            {
+              "chunk_id": 903,
+              "purpose": "RAG generation beam4 and ten documents"
+            }
+          ]
+        },
+        "agent": {
+          "required_statuses": [
+            "missing",
+            "missing",
+            "missing"
+          ],
+          "citations_supported": false,
+          "unsupported_or_wrong_claims": [],
+          "correct_refusal": false,
+          "notes": "RAG正确区分Transformer翻译与RAG指定生成任务，没有混入QA的greedy/15/50设置。Agent/Auto在复杂并列主体规划校验失败，未交付，计0。",
+          "result_sha256": "2d8f4cbbb95d4a3a8c4bf87a4579b4dc73bcd9ed747e7a6ae534c5c50564868d",
+          "answer_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "source_checks": [
+            {
+              "chunk_id": 73,
+              "purpose": "Transformer beam4 and optional alpha0.6"
+            },
+            {
+              "chunk_id": 903,
+              "purpose": "RAG generation beam4 and ten documents"
+            }
+          ]
+        },
+        "auto": {
+          "required_statuses": [
+            "missing",
+            "missing",
+            "missing"
+          ],
+          "citations_supported": false,
+          "unsupported_or_wrong_claims": [],
+          "correct_refusal": false,
+          "notes": "RAG正确区分Transformer翻译与RAG指定生成任务，没有混入QA的greedy/15/50设置。Agent/Auto在复杂并列主体规划校验失败，未交付，计0。",
+          "result_sha256": "bc90f1a63475c63bf16fdb81dd209b164fac5414c7399f8f099dd42ac381eb94",
+          "answer_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "source_checks": [
+            {
+              "chunk_id": 73,
+              "purpose": "Transformer beam4 and optional alpha0.6"
+            },
+            {
+              "chunk_id": 903,
+              "purpose": "RAG generation beam4 and ten documents"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "a05",
+      "arms": {
+        "rag": {
+          "required_statuses": [
+            "covered",
+            "covered",
+            "covered",
+            "covered"
+          ],
+          "citations_supported": true,
+          "unsupported_or_wrong_claims": [],
+          "correct_refusal": false,
+          "notes": "三条均给主DPR batch128、lr1e-5和ColBERT batch32、lr3e-6。Auto额外区分joint training batch16，不当成主实验值。固定Agent两处多引[3]（ColBERT），同组[9]确实支撑DPR事实；记引用冗余，不把充分支撑的事实判为无来源。",
+          "result_sha256": "6291f367b4ea4aa31c248fa8c4c484058b4d253d57eb1d20f6727d2d212f474e",
+          "answer_sha256": "14720e83c073a0b2669898f7aa6ad10e555aad089989f83348bae26e880d92bb",
+          "source_checks": [
+            {
+              "chunk_id": 435,
+              "purpose": "Main DPR batch128"
+            },
+            {
+              "chunk_id": 436,
+              "purpose": "DPR learning rate and training options"
+            },
+            {
+              "chunk_id": 641,
+              "purpose": "ColBERT batch32/lr3e-6"
+            },
+            {
+              "chunk_id": 538,
+              "purpose": "Separate joint-training batch16 and 1600 passages"
+            }
+          ]
+        },
+        "agent": {
+          "required_statuses": [
+            "covered",
+            "covered",
+            "covered",
+            "covered"
+          ],
+          "citations_supported": true,
+          "unsupported_or_wrong_claims": [],
+          "correct_refusal": false,
+          "notes": "三条均给主DPR batch128、lr1e-5和ColBERT batch32、lr3e-6。Auto额外区分joint training batch16，不当成主实验值。固定Agent两处多引[3]（ColBERT），同组[9]确实支撑DPR事实；记引用冗余，不把充分支撑的事实判为无来源。",
+          "result_sha256": "9f4699f1a886b844381b192eb15cf1dddf8c09f70aba691795330838d4231c1f",
+          "answer_sha256": "b6c951f91436e085c8a34d9aee00ec3c19e04dc2d0889555d0ade5edacc2ce49",
+          "source_checks": [
+            {
+              "chunk_id": 435,
+              "purpose": "Main DPR batch128"
+            },
+            {
+              "chunk_id": 436,
+              "purpose": "DPR learning rate and training options"
+            },
+            {
+              "chunk_id": 641,
+              "purpose": "ColBERT batch32/lr3e-6"
+            },
+            {
+              "chunk_id": 538,
+              "purpose": "Separate joint-training batch16 and 1600 passages"
+            }
+          ]
+        },
+        "auto": {
+          "required_statuses": [
+            "covered",
+            "covered",
+            "covered",
+            "covered"
+          ],
+          "citations_supported": true,
+          "unsupported_or_wrong_claims": [],
+          "correct_refusal": false,
+          "notes": "三条均给主DPR batch128、lr1e-5和ColBERT batch32、lr3e-6。Auto额外区分joint training batch16，不当成主实验值。固定Agent两处多引[3]（ColBERT），同组[9]确实支撑DPR事实；记引用冗余，不把充分支撑的事实判为无来源。",
+          "result_sha256": "74c9ac1ff347377e5c50386af94c13e3556d3c2ed9f5eaa9bf4ffd77a9e80379",
+          "answer_sha256": "766e9b48affe9461551e144d9b02dbbc8a17ac9256cbcef0892eb81824d97e19",
+          "source_checks": [
+            {
+              "chunk_id": 435,
+              "purpose": "Main DPR batch128"
+            },
+            {
+              "chunk_id": 436,
+              "purpose": "DPR learning rate and training options"
+            },
+            {
+              "chunk_id": 641,
+              "purpose": "ColBERT batch32/lr3e-6"
+            },
+            {
+              "chunk_id": 538,
+              "purpose": "Separate joint-training batch16 and 1600 passages"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "a06",
+      "arms": {
+        "rag": {
+          "required_statuses": [
+            "covered",
+            "covered"
+          ],
+          "citations_supported": true,
+          "unsupported_or_wrong_claims": [],
+          "correct_refusal": false,
+          "notes": "均正确说明训练集均值与每像素相减。按所问像素值中心化理解“仅做减均值”，不把它扩展为否认论文的几何缩放/裁剪。未要求均值张量空间粒度。",
+          "result_sha256": "a271110baf3aa52c507148f31959d034472f5a88193087e3634d17e971b43d5d",
+          "answer_sha256": "2e92aa532003b4d06a6105b2573e4b251e6d62287eec026ee05b0348c32d740a",
+          "source_checks": [
+            {
+              "chunk_id": 128,
+              "purpose": "DCNN mean over training set"
+            },
+            {
+              "chunk_id": 232,
+              "purpose": "VGG training-set mean RGB"
+            }
+          ]
+        },
+        "agent": {
+          "required_statuses": [
+            "covered",
+            "covered"
+          ],
+          "citations_supported": true,
+          "unsupported_or_wrong_claims": [],
+          "correct_refusal": false,
+          "notes": "均正确说明训练集均值与每像素相减。按所问像素值中心化理解“仅做减均值”，不把它扩展为否认论文的几何缩放/裁剪。未要求均值张量空间粒度。",
+          "result_sha256": "957d63b94b1ec7b7f9bc2983a4820b6794d3c6ec89912d537513ddc1cd60fbac",
+          "answer_sha256": "9742b15ff77803d15bf0ab00c5caf6ce03877986f63bf536037df686837aa046",
+          "source_checks": [
+            {
+              "chunk_id": 128,
+              "purpose": "DCNN mean over training set"
+            },
+            {
+              "chunk_id": 232,
+              "purpose": "VGG training-set mean RGB"
+            }
+          ]
+        },
+        "auto": {
+          "required_statuses": [
+            "covered",
+            "covered"
+          ],
+          "citations_supported": true,
+          "unsupported_or_wrong_claims": [],
+          "correct_refusal": false,
+          "notes": "均正确说明训练集均值与每像素相减。按所问像素值中心化理解“仅做减均值”，不把它扩展为否认论文的几何缩放/裁剪。未要求均值张量空间粒度。",
+          "result_sha256": "b31e1985c74642a4caf0c5b0568ff5604aa243f0f622af5d09db4f1618d25820",
+          "answer_sha256": "4d7d1ebed32bed377f7e3b31f663c6fdff23abc12330f9145a6bb31a74fec257",
+          "source_checks": [
+            {
+              "chunk_id": 128,
+              "purpose": "DCNN mean over training set"
+            },
+            {
+              "chunk_id": 232,
+              "purpose": "VGG training-set mean RGB"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "a07",
+      "arms": {
+        "rag": {
+          "required_statuses": [
+            "covered"
+          ],
+          "citations_supported": true,
+          "unsupported_or_wrong_claims": [],
+          "correct_refusal": true,
+          "notes": "均说明缺Gemma 2原报告及两项规格，未猜值。Agent/Auto全missing本地拒答，回答阶段0请求。",
+          "result_sha256": "63444b9d44f3e37131bdc4c82fb2123996785b62885dbde5c3b6237151e138f4",
+          "answer_sha256": "3baa640b4dad98977d5e032201c3f0eb8611f8b22a2aa4fd162a67208ad8084d",
+          "source_checks": []
+        },
+        "agent": {
+          "required_statuses": [
+            "covered"
+          ],
+          "citations_supported": true,
+          "unsupported_or_wrong_claims": [],
+          "correct_refusal": true,
+          "notes": "均说明缺Gemma 2原报告及两项规格，未猜值。Agent/Auto全missing本地拒答，回答阶段0请求。",
+          "result_sha256": "62af8ba2daf6699a2d0097dd8fb8a737883a253438ad6361ff4c9eff7dc2c0cd",
+          "answer_sha256": "f6656f8965453d7eba51aa3d8eef51d096e50833aeb86ebad19959dfdb883d18",
+          "source_checks": []
+        },
+        "auto": {
+          "required_statuses": [
+            "covered"
+          ],
+          "citations_supported": true,
+          "unsupported_or_wrong_claims": [],
+          "correct_refusal": true,
+          "notes": "均说明缺Gemma 2原报告及两项规格，未猜值。Agent/Auto全missing本地拒答，回答阶段0请求。",
+          "result_sha256": "63a127fbbb30da3424be8fd36398220a0bd44281cd236ef4496974f9d0b928a1",
+          "answer_sha256": "a14ccae9e4018c890fe6f08eec6277a0b50aa2a82515a88633b88ffddb31b950",
+          "source_checks": []
+        }
+      }
+    },
+    {
+      "id": "a08",
+      "arms": {
+        "rag": {
+          "required_statuses": [
+            "covered"
+          ],
+          "citations_supported": true,
+          "unsupported_or_wrong_claims": [],
+          "correct_refusal": true,
+          "notes": "均未猜USD或kWh。Agent/Auto各先search、再read_neighbors后model_stop；全missing本地拒答，回答阶段0请求。初检不足以证明完整论文绝无测量，先搜确认属于预先记录的合理替代。",
+          "result_sha256": "79deba4db4fe6e563e065d72fd16b309f794660b8aedae3ae4ec119c6ce59511",
+          "answer_sha256": "ea82a5cbfbfe44a422432b73374134e036b35686fbb404ecfc8390e4f3599cbe",
+          "source_checks": []
+        },
+        "agent": {
+          "required_statuses": [
+            "covered"
+          ],
+          "citations_supported": true,
+          "unsupported_or_wrong_claims": [],
+          "correct_refusal": true,
+          "notes": "均未猜USD或kWh。Agent/Auto各先search、再read_neighbors后model_stop；全missing本地拒答，回答阶段0请求。初检不足以证明完整论文绝无测量，先搜确认属于预先记录的合理替代。",
+          "result_sha256": "e66289f56e3c7271683942f53e9e64bbe51a48dd89125d3dd0d6467f2d3e7cb9",
+          "answer_sha256": "db226093af0fd71b88cb0e522ed7dc553eb439374b51a05cbf75df435adb2619",
+          "source_checks": []
+        },
+        "auto": {
+          "required_statuses": [
+            "covered"
+          ],
+          "citations_supported": true,
+          "unsupported_or_wrong_claims": [],
+          "correct_refusal": true,
+          "notes": "均未猜USD或kWh。Agent/Auto各先search、再read_neighbors后model_stop；全missing本地拒答，回答阶段0请求。初检不足以证明完整论文绝无测量，先搜确认属于预先记录的合理替代。",
+          "result_sha256": "f1ce97cadd8bf2a4e4fc6787229cc1a1d687dd24704a98f903c930e7dc3bad71",
+          "answer_sha256": "55cfd4bb14b1bc22f32053d44771f92a6cd17f4d8ccf8ebf62056682a7f8fd5f",
+          "source_checks": []
+        }
+      }
+    }
+  ]
+}

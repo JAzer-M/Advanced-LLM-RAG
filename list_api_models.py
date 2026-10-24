@@ -1,3 +1,5 @@
+# 辅助命令：读取私有配置对应服务的模型列表；列出 ID 不等于逐个验证生成能力。
+
 """Read available model IDs from the configured proxy; no generation request."""
 
 from src.api_llm import list_models

@@ -1,0 +1,140 @@
+{
+  "question": "How does DCNN initialize neuron biases in different layers, and why does it use positive biases in selected layers?",
+  "requirements": [
+    {
+      "id": "r1",
+      "subject": "DCNN",
+      "question_quote": "How does DCNN initialize neuron biases in different layers, and why does it use positive biases in selected layers?",
+      "need": "How does DCNN initialize neuron biases in different layers, and why does it use positive biases in selected layers?"
+    }
+  ],
+  "assessment": [
+    {
+      "id": "r1",
+      "status": "supported",
+      "supported_part": "DCNN将第二、第四、第五卷积层以及全连接隐藏层的神经元偏置初始化为常数1，其余层初始化为常数0；使用正偏置的原因是在早期学习阶段为ReLU提供正输入以加速学习。",
+      "gap": "",
+      "evidence": [
+        {
+          "chunk_id": 177,
+          "quote": "We ini- tialized the neuron biases in the second, fourth, and fifth convolutional layers, as well as in the fully connected hidden layers, with the constant 1. This initialization accelerates the early stages of learning by providing the ReLUs with positive inputs."
+        },
+        {
+          "chunk_id": 178,
+          "quote": "We initialized the neuron biases in the remaining lay- ers with the constant 0."
+        }
+      ]
+    }
+  ],
+  "halt_reason": "answer_ready",
+  "passages": [
+    {
+      "citation": 1,
+      "chunk_id": 177,
+      "source": "DCNN.pdf",
+      "page": 5,
+      "title": "DCNN",
+      "text": "We initialized the weights in each layer from a zero-mean Gaussian distribution with standard deviation 0.01. We ini- tialized the neuron biases in the second, fourth, and fifth convolutional layers, as well as in the fully connected hidden layers, with the constant 1. This initialization accelerates the early stages of learning by providing the ReLUs with positive inputs.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 2,
+      "chunk_id": 178,
+      "source": "DCNN.pdf",
+      "page": 5,
+      "title": "DCNN",
+      "text": "We initialized the neuron biases in the remaining lay- ers with the constant 0. We used an equal learning rate for all layers, which we adjusted manually throughout training. The heuristic which we followed was to divide the learning rate by 10 when the vali- dation error rate stopped improving with the current learning rate. The learning rate was initialized at 0.01 and reduced three times prior to termination.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 3,
+      "chunk_id": 139,
+      "source": "DCNN.pdf",
+      "page": 3,
+      "title": "DCNN",
+      "text": "The parallelization scheme that we employ essentially puts half of the kernels (or neurons) on each GPU, with one addi- tional trick: the GPUs communicate only in certain layers. This means that, for example, the kernels of layer 3 take input from all kernel maps in layer 2. However, kernels in layer 4 take input only from those kernel maps in layer 3 which reside on the same GPU.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 4,
+      "chunk_id": 173,
+      "source": "DCNN.pdf",
+      "page": 5,
+      "title": "DCNN",
+      "text": "This technique reduces complex co adaptations of neurons, since a neuron cannot rely on the presence of particular other neurons. It is, therefore, forced to learn more robust features that are useful in conjunction with many different random subsets of the other neurons. At test time, we use all the neu- rons but multiply their outputs by 0.5, which is a reasonable approximation to taking the geometric mean of the predic- tive distributions produced by the exponentially-many drop- out networks.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 5,
+      "chunk_id": 156,
+      "source": "DCNN.pdf",
+      "page": 4,
+      "title": "DCNN",
+      "text": "The kernels of the second, fourth, and fifth convolutional layers are connected only to those kernel maps in the previous layer which reside on the same GPU (see Figure 2). The ker- nels of the third convolutional layer are connected to all ker- nel maps in the second layer. The neurons in the fully-connected layers are connected to all neurons in the previous layer. Response-normalization layers follow the first and second convolutional layers.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 6,
+      "chunk_id": 144,
+      "source": "DCNN.pdf",
+      "page": 3,
+      "title": "DCNN",
+      "text": "This sort of response normalization implements a form of lateral inhibi- tion inspired by the type found in real neurons, creating com- petition for big activities among neuron outputs computed 40 using different kernels.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 7,
+      "chunk_id": 152,
+      "source": "DCNN.pdf",
+      "page": 4,
+      "title": "DCNN",
+      "text": "The network’s input is 150,528-dimensional, and the number of neurons in the network’s remaining layers is given by 290,400–186,624– 64,896–64,896–43,264–4096–4096–1000. 3 5 3 5 3 11 48 11 128 27 55 13 3 5 3 224 5 13 27 3 11 3 55 11 Max Max 224 Stride 128 pooling pooling of 4 3 48 pooling.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 8,
+      "chunk_id": 102,
+      "source": "DCNN.pdf",
+      "page": 1,
+      "title": "DCNN",
+      "text": "On the test data, we achieved top-1 and top-5 error rates of 37.5% and 17.0%, respectively, which is considerably better than the previous state-of-the-art. The neural network, which has 60 million parameters and 650,000 neurons, con- sists of five convolutional layers, some of which are followed by max-pooling layers, and three fully connected layers with a final 1000-way softmax.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 9,
+      "chunk_id": 147,
+      "source": "DCNN.pdf",
+      "page": 3,
+      "title": "DCNN",
+      "text": "4.4. Overlapping pooling Pooling layers in CNNs summarize the outputs of neighbor- ing groups of neurons in the same kernel map. Traditionally, the neighborhoods summarized by adjacent pooling units do not overlap (e.g., Refs.5, 13, 20). To be more precise, a pooling layer can be thought of as consisting of a grid of pooling units spaced s pixels apart, each summarizing a neighborhood of size z × z centered at the location of the pooling unit.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 10,
+      "chunk_id": 121,
+      "source": "DCNN.pdf",
+      "page": 2,
+      "title": "DCNN",
+      "text": "We wrote a highly optimized GPU implementation of 2D convolution and all the other opera- tions inherent in training CNNs, which we make available publicly.a Our network contains a number of new and unusual features which improve its performance and reduce its training time, which are detailed in Section 4. The size of our network made overfitting a significant problem, even with 1.2 million labeled training examples, so we used several effective techniques for preventing overfitting, which are described in Section 5. Our final network contains five convo- lutional and three fully connected layers, and this depth seems to be important: we found that removing any convolu- tional layer (each of which contains no more than 1% of the model’s parameters) resulted in inferior performance.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 11,
+      "chunk_id": 155,
+      "source": "DCNN.pdf",
+      "page": 4,
+      "title": "DCNN",
+      "text": "Our net- work maximizes the multinomial logistic regression objective, which is equivalent to maximizing the average across training cases of the log-probability of the correct label under the prediction distribution.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 12,
+      "chunk_id": 151,
+      "source": "DCNN.pdf",
+      "page": 4,
+      "title": "DCNN",
+      "text": "Figure 2. An illustration of the architecture of our CNN, explicitly showing the delineation of responsibilities between the two GPUs. One GPU runs the layer-parts at the top of the figure while the other runs the layer-parts at the bottom. The GPUs communicate only at certain layers.",
+      "kb_version": "all-papers-8-20261020"
+    }
+  ]
+}

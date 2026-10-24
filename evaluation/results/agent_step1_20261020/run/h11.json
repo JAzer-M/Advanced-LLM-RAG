@@ -1,0 +1,68 @@
+{
+  "id": "h11",
+  "query": "Using only the supplied eight-paper corpus, what training-data size and hidden-state dimension are specified for the Mamba model in the Mamba paper?",
+  "kb_version": "all-papers-8-20261020",
+  "status": "completed",
+  "actions_executed": 0,
+  "semantic_correctness": "requires_manual_review",
+  "plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "Mamba model",
+        "need": "确定 Mamba 模型中指定的 training-data size",
+        "question_quote": "what training-data size and hidden-state dimension are specified for the Mamba model"
+      },
+      {
+        "id": "r2",
+        "subject": "Mamba model",
+        "need": "确定 Mamba 模型中指定的 hidden-state dimension",
+        "question_quote": "what training-data size and hidden-state dimension are specified for the Mamba model"
+      },
+      {
+        "id": "r3",
+        "subject": "Mamba paper",
+        "need": "确认所依据的是 supplied eight-paper corpus 中的 Mamba paper",
+        "question_quote": "Using only the supplied eight-paper corpus"
+      }
+    ]
+  },
+  "assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "missing",
+        "evidence": [],
+        "reason": "所给段落中没有任何关于 Mamba 模型的 training-data size 的内容；涉及训练数据规模的段落均出自 Self-RAG 等其他论文。",
+        "gap": "缺少 Mamba 论文中关于 training-data size 的说明。"
+      },
+      {
+        "id": "r2",
+        "status": "missing",
+        "evidence": [],
+        "reason": "所给段落中没有关于 Mamba 模型 hidden-state dimension 的内容；chunk 467 中的 hidden dimension 属于 DPR 的 BERT 表示，与 Mamba 无关。",
+        "gap": "缺少 Mamba 论文中关于 hidden-state dimension 的说明。"
+      },
+      {
+        "id": "r3",
+        "status": "missing",
+        "evidence": [],
+        "reason": "inventory 中的八篇论文不包含 Mamba 论文，所给段落也没有任何 Mamba 论文内容。",
+        "gap": "supplied eight-paper corpus 中不存在 Mamba 论文。"
+      }
+    ],
+    "next_action": {
+      "type": "stop",
+      "reason": "所请求的 Mamba 论文不在提供的八篇论文清单中，本地工具无法确定其 training-data size 与 hidden-state dimension。",
+      "requirement_ids": [
+        "r1",
+        "r2",
+        "r3"
+      ],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    }
+  },
+  "elapsed_seconds": 4.57
+}

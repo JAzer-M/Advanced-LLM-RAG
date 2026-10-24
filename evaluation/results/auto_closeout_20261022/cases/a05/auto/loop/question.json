@@ -1,0 +1,231 @@
+{
+  "id": "question",
+  "query": "What training batch size and learning rate are reported for the main DPR retriever and for ColBERT fine-tuning?",
+  "kb_version": "all-papers-8-20261020",
+  "status": "completed",
+  "actions_executed": 0,
+  "semantic_correctness": "requires_manual_review",
+  "plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "main DPR retriever",
+        "question_quote": "What training batch size and learning rate are reported for the main DPR retriever",
+        "need": "What training batch size and learning rate are reported for the main DPR retriever"
+      },
+      {
+        "id": "r2",
+        "subject": "ColBERT fine-tuning",
+        "question_quote": "and for ColBERT fine-tuning?",
+        "need": "and for ColBERT fine-tuning?"
+      }
+    ]
+  },
+  "validation_repairs": [
+    {
+      "phase": "assess",
+      "error": "gap must be a nonempty string."
+    }
+  ],
+  "assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 435,
+            "quote": "The DPR model used in our main experiments is trained using the in-batch negative setting (Sec- tion 3.2) with a batch size of 128 and one additional BM25 negative passage per question."
+          },
+          {
+            "chunk_id": 436,
+            "quote": "We trained the question and passage encoders for up to 40 epochs for large datasets (NQ, TriviaQA, SQuAD) and 100 epochs for small datasets (TREC, WQ), with a learning rate of 10−5 using Adam, linear scheduling with warm-up and dropout rate 0.1."
+          }
+        ],
+        "supported_part": "主实验所用DPR检索器的训练批次大小为128，学习率为10−5。",
+        "reason": "chunk 435明确给出主实验DPR模型的批次大小为128；chunk 436给出问题与段落编码器训练的学习率为10−5，覆盖该需求的两项要素。",
+        "gap": ""
+      },
+      {
+        "id": "r2",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 641,
+            "quote": "Similar to [25], we ﬁne-tune all ColBERT models with learning rate 3 × 10−6 with a batch size 32."
+          }
+        ],
+        "supported_part": "ColBERT微调使用学习率3×10−6、批次大小32。",
+        "reason": "chunk 641直接陈述ColBERT所有模型的微调学习率与批次大小。",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "answer",
+      "reason": "两个需求的批次大小与学习率均已由原文段落建立。",
+      "requirement_ids": [],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "引文均落在各自需求的批次大小与学习率范围内，未引入额外条件。"
+    }
+  },
+  "steps": [],
+  "evidence_after": [
+    {
+      "chunk_id": 641,
+      "source": "2004.12832v2.pdf",
+      "page": 6,
+      "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+      "text": "Similar to [25], we ﬁne-tune all ColBERT models with learning rate 3 × 10−6 with a batch size 32. We ﬁx the number of embeddings per query at Nq = 32. We set our ColBERT embedding dimension m to be 128; §4.5 demonstrates ColBERT’s robustness to a wide range of embedding dimensions. For MS MARCO, we initialize the BERT components of the Col- BERT query and document encoders using Google’s oﬃcial pre- trained BERTbase model. Further, we train all models for 200k itera- tions.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 435,
+      "source": "2004.04906v3.pdf",
+      "page": 5,
+      "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+      "text": "See text for more details. traditional retrieval methods, the effects of different training schemes and the run-time efﬁciency. The DPR model used in our main experiments is trained using the in-batch negative setting (Sec- tion 3.2) with a batch size of 128 and one additional BM25 negative passage per question.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 613,
+      "source": "2004.12832v2.pdf",
+      "page": 5,
+      "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+      "text": "Õ j ∈[|Ed |] Eqi · ET Sq,d := max dj i ∈[|Eq |] ColBERT is diﬀerentiable end-to-end. We ﬁne-tune the BERT encoders and train from scratch the additional parameters (i.e., the linear layer and the [Q] and [D] markers’ embeddings) using the Adam [16] optimizer. Notice that our interaction mechanism has no trainable parameters.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 254,
+      "source": "VGG.pdf",
+      "page": 4,
+      "title": "VGG",
+      "text": "The batch size was set to 256, momentum to 0.9. The training was regularised by weight decay (the L2 penalty multiplier set to 5·10−4) and dropout regularisation for the ﬁrst two fully-connected layers (dropout ratio set to 0.5). The learning rate was initially set to 10−2, and then decreased by a factor of 10 when the validation set accuracy stopped improving. In total, the learning rate was decreased 3 times, and the learning was stopped after 370K iterations (74 epochs).",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 643,
+      "source": "2004.12832v2.pdf",
+      "page": 6,
+      "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+      "text": "Tey release their BERTlarge pre-trained model, which we ﬁne-tune for ColBERT’s experiments on TREC CAR. Since ﬁne- tuning this model is signiﬁcantly slower than BERTbase, we train on TREC CAR for only 125k iterations.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 538,
+      "source": "2004.04906v3.pdf",
+      "page": 12,
+      "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+      "text": "Speciﬁcally, we get top 100 passages for each question in a mini-batch and use the method similar to in-batch negative training: all retrieved passages’ vectors participate in the loss calculation for all questions in a batch. Our training batch size is set to 16, which effectively gives 1,600 passages per question to calculate retriever loss. The reader still uses 24 passages per question, which are selected",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 334,
+      "source": "VGG.pdf",
+      "page": 10,
+      "title": "VGG",
+      "text": "We trained two localisation models, each on a single scale: S = 256 and S = 384 (due to the time constraints, we did not use training scale jittering for our ILSVRC-2014 submission). Training was initialised with the corresponding classiﬁcation models (trained on the same scales), and the initial learning rate was set to 10−3. We explored both ﬁne-tuning all layers and ﬁne-tuning only the ﬁrst two fully-connected layers, as done in (Sermanet et al., 2014).",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 434,
+      "source": "2004.04906v3.pdf",
+      "page": 5,
+      "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+      "text": "Training Retriever Top-20 NQ TriviaQA WQ None BM25 59.1 66.9 55.0 78.4 79.4 73.2 DPR Single BM25 + DPR 76.6 79.8 71.0 79.4 75.0 DPR 78.8 Multi 79.9 BM25 + DPR 78.0 74.7 Table 2: Top-20 & Top-100 retrieval accuracy on test sets, measured as the percentage of top 20/100 retrieved passages that contain the answer. Single and Multi denote that our Dense Passage Retriever (DPR) was trained using individial or combined training datasets (all the datasets excluding SQuAD).",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 436,
+      "source": "2004.04906v3.pdf",
+      "page": 5,
+      "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+      "text": "We trained the question and passage encoders for up to 40 epochs for large datasets (NQ, TriviaQA, SQuAD) and 100 epochs for small datasets (TREC, WQ), with a learning rate of 10−5 using Adam, linear scheduling with warm-up and dropout rate 0.1. While it is good to have the ﬂexibility to adapt the retriever to each dataset, it would also be de- sirable to obtain a single retriever that works well across the board.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 262,
+      "source": "VGG.pdf",
+      "page": 4,
+      "title": "VGG",
+      "text": "In our experiments, we evaluated models trained at two ﬁxed scales: S = 256 (which has been widely used in the prior art (Krizhevsky et al., 2012; Zeiler & Fergus, 2013; Sermanet et al., 2014)) and S = 384. Given a ConvNet conﬁguration, we ﬁrst trained the network using S = 256. To speed-up training of the S = 384 network, it was initialised with the weights pre-trained with S = 256, and we used a smaller initial learning rate of 10−3. The second approach to setting S is multi-scale training, where each training image is individually rescaled by randomly sampling S from a certain range [Smin, Smax] (we used Smin = 256 and Smax = 512).",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 640,
+      "source": "2004.12832v2.pdf",
+      "page": 6,
+      "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+      "text": "Tis amounts to roughly 3M queries generated by concatenating the title of a Wikipedia page with the heading of one of its sections. Tat section’s passages are marked as relevant to the corresponding query. Our evaluation is conducted on the test set used in TREC 2017 CAR, which contains 2,254 queries. Implementation. Our ColBERT models are implemented 4.1.2 using Python 3 and PyTorch 1. We use the popular transformers5 library for the pre-trained BERT model.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 536,
+      "source": "2004.04906v3.pdf",
+      "page": 12,
+      "title": "Dense Passage Retrieval for Open-Domain Question Answering",
+      "text": "The salient phrase “Thoros of Myr” is critical, and DPR is unable to capture it. D Joint Training of Retriever and Reader We ﬁx the passage encoder in our joint-training scheme while allowing only the question encoder to receive backpropagation signal from the com- bined (retriever + reader) loss function. This allows us to leverage the HNSW-based FAISS index for efﬁcient low-latency retrieving, without reindexing the passages during model updates.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "chunk_id": 333,
+      "source": "VGG.pdf",
+      "page": 10,
+      "title": "VGG",
+      "text": "Apart from the last bounding box prediction layer, we use the ConvNet architecture D (Table 1), which contains 16 weight layers and was found to be the best-performing in the classiﬁcation task (Sect. Training of localisation ConvNets is similar to that of the classiﬁcation ConvNets (Sect. The main difference is that we replace the logistic regression objective with a Euclidean loss, which penalises the deviation of the predicted bounding box parameters from the ground-truth.",
+      "kb_version": "all-papers-8-20261020"
+    }
+  ],
+  "halt_reason": "answer_ready",
+  "final_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 435,
+            "quote": "The DPR model used in our main experiments is trained using the in-batch negative setting (Sec- tion 3.2) with a batch size of 128 and one additional BM25 negative passage per question."
+          },
+          {
+            "chunk_id": 436,
+            "quote": "We trained the question and passage encoders for up to 40 epochs for large datasets (NQ, TriviaQA, SQuAD) and 100 epochs for small datasets (TREC, WQ), with a learning rate of 10−5 using Adam, linear scheduling with warm-up and dropout rate 0.1."
+          }
+        ],
+        "supported_part": "主实验所用DPR检索器的训练批次大小为128，学习率为10−5。",
+        "reason": "chunk 435明确给出主实验DPR模型的批次大小为128；chunk 436给出问题与段落编码器训练的学习率为10−5，覆盖该需求的两项要素。",
+        "gap": ""
+      },
+      {
+        "id": "r2",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 641,
+            "quote": "Similar to [25], we ﬁne-tune all ColBERT models with learning rate 3 × 10−6 with a batch size 32."
+          }
+        ],
+        "supported_part": "ColBERT微调使用学习率3×10−6、批次大小32。",
+        "reason": "chunk 641直接陈述ColBERT所有模型的微调学习率与批次大小。",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "answer",
+      "reason": "两个需求的批次大小与学习率均已由原文段落建立。",
+      "requirement_ids": [],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "引文均落在各自需求的批次大小与学习率范围内，未引入额外条件。"
+    }
+  },
+  "elapsed_seconds": 8.201
+}

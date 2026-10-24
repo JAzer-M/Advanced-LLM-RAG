@@ -1,0 +1,113 @@
+{
+  "question": "Using only the supplied corpus, what training-token count and context-window length are specified for Mistral 7B in the Mistral 7B paper?",
+  "requirements": [
+    {
+      "id": "r1",
+      "subject": "Mistral 7B",
+      "question_quote": "what training-token count and context-window length are specified for Mistral 7B in the Mistral 7B paper?",
+      "need": "what training-token count and context-window length are specified for Mistral 7B in the Mistral 7B paper?"
+    }
+  ],
+  "assessment": [
+    {
+      "id": "r1",
+      "status": "missing",
+      "supported_part": "",
+      "gap": "缺少 Mistral 7B 论文中关于训练 token 数量和上下文窗口长度的具体数值。",
+      "evidence": []
+    }
+  ],
+  "halt_reason": "model_stop",
+  "passages": [
+    {
+      "citation": 1,
+      "chunk_id": 767,
+      "source": "2005.11401v4.pdf",
+      "page": 4,
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "text": "The task consists of questions, ten gold passages retrieved from a search engine for each question, and a full sentence answer annotated from the retrieved passages. We do not use the supplied passages, only the questions and answers, to treat",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 2,
+      "chunk_id": 1127,
+      "source": "2310.11511v1.pdf",
+      "page": 19,
+      "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+      "text": "B EXPERIMENTAL DETAILS B.1 MORE DETAILS OF TRAINING More details of training and computations. We use 4 Nvidia A100 with 80GB memory to train our models. All models are trained for 3 epochs with a batch size of 128, a peak learning rate of 2e-5 with 3% warmup steps, and linear decay afterward. We set the maximum token length to be 2,048 for the 7B model, and 1,524 for the 13B model due to the memory constraint.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 3,
+      "chunk_id": 1024,
+      "source": "2310.11511v1.pdf",
+      "page": 9,
+      "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+      "text": "PQA Med AS (acc) (acc) (em) SELF-RAG (50k) 45.5 73.5 32.1 Training No Retriever R 43.6 67.8 31.0 No Critic C 42.6 72.0 18.1 Test No retrieval 24.7 73.0 – Hard constraints 28.3 72.6 – Retrieve top1 41.8 73.1 28.6 Remove ISSUP 44.1 73.2 30.6 (a) Ablation 1 2 70.0 70.5 Precision 1 2 Weight for IsSupport 90 95 Mauve (b) Customization 0.0 0.2 0.4 0.6 0.98 0.99 0.99 1.00 Accuracy PubHealth 0.0 0.2 0.4 0.6 Retrieval Threshold 0.6 0.8 1.0 Accuracy PopQA 0.0 0.5 1.0 Frequency 0.25 0.50 0.75 1.00 Frequency (c) Retrieval Figure 3: Analysis on SELF-RAG: (a) Ablation studies for key components of SELF-RAG training and inference based on our 7B model.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 4,
+      "chunk_id": 988,
+      "source": "2310.11511v1.pdf",
+      "page": 5,
+      "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+      "text": "See the example training data in Figure 2. Generator learning. We train the generator model M by training on the curated corpus augmented with reflection tokens Dgen using the standard next token objective: max M E(x,y,r)∼Dgen log pM(y, r|x). (2) Unlike C training (Eq. 1), M learns to predict the target output as well as the reflection tokens.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 5,
+      "chunk_id": 973,
+      "source": "2310.11511v1.pdf",
+      "page": 4,
+      "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+      "text": "We train C to generate reflection tokens for evaluating retrieved passages and the quality of a given task output (Section 3.2.1). Using the critic model, we update the training corpus by inserting reflection tokens into task outputs offline. Subsequently, we train the final generator model (M) using the conventional LM objective (Section 3.2.2) to enable M to generate reflection tokens by itself without relying on the critic at inference time.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 6,
+      "chunk_id": 1017,
+      "source": "2310.11511v1.pdf",
+      "page": 8,
+      "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+      "text": "Short-form Closed-set Long-form generations (with citations) PopQA TQA Pub ARC Bio ASQA LM (acc) (acc) (acc) (acc) (FS) (em) (rg) (mau) (pre) (rec) LMs with proprietary data Llama2-c13B 20.0 59.3 49.4 38.4 55.9 22.4 29.6 28.6 – – Ret-Llama2-c13B 51.8 59.8 52.1 37.9 79.9 32.8 34.8 43.8 19.8 36.1 ChatGPT 29.3 74.3 70.1 75.3 71.8 35.3 36.2 68.8 – – Ret-ChatGPT 50.8 65.7 54.7 75.3 – 40.7 39.9 79.7 65.1 76.6 Perplexity.ai – – – – 71.2 – – – – – Baselines without retrieval Llama27B 14.7 30.5 34.2 21.8 44.5 7.9 15.3 19.0 – – Alpaca7B 23.6 54.5 49.8 45.0 45.8 18.8 29.4 61.7 – – Llama213B 14.7 38.5 29.4 29.4 53.4 7.2 12.4 16.0 – – Alpaca13B 24.4 61.3 55.5 54.9 50.2 22.9 32.0 70.6 – – CoVE65B * – – – – 71.2 – – – – – Baselines with retrieval Toolformer*6B – 48.8 – – – – – – – – Llama27B 38.2 42.5 30.0 48.0 78.0 15.2 22.1 32.0 2.9 4.0 Alpaca7B 46.7 64.1 40.2 48.0 76.6 30.9 33.3 57.9 5.5 7.2 Llama2-FT7B 48.7 57.3 64.3 65.8 78.2 31.0 35.8 51.2 5.0 7.5 SAIL*7B – – 69.2 48.4 – – – – – – Llama213B 45.7 47.0 30.2 26.0 77.5 16.3 20.5 24.7 2.3 3.6 Alpaca13B 46.1 66.9 51.1 57.6 77.7 34.8 36.7 56.6 2.0 3.8 Our SELF-RAG 7B 54.9 66.4 72.4 67.3 81.2 30.0 35.7 74.3 66.9 67.8 Our SELF-RAG 13B 55.8 69.3 74.5 73.1 80.2 31.7 37.0 71.6 70.3 71.3",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 7,
+      "chunk_id": 63,
+      "source": "Attention is all you need.pdf",
+      "page": 7,
+      "title": "Attention is All you Need",
+      "text": "Sentences were encoded using byte-pair encoding [3], which has a shared source- target vocabulary of about 37000 tokens. For English-French, we used the signiﬁcantly larger WMT 2014 English-French dataset consisting of 36M sentences and split tokens into a 32000 word-piece vocabulary [31]. Sentence pairs were batched together by approximate sequence length. Each training batch contained a set of sentence pairs containing approximately 25000 source tokens and 25000 target tokens.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 8,
+      "chunk_id": 752,
+      "source": "2005.11401v4.pdf",
+      "page": 3,
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "text": "2.4 Training We jointly train the retriever and generator components without any direct supervision on what document should be retrieved. Given a ﬁne-tuning training corpus of input/output pairs (xj, yj), we",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 9,
+      "chunk_id": 1034,
+      "source": "2310.11511v1.pdf",
+      "page": 9,
+      "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+      "text": "We analyze the effects of different parameter weights on the top of our 7B model during inference time on ASQA, where multiple evaluation aspects are considered. Figure 3b shows the effects of changing the weighting term for ISSUP , which criticizes how supported the output is by the text passage. As the figure shows, increasing the weight leads to positive effects on the models’ citation precision since this puts more emphasis on whether model generation is supported by the evidence.",
+      "kb_version": "all-papers-8-20261020"
+    },
+    {
+      "citation": 10,
+      "chunk_id": 1262,
+      "source": "2401.15884v3.pdf",
+      "page": 4,
+      "title": "Corrective Retrieval Augmented Generation",
+      "text": "Compared with the critic model of Self-RAG (Asai et al., 2024) that instruction- tuned LLaMA-2 (7B), the evaluator designed in CRAG demonstrates the advantages of being quite lightweight (0.77B).",
+      "kb_version": "all-papers-8-20261020"
+    }
+  ]
+}

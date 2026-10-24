@@ -1,0 +1,335 @@
+[
+  {
+    "id": "h01",
+    "type": "single_document",
+    "question": "What label-smoothing value does Attention Is All You Need use, and how does the paper say it affects perplexity versus accuracy and BLEU?",
+    "gold_evidence": [
+      {
+        "source": "Attention is all you need.pdf",
+        "page": 8,
+        "quote": "we employed label smoothing of value"
+      },
+      {
+        "source": "Attention is all you need.pdf",
+        "page": 8,
+        "quote": "This hurts perplexity"
+      }
+    ],
+    "reference_points": [
+      "Label smoothing epsilon is 0.1.",
+      "It hurts perplexity (the model is more unsure) but improves accuracy and BLEU."
+    ],
+    "novelty_vs_previous_46": "Regularization and metric tradeoff; no old question asked label smoothing.",
+    "gold_chunk_ids_at_freeze": [
+      69,
+      70
+    ]
+  },
+  {
+    "id": "h02",
+    "type": "single_document",
+    "question": "In CRAG knowledge refinement, how are knowledge strips formed, filtered, and recomposed after a document is judged relevant?",
+    "gold_evidence": [
+      {
+        "source": "2401.15884v3.pdf",
+        "page": 6,
+        "quote": "If a retrieved result is as short as one or two sentences"
+      },
+      {
+        "source": "2401.15884v3.pdf",
+        "page": 6,
+        "quote": "irrelevant knowledge strips are filtered out"
+      }
+    ],
+    "reference_points": [
+      "A one- or two-sentence result is a strip; longer results are split into smaller units of a few sentences according to length.",
+      "The fine-tuned retrieval evaluator scores the relevance of each strip and filters irrelevant strips.",
+      "Relevant strips are concatenated in their original order to form internal knowledge."
+    ],
+    "novelty_vs_previous_46": "Within-document refinement; old CRAG questions covered document-level judgments, actions, or external sources.",
+    "gold_chunk_ids_at_freeze": [
+      1279,
+      1280
+    ]
+  },
+  {
+    "id": "h03",
+    "type": "single_document",
+    "question": "What batching and text-preprocessing optimizations does ColBERT use to reduce padding and WordPiece tokenization overhead during offline indexing?",
+    "gold_evidence": [
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 5,
+        "quote": "It sorts these documents by length"
+      },
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 5,
+        "quote": "we parallelize the pre-processing across the available CPU cores"
+      }
+    ],
+    "reference_points": [
+      "Documents are sorted by length in groups and encoded in batches of comparable lengths, padding only to the batch maximum.",
+      "Independent text preprocessing, especially WordPiece tokenization, is parallelized across CPU cores."
+    ],
+    "novelty_vs_previous_46": "Indexing throughput mechanisms; old questions asked what representations are precomputed, not bucketing or CPU preprocessing.",
+    "gold_chunk_ids_at_freeze": [
+      616,
+      618
+    ]
+  },
+  {
+    "id": "h04",
+    "type": "single_document",
+    "question": "For dense evaluation of an uncropped test image, how does VGG convert its fully connected layers, and how does it reduce the output to final image-level class scores?",
+    "gold_evidence": [
+      {
+        "source": "VGG.pdf",
+        "page": 5,
+        "quote": "the last two FC layers to 1 × 1 conv."
+      },
+      {
+        "source": "VGG.pdf",
+        "page": 5,
+        "quote": "the class score map is spatially averaged"
+      }
+    ],
+    "reference_points": [
+      "Convert the first fully connected layer to a 7x7 convolution and the final two to 1x1 convolutions, then apply the network to the whole uncropped image.",
+      "Spatially average (sum-pool, in the paper wording) the class score map to a fixed-size vector.",
+      "Average softmax class posteriors of the original and horizontally flipped images."
+    ],
+    "novelty_vs_previous_46": "Dense inference and aggregation; old VGG questions covered filters, pooling, training, and dropout.",
+    "gold_chunk_ids_at_freeze": [
+      266,
+      267
+    ]
+  },
+  {
+    "id": "h05",
+    "type": "cross_document",
+    "question": "How does VGG initialize deeper configurations from configuration A, and how does this differ from the per-layer weight initialization reported in DCNN?",
+    "gold_evidence": [
+      {
+        "source": "VGG.pdf",
+        "page": 4,
+        "quote": "we initialised the ﬁrst four convolutional layers"
+      },
+      {
+        "source": "DCNN.pdf",
+        "page": 5,
+        "quote": "We initialized the weights in each layer from a zero-mean Gaussian distribution"
+      }
+    ],
+    "reference_points": [
+      "VGG first trains the shallower configuration A with random initialization, then copies its first four convolutional and last three fully connected layers into deeper networks; intermediate layers are random.",
+      "The copied VGG layers continue learning without a reduced learning rate.",
+      "DCNN initializes weights in each layer from a zero-mean Gaussian with standard deviation 0.01."
+    ],
+    "novelty_vs_previous_46": "Initialization transfer versus independent random initialization; old comparison asked optimizer batch/momentum/weight decay.",
+    "gold_chunk_ids_at_freeze": [
+      177,
+      256
+    ]
+  },
+  {
+    "id": "h06",
+    "type": "cross_document",
+    "question": "How do DCNN and VGG distribute training across multiple GPUs, and how do the GPUs exchange information in each scheme?",
+    "gold_evidence": [
+      {
+        "source": "DCNN.pdf",
+        "page": 3,
+        "quote": "puts half of the kernels (or neurons) on each GPU"
+      },
+      {
+        "source": "VGG.pdf",
+        "page": 5,
+        "quote": "Multi-GPU training exploits data parallelism"
+      }
+    ],
+    "reference_points": [
+      "DCNN places roughly half the kernels/neurons on each of two GPUs; communication is restricted to selected layers (layer 3 sees both GPUs, layer 4 only its own).",
+      "VGG uses data parallelism by splitting each image batch into GPU batches.",
+      "VGG synchronously averages GPU gradients to obtain the full-batch gradient, equivalent to the single-GPU computation."
+    ],
+    "novelty_vs_previous_46": "Parallelization and synchronization; no previous question asked model versus data parallelism.",
+    "gold_chunk_ids_at_freeze": [
+      139,
+      273
+    ]
+  },
+  {
+    "id": "h07",
+    "type": "cross_document",
+    "question": "How does the learning-rate schedule in Attention Is All You Need differ from DCNN, including what triggers the decrease in each paper?",
+    "gold_evidence": [
+      {
+        "source": "Attention is all you need.pdf",
+        "page": 7,
+        "quote": "increasing the learning rate linearly for the ﬁrst warmup_steps training steps"
+      },
+      {
+        "source": "DCNN.pdf",
+        "page": 5,
+        "quote": "divide the learning rate by 10"
+      }
+    ],
+    "reference_points": [
+      "Transformer increases the learning rate linearly during 4000 warmup steps.",
+      "After warmup Transformer decreases learning rate proportionally to inverse square root of step number.",
+      "DCNN manually divides the learning rate by 10 when validation error stops improving (starting at 0.01, reduced three times)."
+    ],
+    "novelty_vs_previous_46": "Learning-rate control; previous training comparison did not ask schedules or trigger conditions.",
+    "gold_chunk_ids_at_freeze": [
+      66,
+      178
+    ]
+  },
+  {
+    "id": "h08",
+    "type": "cross_document",
+    "question": "How does the DPR end-to-end QA system select its final answer, and how does its output constraint differ from the abstractive QA capability described in RAG?",
+    "gold_evidence": [
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 2,
+        "quote": "the answer is restricted to a span appearing in one or more"
+      },
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 7,
+        "quote": "the reader assigns a passage selection score to each passage"
+      },
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 7,
+        "quote": "is chosen as the ﬁnal answer"
+      },
+      {
+        "source": "2005.11401v4.pdf",
+        "page": 4,
+        "quote": "answer questions with free-form, abstractive text generation"
+      }
+    ],
+    "reference_points": [
+      "DPR uses an extractive reader and restricts answers to spans in retrieved passages.",
+      "The reader scores passages and spans, then chooses the best span from the passage with the highest passage-selection score.",
+      "RAG supports free-form abstractive answer generation beyond copying a passage span."
+    ],
+    "novelty_vs_previous_46": "Reader answer selection and output constraint; old DPR/RAG questions addressed encoders, training, and indexes.",
+    "gold_chunk_ids_at_freeze": [
+      396,
+      464,
+      465,
+      766
+    ]
+  },
+  {
+    "id": "h09",
+    "type": "cross_document",
+    "question": "How does the DPR paper combine BM25 and DPR scores, and how does ColBERT distinguish re-ranking another retriever's candidates from end-to-end collection retrieval?",
+    "gold_evidence": [
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 5,
+        "quote": "we obtain two initial sets of top-2000 passages"
+      },
+      {
+        "source": "2004.04906v3.pdf",
+        "page": 5,
+        "quote": "We used λ = 1.1"
+      },
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 5,
+        "quote": "ColBERT can be used for re-ranking the output"
+      },
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 5,
+        "quote": "index all document embeddings into faiss"
+      },
+      {
+        "source": "2004.12832v2.pdf",
+        "page": 5,
+        "quote": "the ﬁrst is an approximate stage aimed at ﬁltering"
+      }
+    ],
+    "reference_points": [
+      "DPR takes the union of top-2000 BM25 and top-2000 DPR passages and reranks by BM25(q,p) + lambda*sim(q,p), with lambda 1.1 selected on development accuracy.",
+      "ColBERT re-ranking scores candidates returned by another retriever, typically a term-based model.",
+      "ColBERT can alternatively retrieve directly from the full collection using a FAISS embedding index and approximate filtering followed by refinement."
+    ],
+    "novelty_vs_previous_46": "Lexical combination and candidate-generation modes; old DPR/ColBERT comparisons covered vector representation, loss, and encoder sharing.",
+    "gold_chunk_ids_at_freeze": [
+      437,
+      438,
+      619,
+      627,
+      628
+    ]
+  },
+  {
+    "id": "h10",
+    "type": "cross_document",
+    "question": "For short-answer open-domain QA, how does the correctness criterion reported by RAG differ from the criterion used by Self-RAG for PopQA and TriviaQA?",
+    "gold_evidence": [
+      {
+        "source": "2005.11401v4.pdf",
+        "page": 4,
+        "quote": "report Exact Match (EM) scores"
+      },
+      {
+        "source": "2310.11511v1.pdf",
+        "page": 7,
+        "quote": "whether gold answers are included in the model generations"
+      }
+    ],
+    "reference_points": [
+      "RAG reports Exact Match scores for its open-domain QA evaluation.",
+      "Self-RAG judges whether a gold answer is included in the generated text instead of strictly requiring exact matching; the raw scores therefore have different criteria."
+    ],
+    "novelty_vs_previous_46": "Evaluation criterion rather than architecture or retrieval control; no previous question asked this metric distinction.",
+    "gold_chunk_ids_at_freeze": [
+      765,
+      1003
+    ]
+  },
+  {
+    "id": "h11",
+    "type": "unanswerable",
+    "question": "Using only the supplied eight-paper corpus, what training-data size and hidden-state dimension are specified for the Mamba model in the Mamba paper?",
+    "gold_evidence": [],
+    "reference_points": [
+      "State that the Mamba paper/model specification is absent from this corpus and the two requested values cannot be established; do not guess numbers."
+    ],
+    "novelty_vs_previous_46": "An absent source/model specification, rather than a historical question about stock price or measured project latency.",
+    "unanswerable_rationale": "The inventory contains only Transformer, AlexNet/DCNN, VGG, RAG, DPR, ColBERT, Self-RAG, and CRAG. Mamba is not supplied; a full-PDF text scan for Mamba is recorded separately. Absence is corpus-scoped, not a claim about all literature.",
+    "gold_chunk_ids_at_freeze": []
+  },
+  {
+    "id": "h12",
+    "type": "unanswerable",
+    "question": "What exact ImageNet-1k top-1 accuracy did the original Transformer in Attention Is All You Need achieve under the same training protocol as VGG configuration D?",
+    "gold_evidence": [],
+    "reference_points": [
+      "Explain that the corpus does not report the requested controlled ImageNet experiment for the original Transformer; do not substitute a BLEU score, a VGG result, or a later vision Transformer result."
+    ],
+    "novelty_vs_previous_46": "False premise of a common cross-task experiment; prior unanswerable questions asked project timings or combined-method measurements.",
+    "unanswerable_rationale": "Attention Is All You Need reports translation and constituency parsing, not a controlled ImageNet classification run with VGG D. VGG reports its own visual recognition experiments; those do not establish an original-Transformer ImageNet score.",
+    "boundary_evidence": [
+      {
+        "source": "Attention is all you need.pdf",
+        "page": 8,
+        "quote": "On the WMT 2014 English-to-German translation task"
+      },
+      {
+        "source": "VGG.pdf",
+        "page": 1,
+        "quote": "ImageNet Challenge 2014 submission"
+      }
+    ],
+    "gold_chunk_ids_at_freeze": []
+  }
+]

@@ -1,0 +1,299 @@
+{
+  "query": "In Attention Is All You Need, which three transformations share a weight matrix, and how are those weights scaled in the embedding layers?",
+  "knowledge_base": {
+    "version": "all-papers-8-20261020",
+    "chunk_count": 1397,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/manifest.json",
+    "manifest_sha256": "9c4e2c26b4f11fe7baf526595630cbee2d325416ec0e497f417975fbd60779ef",
+    "files": {
+      "faiss.index": "ff1f4a3e38e20c0275ba79d805e6475639b3cea7a7a583f9c18c67ec8e40a2ed",
+      "chunks.json": "3e63d75abbe164ff8e135b1d66fd6b02d9479b2e037e289a726e7c542464593a"
+    }
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 191,
+    "global_top_ids": [
+      44,
+      42,
+      30,
+      33,
+      26,
+      22,
+      6,
+      15,
+      82,
+      40
+    ],
+    "protected_ids": [
+      44
+    ],
+    "sub_query_evidence": [
+      {
+        "query": "In Attention Is All You Need, which three transformations share a weight matrix?",
+        "top_ids": [
+          44,
+          42,
+          30
+        ]
+      },
+      {
+        "query": "In Attention Is All You Need, how are the weights scaled in the embedding layers?",
+        "top_ids": [
+          44,
+          26,
+          30
+        ]
+      }
+    ],
+    "retrieval_anchor_ids": [
+      44
+    ],
+    "evidence_completion": {
+      "requested_sources": [
+        "Attention is all you need.pdf"
+      ],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        44,
+        42,
+        30,
+        33,
+        26,
+        22,
+        6,
+        15,
+        82,
+        40
+      ],
+      "retained_local_ids": [
+        44,
+        42,
+        30,
+        26
+      ],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        44,
+        42,
+        30,
+        33,
+        26,
+        22,
+        6,
+        15,
+        82,
+        40
+      ],
+      "elapsed_seconds": 0.000901
+    }
+  },
+  "selected_ids": [
+    44,
+    42,
+    30,
+    33,
+    26,
+    22,
+    6,
+    15,
+    82,
+    40,
+    38
+  ],
+  "context": "[1] Source: Attention is all you need.pdf | Page: 5 | Section: None\nIn our model, we share the same weight matrix between the two embedding layers and the pre-softmax linear transformation, similar to [24]. In the embedding layers, we multiply those weights by √dmodel.\n\n[2] Source: Attention is all you need.pdf | Page: 5 | Section: None\nThis consists of two linear transformations with a ReLU activation in between. FFN(x) = max(0, xW1 + b1)W2 + b2 (2) While the linear transformations are the same across different positions, they use different parameters from layer to layer. Another way of describing this is as two convolutions with kernel size 1. The dimensionality of input and output is dmodel = 512, and the inner-layer has dimensionality dff = 2048.\n\n[3] Source: Attention is all you need.pdf | Page: 4 | Section: None\nquery with all keys, divide each by √dk, and apply a softmax function to obtain the weights on the values. In practice, we compute the attention function on a set of queries simultaneously, packed together into a matrix Q. The keys and values are also packed together into matrices K and V . We compute the matrix of outputs as: Attention(Q, K, V ) = softmax(QKT √dk )V (1) The two most commonly used attention functions are additive attention [2], and dot-product (multi- plicative) attention.\n\n[4] Source: Attention is all you need.pdf | Page: 4 | Section: None\n3.2.2 Multi-Head Attention Instead of performing a single attention function with dmodel-dimensional keys, values and queries, we found it beneﬁcial to linearly project the queries, keys and values h times with different, learned linear projections to dk, dk and dv dimensions, respectively. On each of these projected versions of queries, keys and values we then perform the attention function in parallel, yielding dv-dimensional output values.\n\n[5] Source: Attention is all you need.pdf | Page: 3 | Section: None\n3.2 Attention An attention function can be described as mapping a query and a set of key-value pairs to an output, where the query, keys, values, and output are all vectors. The output is computed as a weighted sum of the values, where the weight assigned to each value is computed by a compatibility function of the query with the corresponding key.\n\n[6] Source: Attention is all you need.pdf | Page: 2 | Section: None\nThe ﬁrst is a multi-head self-attention mechanism, and the second is a simple, position-\n\n[7] Source: Attention is all you need.pdf | Page: 1 | Section: None\nJakob proposed replacing RNNs with self-attention and started the effort to evaluate this idea. Ashish, with Illia, designed and implemented the ﬁrst Transformer models and has been crucially involved in every aspect of this work. Noam proposed scaled dot-product attention, multi-head attention and the parameter-free position representation and became the other person involved in nearly every detail.\n\n[8] Source: Attention is all you need.pdf | Page: 2 | Section: None\nIn the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as described in section 3.2. Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.\n\n[9] Source: Attention is all you need.pdf | Page: 9 | Section: None\nIn the former task our best model outperforms even all previously reported ensembles. We are excited about the future of attention-based models and plan to apply them to other tasks. We plan to extend the Transformer to problems involving input and output modalities other than text and to investigate local, restricted attention mechanisms to efﬁciently handle large inputs and outputs such as images, audio and video. Making generation less sequential is another research goals of ours.\n\n[10] Source: Attention is all you need.pdf | Page: 5 | Section: None\nWe need to prevent leftward information ﬂow in the decoder to preserve the auto-regressive property. We implement this inside of scaled dot-product attention by masking out (setting to −∞) all values in the input of the softmax which correspond to illegal connections.\n\n[11] Source: Attention is all you need.pdf | Page: 5 | Section: None\n3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+  "ledger": {
+    "citation_registry": [
+      {
+        "citation": 1,
+        "chunk_id": 44,
+        "source": "Attention is all you need.pdf",
+        "page": 5,
+        "title": "Attention is All you Need",
+        "text": "In our model, we share the same weight matrix between the two embedding layers and the pre-softmax linear transformation, similar to [24]. In the embedding layers, we multiply those weights by √dmodel.",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 2,
+        "chunk_id": 42,
+        "source": "Attention is all you need.pdf",
+        "page": 5,
+        "title": "Attention is All you Need",
+        "text": "This consists of two linear transformations with a ReLU activation in between. FFN(x) = max(0, xW1 + b1)W2 + b2 (2) While the linear transformations are the same across different positions, they use different parameters from layer to layer. Another way of describing this is as two convolutions with kernel size 1. The dimensionality of input and output is dmodel = 512, and the inner-layer has dimensionality dff = 2048.",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 3,
+        "chunk_id": 30,
+        "source": "Attention is all you need.pdf",
+        "page": 4,
+        "title": "Attention is All you Need",
+        "text": "query with all keys, divide each by √dk, and apply a softmax function to obtain the weights on the values. In practice, we compute the attention function on a set of queries simultaneously, packed together into a matrix Q. The keys and values are also packed together into matrices K and V . We compute the matrix of outputs as: Attention(Q, K, V ) = softmax(QKT √dk )V (1) The two most commonly used attention functions are additive attention [2], and dot-product (multi- plicative) attention.",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 4,
+        "chunk_id": 33,
+        "source": "Attention is all you need.pdf",
+        "page": 4,
+        "title": "Attention is All you Need",
+        "text": "3.2.2 Multi-Head Attention Instead of performing a single attention function with dmodel-dimensional keys, values and queries, we found it beneﬁcial to linearly project the queries, keys and values h times with different, learned linear projections to dk, dk and dv dimensions, respectively. On each of these projected versions of queries, keys and values we then perform the attention function in parallel, yielding dv-dimensional output values.",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 5,
+        "chunk_id": 26,
+        "source": "Attention is all you need.pdf",
+        "page": 3,
+        "title": "Attention is All you Need",
+        "text": "3.2 Attention An attention function can be described as mapping a query and a set of key-value pairs to an output, where the query, keys, values, and output are all vectors. The output is computed as a weighted sum of the values, where the weight assigned to each value is computed by a compatibility function of the query with the corresponding key.",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 6,
+        "chunk_id": 22,
+        "source": "Attention is all you need.pdf",
+        "page": 2,
+        "title": "Attention is All you Need",
+        "text": "The ﬁrst is a multi-head self-attention mechanism, and the second is a simple, position-",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 7,
+        "chunk_id": 6,
+        "source": "Attention is all you need.pdf",
+        "page": 1,
+        "title": "Attention is All you Need",
+        "text": "Jakob proposed replacing RNNs with self-attention and started the effort to evaluate this idea. Ashish, with Illia, designed and implemented the ﬁrst Transformer models and has been crucially involved in every aspect of this work. Noam proposed scaled dot-product attention, multi-head attention and the parameter-free position representation and became the other person involved in nearly every detail.",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 8,
+        "chunk_id": 15,
+        "source": "Attention is all you need.pdf",
+        "page": 2,
+        "title": "Attention is All you Need",
+        "text": "In the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as described in section 3.2. Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 9,
+        "chunk_id": 82,
+        "source": "Attention is all you need.pdf",
+        "page": 9,
+        "title": "Attention is All you Need",
+        "text": "In the former task our best model outperforms even all previously reported ensembles. We are excited about the future of attention-based models and plan to apply them to other tasks. We plan to extend the Transformer to problems involving input and output modalities other than text and to investigate local, restricted attention mechanisms to efﬁciently handle large inputs and outputs such as images, audio and video. Making generation less sequential is another research goals of ours.",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 10,
+        "chunk_id": 40,
+        "source": "Attention is all you need.pdf",
+        "page": 5,
+        "title": "Attention is All you Need",
+        "text": "We need to prevent leftward information ﬂow in the decoder to preserve the auto-regressive property. We implement this inside of scaled dot-product attention by masking out (setting to −∞) all values in the input of the softmax which correspond to illegal connections.",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 11,
+        "chunk_id": 38,
+        "source": "Attention is all you need.pdf",
+        "page": 5,
+        "title": "Attention is All you Need",
+        "text": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+        "kb_version": "all-papers-8-20261020"
+      }
+    ]
+  },
+  "status": "completed",
+  "mode": "agent",
+  "answer": "在《Attention Is All You Need》中，共享同一权重矩阵的三个变换是：两个嵌入层与pre-softmax线性变换；在嵌入层中，这些权重被乘以√dmodel[1]。",
+  "run_dir": "/Users/j/Desktop/Advanced-LLM-RAG/evaluation/results/auto_closeout_20261022/cases/a01/agent",
+  "initial_selected_ids": [
+    44,
+    42,
+    30,
+    33,
+    26,
+    22,
+    6,
+    15,
+    82,
+    40
+  ],
+  "agent": {
+    "decision_summary": {
+      "planned_cases": 1,
+      "completed_cases": 1,
+      "api_attempts": 2,
+      "failed_api_attempts": 0,
+      "automatic_retries": 0,
+      "actions_executed": 0,
+      "usage_missing_calls": [],
+      "reported_usage": {
+        "prompt_tokens": 3330,
+        "completion_tokens": 259,
+        "total_tokens": 3589
+      },
+      "proposed_actions": {
+        "question": {
+          "type": "answer",
+          "reason": "唯一需求已被支持的段落完整确立。",
+          "requirement_ids": [],
+          "query": null,
+          "source": null,
+          "chunk_id": null
+        }
+      },
+      "action_attempts": 0,
+      "reassessment_api_attempts": 0,
+      "reassessed_actions": {
+        "question": null
+      },
+      "final_answer_generations": 0,
+      "automatic_action_loop": true,
+      "validation_repair_attempts": 0,
+      "paused_cases": 0,
+      "halt_reasons": {
+        "question": "answer_ready"
+      }
+    },
+    "halt_reason": "answer_ready",
+    "actions_executed": 0,
+    "answer_summary": {
+      "question_id": "question",
+      "status": "completed",
+      "answer_status": "review_passed",
+      "api_attempts": 2,
+      "failed_api_attempts": 0,
+      "automatic_retries": 0,
+      "repair_attempted": false,
+      "usage_missing_calls": [],
+      "reported_usage": {
+        "prompt_tokens": 4385,
+        "completion_tokens": 259,
+        "total_tokens": 4644
+      },
+      "semantic_correctness": "requires_manual_review"
+    }
+  },
+  "api_summary": {
+    "attempts": 4,
+    "failed_attempts": 0,
+    "automatic_retries": 0,
+    "usage_missing_calls": [],
+    "reported_usage": {
+      "prompt_tokens": 7715,
+      "completion_tokens": 518,
+      "total_tokens": 8233
+    }
+  }
+}

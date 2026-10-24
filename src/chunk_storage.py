@@ -1,3 +1,5 @@
+# 分块 JSON 的基础读写；它与 FAISS 向量行必须配对，正式版本校验见 knowledge_base.py。
+
 import json
 from pathlib import Path
 

@@ -1,0 +1,804 @@
+{
+  "query": "How does RAG-Sequence's Thorough Decoding score a candidate absent from a document's beam, and how does Self-RAG use critique-token probabilities to score output segments?",
+  "decomposition": {
+    "needs_decomposition": true,
+    "sub_queries": [
+      "How does RAG-Sequence's Thorough Decoding score a candidate absent from a document's beam?",
+      "How does Self-RAG use critique-token probabilities to score output segments?"
+    ],
+    "status": "accepted",
+    "proposed_count": 2
+  },
+  "knowledge_base": {
+    "version": "all-papers-8-20261020",
+    "chunk_count": 1397,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/manifest.json",
+    "manifest_sha256": "9c4e2c26b4f11fe7baf526595630cbee2d325416ec0e497f417975fbd60779ef",
+    "files": {
+      "faiss.index": "ff1f4a3e38e20c0275ba79d805e6475639b3cea7a7a583f9c18c67ec8e40a2ed",
+      "chunks.json": "3e63d75abbe164ff8e135b1d66fd6b02d9479b2e037e289a726e7c542464593a"
+    }
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 219,
+    "global_top_ids": [
+      935,
+      945,
+      996,
+      946,
+      967,
+      968,
+      970,
+      934,
+      995,
+      994
+    ],
+    "protected_ids": [
+      756,
+      996
+    ],
+    "sub_query_evidence": [
+      {
+        "query": "How does RAG-Sequence's Thorough Decoding score a candidate absent from a document's beam?",
+        "top_ids": [
+          756,
+          757,
+          902
+        ]
+      },
+      {
+        "query": "How does Self-RAG use critique-token probabilities to score output segments?",
+        "top_ids": [
+          996,
+          946,
+          945
+        ]
+      }
+    ],
+    "retrieval_anchor_ids": [
+      903
+    ],
+    "evidence_completion": {
+      "requested_sources": [
+        "2310.11511v1.pdf"
+      ],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        935,
+        945,
+        996,
+        946,
+        967,
+        968,
+        757,
+        756,
+        902,
+        903
+      ],
+      "retained_local_ids": [
+        945,
+        996,
+        946,
+        757,
+        756,
+        902
+      ],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        935,
+        945,
+        996,
+        946,
+        967,
+        968,
+        757,
+        756,
+        902,
+        903
+      ],
+      "elapsed_seconds": 0.000223
+    }
+  },
+  "selected_ids": [
+    935,
+    945,
+    996,
+    946,
+    967,
+    968,
+    757,
+    756,
+    902,
+    903
+  ],
+  "context": "Original passages:\n[1] Source: 2310.11511v1.pdf | Page: 1 | Section: 1 INTRODUCTION\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nSubsequently, SELF-RAG concurrently processes multiple retrieved passages, evaluating their relevance and then generating corresponding task outputs (Step 2). It then generates critique tokens to criticize its own output and choose best one (Step 3) in terms of factuality and overall quality.\n\n[2] Source: 2310.11511v1.pdf | Page: 2 | Section: 1 INTRODUCTION\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nWhile we draw inspiration from studies that use control tokens to start and guide text generation (Lu et al., 2022; Keskar et al., 2019), our trained LM uses critique tokens to assess its own predictions after each generated segment as an integral part of the generation output. SELF-RAG further enables a customizable decoding algorithm to satisfy hard or soft constraints, which are defined by reflection token predictions.\n\n[3] Source: 2310.11511v1.pdf | Page: 6 | Section: 3.3 SELF-RAG INFERENCE\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nFor each critique token group G (e.g., ISREL ), we denote its score at timestamp t as sG t , and we compute a segment score as follows: f(yt, d, Critique ) = p(yt|x, d, y<t)) + S( Critique ), where (3) S( Critique ) = X G∈G wGsG t for G = { ISREL , ISSUP , ISUSE }, (4) where sG t = pt(ˆr) PNG i=1 pt(ri) stands for the generation probability of the most desirable reflection token ˆr (e.g., ISREL =Relevant) for the critique token type G with N G distinct tokens (that represent different possible values for G).\n\n[4] Source: 2310.11511v1.pdf | Page: 2 | Section: 1 INTRODUCTION\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nIn particular, our inference-time algorithm enables us to (1) flexibly adjust retrieval frequency for different downstream applications and (2) customize models’ behaviors to user preferences by leveraging reflection tokens through segment-level beam search using the weighted linear sum of the reflection token probabilities as segment score.\n\n[5] Source: 2310.11511v1.pdf | Page: 4 | Section: 3.1 PROBLEM FORMALIZATION AND OVERVIEW\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\n, dN} 1: Input: input prompt x and preceding generation y<t, Output: next output segment yt 2: M predicts Retrieve given (x, y<t) 3: if Retrieve == Yes then 4: Retrieve relevant text passages D using R given (x, yt−1) ▷Retrieve 5: M predicts ISREL given x, d and yt given x, d, y<t for each d ∈D ▷Generate 6: M predicts ISSUP and ISUSE given x, yt, d for each d ∈D ▷Critique 7: Rank yt based on ISREL , ISSUP , ISUSE ▷Detailed in Section 3.3 8: else if Retrieve == No then 9: Mgen predicts yt given x ▷Generate 10: Mgen predicts ISUSE given x, yt ▷Critique Inference overview.\n\n[6] Source: 2310.11511v1.pdf | Page: 4 | Section: 3.1 PROBLEM FORMALIZATION AND OVERVIEW\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nFigure 1 and Algorithm 1 present an overview of SELF-RAG at inference. For every x and preceding generation y<t, the model decodes a retrieval token to evaluate the utility of retrieval. If retrieval is not required, the model predicts the next output segment, as it does in a standard LM.\n\n[7] Source: 2005.11401v4.pdf | Page: 4 | Section: 2.5 Decoding\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nTo estimate the probability of an hypothesis y we run an additional forward pass for each document z for which y does not appear in the beam, multiply generator probability with pη(z|x) and then sum the probabilities across beams for the marginals. We refer to this decoding procedure as “Thorough Decoding.” For longer output sequences, |Y | can become large, requiring many forward passes.\n\n[8] Source: 2005.11401v4.pdf | Page: 4 | Section: 2.5 Decoding\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nRAG-Sequence For RAG-Sequence, the likelihood p(y|x) does not break into a conventional per- token likelihood, hence we cannot solve it with a single beam search. Instead, we run beam search for each document z, scoring each hypothesis using pθ(yi|x, z, y1:i−1). This yields a set of hypotheses Y , some of which may not have appeared in the beams of all documents.\n\n[9] Source: 2005.11401v4.pdf | Page: 17 | Section: 6 Discussion\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nAppendices for Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks A Implementation Details For Open-domain QA we report test numbers using 15 retrieved documents for RAG-Token models. For RAG-Sequence models, we report test results using 50 retrieved documents, and we use the Thorough Decoding approach since answers are generally short. We use greedy decoding for QA as we did not ﬁnd beam search improved results.\n\n[10] Source: 2005.11401v4.pdf | Page: 17 | Section: 6 Discussion\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nFor Open-MSMarco and Jeopardy question generation, we report test numbers using ten retrieved documents for both RAG-Token and RAG-Sequence, and we also train a BART-large model as a baseline. We use a beam size of four, and use the Fast Decoding approach for RAG-Sequence models, as Thorough Decoding did not improve performance. B Human Evaluation Figure 4: Annotation interface for human evaluation of factuality.\n\nEvidence guidance:\n- Rule-based subject attribution: LM; passage: “, 2019), our trained LM uses critique tokens to assess its own predictions after each generated segment as an integral part of the generation output.” [2]\n- Rule-based subject attribution: LM; passage: “In particular, our inference-time algorithm enables us to (1) flexibly adjust retrieval frequency for different downstream applications and (2) customize models’ behaviors to user preferences by leveraging reflection tokens through segment-level beam search using the weighted linear sum of the reflection token probabilities as segment score.” [4][2]",
+  "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\nOriginal passages:\n[1] Source: 2310.11511v1.pdf | Page: 1 | Section: 1 INTRODUCTION\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nSubsequently, SELF-RAG concurrently processes multiple retrieved passages, evaluating their relevance and then generating corresponding task outputs (Step 2). It then generates critique tokens to criticize its own output and choose best one (Step 3) in terms of factuality and overall quality.\n\n[2] Source: 2310.11511v1.pdf | Page: 2 | Section: 1 INTRODUCTION\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nWhile we draw inspiration from studies that use control tokens to start and guide text generation (Lu et al., 2022; Keskar et al., 2019), our trained LM uses critique tokens to assess its own predictions after each generated segment as an integral part of the generation output. SELF-RAG further enables a customizable decoding algorithm to satisfy hard or soft constraints, which are defined by reflection token predictions.\n\n[3] Source: 2310.11511v1.pdf | Page: 6 | Section: 3.3 SELF-RAG INFERENCE\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nFor each critique token group G (e.g., ISREL ), we denote its score at timestamp t as sG t , and we compute a segment score as follows: f(yt, d, Critique ) = p(yt|x, d, y<t)) + S( Critique ), where (3) S( Critique ) = X G∈G wGsG t for G = { ISREL , ISSUP , ISUSE }, (4) where sG t = pt(ˆr) PNG i=1 pt(ri) stands for the generation probability of the most desirable reflection token ˆr (e.g., ISREL =Relevant) for the critique token type G with N G distinct tokens (that represent different possible values for G).\n\n[4] Source: 2310.11511v1.pdf | Page: 2 | Section: 1 INTRODUCTION\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nIn particular, our inference-time algorithm enables us to (1) flexibly adjust retrieval frequency for different downstream applications and (2) customize models’ behaviors to user preferences by leveraging reflection tokens through segment-level beam search using the weighted linear sum of the reflection token probabilities as segment score.\n\n[5] Source: 2310.11511v1.pdf | Page: 4 | Section: 3.1 PROBLEM FORMALIZATION AND OVERVIEW\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\n, dN} 1: Input: input prompt x and preceding generation y<t, Output: next output segment yt 2: M predicts Retrieve given (x, y<t) 3: if Retrieve == Yes then 4: Retrieve relevant text passages D using R given (x, yt−1) ▷Retrieve 5: M predicts ISREL given x, d and yt given x, d, y<t for each d ∈D ▷Generate 6: M predicts ISSUP and ISUSE given x, yt, d for each d ∈D ▷Critique 7: Rank yt based on ISREL , ISSUP , ISUSE ▷Detailed in Section 3.3 8: else if Retrieve == No then 9: Mgen predicts yt given x ▷Generate 10: Mgen predicts ISUSE given x, yt ▷Critique Inference overview.\n\n[6] Source: 2310.11511v1.pdf | Page: 4 | Section: 3.1 PROBLEM FORMALIZATION AND OVERVIEW\nTitle: Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection\nFigure 1 and Algorithm 1 present an overview of SELF-RAG at inference. For every x and preceding generation y<t, the model decodes a retrieval token to evaluate the utility of retrieval. If retrieval is not required, the model predicts the next output segment, as it does in a standard LM.\n\n[7] Source: 2005.11401v4.pdf | Page: 4 | Section: 2.5 Decoding\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nTo estimate the probability of an hypothesis y we run an additional forward pass for each document z for which y does not appear in the beam, multiply generator probability with pη(z|x) and then sum the probabilities across beams for the marginals. We refer to this decoding procedure as “Thorough Decoding.” For longer output sequences, |Y | can become large, requiring many forward passes.\n\n[8] Source: 2005.11401v4.pdf | Page: 4 | Section: 2.5 Decoding\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nRAG-Sequence For RAG-Sequence, the likelihood p(y|x) does not break into a conventional per- token likelihood, hence we cannot solve it with a single beam search. Instead, we run beam search for each document z, scoring each hypothesis using pθ(yi|x, z, y1:i−1). This yields a set of hypotheses Y , some of which may not have appeared in the beams of all documents.\n\n[9] Source: 2005.11401v4.pdf | Page: 17 | Section: 6 Discussion\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nAppendices for Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks A Implementation Details For Open-domain QA we report test numbers using 15 retrieved documents for RAG-Token models. For RAG-Sequence models, we report test results using 50 retrieved documents, and we use the Thorough Decoding approach since answers are generally short. We use greedy decoding for QA as we did not ﬁnd beam search improved results.\n\n[10] Source: 2005.11401v4.pdf | Page: 17 | Section: 6 Discussion\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nFor Open-MSMarco and Jeopardy question generation, we report test numbers using ten retrieved documents for both RAG-Token and RAG-Sequence, and we also train a BART-large model as a baseline. We use a beam size of four, and use the Fast Decoding approach for RAG-Sequence models, as Thorough Decoding did not improve performance. B Human Evaluation Figure 4: Annotation interface for human evaluation of factuality.\n\nEvidence guidance:\n- Rule-based subject attribution: LM; passage: “, 2019), our trained LM uses critique tokens to assess its own predictions after each generated segment as an integral part of the generation output.” [2]\n- Rule-based subject attribution: LM; passage: “In particular, our inference-time algorithm enables us to (1) flexibly adjust retrieval frequency for different downstream applications and (2) customize models’ behaviors to user preferences by leveraging reflection tokens through segment-level beam search using the weighted linear sum of the reflection token probabilities as segment score.” [4][2]\n\nQuestion:\nHow does RAG-Sequence's Thorough Decoding score a candidate absent from a document's beam, and how does Self-RAG use critique-token probabilities to score output segments?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": "Subsequently, SELF-RAG concurrently processes multiple retrieved passages, evaluating their relevance and then generating corresponding task outputs (Step 2).",
+        "evidence_start": 0,
+        "evidence_end": 158,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            935
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 935,
+        "page": 1,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " It then generates critique tokens to criticize its own output and choose best one (Step 3) in terms of factuality and overall quality.",
+        "evidence_start": 158,
+        "evidence_end": 293,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            935
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 935,
+        "page": 1,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": ", 2019), our trained LM uses critique tokens to assess its own predictions after each generated segment as an integral part of the generation output.",
+        "evidence_start": 129,
+        "evidence_end": 278,
+        "subject": "LM",
+        "identity": {
+          "subject": "LM",
+          "basis": "explicit_named_clause",
+          "context_chunk_ids": [
+            945
+          ],
+          "identity_quote": "While we draw inspiration from studies that use control tokens to start and guide text generation (Lu et al., 2022; Keskar et al., 2019), our trained LM uses critique tokens to assess its own predictions after each generated segment as an integral part of the generation output. SELF-RAG further enables a customizable decoding algorithm to satisfy hard or soft constraints, which are defined by reflection token predictions.",
+          "identity_chunk_id": 945
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 945,
+        "page": 2,
+        "citations": [
+          2
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " SELF-RAG further enables a customizable decoding algorithm to satisfy hard or soft constraints, which are defined by reflection token predictions.",
+        "evidence_start": 278,
+        "evidence_end": 425,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            945
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 945,
+        "page": 2,
+        "citations": [
+          2
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": ", ISREL =Relevant) for the critique token type G with N G distinct tokens (that represent different possible values for G).",
+        "evidence_start": 390,
+        "evidence_end": 513,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            996
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 996,
+        "page": 6,
+        "citations": [
+          3
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "In particular, our inference-time algorithm enables us to (1) flexibly adjust retrieval frequency for different downstream applications and (2) customize models’ behaviors to user preferences by leveraging reflection tokens through segment-level beam search using the weighted linear sum of the reflection token probabilities as segment score.",
+        "evidence_start": 0,
+        "evidence_end": 343,
+        "subject": "LM",
+        "identity": {
+          "subject": "LM",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            946,
+            945
+          ],
+          "identity_quote": "While we draw inspiration from studies that use control tokens to start and guide text generation (Lu et al., 2022; Keskar et al., 2019), our trained LM uses critique tokens to assess its own predictions after each generated segment as an integral part of the generation output. SELF-RAG further enables a customizable decoding algorithm to satisfy hard or soft constraints, which are defined by reflection token predictions.",
+          "identity_chunk_id": 945
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 946,
+        "page": 2,
+        "citations": [
+          4,
+          2
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "3 8: else if Retrieve == No then 9: Mgen predicts yt given x ▷Generate 10: Mgen predicts ISUSE given x, yt ▷Critique Inference overview.",
+        "evidence_start": 440,
+        "evidence_end": 576,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            967
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 967,
+        "page": 4,
+        "citations": [
+          5
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Figure 1 and Algorithm 1 present an overview of SELF-RAG at inference.",
+        "evidence_start": 0,
+        "evidence_end": 70,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            968
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 968,
+        "page": 4,
+        "citations": [
+          6
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " For every x and preceding generation y<t, the model decodes a retrieval token to evaluate the utility of retrieval.",
+        "evidence_start": 70,
+        "evidence_end": 186,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            968
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 968,
+        "page": 4,
+        "citations": [
+          6
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " If retrieval is not required, the model predicts the next output segment, as it does in a standard LM.",
+        "evidence_start": 186,
+        "evidence_end": 289,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            968
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2310.11511v1.pdf",
+        "chunk_id": 968,
+        "page": 4,
+        "citations": [
+          6
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "To estimate the probability of an hypothesis y we run an additional forward pass for each document z for which y does not appear in the beam, multiply generator probability with pη(z|x) and then sum the probabilities across beams for the marginals.",
+        "evidence_start": 0,
+        "evidence_end": 248,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            757,
+            756,
+            755
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 757,
+        "page": 4,
+        "citations": [
+          7
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "” For longer output sequences, |Y | can become large, requiring many forward passes.",
+        "evidence_start": 307,
+        "evidence_end": 391,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            757,
+            756,
+            755
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 757,
+        "page": 4,
+        "citations": [
+          7
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "RAG-Sequence For RAG-Sequence, the likelihood p(y|x) does not break into a conventional per- token likelihood, hence we cannot solve it with a single beam search.",
+        "evidence_start": 0,
+        "evidence_end": 162,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            756,
+            755
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 756,
+        "page": 4,
+        "citations": [
+          8
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Instead, we run beam search for each document z, scoring each hypothesis using pθ(yi|x, z, y1:i−1).",
+        "evidence_start": 162,
+        "evidence_end": 262,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            756,
+            755
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 756,
+        "page": 4,
+        "citations": [
+          8
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " This yields a set of hypotheses Y , some of which may not have appeared in the beams of all documents.",
+        "evidence_start": 262,
+        "evidence_end": 365,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            756,
+            755
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 756,
+        "page": 4,
+        "citations": [
+          8
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Appendices for Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks A Implementation Details For Open-domain QA we report test numbers using 15 retrieved documents for RAG-Token models.",
+        "evidence_start": 0,
+        "evidence_end": 197,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            902
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 902,
+        "page": 17,
+        "citations": [
+          9
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " For RAG-Sequence models, we report test results using 50 retrieved documents, and we use the Thorough Decoding approach since answers are generally short.",
+        "evidence_start": 197,
+        "evidence_end": 352,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            902
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 902,
+        "page": 17,
+        "citations": [
+          9
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We use greedy decoding for QA as we did not ﬁnd beam search improved results.",
+        "evidence_start": 352,
+        "evidence_end": 430,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            902
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 902,
+        "page": 17,
+        "citations": [
+          9
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "For Open-MSMarco and Jeopardy question generation, we report test numbers using ten retrieved documents for both RAG-Token and RAG-Sequence, and we also train a BART-large model as a baseline.",
+        "evidence_start": 0,
+        "evidence_end": 192,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            903
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 903,
+        "page": 17,
+        "citations": [
+          10
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We use a beam size of four, and use the Fast Decoding approach for RAG-Sequence models, as Thorough Decoding did not improve performance.",
+        "evidence_start": 192,
+        "evidence_end": 330,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            903
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 903,
+        "page": 17,
+        "citations": [
+          10
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " B Human Evaluation Figure 4: Annotation interface for human evaluation of factuality.",
+        "evidence_start": 330,
+        "evidence_end": 416,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            903
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 903,
+        "page": 17,
+        "citations": [
+          10
+        ],
+        "record_id": "E21"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 935,
+        "text": "Subsequently, SELF-RAG concurrently processes multiple retrieved passages, evaluating their relevance and then generating corresponding task outputs (Step 2). It then generates critique tokens to criticize its own output and choose best one (Step 3) in terms of factuality and overall quality.",
+        "source": "2310.11511v1.pdf",
+        "page": 1,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "1 INTRODUCTION"
+      },
+      {
+        "chunk_id": 945,
+        "text": "While we draw inspiration from studies that use control tokens to start and guide text generation (Lu et al., 2022; Keskar et al., 2019), our trained LM uses critique tokens to assess its own predictions after each generated segment as an integral part of the generation output. SELF-RAG further enables a customizable decoding algorithm to satisfy hard or soft constraints, which are defined by reflection token predictions.",
+        "source": "2310.11511v1.pdf",
+        "page": 2,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "1 INTRODUCTION"
+      },
+      {
+        "chunk_id": 996,
+        "text": "For each critique token group G (e.g., ISREL ), we denote its score at timestamp t as sG t , and we compute a segment score as follows: f(yt, d, Critique ) = p(yt|x, d, y<t)) + S( Critique ), where (3) S( Critique ) = X G∈G wGsG t for G = { ISREL , ISSUP , ISUSE }, (4) where sG t = pt(ˆr) PNG i=1 pt(ri) stands for the generation probability of the most desirable reflection token ˆr (e.g., ISREL =Relevant) for the critique token type G with N G distinct tokens (that represent different possible values for G).",
+        "source": "2310.11511v1.pdf",
+        "page": 6,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "3.3 SELF-RAG INFERENCE"
+      },
+      {
+        "chunk_id": 946,
+        "text": "In particular, our inference-time algorithm enables us to (1) flexibly adjust retrieval frequency for different downstream applications and (2) customize models’ behaviors to user preferences by leveraging reflection tokens through segment-level beam search using the weighted linear sum of the reflection token probabilities as segment score.",
+        "source": "2310.11511v1.pdf",
+        "page": 2,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "1 INTRODUCTION"
+      },
+      {
+        "chunk_id": 967,
+        "text": ", dN} 1: Input: input prompt x and preceding generation y<t, Output: next output segment yt 2: M predicts Retrieve given (x, y<t) 3: if Retrieve == Yes then 4: Retrieve relevant text passages D using R given (x, yt−1) ▷Retrieve 5: M predicts ISREL given x, d and yt given x, d, y<t for each d ∈D ▷Generate 6: M predicts ISSUP and ISUSE given x, yt, d for each d ∈D ▷Critique 7: Rank yt based on ISREL , ISSUP , ISUSE ▷Detailed in Section 3.3 8: else if Retrieve == No then 9: Mgen predicts yt given x ▷Generate 10: Mgen predicts ISUSE given x, yt ▷Critique Inference overview.",
+        "source": "2310.11511v1.pdf",
+        "page": 4,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "3.1 PROBLEM FORMALIZATION AND OVERVIEW"
+      },
+      {
+        "chunk_id": 968,
+        "text": "Figure 1 and Algorithm 1 present an overview of SELF-RAG at inference. For every x and preceding generation y<t, the model decodes a retrieval token to evaluate the utility of retrieval. If retrieval is not required, the model predicts the next output segment, as it does in a standard LM.",
+        "source": "2310.11511v1.pdf",
+        "page": 4,
+        "title": "Self-RAG: Learning to Retrieve, Generate, and Critique through Self-Reflection",
+        "section": "3.1 PROBLEM FORMALIZATION AND OVERVIEW"
+      },
+      {
+        "chunk_id": 757,
+        "text": "To estimate the probability of an hypothesis y we run an additional forward pass for each document z for which y does not appear in the beam, multiply generator probability with pη(z|x) and then sum the probabilities across beams for the marginals. We refer to this decoding procedure as “Thorough Decoding.” For longer output sequences, |Y | can become large, requiring many forward passes.",
+        "source": "2005.11401v4.pdf",
+        "page": 4,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "2.5 Decoding"
+      },
+      {
+        "chunk_id": 756,
+        "text": "RAG-Sequence For RAG-Sequence, the likelihood p(y|x) does not break into a conventional per- token likelihood, hence we cannot solve it with a single beam search. Instead, we run beam search for each document z, scoring each hypothesis using pθ(yi|x, z, y1:i−1). This yields a set of hypotheses Y , some of which may not have appeared in the beams of all documents.",
+        "source": "2005.11401v4.pdf",
+        "page": 4,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "2.5 Decoding"
+      },
+      {
+        "chunk_id": 902,
+        "text": "Appendices for Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks A Implementation Details For Open-domain QA we report test numbers using 15 retrieved documents for RAG-Token models. For RAG-Sequence models, we report test results using 50 retrieved documents, and we use the Thorough Decoding approach since answers are generally short. We use greedy decoding for QA as we did not ﬁnd beam search improved results.",
+        "source": "2005.11401v4.pdf",
+        "page": 17,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "6 Discussion"
+      },
+      {
+        "chunk_id": 903,
+        "text": "For Open-MSMarco and Jeopardy question generation, we report test numbers using ten retrieved documents for both RAG-Token and RAG-Sequence, and we also train a BART-large model as a baseline. We use a beam size of four, and use the Fast Decoding approach for RAG-Sequence models, as Thorough Decoding did not improve performance. B Human Evaluation Figure 4: Annotation interface for human evaluation of factuality.",
+        "source": "2005.11401v4.pdf",
+        "page": 17,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "6 Discussion"
+      }
+    ],
+    "selected_ids": [
+      935,
+      945,
+      996,
+      946,
+      967,
+      968,
+      757,
+      756,
+      902,
+      903
+    ]
+  },
+  "answer": "关于 RAG-Sequence 的 Thorough Decoding：对某个候选假设 y，若它未出现在某文档 z 的 beam 中，则对该文档额外做一次前向计算，将生成器概率与 pη(z|x) 相乘，再跨各 beam 求和得到边际概率（[7]）。\n\n关于 Self-RAG 的评审 token 概率评分：对每个评审 token 组 G（如 ISREL），以最理想反思 token 的生成概率在该组所有 token 概率中的占比作为该组得分 sG t（[3]）；段得分由生成概率 p(yt|x, d, y<t) 加上各评审组得分的加权线性和 S(Critique)=Σ_{G∈G} wG·sG t（G={ISREL, ISSUP, ISUSE}）构成（[3]）。该加权线性和的段得分用于段级 beam search，从而按用户偏好定制模型行为（[4]）。",
+  "original_answer": "关于 RAG-Sequence 的 Thorough Decoding：对某个候选假设 y，若它未出现在某文档 z 的 beam 中，则对该文档额外做一次前向计算，将生成器概率与 pη(z|x) 相乘，再跨各 beam 求和得到边际概率（[7]）。\n\n关于 Self-RAG 的评审 token 概率评分：对每个评审 token 组 G（如 ISREL），以最理想反思 token 的生成概率在该组所有 token 概率中的占比作为该组得分 sG t（[3]）；段得分由生成概率 p(yt|x, d, y<t) 加上各评审组得分的加权线性和 S(Critique)=Σ_{G∈G} wG·sG t（G={ISREL, ISSUP, ISUSE}）构成（[3]）。该加权线性和的段得分用于段级 beam search，从而按用户偏好定制模型行为（[4]）。",
+  "citation_validation": {
+    "answer": "关于 RAG-Sequence 的 Thorough Decoding：对某个候选假设 y，若它未出现在某文档 z 的 beam 中，则对该文档额外做一次前向计算，将生成器概率与 pη(z|x) 相乘，再跨各 beam 求和得到边际概率（[7]）。\n\n关于 Self-RAG 的评审 token 概率评分：对每个评审 token 组 G（如 ISREL），以最理想反思 token 的生成概率在该组所有 token 概率中的占比作为该组得分 sG t（[3]）；段得分由生成概率 p(yt|x, d, y<t) 加上各评审组得分的加权线性和 S(Critique)=Σ_{G∈G} wG·sG t（G={ISREL, ISSUP, ISUSE}）构成（[3]）。该加权线性和的段得分用于段级 beam search，从而按用户偏好定制模型行为（[4]）。",
+    "original_answer": "关于 RAG-Sequence 的 Thorough Decoding：对某个候选假设 y，若它未出现在某文档 z 的 beam 中，则对该文档额外做一次前向计算，将生成器概率与 pη(z|x) 相乘，再跨各 beam 求和得到边际概率（[7]）。\n\n关于 Self-RAG 的评审 token 概率评分：对每个评审 token 组 G（如 ISREL），以最理想反思 token 的生成概率在该组所有 token 概率中的占比作为该组得分 sG t（[3]）；段得分由生成概率 p(yt|x, d, y<t) 加上各评审组得分的加权线性和 S(Critique)=Σ_{G∈G} wG·sG t（G={ISREL, ISSUP, ISUSE}）构成（[3]）。该加权线性和的段得分用于段级 beam search，从而按用户偏好定制模型行为（[4]）。",
+    "repair_candidate": null,
+    "initial_check": {
+      "cited_numbers": [
+        3,
+        4,
+        7
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 3,
+          "chunk_id": 996,
+          "source": "2310.11511v1.pdf",
+          "page": 6,
+          "text": "For each critique token group G (e.g., ISREL ), we denote its score at timestamp t as sG t , and we compute a segment score as follows: f(yt, d, Critique ) = p(yt|x, d, y<t)) + S( Critique ), where (3) S( Critique ) = X G∈G wGsG t for G = { ISREL , ISSUP , ISUSE }, (4) where sG t = pt(ˆr) PNG i=1 pt(ri) stands for the generation probability of the most desirable reflection token ˆr (e.g., ISREL =Relevant) for the critique token type G with N G distinct tokens (that represent different possible values for G)."
+        },
+        {
+          "citation": 4,
+          "chunk_id": 946,
+          "source": "2310.11511v1.pdf",
+          "page": 2,
+          "text": "In particular, our inference-time algorithm enables us to (1) flexibly adjust retrieval frequency for different downstream applications and (2) customize models’ behaviors to user preferences by leveraging reflection tokens through segment-level beam search using the weighted linear sum of the reflection token probabilities as segment score."
+        },
+        {
+          "citation": 7,
+          "chunk_id": 757,
+          "source": "2005.11401v4.pdf",
+          "page": 4,
+          "text": "To estimate the probability of an hypothesis y we run an additional forward pass for each document z for which y does not appear in the beam, multiply generator probability with pη(z|x) and then sum the probabilities across beams for the marginals. We refer to this decoding procedure as “Thorough Decoding.” For longer output sequences, |Y | can become large, requiring many forward passes."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "final_check": {
+      "cited_numbers": [
+        3,
+        4,
+        7
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 3,
+          "chunk_id": 996,
+          "source": "2310.11511v1.pdf",
+          "page": 6,
+          "text": "For each critique token group G (e.g., ISREL ), we denote its score at timestamp t as sG t , and we compute a segment score as follows: f(yt, d, Critique ) = p(yt|x, d, y<t)) + S( Critique ), where (3) S( Critique ) = X G∈G wGsG t for G = { ISREL , ISSUP , ISUSE }, (4) where sG t = pt(ˆr) PNG i=1 pt(ri) stands for the generation probability of the most desirable reflection token ˆr (e.g., ISREL =Relevant) for the critique token type G with N G distinct tokens (that represent different possible values for G)."
+        },
+        {
+          "citation": 4,
+          "chunk_id": 946,
+          "source": "2310.11511v1.pdf",
+          "page": 2,
+          "text": "In particular, our inference-time algorithm enables us to (1) flexibly adjust retrieval frequency for different downstream applications and (2) customize models’ behaviors to user preferences by leveraging reflection tokens through segment-level beam search using the weighted linear sum of the reflection token probabilities as segment score."
+        },
+        {
+          "citation": 7,
+          "chunk_id": 757,
+          "source": "2005.11401v4.pdf",
+          "page": 4,
+          "text": "To estimate the probability of an hypothesis y we run an additional forward pass for each document z for which y does not appear in the beam, multiply generator probability with pη(z|x) and then sum the probabilities across beams for the marginals. We refer to this decoding procedure as “Thorough Decoding.” For longer output sequences, |Y | can become large, requiring many forward passes."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "repair_attempted": false,
+    "normalization_applied": false,
+    "repair_applied": false,
+    "repair_response": null,
+    "repair_prompt": null,
+    "unresolved_blocks": [],
+    "status": "not_needed",
+    "note": "Citation structure only; source relevance and claim meaning are not automatically verified."
+  },
+  "status": "completed"
+}

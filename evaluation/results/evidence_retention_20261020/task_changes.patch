@@ -1,0 +1,1046 @@
+--- a/main.py
++++ b/main.py
+@@ -43,11 +43,11 @@
+ # no meaningful overall retrieval improvement.
+ USE_HYDE = False
+ 
+-# Opt-in until the fixed new/old question comparison passes its adoption gates.
+-USE_EVIDENCE_COMPLETION = False
+-
+-RETRIEVAL_TOP_K = 60
+-RRF_TOP_K = 60
++# User-selected bounded completion; coverage signals still control whether it runs.
++USE_EVIDENCE_COMPLETION = True
++
++RETRIEVAL_TOP_K = 120
++RRF_TOP_K = 120
+ RERANK_TOP_K = 10
+ SUB_QUERY_EVIDENCE_K = 3
+ RRF_K = 60
+@@ -176,7 +176,7 @@
+ # Main pipeline
+ # ---------------------------------------------------------------------------
+ 
+-def main(query=None, kb_version=None, complete_evidence=None, completion_rounds=1):
++def main(query=None, kb_version=None, complete_evidence=None, completion_rounds=2):
+     if completion_rounds not in (1, 2, 3):
+         raise ValueError('completion_rounds must be 1, 2 or 3')
+     # 1. Load the Semantic FAISS index and its corresponding chunks.
+@@ -226,6 +226,12 @@
+         top_k=RETRIEVAL_TOP_K,
+     )
+ 
++    # Freeze the original query's independent retrieval anchor before augmentation.
++    original_rrf_results = reciprocal_rank_fusion(
++        dense_results=dense_results, bm25_results=bm25_results,
++        k=RRF_K, top_k=RRF_TOP_K)
++    retrieval_anchor_ids = [c['chunk_id'] for c in original_rrf_results[:1]]
++
+     # 4. Collect optional additional retrieval lists.
+     # RRF will fuse these lists with the original Dense + BM25 results.
+     extra_results = []
+@@ -330,7 +336,7 @@
+         k=RRF_K,
+         top_k=RRF_TOP_K,
+         extra_results=extra_results,
+-    )
++    ) if extra_results else original_rrf_results
+ 
+     # Add sub-query RRF results to the original-query candidate list.
+     candidate_pool = list(rrf_results)
+@@ -356,7 +362,6 @@
+ 
+     global_ranking, sub_query_evidence = rank_evidence(
+         query, unique_candidates, sub_query_results, reranker_model, SUB_QUERY_EVIDENCE_K)
+-    retrieval_anchor_ids = [c['chunk_id'] for c in rrf_results[:1]]
+     results = select_evidence(global_ranking, sub_query_evidence, RERANK_TOP_K,
+                               retrieval_anchor_ids)
+     retrieval_diagnostics = {
+--- a/src/reranker.py
++++ b/src/reranker.py
+@@ -65,11 +65,12 @@
+     return global_ranking, sub_query_evidence
+ 
+ 
+-def select_evidence(global_ranking, sub_query_evidence, top_k, retrieval_first_ids=()):
+-    """Protect original retrieval and subquestion first hits within the budget."""
++def select_evidence(global_ranking, sub_query_evidence, top_k, retrieval_first_ids=(),
++                    protected_ids=()):
++    """Protect original retrieval and retained local evidence within the budget."""
+     if top_k <= 0:
+         raise ValueError('top_k must be greater than 0')
+-    protected = list(dict.fromkeys([*retrieval_first_ids,
++    protected = list(dict.fromkeys([*retrieval_first_ids, *protected_ids,
+         *(item['top_ids'][0] for item in sub_query_evidence if item['top_ids'])]))
+     focused = {cid for item in sub_query_evidence for cid in item['top_ids']}
+     selected = set(protected[:top_k])
+--- a/src/evidence_gap.py
++++ b/src/evidence_gap.py
+@@ -76,10 +76,13 @@
+         raise ValueError('max_rounds must be 1, 2 or 3')
+     started = time.perf_counter()
+     baseline = select_evidence(global_ranking, local_evidence, top_k, retrieval_anchor_ids)
++    local_ids = {cid for item in local_evidence for cid in item['top_ids']}
++    retained_local_ids = [c['chunk_id'] for c in baseline if c['chunk_id'] in local_ids]
+     trace = plan_evidence_gap(query, global_ranking, local_evidence, baseline, chunks, top_k)
+     trace.update(rounds=0, supplement_queries=0, max_rounds=max_rounds,
+                  completed_passes=0, round_history=[],
+-                 selected_ids_before=[c['chunk_id'] for c in baseline])
++                 selected_ids_before=[c['chunk_id'] for c in baseline],
++                 retained_local_ids=retained_local_ids)
+     tasks = trace['tasks']
+     if not tasks or not any(t['needs_retrieval'] or t['excluded_global_ids'] for t in tasks):
+         trace.update(stop_reason='not_explicit_cross_paper' if not tasks else 'no_coverage_signal',
+@@ -138,12 +141,9 @@
+         new_ranking = rerank_results(query, new_candidates, reranker_model,
+                                      top_k=len(new_candidates), include_source=True)
+         merged = sorted([*global_ranking, *new_ranking], key=lambda c: -c['rerank_score'])
+-        priority = [c['chunk_id'] for c in merged[:max(1, top_k // 2)]]
+-        priority.extend(retrieval_anchor_ids[:1])
+-        priority.extend(t['scoped_top_ids'][0] for t in tasks if t['scoped_top_ids'])
+-        priority.extend(c['chunk_id'] for c in merged)
+-        selected_ids = set(list(dict.fromkeys(priority))[:top_k])
+-        selected = [c for c in merged if c['chunk_id'] in selected_ids]
++        scoped_evidence = [{'query': t['query'], 'top_ids': t['scoped_top_ids']} for t in tasks]
++        selected = select_evidence(merged, [*local_evidence, *scoped_evidence], top_k,
++                                   retrieval_anchor_ids, protected_ids=retained_local_ids)
+         new_ids = [c['chunk_id'] for c in new_candidates]
+         all_new_ids.extend(new_ids)
+         trace['rounds'] += bool(pass_queries)
+--- a/evaluation/run_evaluation.py
++++ b/evaluation/run_evaluation.py
+@@ -38,9 +38,9 @@
+ QUESTIONS_PATH = PROJECT_DIR / "evaluation" / "questions.json"
+ 
+ FINAL_K = 10
+-CANDIDATE_K = 60
++CANDIDATE_K = 120
+ RRF_K = 60
+-RRF_TOP_K = 60
++RRF_TOP_K = 120
+ 
+ ENABLE_REWRITING = True
+ ENABLE_DECOMPOSITION = True
+@@ -501,13 +501,15 @@
+ 
+ def evaluate_query_modes(query, auxiliary, dense, sparse, base_fused, base_ranking,
+                          local_evidence, sub_details, base_completion, completion_caps,
+-                         embedding, index, chunks, bm25, reranker):
++                         embedding, index, chunks, bm25, reranker, top_k=None):
+     """Replay main.py's optional query lists, retaining real passages as evidence.
+ 
+     Decomposed queries are identical in all four modes. Their complete RRF lists
+     enter every candidate pool, so their local Top-3 rankings can be reused.
+     Gold is deliberately absent from this interface.
+     """
++    top_k = FINAL_K if top_k is None else top_k
++    anchors = get_result_ids(base_fused[:1])
+     rewritten = auxiliary['rewritten_query']
+     rewrite_lists = list(retrieve_two_ways(rewritten, embedding, index, chunks, bm25)) if (
+         rewritten and rewritten != query) else []
+@@ -521,8 +523,7 @@
+         candidates = deduplicate_results([*fused, *(c for item in (sub_details or []) for c in item['rrf'])])
+         ranking = base_ranking if mode == 'base' else rerank_results(
+             query, candidates, reranker, top_k=len(candidates))
+-        anchors = get_result_ids(fused[:1])
+-        selected = select_evidence(ranking, local_evidence, FINAL_K, anchors)
++        selected = select_evidence(ranking, local_evidence, top_k, anchors)
+         methods[query_mode_name(mode, 0)] = get_result_ids(selected)
+         completion = None
+         if completion_caps:
+@@ -531,11 +532,11 @@
+             else:
+                 _, completion = complete_evidence(
+                     query, ranking, local_evidence, anchors, embedding, index, chunks, bm25, reranker,
+-                    top_k=FINAL_K, candidate_k=CANDIDATE_K, max_rounds=max(completion_caps))
++                    top_k=top_k, candidate_k=CANDIDATE_K, max_rounds=max(completion_caps))
+             for cap in completion_caps:
+                 history = [r for r in completion['round_history'] if r['round'] <= cap]
+                 methods[query_mode_name(mode, cap)] = history[-1]['selected_ids'] if history else get_result_ids(selected)
+-        traces[mode] = {'rrf_ids': get_result_ids(fused), 'candidate_ids': get_result_ids(candidates),
++        traces[mode] = {'top_k': top_k, 'rrf_ids': get_result_ids(fused), 'candidate_ids': get_result_ids(candidates),
+                         'global_ranking_ids': get_result_ids(ranking), 'retrieval_anchor_ids': anchors,
+                         'selected_ids_before': get_result_ids(selected), 'evidence_completion': completion,
+                         'mode_processing_seconds': round(time.perf_counter() - started, 6)}
+@@ -550,13 +551,13 @@
+                         help='题目 JSON；默认保留已有六题')
+     parser.add_argument('--top-k', type=int, nargs='+', default=[10],
+                         help='最终证据条数，可同时对比 5 10 20；默认 10')
+-    parser.add_argument('--candidate-k', type=int, default=60,
+-                        help='每路检索和 RRF 候选预算；默认与主流程相同为 60')
++    parser.add_argument('--candidate-k', type=int, default=120,
++                        help='每路检索和 RRF 候选预算；默认与主流程相同为 120')
+     parser.add_argument('--output-dir', type=Path, help='保存逐题指标、阶段排名及辅助查询')
+     parser.add_argument('--auxiliary-cache', type=Path, help='复用同一问题的分解/改写，不调用 API')
+     parser.add_argument('--no-auxiliary', action='store_true', help='禁用分解/改写，只评估原问题')
+     parser.add_argument('--complete-evidence', action='store_true',
+-                        help='额外评估一次限定论文的补检索；原方法与指标保留')
++                        help='额外评估限定论文的补检索；各 top-k 独立选证据，原方法保留')
+     parser.add_argument('--completion-rounds', type=int, nargs='+', choices=(1, 2, 3), default=[1],
+                         help='补查轮数上限，例如 1 3；一次运行复用同一轮次轨迹')
+     parser.add_argument('--query-ablation', action='store_true',
+@@ -565,8 +566,6 @@
+     ks = sorted(set(args.top_k))
+     if min(ks) <= 0 or args.candidate_k < max(ks):
+         parser.error('top-k 必须大于零，candidate-k 必须不小于最大 top-k。')
+-    if args.complete_evidence and ks != [10]:
+-        parser.error('本轮补检索原型固定最终 top-k=10。')
+     if not args.complete_evidence and args.completion_rounds != [1]:
+         parser.error('completion-rounds 需要同时指定 --complete-evidence。')
+     FINAL_K, CANDIDATE_K, RRF_TOP_K = max(ks), args.candidate_k, args.candidate_k
+@@ -576,8 +575,8 @@
+         parser.error('题目 ID 不能重复。')
+     cache = json.loads(args.auxiliary_cache.read_text(encoding='utf-8')) if args.auxiliary_cache else None
+     if args.query_ablation:
+-        if args.no_auxiliary or cache is None or ks != [10]:
+-            parser.error('query-ablation 需要 auxiliary-cache、启用辅助查询并固定 top-k=10。')
++        if args.no_auxiliary or cache is None:
++            parser.error('query-ablation 需要 auxiliary-cache 并启用辅助查询。')
+         for question in questions:
+             if not question.get('gold_evidence'):
+                 continue
+@@ -690,17 +689,19 @@
+                     _, multi_ranking = fuse_and_rerank(query, dense, sparse, reranker, extra_results=[rd, rb])
+                 methods['Rewritten Hybrid + Reranker'] = get_result_ids(rewrite_ranking)
+                 methods['Multi-Query + Reranker'] = get_result_ids(multi_ranking)
+-            completion = None
++            completions_by_k = {}
++            extra_methods_by_k = {k: {} for k in ks}
+             if args.complete_evidence:
+-                completed, completion = complete_evidence(
+-                    query, info['global_ranking'] if info else ranking,
+-                    info['sub_query_evidence'] if info else [], get_result_ids(fused[:1]),
+-                    embedding, index, chunks, bm25, reranker,
+-                    top_k=FINAL_K, candidate_k=CANDIDATE_K,
+-                    max_rounds=max(completion_names))
+-                for cap, method_name in completion_names.items():
+-                    checkpoints = [r for r in completion['round_history'] if r['round'] <= cap]
+-                    methods[method_name] = checkpoints[-1]['selected_ids'] if checkpoints else get_result_ids(completed)
++                for k in ks:
++                    completed, completion = complete_evidence(
++                        query, info['global_ranking'] if info else ranking,
++                        info['sub_query_evidence'] if info else [], get_result_ids(fused[:1]),
++                        embedding, index, chunks, bm25, reranker,
++                        top_k=k, candidate_k=CANDIDATE_K, max_rounds=max(completion_names))
++                    completions_by_k[str(k)] = completion
++                    for cap, method_name in completion_names.items():
++                        checkpoints = [r for r in completion['round_history'] if r['round'] <= cap]
++                        extra_methods_by_k[k][method_name] = checkpoints[-1]['selected_ids'] if checkpoints else get_result_ids(completed)
+             entry = {'id': qid, 'query': query, 'status': 'completed', 'gold_ids': sorted(gold_ids),
+                      'auxiliary': auxiliary, 'retrieval_seconds': round(time.perf_counter() - question_started, 3),
+                      'stage_ids': {name: get_result_ids(items) for name, items in stages.items()},
+@@ -711,19 +712,25 @@
+                      'subquery_stages': [{'query': item['query'],
+                                           'ids': {name: get_result_ids(item[name]) for name in ('dense','bm25','rrf')}}
+                                          for item in (details or [])], 'metrics_by_k': {}}
+-            if completion is not None:
+-                entry['evidence_completion'] = completion
++            if completions_by_k:
++                entry['evidence_completion_by_k'] = completions_by_k
++                entry['evidence_completion'] = completions_by_k[str(FINAL_K)]
+             if args.query_ablation:
+-                augmented_methods, mode_traces = evaluate_query_modes(
+-                    query, auxiliary, dense, sparse, fused,
+-                    info['global_ranking'] if info else ranking,
+-                    info['sub_query_evidence'] if info else [], details, completion,
+-                    list(completion_names) if args.complete_evidence else [],
+-                    embedding, index, chunks, bm25, reranker)
+-                methods.update(augmented_methods)
+-                entry['query_modes'] = mode_traces
++                mode_traces_by_k = {}
++                for k in ks:
++                    augmented_methods, mode_traces = evaluate_query_modes(
++                        query, auxiliary, dense, sparse, fused,
++                        info['global_ranking'] if info else ranking,
++                        info['sub_query_evidence'] if info else [], details, completions_by_k.get(str(k)),
++                        list(completion_names) if args.complete_evidence else [],
++                        embedding, index, chunks, bm25, reranker, top_k=k)
++                    extra_methods_by_k[k].update(augmented_methods)
++                    mode_traces_by_k[str(k)] = mode_traces
++                entry['query_modes_by_k'] = mode_traces_by_k
++                entry['query_modes'] = mode_traces_by_k[str(FINAL_K)]
+             for k in ks:
+                 methods_k = {name: ids[:k] for name,ids in methods.items()}
++                methods_k.update(extra_methods_by_k[k])
+                 anchor_ids = get_result_ids(fused[:1])
+                 methods_k[anchor_name] = get_result_ids(select_evidence(ranking, [], k, anchor_ids))
+                 if info:
+--- a/tests/test_evidence_gap.py
++++ b/tests/test_evidence_gap.py
+@@ -79,7 +79,7 @@
+         dense.assert_not_called()
+         self.assertEqual(trace['rounds'], 0)
+         self.assertEqual(trace['stop_reason'], 'selection_repaired_without_search')
+-        self.assertTrue(set(range(5)) <= {c['chunk_id'] for c in selected})
++        self.assertTrue({5, 6, 7, 8, 9, 10} <= {c['chunk_id'] for c in selected})
+ 
+     def test_task_limit_is_explicit_and_does_not_recurse(self):
+         local = [{'query': f'Compare Alpha and its property {i}', 'top_ids': [8, 9, 10]}
+--- /dev/null
++++ b/tests/test_retention_regression.py
+@@ -0,0 +1,131 @@
++from contextlib import redirect_stdout
++import io
++import json
++from pathlib import Path
++import re
++import sys
++import tempfile
++from types import SimpleNamespace
++import unittest
++from unittest.mock import patch
++
++import evaluation.run_evaluation as evaluation
++from src.evidence_gap import complete_evidence
++from src.reranker import rerank_results, select_evidence
++
++
++def passages(count):
++    return [{'chunk_id': i, 'text': f'Evidence passage {i}.',
++             'source': 'alpha.pdf' if i < 12 else 'beta.pdf', 'page': i + 1,
++             'title': 'Alpha: Retrieval' if i < 12 else 'Beta: Search', 'section': None,
++             'rerank_score': 100 - i} for i in range(count)]
++
++
++class RankedModel:
++    def predict(self, pairs):
++        return [100 - int(re.search(r'passage (\d+)', text).group(1)) for _, text in pairs]
++
++
++class RetentionRegressionTests(unittest.TestCase):
++    def test_real_main_preserves_pre_augmentation_anchor(self):
++        import main as pipeline
++        chunks = passages(12)
++        original = [chunks[10], *chunks[:10], chunks[11]]
++
++        def dense(*args, **kwargs):
++            return original if kwargs['query'] == 'Original question' else [chunks[11]]
++
++        def context(all_chunks, selected):
++            return 'Fixture context', {'citation_registry': selected}
++
++        with redirect_stdout(io.StringIO()), \
++                patch.object(pipeline, 'load_settings', return_value={'model': 'fixture'}), \
++                patch.object(pipeline, 'load_knowledge_base', return_value=(
++                    SimpleNamespace(ntotal=12, d=384), chunks, {'version': 'fixture'})), \
++                patch.object(pipeline, 'load_embedding_model', return_value=object()), \
++                patch.object(pipeline, 'build_bm25_index', return_value=object()), \
++                patch.object(pipeline, 'CrossEncoder', return_value=RankedModel()), \
++                patch.object(pipeline, 'decompose_query', return_value={
++                    'needs_decomposition': False, 'sub_queries': []}), \
++                patch.object(pipeline, 'rewrite_query', return_value='Rewritten query'), \
++                patch.object(pipeline, 'generate_hypothetical_document', return_value='Synthetic retrieval text'), \
++                patch.object(pipeline, 'retrieve', side_effect=dense), \
++                patch.object(pipeline, 'retrieve_bm25', side_effect=lambda **kw:
++                    original if kw['query'] == 'Original question' else [chunks[11]]), \
++                patch.object(pipeline, 'build_evidence_context', side_effect=context), \
++                patch.object(pipeline, 'render_complete', return_value={'answer': 'Fixture'}), \
++                patch.object(pipeline, 'generate_final_answer', return_value='Supported answer [1].'), \
++                patch.multiple(pipeline, USE_MULTI_QUERY=True, USE_HYDE=True, RERANK_TOP_K=10):
++            result = pipeline.main('Original question', complete_evidence=False)
++        self.assertEqual(result['retrieval_diagnostics']['retrieval_anchor_ids'], [10])
++        self.assertIn(10, result['selected_ids'])
++
++    def test_ablation_preserves_original_anchor_in_every_query_mode(self):
++        chunks = passages(12)
++        original = [chunks[10], *chunks[:10], chunks[11]]
++        ranking = rerank_results('Original question', original, RankedModel(), top_k=12)
++        with patch.object(evaluation, 'FINAL_K', 10), \
++                patch.object(evaluation, 'retrieve_two_ways', return_value=([chunks[11]], [chunks[11]])), \
++                patch.object(evaluation, 'retrieve', return_value=[chunks[11]]):
++            methods, traces = evaluation.evaluate_query_modes(
++                'Original question', {'rewritten_query': 'Rewrite', 'hypothetical_document': 'Synthetic'},
++                original, original, original, ranking, [], [], None, [],
++                object(), object(), chunks, object(), RankedModel())
++        self.assertNotEqual(traces['both']['rrf_ids'][0], 10)
++        for mode in ['base', 'rewrite', 'hyde', 'both']:
++            self.assertEqual(traces[mode]['retrieval_anchor_ids'], [10])
++            self.assertIn(10, methods[f'Pipeline {mode} (0 rounds)'])
++
++    def test_completion_retains_selected_local_top3_not_only_first_hits(self):
++        chunks = passages(24)
++        local = [{'query': 'What does Alpha store?', 'top_ids': [7, 8, 9]},
++                 {'query': 'What does Beta store?', 'top_ids': [18, 19, 20]}]
++        for k in [10, 20]:
++            with self.subTest(top_k=k), \
++                    patch('src.evidence_gap.rerank_results', side_effect=lambda query, candidates, model,
++                        top_k, **kw: sorted(candidates, key=lambda c: c['chunk_id'])[:top_k]), \
++                    patch('src.evidence_gap.retrieve') as fetch:
++                before = select_evidence(chunks, local, k, [0])
++                selected, trace = complete_evidence('Compare Alpha and Beta.', chunks, local, [0],
++                    object(), object(), chunks, object(), object(), top_k=k, max_rounds=1)
++                retained = {cid for item in local for cid in item['top_ids']} & {c['chunk_id'] for c in before}
++                self.assertTrue(retained <= {c['chunk_id'] for c in selected})
++                self.assertEqual(len(selected), k)
++                self.assertEqual(set(trace['retained_local_ids']), retained)
++                fetch.assert_not_called()
++
++    def test_completion_k10_and_k20_are_selected_independently(self):
++        chunks = passages(30)
++        original = [chunks[19], *chunks[:19], *chunks[20:]]
++        with tempfile.TemporaryDirectory() as temporary:
++            root = Path(temporary)
++            qpath, cpath = root / 'questions.json', root / 'chunks.json'
++            qpath.write_text(json.dumps([{'id': 'fixture', 'question': 'Locate evidence.',
++                'gold_evidence': [{'source': chunks[19]['source'], 'page': 20, 'quote': 'Evidence passage 19.'}]}]))
++            cpath.write_text(json.dumps(chunks))
++            kb = {'version': 'fixture', 'index_path': str(cpath), 'chunks_path': str(cpath), 'manifest_path': None}
++            with redirect_stdout(io.StringIO()), \
++                    patch.object(sys, 'argv', ['run_evaluation', '--questions', str(qpath), '--top-k', '10', '20',
++                        '--candidate-k', '120', '--no-auxiliary', '--complete-evidence', '--completion-rounds', '2',
++                        '--output-dir', str(root / 'output')]), \
++                    patch.object(evaluation, 'load_knowledge_base', return_value=(object(), chunks, kb)), \
++                    patch.object(evaluation, 'load_embedding_model', return_value=object()), \
++                    patch.object(evaluation, 'build_bm25_index', return_value=object()), \
++                    patch.object(evaluation, 'CrossEncoder', return_value=RankedModel()), \
++                    patch.object(evaluation, 'retrieve_two_ways', return_value=(original, [])), \
++                    patch.object(evaluation.api, 'chat_completion', side_effect=AssertionError('API forbidden')):
++                evaluation.main()
++            report = json.loads((root / 'output/results.json').read_text())
++            row = report['questions'][0]
++            method = 'Evidence Completion (up to 2 rounds)'
++            ten = row['metrics_by_k']['10'][method]['retrieved_ids']
++            twenty = row['metrics_by_k']['20'][method]['retrieved_ids']
++            self.assertEqual(ten, [*range(9), 19])
++            self.assertEqual(twenty, list(range(20)))
++            self.assertNotEqual(ten, twenty[:10])
++            self.assertEqual(set(row['evidence_completion_by_k']), {'10', '20'})
++            self.assertEqual(report['api_call_count'], 0)
++
++
++if __name__ == '__main__':
++    unittest.main()
+--- a/README.md
++++ b/README.md
+@@ -4,15 +4,17 @@
+ 
+ 当前生成模型为 `cn:deepseek-v4.1-flash`。Embedding 与重排在本机 CPU 运行；问题分解、回答和必要时的一次引用修复共用本机反代 API。
+ 
+-问题分解支持 2～4 个有效子题，比较题按实体及维度拆分，并保留向量/相似度等检索术语。主流程与评估共用选证据函数，默认每路候选 60、最终 10；生成上下文补充已有真实论文标题，便于识别数字文件名对应的论文。
++问题分解支持 2～4 个有效子题，比较题按实体及维度拆分，并保留向量/相似度等检索术语。主流程与评估共用选证据函数，默认每路与 RRF 候选 120、最终 10；main 默认按需最多补查两次，重写与 HyDE 关闭。生成上下文补充已有真实论文标题，便于识别数字文件名对应的论文。
+ 
+-**2026-10-20 最新完整语料评估**：全部 8 篇、120 页、1,397 条，42 道英文可答题比较四种查询设置及 0/1/2 轮补查。原流程 Recall@10=0.7361、MAP@10=0.4899；重写 + HyDE + 两轮为 0.7242、0.4797，完整 Gold 27/42→25/42，未通过采用门槛，三个开关保持默认关闭。64 项测试、1,008 组指标独立重算、八次真实 main 选证据对齐通过；两道部分回答仍未恢复。数据、成本与下一步证据保留修复建议见 [全部论文评估日志](docs/ALL_PAPERS_EVALUATION_2026-10-20.md)。
++**2026-10-20 最新修复与预算对照**：固定增强前的原问题锚点，保留初次入选的子题局部证据，补查按每个 K 独立执行。全部 8 篇、120 页、1,397 条、42 道英文可答题，在候选 120、最多两轮下，Top-10 的 Precision / Recall / MAP / MRR 为 **0.1310 / 0.7679 / 0.4837 / 0.5708**，Top-20 为 **0.0714 / 0.8115 / 0.4857 / 0.5727**；完整 Gold 28/42→30/42，上下文字符比值中位数 1.92。按预先预算门槛保留默认 10，20 可显式试用。本轮新增 API 调用为 0；较大候选池没有在所有指标上优于 60。方法、完整对照、验证边界和交接见 [修复与预算报告](docs/EVIDENCE_RETENTION_AND_BUDGET_2026-10-20.md)与 [PROGRESS](PROGRESS.md)。
++
++此前完整语料评估比较了四种查询设置及 0/1/2 轮补查：原流程 Recall@10=0.7361、MAP@10=0.4899；重写 + HyDE + 两轮为 0.7242、0.4797，完整 Gold 27/42→25/42，当时三个开关默认关闭。旧结果及八次真实回答留在 [全部论文评估日志](docs/ALL_PAPERS_EVALUATION_2026-10-20.md)，不作为本轮新参数的回答验收。
+ 
+ 此前十二道英文新题验证中，十道可答题 Recall@10=0.4833、MAP@10=0.2144，其中跨篇召回仅 0.2222。两种离线排序候选没有稳定收益，已保留原排序；此前六道开发题 Gold 全覆盖不能代表泛化。闭卷/原文/无关证据对照及剩余过度拒答见 [新题与模型知识对照日志](docs/INDEPENDENT_VALIDATION_2026-10-19.md)。历史[英文优化](docs/RETRIEVAL_OPTIMIZATION_2026-10-19.md)及[分解修复](docs/DECOMPOSITION_EVALUATION_2026-10-19.md)保留。
+ 
+-后续一轮限定论文补检索原型使同十道新题 Recall@10 达到 0.6000、跨篇达到 0.4167，但旧六题 Recall 从 1.0000 降到 0.9167，未通过采用门槛。默认流程保留；原型仅显式启用，量化入口为 `--complete-evidence`，最终固定 Top-10。实现、失败案例与零 API 调用记录见 [一轮补检索日志](docs/EVIDENCE_COMPLETION_2026-10-19.md)。
++历史一轮限定论文补检索原型使同十道新题 Recall@10 达到 0.6000、跨篇达到 0.4167，但旧六题 Recall 从 1.0000 降到 0.9167，当时未通过采用门槛，仅显式启用且只支持 Top-10。现已支持多个 K 独立补查，量化仍需显式加 `--complete-evidence`。原实现、失败案例与零 API 调用记录见 [一轮补检索日志](docs/EVIDENCE_COMPLETION_2026-10-19.md)。
+ 
+-此前按用户授权比较 0/1/3 轮：同十题 Recall 为 0.4833/0.6000/0.5500，三轮 MAP=0.2252、MRR=0.3161，均低于一轮；旧六题三轮仍为 0.9167。三轮采用 60→120→180 的限定论文候选深度，增加候选没有恢复最终证据，保持补查默认关闭，重写与 HyDE 也继续关闭。显式调用可传 `completion_rounds=3`，evaluation 可加 `--completion-rounds 1 3`。完整结果、成本与局限见 [三轮补查日志](docs/COMPLETION_ROUNDS_2026-10-19.md)。
++此前按用户授权比较 0/1/3 轮：同十题 Recall 为 0.4833/0.6000/0.5500，三轮 MAP=0.2252、MRR=0.3161，均低于一轮；旧六题三轮仍为 0.9167。三轮采用 60→120→180 的限定论文候选深度，当时保持补查默认关闭。用户本轮最终选择覆盖旧默认：启用最多两轮、候选 120；重写与 HyDE 继续关闭。显式调用仍可传 `completion_rounds=3`，evaluation 可加 `--completion-rounds 1 3`。旧结果、成本与局限见 [三轮补查日志](docs/COMPLETION_ROUNDS_2026-10-19.md)。
+ 
+ ## 运行
+ 
+@@ -53,18 +55,18 @@
+ python -m evaluation.run_evaluation --questions evaluation/arxiv_pilot_questions_en.json --kb-version arxiv-pilot-5-20261019 --top-k 5 10 20 --output-dir evaluation/results/new_english_run
+ ```
+ 
+-回答评估会调用 API；`run_evaluation.py` 默认启用分解与改写，也会调用 API，默认候选 60、最终 10，输出 Precision、Recall、MAP、MRR。评估与主流程共用当前选证据实现，同时保留原全局重排等对照行。`--candidate-k 20 --top-k 5` 可复现旧预算。Gold/reference_answer 仅供评估，不传给模型。
++回答评估会调用 API；`run_evaluation.py` 默认启用分解与改写，也会调用 API，默认候选 120、最终 10，输出 Precision、Recall、MAP、MRR。评估与主流程共用当前选证据实现，同时保留原全局重排等对照行。量化补查需显式传 `--complete-evidence --completion-rounds 2`（CLI 轮数默认仍为 1），不随 main 开关隐式启用。`--candidate-k 20 --top-k 5` 可复现旧预算。Gold/reference_answer 仅供评估，不传给模型。
+ 
+ 上一轮英文六题同分解候选池、同十条预算对照：Recall@10 从 0.6667 到 1.0000，MAP@10 从 0.3542 到 0.3998。Top-20 无额外召回收益，正文约为十条的 1.95 倍，因此保留默认 10。每个预算独立选证据，固定列表的前缀分数另存。五道单篇验证题及旧库五题的原问题 Top-10 指标未退步。详见 [开发集检索优化日志](docs/RETRIEVAL_OPTIMIZATION_2026-10-19.md)；[此前中文 Top-5 分数](docs/RETRIEVAL_EVALUATION_2026-10-19.md)保留为历史基线。
+ 
+ 上述六题属于开发集。后续十二道新英文题、两种失败的排序尝试、四题三条件生成及两题标题复核见 [新题验证日志](docs/INDEPENDENT_VALIDATION_2026-10-19.md)。新题集为 `evaluation/arxiv_next_questions_en.json`，缓存为 `evaluation/results/independent_validation_20261019/auxiliary.json`；其中改写关闭以匹配主流程。两道无 Gold 题不计检索分数，生成仅抽测 n11。正确证据组是标注原文的正向控制，不是端到端检索答案。
+ 
+-只评估原问题、不调用辅助 API：加 `--no-auxiliary`。固定输入比较预算：用 `--auxiliary-cache 已保存的auxiliary.json`，同题查询不会重复生成。本轮固定缓存为 `evaluation/results/retrieval_optimization_20261019/auxiliary_final.json`；受控线程的 Mac 命令见优化日志。
++只评估原问题、不调用辅助 API：加 `--no-auxiliary`，但这也会禁用分解，不能当作同分解对照。固定输入比较预算：用 `--auxiliary-cache 已保存的auxiliary.json`，同题查询不会重复生成。当前八篇缓存为 `evaluation/results/all_papers_20261020/auxiliary.json`；旧六题缓存为 `evaluation/results/retrieval_optimization_20261019/auxiliary_final.json`。受控线程的 Mac 条件见 PROGRESS。
+ 
+-完整八篇语料的查询增强对照使用 `--query-ablation`：追加与 `main.py` 对齐的 base、rewrite、HyDE、both 四组，并可共用同一轨迹记录补查前及一/两轮后的分数。此模式固定 Top-10，必须提供含 `rewritten_query`、`hypothetical_document` 和分解结果的匹配缓存，离线回放不调用 API。2026-10-20 实验题集为 `evaluation/all_papers_questions_en.json`，独立库为 `all-papers-8-20261020`，辅助缓存为 `evaluation/results/all_papers_20261020/auxiliary.json`；旧库仍保留。
++完整八篇语料的查询增强对照使用 `--query-ablation`：追加与 `main.py` 对齐的 base、rewrite、HyDE、both 四组，支持多个 K 分别选证据与补查，并记录补查前及指定轮数后的分数。必须提供含 `rewritten_query`、`hypothetical_document` 和分解结果的匹配缓存，离线回放不调用 API。2026-10-20 实验题集为 `evaluation/all_papers_questions_en.json`，独立库为 `all-papers-8-20261020`；默认激活库仍是三篇，旧库保留。
+ 
+ ```bash
+-python -m evaluation.run_evaluation --questions evaluation/all_papers_questions_en.json --kb-version all-papers-8-20261020 --auxiliary-cache evaluation/results/all_papers_20261020/auxiliary.json --query-ablation --complete-evidence --completion-rounds 1 2 --output-dir evaluation/results/new_all_papers_run
++python -m evaluation.run_evaluation --questions evaluation/all_papers_questions_en.json --kb-version all-papers-8-20261020 --candidate-k 120 --top-k 10 20 --auxiliary-cache evaluation/results/all_papers_20261020/auxiliary.json --query-ablation --complete-evidence --completion-rounds 2 --output-dir evaluation/results/new_all_papers_run
+ ```
+ 
+ 该命令重新计算本地检索和重排；本次使用保存于结果目录中的分题驱动共享重复推理，完整产物保存后无需重复跑分。
+@@ -79,17 +81,17 @@
+ - [当前交接状态](PROGRESS.md)
+ - [历史实验概览](docs/experiments.md)与[历史结果归档](docs/history/README.md)
+ 
+-本地回归使用 `python -m unittest discover -s tests -v`，当前 64 项，覆盖 API 未完成状态、失败留档、BM25、版本发布/回退/固定、真实四子题响应、预算与评估对齐、缓存回放、RRF 证据保留、引用别名、生成标题元数据、旧上下文兼容性、查询增强真实候选隔离与缺失缓存拒绝，以及限定论文补查的名称识别、多轮深度、预算、重复计划和无新增候选停止条件；这些检查不调用生成 API。
++本地回归使用 `python -m unittest discover -s tests -v`，当前 68 项，覆盖 API 未完成状态、失败留档、BM25、版本发布/回退/固定、真实四子题响应、预算与评估对齐、缓存回放、RRF 证据保留、引用别名、生成标题元数据、旧上下文兼容性、查询增强真实候选隔离与缺失缓存拒绝，以及限定论文补查的名称识别、多轮深度、预算、重复计划和无新增候选停止条件。本轮新增 main 调用点锚点保护、局部 Top-3 保留及 10/20 独立补查回归；这些检查不调用生成 API。
+ 
+ ## 代码结构
+ 
+-- `main.py`：当前问答主流程；HyDE 和查询改写保留开关，默认关闭。
++- `main.py`：当前问答主流程；候选 120、最终 10、按需最多补查两次；HyDE 和查询改写默认关闭。
+ - `src/pdf_loader.py`、`chunking_semantic.py`、`chunking_recursive.py`：解析和分块。
+ - `src/embedding.py`、`vector_store.py`、`chunk_storage.py`：向量与持久化。
+ - `src/knowledge_base.py`：成对版本、哈希校验、当前选择与切换/回退命令。
+ - `download_arxiv_papers.py`：按固定版本清单下载小批量论文、校验并跳过已有文件、记录失败供重跑。
+ - `src/*retriever.py`、`reranker.py`：检索、融合与重排。
+-- `src/evidence_gap.py`：默认关闭的来源定向补检索原型，上限可设 1～3 轮，返回覆盖信号、逐轮候选、补查与停止记录。
++- `src/evidence_gap.py`：来源定向补检索；main 默认最多两轮，上限可显式设 1～3 轮，返回覆盖信号、局部保留 ID、逐轮候选、补查与停止记录。
+ - `src/query_decomposer.py`、`query_rewriter.py`、`hyde.py`：问题分解与可选查询增强。
+ - `src/numeric_evidence.py`、`grounded_evidence.py`：保守数值解析、有限主体归属及原文证据视图。
+ - `src/api_llm.py`、`llm.py`、`citation_validation.py`：API 调用、共享入口与引用结构检查。
+--- a/PROGRESS.md
++++ b/PROGRESS.md
+@@ -1,278 +1,172 @@
+-# Advanced-LLM-RAG 项目进度与实习路线
++# Advanced-LLM-RAG 项目进度与新对话交接
+ 
+-更新日期：2026-10-20（Asia/Shanghai）。以当前工作树、源码和原始运行产物为准。本文保留接续开发需要的事实、决策和验收条件，实验细节见文末报告。
++更新：2026-10-20（Asia/Shanghai）。当前工作区：`/Users/j/Desktop/Advanced-LLM-RAG`；Git 基点 `c2cd612`，有大量已保留的未提交 / 未跟踪工作，尚未提交或推送本轮改动。
+ 
+-## 1. 项目目标与当前阶段
++## 1. 新对话先看这里
+ 
+-目标：完成一个面向科研论文的 Agentic RAG 应用，能够规划检索、选择工具、检查证据缺口、补充资料、给出可追溯回答，并通过对照评测解释收益与成本，用于实习投递和面试展示。
++本轮用户最终决定：**按需最多补查两次，候选 120，对比 Top-10 / Top-20，Precision、Recall、MAP、MRR 四项都算；保存完整会话并重写交接。** 这覆盖此前选择一次补查的倾向。
+ 
+-目前按大模型应用 / RAG / Agent 开发实习方向规划，尚未绑定具体 JD；拿到岗位描述后再调整重点。既要能运行，也要能讲清核心代码、设计取舍、实验口径、失败案例和本人实际理解与贡献。
++**已完成**原查询锚点和补查局部证据保留修复；当前 main 为候选 120、最终 Top-10、按需最多两轮补查。Top-20 已独立量化并保留结果，尚未设为默认。重写与 HyDE 关闭。四项指标全部计算，本轮新增 API 调用为 0。
+ 
+-**已完成：固定流程的 Advanced RAG、API 生成接入、模型与查询增强实验、必要清理。待实现：批量论文导入、自适应 Agent、联网工具、LangGraph 编排与演示界面。**
++先读本文和 [最新修复 / 预算报告](docs/EVIDENCE_RETENTION_AND_BUDGET_2026-10-20.md)，需要旧结论的原话再查 [完整可见对话](docs/chat_history/RAG_2026-10-19_20_完整对话.md)。不要重跑整套付费查询或重建索引来“恢复上下文”。
+ 
+-Single-Agent 可以承担完整的动态规划和工具调用；多 Agent 不是必要条件。“证据不足时最多补检索一次”仅适合作为早期验证步骤，不再作为最终目标。完整 Agent 仍应有可配置的调用、时间和 token 预算，以及明确的停止条件。
++## 2. 用户约束与设备事实
+ 
+-### 1.1 用户设备与跨机开发约束（长期保留）
++- 默认中文说明；问题题集使用英文。先说明目的、结果和验证边界。讲解 / 下一步讨论不等于实施授权；明确委托执行时在授权范围内完成。
++- 保持普通函数、字典、列表及原文件结构；最小改动，不为技术名词增加框架。插件是协作辅助，不是项目运行依赖。
++- 本机全局规范位于 `~/.codex/AGENTS.md`，本轮实际收到并遵循；无需重复改插件缓存。Matt Pocock / 鼠鼠实习工具按需要使用，不自动同步到 Windows 或普通 ChatGPT。本轮实际使用 Karpathy 与 Matt 调试技能，没有新增子代理。
++- 核心目标是可解释、可复现、有量化证据的科研论文 RAG / Agent 项目，面向大模型应用、RAG、Agent 开发实习，尚未绑定具体 JD。
++- **本项目不做 Fine-tuning、LoRA、QLoRA**；不混入独立的 PyTorch Transformer 架构项目。
++- MacBook Air + PyCharm 是主开发设备；本机项目 `.venv` Python **3.11.9** 本轮已核对。现有记录没有确认具体芯片和内存，不推断为 M3 或 16GB。
++- Windows：用户历史设备 RTX 5060 Laptop GPU、约 8GB 显存，PyCharm、Python 3.11.9。历史本地 Qwen3.5-2B / CUDA 运行记录不冒充本轮 Mac 或 Windows 新实测。
++- 当前生成走 API，Embedding / BGE 在 Mac CPU 离线运行；主线不要求额外 NVIDIA GPU。两台电脑不共享进程、虚拟环境、模型缓存或本机代理，`127.0.0.1` 指运行程序所在电脑。
++- Git 只同步已提交且推送的内容。当前新增论文、版本、模型缓存、配置与未提交资料不能假定已同步到 GitHub / Windows；本轮没有提交 / 推送授权或操作。
++- 保留原有工作、配对索引、题集与实验结果；凭证只保存在本地私有配置 / 环境变量，不进入日志。
+ 
+-以下设备事实从 Git 历史 PROGRESS 的环境章节及历史交接恢复；历史配置不冒充对 Mac 的当前实测。
++## 3. 当前配置、知识库与真实运行范围
+ 
+-| 项目 | 已知事实与约束 |
++| 项目 | 当前值 / 验证边界 |
+ | --- | --- |
+-| Mac | **MacBook Air + PyCharm，原本就是主开发环境**，承担代码开发、PDF 解析、数据处理、检索与评估；已核对记录未注明具体芯片和内存，不推断为某款 Apple Silicon 或 16GB |
+-| Mac 环境 | 项目独立 `.venv`，历史 Python **3.11.9**；历史路径 `/Users/j/Desktop/Advanced-LLM-RAG`，迁移时核对实际路径和依赖 |
+-| Windows | **RTX 5060 Laptop GPU，约 8GB 显存，PyCharm**；已运行原本地 `Qwen/Qwen3.5-2B`，用于本地生成实验与对照 |
+-| Windows 环境 | 独立 Python **3.11.9** 环境；本地实验记录为 `torch 2.13.0+cu130`、CUDA 可用；项目路径 `C:/Users/J/Desktop/Advanced-LLM-RAG` |
+-| 当前硬件需求 | 主流程 API 生成，Embedding 与 BGE 重排已在 CPU 运行；后续导入、评测、Agent、联网和 UI 主线不要求 NVIDIA 显卡。批量性能仍需在实际 Mac 上验证 |
+-| 两机关系 | 不共享进程、虚拟环境、模型缓存或 GPU。没有已验证的 Mac → Windows 实时推理服务，不能直接跨机 import 本地 Qwen |
+-| API 迁移 | `127.0.0.1:7863` 指运行程序的那台电脑；Mac 需启动自己的代理或使用可访问的服务地址，不能假设 Windows 的本机代理自动可达 |
+-| 文件同步 | Git/GitHub 只同步提交并推送的被跟踪内容；现有未提交/未跟踪改动，以及被忽略的论文、索引、配置和模型缓存，必须单独核对。两机虚拟环境独立安装，不复制 Windows `.venv` 到 Mac |
++| Embedding | `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`，CPU、384 维 |
++| Reranker | `BAAI/bge-reranker-base`，本机缓存，CPU 离线实测 |
++| 每路 Dense / BM25 与 RRF 候选 | `RETRIEVAL_TOP_K=120`、`RRF_TOP_K=120` |
++| RRF 秩平滑常数 | `RRF_K=60`，不是候选数 |
++| 最终证据 | `RERANK_TOP_K=10`；Top-20 已独立对照 |
++| 来源定向补查 | `USE_EVIDENCE_COMPLETION=True`，`main(..., completion_rounds=2)`；按信号触发并可提前停止 |
++| 补查候选深度 | 第 1 / 2 轮为 120 / 240，先限定论文再截断；不是固定执行两次 |
++| rewrite / HyDE | `USE_MULTI_QUERY=False`、`USE_HYDE=False` |
++| 默认知识库 | `semantic-mac-20261019` 三篇库；八篇需显式指定 |
++| evaluation | 候选默认 120；本轮显式 `--top-k 10 20 --complete-evidence --completion-rounds 2`；CLI 补查轮数默认仍为 1 |
++| 当前真实生成 | API 配置存在；本轮未重新发起生成，不能据此验收新参数回答 |
+ 
+-### 1.2 项目边界与学习方式（长期保留）
+ 
+-- **本 RAG 项目不做 Fine-tuning / LoRA / QLoRA**，不混入独立 PyTorch Transformer 架构项目；不得把微调重新加入后续路线或显卡需求。
+-- 核心检索与数据流程保持可读、可解释的实现，不为增加技术名词而引入框架；后期编排按实际需要使用 LangGraph。当前用户授权使用个人插件辅助分析与开发，不等于将插件变成项目运行依赖。
+-- 历史学习偏好是逐步讲清目的、代码与预期输出，便于自己理解和手写；用户明确委托执行、完整整理或批量调试时按当次授权推进，不据旧偏好重复索要确认。
+-- 更新 PROGRESS 时分别核对长期约束和阶段性状态。可以压缩历史实验细节并链接归档，但**设备、项目排除项、学习偏好与同步限制不能随进度更新丢失**；变化需有用户新指示或实测依据。
++API 私有配置已填写，当前请求路由 `cn:deepseek-v4.1-flash`；此前实际响应报告 `deepseek-v4.1-flash`，标识不能独立证明上游权重。设置为 `thinking.type=disabled`、`temperature=0`、`max_tokens=4096`。本轮没有发起 API 调用，因此没有重新验收反代连通性或新预算下的回答生成。
+ 
+-### 1.3 Mac 接续实测（2026-10-19）
++### 知识库版本
+ 
+-- 当前提交为 `c2cd612`。已读取上一轮「检查项目并规划后续步骤」及更早 RAG 对话「检查项目并找出需重写文件」的最近四轮；旧记录中的“Decomposition 尚未实现”已被 Windows 后续实现替代，以当前源码为准。
+-- 26 个 Python 文件语法通过；九个迁移数据文件哈希一致，Semantic 仍为 378 条、384 维。25 条 Gold 引文匹配；历史最终六题的 143 条证据记录和引用结构复查通过，不等于重新生成或完成独立语义盲评。
+-- API 已恢复连通，模型列表含当前路由；Mac 三题真实问答共完成六次生成调用，全部 `finish_reason=stop`，无 HTTP 错误、截断或额外引用修复。代理报告输入 6725、输出 503、合计 7228 token；不据此推断金额。配置仍在忽略的 `api.local.json`（0600），Key 未进入报告或输出。
+-- `BAAI/bge-reranker-base` 已下载到本机默认 Hugging Face 缓存（约 1.13 GB），官方权重 SHA-256 校验通过，离线 CPU 加载和重排成功。**Mac 已完成单论文 q2、跨论文 q5、库外拒答 q6 三题真实主流程**；三题 Top-10 与完整 context 均和 Windows 历史记录一致。q2/q6 人工核对通过；q5 核心数值正确，但 VGG 的 in all layers 范围措辞仍记严格部分通过。
+-- **已修正 API 未完成响应与 BM25 零分候选**：共享文本 API 仅接受 `stop` 且正文非空，其他结束状态抛出携带部分正文/用量的错误；评估记失败并保留响应，不输出成功答案。BM25 空词项直接返回空候选，过滤零分并保留合法负分；纯中文由 Dense 继续检索。新增 10 个本地回归测试全部通过，真实六道英文题的 BM25 排名/分数不变。本轮生成 API 调用为 0；原始 Mac 三题记录属于修复前基线，没有冒充新代码端到端运行。
+-- 本机全局 `~/.codex/AGENTS.md` 已存在精简 Karpathy 规范，且实际加载进本轮；本次复核无需重复改写插件缓存或全局文件。后续按需要使用 Matt Pocock 技能集与鼠鼠实习工具；不自动同步到 Windows 或普通 ChatGPT 对话。
+-- **成对知识库版本与回退已实现并演示**：旧库快照 `legacy-3papers-20261019` 与原文件字节一致；同三篇论文重建 `semantic-mac-20261019`，仍为 378 条、384 维。四次切换/回退的本地 Top-10 与 Mac 基线一致，25 条 Gold 均匹配，25 个回归测试通过。本机当前激活重建版，生成 API 调用 0；旧九个数据文件与历史结果未改。操作见 [知识库版本指南](docs/KNOWLEDGE_BASE_VERSIONS.md)，记录见 `evaluation/results/kb_versions_20261019/`。
++| 版本 | 语料 / 数量 | 状态 |
++| --- | --- | --- |
++| `legacy-3papers-20261019` | 原 Transformer / DCNN / VGG，378 条 | 不重编码的旧配对快照 |
++| `semantic-mac-20261019` | 同三篇，378 条、384 维 | **当前激活指针**，Mac 重建对照通过 |
++| `arxiv-pilot-5-20261019` | RAG / DPR / ColBERT / Self-RAG / CRAG，88 页、1,019 条 | 独立五篇实验库 |
++| `all-papers-8-20261020` | `data` 全部八篇，120 页、1,397 条 | 精确合并三篇 / 五篇的已验证分块及向量，仅重映射位置 ID |
+ 
+-- **首批五篇 arXiv 下载与先导实验已完成**：RAG v4、DPR v3、ColBERT v2、Self-RAG v1、CRAG v3，共 88 页、1,019 条、384 维，独立版本 `arxiv-pilot-5-20261019`。固定版本清单、串行下载、SHA 校验、完成文件跳过、失败文件重跑已实现；重复运行五篇均跳过，模拟中断恢复与篡改防覆盖通过。原 18 个基线文件/私有配置未改，当前默认仍是三篇的 `semantic-mac-20261019`。
+-- 新库跑了 7 道中文原问题检索、6 道英文表达对照、3 道真实主流程问答。预设 Gold 全进 Top-10 为中文 2/6、英文 4/6，但人工核对替代段落后五道单篇题均有可用证据。真实问答为 ColBERT 单篇完整、DPR/ColBERT 跨篇部分完成、本机测速缺证据题正确拒答但切成英文；共 6 次 API 调用，输入 6586、输出 870、合计 7456 token，不推断金额。25 个既有回归测试通过。详见 [五篇实验报告](docs/ARXIV_PILOT_2026-10-19.md)。
+-- **分解与选证据修复、evaluation 已完成**：接受 2～4 个去重子题，非法结果显式记拒绝；重排补已有标题且避免重复；子题 Top-3 优先并保护首条，最终预算仍为 10，不跨题比较分数。固定四子题响应对照中 p6 关键引文从 1/3 到 3/3；七题真实主流程后对四个输出样例固定证据复核，五道单篇核心点齐、跨篇四核心点齐、拒答为简短中文。p6 仍有未要求的维度补充和 L2 措辞精度问题，未记严格无瑕疵通过。42 个测试通过，旧三篇原问题六题 Top-10 ID 前后完全相同；本轮共 19 次 API、27976 token。详见 [修复与 evaluation 日志](docs/DECOMPOSITION_EVALUATION_2026-10-19.md)。
+-- **补跑用户指定的 `run_evaluation.py` 量化检索评估**：增加可选题集参数，保留原七组方法和 Top-20→Top-5 参数；使用五篇题集，六道有 Gold 题计分、p7 跳过。改写后检索重排组 Recall@5=0.5000、MAP@5=0.3889、MRR@5=0.3889；普通混合重排分别为 0.2500、0.1944、0.2222。分解组 Recall 仍为 0.2500，原评估尚未采用主流程的局部子题保护策略，不能当作主流程修复前后对照。本轮新增 12 次辅助 API、5695 token；42 组逐题分数重算及原 stdout 对照一致，Gold/索引/默认库未变。完整表格见 [检索量化日志](docs/RETRIEVAL_EVALUATION_2026-10-19.md)。
+-- **英文检索优化与预算对照已完成**：评估默认 60→10，与主流程共用 `rank_evidence/select_evidence`；保留原问题 RRF 首条，分解同时保留比较维度与向量/相似度语义。固定英文六题、同分解候选池、同 Top-10，Recall 从 0.6667 到 1.0000，MAP 从 0.3542 到 0.3998，MRR 从 0.3542 到 0.3917。六题原 Gold 均入实际十条，但 p1 第十、p6 第八/九，尚不能称排序优秀或答案全对。Top-20 召回不再提升，正文约 1.95 倍，保留默认 10。五道新英文题及旧库五题的原问题 Top-10 四项指标逐题未退步；不包含新分解提示的泛化验证。47 测试通过、510 组指标独立重算一致、实际主流程 p6 检索 ID 与评估一致。本轮共 14 次辅助 API、7060 token，无最终生成调用；预算对照全部固定查询离线回放。旧 Gold、索引、API 私有配置和默认三篇库保留。详见 [英文优化日志](docs/RETRIEVAL_OPTIMIZATION_2026-10-19.md)。
+-- **十二道英文新题与模型知识对照已完成，有限排序尝试不采用**：4 单篇、6 跨篇、2 无 Gold，十道可答题当前主流程 P@10=0.0700、Recall@10=0.4833、MAP@10=0.2144、MRR@10=0.3061；单篇召回 0.8750、跨篇 0.2222，完整 Gold 4/10，不能延用旧六题 100% 宣称泛化。两个离线排序候选新题 MAP 为 0.2111、0.1761，且有旧题退步，按事先门槛保留原排序。闭卷/标注原文/无关原文四题三条件表明模型确有论文知识，也有细节混淆；无关证据四题均拒答。正向实验暴露缺少论文身份元数据，生产仅补 `build_context` 的真实 title 头，兼容旧文件名；两题固定证据标题复核中 n08 恢复完整，n05 仍过度拒答，不继续采样。正确证据是 oracle 控制，不是实际检索生成验收。50 测试通过，旧 378 个上下文逐字相同，新 1019 个仅加标题；46 个登记文件哈希不变。共 24 次 API（10 分解、12 三条件回答、2 标题复核），12186 token，无自动重试；索引、Gold、默认库与私有配置未改。详见 [新题验证与有限优化日志](docs/INDEPENDENT_VALIDATION_2026-10-19.md)。
+-- **一轮来源定向补检索原型与原 evaluation 已完成**：只尝试一个预先固定方案，问题需明确涉及两篇以上论文，依据已有 title/source 映射与子题覆盖信号决定是否补查；最多一轮、四子题，最终仍 10，运行不接收 Gold。26 道新旧可答题全部调用原 `evaluation/run_evaluation.py` 评估，全部旧方法的逐题结果与冻结记录一致。新十题 Recall 0.4833→0.6000、MAP 0.2144→0.2367、MRR 0.3061→0.3272；跨篇 Recall 0.2222→0.4167，但完整 Gold 仍 4/10。旧六题 Recall 1.0000→0.9167、MAP 0.3998→0.3792，p6 丢失一段已覆盖 Gold；旧五验证题不变，三篇库五题 Recall 0.8417→0.8667。未通过旧题回归门槛，保留原默认流程，原型仅由 `main.main(..., complete_evidence=True)` 或评估 `--complete-evidence` 显式启用，不继续调参。58 项本地测试通过；检索评测 API 调用 0，未进行真实生成，不把检索分数称作回答正确率。详情见 [一轮补检索日志](docs/EVIDENCE_COMPLETION_2026-10-19.md)。
+-- **按新增授权完成三轮上限对照**：保留第一轮行为，第二/三轮将同一批来源任务候选深度由 60 扩到 120/180，最终仍 10，无新重写或 HyDE。原 evaluation 同次轨迹比较 0/1/3 轮，26 道可答题的旧方法及一轮结果逐项复现。新十题 Recall 0.4833/0.6000/0.5500、MAP 0.2144/0.2367/0.2252、MRR 0.3061/0.3272/0.3161；跨篇 Recall 0.2222/0.4167/0.3333。旧六题三轮仍 Recall 0.9167、MAP 0.3792，与一轮相同；旧验证题和三篇库三轮也与一轮相同。三轮没有任何最终题目指定 Gold 召回优于一轮，n07 从 1/2 降到 0/2，n06 排序下降。未通过旧题门槛，补查默认仍关闭，重写/HyDE 继续关闭。62 项测试通过，生成 API 调用 0；8 道触发题执行三次处理、共 60 次定向查询，额外两次处理耗时中位数约 57.13 秒。轮数与候选预算共同增加，不能单独归因轮数。详情见 [三轮日志](docs/COMPLETION_ROUNDS_2026-10-19.md)。
+-- 三轮实验结束时的停止点：一轮有局部检索收益，三轮加深未进一步改善，已完成 0/1/3 轮实验并保留原默认流程。来源覆盖不能保证语义支持，已召回证据被丢掉仍是核心缺口；当时尚未完成独立跨篇和真实端到端生成验收。新题是手工同语料验证集，n08 有条件归属歧义，旧 Gold 与分数保留。默认线程崩溃根因未定位，继续受控线程；尚未实现完整 Agent、跨版本稳定 ID、通用内容去重及完整导入生命周期。
++五篇固定版本为 RAG v4 `2005.11401v4`、DPR v3 `2004.04906v3`、ColBERT v2 `2004.12832v2`、Self-RAG v1 `2310.11511v1`、CRAG v3 `2401.15884v3`。原三篇是 Transformer 11 页、DCNN / AlexNet 7 页、VGG 14 页，不含 ResNet。
+ 
+-### 1.4 全部论文与 rewrite / HyDE / 两轮补查（2026-10-20）
++`data/processed/active_kb.json` 仍选择三篇库。使用八篇库时显式传 `kb_version="all-papers-8-20261020"`；本轮未擅自切换指针。每版 `faiss.index`、`chunks.json`、`manifest.json` 必须成对；位置 ID 不跨库通用，Gold 以 source/page/quote 映射，合并 ID 映射另存。操作见 [版本指南](docs/KNOWLEDGE_BASE_VERSIONS.md)。
+ 
+-- 用户在暂停后明确说“继续”，本轮按授权重新测试两个增强开关和两轮补查。遍历 `data` 实际共 **8 篇不同 PDF、120 页**，均与既有清单 SHA 相同；以已验证三篇 / 五篇库的原分块及原向量创建独立 `all-papers-8-20261020`，**1,397 条、384 维**，只有合并位置 ID 重映射。旧版本和当前默认三篇指针保留，未重新解析、改变 chunking 或声称实现通用导入生命周期。
+-- 原 `evaluation/run_evaluation.py` 只增加显式 `--query-ablation`，保留旧对照及指标公式，统一比较 base / rewrite / HyDE / both × 补查上限 0/1/2，候选 60、最终 10。固定 42 道英文可答题（26 旧题不改、16 新题），另 4 道无 Gold 跳过、不计正确。新题引文逐条核对 PDF 页码，全部 42 题 Gold 按 source/page/quote 映射，无 Gold 进入生成或运行时判断。
+-- **总体结果不支持采用全部增强。** 原流程 Recall@10=0.7361、MAP=0.4899、MRR=0.5693，完整 Gold 27/42；重写 + HyDE + 两轮为 **0.7242 / 0.4797 / 0.5690，25/42**。不开增强而只补查一轮 / 两轮，Recall 为 0.7520 / 0.7480，MAP 为 0.4922 / 0.4937，完整 Gold 均 26/42；旧六题仍有 p6 退步。新八道跨篇 Recall 0.5000→0.5417，未达到预设 +0.10；原六题 Recall 1.0→0.75。四项检索采用门槛全部未通过，**三个生产开关继续关闭**。
+-- 定位到明确机制：p1 的 Gold 750 本在增强前 RRF 首条，融合增强后锚点换成 Self-RAG 986，Gold 虽在候选池却失去保护，Recall 1→0；p6 补查丢掉已覆盖 Gold 597；n07 第一轮选中 615，第二轮虽然 615、761 都在候选池，却又全部落选；a13 第二轮新增 995 仅使 Recall 到 1/3。a09/a15 的 Transformer 简称不能被现有来源别名识别，未触发双来源补查。本轮保持规则与 Gold，不因结果调参或改题。
+-- 固定 p3/n07/a10/a12 跑 **8 次真实 main 回答**，查询增强重放真实 API 缓存，最终生成实际调用 API；八份选证据 ID 均与 evaluation 完全一致，引用结构 8/8、修复 0。人工逐条核对中，两组均 p3/a10 核心完整、n07/a12 部分回答，缺失 RAG 预计算 / DPR 独立编码器原文的问题未恢复。属于同语料小样本人工验收，不称总体回答准确率或盲测通过。
+-- **64 项本地测试通过；1,008 组逐题分数及分组指标独立重算一致**；所有旧分块 / 向量逐条保留，九个迁移数据 SHA 匹配，默认指针、旧题 / Gold、私有配置、`main.py` 未改，日志无 Key。新增辅助 API 110 次（复用 16 旧分解，26 新分解、42 rewrite、42 HyDE）及最终回答 8 次，累计 **118 次、61,719 token**，全部 stop、失败 / 自动重试 / 修复均 0。共享重排重复分数后检索处理合计约 12.69 分钟，不是逐组服务延迟或 P95。详见 [全部论文评估日志](docs/ALL_PAPERS_EVALUATION_2026-10-20.md)，全部原始记录在 `evaluation/results/all_papers_20261020/`。
+-- **当前停止点与下一步：本轮全部完成，保持原默认流程。** 下一项建议先固定增强前原查询锚点，再独立尝试补查对关键子题首条的保留；使用现有缓存和同一题集做一次有边界的离线复评，无需再次生成整批查询。不把这次实验升级为完整 Agent；仍缺独立盲测、语义覆盖判断、通用导入和服务级性能验证。
++### Mac 受控线程
+ 
+-## 2. 当前真实流程
++批量线程退出 139 的根因仍未定位；本轮稳定运行继续采用：
+ 
+-### 离线构建
+-
+-```text
+-data/raw/ 中的 PDF
+-  → PDF 解析（保留来源、页码、标题、章节）
+-  → Semantic 分块
+-  → MiniLM 向量化（CPU，384 维）
+-  → 保存 FAISS 索引和 chunks JSON
++```bash
++OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1 \
++VECLIB_MAXIMUM_THREADS=1 TOKENIZERS_PARALLELISM=false \
++HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 \
++.venv/bin/python evaluation/results/evidence_retention_20261020/run_comparison.py
+ ```
+ 
+-入口为 `build_semantic_index.py --version 版本名`：在独立目录构建并校验索引/JSON，发布后默认不改变当前选择，需 activate 或显式 --activate。`src/knowledge_base.py` 统一验证哈希、数量、维度及位置 ID，并原子切换版本；问答与评估共用读取入口。原始 Semantic 文件保留，无指针的旧项目仍兼容。新增固定 ID 论文清单下载入口，索引仍整体重建，尚无向量增量更新；`build_recursive_index.py` 保留为独立对照。双栏通过 `--two-column-files` 显式配置，五篇样本有抽查，尚未验证大量版式泛化。
++驱动在首次模型加载前设置 `torch.set_num_threads(1)` 和 `torch.set_num_interop_threads(1)`。上述完整实验已有结果时直接读取，**无需再次执行**。新 Python 进程中的真实 main 问答仍会调用 API。
+ 
+-### 在线问答
++## 4. 当前流程与本轮修复
+ 
+-```text
+-main.py 加载已有 Semantic 索引
+-  → 用户问题 → API 判断是否需要分解
+-  → 原问题 Dense + BM25 检索
+-  → 可选 rewrite / HyDE 检索（默认关闭）
+-  → 原查询与可选检索列表做 RRF 融合
+-  → 若需分解：各子问题 Dense + BM25 + RRF，追加候选
+-  → 候选去重 → 原问题全局 BGE 重排 + 各子题局部 Top-3
+-  → 子题证据优先/首条保护，其余按全局顺序填充，最终最多 Top-10
+-  → 原文证据 + 规则化证据账本 + 必要的主体上下文
+-  → API 生成回答
+-  → 引用编号结构检查，必要时最多修复一次
+-  → 输出答案、引用来源和检查状态
++离线：PDF 解析 → Semantic 分块 → MiniLM 归一化向量 → FAISS 配对版本。构建入口 `build_semantic_index.py --version 新版本名` 不覆盖旧版；整体构建，尚无完整增量导入生命周期。默认 `data/raw` 加载只遍历本层 PDF，五篇另在子目录；八篇版本是既有配对资产的精确合并，不能假定默认构建入口会递归重建全部八篇。
++
++在线：API 分解判断（2～4 个有效去重子题）→ 原问题 Dense / BM25 → 保存增强前 RRF 首条锚点 → 可选 rewrite / HyDE 候选融合 → 子题各路检索并合并去重 → 原问题全局 BGE + 子题局部 Top-3 → 预算内选证据 → 按来源覆盖信号最多补查两轮 → 原文 / 标题 / 规则账本 → API 回答 → 引用结构检查、必要时一次修复。
++
++- **锚点固定**：增强前原问题的 RRF 首条不因 rewrite / HyDE 融合而改变。不开增强时该修复不改变原锚点。
++- **局部证据保留**：只把初次已入选且属于子题局部 Top-3 的片段记为 `retained_local_ids`；补查后与锚点一起保护，并复用 `select_evidence` 选择原子题和定向补查候选。去掉另一套“先给全局前五”的规则。
++- **K 独立**：原 evaluation 每个最终 K 分别选证据、判断覆盖、运行补查，保存 `evidence_completion_by_k`；不能把 20 条前缀当 10 条结果。
++- 补查只对能识别两个以上论文来源且有覆盖信号的题触发；单篇题或无信号时跳过。每轮最多四个来源任务，第二轮增加同一批任务的候选深度；没有动态 LLM 语义缺口判定。
++- 当前不是完整 Agent：没有根据结果自主规划任意工具、联网检索、LangGraph 编排或演示 UI。导入的 Self-RAG / CRAG 论文内容不代表本项目已实现它们的方法。
++
++### 不能丢失的数据 / 算法事实
++
++- Chunk 字段：`chunk_id/text/source/page/title/section`。Embedding 和 BM25 主要索引正文；保留 title 不等于 title 进入向量，BGE / 生成上下文使用标题元数据。
++- 构建 Semantic 实参 `max_chunk_size=500` 字符、`percentile=10`；单个超长句不硬切，但短句 / 短片段过滤和跨页断句意味着不保证无损。双栏文件显式指定，尚无通用版式保证。
++- FAISS 是归一化向量的 `IndexFlatIP` 精确内积检索，不是 HNSW。论文中提到 HNSW 不等于项目使用 HNSW。
++- `RRF_K=60` 是秩平滑常数，与每路候选 120、`RRF_TOP_K=120` 和最终 K 不同。
++- 引用检查仅验证编号结构；元数据、来源覆盖、局部 Top-3 和保护规则都不是语义正确的证明。
++- API 只接受非空正文且 `finish_reason=stop`，截断 / 其他结束状态显式失败并留档；不隐式回退本地 Qwen，也没有隐藏重试。
++- BM25 空有效词项返回空，过滤零分，避免无效 RRF 贡献；纯中文仍可走 Dense，英文 / 数字分词不代表中文 BM25 已完善。
++
++## 5. 最新四项量化结果
++
++八篇库 42 道英文可答题，候选 120、关闭 rewrite / HyDE、按需最多补查两轮：
++
++| 最终预算 | Precision | Recall | MAP | MRR | 全部 Gold 入选 |
++| --- | ---: | ---: | ---: | ---: | ---: |
++| Top-10 | 0.1310 | 0.7679 | 0.4837 | 0.5708 | 28/42 |
++| Top-20 | 0.0714 | 0.8115 | 0.4857 | 0.5727 | 30/42 |
++
++
++Precision 分母随 K 变化，Top-20 下降需要结合 Recall、MAP、MRR 和完整覆盖判断；不是只选 Recall 最大的一组。Gold 为非穷尽原文标注，不等于所有其他段落无用。上下文字符长度只是成本代理，不是实际 token 账单或服务 P95。
++
++Top-20 的 Recall 增加 **4.37 个百分点**、完整 Gold 由 28/42 增至 30/42，MAP / MRR 略增；完整上下文字符比值中位数为 **1.92**。本轮开始前设定 Recall 至少增加 5 个百分点才把默认提高为 20，因此保持 10。此门槛是本轮的工程预算选择，不是通用统计结论；偏重召回时可显式使用 20。候选 120 按用户决定保留，但修复后候选 60 的 Top-10 Recall 同为 .7679、MAP / MRR 更高，不能说候选越大越好。
++
++## 6. 本轮验证与仍未验收的内容
++
++- 先在旧代码上建立四个失败回归测试，再修复；全部 **68 项 unittest** 通过，红灯 / 绿灯原始输出保留。
++- 原 `run_evaluation` CLI 完成 42 题 × 修复前后 × 候选 60/120 × 独立 K=10/20；所有方法保存 Precision、Recall、AP/RR，汇总 MAP/MRR。4 道无 Gold 题跳过，未伪造为 0 分。
++- 独立脚本重新由原文映射 Gold，并复算 **3,844 组方法/K/题记录的四项指标**（主对照 3,696 组，加增强和三篇入口检查）；分组均值也一致。
++- `main.main` 真实检索 / 重排 / 上下文回放 **8 次**，p1 含 rewrite + HyDE 的两种 K，选中 ID 均与 evaluation 对齐；最终回答显式替身，不能称为真实回答成功。
++- 当前仍激活的三篇库，通过五道题、候选 120、两种 K、最多两轮的实际 evaluation CLI；原三篇/五篇/八篇资产哈希及 9 项迁移清单一致。
++- 原 60 / Top-10 共有方法逐题复现上一轮；全部被标记的局部证据在补查各轮保留，API 调用计数为 **0**，凭证未进入导出产物。
++- 主对照耗时约 **20.6 分钟**，共享重排缓存，不能作为单请求延迟或服务基准。
++
++- 新版 default / Top-20 下的真实最终回答与语义效果没有重新调用 API 验证。最新真实回答证据来自上一轮 8 次 main：p3/a10 核心完整，n07/a12 部分完成；这些属于旧参数条件，不能当作本轮新设置的回答验收。
++- 原数据、题目、Gold、旧结果、配对索引及私有配置保留；日志脱敏。默认库指针仍三篇，完整八篇需显式指定。
++- 来源别名仍不能把 Transformer 简称映射到 `Attention is all you need.pdf`（a09/a15），本轮未改题 / 改标注解决它。
++- 复用的 p4 旧分解因五个子题被拒绝，沿用原状态，没有再花 API 重生成。n08 原题条件归属有歧义，保留原题与 Gold。
++- 保护可能保留不正确的局部候选；候选 120 会改变首次局部排序。修复不承诺所有 Gold 进入 Top-K，也不代表语义充分。
++
++## 7. 历史实验索引与结论
++
++| 工作 | 可信结论 / 边界 | 报告 |
++| --- | --- | --- |
++| 保持风格清理 / 早期 API 调试 | 保持普通函数结构；六题与固定证据调试，仍有绝对化措辞问题 | [清理](docs/CLEANUP_LOG_2026-10-18.md)、[DeepSeek 调试](docs/DEEPSEEK_V41_DEBUG_LOG_2026-10-18.md) |
++| rewrite / HyDE 与本地 Qwen 对照 | 三篇库三题四条件；增强输出来自 API，本地 Qwen 仅回放最终提示；不是本地生成的增强实验 | [三篇模型 / 增强对照](docs/REWRITE_HYDE_LOCAL_COMPARISON_2026-10-18.md) |
++| Mac 迁移 / 版本配对 | 离线检索、BGE CPU、三题真实 API；版本切换 / 回退已实测 | [Mac 审计](docs/MAC_AUDIT_2026-10-19.md)、[版本指南](docs/KNOWLEDGE_BASE_VERSIONS.md) |
++| 五篇下载 / 先导 | 固定版本、幂等下载 / 失败重跑；不等于通用导入阶段完成 | [先导](docs/ARXIV_PILOT_2026-10-19.md)、[选题](docs/ARXIV_PILOT_SELECTION_2026-10-19.md) |
++| 分解 / 证据选择修复 | 2～4 子题、局部 Top-3、标题、拒答修正；部分措辞精度仍有限 | [修复与 evaluation](docs/DECOMPOSITION_EVALUATION_2026-10-19.md) |
++| 英文六题 / Top-K | 开发六题指定 Gold 全覆盖，排序仍靠后；不能宣称泛化满分 | [原量化](docs/RETRIEVAL_EVALUATION_2026-10-19.md)、[英文优化](docs/RETRIEVAL_OPTIMIZATION_2026-10-19.md) |
++| 新十二题 / 模型知识对照 | 十道计分题 Recall .4833，跨篇 .2222；oracle 原文不是实际检索成功，两个排序候选未采用 | [独立新题与有限优化](docs/INDEPENDENT_VALIDATION_2026-10-19.md) |
++| 一轮 / 三轮补查 | 有局部收益与旧题退步；三轮未超一轮，轮数与候选深度一起变 | [一轮](docs/EVIDENCE_COMPLETION_2026-10-19.md)、[三轮](docs/COMPLETION_ROUNDS_2026-10-19.md) |
++| 全部八篇与增强 / 两轮 | 42 题：原 .7361/.4899，全部增强 + 两轮 .7242/.4797；8 次真实问答未补足两题 | [八篇完整评估](docs/ALL_PAPERS_EVALUATION_2026-10-20.md) |
++| 本轮锚点 / 保留 / 预算 | 用户接受两轮，候选 120，独立比较 10 / 20，四项指标及交接完整留档 | [最新修复与预算](docs/EVIDENCE_RETENTION_AND_BUDGET_2026-10-20.md) |
++
++历史“默认关闭”结论保留在对应报告中；当前用户选择与实际开关以本文件第 1～3 节为准，不把旧报告重写成新结论。
++
++## 8. 新对话的下一步
++
++本轮已经完成，以下为建议而非已执行工作：
++
++1. 先用显式八篇版本与最终预算做少量真实回答验收（单篇、跨篇、缺证据拒答），同时核对论断、引用和上下文长度。只在生成即将发生时确认 API 连通；已有 Key 不重复索取，不重跑整个题集。
++2. 针对仍缺的来源名称识别与跨篇覆盖做一轮有边界处理；沿用缓存、四项指标和旧题回归，避免无止境调参或按 Gold 硬编码运行时选择。
++3. 再推进最小 Agent 闭环：记录所需证据 / 已有证据 / 缺口 / 行动 / 调用和时间预算，先接本地检索工具，设停止条件；不需要多 Agent。
++4. P0 仍缺通用批量导入 / 去重 / 稳定文档身份 / 增量更新和失败恢复的完整生命周期；P1 仍缺真正独立盲测及服务级性能；P2 Agent、P3 联网证据来源 / 入库边界、P4 LangGraph 与演示 UI 按需推进。
++
++有 arXiv、小批量免费接口的历史调研，但不把旧报告中的价格 / 限速当成永久当前事实；选服务前重新核对。当前主线无需先采购 GPU 或引入微调。
++
++## 9. 文件与复现入口
++
++- [最新原始结果目录](evaluation/results/evidence_retention_20261020/comparison.json)、[独立复核](evaluation/results/evidence_retention_20261020/verification.json)、[预算采用依据](evaluation/results/evidence_retention_20261020/adoption.json)。
++- [本次可见对话](docs/chat_history/RAG_2026-10-19_20_完整对话.md)、[工具记录压缩包](docs/chat_history/RAG_2026-10-19_20_tools.jsonl.gz)、[导出清单](docs/chat_history/RAG_2026-10-19_20_export_manifest.json)。
++- [重写前完整 PROGRESS](docs/history/PROGRESS_BEFORE_RETENTION_2026-10-20.md) 保留原长期路线和全部阶段记录；[旧实验归档说明](docs/history/README.md)。
++- `main.py` 问答；`build_semantic_index.py` 离线构建；`src/knowledge_base.py` 成对版本；`src/evidence_gap.py` 有界补查；`evaluation/run_evaluation.py` 四项检索指标；`evaluation/run_answer_evaluation.py` 回答与引用检查。
++
++直接运行 evaluation 默认会生成辅助查询；离线复评必须提供 `--auxiliary-cache`。`--no-auxiliary` 也可避免 API，但会禁用分解 / 改写，不能冒充同分解对照。
++
++如确需重跑量化，以下使用已有辅助查询、不会新调用 API，但会消耗本机 CPU；请使用新的结果目录：
++
++```bash
++python -m evaluation.run_evaluation \
++  --questions evaluation/all_papers_questions_en.json \
++  --kb-version all-papers-8-20261020 \
++  --candidate-k 120 --top-k 10 20 \
++  --complete-evidence --completion-rounds 2 \
++  --auxiliary-cache evaluation/results/all_papers_20261020/auxiliary.json \
++  --output-dir evaluation/results/new_retention_replay
+ ```
+ 
+-分解判断在检索前进行；当前没有“根据检索结果发现缺口，再自主选择下一工具”的闭环。引用修复是格式处理，不是证据充分性或语义正确性的保证。
+-
+-| 项目 | 当前设置 |
+-| --- | --- |
+-| 知识库 | Transformer、DCNN、VGG 三篇 PDF；378 Semantic chunks / vectors |
+-| 独立实验库 | 五篇先导库 1,019 条；全部八篇库 `all-papers-8-20261020` 为 1,397 条，可显式指定版本；当前默认指针未切换 |
+-| Embedding | `sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2`，CPU |
+-| 检索与重排 | FAISS Dense + BM25 + RRF；每路候选 60，RRF 保留 60；BGE CPU 全局重排并保留子题证据，最终 Top-10 |
+-| 生成模型 | 请求 `cn:deepseek-v4.1-flash`，反代返回 `deepseek-v4.1-flash`；标识不能独立证明上游权重身份 |
+-| 生成设置 | `thinking.type=disabled`、`temperature=0`、`max_tokens=4096` |
+-| 查询增强 | `USE_MULTI_QUERY=False`、`USE_HYDE=False`；rewrite 开关实际为原查询与改写查询融合 |
+-| 运行方式 | Python 3.11；本机反代 `http://127.0.0.1:7863/v1`；Embedding 与重排在本机运行 |
+-
+-问题分解、启用的查询增强、回答和引用修复共用 API，不隐式回退到本地生成。Key 仅保存在忽略的 `api.local.json` 或环境变量 `RAG_API_KEY`，不写入日志、文档或 Git。运行命令见 [README](README.md) 与 [API 指南](docs/PYCHARM_API_GUIDE.md)。
+-
+-### 2.1 数据与检索接口：不能丢失的技术事实
+-
+-- 三篇论文共 32 页：Transformer 11 页、DCNN（AlexNet）7 页、VGG 14 页；不含 ResNet。解析产物约 86 个 Documents，与物理页数和最终 chunks 数是不同层级。
+-- Chunk 保留 `chunk_id/text/source/page/title/section`，`section` 可以为 `None`。当前 Embedding 和 BM25 都主要索引 `text`；保留 Metadata 不等于把 Metadata 编入检索文本。
+-- Semantic 构建实参为 `max_chunk_size=500, percentile=10`，长度单位是字符；函数默认 percentile=20 不等于构建参数。当前代码保留超过 500 字符的完整长句，不再像旧版按字符强切；仍会过滤很短的句子和片段，因此不保证无损。按 Document 独立处理，不能自动接回跨页断句。
+-- FAISS 为 `IndexFlatIP` 精确内积搜索，不是 HNSW/ANN 图索引；文档与查询均归一化后，内积对应余弦相似度。
+-- FAISS 向量位置必须与对应 chunks 列表一致；索引与 JSON 必须成对更新，数量相同也不保证语义对齐。历史片段编号不能跨分块版本直接复用。
+-- `RRF_K=60` 是秩平滑常数，`RRF_TOP_K=60` 是融合后返回数；每路候选数与最终 Top-10 又是不同参数。Cross-Encoder 只能重排收到的候选，不能找回已被截掉的片段。
+-- 当前 BM25 分词提取英文/数字词项；多语言 Embedding 不代表中文关键词检索已完善。批量评测应复用模型实例；当前 main 每次调用仍会重新初始化相关模型，不宣称已完成服务级缓存优化。
+-
+-## 3. 已完成工作与可信结论
+-
+-| 工作 | 结果与边界 |
+-| --- | --- |
+-| DeepSeek 主流程调试 | 原有六题真实运行与复核；固定证据调试感受野解释、主要规律与配置例外。个别措辞仍有瑕疵，不能称为全部语义正确 |
+-| 新题与本地生成对照 | 三题不在 questions.json 中；相同提示、相同证据、双方 512 输出上限，Qwen3.5-2B 为 8.5/12，DeepSeek 为 11.5/12。仅为预设要点的三题人工开发评分 |
+-| rewrite / HyDE 消融 | 三题各跑 base / rewrite / HyDE / both；rewrite 与 both 的 Top-10 全部与 base 相同，HyDE 仅替换一题第十条且未补核心证据，默认继续关闭 |
+-| 检索 evaluation | 已实际完成五道有 Gold 的题，q6 无 Gold 被跳过；Top-20 候选、Top-5 评价，与主流程 Top-10 不同 |
+-| 引用缺陷修复 | 数学区间 `[256; 512]` 曾被误判为坏引用，已做局部修正；12 份真实草稿回放不再误触发修复，保留越界/组合引用检查 |
+-| 索引构建核验 | 独立重跑解析、分块和向量化，chunks 完全相同、向量最大差异 0.0，未覆盖原数据 |
+-| 代码清理 | 删除 31 个废弃 Python 文件、4406 行及项目缓存，保留 26 个 Python 文件、必要评估入口和历史恢复材料；未卸载既有环境 |
+-
+-本地对照只更换最终生成模型，分解及查询增强输出来自同一套 API 产物，并非两套完整模型系统的端到端比较。tokenizer 不同，等输出上限不等于等算力或成本。新题措辞也不意味着论文知识未出现在预训练中；当前实验无法分离模型先验与检索贡献。
+-
+-现有五题检索结果摘录：
+-
+-| 方法 | P@5 | R@5 | MAP@5 | MRR@5 |
+-| --- | ---: | ---: | ---: | ---: |
+-| Hybrid | 0.2800 | 0.5667 | 0.4367 | 0.7000 |
+-| Hybrid + Reranker | 0.3600 | 0.6417 | 0.4758 | 0.7400 |
+-| 仅改写查询 + Reranker | 0.4400 | 0.7000 | 0.5214 | 0.8000 |
+-| 原查询 + 改写融合 + Reranker | 0.3600 | 0.6417 | 0.4758 | 0.7400 |
+-
+-“仅改写检索”的收益不能用来支持直接开启主流程的“原查询 + 改写融合”。相同提示下也观察到不同措辞，不能把答案随机变化归因于查询增强。不可把三题评分写成“总体准确率提高 25%”，或把不同配置的历史指标相减当作换模型收益。
+-
+-## 4. 已知缺口与开发约束
+-
+-- 证据账本的主体归属、数值与限定条件处理是有限规则；引用结构通过不代表语义支撑通过。
+-- VGG 新题未检索到训练时固定 224×224 裁剪的证据，是检索覆盖问题；不能让模型用常识补成“有来源”的答案。
+-- Transformer 新题分解把联合机制拆成分别防泄漏的问题，可能引入错误前提，尚未修复。
+-- PDF 表格、公式、跨页句子和双栏解析仍有限。扩库先检查文本质量，再调整检索参数。
+-- 当前题目用于开发，没有独立盲测或总体准确率结论；服务发生过 HTTP 503，不能把服务错误当作知识不足。
+-- 清理后保留 `run_answer_evaluation.py`、`run_evaluation.py`、`check_evidence.py`、`metrics.py`。优先扩展必要入口，避免不断增加一次性诊断脚本。
+-- 保留函数式风格与必要中文注释。模块对外暴露少量清楚的操作，把重试、去重、证据映射等复杂度收在内部；出现真实替换需求时再抽象，不预先搭通用插件框架。
+-- 工作树已有大量修改、暂存和未跟踪内容；保留它们，不重置、不擅自提交或推送。Gold 和针对某题的答案替换规则不得进入生产流程。
+-
+-## 5. 历史决策与后续路线（P0～P4 尚未实现）
+-
+-### 历史诊断中应继续使用的方法
+-
+-按 PDF 原文 → 解析文本 → 分块 → 初检候选 → RRF 截断 → 重排/上下文选择 → 生成/引用逐层定位问题，不因最终答案错误就只改提示词。
+-
+-历史 q5 曾出现“候选池覆盖 4/4 必需结论，最终 Top-10 仅覆盖 2/4”的现象；这是旧实验的上下文选择诊断，不是当前新一轮测量。后续 Agent 应检查每个子问题的证据覆盖，必要时在相同上下文预算内比较子问题保留策略。旧 selector 原型已清理，不能描述成已集成能力；不同子问题的 reranker 分数也不能无条件直接比较。
+-
+-历史 VGG 诊断还发现过关键证据被 RRF Top-20 截掉，以及提供 Gold-only 证据后小模型仍误读感受野。说明候选召回、上下文覆盖和生成理解需分别验证。Source Filter、Gold-only 和硬编码 ID 仅用于定位，不进入通用流程。
+-
+-Parser V2 的深度布局/表格/公式开发曾明确延后，原型后已清理。扩库先做质量检查；只有多样题目证明解析是普遍瓶颈时，再单独规划解析改造，不因旧文档提及就自动恢复整套原型。
+-
+-### Gold 与实验版本约定
+-
+-现有 q1～q5 分别覆盖 VGG 小卷积核、位置编码、缩放点积、DCNN 数据增强、VGG/DCNN 比较；q6 为库外股价问题。q6 不参与检索均值，其拒答表现需看答案级记录。
+-
+-`get_gold_chunk_ids` 按 source、page 和 NFKC/空白/大小写规范化后的 quote 子串匹配当前 chunks，结果去重。相同证据可能匹配多个重叠片段；现有 Gold/旧候选池不是穷尽相关性标注。Chunk Recall 与论断证据覆盖不同，扩库后应同时观察；改标注必须有原文依据并记录版本，不为提高分数而改 Gold。
+-
+-每次对照固定并记录题集、Gold、索引/分块、查询分支、候选预算、RRF 参数、reranker、最终 K、上下文选择与生成设置。Original baseline 不得先经过 rewrite；相同辅助查询尽量复用。不要同时修改多个环节再把结果归因于其中一个。
+-
+-历史版本规则：330、340、385 等数量和旧 MiniLM/BGE 表格仅用于回顾；默认三篇 Semantic 为 378，五篇先导版本为 1019，须按版本区分。Fixed 构建器、Parser V2、旧本地生成入口已移除，保留的旧数据不表示这些代码仍受支持。
+-
+-### P0：批量导入与可复现知识库
+-
+-第一批只接 arXiv，以 RAG / 检索 / 重排 / 自适应检索为主题。先用 5～10 篇覆盖不同版式的论文验证导入，再扩至筛选后的 30～50 篇；数量是起步范围，是否继续增加取决于题目覆盖和解析质量。
+-
+-2026-10-19 首批五篇已完成固定版本下载、文件级幂等/失败重跑和独立构建；实测结果及尚未实现的通用导入能力见 [先导报告](docs/ARXIV_PILOT_2026-10-19.md)。以下为 P0 完整目标，不能把当前小批量入口视为全阶段完成。
+-
+-流程：主题或论文 ID → 元数据候选 → 摘要筛选 → 正文获取 → 解析质量检查 → 分块与索引 → 导入报告。
+-
+-保留论文 ID、版本、标题、作者、日期、URL、获取时间、内容哈希、可获得的许可信息，以及页码和稳定的文档/片段标识。区分发现成功、正文不可获取、下载失败、解析失败和入库成功；实现限速、有限重试、断点续跑及重复导入跳过。保留三篇旧库快照，再生成新库版本；初期小规模索引可以整体重建，不急于实现复杂的向量增量更新。
+-
+-验收：同一批重复导入不产生重复文档；中断可恢复；抽查原文与片段顺序、页码、公式/表格；新旧库可分别运行，旧评测证据仍可定位。公开项目优先提供论文清单与下载脚本，全文再分发按各论文许可处理。
+-
+-实习价值：展示数据接入、幂等处理、失败恢复、数据质量和证据溯源能力。
+-
+-### P1：扩充评测并测量证据贡献
+-
+-保留现有回归题，新增约 20～30 道有人工核对证据的起步题，覆盖单文档、跨论文比较、限定条件/数值、库内缺证据和版本差异。预先确定评分标准，划分开发集和留出集；调试不反复使用留出题。
+-
+-另设明确标记的虚构文档评测组，用模型无法仅靠经典论文常识推出的新规则/数值测试证据利用。比较无上下文、正确上下文、无关/不足上下文、冲突上下文，分别统计事实正确性、来源忠实性、引用支撑和合理拒答；虚构结果与真实论文结果分别报告。
+-
+-以同一知识库、题目、生成模型及一致的预算约束比较固定 RAG 与后续 Agent。保留 Top-5 历史表，同时补充与生产 Top-10 一致的检索评价；记录答案质量、工具调用数、token、延迟和失败。有可靠单价时再折算费用。
+-
+-验收：每个评分点有原文依据；评估数据不注入生产提示；扩库后同时报告旧题退步与新题表现。检索/索引变化时重跑检索评测；只改最终措辞时优先固定证据回放。模型自评作为辅助，关键结论人工复核。
+-
+-实习价值：能回答“提升来自哪里、对照是否公平、何时没有收益”。
+-
+-### P2：完整的本地 Agentic RAG
+-
+-复用现有检索函数，逐步形成：任务所需证据 → 初始计划 → 选择工具 → 观察结果 → 更新缺口 → 定向补充 → 综合回答 → 关键结论核对 → 停止。
+-
+-首先提供本地混合检索、按文档筛选、读取相邻片段/页面；根据缺口选择改写、分解或 HyDE，而非所有问题默认全部开启。HyDE 文本仅用于检索，不能充当论文证据。
+-
+-状态至少记录原问题、所需证据、已找到证据、缺口/冲突、行动记录、预算和停止原因。工具结果包含来源、页码/定位、内容及失败状态；日志保存简短的行动理由与结果，不要求模型输出冗长内心推理。
+-
+-停止条件包括证据充分、部分可答、资料不足、连续行动无新增有效证据、预算用尽和服务失败。需要检查实体、数值与条件绑定、冲突来源及关键结论引用，不能只用模型一句“充分”判定成功。
+-
+-验收：覆盖首轮足够、真实漏检、跨文档、错误前提、资料不足、来源冲突和 API 错误；缺口驱动的行动确实补到证据，或给出有依据的停止说明。不能硬编码已知 chunk ID 或题目答案。与固定 RAG 对照质量和成本，不预设 Agent 必然更好。
+-
+-实习价值：展示状态管理、工具调用、证据反馈、异常处理与可解释的控制流程。
+-
+-### P3：按需联网搜索与正文读取
+-
+-在本地闭环可验证后接入。优先复用 arXiv 发现/读取能力作为论文搜索工具，再按实际任务需要选择通用网页搜索提供方。论文 API 查询与通用互联网搜索是不同能力，后者可能另有费用。
+-
+-触发条件：用户要求最新资料、知识库时间范围不覆盖问题，或定向本地检索仍缺关键证据。区分搜索摘要和已读取正文；详细结论引用实际获取的内容。联网证据先进入当前任务，满足入库规则后才进入长期知识库。
+-
+-验收：记录 URL、日期、获取时间和原文定位；正文不可访问时不伪称已读；外部文本只作为资料，不能改变系统指令；超时、限流和预算耗尽有明确状态。对同一组需外部证据的问题比较本地与联网模式，报告质量增益、额外延迟及调用成本。
+-
+-### P4：编排、演示与实习材料
+-
+-本地状态和分支稳定后用 LangGraph 表达已验证的流程，保持工具接口简洁，避免为迁移框架重写检索算法。补充简洁界面，展示回答、来源、证据缺口、行动过程、停止原因和耗时；整理依赖及启动说明，验证可复现启动路径。
+-
+-最终交付：可运行 demo、架构与数据流说明、固定 RAG / Agent 对照表、两至三个失败复盘、核心代码讲解、真实贡献清单和简历草稿。按具体 JD 再决定是否需要 HTTP 服务或 Docker，不提前扩展分布式系统。
+-
+-面试必须能解释：Dense 与 BM25 为什么互补；RRF 与 reranker 各做什么；rewrite/HyDE 何时无收益；为何模型换强后仍需要证据评测；Agent 什么时候应停止；扩库和联网引入哪些质量与成本问题。
+-
+-## 6. 论文 API 与成本决策
+-
+-下表依据 2026-10-18 核对的官方页面，接入时仍需复核。元数据接口免费不等于所有正文都可获取或再分发，也不包含 LLM 推理、通用搜索和云存储费用。
+-
+-| 来源 | 收费与限制 | 本项目决策 |
+-| --- | --- | --- |
+-| [arXiv](https://info.arxiv.org/help/api/tou.html) | 公共 API 免费；legacy API 每三秒最多一次请求、单连接 | 第一阶段使用；低频发现并获取筛选后的论文 |
+-| [Semantic Scholar](https://webflow.semanticscholar.org/product/api) | 提供免费公开访问；部分接口需 Key，新 Key 初始限速 1 请求/秒 | 后续有引用关系/推荐需求时再接 |
+-| [OpenAlex](https://help.openalex.org/access/pricing/) | 免费账户每天含 1 美元 API 使用额度，无需付款方式；更高用量可预付或订阅 | 需要更广元数据覆盖时再考虑，不能称为无限免费 |
+-| [Crossref](https://www.crossref.org/02publishers/20pub_fees.html) | 公共 REST 元数据 API 免费；Metadata Plus 是可选付费服务 | 有 DOI 元数据补全需求时使用免费接口 |
+-
+-当前 30～50 篇的计划无需先采购论文 API 套餐。优先用 arXiv 与本机已有 Embedding/重排；模型调用按实际代理/上游计费另算，不承诺零总成本。通用搜索尚未选供应商、未开通付费服务。
+-
+-## 7. 下一次开工任务
+-
+-Mac 基线、API/BM25 修复、版本回退、五篇先导、分解 / 选证据修复、模型知识对照、一轮 / 三轮补查，以及 **2026-10-20 全部八篇、42 题的查询增强与两轮补查实验均已完成**。当前 64 项本地测试通过。最新原流程 Recall/MAP 为 0.7361/0.4899，全部增强 + 两轮为 0.7242/0.4797，未通过四项检索采用门槛；真实 main 八份验证没有改善两道部分回答。保持三个开关默认关闭及原三篇默认库，实验八篇版本和全部查询缓存可继续离线使用。完整结果见第 1.4 节及 [全部论文日志](docs/ALL_PAPERS_EVALUATION_2026-10-20.md)。
+-
+-下一项建议：先修复增强融合导致原检索锚点保护漂移，再单独验证补查是否保留关键子题证据，限定一次同缓存离线对照。用户目前仅授权完成本轮实验，下一项尚未实施。不要重复付费生成整套辅助查询，不拿不同库或不同分解设置的历史分数直接归因。仍未开始完整 Agent 开发。
+-
+-五篇实验的默认三篇库及所有既有证据仍保留；尚未做 Agent 开发，不把本次导入论文中的方法当成已实现能力。具体范围、用量与缺陷见第 1.3 节及先导报告。
+-
+-## 8. 证据、清理与本次文档更新记录
+-
+-- [全部八篇、查询重写 / HyDE 与两轮补查评估](docs/ALL_PAPERS_EVALUATION_2026-10-20.md)：42 题量化、八次真实 main、四项未通过门槛、118 次 API 和独立复核；保留默认，记录下一项证据保留修复建议。本轮遵循 Karpathy 技能做最小改动，未额外启动子代理或接入实习材料插件。
+-- [DeepSeek 调试日志](docs/DEEPSEEK_V41_DEBUG_LOG_2026-10-18.md)：六题、固定证据提示调试、API 失败和验证边界；原始结果在 `evaluation/results/deepseek_v41/`。
+-- [rewrite / HyDE 与本地对照报告](docs/REWRITE_HYDE_LOCAL_COMPARISON_2026-10-18.md)：三题、四组消融、本地重放、五题检索评估、引用修复；原始结果在 `evaluation/results/rewrite_hyde_20261018/`。旧运行哈希与失败状态保留，不冒充新代码运行。
+-- [清理日志](docs/CLEANUP_LOG_2026-10-18.md)与[清单](docs/CLEANUP_MANIFEST_2026-10-18.json)：删除范围、恢复路径和检查结果；未删除 `.venv`、原始论文、索引或本地配置。
+-- [历史归档说明](docs/history/README.md)：旧交接与历史实验存于 `docs/history/20261018_experiments.zip`。
+-
+-本次使用个人插件市场的 `shushu-internship-tool`（实习目标、真实成果与验收）和 `matt-pocock-skills:codebase-design`（模块接口和复杂度控制）。实际执行鼠鼠插件的仓库摸底脚本，并人工核对 README、构建入口、main、Embedding 与最新实验报告；脚本按文件名发现的能力线索不作为已实现功能证明。
+-
+-辅助摸底产物存于仓库外的 `C:/Users/J/.codex/visualizations/2026/10/18/01a14f0e-47d4-7f62-8fca-0b58c78658d1/internship-progress-audit/`，避免增加项目诊断脚本。本次项目内仅修改本文；保留既有运行结果和工作树改动，未提交或推送 Git。
+-
+-同日纠正：用户指出设备要求遗漏后，核对 Git HEAD、暂存区中的历史 PROGRESS 与归档交接，恢复第 1.1、1.2 节的设备、项目边界和学习偏好。此前重整只读取了已经精简的工作树版本，未补齐长期约束；此前 Mac 建议中的 Apple Silicon/16GB 属泛化建议，并非用户设备事实，微调也不属于本项目范围。本次仅修正文档，未执行 Mac 迁移或硬件测试。
+-
+-### 8.1 历史核对与 GitHub/Mac 接续（2026-10-18）
+-
+-用户本次明确授权重新上传 GitHub。已逐段核对 `1c0cb11` 中的旧 PROGRESS，以及历史 ZIP 中的交接正文，并对照当前源码；补回数据/Metadata 契约、分块长度的真实含义、FlatIP/归一化、RRF 参数区别、Gold 映射、候选与最终上下文覆盖、Parser V2 延后决定和实验版本约定。旧的“分解/HyDE 未实现”“385 条是当前索引”“必须用 Windows 本地生成”等状态不恢复为当前事实。
+-
+-远端为私有仓库 `https://github.com/JAzer-M/Advanced-LLM-RAG`，分支 `main`；同步准备时远端与本地基点均为 `1c0cb11`。本次将当前源码与实验资料连同九个已有数据文件同步，保留新数据默认忽略规则；Key、虚拟环境、模型缓存继续排除。具体提交与推送是否成功以本次交付消息、Git 记录及远端核验为准，不以本段准备记录代替成功证据。
+-
+-Mac 操作见 [接续说明](docs/MAC_HANDOFF.md)，数据逐文件校验见 [迁移清单](data/migration_manifest.json)。原始论文/索引以前被忽略的历史描述仅适用于本次迁移前；当前明确放行的九个快照文件随此次提交传输。Mac 尚未实测，不提前声称跨平台运行成功。
++Mac 仍应使用前述受控线程环境 / Python 设置。已有完整结果无需重复计算；源码变更后再运行 `python -m unittest discover -s tests -v` 做相应回归。
+--- /dev/null
++++ b/docs/EVIDENCE_RETENTION_AND_BUDGET_2026-10-20.md
+@@ -0,0 +1,135 @@
++# 锚点与局部证据保留修复、候选 120、Top-10 / Top-20 对照
++
++日期：2026-10-20，Asia/Shanghai。状态：修复、完整离线量化、main 检索回放、独立复核和交接完成。
++
++## 本轮结论
++
++**已完成**原查询锚点和补查局部证据保留修复；当前 main 为候选 120、最终 Top-10、按需最多两轮补查。Top-20 已独立量化并保留结果，尚未设为默认。重写与 HyDE 关闭。四项指标全部计算，本轮新增 API 调用为 0。
++
++| 最终预算 | Precision | Recall | MAP | MRR | 全部 Gold 入选 |
++| --- | ---: | ---: | ---: | ---: | ---: |
++| Top-10 | 0.1310 | 0.7679 | 0.4837 | 0.5708 | 28/42 |
++| Top-20 | 0.0714 | 0.8115 | 0.4857 | 0.5727 | 30/42 |
++
++Top-20 的 Recall 增加 **4.37 个百分点**、完整 Gold 由 28/42 增至 30/42，MAP / MRR 略增；完整上下文字符比值中位数为 **1.92**。本轮开始前设定 Recall 至少增加 5 个百分点才把默认提高为 20，因此保持 10。此门槛是本轮的工程预算选择，不是通用统计结论；偏重召回时可显式使用 20。候选 120 按用户决定保留，但修复后候选 60 的 Top-10 Recall 同为 .7679、MAP / MRR 更高，不能说候选越大越好。
++
++## 用户最终决定与实验范围
++
++用户最新要求覆盖上一条“最多补查一次”的倾向：保留**按需、最多两次补查**，每路和 RRF 候选设为 120，比较最终 Top-10 / Top-20，计算 Precision、Recall、MAP、MRR 四项。重写与 HyDE 继续关闭；本轮不重新生成整套查询，不调用回答 API。
++
++使用相同的八篇库 `all-papers-8-20261020`，120 页、1,397 条、384 维；42 道英文可答题、4 道无 Gold 跳过。题目、原文 Gold、索引、Embedding/BGE 模型和已有 API 查询输出均固定。当前激活指针仍是三篇库，完整八篇通过版本参数显式读取。
++
++## 修复与失败证据
++
++应用 Karpathy Guidelines 控制改动范围，并用 Matt Pocock diagnosing-bugs 的失败反馈流程：先建立四个回归测试，修复前实际失败（含两个 K 的局部保留子测试）；然后修改生产函数，68 项测试全部通过。原始红灯与绿灯输出保留。
++
++1. `main.py` 在任何增强检索前，保存原问题 Dense/BM25 的 RRF 首条。增强后的融合结果只更新候选，不再改写该锚点。evaluation 的四种查询模式使用同一原始锚点。
++2. `complete_evidence` 从初次入选片段中，提取属于原子题局部 Top-3 的 ID，记录为 `retained_local_ids`。补查后继续调用主流程的 `select_evidence`，优先保留原锚点和这些已入选局部证据，再考虑原子题 / 定向补查的局部候选及全局候选，去重且不超预算。去掉另一套“先固定全局前半预算”的补查选择规则。
++3. 原 evaluation 不再把补查限制为 Top-10。每个 K 独立执行选证据、覆盖判断和最多两轮补查，分别存入 `evidence_completion_by_k`；Top-10 不从 Top-20 前缀截取。四种查询增强回放也支持各自独立的 K。
++
++保留原来的函数、字典和列表风格；`select_evidence` 只增加一个向后兼容的可选 `protected_ids` 参数。没有新增框架、Agent 或语义判断 API。运行时不接收 Gold、答案或评估 reference_points。
++
++### 保护规则的边界
++
++“保留局部证据”并不证明它语义正确。原局部 Top-3 可能来自错误论文或只是主题相关；被保护的内容也会占用预算。该方案只保证原先已经选中的局部 Top-3 不在补查选择时被丢掉，并非保证所有指定 Gold 都恢复。
++
++在候选数仍为 60 时，p6 的指定 Gold 从补查后的 1/2 恢复为 2/2。候选扩大到 120 会改变首次局部排序，597 已不在初次入选的局部集合内，因此该题仍不能靠这项保留规则恢复全部 Gold。这是候选预算影响，与补查阶段的保留修复分开记录。
++
++## 对照设计
++
++实际调用原 `evaluation/run_evaluation.py`，按题保存且复用模型及相同 query-passage 的重排分数：
++
++| 选择规则 | 候选数 | 最终预算 | 补查上限 | 目的 |
++| --- | ---: | --- | ---: | --- |
++| 修复前 | 60 | 10 / 20 | 2 | Top-10 所有共有方法必须逐题复现上一轮 |
++| 修复后 | 60 | 10 / 20 | 2 | 隔离选择规则的效果 |
++| 修复前 | 120 | 10 / 20 | 2 | 同候选数的修复对照 |
++| 修复后 | 120 | 10 / 20 | 2 | 用户最终预算下的比较 |
++
++修复前补查函数从本轮修改前的源码快照加载，使用相同当前检索 / 模型。旧 60 / Top-10 与上一轮逐题核对，可以捕获回放漂移。候选数增加还会使补查深度从 60→120 变为 120→240；这是整体候选预算变化，不能只归因于初检或某一次重排。
++
++## 四项指标与选择口径
++
++- Precision@K：命中指定 Gold 的片段数 / K。
++- Recall@K：命中指定 Gold 的片段数 / 全部 Gold 片段数。
++- MAP@K：每题对命中位置累积 Precision@rank，除以该题全部 Gold 数，再跨题平均。
++- MRR@K：每题第一条 Gold 排名的倒数，无命中为 0，再跨题平均。
++
++另外记录全部 Gold 入选题数、完整上下文字符数和耗时。Gold 非穷尽相关性标注；Precision 是相对指定 Gold 的精度，不能把其他所有片段判为无用。
++
++预先固定最终预算选择规则：只有 Top-20 相对 Top-10 的 Recall 至少增加 0.05、MAP/MRR 下降各不超过 0.01、完整上下文字符数比值中位数不超过 2.2，才采用 Top-20，否则默认保留 10。Precision 两组均报告；由于分母翻倍，不要求 P@20 与 P@10 相等。该选择是检索与上下文预算选择，不代表生成质量已验证。
++
++## 完整量化结果
++
++以下均为原 evaluation 的 `Evidence Completion (up to 2 rounds)` 行，四项分数都是逐题计算后取平均。题集相同、rewrite / HyDE 关闭；不是重写增强后的结果。
++
++| 选择规则 | 候选 | 最终 K | Precision | Recall | MAP | MRR | 全部 Gold 入选 |
++| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
++| 修复前 | 60 | 10 | 0.1310 | 0.7480 | 0.4937 | 0.5830 | 26/42 |
++| 修复前 | 60 | 20 | 0.0702 | 0.7788 | 0.4951 | 0.5841 | 27/42 |
++| 修复后 | 60 | 10 | 0.1333 | 0.7679 | 0.4982 | 0.5852 | 28/42 |
++| 修复后 | 60 | 20 | 0.0726 | 0.8026 | 0.4984 | 0.5849 | 29/42 |
++| 修复前 | 120 | 10 | 0.1333 | 0.7718 | 0.4836 | 0.5726 | 27/42 |
++| 修复前 | 120 | 20 | 0.0714 | 0.8115 | 0.4849 | 0.5735 | 29/42 |
++| 修复后 | 120 | 10 | 0.1310 | 0.7679 | 0.4837 | 0.5708 | 28/42 |
++| 修复后 | 120 | 20 | 0.0714 | 0.8115 | 0.4857 | 0.5727 | 30/42 |
++
++同候选 120、Top-10 下，修复使 Recall 从 .7718 变为 .7679（下降 0.40 个百分点），MAP 从 .483554 变为 .483675，MRR 从 .5726 变为 .5708，全部 Gold 入选题数从 27 增为 28。可见保留行为修复成立，但并非全部指标上升。保护较弱的局部候选会与其他证据竞争预算。
++
++与上一轮修复前 60 / Top-10 的两轮补查相比，最终 120 / Top-10 Recall .7480→.7679（+1.98 个百分点），MAP .4937→.4837、MRR .5830→.5708；不能只报召回而隐藏排序损失。修复后 60 / Top-10 的 MAP .4982、MRR .5852 均高于 120，候选 120 依用户选择保留。
++
++### 候选 120 的分组结果
++
++| 题组 | 题数 | 最终 K | Precision | Recall | MAP | MRR | 全部 Gold 入选 |
++| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
++| 此前题集 | 26 | 10 | 0.1269 | 0.7468 | 0.4306 | 0.5071 | 16/26 |
++| 此前题集 | 26 | 20 | 0.0712 | 0.7981 | 0.4359 | 0.5101 | 17/26 |
++| 八篇评估新增题（本轮复用） | 16 | 10 | 0.1375 | 0.8021 | 0.5700 | 0.6745 | 12/16 |
++| 八篇评估新增题（本轮复用） | 16 | 20 | 0.0719 | 0.8333 | 0.5667 | 0.6745 | 13/16 |
++| 单篇 | 26 | 10 | 0.1385 | 0.9647 | 0.6171 | 0.6545 | 23/26 |
++| 单篇 | 26 | 20 | 0.0712 | 0.9712 | 0.6178 | 0.6526 | 24/26 |
++| 跨篇 | 16 | 10 | 0.1187 | 0.4479 | 0.2668 | 0.4349 | 5/16 |
++| 跨篇 | 16 | 20 | 0.0719 | 0.5521 | 0.2712 | 0.4430 | 6/16 |
++
++跨篇题仍是主要短板，Top-10 / 20 Recall 为 .4479 / .5521。新增题与旧题、单篇与跨篇属于两种交叉分组，不能加在一起当作额外题量。四道无 Gold 题 q6 / p7 / n11 / n12 未计检索分数；未重新验证它们的生成拒答效果。
++
++### 上下文、耗时与默认预算
++
++完整上下文包括正文、真实标题及规则账本。Top-10 / Top-20 的字符数中位数分别为 6,054 / 12,022.5，按题计算比值的中位数为 1.9221（与两个总体中位数相除不同）。它只是输入长度代理，未测实际 token 或新版 API 账单。
++
++Top-20 召回 +4.37 个百分点，MAP +.0020、MRR +.0019，全部 Gold 多覆盖两题。预先采用门槛要求召回至少 +5 个百分点，其余三项门槛通过，召回门槛未过，因此默认保留 10；20 是可用选项，不是失败配置。没有在看完分数后修改阈值，也没有据此断言生成一定更好。
++
++主对照实际耗时 1233.189 秒（约 20.6 分钟），共 24,245 次唯一 query-passage 评分、144,829 次缓存复用。为降低本机重复推理，按题共享模型和分数并清空跨题缓存；这是顺序相关的实验总耗时，不可用于对比四方案的在线延迟。此次全部离线，**新 API 调用 0、没有新增 API token 消费**；以前 118 次调用属于上一轮。
++
++## 实际验收与复核
++
++- 先在旧代码上建立四个失败回归测试，再修复；全部 **68 项 unittest** 通过，红灯 / 绿灯原始输出保留。
++- 原 `run_evaluation` CLI 完成 42 题 × 修复前后 × 候选 60/120 × 独立 K=10/20；所有方法保存 Precision、Recall、AP/RR，汇总 MAP/MRR。4 道无 Gold 题跳过，未伪造为 0 分。
++- 独立脚本重新由原文映射 Gold，并复算 **3,844 组方法/K/题记录的四项指标**（主对照 3,696 组，加增强和三篇入口检查）；分组均值也一致。
++- `main.main` 真实检索 / 重排 / 上下文回放 **8 次**，p1 含 rewrite + HyDE 的两种 K，选中 ID 均与 evaluation 对齐；最终回答显式替身，不能称为真实回答成功。
++- 当前仍激活的三篇库，通过五道题、候选 120、两种 K、最多两轮的实际 evaluation CLI；原三篇/五篇/八篇资产哈希及 9 项迁移清单一致。
++- 原 60 / Top-10 共有方法逐题复现上一轮；全部被标记的局部证据在补查各轮保留，API 调用计数为 **0**，凭证未进入导出产物。
++- 主对照耗时约 **20.6 分钟**，共享重排缓存，不能作为单请求延迟或服务基准。
++
++核心失败案例：p1 的增强查询锚点已固定并通过实际入口对照；p6 在候选 60 恢复被补查挤掉的 597，但在 120 的首次局部排序中该片段已未入选，仍只有部分指定证据。n07 的缺证据问题也没有因为保留规则而全部消失。所有这些题都保留逐轮 ID 和轨迹，运行时未读取 Gold。
++
++## 仍需下一轮确认
++
++本轮验证了检索、重排、证据预算与上下文构建，没有新调用最终回答 API。上一轮八次真实回答是旧设置的历史证据；新设置的答案准确性、语义引用和拒答仍需小量实测。来源简称匹配（例如 Transformer）、手工 Gold 不穷尽、p4 旧分解被拒绝、n08 题意歧义及受控线程根因均原样保留。不要重跑全套付费增强来恢复上下文。
++
++下一轮先读重写后的 [PROGRESS](../PROGRESS.md)，再按用户授权做少量真实回答验收。Agent、通用增量入库和盲测属于后续工作，本轮未实现。
++
++## 保存与交接
++
++本轮原始记录在 `evaluation/results/evidence_retention_20261020/`。完整修改前 PROGRESS 已保存为 `docs/history/PROGRESS_BEFORE_RETENTION_2026-10-20.md`，不因重写丢失旧计划、设备与历史证据。
++
++同一线程的用户消息、助手可见进度和答复保存于 `docs/chat_history/RAG_2026-10-19_20_完整对话.md`；工具调用 / 返回另存为压缩 JSONL。记录按本地会话来源顺序导出、凭证脱敏，历史原话不自动当成当前事实。
++
++### 可核查产物
++
++- [完整对照 JSON](../evaluation/results/evidence_retention_20261020/comparison.json)、[默认预算依据](../evaluation/results/evidence_retention_20261020/adoption.json)、[独立复核](../evaluation/results/evidence_retention_20261020/verification.json)。
++- [红灯回归](../evaluation/results/evidence_retention_20261020/regressions_red.log)、[68 项绿灯](../evaluation/results/evidence_retention_20261020/tests_first_green.log)、[main 检索回放摘要](../evaluation/results/evidence_retention_20261020/main_replay_summary.json)。
++- [上下文成本](../evaluation/results/evidence_retention_20261020/context_cost.json)、[评分复用](../evaluation/results/evidence_retention_20261020/processing_cost.json)、[原始输入哈希](../evaluation/results/evidence_retention_20261020/baseline_hashes.json)、[实验协议](../evaluation/results/evidence_retention_20261020/protocol.json)。
++- [完整可见对话](chat_history/RAG_2026-10-19_20_完整对话.md)、[工具记录](chat_history/RAG_2026-10-19_20_tools.jsonl.gz)、[导出清单](chat_history/RAG_2026-10-19_20_export_manifest.json)、[重写前 PROGRESS 原件](history/PROGRESS_BEFORE_RETENTION_2026-10-20.md)。
++
++对话导出以清单中的时间 / 哈希为快照边界，包含本次线程此前的可见用户 / 助手记录，不包含内部推理。当前轮最后一条交付答复若晚于快照，须后续刷新才进入原始会话归档；本报告和 PROGRESS 已保存最终交付状态。根目录 PROGRESS 已重写，旧版字节原样归档，没有丢弃长期路线。

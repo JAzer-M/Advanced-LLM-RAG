@@ -1,0 +1,409 @@
+{
+  "query": "According to the RoFormer paper, how does its positional encoding incorporate absolute position and relative-position dependence in self-attention?",
+  "status": "completed",
+  "decomposition": {
+    "needs_decomposition": false,
+    "sub_queries": [],
+    "status": "not_needed"
+  },
+  "knowledge_base": {
+    "version": "all-papers-8-20261020",
+    "chunk_count": 1397,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/manifest.json",
+    "manifest_sha256": "9c4e2c26b4f11fe7baf526595630cbee2d325416ec0e497f417975fbd60779ef",
+    "files": {
+      "faiss.index": "ff1f4a3e38e20c0275ba79d805e6475639b3cea7a7a583f9c18c67ec8e40a2ed",
+      "chunks.json": "3e63d75abbe164ff8e135b1d66fd6b02d9479b2e037e289a726e7c542464593a"
+    }
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 120,
+    "global_top_ids": [
+      39,
+      45,
+      25,
+      47,
+      48,
+      15,
+      17,
+      22,
+      20,
+      54
+    ],
+    "protected_ids": [],
+    "sub_query_evidence": [],
+    "retrieval_anchor_ids": [
+      39
+    ],
+    "evidence_completion": {
+      "requested_sources": [],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        39,
+        45,
+        25,
+        47,
+        48,
+        15,
+        17,
+        22,
+        20,
+        54
+      ],
+      "retained_local_ids": [],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        39,
+        45,
+        25,
+        47,
+        48,
+        15,
+        17,
+        22,
+        20,
+        54
+      ],
+      "elapsed_seconds": 0.000223
+    }
+  },
+  "selected_ids": [
+    39,
+    45,
+    25,
+    47,
+    48,
+    15,
+    17,
+    22,
+    20,
+    54,
+    38,
+    1402,
+    1456,
+    1397,
+    1418,
+    1419,
+    1401
+  ],
+  "context": "[1] Source: Attention is all you need.pdf | Page: 5 | Section: None\n• The encoder contains self-attention layers. In a self-attention layer all of the keys, values and queries come from the same place, in this case, the output of the previous layer in the encoder. Each position in the encoder can attend to all positions in the previous layer of the encoder. • Similarly, self-attention layers in the decoder allow each position in the decoder to attend to all positions in the decoder up to and including that position.\n\n[2] Source: Attention is all you need.pdf | Page: 5 | Section: None\n3.5 Positional Encoding Since our model contains no recurrence and no convolution, in order for the model to make use of the order of the sequence, we must inject some information about the relative or absolute position of the tokens in the sequence. To this end, we add \"positional encodings\" to the input embeddings at the\n\n[3] Source: Attention is all you need.pdf | Page: 3 | Section: None\nSimilar to the encoder, we employ residual connections around each of the sub-layers, followed by layer normalization. We also modify the self-attention sub-layer in the decoder stack to prevent positions from attending to subsequent positions. This masking, combined with fact that the output embeddings are offset by one position, ensures that the predictions for position i can depend only on the known outputs at positions less than i.\n\n[4] Source: Attention is all you need.pdf | Page: 6 | Section: None\nLayer Type Complexity per Layer Sequential Maximum Path Length Operations Self-Attention O(n2 · d) O(1) O(1) Recurrent O(n · d2) O(n) O(n) Convolutional O(k · n · d2) O(1) O(logk(n)) Self-Attention (restricted) O(r · n · d) O(1) O(n/r) bottoms of the encoder and decoder stacks. The positional encodings have the same dimension dmodel as the embeddings, so that the two can be summed. There are many choices of positional encodings, learned and ﬁxed [8].\n\n[5] Source: Attention is all you need.pdf | Page: 6 | Section: None\nIn this work, we use sine and cosine functions of different frequencies: PE(pos,2i) = sin(pos/100002i/dmodel) PE(pos,2i+1) = cos(pos/100002i/dmodel) where pos is the position and i is the dimension. That is, each dimension of the positional encoding corresponds to a sinusoid. The wavelengths form a geometric progression from 2π to 10000 · 2π.\n\n[6] Source: Attention is all you need.pdf | Page: 2 | Section: None\nIn the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as described in section 3.2. Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.\n\n[7] Source: Attention is all you need.pdf | Page: 2 | Section: None\nTo the best of our knowledge, however, the Transformer is the ﬁrst transduction model relying entirely on self-attention to compute representations of its input and output without using sequence- aligned RNNs or convolution. In the following sections, we will describe the Transformer, motivate self-attention and discuss its advantages over models such as [14, 15] and [8].\n\n[8] Source: Attention is all you need.pdf | Page: 2 | Section: None\nThe ﬁrst is a multi-head self-attention mechanism, and the second is a simple, position-\n\n[9] Source: Attention is all you need.pdf | Page: 2 | Section: None\nThe Transformer follows this overall architecture using stacked self-attention and point-wise, fully connected layers for both the encoder and decoder, shown in the left and right halves of Figure 1, respectively.\n\n[10] Source: Attention is all you need.pdf | Page: 6 | Section: None\nAs noted in Table 1, a self-attention layer connects all positions with a constant number of sequentially executed operations, whereas a recurrent layer requires O(n) sequential operations.\n\n[11] Source: Attention is all you need.pdf | Page: 5 | Section: None\n3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].\n\n[12] Source: 2104.09864v5.pdf | Page: 2 | Section: 1 Introduction\nTitle: RoFormer\n encoding from the\nperspective of Neural ODE Chen et al. [2018a], and the authors of Wang et al. [2020] have proposed to model the\nposition information in complex space. Despite the effectiveness of these approaches, they commonly add the position\ninformation to the context representation and thus render them unsuitable for the linear self-attention architecture.\nIn this paper, we introduce a novel method, namely Rotary Position Embedding(RoPE), to leverage the positional\ninformation into the learning process of PLMS. Specifically, RoPE encodes the absolute position with a rotation matrix\nand meanwhile incorporates the explicit relative position dependency in self-attention formulation. Note that the\nproposed RoPE is prioritized over the existing methods through valuable properties, including the sequence length\nflexibility, decaying inter-token dependency with increasing relative distances, and the capability of equipping the\nlinear self-attention with relative position encoding. Experimental results on various long text classification benchmark\ndatasets show that the enhanced transformer with rotary position embedding, namely RoFormer, can give better\nperformance compared to base\n\n[13] Source: 2104.09864v5.pdf | Page: 12 | Section: 5 Conclusions\nTitle: RoFormer\n5\nConclusions\nIn this work, we proposed a new position embedding method that incorporates explicit relative position dependency in\nself-attention to enhance the performance of transformer architectures. Our theoretical analysis indicates that relative\nposition can be naturally formulated using vector production in self-attention, with absolution position information\nbeing encoded through a rotation matrix. In addition, we mathematically illustrated the advantageous properties of\nthe proposed method when applied to the Transformer. Finally, experiments on both English and Chinese benchmark\ndatasets demonstrate that our method encourages faster convergence in pre-training. The experimental results also show\nthat our proposed RoFormer can achieve better performance on long texts task.\nReferences\nJonas Gehring, Michael Auli, David Grangier, Denis Yarats, and Yann N Dauphin. Convolutional sequence to sequence\nlearning. In International Conference on Machine Learning, pages 1243–1252. PMLR, 2017.\nMd. Amirul Islam, Sen Jia, and Neil D. B. Bruce. How much position information do convolutional neural networks\nencode? ArXiv, abs/2001.08248, 2020.\nAshish Vaswani, Noam Shazeer, Niki Parmar, Ja\n\n[14] Source: 2104.09864v5.pdf | Page: 1 | Section: None\nTitle: RoFormer\nROFORMER: ENHANCED TRANSFORMER WITH ROTARY\nPOSITION EMBEDDING\nJianlin Su\nZhuiyi Technology Co., Ltd.\nZhuiyi Technology Co., Ltd.\nShenzhen\narXiv:2104.09864v5  [cs.CL]  8 Nov 2023\nbojonesu@wezhuiyi.com\njulianlu@wezhuiyi.com\nAhmed Murtadha\nZhuiyi Technology Co., Ltd.\nZhuiyi Technology Co., Ltd.\nShenzhen\nmengjiayi@wezhuiyi.com\nbrucewen@wezhuiyi.com\nNovember 9, 2023\nPosition encoding recently has shown effective in the transformer architecture. It enables valuable\nsupervision for dependency modeling between elements at different positions of the sequence. In\nthis paper, we first investigate various methods to integrate positional information into the learning\nprocess of transformer-based language models. Then, we propose a novel method named Rotary\nPosition Embedding(RoPE) to effectively leverage the positional information. Specifically, the\nproposed RoPE encodes the absolute position with a rotation matrix and meanwhile incorporates\nthe explicit relative position dependency in self-attention formulation. Notably, RoPE enables\nvaluable properties, including the flexibility of sequence length, decaying inter-token dependency\nwith increasing relative distances, and the capability of equip\n\n[15] Source: 2104.09864v5.pdf | Page: 5 | Section: 3.2.2 General form\nTitle: RoFormer\n3.2.2\nGeneral form\nIn order to generalize our results in 2D to any xi ∈Rd where d is even, we divide the d-dimension space into d/2\nsub-spaces and combine them in the merit of the linearity of the inner product, turning f{q,k} into:\nf{q,k}(xm, m) = Rd\nwhere\n−sin mθ1\ncos mθ1\n\nsin mθ1\ncos mθ1\n\n0\n0\ncos mθ2\n\n\n0\n0\nsin mθ2\nRd\n\nΘ,m =\n\n...\n...\n\n\n\n0\n0\n\n0\n0\nis the rotary matrix with pre-defined parameters Θ = {θi = 10000−2(i−1)/d, i ∈[1, 2, ..., d/2]}. A graphic illustration\nof RoPE is shown in Figure (1). Applying our RoPE to self-attention in Equation (2), we obtain:\nΘ,mW qxm)⊺(Rd\nq⊺\nmkn = (Rd\nΘ,m)⊺Rd\nΘ,n−m = (Rd\nwhere Rd\nΘ,n. Note that Rd\nΘ is an orthogonal matrix, which ensures stability during the process of\nencoding position information. In addition, due to the sparsity of Rd\nEquation (16) is not computationally efficient; we provide another realization in theoretical explanation.\nIn contrast to the additive nature of position embedding method adopted in the previous works, i.e., Equations (3)\nto (10), our approach is multiplicative. Moreover, RoPE naturally incorporates relative position information through\nrotation matrix product instead of altering terms in the expanded fo\n\n[16] Source: 2104.09864v5.pdf | Page: 5 | Section: 3.2.2 General form\nTitle: RoFormer\nmultiplicative. Moreover, RoPE naturally incorporates relative position information through\nrotation matrix product instead of altering terms in the expanded formulation of additive position encoding when applied\nwith self-attention.\nθ1\nConstant\n(x1, x2)\nQuery / Key\nm\nPosition\nd=2\nθ1\nθ2\nθd/2-1 θd/2\nEnhanced\nTransformer\nwith\nRotary\nPosition\nEmbedding\nQuery / Key\nFigure 1: Implementation of Rotary Position Embedding(RoPE).\n\n[17] Source: 2104.09864v5.pdf | Page: 2 | Section: 1 Introduction\nTitle: RoFormer\nIt is noteworthy that the self-attention architecture of the current PLMs has shown to be position-agnostic Yun et al.\n[2020]. Following this claim, various approaches have been proposed to encode the position information into the\nlearning process. On one side, generated absolute position encoding through a pre-defined function Vaswani et al.\n[2017] was added to the contextual representations, while a trainable absolute position encoding Gehring et al. [2017],\nDevlin et al. [2019], Lan et al. [2020], Clark et al. [2020], Radford et al. [2019], Radford and Narasimhan [2018]. On\nthe other side, the previous work Parikh et al. [2016], Shaw et al. [2018], Huang et al. [2018], Dai et al. [2019], Yang\net al. [2019], Raffel et al. [2020], Ke et al. [2020], He et al. [2020], Huang et al. [2020] focuses on relative position\nencoding, which typically encodes the relative position information into the attention mechanism. In addition to these\napproaches, the authors of Liu et al. [2020] have proposed to model the dependency of position encoding from the\nperspective of Neural ODE Chen et al. [2018a], and the authors of Wang et al. [2020] have proposed to model the\nposition information in compl",
+  "ledger": {
+    "citation_registry": [
+      {
+        "citation": 1,
+        "chunk_id": 39,
+        "source": "Attention is all you need.pdf",
+        "page": 5,
+        "title": "Attention is All you Need",
+        "text": "• The encoder contains self-attention layers. In a self-attention layer all of the keys, values and queries come from the same place, in this case, the output of the previous layer in the encoder. Each position in the encoder can attend to all positions in the previous layer of the encoder. • Similarly, self-attention layers in the decoder allow each position in the decoder to attend to all positions in the decoder up to and including that position.",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 2,
+        "chunk_id": 45,
+        "source": "Attention is all you need.pdf",
+        "page": 5,
+        "title": "Attention is All you Need",
+        "text": "3.5 Positional Encoding Since our model contains no recurrence and no convolution, in order for the model to make use of the order of the sequence, we must inject some information about the relative or absolute position of the tokens in the sequence. To this end, we add \"positional encodings\" to the input embeddings at the",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 3,
+        "chunk_id": 25,
+        "source": "Attention is all you need.pdf",
+        "page": 3,
+        "title": "Attention is All you Need",
+        "text": "Similar to the encoder, we employ residual connections around each of the sub-layers, followed by layer normalization. We also modify the self-attention sub-layer in the decoder stack to prevent positions from attending to subsequent positions. This masking, combined with fact that the output embeddings are offset by one position, ensures that the predictions for position i can depend only on the known outputs at positions less than i.",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 4,
+        "chunk_id": 47,
+        "source": "Attention is all you need.pdf",
+        "page": 6,
+        "title": "Attention is All you Need",
+        "text": "Layer Type Complexity per Layer Sequential Maximum Path Length Operations Self-Attention O(n2 · d) O(1) O(1) Recurrent O(n · d2) O(n) O(n) Convolutional O(k · n · d2) O(1) O(logk(n)) Self-Attention (restricted) O(r · n · d) O(1) O(n/r) bottoms of the encoder and decoder stacks. The positional encodings have the same dimension dmodel as the embeddings, so that the two can be summed. There are many choices of positional encodings, learned and ﬁxed [8].",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 5,
+        "chunk_id": 48,
+        "source": "Attention is all you need.pdf",
+        "page": 6,
+        "title": "Attention is All you Need",
+        "text": "In this work, we use sine and cosine functions of different frequencies: PE(pos,2i) = sin(pos/100002i/dmodel) PE(pos,2i+1) = cos(pos/100002i/dmodel) where pos is the position and i is the dimension. That is, each dimension of the positional encoding corresponds to a sinusoid. The wavelengths form a geometric progression from 2π to 10000 · 2π.",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 6,
+        "chunk_id": 15,
+        "source": "Attention is all you need.pdf",
+        "page": 2,
+        "title": "Attention is All you Need",
+        "text": "In the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as described in section 3.2. Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 7,
+        "chunk_id": 17,
+        "source": "Attention is all you need.pdf",
+        "page": 2,
+        "title": "Attention is All you Need",
+        "text": "To the best of our knowledge, however, the Transformer is the ﬁrst transduction model relying entirely on self-attention to compute representations of its input and output without using sequence- aligned RNNs or convolution. In the following sections, we will describe the Transformer, motivate self-attention and discuss its advantages over models such as [14, 15] and [8].",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 8,
+        "chunk_id": 22,
+        "source": "Attention is all you need.pdf",
+        "page": 2,
+        "title": "Attention is All you Need",
+        "text": "The ﬁrst is a multi-head self-attention mechanism, and the second is a simple, position-",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 9,
+        "chunk_id": 20,
+        "source": "Attention is all you need.pdf",
+        "page": 2,
+        "title": "Attention is All you Need",
+        "text": "The Transformer follows this overall architecture using stacked self-attention and point-wise, fully connected layers for both the encoder and decoder, shown in the left and right halves of Figure 1, respectively.",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 10,
+        "chunk_id": 54,
+        "source": "Attention is all you need.pdf",
+        "page": 6,
+        "title": "Attention is All you Need",
+        "text": "As noted in Table 1, a self-attention layer connects all positions with a constant number of sequentially executed operations, whereas a recurrent layer requires O(n) sequential operations.",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 11,
+        "chunk_id": 38,
+        "source": "Attention is all you need.pdf",
+        "page": 5,
+        "title": "Attention is All you Need",
+        "text": "3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In \"encoder-decoder attention\" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].",
+        "kb_version": "all-papers-8-20261020"
+      },
+      {
+        "citation": 12,
+        "source": "2104.09864v5.pdf",
+        "page": 2,
+        "title": "RoFormer",
+        "section": "1 Introduction",
+        "text": " encoding from the\nperspective of Neural ODE Chen et al. [2018a], and the authors of Wang et al. [2020] have proposed to model the\nposition information in complex space. Despite the effectiveness of these approaches, they commonly add the position\ninformation to the context representation and thus render them unsuitable for the linear self-attention architecture.\nIn this paper, we introduce a novel method, namely Rotary Position Embedding(RoPE), to leverage the positional\ninformation into the learning process of PLMS. Specifically, RoPE encodes the absolute position with a rotation matrix\nand meanwhile incorporates the explicit relative position dependency in self-attention formulation. Note that the\nproposed RoPE is prioritized over the existing methods through valuable properties, including the sequence length\nflexibility, decaying inter-token dependency with increasing relative distances, and the capability of equipping the\nlinear self-attention with relative position encoding. Experimental results on various long text classification benchmark\ndatasets show that the enhanced transformer with rotary position embedding, namely RoFormer, can give better\nperformance compared to base",
+        "origin": "arxiv",
+        "arxiv_id": "2104.09864v5",
+        "url": "https://arxiv.org/pdf/2104.09864v5",
+        "pdf_sha256": "e9a481fbe1c8a20b7b1fa566b13102a1896c7829fa9a8b4c80528452a5ddaf79",
+        "evidence_id": "arxiv:2104.09864v5:document:2:chars:1040:2240",
+        "document_evidence_id": "arxiv:2104.09864v5:document:2",
+        "start": 1040,
+        "end": 2240,
+        "chunk_id": 1402
+      },
+      {
+        "citation": 13,
+        "source": "2104.09864v5.pdf",
+        "page": 12,
+        "title": "RoFormer",
+        "section": "5 Conclusions",
+        "text": "5\nConclusions\nIn this work, we proposed a new position embedding method that incorporates explicit relative position dependency in\nself-attention to enhance the performance of transformer architectures. Our theoretical analysis indicates that relative\nposition can be naturally formulated using vector production in self-attention, with absolution position information\nbeing encoded through a rotation matrix. In addition, we mathematically illustrated the advantageous properties of\nthe proposed method when applied to the Transformer. Finally, experiments on both English and Chinese benchmark\ndatasets demonstrate that our method encourages faster convergence in pre-training. The experimental results also show\nthat our proposed RoFormer can achieve better performance on long texts task.\nReferences\nJonas Gehring, Michael Auli, David Grangier, Denis Yarats, and Yann N Dauphin. Convolutional sequence to sequence\nlearning. In International Conference on Machine Learning, pages 1243–1252. PMLR, 2017.\nMd. Amirul Islam, Sen Jia, and Neil D. B. Bruce. How much position information do convolutional neural networks\nencode? ArXiv, abs/2001.08248, 2020.\nAshish Vaswani, Noam Shazeer, Niki Parmar, Ja",
+        "origin": "arxiv",
+        "arxiv_id": "2104.09864v5",
+        "url": "https://arxiv.org/pdf/2104.09864v5",
+        "pdf_sha256": "e9a481fbe1c8a20b7b1fa566b13102a1896c7829fa9a8b4c80528452a5ddaf79",
+        "evidence_id": "arxiv:2104.09864v5:document:47:chars:0:1200",
+        "document_evidence_id": "arxiv:2104.09864v5:document:47",
+        "start": 0,
+        "end": 1200,
+        "chunk_id": 1456
+      },
+      {
+        "citation": 14,
+        "source": "2104.09864v5.pdf",
+        "page": 1,
+        "title": "RoFormer",
+        "section": null,
+        "text": "ROFORMER: ENHANCED TRANSFORMER WITH ROTARY\nPOSITION EMBEDDING\nJianlin Su\nZhuiyi Technology Co., Ltd.\nZhuiyi Technology Co., Ltd.\nShenzhen\narXiv:2104.09864v5  [cs.CL]  8 Nov 2023\nbojonesu@wezhuiyi.com\njulianlu@wezhuiyi.com\nAhmed Murtadha\nZhuiyi Technology Co., Ltd.\nZhuiyi Technology Co., Ltd.\nShenzhen\nmengjiayi@wezhuiyi.com\nbrucewen@wezhuiyi.com\nNovember 9, 2023\nPosition encoding recently has shown effective in the transformer architecture. It enables valuable\nsupervision for dependency modeling between elements at different positions of the sequence. In\nthis paper, we first investigate various methods to integrate positional information into the learning\nprocess of transformer-based language models. Then, we propose a novel method named Rotary\nPosition Embedding(RoPE) to effectively leverage the positional information. Specifically, the\nproposed RoPE encodes the absolute position with a rotation matrix and meanwhile incorporates\nthe explicit relative position dependency in self-attention formulation. Notably, RoPE enables\nvaluable properties, including the flexibility of sequence length, decaying inter-token dependency\nwith increasing relative distances, and the capability of equip",
+        "origin": "arxiv",
+        "arxiv_id": "2104.09864v5",
+        "url": "https://arxiv.org/pdf/2104.09864v5",
+        "pdf_sha256": "e9a481fbe1c8a20b7b1fa566b13102a1896c7829fa9a8b4c80528452a5ddaf79",
+        "evidence_id": "arxiv:2104.09864v5:document:0:chars:0:1200",
+        "document_evidence_id": "arxiv:2104.09864v5:document:0",
+        "start": 0,
+        "end": 1200,
+        "chunk_id": 1397
+      },
+      {
+        "citation": 15,
+        "source": "2104.09864v5.pdf",
+        "page": 5,
+        "title": "RoFormer",
+        "section": "3.2.2 General form",
+        "text": "3.2.2\nGeneral form\nIn order to generalize our results in 2D to any xi ∈Rd where d is even, we divide the d-dimension space into d/2\nsub-spaces and combine them in the merit of the linearity of the inner product, turning f{q,k} into:\nf{q,k}(xm, m) = Rd\nwhere\n−sin mθ1\ncos mθ1\n\nsin mθ1\ncos mθ1\n\n0\n0\ncos mθ2\n\n\n0\n0\nsin mθ2\nRd\n\nΘ,m =\n\n...\n...\n\n\n\n0\n0\n\n0\n0\nis the rotary matrix with pre-defined parameters Θ = {θi = 10000−2(i−1)/d, i ∈[1, 2, ..., d/2]}. A graphic illustration\nof RoPE is shown in Figure (1). Applying our RoPE to self-attention in Equation (2), we obtain:\nΘ,mW qxm)⊺(Rd\nq⊺\nmkn = (Rd\nΘ,m)⊺Rd\nΘ,n−m = (Rd\nwhere Rd\nΘ,n. Note that Rd\nΘ is an orthogonal matrix, which ensures stability during the process of\nencoding position information. In addition, due to the sparsity of Rd\nEquation (16) is not computationally efficient; we provide another realization in theoretical explanation.\nIn contrast to the additive nature of position embedding method adopted in the previous works, i.e., Equations (3)\nto (10), our approach is multiplicative. Moreover, RoPE naturally incorporates relative position information through\nrotation matrix product instead of altering terms in the expanded fo",
+        "origin": "arxiv",
+        "arxiv_id": "2104.09864v5",
+        "url": "https://arxiv.org/pdf/2104.09864v5",
+        "pdf_sha256": "e9a481fbe1c8a20b7b1fa566b13102a1896c7829fa9a8b4c80528452a5ddaf79",
+        "evidence_id": "arxiv:2104.09864v5:document:13:chars:0:1200",
+        "document_evidence_id": "arxiv:2104.09864v5:document:13",
+        "start": 0,
+        "end": 1200,
+        "chunk_id": 1418
+      },
+      {
+        "citation": 16,
+        "source": "2104.09864v5.pdf",
+        "page": 5,
+        "title": "RoFormer",
+        "section": "3.2.2 General form",
+        "text": "multiplicative. Moreover, RoPE naturally incorporates relative position information through\nrotation matrix product instead of altering terms in the expanded formulation of additive position encoding when applied\nwith self-attention.\nθ1\nConstant\n(x1, x2)\nQuery / Key\nm\nPosition\nd=2\nθ1\nθ2\nθd/2-1 θd/2\nEnhanced\nTransformer\nwith\nRotary\nPosition\nEmbedding\nQuery / Key\nFigure 1: Implementation of Rotary Position Embedding(RoPE).",
+        "origin": "arxiv",
+        "arxiv_id": "2104.09864v5",
+        "url": "https://arxiv.org/pdf/2104.09864v5",
+        "pdf_sha256": "e9a481fbe1c8a20b7b1fa566b13102a1896c7829fa9a8b4c80528452a5ddaf79",
+        "evidence_id": "arxiv:2104.09864v5:document:13:chars:1040:1464",
+        "document_evidence_id": "arxiv:2104.09864v5:document:13",
+        "start": 1040,
+        "end": 1464,
+        "chunk_id": 1419
+      },
+      {
+        "citation": 17,
+        "source": "2104.09864v5.pdf",
+        "page": 2,
+        "title": "RoFormer",
+        "section": "1 Introduction",
+        "text": "It is noteworthy that the self-attention architecture of the current PLMs has shown to be position-agnostic Yun et al.\n[2020]. Following this claim, various approaches have been proposed to encode the position information into the\nlearning process. On one side, generated absolute position encoding through a pre-defined function Vaswani et al.\n[2017] was added to the contextual representations, while a trainable absolute position encoding Gehring et al. [2017],\nDevlin et al. [2019], Lan et al. [2020], Clark et al. [2020], Radford et al. [2019], Radford and Narasimhan [2018]. On\nthe other side, the previous work Parikh et al. [2016], Shaw et al. [2018], Huang et al. [2018], Dai et al. [2019], Yang\net al. [2019], Raffel et al. [2020], Ke et al. [2020], He et al. [2020], Huang et al. [2020] focuses on relative position\nencoding, which typically encodes the relative position information into the attention mechanism. In addition to these\napproaches, the authors of Liu et al. [2020] have proposed to model the dependency of position encoding from the\nperspective of Neural ODE Chen et al. [2018a], and the authors of Wang et al. [2020] have proposed to model the\nposition information in compl",
+        "origin": "arxiv",
+        "arxiv_id": "2104.09864v5",
+        "url": "https://arxiv.org/pdf/2104.09864v5",
+        "pdf_sha256": "e9a481fbe1c8a20b7b1fa566b13102a1896c7829fa9a8b4c80528452a5ddaf79",
+        "evidence_id": "arxiv:2104.09864v5:document:2:chars:0:1200",
+        "document_evidence_id": "arxiv:2104.09864v5:document:2",
+        "start": 0,
+        "end": 1200,
+        "chunk_id": 1401
+      }
+    ]
+  },
+  "mode": "agent",
+  "answer": "根据RoFormer论文，其位置编码方法RoPE用旋转矩阵编码绝对位置，同时在自注意力公式中引入显式的相对位置依赖[12][14]。理论上，相对位置通过自注意力中的向量乘积自然表达，绝对位置信息则通过旋转矩阵编码[13]。与以往工作中加性的位置嵌入不同，该方法是乘性的，并通过旋转矩阵乘积自然地纳入相对位置信息，而非修改加性位置编码展开式中的项[15][16]。\n\n来源：\n[12] 2104.09864v5.pdf，p.2；[固定版本PDF](https://arxiv.org/pdf/2104.09864v5)\n[13] 2104.09864v5.pdf，p.12；[固定版本PDF](https://arxiv.org/pdf/2104.09864v5)\n[14] 2104.09864v5.pdf，p.1；[固定版本PDF](https://arxiv.org/pdf/2104.09864v5)\n[15] 2104.09864v5.pdf，p.5；[固定版本PDF](https://arxiv.org/pdf/2104.09864v5)\n[16] 2104.09864v5.pdf，p.5；[固定版本PDF](https://arxiv.org/pdf/2104.09864v5)",
+  "run_dir": "/Users/j/Desktop/Advanced-LLM-RAG/evaluation/results/p3_validation_20261022/live/n03/agent_on",
+  "initial_selected_ids": [
+    39,
+    45,
+    25,
+    47,
+    48,
+    15,
+    17,
+    22,
+    20,
+    54
+  ],
+  "agent": {
+    "invoked": true,
+    "actions_executed": 0,
+    "decision_summary": {
+      "planned_cases": 1,
+      "completed_cases": 1,
+      "api_attempts": 2,
+      "failed_api_attempts": 0,
+      "automatic_retries": 0,
+      "actions_executed": 0,
+      "usage_missing_calls": [],
+      "reported_usage": {
+        "prompt_tokens": 3354,
+        "completion_tokens": 239,
+        "total_tokens": 3593
+      },
+      "proposed_actions": {
+        "question": {
+          "type": "stop",
+          "reason": "所需主要论文RoFormer不在存货清单中，本地工具无法建立该事实，应以边界说明终止而非臆造。",
+          "requirement_ids": [
+            "r1"
+          ],
+          "query": null,
+          "source": null,
+          "chunk_id": null
+        }
+      },
+      "action_attempts": 0,
+      "reassessment_api_attempts": 0,
+      "reassessed_actions": {
+        "question": null
+      },
+      "final_answer_generations": 0,
+      "automatic_action_loop": true,
+      "validation_repair_attempts": 0,
+      "paused_cases": 0,
+      "halt_reasons": {
+        "question": "model_stop"
+      }
+    },
+    "halt_reason": "model_stop"
+  },
+  "network": {
+    "status": "completed",
+    "network_decision_calls": 3,
+    "http_tool_calls": 2,
+    "papers_read": 1,
+    "automatic_retries": 0,
+    "permanent_kb_import": false,
+    "route": {
+      "route": "arxiv",
+      "requirement_id": "r1",
+      "paper_title": "RoFormer: Enhanced Transformer with Rotary Position Embedding",
+      "reason": "本地目录中没有 RoFormer 论文，且该需求明确指向 RoFormer 原始论文，其完整标题为《RoFormer: Enhanced Transformer with Rotary Position Embedding》。"
+    },
+    "search_query": "ti:\"RoFormer: Enhanced Transformer with Rotary Position Embedding\"",
+    "selection": {
+      "arxiv_id": "2104.09864v5",
+      "two_columns": true,
+      "reason": "这是唯一返回的论文，标题即《RoFormer: Enhanced Transformer with Rotary Position Embedding》，作者为首创者Jianlin Su等，摘要直接描述RoPE以旋转矩阵编码绝对位置并在自注意力中融入显式相对位置依赖，正是要求所指的RoFormer原始论文，而非后续或对比论文。"
+    },
+    "passage_selection": {
+      "candidate_count": 70,
+      "reranked_candidates": 70,
+      "selected_count": 6,
+      "selected_ids": [
+        1402,
+        1456,
+        1397,
+        1418,
+        1419,
+        1401
+      ]
+    },
+    "answer_status": "review_passed",
+    "semantic_correctness": "requires_manual_review"
+  },
+  "answer_strategy": "arxiv_evidence_reviewed",
+  "api_summary": {
+    "attempts": 8,
+    "failed_attempts": 0,
+    "automatic_retries": 0,
+    "usage_missing_calls": [],
+    "reported_usage": {
+      "prompt_tokens": 22589,
+      "completion_tokens": 1363,
+      "total_tokens": 23952
+    }
+  }
+}

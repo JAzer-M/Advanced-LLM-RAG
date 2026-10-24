@@ -1,0 +1,189 @@
+LLM: proxy API | Model: cn:deepseek-v4.1-flash
+Knowledge Base: all-papers-8-20261020
+Total Vectors: 1397
+Vector Dimensions: 384
+Total Chunks: 1397
+
+Original Query: In Attention Is All You Need, what transformations and activation make up the position-wise feed-forward network, and what inner-layer dimensionality is specified in its description?
+Decomposition: {'needs_decomposition': True, 'sub_queries': ['In Attention Is All You Need, what transformations and activation make up the position-wise feed-forward network?', 'In Attention Is All You Need, what inner-layer dimensionality is specified for the position-wise feed-forward network?'], 'status': 'accepted', 'proposed_count': 2}
+Sub-Queries:
+- In Attention Is All You Need, what transformations and activation make up the position-wise feed-forward network?
+- In Attention Is All You Need, what inner-layer dimensionality is specified for the position-wise feed-forward network?
+Additional Retrieval Lists: 0
+HyDE Enabled: False
+
+=== Sub-Query: In Attention Is All You Need, what transformations and activation make up the position-wise feed-forward network? (RRF Top-5) ===
+
+Rank: 1
+Source: Attention is all you need.pdf
+Page: 5
+Section: 3.3 Position-wise Feed-Forward Networks
+Text: 3.3 Position-wise Feed-Forward Networks In addition to attention sub-layers, each of the layers in our encoder and decoder contains a fully connected feed-forward network, which is applied to each position separately and identically.
+
+Rank: 2
+Source: Attention is all you need.pdf
+Page: 3
+Section: 3.1 Encoder and Decoder Stacks
+Text: wise fully connected feed-forward network. We employ a residual connection [10] around each of the two sub-layers, followed by layer normalization [1]. That is, the output of each sub-layer is LayerNorm(x + Sublayer(x)), where Sublayer(x) is the function implemented by the sub-layer itself.
+
+Rank: 3
+Source: Attention is all you need.pdf
+Page: 2
+Section: 3.1 Encoder and Decoder Stacks
+Text: The ﬁrst is a multi-head self-attention mechanism, and the second is a simple, position-
+
+Rank: 4
+Source: Attention is all you need.pdf
+Page: 5
+Section: 3.2.3 Applications of Attention in our Model
+Text: 3.2.3 Applications of Attention in our Model The Transformer uses multi-head attention in three different ways: • In "encoder-decoder attention" layers, the queries come from the previous decoder layer, and the memory keys and values come from the output of the encoder. This allows every position in the decoder to attend over all positions in the input sequence. This mimics the typical encoder-decoder attention mechanisms in sequence-to-sequence models such as [31, 2, 8].
+
+Rank: 5
+Source: Attention is all you need.pdf
+Page: 2
+Section: 1 Introduction
+Text: Attention mechanisms have become an integral part of compelling sequence modeling and transduc- tion models in various tasks, allowing modeling of dependencies without regard to their distance in the input or output sequences [2, 16]. In all but a few cases [22], however, such attention mechanisms are used in conjunction with a recurrent network.
+
+=== Sub-Query: In Attention Is All You Need, what inner-layer dimensionality is specified for the position-wise feed-forward network? (RRF Top-5) ===
+
+Rank: 1
+Source: Attention is all you need.pdf
+Page: 5
+Section: 3.3 Position-wise Feed-Forward Networks
+Text: 3.3 Position-wise Feed-Forward Networks In addition to attention sub-layers, each of the layers in our encoder and decoder contains a fully connected feed-forward network, which is applied to each position separately and identically.
+
+Rank: 2
+Source: Attention is all you need.pdf
+Page: 3
+Section: 3.1 Encoder and Decoder Stacks
+Text: wise fully connected feed-forward network. We employ a residual connection [10] around each of the two sub-layers, followed by layer normalization [1]. That is, the output of each sub-layer is LayerNorm(x + Sublayer(x)), where Sublayer(x) is the function implemented by the sub-layer itself.
+
+Rank: 3
+Source: Attention is all you need.pdf
+Page: 2
+Section: 3.1 Encoder and Decoder Stacks
+Text: The ﬁrst is a multi-head self-attention mechanism, and the second is a simple, position-
+
+Rank: 4
+Source: Attention is all you need.pdf
+Page: 3
+Section: 3.1 Encoder and Decoder Stacks
+Text: Similar to the encoder, we employ residual connections around each of the sub-layers, followed by layer normalization. We also modify the self-attention sub-layer in the decoder stack to prevent positions from attending to subsequent positions. This masking, combined with fact that the output embeddings are offset by one position, ensures that the predictions for position i can depend only on the known outputs at positions less than i.
+
+Rank: 5
+Source: Attention is all you need.pdf
+Page: 6
+Section: 4 Why Self-Attention
+Text: One key factor affecting the ability to learn such dependencies is the length of the paths forward and backward signals have to traverse in the network. The shorter these paths between any combination of positions in the input and output sequences, the easier it is to learn long-range dependencies [11]. Hence we also compare the maximum path length between any two input and output positions in networks composed of the different layer types.
+
+Candidate Pool Before Deduplication: 360
+Candidate Pool After Deduplication: 171
+Selected Chunk IDs: [42, 2, 26, 41, 15, 33, 30, 82, 52, 31]
+Sub-Query Evidence Selection: {'candidate_count': 171, 'global_top_ids': [42, 2, 26, 41, 15, 33, 30, 82, 52, 58], 'protected_ids': [42], 'sub_query_evidence': [{'query': 'In Attention Is All You Need, what transformations and activation make up the position-wise feed-forward network?', 'top_ids': [42, 41, 2]}, {'query': 'In Attention Is All You Need, what inner-layer dimensionality is specified for the position-wise feed-forward network?', 'top_ids': [42, 41, 31]}], 'retrieval_anchor_ids': [41], 'evidence_completion': {'requested_sources': ['Attention is all you need.pdf'], 'tasks': [], 'coverage': 'heuristic_only', 'rounds': 0, 'supplement_queries': 0, 'max_rounds': 2, 'completed_passes': 0, 'round_history': [], 'selected_ids_before': [42, 2, 26, 41, 15, 33, 30, 82, 52, 31], 'retained_local_ids': [42, 2, 41, 31], 'stop_reason': 'not_explicit_cross_paper', 'selected_ids_after': [42, 2, 26, 41, 15, 33, 30, 82, 52, 31], 'elapsed_seconds': 0.000869}}
+
+=== Retrieved Top-10 ===
+
+Rank: 1
+Source: Attention is all you need.pdf
+Page: 5
+Section: 3.3 Position-wise Feed-Forward Networks
+Text: This consists of two linear transformations with a ReLU activation in between. FFN(x) = max(0, xW1 + b1)W2 + b2 (2) While the linear transformations are the same across different positions, they use different parameters from layer to layer. Another way of describing this is as two convolutions with kernel size 1. The dimensionality of input and output is dmodel = 512, and the inner-layer has dimensionality dff = 2048.
+
+Rank: 2
+Source: Attention is all you need.pdf
+Page: 1
+Section: None
+Text: We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely.
+
+Rank: 3
+Source: Attention is all you need.pdf
+Page: 3
+Section: 3.2 Attention
+Text: 3.2 Attention An attention function can be described as mapping a query and a set of key-value pairs to an output, where the query, keys, values, and output are all vectors. The output is computed as a weighted sum of the values, where the weight assigned to each value is computed by a compatibility function of the query with the corresponding key.
+
+Rank: 4
+Source: Attention is all you need.pdf
+Page: 5
+Section: 3.3 Position-wise Feed-Forward Networks
+Text: 3.3 Position-wise Feed-Forward Networks In addition to attention sub-layers, each of the layers in our encoder and decoder contains a fully connected feed-forward network, which is applied to each position separately and identically.
+
+Rank: 5
+Source: Attention is all you need.pdf
+Page: 2
+Section: 2 Background
+Text: In the Transformer this is reduced to a constant number of operations, albeit at the cost of reduced effective resolution due to averaging attention-weighted positions, an effect we counteract with Multi-Head Attention as described in section 3.2. Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.
+
+Rank: 6
+Source: Attention is all you need.pdf
+Page: 4
+Section: 3.2.2 Multi-Head Attention
+Text: 3.2.2 Multi-Head Attention Instead of performing a single attention function with dmodel-dimensional keys, values and queries, we found it beneﬁcial to linearly project the queries, keys and values h times with different, learned linear projections to dk, dk and dv dimensions, respectively. On each of these projected versions of queries, keys and values we then perform the attention function in parallel, yielding dv-dimensional output values.
+
+Rank: 7
+Source: Attention is all you need.pdf
+Page: 4
+Section: 3.2.1 Scaled Dot-Product Attention
+Text: query with all keys, divide each by √dk, and apply a softmax function to obtain the weights on the values. In practice, we compute the attention function on a set of queries simultaneously, packed together into a matrix Q. The keys and values are also packed together into matrices K and V . We compute the matrix of outputs as: Attention(Q, K, V ) = softmax(QKT √dk )V (1) The two most commonly used attention functions are additive attention [2], and dot-product (multi- plicative) attention.
+
+Rank: 8
+Source: Attention is all you need.pdf
+Page: 9
+Section: 7 Conclusion
+Text: In the former task our best model outperforms even all previously reported ensembles. We are excited about the future of attention-based models and plan to apply them to other tasks. We plan to extend the Transformer to problems involving input and output modalities other than text and to investigate local, restricted attention mechanisms to efﬁciently handle large inputs and outputs such as images, audio and video. Making generation less sequential is another research goals of ours.
+
+Rank: 9
+Source: Attention is all you need.pdf
+Page: 6
+Section: 4 Why Self-Attention
+Text: One is the total computational complexity per layer. Another is the amount of computation that can be parallelized, as measured by the minimum number of sequential operations required. The third is the path length between long-range dependencies in the network. Learning long-range dependencies is a key challenge in many sequence transduction tasks.
+
+Rank: 10
+Source: Attention is all you need.pdf
+Page: 4
+Section: 3.2.1 Scaled Dot-Product Attention
+Text: Dot-product attention is identical to our algorithm, except for the scaling factor of 1 √dk . Additive attention computes the compatibility function using a feed-forward network with a single hidden layer. While the two are similar in theoretical complexity, dot-product attention is much faster and more space-efﬁcient in practice, since it can be implemented using highly optimized matrix multiplication code.
+
+=== Evidence: parsed facts and source quotations ===
+- Source quotation (Attention is all you need.pdf, p.5): “This consists of two linear transformations with a ReLU activation in between.” [1]
+- Source quotation (Attention is all you need.pdf, p.5): “FFN(x) = max(0, xW1 + b1)W2 + b2 (2) While the linear transformations are the same across different positions, they use different parameters from layer to layer.” [1]
+- Source quotation (Attention is all you need.pdf, p.5): “Another way of describing this is as two convolutions with kernel size 1.” [1]
+- Source quotation (Attention is all you need.pdf, p.5): “The dimensionality of input and output is dmodel = 512, and the inner-layer has dimensionality dff = 2048.” [1]
+- Source quotation (Attention is all you need.pdf, p.1): “We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely.” [2]
+- Source quotation (Attention is all you need.pdf, p.3): “2 Attention An attention function can be described as mapping a query and a set of key-value pairs to an output, where the query, keys, values, and output are all vectors.” [3]
+- Source quotation (Attention is all you need.pdf, p.3): “The output is computed as a weighted sum of the values, where the weight assigned to each value is computed by a compatibility function of the query with the corresponding key.” [3]
+- Source quotation (Attention is all you need.pdf, p.5): “3 Position-wise Feed-Forward Networks In addition to attention sub-layers, each of the layers in our encoder and decoder contains a fully connected feed-forward network, which is applied to each position separately and identically.” [4]
+- Source quotation (Attention is all you need.pdf, p.2): “Self-attention, sometimes called intra-attention is an attention mechanism relating different positions of a single sequence in order to compute a representation of the sequence.” [5]
+- Source quotation (Attention is all you need.pdf, p.4): “2 Multi-Head Attention Instead of performing a single attention function with dmodel-dimensional keys, values and queries, we found it beneﬁcial to linearly project the queries, keys and values h times with different, learned linear projections to dk, dk and dv dimensions, respectively.” [6]
+- Source quotation (Attention is all you need.pdf, p.4): “On each of these projected versions of queries, keys and values we then perform the attention function in parallel, yielding dv-dimensional output values.” [6]
+- Source quotation (Attention is all you need.pdf, p.4): “query with all keys, divide each by √dk, and apply a softmax function to obtain the weights on the values.” [7]
+- Source quotation (Attention is all you need.pdf, p.4): “In practice, we compute the attention function on a set of queries simultaneously, packed together into a matrix Q.” [7]
+- Source quotation (Attention is all you need.pdf, p.4): “The keys and values are also packed together into matrices K and V .” [7]
+- Source quotation (Attention is all you need.pdf, p.4): “We compute the matrix of outputs as: Attention(Q, K, V ) = softmax(QKT √dk )V (1) The two most commonly used attention functions are additive attention [2], and dot-product (multi- plicative) attention.” [7]
+- Source quotation (Attention is all you need.pdf, p.9): “In the former task our best model outperforms even all previously reported ensembles.” [8]
+- Source quotation (Attention is all you need.pdf, p.9): “We are excited about the future of attention-based models and plan to apply them to other tasks.” [8]
+- Source quotation (Attention is all you need.pdf, p.9): “We plan to extend the Transformer to problems involving input and output modalities other than text and to investigate local, restricted attention mechanisms to efﬁciently handle large inputs and outputs such as images, audio and video.” [8]
+- Source quotation (Attention is all you need.pdf, p.9): “Making generation less sequential is another research goals of ours.” [8]
+- Source quotation (Attention is all you need.pdf, p.6): “One is the total computational complexity per layer.” [9]
+- Source quotation (Attention is all you need.pdf, p.6): “Another is the amount of computation that can be parallelized, as measured by the minimum number of sequential operations required.” [9]
+- Source quotation (Attention is all you need.pdf, p.6): “The third is the path length between long-range dependencies in the network.” [9]
+- Source quotation (Attention is all you need.pdf, p.6): “Learning long-range dependencies is a key challenge in many sequence transduction tasks.” [9]
+- Source quotation (Attention is all you need.pdf, p.4): “Dot-product attention is identical to our algorithm, except for the scaling factor of 1 √dk .” [10]
+- Source quotation (Attention is all you need.pdf, p.4): “Additive attention computes the compatibility function using a feed-forward network with a single hidden layer.” [10]
+- Source quotation (Attention is all you need.pdf, p.4): “While the two are similar in theoretical complexity, dot-product attention is much faster and more space-efﬁcient in practice, since it can be implemented using highly optimized matrix multiplication code.” [10]
+
+=== Citation Sources ===
+[1] Attention is all you need.pdf, p.5 (chunk 42)
+[2] Attention is all you need.pdf, p.1 (chunk 2)
+[3] Attention is all you need.pdf, p.3 (chunk 26)
+[4] Attention is all you need.pdf, p.5 (chunk 41)
+[5] Attention is all you need.pdf, p.2 (chunk 15)
+[6] Attention is all you need.pdf, p.4 (chunk 33)
+[7] Attention is all you need.pdf, p.4 (chunk 30)
+[8] Attention is all you need.pdf, p.9 (chunk 82)
+[9] Attention is all you need.pdf, p.6 (chunk 52)
+[10] Attention is all you need.pdf, p.4 (chunk 31)
+question completed
+
+=== Agent Answer ===
+在《Attention Is All You Need》中，位置前馈网络由两次线性变换组成，中间夹一个 ReLU 激活，即 FFN(x)=max(0, xW1 + b1)W2 + b2 [1]。其输入和输出维度为 dmodel = 512，内层维度为 dff = 2048 [1]。该网络对每个位置分别且相同地应用 [4]。
+Run directory: /Users/j/Desktop/Advanced-LLM-RAG/evaluation/results/p3_validation_20261022/live/n01/agent_off

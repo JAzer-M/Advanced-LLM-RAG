@@ -1,0 +1,954 @@
+{
+  "query": "Do DPR and ColBERT share BERT weights between their question or query encoder and document encoder?",
+  "decomposition": {
+    "needs_decomposition": true,
+    "sub_queries": [
+      "Does DPR share BERT weights between its question encoder and document encoder?",
+      "Does ColBERT share BERT weights between its query encoder and document encoder?"
+    ],
+    "status": "accepted",
+    "proposed_count": 2
+  },
+  "knowledge_base": {
+    "version": "all-papers-8-20261020",
+    "chunk_count": 1397,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/all-papers-8-20261020/manifest.json",
+    "manifest_sha256": "9c4e2c26b4f11fe7baf526595630cbee2d325416ec0e497f417975fbd60779ef",
+    "files": {
+      "faiss.index": "ff1f4a3e38e20c0275ba79d805e6475639b3cea7a7a583f9c18c67ec8e40a2ed",
+      "chunks.json": "3e63d75abbe164ff8e135b1d66fd6b02d9479b2e037e289a726e7c542464593a"
+    }
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 94,
+    "global_top_ids": [
+      601,
+      577,
+      609,
+      920,
+      595,
+      641,
+      747,
+      687,
+      600,
+      548
+    ],
+    "protected_ids": [
+      601
+    ],
+    "sub_query_evidence": [
+      {
+        "query": "Does DPR share BERT weights between its question encoder and document encoder?",
+        "top_ids": [
+          601,
+          920,
+          779
+        ]
+      },
+      {
+        "query": "Does ColBERT share BERT weights between its query encoder and document encoder?",
+        "top_ids": [
+          601,
+          609,
+          577
+        ]
+      }
+    ],
+    "retrieval_anchor_ids": [
+      601
+    ]
+  },
+  "selected_ids": [
+    601,
+    577,
+    609,
+    920,
+    595,
+    641,
+    747,
+    687,
+    600,
+    779
+  ],
+  "context": "Original passages:\n[1] Source: 2004.12832v2.pdf | Page: 4 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nWe share a single BERT model among our query and document en- coders but distinguish input sequences that correspond to queries and documents by prepending a special token [Q] to queries and another token [D] to documents. Qery Encoder. Given a textual query q, we tokenize it into its BERT-based WordPiece [35] tokensq1q2...ql . We prepend the token [Q] to the query. We place this token right afer BERT’s sequence- start token [CLS].\n\n[2] Source: 2004.12832v2.pdf | Page: 2 | Section: 1 INTRODUCTION\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nOur main contributions are as follows. (1) We propose late interaction (§3.1) as a paradigm for eﬃcient and eﬀective neural ranking. (2) We present ColBERT (§3.2 & 3.3), a highly-eﬀective model that employs novel BERT-based query and document en- coders within the late interaction paradigm.\n\n[3] Source: 2004.12832v2.pdf | Page: 4 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nDocument Encoder. Our document encoder has a very similar architecture. We ﬁrst segment a document d into its constituent to- kens d1d2...dm, to which we prepend BERT’s start token [CLS] fol- lowed by our special token [D] that indicates a document sequence. Unlike queries, we do not append [mask] tokens to documents.\n\n[4] Source: 2005.11401v4.pdf | Page: 18 | Section: 6 Discussion\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nG Parameters Our RAG models contain the trainable parameters for the BERT-base query and document encoder of DPR, with 110M parameters each (although we do not train the document encoder ourselves) and 406M trainable parameters from BART-large, 406M parameters, making a total of 626M trainable\n\n[5] Source: 2004.12832v2.pdf | Page: 4 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nEven though ColBERT’s late-interaction framework can be ap- plied to a wide variety of architectures (e.g., CNNs, RNNs, trans- formers, etc.), we choose to focus this work on bi-directional transformer- based encoders (i.e., BERT) owing to their state-of-the-art eﬀective- ness yet very high computational cost. 3.1 Architecture Figure 3 depicts the general architecture of ColBERT, which com- prises: (a) a query encoder fQ, (b) a document encoder fD, and (c) the late interaction mechanism.\n\n[6] Source: 2004.12832v2.pdf | Page: 6 | Section: 4 EXPERIMENTAL EVALUATION\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nSimilar to [25], we ﬁne-tune all ColBERT models with learning rate 3 × 10−6 with a batch size 32. We ﬁx the number of embeddings per query at Nq = 32. We set our ColBERT embedding dimension m to be 128; §4.5 demonstrates ColBERT’s robustness to a wide range of embedding dimensions. For MS MARCO, we initialize the BERT components of the Col- BERT query and document encoders using Google’s oﬃcial pre- trained BERTbase model. Further, we train all models for 200k itera- tions.\n\n[7] Source: 2005.11401v4.pdf | Page: 3 | Section: 2.2 Retriever: DPR\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\n2.2 Retriever: DPR The retrieval component pη(z|x) is based on DPR [26]. DPR follows a bi-encoder architecture: pη(z|x) ∝exp \u0000 d(z)⊤q(x) \u0001 d(z) = BERTd(z), q(x) = BERTq(x) where d(z) is a dense representation of a document produced by a BERTBASE document encoder [8], and q(x) a query representation produced by a query encoder, also based on BERTBASE.\n\n[8] Source: 2004.12832v2.pdf | Page: 9 | Section: 4 EXPERIMENTAL EVALUATION\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nWhile ColBERT encodes each document with BERT exactly once, existing BERT-based rankers would repeat similar 0.36 computations on possibly hundreds of documents for each query. Seting Dimension(m) Bytes/Dim Space(GiBs) MRR@10 Re-rank Cosine 128 4 286 34.9 End-to-end L2 128 2 154 36.0 Re-rank L2 128 2 143 34.8 Re-rank Cosine 48 4 54 34.4 Re-rank Cosine 24 2 27 33.9 Table 4: Space Footprint vs MRR@10 (Dev) on MS MARCO.\n\n[9] Source: 2004.12832v2.pdf | Page: 4 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nOther cheap choices (e.g., a summation of average similarity scores, instead of maximum) are possible; however, many are less amenable to pruning. In §4.4, we conduct an extensive ablation study that empirically veriﬁes the ad- vantage of our MaxSim-based late interaction against alternatives. 3.2 Qery & Document Encoders Prior to late interaction, ColBERT encodes each query or document into a bag of embeddings, employing BERT-based encoders.\n\n[10] Source: 2005.11401v4.pdf | Page: 5 | Section: 4.1 Open-domain Question Answering\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nIt is worth noting that RAG’s retriever is initialized using DPR’s retriever, which uses retrieval supervision on Natural Questions and TriviaQA. RAG compares favourably to the DPR QA system, which uses a BERT-based “cross- encoder” to re-rank documents, along with an extractive reader. RAG demonstrates that neither a re-ranker nor extractive reader is necessary for state-of-the-art performance. There are several advantages to generating answers even when it is possible to extract them.\n\n[11] Source: 2004.12832v2.pdf | Page: 6 | Section: 4 EXPERIMENTAL EVALUATION\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nTis amounts to roughly 3M queries generated by concatenating the title of a Wikipedia page with the heading of one of its sections. Tat section’s passages are marked as relevant to the corresponding query. Our evaluation is conducted on the test set used in TREC 2017 CAR, which contains 2,254 queries. Implementation. Our ColBERT models are implemented 4.1.2 using Python 3 and PyTorch 1. We use the popular transformers5 library for the pre-trained BERT model.\n\nEvidence guidance:\n- Rule-based subject attribution: CAR; passage: “Similar to [25], we ﬁne-tune all ColBERT models with learning rate 3 × 10−6 with a batch size 32.” [6][11]",
+  "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in Simplified Chinese unless the question explicitly requests another language. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported Chinese question, begin with 当前证据不足 and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n\nContext:\nOriginal passages:\n[1] Source: 2004.12832v2.pdf | Page: 4 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nWe share a single BERT model among our query and document en- coders but distinguish input sequences that correspond to queries and documents by prepending a special token [Q] to queries and another token [D] to documents. Qery Encoder. Given a textual query q, we tokenize it into its BERT-based WordPiece [35] tokensq1q2...ql . We prepend the token [Q] to the query. We place this token right afer BERT’s sequence- start token [CLS].\n\n[2] Source: 2004.12832v2.pdf | Page: 2 | Section: 1 INTRODUCTION\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nOur main contributions are as follows. (1) We propose late interaction (§3.1) as a paradigm for eﬃcient and eﬀective neural ranking. (2) We present ColBERT (§3.2 & 3.3), a highly-eﬀective model that employs novel BERT-based query and document en- coders within the late interaction paradigm.\n\n[3] Source: 2004.12832v2.pdf | Page: 4 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nDocument Encoder. Our document encoder has a very similar architecture. We ﬁrst segment a document d into its constituent to- kens d1d2...dm, to which we prepend BERT’s start token [CLS] fol- lowed by our special token [D] that indicates a document sequence. Unlike queries, we do not append [mask] tokens to documents.\n\n[4] Source: 2005.11401v4.pdf | Page: 18 | Section: 6 Discussion\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nG Parameters Our RAG models contain the trainable parameters for the BERT-base query and document encoder of DPR, with 110M parameters each (although we do not train the document encoder ourselves) and 406M trainable parameters from BART-large, 406M parameters, making a total of 626M trainable\n\n[5] Source: 2004.12832v2.pdf | Page: 4 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nEven though ColBERT’s late-interaction framework can be ap- plied to a wide variety of architectures (e.g., CNNs, RNNs, trans- formers, etc.), we choose to focus this work on bi-directional transformer- based encoders (i.e., BERT) owing to their state-of-the-art eﬀective- ness yet very high computational cost. 3.1 Architecture Figure 3 depicts the general architecture of ColBERT, which com- prises: (a) a query encoder fQ, (b) a document encoder fD, and (c) the late interaction mechanism.\n\n[6] Source: 2004.12832v2.pdf | Page: 6 | Section: 4 EXPERIMENTAL EVALUATION\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nSimilar to [25], we ﬁne-tune all ColBERT models with learning rate 3 × 10−6 with a batch size 32. We ﬁx the number of embeddings per query at Nq = 32. We set our ColBERT embedding dimension m to be 128; §4.5 demonstrates ColBERT’s robustness to a wide range of embedding dimensions. For MS MARCO, we initialize the BERT components of the Col- BERT query and document encoders using Google’s oﬃcial pre- trained BERTbase model. Further, we train all models for 200k itera- tions.\n\n[7] Source: 2005.11401v4.pdf | Page: 3 | Section: 2.2 Retriever: DPR\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\n2.2 Retriever: DPR The retrieval component pη(z|x) is based on DPR [26]. DPR follows a bi-encoder architecture: pη(z|x) ∝exp \u0000 d(z)⊤q(x) \u0001 d(z) = BERTd(z), q(x) = BERTq(x) where d(z) is a dense representation of a document produced by a BERTBASE document encoder [8], and q(x) a query representation produced by a query encoder, also based on BERTBASE.\n\n[8] Source: 2004.12832v2.pdf | Page: 9 | Section: 4 EXPERIMENTAL EVALUATION\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nWhile ColBERT encodes each document with BERT exactly once, existing BERT-based rankers would repeat similar 0.36 computations on possibly hundreds of documents for each query. Seting Dimension(m) Bytes/Dim Space(GiBs) MRR@10 Re-rank Cosine 128 4 286 34.9 End-to-end L2 128 2 154 36.0 Re-rank L2 128 2 143 34.8 Re-rank Cosine 48 4 54 34.4 Re-rank Cosine 24 2 27 33.9 Table 4: Space Footprint vs MRR@10 (Dev) on MS MARCO.\n\n[9] Source: 2004.12832v2.pdf | Page: 4 | Section: 3 COLBERT\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nOther cheap choices (e.g., a summation of average similarity scores, instead of maximum) are possible; however, many are less amenable to pruning. In §4.4, we conduct an extensive ablation study that empirically veriﬁes the ad- vantage of our MaxSim-based late interaction against alternatives. 3.2 Qery & Document Encoders Prior to late interaction, ColBERT encodes each query or document into a bag of embeddings, employing BERT-based encoders.\n\n[10] Source: 2005.11401v4.pdf | Page: 5 | Section: 4.1 Open-domain Question Answering\nTitle: Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks\nIt is worth noting that RAG’s retriever is initialized using DPR’s retriever, which uses retrieval supervision on Natural Questions and TriviaQA. RAG compares favourably to the DPR QA system, which uses a BERT-based “cross- encoder” to re-rank documents, along with an extractive reader. RAG demonstrates that neither a re-ranker nor extractive reader is necessary for state-of-the-art performance. There are several advantages to generating answers even when it is possible to extract them.\n\n[11] Source: 2004.12832v2.pdf | Page: 6 | Section: 4 EXPERIMENTAL EVALUATION\nTitle: ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT\nTis amounts to roughly 3M queries generated by concatenating the title of a Wikipedia page with the heading of one of its sections. Tat section’s passages are marked as relevant to the corresponding query. Our evaluation is conducted on the test set used in TREC 2017 CAR, which contains 2,254 queries. Implementation. Our ColBERT models are implemented 4.1.2 using Python 3 and PyTorch 1. We use the popular transformers5 library for the pre-trained BERT model.\n\nEvidence guidance:\n- Rule-based subject attribution: CAR; passage: “Similar to [25], we ﬁne-tune all ColBERT models with learning rate 3 × 10−6 with a batch size 32.” [6][11]\n\nQuestion:\nDo DPR and ColBERT share BERT weights between their question or query encoder and document encoder?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n\nAnswer:",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": "We share a single BERT model among our query and document en- coders but distinguish input sequences that correspond to queries and documents by prepending a special token [Q] to queries and another token [D] to documents.",
+        "evidence_start": 0,
+        "evidence_end": 222,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            601,
+            600
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 601,
+        "page": 4,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We prepend the token [Q] to the query.",
+        "evidence_start": 329,
+        "evidence_end": 368,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            601
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 601,
+        "page": 4,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We place this token right afer BERT’s sequence- start token [CLS].",
+        "evidence_start": 368,
+        "evidence_end": 435,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            601
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 601,
+        "page": 4,
+        "citations": [
+          1
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Our main contributions are as follows.",
+        "evidence_start": 0,
+        "evidence_end": 38,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            577,
+            576
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 577,
+        "page": 2,
+        "citations": [
+          2
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "1) as a paradigm for eﬃcient and eﬀective neural ranking.",
+        "evidence_start": 75,
+        "evidence_end": 132,
+        "subject": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "identity": {
+          "subject": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            577
+          ],
+          "identity_quote": "Our main contributions are as follows. (1) We propose late interaction (§3.",
+          "identity_chunk_id": 577
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 577,
+        "page": 2,
+        "citations": [
+          2
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "3), a highly-eﬀective model that employs novel BERT-based query and document en- coders within the late interaction paradigm.",
+        "evidence_start": 166,
+        "evidence_end": 291,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            577
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 577,
+        "page": 2,
+        "citations": [
+          2
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Our document encoder has a very similar architecture.",
+        "evidence_start": 17,
+        "evidence_end": 71,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            609,
+            608,
+            607
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 609,
+        "page": 4,
+        "citations": [
+          3
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "dm, to which we prepend BERT’s start token [CLS] fol- lowed by our special token [D] that indicates a document sequence.",
+        "evidence_start": 138,
+        "evidence_end": 258,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            609
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 609,
+        "page": 4,
+        "citations": [
+          3
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Unlike queries, we do not append [mask] tokens to documents.",
+        "evidence_start": 258,
+        "evidence_end": 319,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            609
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 609,
+        "page": 4,
+        "citations": [
+          3
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "G Parameters Our RAG models contain the trainable parameters for the BERT-base query and document encoder of DPR, with 110M parameters each (although we do not train the document encoder ourselves) and 406M trainable parameters from BART-large, 406M parameters, making a total of 626M trainable",
+        "evidence_start": 0,
+        "evidence_end": 294,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            920
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 920,
+        "page": 18,
+        "citations": [
+          4
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": ", BERT) owing to their state-of-the-art eﬀective- ness yet very high computational cost.",
+        "evidence_start": 223,
+        "evidence_end": 311,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            595,
+            594,
+            593
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 595,
+        "page": 4,
+        "citations": [
+          5
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "1 Architecture Figure 3 depicts the general architecture of ColBERT, which com- prises: (a) a query encoder fQ, (b) a document encoder fD, and (c) the late interaction mechanism.",
+        "evidence_start": 314,
+        "evidence_end": 492,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            595
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 595,
+        "page": 4,
+        "citations": [
+          5
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Similar to [25], we ﬁne-tune all ColBERT models with learning rate 3 × 10−6 with a batch size 32.",
+        "evidence_start": 0,
+        "evidence_end": 97,
+        "subject": "CAR",
+        "identity": {
+          "subject": "CAR",
+          "basis": "bounded_named_antecedent",
+          "context_chunk_ids": [
+            641,
+            640
+          ],
+          "identity_quote": "Tis amounts to roughly 3M queries generated by concatenating the title of a Wikipedia page with the heading of one of its sections. Tat section’s passages are marked as relevant to the corresponding query. Our evaluation is conducted on the test set used in TREC 2017 CAR, which contains 2,254 queries. Implementation. Our ColBERT models are implemented 4.1.2 using Python 3 and PyTorch 1. We use the popular transformers5 library for the pre-trained BERT model.",
+          "identity_chunk_id": 640
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 641,
+        "page": 6,
+        "citations": [
+          6,
+          11
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We ﬁx the number of embeddings per query at Nq = 32.",
+        "evidence_start": 97,
+        "evidence_end": 150,
+        "subject": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "identity": {
+          "subject": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            641
+          ],
+          "identity_quote": "Similar to [25], we ﬁne-tune all ColBERT models with learning rate 3 × 10−6 with a batch size 32. We ﬁx the number of embeddings per query at Nq = 32. We set our ColBERT embedding dimension m to be 128; §4.5 demonstrates ColBERT’s robustness to a wide range of embedding dimensions. For MS MARCO, we initialize the BERT components of the Col- BERT query and document encoders using Google’s oﬃcial pre- trained BERTbase model. Further, we train all models for 200k itera- tions.",
+          "identity_chunk_id": 641
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 641,
+        "page": 6,
+        "citations": [
+          6
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "5 demonstrates ColBERT’s robustness to a wide range of embedding dimensions.",
+        "evidence_start": 206,
+        "evidence_end": 282,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            641
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 641,
+        "page": 6,
+        "citations": [
+          6
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " For MS MARCO, we initialize the BERT components of the Col- BERT query and document encoders using Google’s oﬃcial pre- trained BERTbase model.",
+        "evidence_start": 282,
+        "evidence_end": 426,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            641
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 641,
+        "page": 6,
+        "citations": [
+          6
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Further, we train all models for 200k itera- tions.",
+        "evidence_start": 426,
+        "evidence_end": 478,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            641
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 641,
+        "page": 6,
+        "citations": [
+          6
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "2 Retriever: DPR The retrieval component pη(z|x) is based on DPR [26].",
+        "evidence_start": 2,
+        "evidence_end": 72,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            747
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 747,
+        "page": 3,
+        "citations": [
+          7
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " DPR follows a bi-encoder architecture: pη(z|x) ∝exp \u0000 d(z)⊤q(x) \u0001 d(z) = BERTd(z), q(x) = BERTq(x) where d(z) is a dense representation of a document produced by a BERTBASE document encoder [8], and q(x) a query representation produced by a query encoder, also based on BERTBASE.",
+        "evidence_start": 72,
+        "evidence_end": 352,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            747
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 747,
+        "page": 3,
+        "citations": [
+          7
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "36 computations on possibly hundreds of documents for each query.",
+        "evidence_start": 111,
+        "evidence_end": 176,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            687
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 687,
+        "page": 9,
+        "citations": [
+          8
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "9 Table 4: Space Footprint vs MRR@10 (Dev) on MS MARCO.",
+        "evidence_start": 365,
+        "evidence_end": 420,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            687
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 687,
+        "page": 9,
+        "citations": [
+          8
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": ", a summation of average similarity scores, instead of maximum) are possible; however, many are less amenable to pruning.",
+        "evidence_start": 25,
+        "evidence_end": 146,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            600,
+            599,
+            598,
+            597,
+            596
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 600,
+        "page": 4,
+        "citations": [
+          9
+        ],
+        "record_id": "E22"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "4, we conduct an extensive ablation study that empirically veriﬁes the ad- vantage of our MaxSim-based late interaction against alternatives.",
+        "evidence_start": 153,
+        "evidence_end": 294,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            600,
+            599,
+            598,
+            597,
+            596
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 600,
+        "page": 4,
+        "citations": [
+          9
+        ],
+        "record_id": "E23"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "2 Qery & Document Encoders Prior to late interaction, ColBERT encodes each query or document into a bag of embeddings, employing BERT-based encoders.",
+        "evidence_start": 297,
+        "evidence_end": 446,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            600
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2004.12832v2.pdf",
+        "chunk_id": 600,
+        "page": 4,
+        "citations": [
+          9
+        ],
+        "record_id": "E24"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "It is worth noting that RAG’s retriever is initialized using DPR’s retriever, which uses retrieval supervision on Natural Questions and TriviaQA.",
+        "evidence_start": 0,
+        "evidence_end": 145,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            779
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 779,
+        "page": 5,
+        "citations": [
+          10
+        ],
+        "record_id": "E25"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " RAG compares favourably to the DPR QA system, which uses a BERT-based “cross- encoder” to re-rank documents, along with an extractive reader.",
+        "evidence_start": 145,
+        "evidence_end": 287,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            779
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 779,
+        "page": 5,
+        "citations": [
+          10
+        ],
+        "record_id": "E26"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " RAG demonstrates that neither a re-ranker nor extractive reader is necessary for state-of-the-art performance.",
+        "evidence_start": 287,
+        "evidence_end": 398,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            779
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 779,
+        "page": 5,
+        "citations": [
+          10
+        ],
+        "record_id": "E27"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " There are several advantages to generating answers even when it is possible to extract them.",
+        "evidence_start": 398,
+        "evidence_end": 491,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            779
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "2005.11401v4.pdf",
+        "chunk_id": 779,
+        "page": 5,
+        "citations": [
+          10
+        ],
+        "record_id": "E28"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 601,
+        "text": "We share a single BERT model among our query and document en- coders but distinguish input sequences that correspond to queries and documents by prepending a special token [Q] to queries and another token [D] to documents. Qery Encoder. Given a textual query q, we tokenize it into its BERT-based WordPiece [35] tokensq1q2...ql . We prepend the token [Q] to the query. We place this token right afer BERT’s sequence- start token [CLS].",
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "3 COLBERT"
+      },
+      {
+        "chunk_id": 577,
+        "text": "Our main contributions are as follows. (1) We propose late interaction (§3.1) as a paradigm for eﬃcient and eﬀective neural ranking. (2) We present ColBERT (§3.2 & 3.3), a highly-eﬀective model that employs novel BERT-based query and document en- coders within the late interaction paradigm.",
+        "source": "2004.12832v2.pdf",
+        "page": 2,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "1 INTRODUCTION"
+      },
+      {
+        "chunk_id": 609,
+        "text": "Document Encoder. Our document encoder has a very similar architecture. We ﬁrst segment a document d into its constituent to- kens d1d2...dm, to which we prepend BERT’s start token [CLS] fol- lowed by our special token [D] that indicates a document sequence. Unlike queries, we do not append [mask] tokens to documents.",
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "3 COLBERT"
+      },
+      {
+        "chunk_id": 920,
+        "text": "G Parameters Our RAG models contain the trainable parameters for the BERT-base query and document encoder of DPR, with 110M parameters each (although we do not train the document encoder ourselves) and 406M trainable parameters from BART-large, 406M parameters, making a total of 626M trainable",
+        "source": "2005.11401v4.pdf",
+        "page": 18,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "6 Discussion"
+      },
+      {
+        "chunk_id": 595,
+        "text": "Even though ColBERT’s late-interaction framework can be ap- plied to a wide variety of architectures (e.g., CNNs, RNNs, trans- formers, etc.), we choose to focus this work on bi-directional transformer- based encoders (i.e., BERT) owing to their state-of-the-art eﬀective- ness yet very high computational cost. 3.1 Architecture Figure 3 depicts the general architecture of ColBERT, which com- prises: (a) a query encoder fQ, (b) a document encoder fD, and (c) the late interaction mechanism.",
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "3 COLBERT"
+      },
+      {
+        "chunk_id": 641,
+        "text": "Similar to [25], we ﬁne-tune all ColBERT models with learning rate 3 × 10−6 with a batch size 32. We ﬁx the number of embeddings per query at Nq = 32. We set our ColBERT embedding dimension m to be 128; §4.5 demonstrates ColBERT’s robustness to a wide range of embedding dimensions. For MS MARCO, we initialize the BERT components of the Col- BERT query and document encoders using Google’s oﬃcial pre- trained BERTbase model. Further, we train all models for 200k itera- tions.",
+        "source": "2004.12832v2.pdf",
+        "page": 6,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "4 EXPERIMENTAL EVALUATION"
+      },
+      {
+        "chunk_id": 747,
+        "text": "2.2 Retriever: DPR The retrieval component pη(z|x) is based on DPR [26]. DPR follows a bi-encoder architecture: pη(z|x) ∝exp \u0000 d(z)⊤q(x) \u0001 d(z) = BERTd(z), q(x) = BERTq(x) where d(z) is a dense representation of a document produced by a BERTBASE document encoder [8], and q(x) a query representation produced by a query encoder, also based on BERTBASE.",
+        "source": "2005.11401v4.pdf",
+        "page": 3,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "2.2 Retriever: DPR"
+      },
+      {
+        "chunk_id": 687,
+        "text": "While ColBERT encodes each document with BERT exactly once, existing BERT-based rankers would repeat similar 0.36 computations on possibly hundreds of documents for each query. Seting Dimension(m) Bytes/Dim Space(GiBs) MRR@10 Re-rank Cosine 128 4 286 34.9 End-to-end L2 128 2 154 36.0 Re-rank L2 128 2 143 34.8 Re-rank Cosine 48 4 54 34.4 Re-rank Cosine 24 2 27 33.9 Table 4: Space Footprint vs MRR@10 (Dev) on MS MARCO.",
+        "source": "2004.12832v2.pdf",
+        "page": 9,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "4 EXPERIMENTAL EVALUATION"
+      },
+      {
+        "chunk_id": 600,
+        "text": "Other cheap choices (e.g., a summation of average similarity scores, instead of maximum) are possible; however, many are less amenable to pruning. In §4.4, we conduct an extensive ablation study that empirically veriﬁes the ad- vantage of our MaxSim-based late interaction against alternatives. 3.2 Qery & Document Encoders Prior to late interaction, ColBERT encodes each query or document into a bag of embeddings, employing BERT-based encoders.",
+        "source": "2004.12832v2.pdf",
+        "page": 4,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "3 COLBERT"
+      },
+      {
+        "chunk_id": 779,
+        "text": "It is worth noting that RAG’s retriever is initialized using DPR’s retriever, which uses retrieval supervision on Natural Questions and TriviaQA. RAG compares favourably to the DPR QA system, which uses a BERT-based “cross- encoder” to re-rank documents, along with an extractive reader. RAG demonstrates that neither a re-ranker nor extractive reader is necessary for state-of-the-art performance. There are several advantages to generating answers even when it is possible to extract them.",
+        "source": "2005.11401v4.pdf",
+        "page": 5,
+        "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+        "section": "4.1 Open-domain Question Answering"
+      },
+      {
+        "chunk_id": 640,
+        "text": "Tis amounts to roughly 3M queries generated by concatenating the title of a Wikipedia page with the heading of one of its sections. Tat section’s passages are marked as relevant to the corresponding query. Our evaluation is conducted on the test set used in TREC 2017 CAR, which contains 2,254 queries. Implementation. Our ColBERT models are implemented 4.1.2 using Python 3 and PyTorch 1. We use the popular transformers5 library for the pre-trained BERT model.",
+        "source": "2004.12832v2.pdf",
+        "page": 6,
+        "title": "ColBERT: Efficient and Effective Passage Search via Contextualized Late Interaction over BERT",
+        "section": "4 EXPERIMENTAL EVALUATION"
+      }
+    ],
+    "selected_ids": [
+      601,
+      577,
+      609,
+      920,
+      595,
+      641,
+      747,
+      687,
+      600,
+      779
+    ]
+  },
+  "answer": "根据提供的上下文，ColBERT 在查询编码器和文档编码器之间共享同一个 BERT 模型，并通过在查询前加 `[Q]`、在文档前加 `[D]` 来区分输入序列[1]。ColBERT 的架构包含查询编码器 fQ 和文档编码器 fD[5]，其查询和文档编码器均基于 BERT[9]。\n\n关于 DPR，上下文中仅说明其检索组件采用双编码器架构，文档表示由 BERTBASE 文档编码器产生，查询表示也由基于 BERTBASE 的查询编码器产生[7]；但现有证据未说明 DPR 是否在查询编码器与文档编码器之间共享 BERT 权重。因此，对于“DPR 是否共享权重”这一问题，当前证据不足。",
+  "original_answer": "根据提供的上下文，ColBERT 在查询编码器和文档编码器之间共享同一个 BERT 模型，并通过在查询前加 `[Q]`、在文档前加 `[D]` 来区分输入序列[1]。ColBERT 的架构包含查询编码器 fQ 和文档编码器 fD[5]，其查询和文档编码器均基于 BERT[9]。\n\n关于 DPR，上下文中仅说明其检索组件采用双编码器架构，文档表示由 BERTBASE 文档编码器产生，查询表示也由基于 BERTBASE 的查询编码器产生[7]；但现有证据未说明 DPR 是否在查询编码器与文档编码器之间共享 BERT 权重。因此，对于“DPR 是否共享权重”这一问题，当前证据不足。",
+  "citation_validation": {
+    "answer": "根据提供的上下文，ColBERT 在查询编码器和文档编码器之间共享同一个 BERT 模型，并通过在查询前加 `[Q]`、在文档前加 `[D]` 来区分输入序列[1]。ColBERT 的架构包含查询编码器 fQ 和文档编码器 fD[5]，其查询和文档编码器均基于 BERT[9]。\n\n关于 DPR，上下文中仅说明其检索组件采用双编码器架构，文档表示由 BERTBASE 文档编码器产生，查询表示也由基于 BERTBASE 的查询编码器产生[7]；但现有证据未说明 DPR 是否在查询编码器与文档编码器之间共享 BERT 权重。因此，对于“DPR 是否共享权重”这一问题，当前证据不足。",
+    "original_answer": "根据提供的上下文，ColBERT 在查询编码器和文档编码器之间共享同一个 BERT 模型，并通过在查询前加 `[Q]`、在文档前加 `[D]` 来区分输入序列[1]。ColBERT 的架构包含查询编码器 fQ 和文档编码器 fD[5]，其查询和文档编码器均基于 BERT[9]。\n\n关于 DPR，上下文中仅说明其检索组件采用双编码器架构，文档表示由 BERTBASE 文档编码器产生，查询表示也由基于 BERTBASE 的查询编码器产生[7]；但现有证据未说明 DPR 是否在查询编码器与文档编码器之间共享 BERT 权重。因此，对于“DPR 是否共享权重”这一问题，当前证据不足。",
+    "repair_candidate": null,
+    "initial_check": {
+      "cited_numbers": [
+        1,
+        5,
+        7,
+        9
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": false,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 601,
+          "source": "2004.12832v2.pdf",
+          "page": 4,
+          "text": "We share a single BERT model among our query and document en- coders but distinguish input sequences that correspond to queries and documents by prepending a special token [Q] to queries and another token [D] to documents. Qery Encoder. Given a textual query q, we tokenize it into its BERT-based WordPiece [35] tokensq1q2...ql . We prepend the token [Q] to the query. We place this token right afer BERT’s sequence- start token [CLS]."
+        },
+        {
+          "citation": 5,
+          "chunk_id": 595,
+          "source": "2004.12832v2.pdf",
+          "page": 4,
+          "text": "Even though ColBERT’s late-interaction framework can be ap- plied to a wide variety of architectures (e.g., CNNs, RNNs, trans- formers, etc.), we choose to focus this work on bi-directional transformer- based encoders (i.e., BERT) owing to their state-of-the-art eﬀective- ness yet very high computational cost. 3.1 Architecture Figure 3 depicts the general architecture of ColBERT, which com- prises: (a) a query encoder fQ, (b) a document encoder fD, and (c) the late interaction mechanism."
+        },
+        {
+          "citation": 7,
+          "chunk_id": 747,
+          "source": "2005.11401v4.pdf",
+          "page": 3,
+          "text": "2.2 Retriever: DPR The retrieval component pη(z|x) is based on DPR [26]. DPR follows a bi-encoder architecture: pη(z|x) ∝exp \u0000 d(z)⊤q(x) \u0001 d(z) = BERTd(z), q(x) = BERTq(x) where d(z) is a dense representation of a document produced by a BERTBASE document encoder [8], and q(x) a query representation produced by a query encoder, also based on BERTBASE."
+        },
+        {
+          "citation": 9,
+          "chunk_id": 600,
+          "source": "2004.12832v2.pdf",
+          "page": 4,
+          "text": "Other cheap choices (e.g., a summation of average similarity scores, instead of maximum) are possible; however, many are less amenable to pruning. In §4.4, we conduct an extensive ablation study that empirically veriﬁes the ad- vantage of our MaxSim-based late interaction against alternatives. 3.2 Qery & Document Encoders Prior to late interaction, ColBERT encodes each query or document into a bag of embeddings, employing BERT-based encoders."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "final_check": {
+      "cited_numbers": [
+        1,
+        5,
+        7,
+        9
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": false,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 601,
+          "source": "2004.12832v2.pdf",
+          "page": 4,
+          "text": "We share a single BERT model among our query and document en- coders but distinguish input sequences that correspond to queries and documents by prepending a special token [Q] to queries and another token [D] to documents. Qery Encoder. Given a textual query q, we tokenize it into its BERT-based WordPiece [35] tokensq1q2...ql . We prepend the token [Q] to the query. We place this token right afer BERT’s sequence- start token [CLS]."
+        },
+        {
+          "citation": 5,
+          "chunk_id": 595,
+          "source": "2004.12832v2.pdf",
+          "page": 4,
+          "text": "Even though ColBERT’s late-interaction framework can be ap- plied to a wide variety of architectures (e.g., CNNs, RNNs, trans- formers, etc.), we choose to focus this work on bi-directional transformer- based encoders (i.e., BERT) owing to their state-of-the-art eﬀective- ness yet very high computational cost. 3.1 Architecture Figure 3 depicts the general architecture of ColBERT, which com- prises: (a) a query encoder fQ, (b) a document encoder fD, and (c) the late interaction mechanism."
+        },
+        {
+          "citation": 7,
+          "chunk_id": 747,
+          "source": "2005.11401v4.pdf",
+          "page": 3,
+          "text": "2.2 Retriever: DPR The retrieval component pη(z|x) is based on DPR [26]. DPR follows a bi-encoder architecture: pη(z|x) ∝exp \u0000 d(z)⊤q(x) \u0001 d(z) = BERTd(z), q(x) = BERTq(x) where d(z) is a dense representation of a document produced by a BERTBASE document encoder [8], and q(x) a query representation produced by a query encoder, also based on BERTBASE."
+        },
+        {
+          "citation": 9,
+          "chunk_id": 600,
+          "source": "2004.12832v2.pdf",
+          "page": 4,
+          "text": "Other cheap choices (e.g., a summation of average similarity scores, instead of maximum) are possible; however, many are less amenable to pruning. In §4.4, we conduct an extensive ablation study that empirically veriﬁes the ad- vantage of our MaxSim-based late interaction against alternatives. 3.2 Qery & Document Encoders Prior to late interaction, ColBERT encodes each query or document into a bag of embeddings, employing BERT-based encoders."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    },
+    "repair_attempted": false,
+    "normalization_applied": false,
+    "repair_applied": false,
+    "repair_response": null,
+    "repair_prompt": null,
+    "unresolved_blocks": [],
+    "status": "not_needed",
+    "note": "Citation structure only; source relevance and claim meaning are not automatically verified."
+  },
+  "id": "a12",
+  "mode": "base",
+  "completion_cap": 0,
+  "elapsed_with_shared_models_seconds": 13.915,
+  "auxiliary_calls_replayed": true,
+  "evaluation_ids_match": true
+}

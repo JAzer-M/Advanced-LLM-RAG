@@ -1,3 +1,6 @@
+# 可选查询增强：用 API 生成假想段落，供 Dense 检索定位真实知识库片段。
+# 假想段落不作为事实证据；main.py 当前默认关闭此分支。
+
 from llm import generate_answer
 
 def generate_hypothetical_document(query: str) -> str:

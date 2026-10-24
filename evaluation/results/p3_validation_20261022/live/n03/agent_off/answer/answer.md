@@ -1,0 +1,2 @@
+当前证据不足，无法可靠回答以下需求：
+- RoFormer：According to the RoFormer paper, how does its positional encoding incorporate absolute position and relative-position dependence in self-attention?；缺少 RoFormer 原始论文，无法确定其位置编码在自注意力中融合绝对位置与相对位置依赖的具体机制。

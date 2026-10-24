@@ -1,3 +1,6 @@
+# Dense 检索：问题编码后搜索 FAISS，向量行号用于读取同一配对版本的 chunk。
+# 建库与查询都归一化时，内积可作为余弦相似度；返回内容始终来自知识库原文。
+
 import numpy as np
 
 def retrieve(model, index, chunks, query, top_k = 5):

@@ -1,0 +1,238 @@
+{
+  "scope": "Initial frozen two-case engineering smoke plus two s02 development followups; not a held-out comparison.",
+  "authorized_max_model_requests": 28,
+  "actual_model_http_attempts": 22,
+  "actual_chat_calls": 22,
+  "model_http_failures": 0,
+  "finish_reasons": {
+    "stop": 22
+  },
+  "usage_missing_calls": 0,
+  "automatic_retries": 0,
+  "reported_usage": {
+    "prompt_tokens": 42202,
+    "completion_tokens": 2051,
+    "total_tokens": 44253
+  },
+  "public_arxiv_get_attempts": 4,
+  "public_arxiv_http_200": 4,
+  "public_calls": [
+    {
+      "record": "live/s02/network/search/result.json",
+      "tool": "search_arxiv",
+      "status": "completed",
+      "request_url": "https://export.arxiv.org/api/query?search_query=ti%3A%22Mamba%22+AND+abs%3A%22Transformers%22&start=0&max_results=3",
+      "http_attempts": 1,
+      "http_status": 200,
+      "bytes": 8194,
+      "response_sha256": "b836f314ca4a2a10a76f9b019f7fb56b544d12819b09db499d4cb1dc637f9d40"
+    },
+    {
+      "record": "network_followup/s02/network/search/result.json",
+      "tool": "search_arxiv",
+      "status": "failed",
+      "request_url": "https://export.arxiv.org/api/query?search_query=ti%3AMamba+abstract&start=0&max_results=3",
+      "http_attempts": 1,
+      "http_status": 200,
+      "bytes": 6432,
+      "response_sha256": "2081093815680533e7d7eb43db9e44463af4a7d5b698a9719107a1c6999f5200"
+    },
+    {
+      "record": "development_followup/s02/network/read/result.json",
+      "tool": "read_arxiv_paper",
+      "status": "completed",
+      "request_url": "https://arxiv.org/pdf/2312.00752v2",
+      "http_attempts": 1,
+      "http_status": 200,
+      "bytes": 1168615,
+      "response_sha256": "adf70ed1803c85b1899dec3e21f3af0b124411439e8654b840ea65f7b9f52b2e"
+    },
+    {
+      "record": "development_followup/s02/network/search/result.json",
+      "tool": "search_arxiv",
+      "status": "completed",
+      "request_url": "https://export.arxiv.org/api/query?search_query=ti%3A%22Mamba%3A+Linear-Time+Sequence+Modeling+with+Selective+State+Spaces%22&start=0&max_results=3",
+      "http_attempts": 1,
+      "http_status": 200,
+      "bytes": 3231,
+      "response_sha256": "c5710ca547e96004be8275bf5d24e3e6f00ccf84a90243a5a1f8637b69609dfc"
+    }
+  ],
+  "runs": [
+    {
+      "run": "live",
+      "id": "s01",
+      "status": "completed",
+      "seconds": 16.068621833022917,
+      "answer_strategy": null,
+      "network": null,
+      "api_summary": {
+        "attempts": 5,
+        "failed_attempts": 0,
+        "automatic_retries": 0,
+        "usage_missing_calls": [],
+        "reported_usage": {
+          "prompt_tokens": 8687,
+          "completion_tokens": 464,
+          "total_tokens": 9151
+        }
+      },
+      "error": null,
+      "model_phases": {
+        "decompose": 1,
+        "decision": 2,
+        "answer": 2
+      }
+    },
+    {
+      "run": "live",
+      "id": "s02",
+      "status": "completed",
+      "seconds": 17.054454833996715,
+      "answer_strategy": null,
+      "network": {
+        "status": "no_evidence",
+        "network_decision_calls": 2,
+        "http_tool_calls": 1,
+        "papers_read": 0,
+        "automatic_retries": 0,
+        "permanent_kb_import": false,
+        "route": {
+          "route": "arxiv",
+          "requirement_id": "r1",
+          "query": "ti:\"Mamba\" AND abs:\"Transformers\"",
+          "reason": "本地目录中没有 Mamba 的原始论文；该需求要求依据 Mamba 论文摘要陈述其对 Transformer 的推理吞吐优势，因此需要检索并补充该缺失的主论文。"
+        },
+        "selection": {
+          "arxiv_id": null,
+          "two_columns": true,
+          "reason": "这些论文都是基于或改进Mamba的后续工作（Differential Mamba、Mamba-in-Mamba、Bi-Mamba+），并非提出Mamba架构的原始Mamba论文本身，因此无法从中确定满足该要求的原始论文，返回null。"
+        },
+        "reason": "这些论文都是基于或改进Mamba的后续工作（Differential Mamba、Mamba-in-Mamba、Bi-Mamba+），并非提出Mamba架构的原始Mamba论文本身，因此无法从中确定满足该要求的原始论文，返回null。"
+      },
+      "api_summary": {
+        "attempts": 5,
+        "failed_attempts": 0,
+        "automatic_retries": 0,
+        "usage_missing_calls": [],
+        "reported_usage": {
+          "prompt_tokens": 5841,
+          "completion_tokens": 396,
+          "total_tokens": 6237
+        }
+      },
+      "error": null,
+      "model_phases": {
+        "decompose": 1,
+        "decision": 2,
+        "network": 2
+      }
+    },
+    {
+      "run": "network_followup",
+      "id": "s02",
+      "status": "failed",
+      "seconds": 16.1651856249955,
+      "answer_strategy": null,
+      "network": {
+        "status": "failed",
+        "network_decision_calls": 1,
+        "http_tool_calls": 1,
+        "papers_read": 0,
+        "automatic_retries": 0,
+        "permanent_kb_import": false,
+        "route": {
+          "route": "arxiv",
+          "requirement_id": "r1",
+          "query": "ti:Mamba abstract",
+          "reason": "该需求明确指向Mamba原始论文摘要中的推理吞吐量优势，而本地目录中没有Mamba论文；缺失的是可唯一识别的原始论文，需从arXiv检索。"
+        },
+        "error": "ValueError: Use a modern version-pinned arXiv ID, for example 2312.00752v1."
+      },
+      "api_summary": {
+        "attempts": 4,
+        "failed_attempts": 0,
+        "automatic_retries": 0,
+        "usage_missing_calls": [],
+        "reported_usage": {
+          "prompt_tokens": 4513,
+          "completion_tokens": 322,
+          "total_tokens": 4835
+        }
+      },
+      "error": "ValueError: Use a modern version-pinned arXiv ID, for example 2312.00752v1.",
+      "model_phases": {
+        "decompose": 1,
+        "decision": 2,
+        "network": 1
+      }
+    },
+    {
+      "run": "development_followup",
+      "id": "s02",
+      "status": "completed",
+      "seconds": 41.85216212499654,
+      "answer_strategy": "arxiv_evidence_reviewed",
+      "network": {
+        "status": "completed",
+        "network_decision_calls": 3,
+        "http_tool_calls": 2,
+        "papers_read": 1,
+        "automatic_retries": 0,
+        "permanent_kb_import": false,
+        "route": {
+          "route": "arxiv",
+          "requirement_id": "r1",
+          "paper_title": "Mamba: Linear-Time Sequence Modeling with Selective State Spaces",
+          "reason": "本地目录中没有 Mamba 论文，因此这是本地检索缺口；但需求明确指向 Mamba 原始论文，可以确定其完整标题为《Mamba: Linear-Time Sequence Modeling with Selective State Spaces》，应作为 arXiv 论文检索。"
+        },
+        "search_query": "ti:\"Mamba: Linear-Time Sequence Modeling with Selective State Spaces\"",
+        "selection": {
+          "arxiv_id": "2312.00752v2",
+          "two_columns": true,
+          "reason": "该论文标题即为《Mamba: Linear-Time Sequence Modeling with Selective State Spaces》，作者为Albert Gu和Tri Dao，正是提出Mamba架构的原始论文，摘要中明确表述了相对Transformer有5倍推理吞吐量优势，因此是回答该需求的直接原始文献。"
+        },
+        "passage_selection": {
+          "candidate_count": 146,
+          "reranked_candidates": 120,
+          "selected_count": 6,
+          "selected_ids": [
+            1398,
+            1455,
+            1456,
+            1404,
+            1540,
+            1458
+          ]
+        },
+        "answer_status": "review_passed",
+        "semantic_correctness": "requires_manual_review"
+      },
+      "api_summary": {
+        "attempts": 8,
+        "failed_attempts": 0,
+        "automatic_retries": 0,
+        "usage_missing_calls": [],
+        "reported_usage": {
+          "prompt_tokens": 23161,
+          "completion_tokens": 869,
+          "total_tokens": 24030
+        }
+      },
+      "error": null,
+      "model_phases": {
+        "decompose": 1,
+        "decision": 2,
+        "network": 3,
+        "answer": 2
+      }
+    }
+  ],
+  "initial_frozen_expected_behavior": {
+    "s01_local_answer": true,
+    "s02_network_answer": false
+  },
+  "final_s02_development_expected_behavior_passed": true,
+  "currency_cost": "Not calculated; current tariff not verified.",
+  "warm_cpu_latency_scope": "Resources loaded once per driver process; per-case single sequential elapsed time, not cold/concurrent/P95."
+}
