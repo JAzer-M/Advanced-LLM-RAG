@@ -26,7 +26,7 @@
 
 论文、索引、配置和检索模型都保存在本机 `~/Library/Application Support/PaperLens/`。提问时，问题和选中的原文段落会发送给你配置的模型服务。
 
-**从源码运行**（Python 3.11）：完整步骤（含本地模型准备）见[安装与首次启动](docs/INSTALL_AND_START.md)。
+**从源码运行**（Python 3.11）：完整步骤（含本地模型准备）见[安装与首次启动](docs/INSTALL_AND_START.md)。**Windows** 用 `webui\start.bat` 启动，见其中的 [Windows 小节](docs/INSTALL_AND_START.md#7-windows源码运行验收中)。
 
 ```bash
 python3.11 -m venv .venv && .venv/bin/pip install -r requirements.txt
@@ -95,7 +95,7 @@ Top-20 的 Recall 只多 4.4 个百分点，没达到事先定的 5 点门槛，
 
 - 扫描件没有 OCR，复杂表格和公式的提取有限
 - 联网补证据目前只支持 arXiv
-- Mac 包仅 Apple Silicon、未公证；Windows 未验收
+- Mac 包仅 Apple Silicon、未公证；Windows 目前只能从源码运行，尚未完整验收
 - 当前版本还没有独立新题上的总体质量评测
 
 ## 开发

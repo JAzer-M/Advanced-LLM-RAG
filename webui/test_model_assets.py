@@ -41,7 +41,7 @@ class ModelAssetsTests(unittest.TestCase):
         folder=self.root/'models'; folder.mkdir()
         (folder/'setup.json').write_text(json.dumps({'status':'running','phase':'download'}))
         (folder/'process.json').write_text(json.dumps({'pid':123456789}))
-        with patch.object(model_assets.os, 'kill', side_effect=ProcessLookupError):
+        with patch.object(model_assets, 'pid_alive', return_value=False):
             state=model_assets.status()
         self.assertEqual(state['status'], 'failed')
         self.assertTrue(state['error'])

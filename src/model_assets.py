@@ -1,8 +1,8 @@
 """下载版首次准备固定版本检索模型；进度落盘，成功校验后才标记可用。"""
 import json
-import os
 from pathlib import Path
 
+from src.platform_compat import pid_alive, try_lock
 from src.runtime_paths import MODEL_REVISIONS, data_root, managed_models, model_location
 
 MODEL_FILES = {
@@ -37,8 +37,7 @@ def status():
     if state.get('status') == 'running':
         try:
             pid = json.loads((folder/'process.json').read_text())['pid']
-            if type(pid) is not int or pid <= 0: raise ValueError('invalid process')
-            os.kill(pid, 0)
+            if not pid_alive(pid): raise ValueError('process is not running')
         except (OSError, ValueError, KeyError):
             state.update(status='failed', error='模型准备已中断，可以重新下载；已完成文件会复用。')
         if state.get('repo') in MODEL_FILES:
@@ -51,12 +50,11 @@ def status():
 
 
 def prepare():
-    import fcntl
     from huggingface_hub import hf_hub_download
     from webui.library import atomic_json
     folder = data_root()/'models'; folder.mkdir(parents=True, exist_ok=True)
     with (folder/'download.lock').open('a') as lock:
-        try: fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        try: try_lock(lock)
         except BlockingIOError: raise ValueError('已有模型准备正在进行。') from None
         if status()['status'] == 'ready': return
         (folder/'ready.json').unlink(missing_ok=True)

@@ -6,10 +6,18 @@ on:
 
 jobs:
   offline-tests:
-    runs-on: ubuntu-latest
+    name: offline tests (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 30
+    # Windows support is still being validated; its result is shown but does not fail the workflow yet.
+    continue-on-error: ${{ matrix.os == 'windows-latest' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
     env:
       PYTHONDONTWRITEBYTECODE: "1"
+      PYTHONUTF8: "1"
       OMP_NUM_THREADS: "1"
       OPENBLAS_NUM_THREADS: "1"
       MKL_NUM_THREADS: "1"

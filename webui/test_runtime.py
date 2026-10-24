@@ -19,9 +19,14 @@ class RuntimeTests(unittest.TestCase):
 
     def test_frozen_app_uses_user_data_outside_bundle(self):
         with patch.dict(os.environ, {'PAPERLENS_DATA_DIR':''}), patch.object(sys, 'frozen', True, create=True), \
-                patch('pathlib.Path.home', return_value=Path('/test/home')):
+                patch.object(sys, 'platform', 'darwin'), patch('pathlib.Path.home', return_value=Path('/test/home')):
             self.assertEqual(data_root(), Path('/test/home/Library/Application Support/PaperLens'))
             self.assertNotEqual(data_root(), source_root())
+
+    def test_frozen_windows_app_uses_local_app_data(self):
+        with patch.dict(os.environ, {'PAPERLENS_DATA_DIR':'', 'LOCALAPPDATA':'/test/local'}), \
+                patch.object(sys, 'frozen', True, create=True), patch.object(sys, 'platform', 'win32'):
+            self.assertEqual(data_root(), Path('/test/local/PaperLens'))
 
     def test_data_override_is_shared_by_server_library_and_api(self):
         with tempfile.TemporaryDirectory() as folder:

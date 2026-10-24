@@ -55,7 +55,9 @@ Agent工具最多3行动；规划/状态修正或重复行动改选共用一次�
 
 **Mac 预览下载包（10月24日）：** 用户数据迁至`~/Library/Application Support/PaperLens/`，冻结程序自启后台进程，首次启动下载固定版本MiniLM/BGE（1.61 GB，可中断续传，完成前禁止上传），网页增加退出按钮。PyInstaller三次构建（缓存权限失败、torchvision本地库缺失、成功），生成`releases/PaperLens-0.1.0-macos-arm64-preview.zip`（276 MB，ad-hoc签名）。解压版从空数据目录和空模型缓存完成入库及RAG/Agent/Auto问答：9请求、17168 token、0失败；重复上传、无正文PDF、退出与重启通过；包内无密钥、论文或权重。验收由Codex完成，报告由Claude据原始记录补写。[报告](docs/maintenance/macos_package_20261024/report.md) · [构建说明](packaging/macos/README.md)
 
-**发布准备（10月24日）：** README改为展示页（截图、架构图、检索消融与回答对照、局限），旧版全文存于[历史目录](docs/history/README_BEFORE_SHOWCASE_2026-10-24.md)；新增MIT许可与GitHub Actions离线测试（CPU版torch，干净克隆中跳过1项依赖本机八篇库的测试）；`docs/chat_history/`改为仅本机保存，并已从未推送的历史中移除；同时把未推送提交的作者统一为JAzer-M，提交号因此变化，对照见[历史改写记录](docs/maintenance/history_rewrite_20261024.md)。干净克隆中后端345项（跳过1）、网页42项通过；CI尚未在GitHub上实际运行。
+**发布准备（10月24日）：** README改为展示页（截图、架构图、检索消融与回答对照、局限），旧版全文存于[历史目录](docs/history/README_BEFORE_SHOWCASE_2026-10-24.md)；新增MIT许可与GitHub Actions离线测试（CPU版torch，干净克隆中跳过1项依赖本机八篇库的测试）；`docs/chat_history/`改为仅本机保存，并已从未推送的历史中移除；同时把未推送提交的作者统一为JAzer-M，提交号因此变化，对照见[历史改写记录](docs/maintenance/history_rewrite_20261024.md)。干净克隆中后端345项（跳过1）、网页42项通过；CI已在GitHub上通过（ubuntu）。
+
+**Windows 适配（10月24日，验收中）：** 入库/模型准备的`fcntl`锁改为跨平台`try_lock`（Windows用msvcrt）；进程存活检查改为`pid_alive`，避免Windows上`os.kill(pid,0)`实际发送Ctrl+C；冻结版Windows数据目录为`%LOCALAPPDATA%\PaperLens`；新增`webui/start.bat`（UTF-8模式、网页内下载模型）及安装说明第7节；CI增加windows-latest（暂不阻断）。尚未在真实Windows电脑上验收。
 
 **接下来交付工作：**
 

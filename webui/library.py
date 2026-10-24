@@ -6,6 +6,7 @@ import os
 from pathlib import Path
 import tempfile
 from uuid import uuid4
+from src.platform_compat import try_lock
 from src.runtime_paths import data_root
 
 ROOT = data_root()
@@ -97,7 +98,6 @@ def prepare(payload):
 
 def build(folder):
     """独立进程内运行；全批成功才切换，重复文件跳过。"""
-    import fcntl
     import faiss
     import pymupdf
     from src.knowledge_base import load_knowledge_base, create_version
@@ -110,7 +110,7 @@ def build(folder):
         status['stage'] = stage; atomic_json(folder/'status.json', status)
     try:
         with (ROOT/'data/webui/import.lock').open('a') as lock:
-            try: fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            try: try_lock(lock)
             except BlockingIOError: raise ValueError('已有导入正在进行，请等待完成后重试。') from None
             state = current()
             processed = ROOT/'data/processed'

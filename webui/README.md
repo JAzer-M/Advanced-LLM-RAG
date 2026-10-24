@@ -34,7 +34,7 @@
 
 网页从`data/webui/library.json`独立选择版本。当前本机为9篇/1767段，新增Mamba的370段；三种模式都固定使用提交时的网页版本。全局三篇激活库和Agent/Auto默认八篇实验基线未被切换。
 
-导入状态落盘，刷新可接续查看；进程中断的导入显示中断。上传文件、任务记录、网页指针及新配对索引均被Git忽略，不会随普通Git克隆复制到新设备。没有网页删除/回退按钮、OCR或arXiv链接直接导入；Windows锁机制尚未验收。Mac隔离安装及首次入库已通过，本地模型复用缓存。[原入库记录](../docs/WEBUI_PDF_IMPORT_2026-10-24.md) · [本轮安装与操作验收](../docs/maintenance/installation_ui_acceptance_20261024/report.md)
+导入状态落盘，刷新可接续查看；进程中断的导入显示中断。上传文件、任务记录、网页指针及新配对索引均被Git忽略，不会随普通Git克隆复制到新设备。没有网页删除/回退按钮、OCR或arXiv链接直接导入；Windows导入锁与进程检测已改为跨平台实现（`src/platform_compat.py`），可用`webui\start.bat`启动，真实Windows电脑验收中。Mac隔离安装及首次入库已通过，本地模型复用缓存。[原入库记录](../docs/WEBUI_PDF_IMPORT_2026-10-24.md) · [本轮安装与操作验收](../docs/maintenance/installation_ui_acceptance_20261024/report.md)
 
 ## 文件分工
 

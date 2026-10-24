@@ -88,4 +88,23 @@ Mac 在项目根目录执行，或双击这个启动文件：
 - 页面可打开但问答失败：核对模型网关、地址、模型和调用参数；在 `logs/webui/` 查看本次记录。没有自动重试。
 - 需要在其他电脑继续：按本文重新安装环境；知识库须成套复制后校验，私有配置单独设置。
 
+## 7. Windows（源码运行，验收中）
+
+Windows 10/11 可以从源码运行，启动脚本是 `webui\start.bat`。这条路径的代码适配已完成（跨平台的导入锁和进程检测、UTF-8 模式），但还没有在真实 Windows 电脑上完成完整验收；遇到问题请记录报错信息。
+
+1. 安装 [Python 3.11](https://www.python.org/downloads/windows/)（安装时勾选 “Add python.exe to PATH”）。
+2. 获取代码：在 GitHub 仓库页点 **Code → Download ZIP** 并解压，或用 `git clone https://github.com/JAzer-M/Advanced-LLM-RAG.git`。
+3. 在项目文件夹打开 PowerShell，创建环境并安装依赖（Windows 上 PyPI 的 torch 默认就是 CPU 版）：
+
+```powershell
+py -3.11 -m venv .venv
+.venv\Scripts\python.exe -m pip install --upgrade pip
+.venv\Scripts\python.exe -m pip install -r requirements.txt
+```
+
+4. 双击 `webui\start.bat`，或在 PowerShell 运行 `.\webui\start.bat`。浏览器会打开 `http://127.0.0.1:8849`。
+5. 与 Mac 下载版相同：先在网页中下载本地检索模型（约 1.6 GB），再配置模型服务、上传 PDF。
+
+`start.bat` 默认把论文、索引、配置和模型保存在 `%LOCALAPPDATA%\PaperLens`，不写入项目文件夹；需要换位置时，先设置环境变量 `PAPERLENS_DATA_DIR`。使用期间保持启动窗口打开，关闭窗口或按 `Ctrl+C` 即停止服务。
+
 面向普通用户的 GitHub 下载包方案见 [本机分发方案](LOCAL_DISTRIBUTION.md)；Mac 预览包的构建方法见 [packaging/macos](../packaging/macos/README.md)，验收见 [下载包验收](maintenance/macos_package_20261024/report.md)。

@@ -23,6 +23,8 @@ def data_root():
     override = os.environ.get('PAPERLENS_DATA_DIR')
     if override: return Path(override).expanduser().resolve()
     if getattr(sys, 'frozen', False):
+        if sys.platform == 'win32':
+            return Path(os.environ.get('LOCALAPPDATA') or Path.home()/'AppData/Local')/'PaperLens'
         return Path.home()/'Library/Application Support/PaperLens'
     return source_root()
 

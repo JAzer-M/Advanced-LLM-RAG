@@ -19,6 +19,7 @@ from wsgiref.simple_server import make_server, WSGIServer
 ROOT = Path(__file__).resolve().parents[1]
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
+from src.platform_compat import pid_alive
 from src.runtime_paths import APP_VERSION, data_root, worker_command
 ROOT = data_root()
 # 只复用数据适配/worker，不加载旧 HTML、CSS、JS，不更改检索及回答实现。
@@ -94,8 +95,8 @@ def import_status(identity):
         process=IMPORTS.get(identity)
         alive=process.poll() is None if process else False
         if not process and (folder/'process.json').exists():
-            try: os.kill(json.loads((folder/'process.json').read_text())['pid'],0); alive=True
-            except ProcessLookupError: pass
+            try: alive=pid_alive(json.loads((folder/'process.json').read_text())['pid'])
+            except (OSError, ValueError, KeyError): pass
         if not alive:
             value.update(status='failed',stage='导入进程已中断',error='请重新选择文件导入；已有知识库仍保留。')
     return 200, value
