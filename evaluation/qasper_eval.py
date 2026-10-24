@@ -12,6 +12,7 @@ import json
 from pathlib import Path
 import random
 import re
+import ssl
 import string
 import subprocess
 import sys
@@ -32,6 +33,14 @@ CACHE = ROOT / 'evaluation/qasper_cache'                 # 数据集原文件（
 RAW = ROOT / f'data/raw/qasper-test50-{RUN}'              # 论文 PDF，只留本机
 DATASET_URL = 'https://qasper-dataset.s3.us-west-2.amazonaws.com/qasper-test-and-evaluator-v0.3.tgz'
 ARXIV_ID = re.compile(r'\d{4}\.\d{4,5}')
+
+
+def tls_context():
+    """python.org 版 macOS Python 默认不带根证书；与 src/arxiv_tools.py 一样加载 certifi 证书。"""
+    import certifi
+    context = ssl.create_default_context()
+    context.load_verify_locations(cafile=certifi.where())
+    return context
 
 
 def dump(path, value):
@@ -164,7 +173,8 @@ def fetch_dataset():
     archive = CACHE / Path(DATASET_URL).name
     if not archive.exists():
         print('下载 QASPER 测试集与官方评测脚本：', DATASET_URL)
-        with urlopen(Request(DATASET_URL, headers={'User-Agent': 'PaperLens-QASPER-eval'}), timeout=120) as response:
+        with urlopen(Request(DATASET_URL, headers={'User-Agent': 'PaperLens-QASPER-eval'}), timeout=120,
+                     context=tls_context()) as response:
             archive.write_bytes(response.read())
     with tarfile.open(archive) as tar:
         for member in tar.getmembers():
@@ -185,7 +195,8 @@ def download_pdf(paper_id):
     time.sleep(3.1)  # arXiv 建议的请求间隔
     url = f'https://arxiv.org/pdf/{paper_id}'
     try:
-        with urlopen(Request(url, headers={'User-Agent': 'PaperLens-QASPER-eval (local research)'}), timeout=60) as response:
+        with urlopen(Request(url, headers={'User-Agent': 'PaperLens-QASPER-eval (local research)'}), timeout=60,
+                     context=tls_context()) as response:
             body, final = response.read(), response.geturl()
         with pymupdf.open(stream=body, filetype='pdf') as pdf:
             pages = len(pdf)
