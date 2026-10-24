@@ -4,7 +4,7 @@
 
 ## 结论与范围
 
-在 macOS 26.6.2 / Apple Silicon / Python 3.11.9 下，以本地提交 `5a4cd85` 叠加安装验收与打包改动，用 PyInstaller 生成自带 Python 与依赖的 `dist/PaperLens.app`，并压缩为预览包：
+在 macOS 26.6.2 / Apple Silicon / Python 3.11.9 下，以本地提交 `2dbe1dd` 叠加安装验收与打包改动，用 PyInstaller 生成自带 Python 与依赖的 `dist/PaperLens.app`，并压缩为预览包：
 
 - `releases/PaperLens-0.1.0-macos-arm64-preview.zip`，276,390,289 字节
 - SHA-256 `c18ae800b78a1148c3f76b6305228acb8f3fb13a01fc8b6a7e642eb5938409ff`（与同目录 `.sha256` 文件一致，2026-10-24 复核）
