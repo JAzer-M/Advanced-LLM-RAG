@@ -105,7 +105,8 @@ Top-20 的 Recall 只多 4.4 个百分点，没达到事先定的 5 点门槛，
 .venv/bin/python -m unittest discover -s tests
 .venv/bin/python -B -m unittest webui.test_server webui.test_config webui.test_library webui.test_model_assets webui.test_runtime
 
-# 命令行问答（会调用 API）
+# 命令行问答（会调用 API）。仓库不含论文和知识库，先用自己的 PDF 构建并激活一个版本：
+.venv/bin/python build_semantic_index.py --raw-dir <你的PDF目录> --activate
 .venv/bin/python main.py --mode auto "What batch size does DPR use?"
 .venv/bin/python main.py --mode agent --allow-network "According to the Mamba paper, what inference throughput advantage over Transformers is stated in its abstract?"
 ```
