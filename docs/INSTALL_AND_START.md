@@ -88,9 +88,9 @@ Mac 在项目根目录执行，或双击这个启动文件：
 - 页面可打开但问答失败：核对模型网关、地址、模型和调用参数；在 `logs/webui/` 查看本次记录。没有自动重试。
 - 需要在其他电脑继续：按本文重新安装环境；知识库须成套复制后校验，私有配置单独设置。
 
-## 7. Windows（源码运行，验收中）
+## 7. Windows（源码运行）
 
-Windows 10/11 可以从源码运行，启动脚本是 `webui\start.bat`。这条路径的代码适配已完成（跨平台的导入锁和进程检测、UTF-8 模式），但还没有在真实 Windows 电脑上完成完整验收；遇到问题请记录报错信息。
+Windows 10/11 可以从源码运行，启动脚本是 `webui\start.bat`。2026-10-24 已在真实 Windows 电脑上人工验收：网页内下载检索模型、配置模型服务、上传 PDF 入库、提问与引用跳转、中文输入法回车、重复上传跳过、刷新接续与重启保留均正常；CI 也在 windows-latest 上运行全部离线测试。
 
 1. 安装 [Python 3.11](https://www.python.org/downloads/windows/)（安装时勾选 “Add python.exe to PATH”）。
 2. 获取代码：在 GitHub 仓库页点 **Code → Download ZIP** 并解压，或用 `git clone https://github.com/JAzer-M/Advanced-LLM-RAG.git`。

@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 import sys
 
-APP_VERSION = '0.1.0'
+APP_VERSION = '0.2.0'
 
 MODEL_REVISIONS = {
     'sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2':'e8f8c211226b894fcb81acc59f3b34ba3efd5f42',

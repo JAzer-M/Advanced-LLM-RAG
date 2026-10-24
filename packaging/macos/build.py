@@ -10,6 +10,8 @@ import sys
 import tempfile
 
 ROOT = Path(__file__).resolve().parents[2]
+sys.path.insert(0, str(ROOT))
+from src.runtime_paths import APP_VERSION  # noqa: E402
 
 
 def main():
@@ -17,7 +19,7 @@ def main():
         raise SystemExit('请在 Apple Silicon macOS 的独立 Python 3.11 环境构建。')
     work = ROOT/'build/macos'; work.mkdir(parents=True, exist_ok=True)
     os.environ['PYINSTALLER_CONFIG_DIR'] = str(work/'cache')
-    notices = ['PaperLens 0.1.0 preview — third-party package notices',
+    notices = [f'PaperLens {APP_VERSION} preview — third-party package notices',
                'Weights are downloaded separately from their pinned upstream repositories.']
     for dist in sorted(distributions(), key=lambda d:d.metadata['Name'].lower()):
         notices += ['\n'+'='*72, dist.metadata['Name']+' '+dist.version,
@@ -40,7 +42,7 @@ def main():
         subprocess.run([str(app/'Contents/MacOS/PaperLens'), '--self-check'],
                        cwd=folder, env=env, check=True)
     releases = ROOT/'releases'; releases.mkdir(exist_ok=True)
-    archive = releases/'PaperLens-0.1.0-macos-arm64-preview.zip'
+    archive = releases/f'PaperLens-{APP_VERSION}-macos-arm64-preview.zip'
     subprocess.run(['ditto', '-c', '-k', '--sequesterRsrc', '--keepParent', str(app), str(archive)], check=True)
     with archive.open('rb') as stream: digest = hashlib.file_digest(stream, 'sha256').hexdigest()
     (releases/(archive.name+'.sha256')).write_text(digest+'  '+archive.name+'\n')

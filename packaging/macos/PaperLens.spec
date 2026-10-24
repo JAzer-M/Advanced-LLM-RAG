@@ -3,6 +3,8 @@ from pathlib import Path
 from PyInstaller.utils.hooks import collect_data_files, collect_dynamic_libs, copy_metadata
 
 root = Path(SPECPATH).parents[1]
+import re
+version = re.search(r"APP_VERSION = '([^']+)'", (root/'src/runtime_paths.py').read_text(encoding='utf-8')).group(1)
 datas = [(str(root / name), '.') for name in ('main.py', 'agent.py')]
 datas += [(str(path), 'src') for path in sorted((root / 'src').glob('*.py'))]
 datas += [(str(root / 'webui' / name), 'webui') for name in ('index.html', 'app.js', 'style.css')]
@@ -35,6 +37,6 @@ exe = EXE(pyz, a.scripts, [], exclude_binaries=True, name='PaperLens',
           target_arch='arm64', codesign_identity=None, entitlements_file=None)
 collection = COLLECT(exe, a.binaries, a.datas, strip=False, upx=False, name='PaperLens')
 app = BUNDLE(collection, name='PaperLens.app', bundle_identifier='org.paperlens.desktop',
-             info_plist={'CFBundleShortVersionString':'0.1.0', 'CFBundleVersion':'1',
+             info_plist={'CFBundleShortVersionString':version, 'CFBundleVersion':'1',
                          'LSUIElement':True, 'NSHighResolutionCapable':True,
                          'LSMinimumSystemVersion':'14.0'})

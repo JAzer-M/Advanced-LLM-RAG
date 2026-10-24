@@ -1,0 +1,38 @@
+name: build-windows
+
+# 手动触发（Actions → build-windows → Run workflow），或推送 v* 标签时自动构建。
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+
+jobs:
+  package:
+    runs-on: windows-latest
+    timeout-minutes: 60
+    env:
+      PYTHONDONTWRITEBYTECODE: "1"
+      OMP_NUM_THREADS: "1"
+      OPENBLAS_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+      TOKENIZERS_PARALLELISM: "false"
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Install build dependencies
+        run: pip install -r requirements-build-windows.txt
+      - name: Build and self-check
+        run: python packaging/windows/build.py
+      - name: Upload package
+        uses: actions/upload-artifact@v4
+        with:
+          name: PaperLens-windows-x64-preview
+          path: |
+            releases/PaperLens-*-windows-x64-preview.zip
+            releases/PaperLens-*-windows-x64-preview.zip.sha256
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 0

@@ -20,10 +20,15 @@ sys.dont_write_bytecode = True
 from src.runtime_paths import APP_VERSION, data_root
 
 
+def _stream(fd):
+    try: return open(fd, 'w', encoding='utf-8', buffering=1)
+    except OSError: return open(os.devnull, 'w', encoding='utf-8')
+
+
 def main():
-    # macOS 图形入口将标准流置空；worker 仍需使用父进程传入的管道。
-    if sys.stdout is None: sys.stdout = open(1, 'w', encoding='utf-8', buffering=1)
-    if sys.stderr is None: sys.stderr = open(2, 'w', encoding='utf-8', buffering=1)
+    # 图形入口（macOS .app、Windows 无控制台 exe）可能没有标准流；worker 仍使用父进程传入的管道。
+    sys.stdout = sys.stdout or _stream(1)
+    sys.stderr = sys.stderr or _stream(2)
     args = sys.argv[1:]
     if args == ['--self-check']:
         import torch, faiss, pymupdf, transformers, sentence_transformers
@@ -33,11 +38,15 @@ def main():
         for module in (pipeline, agent, api_llm):
             if not Path(module.__file__).is_file(): raise RuntimeError('缺少运行身份所需源码文件。')
         result = {'version':APP_VERSION,'frozen':bool(getattr(sys,'frozen',False)),
+                  'platform':sys.platform,'utf8_mode':sys.flags.utf8_mode,
                   'executable':sys.executable,'data_root':str(data_root()),
                   'python':sys.version,'torch':torch.__version__,'faiss':faiss.__version__,
                   'pdf':pymupdf.VersionBind,'transformers':transformers.__version__,
                   'sentence_transformers':sentence_transformers.__version__}
         print(json.dumps(result,ensure_ascii=False), flush=True)
+        # 无控制台的 Windows 构建可能没有可读的标准输出，构建脚本从数据目录读取同一结果。
+        root = data_root(); root.mkdir(parents=True, exist_ok=True)
+        (root/'self_check.json').write_text(json.dumps(result,ensure_ascii=False), encoding='utf-8')
         return
     from webui import server
     if args == ['--worker']:

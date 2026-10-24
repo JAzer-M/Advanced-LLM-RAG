@@ -22,6 +22,6 @@ PDF 原件和向量库在本机；使用远程问答模型时，问题与检索�
 
 Mac 预览包已完成“解压 → 启动 → 模型准备 → 配置 → 上传 → 问答 → 退出 → 重启”验收，包内不含作者的密钥、论文库、实验日志或模型权重。
 
-正式发布前还需：Developer ID 签名与公证（否则用户首次需右键打开）；在另一台无开发环境的 Mac 上验收；创建 GitHub Release 并附 SHA-256。Windows 需要单独处理导入锁、启动方式和依赖，并在真实 Windows 环境验收。
+正式发布前还需：Developer ID 签名与公证（否则用户首次需右键打开）；在另一台无开发环境的 Mac 上验收；创建 GitHub Release 并附 SHA-256。Windows：源码方式已在真实电脑上验收；安装包由 GitHub Actions 的 `build-windows` 工作流在 Windows 构建机上打包并自检（见 [packaging/windows](../packaging/windows/README.md)），需在真实 Windows 电脑上验收后再发布。
 
 [当前源码安装说明](INSTALL_AND_START.md) · [本轮验收记录](maintenance/installation_ui_acceptance_20261024/report.md)
