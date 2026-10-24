@@ -1,0 +1,61 @@
+--- before/PROGRESS.md
++++ after/PROGRESS.md
+@@ -1,4 +1,6 @@
+ # Advanced-LLM-RAG 当前进度与交接
++
++**中文比较需求绑定修复（2026-10-24）：** 已知问题“VGG和RAG的区别是什么？”此前被绑定成“vgg的区别是什么?”、“rag的区别是什么?”，导致 Agent 只讲 VGG 内部配置和 RAG/DPR 的差异。用原抽取复现后确认：`agent.isolate_need()` 的中文比较规则支持“有什么区别”，漏了后置“是什么”；只修改两处匹配，使其沿用逐方描述、保留原比较引文与明确方面的路径。新增3项回归，原失败测试先红后绿，40项定向、345项后端及27项网页测试通过。网页首轮两项因沙箱禁止临时本机端口报错，放开本机端口后通过，原失败输出保留。当前9篇库/cn:glm-5.3 真实 main Agent 一题 completed/review_passed，102.13秒、9请求、34320 token（输入29853/输出4467）、1次读邻段、arXiv/自动重试0；一次复核引用登记错误触发既有有限修订，初稿和失败复核保留。最终直接比较 VGG 的视觉分类/卷积网络与 RAG 的文本检索增强生成，核心事实已对照引用原文。此为已知题开发回归；初检片段与旧运行不同，不据此宣称独立准确率或提速收益，不改旧成绩。[修复、验证与边界](evaluation/results/chinese_comparison_20261024/report.md) · [真实结果](evaluation/results/chinese_comparison_20261024/live_summary.json)
+ 
+ **回答语言与模型 JSON 兼容（2026-10-24）：** 用户换用 cn:glm-5.3 后，中文 VGG/RAG 比较题在 Auto 升级 Agent 时失败：glm 把评估结果包在 ```json 代码块里，原解析器只认纯 JSON，两次格式错误用完唯一修复额度，退回初稿（degraded）。新增 `src/model_json.py`，7 个解析模型 JSON 的位置只剥掉整段回复外的一层代码块，其余校验不变。同时按用户要求让回答语言跟随提问语言（明确指定时按指定）：新增 `src/answer_language.py`；RAG/Agent 回答提示词、Agent 缺口说明、程序插入的固定文字（补查未完成、arXiv 失败说明、证据不足清单、来源）均按语言输出；Auto 缺口判断补充英文“direct comparison”等措辞，避免英文概览题被误升级。新增 11 项测试；15 项原测试用英文提问却断言中文固定文字，已改为对应英文措辞。全套 342 项与 webui 27 项离线通过。真实验证（cn:glm-5.3，网页，开启联网）：英文 Auto 直答 37.1 秒/2 请求/4151 token、英文回答；中文 Auto 直答 37.1 秒/2 请求/3550 token；中文 Agent completed/review_passed，133.8 秒/7 请求/31338 token，评估步骤的代码块回复被正常解析、未用修复额度。两题都不需要 arXiv（论文均在本地库）。遗留：中文“A和B的区别”被拆成“A的区别是什么”“B的区别是什么”，Agent 回答偏题（讲 VGG 各配置差异、RAG 与 DPR 差异），需另行修复需求拆分。以后新评测的回答语言跟随问题，不与旧“英文问中文答”成绩直接比较。
+ 
+--- before/agent.py
++++ after/agent.py
+@@ -129,8 +129,8 @@
+             elif re.fullmatch(r'how (?:do|does)\s*', before) and re.match(r'\s*differ(?:s)?\b', after):
+                 aspect = re.sub(r'^\s*differ(?:s)?\b', '', after)
+             elif not before.strip() and re.fullmatch(
+-                    r'\s*(在[^，,；;。?!]{0,60}?)?(?:有(?:什么|哪些|何)?|的)?(?:区别|差异)[?。 ]*', after):
+-                aspect = re.sub(r'(?:有(?:什么|哪些|何)?|的)?(?:区别|差异)[?。 ]*$', '', after)
++                    r'\s*(在[^，,；;。?!]{0,60}?)?(?:有(?:什么|哪些|何)?|的)?(?:区别|差异)(?:是什么)?[?。 ]*', after):
++                aspect = re.sub(r'(?:有(?:什么|哪些|何)?|的)?(?:区别|差异)(?:是什么)?[?。 ]*$', '', after)
+             if aspect is not None:
+                 aspect = aspect.strip(' .?!。')
+                 return (f"Describe {normalize(subject)} for the requested comparison"
+--- before/tests/test_comparison_intent.py
++++ after/tests/test_comparison_intent.py
+@@ -22,6 +22,36 @@
+             self.assertFalse(agent.names_subject(other, row['need']))
+             self.assertNotIn('difference between vgg?', row['need'])
+             self.assertNotIn('difference between rag?', row['need'])
++
++    def test_actual_chinese_trace_binds_descriptions_for_the_requested_comparison(self):
++        # 来自中文 Agent 失败记录；不能变成“VGG 自己有哪些区别”。
++        query = 'VGG和RAG的区别是什么？'
++        rows = agent.bind_requirements(self.proposal(query, ('VGG', 'RAG')), query)['requirements']
++        self.assertEqual([row['need'] for row in rows], [
++            'Describe vgg for the requested comparison.',
++            'Describe rag for the requested comparison.'])
++        self.assertTrue(all(row['question_quote'] == query for row in rows))
++
++    def test_chinese_comparisons_keep_their_requested_aspect(self):
++        for query, aspect in (
++                ('Atlas和Nova的差异是什么？', ''),
++                ('Atlas 与 Nova 在表示方式上的区别是什么？', '在表示方式上'),
++                ('Atlas和Nova在相同数据集上的性能差异是什么？', '在相同数据集上的性能')):
++            with self.subTest(query=query):
++                rows = agent.bind_requirements(self.proposal(query), query)['requirements']
++                for row in rows:
++                    self.assertIn('for the requested comparison', row['need'])
++                    self.assertIn(aspect, row['need'])
++                    self.assertEqual(row['question_quote'], query)
++                    other = 'Nova' if row['subject'] == 'Atlas' else 'Atlas'
++                    self.assertFalse(agent.names_subject(other, row['need']))
++
++    def test_old_chinese_one_sided_need_is_rejected(self):
++        query = 'VGG和RAG的区别是什么？'
++        bound = agent.bind_requirements(self.proposal(query, ('VGG', 'RAG')), query)
++        bound['requirements'][0]['need'] = 'vgg的区别是什么?'
++        with self.assertRaisesRegex(ValueError, 'bound question excerpt'):
++            agent.validate_plan(bound, query)
+ 
+     def test_symmetric_comparisons_retain_the_relation_and_requested_aspect(self):
+         for query in ('What is the difference between Atlas and Nova?',

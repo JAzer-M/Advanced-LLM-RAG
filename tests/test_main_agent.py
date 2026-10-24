@@ -152,7 +152,7 @@ class MainAgentTests(unittest.TestCase):
         self.assertEqual(result['status'],'completed')
         self.assertEqual(result['agent']['answer_summary']['answer_status'],'insufficient_evidence')
         self.assertEqual(result['agent']['answer_summary']['api_attempts'],0)
-        self.assertIn('证据不足',result['answer'])
+        self.assertIn('Insufficient evidence',result['answer'])
         self.assertEqual(call.call_count,3)
 
     def test_invalid_planning_keeps_failure_without_generating_a_rag_fallback(self):
@@ -163,7 +163,7 @@ class MainAgentTests(unittest.TestCase):
             self.assertFalse((out/'answer/answer.md').exists())
         self.assertEqual(result['status'],'failed')
         self.assertEqual(result['answer_status'], 'unavailable')
-        self.assertIn('未完成', result['answer'])
+        self.assertIn('did not finish', result['answer'])
         self.assertNotIn(ANSWER, result['answer'])
         self.assertEqual(call.call_count,3)
 
@@ -179,7 +179,7 @@ class MainAgentTests(unittest.TestCase):
             result,call=self.invoke(Path(temporary)/'run',replies)
         self.assertEqual(result['status'],'failed')
         self.assertEqual(result['agent']['answer_summary']['answer_status'],'review_failed')
-        self.assertIn('未通过复核',result['answer'])
+        self.assertIn('failed review',result['answer'])
         self.assertEqual(call.call_count,7)
 
     def test_empty_agent_question_does_not_load_models_or_make_requests(self):

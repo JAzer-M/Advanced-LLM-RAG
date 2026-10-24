@@ -1,6 +1,9 @@
 # 历史实验归档
 
-2026-10-22整理后的当前状态见[项目PROGRESS](../../PROGRESS.md)，文档入口见[文档导航](../README.md)。
+当前状态见[项目PROGRESS](../../PROGRESS.md)，文档入口见[文档导航](../README.md)。本页历史文件中的“当前/未完成”均指保存当时的状态。
+
+- [2026-10-24整理前完整进度](PROGRESS_BEFORE_P4_CLOSEOUT_2026-10-24.md)和[整理前量化总览](PROJECT_METRICS_BEFORE_P4_CLOSEOUT_2026-10-24.md)：逐字节保存原件，原有相对链接也保持原样，须按各原文件所在目录解释；日常导航使用当前PROGRESS和PROJECT_METRICS。
+- [2026-10-24 P4整理与核验](../maintenance/p4_closeout_20261024/report.md)：当前入口、默认值、版本、测试与实验结论统一；旧报告、源码和失败未重写。
 
 - [截至2026-10-22的完整进度正文](PROGRESS_THROUGH_2026-10-22.md)：保留清理前所有阶段记录，相对链接已调整；其中“当前／未完成”指各轮当时状态。
 - [清理前逐字节备份](20261022_before_cleanup.zip)：包含根目录README、PROGRESS、`.gitignore`和本索引原件，以及SHA-256清单。压缩包保存项目相对路径；如需恢复先解压到独立目录核对，再选择文件恢复。

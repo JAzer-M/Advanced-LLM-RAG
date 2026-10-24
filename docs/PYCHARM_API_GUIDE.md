@@ -1,5 +1,7 @@
 # 在 PyCharm 中运行 API 版 RAG
 
+当前配置核对：2026-10-24。以下连接方式保持；本机模型已切到`cn:glm-5.3`，历史DeepSeek/Kimi验证按各自日期理解。模型可从网页设置或私有配置修改，[当前状态](../PROGRESS.md)和[公开选项快照](maintenance/p4_closeout_20261024/current_state.json)为本轮接续依据；已有Key无需重新填写。
+
 ## 先理解调用关系
 
 PyCharm 负责启动 Python。API 请求由项目代码发出，因此不需要在 PyCharm 的 AI 插件里选择模型，也不需要让 PyCharm 本身登录模型账号。
@@ -24,11 +26,11 @@ PyCharm 负责启动 Python。API 请求由项目代码发出，因此不需要�
 
 本项目已经配置好。新项目可把 `api.example.json` 复制成 `api.local.json` 后填写 Key；已有配置不必重新复制。
 
-| 字段 | 含义 | 本项目当前设置 |
+| 字段 | 含义 | 本机2026-10-24核对值 |
 |---|---|---|
 | base_url | 反代接口的根地址 | http://127.0.0.1:7863/v1 |
 | api_key | 反代的访问凭证 | 保留你已在本地填写的值 |
-| model | 反代认得的模型 ID，必须精确一致 | cn:deepseek-v4.1-flash |
+| model | 反代认得的模型 ID，必须精确一致 | cn:glm-5.3 |
 
 这三个值类似其他 Agent 软件里的 URL、Key、模型选择，只是保存在 Python 项目的配置文件中。代码会自动在 base_url 后拼接 `/chat/completions`；不要把完整生成路径再填进 base_url。
 
@@ -44,7 +46,7 @@ PyCharm 负责启动 Python。API 请求由项目代码发出，因此不需要�
 
 2026-10-18 按用户要求改为 DeepSeek v4.1 Flash，移除 Kimi 专属的 reasoning_effort / max_completion_tokens，采用关闭思考的请求配置。DeepSeek 官方支持通过 thinking.type 切换思考模式，见 [Thinking Mode](https://api-docs.deepseek.com/guides/thinking_mode/)。反代可能转换参数；随后本轮已实际跑通六题主流程与固定证据检查，兼容性和回答限制见 [2026-10-18 调试日志](DEEPSEEK_V41_DEBUG_LOG_2026-10-18.md)。
 
-4096 是单次输出上限，不表示每次都消耗 4096，也不表示上下文只能有 4096 token。关闭思考沿用此前 DeepSeek 对比的设置；本轮只检查该配置下的 v4.1，没有比较各推理档位。历史 Kimi 检查使用 low reasoning effort，与当前配置分开记录。
+4096是单次输出上限，不表示每次都消耗4096，也不表示上下文只能有4096 token。关闭思考沿用此前DeepSeek对比的设置；10月18日那轮只检查v4.1，没有比较各推理档位。10月24日GLM的真实兼容与中文比较验证见[开发回归](../evaluation/results/chinese_comparison_20261024/report.md)，不保证其他供应商接受相同参数；历史Kimi与各模型记录分开。
 
 ## 在 PyCharm 里怎么运行
 
@@ -52,7 +54,7 @@ PyCharm 负责启动 Python。API 请求由项目代码发出，因此不需要�
 2. 使用 PyCharm 打开 `C:\Users\J\Desktop\Advanced-LLM-RAG`。
 3. 项目 Python Interpreter 选择现有 `.venv\Scripts\python.exe`。API 客户端使用标准库，不需要额外安装 openai SDK。
 4. 右键 `main.py` → Run。也可以在 Run → Edit Configurations 中指定 Script path 为 main.py、Working directory 为项目根目录、Parameters 留空。
-5. 在 Run 控制台输入问题，观察启动行 `LLM: proxy API | Model: cn:deepseek-v4.1-flash`，随后查看检索、证据、引用检查与答案。
+5. 在Run控制台输入问题，观察启动行中的实际模型；本轮本机为`LLM: proxy API | Model: cn:glm-5.3`，随后查看检索、证据、引用检查与答案。
 
 不需要先运行 llm.py，也不需要每次手工发送 HTTP 请求。llm.py 是供其他模块导入的公共生成入口。
 

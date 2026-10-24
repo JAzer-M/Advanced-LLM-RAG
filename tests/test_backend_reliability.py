@@ -108,8 +108,8 @@ class BackendDeliveryTests(unittest.TestCase):
         self.assertEqual(result['stop_reason'], 'external_rate_limited')
         self.assertIn('429', result['answer'])
         self.assertIn('120', result['answer'])
-        self.assertIn('无法核实', result['answer'])
-        self.assertIn('不能据此判断', result['answer'])
+        self.assertIn('cannot be verified', result['answer'])
+        self.assertIn('does not show whether the paper reports them', result['answer'])
         self.assertNotIn('未报告该数值', result['answer'])
         self.assertEqual(result['network']['failure']['stage'], 'search')
         self.assertEqual(result['actions'][-1]['tool'], 'search_arxiv')
@@ -125,7 +125,7 @@ class BackendDeliveryTests(unittest.TestCase):
         self.assert_contract(result)
         self.assertEqual(result['status'], 'degraded')
         self.assertEqual(result['stop_reason'], 'external_timeout')
-        self.assertIn('超时', result['answer'])
+        self.assertIn('timed out', result['answer'])
         self.assertEqual((call.call_count, http.call_count), (4, 1))
 
     def test_unavailable_source_does_not_repeat_an_unverified_non_reporting_claim(self):
@@ -147,7 +147,7 @@ class BackendDeliveryTests(unittest.TestCase):
         self.assertEqual(result['status'], 'degraded')
         self.assertIn(probe, result['answer'])
         self.assertIn('429', result['answer'])
-        self.assertIn('不能据此判断', result['answer'])
+        self.assertIn('does not show whether the paper reports them', result['answer'])
         self.assertEqual(result['api_summary']['attempts'], 5)
         self.assertEqual((call.call_count, http.call_count), (5, 1))
 
@@ -183,7 +183,7 @@ class BackendDeliveryTests(unittest.TestCase):
                                                   query='Describe A and Mamba.')
         self.assertEqual(result['status'], 'degraded', result.get('error'))
         self.assertIn(ANSWER, result['answer'])
-        self.assertIn('无法核实', result['answer'])
+        self.assertIn('cannot be verified', result['answer'])
         self.assertEqual(result['agent']['answer_summary']['answer_status'], 'review_passed')
         self.assertEqual((call.call_count, http.call_count), (6, 1))
 
@@ -249,7 +249,7 @@ class BackendDeliveryTests(unittest.TestCase):
             result, call, http = self.case.invoke(Path(temporary) / 'run', replies, query='Describe A.', allow_network=False)
         self.assert_contract(result)
         self.assertEqual(result['status'], 'failed')
-        self.assertIn('未完成', result['answer'])
+        self.assertIn('did not finish', result['answer'])
         self.assertNotIn('invented scope', result['answer'])
         self.assertEqual(call.call_count, 3)
         http.assert_not_called()

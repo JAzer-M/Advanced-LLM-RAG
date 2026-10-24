@@ -124,7 +124,7 @@ class MainArxivIntegrationTests(unittest.TestCase):
         with TemporaryDirectory() as temporary:
             result, call, network = self.invoke(Path(temporary) / 'run', self.replies()[:3], allow_network=False)
         self.assertEqual(result['status'], 'completed')
-        self.assertIn('证据不足', result['answer'])
+        self.assertIn('Insufficient evidence', result['answer'])
         self.assertEqual(call.call_count, 3)
         network.assert_not_called()
 
@@ -162,7 +162,7 @@ class MainArxivIntegrationTests(unittest.TestCase):
         with TemporaryDirectory() as temporary:
             result, call, network = self.invoke(Path(temporary) / 'run', self.replies()[:4], self.http_replies(feed))
         self.assertEqual(result['network']['status'], 'no_evidence')
-        self.assertIn('证据不足', result['answer'])
+        self.assertIn('Insufficient evidence', result['answer'])
         self.assertEqual(call.call_count, 4)
         self.assertEqual(network.call_count, 1)
 
@@ -184,7 +184,7 @@ class MainArxivIntegrationTests(unittest.TestCase):
             result, call, network = self.invoke(out, self.replies()[:4] + [decline], self.http_replies(feed))
             self.assertFalse((out / 'network/read').exists())
         self.assertEqual(result['network']['status'], 'no_evidence')
-        self.assertIn('证据不足', result['answer'])
+        self.assertIn('Insufficient evidence', result['answer'])
         self.assertEqual(call.call_count, 5)
         self.assertEqual(network.call_count, 1)
 
@@ -216,7 +216,7 @@ class MainArxivIntegrationTests(unittest.TestCase):
             result, call, network = self.invoke(out, replies, [error], mode='auto')
             self.assertEqual(json.loads((out / 'protocol.json').read_text())['max_actual_attempts'], 16)
         self.assertEqual(result['status'], 'degraded')
-        self.assertIn('补查未完成', result['answer'])
+        self.assertIn('did not finish', result['answer'])
         self.assertEqual(network.call_count, 1)
         self.assertEqual(call.call_count, 5)
 
@@ -370,7 +370,7 @@ class MainArxivIntegrationTests(unittest.TestCase):
             result, call, network = self.invoke(Path(temporary) / 'run', self.replies()[:5] + [unsupported])
         self.assertEqual(result['status'], 'completed')
         self.assertEqual(result['network']['answer_status'], 'insufficient_evidence')
-        self.assertIn('证据不足', result['answer'])
+        self.assertIn('Insufficient evidence', result['answer'])
         self.assertEqual(call.call_count, 6)
         self.assertEqual(network.call_count, 2)
 

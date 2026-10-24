@@ -3,6 +3,8 @@
 
 import json
 
+from src.model_json import loads_model_json
+
 MAX_SUB_QUERIES = 4
 
 
@@ -105,7 +107,7 @@ Original Question:
     response = call(prompt)['answer'] if call is not None else generate_answer(prompt)
 
     try:
-        result = json.loads(response.strip())
+        result = loads_model_json(response)
 
     except json.JSONDecodeError:
         return rejected_decomposition('invalid_json')

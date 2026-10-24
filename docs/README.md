@@ -7,9 +7,11 @@
 | 需要了解什么 | 入口 |
 | --- | --- |
 | 当前已完成、限制和下一步 | [PROGRESS](../PROGRESS.md) |
-| 全新Web UI：从空白设计，独立8849端口，待用户验收 | [启动说明](../webui/README.md)、[开发日志与问题处理](WEBUI_REBUILD_2026-10-23.md) |
-| 本地网页试验版：案例回放、实时提问与引用查看 | [启动说明](../ui_prototype/README.md)、[界面验收](../evaluation/results/ui_prototype_20261023/report.md) |
-| Auto比较题偏题、耗时和网页访问修复 | [实际效果/成本/剩余引用瑕疵](../evaluation/results/auto_comparison_20261023/report.md) |
+| 当前PaperLens：8849、暖白/朱橙、引用联动和三模式 | [启动说明](../webui/README.md)、[初版开发记录](WEBUI_REBUILD_2026-10-23.md) |
+| 模型设置与网页PDF入库 | [模型配置记录](WEBUI_MODEL_SETTINGS_2026-10-24.md)、[PDF入库验收](WEBUI_PDF_IMPORT_2026-10-24.md) |
+| 旧8848原型：页面已退役，仅保留共用函数 | [保留原因](../ui_prototype/README.md)、[历史界面验收](../evaluation/results/ui_prototype_20261023/report.md) |
+| 当前中文比较需求修复 | [修复与真实Agent验证](../evaluation/results/chinese_comparison_20261024/report.md) |
+| 10月23日英语Auto比较与耗时修复，保留旧引用缺口 | [历史效果/成本/引用瑕疵](../evaluation/results/auto_comparison_20261023/report.md) |
 | 三模式启动、默认值、知识库选择 | [README](../README.md) |
 | 功能分工与代码阅读顺序 | [代码阅读说明](CODE_READING_GUIDE.md) |
 | Agent工具、保存记录诊断、单步/循环/回答 | [Agent操作](AGENT_REPLAY_GUIDE.md) |
@@ -22,19 +24,21 @@
 
 | 工作 | 报告 |
 | --- | --- |
-| 最新后端故障交付、HTTP诊断和统一返回；314项离线通过，真实搜索超时后有明确说明 | [修复报告](../evaluation/results/backend_reliability_20261023/report.md)、[返回字段与优先级](BACKEND_RESULT.md)、[成本与结果](../evaluation/results/backend_reliability_20261023/live/summary.json) |
+| 10月24日中文比较修复；345项后端/27项网页通过，真实Agent核心比较原文核对通过 | [修复报告](../evaluation/results/chinese_comparison_20261024/report.md)、[最终测试](../evaluation/results/chinese_comparison_20261024/final_offline_test_summary.json)、[原文核对](../evaluation/results/chinese_comparison_20261024/manual_review.json) |
+| 10月24日当前文档、历史归档、分版本实验汇总与本地交付 | [本轮整理与核验](maintenance/p4_closeout_20261024/report.md)、[实验总览](PROJECT_METRICS.md) |
+| 10月23日后端故障交付、HTTP诊断和统一返回；当时314项离线通过，真实超时后有明确说明 | [修复报告](../evaluation/results/backend_reliability_20261023/report.md)、[返回字段与优先级](BACKEND_RESULT.md)、[成本与结果](../evaluation/results/backend_reliability_20261023/live/summary.json) |
 | 此前P3功能、瑕疵及两条真实复验：均遇搜索429，1降级/1失败 | [收尾报告](../evaluation/results/p3_closeout_20261023/report.md)、[人工核对](../evaluation/results/p3_closeout_20261023/manual_review.md)、[成本与结果](../evaluation/results/p3_closeout_20261023/summary.json) |
 | 此前P3书目误拒绝修复、298项离线回归与验证边界 | [修复报告](../evaluation/results/p3_subject_fix_20261022/report.md)、[全套测试](../evaluation/results/p3_subject_fix_20261022/offline_test_summary.json)、[文件核验](../evaluation/results/p3_subject_fix_20261022/verification.json) |
 | 此前P3六题对照及两题Auto，保留当时误拒绝及原成绩 | [报告](../evaluation/results/p3_validation_20261022/report.md)、[原文审阅](../evaluation/results/p3_validation_20261022/manual_review.md)、[失败诊断](../evaluation/results/p3_validation_20261022/failure_diagnosis.json) |
 | P3.2可选arXiv补证据、外部引用与回答复核 | [流程与真实验证](../evaluation/results/p3_integration_20261022/report.md)、[设计/预算](../evaluation/results/p3_integration_20261022/design.md) |
-| 最新反馈状态修复、旧h10离线回放与边界 | [修复报告](../evaluation/results/agent_feedback_fix_20261022/report.md) |
+| 10月22日反馈状态修复、旧h10离线回放与边界 | [修复报告](../evaluation/results/agent_feedback_fix_20261022/report.md) |
 | P3.1独立arXiv搜索/固定版本原文读取工具 | [设计](../evaluation/results/p3_arxiv_tools_20261022/design.md)、[实测与失败](../evaluation/results/p3_arxiv_tools_20261022/report.md) |
-| 最新RAG优先Auto、已知题改善和h10降级 | [设计](../evaluation/results/agent_auto_improvement_20261022/design.md)、[实测与失败](../evaluation/results/agent_auto_improvement_20261022/report.md) |
+| RAG优先Auto策略、10月22日已知题改善和h10降级 | [设计](../evaluation/results/agent_auto_improvement_20261022/design.md)、[实测与失败](../evaluation/results/agent_auto_improvement_20261022/report.md) |
 | 第一版Auto的8题三路径对照，旧版本分数 | [报告](../evaluation/results/auto_closeout_20261022/report.md)、[人工原文核对](../evaluation/results/auto_closeout_20261022/manual_review.md) |
 | main接入与两题真实CLI验证 | [接入报告](../evaluation/results/main_agent_integration_20261022/report.md) |
 | P2.5首轮12题RAG/Agent对照，修复前分数 | [报告](../evaluation/results/agent_p25_20261021/report.md)、[冻结评分](../evaluation/results/agent_p25_20261021/review_protocol.md) |
 | 三类规划问题修复、旧失败题开发回归 | [修复报告](../evaluation/results/agent_plan_fix_20261022/report.md) |
-| 本次进度核对与文件清理 | [清理记录](CLEANUP_LOG_2026-10-22.md) |
+| 10月22日历史进度核对与文件清理 | [清理记录](CLEANUP_LOG_2026-10-22.md) |
 
 ## 历史实验与接续依据
 

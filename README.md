@@ -1,85 +1,78 @@
 # Advanced-LLM-RAG
 
-面向科研论文的问答项目：PDF 解析、Semantic 分块、Dense/BM25 混合检索、RRF 融合、问题分解、BGE 重排和带引用回答；本地 Agent 可按证据缺口搜索与读取邻段。
+面向科研论文的问答项目：PDF解析、Semantic分块、Dense/BM25混合检索、RRF、BGE重排、问题分解、证据保留和带引用回答。本地Agent按证据缺口选择搜索或读取邻段，Auto先走RAG再按需升级。
 
-**当前：Auto比较意图和过度升级已修复，331项离线回归通过。** 同一用户VGG/RAG问题从101.85秒/8请求/28092 token降到30.98秒/2请求/4037 token，主要任务与方法比较有原文支持；附带训练细节的引用仍待完善。网页已恢复，可双击[Mac启动文件](ui_prototype/start.command)。这是同题开发验证，不是独立准确率；五轮合计21请求/54187 token及失败均留档。CLI默认auto，Python函数默认rag。[修复与全部成本](evaluation/results/auto_comparison_20261023/report.md) · [后端结果字段](docs/BACKEND_RESULT.md) · [此前故障交付](evaluation/results/backend_reliability_20261023/report.md)。
+**当前：本机PaperLens可使用三模式、引用原文、模型设置和PDF入库。** 中文比较需求绑定、回答语言和JSON代码块兼容已修复；最新保存的345项后端、27项网页测试通过。当前版本尚无独立新题总体质量成绩。[当前进度](PROGRESS.md) · [质量与成本总览](docs/PROJECT_METRICS.md) · [文档导航](docs/README.md)
 
-[当前进度与下一步](PROGRESS.md) · [文档导航](docs/README.md) · [量化结果](docs/PROJECT_METRICS.md) · [实验目录](evaluation/results/README.md) · [预期全流程](docs/PROJECT_WORKFLOW.md)
+## 本机网页
 
-## 全新 Web UI（待用户验收）
+Mac可双击桌面的“PaperLens 启动.command”或[项目启动文件](webui/start.command)，也可在项目根目录运行：
 
-新增独立的 [PaperLens · 读见依据](http://127.0.0.1:8849)：从空白重做页面与交互，旧版保留。可双击 [新版启动文件](webui/start.command)，或运行 `.venv/bin/python -B -u webui/server.py`。支持三模式提问、引用原文、论文搜索、运行状态与刷新恢复。9项适配层离线检查通过；一次真实RAG为16.28秒、2请求、3054 token。[开发与问题处理日志](docs/WEBUI_REBUILD_2026-10-23.md) · [新版说明](webui/README.md)。
+```bash
+.venv/bin/python -B -u webui/server.py
+```
 
-## 旧版网页原型（保留对照）
+服务就绪后打开[PaperLens](http://127.0.0.1:8849)，使用期间保持启动终端打开。支持暖白/朱橙阅读布局、答案与原文联动、Enter发送/Shift+Enter换行、中英文界面和已保存案例。打开回放不生成新回答；实时提问使用配置的API。
 
-在项目根目录运行`.venv/bin/python ui_prototype/app.py`，浏览器打开[http://127.0.0.1:8848](http://127.0.0.1:8848)。可以回放三个真实案例、输入问题、选择三种模式、查看答案/引用/运行过程和成本。回放不调用模型，点击实时运行才使用现有API；联网默认关闭，界面固定使用八篇库，不改变激活指针。
+网页当前是本机9篇/1767段库，包含新增Mamba；由`data/webui/library.json`独立选择。PDF上传后先构建并校验新版本，再切换下一次网页问答。上传数据、指针与新索引被Git忽略，不随本次本地提交迁移。[网页操作及限制](webui/README.md) · [PDF入库验收](docs/WEBUI_PDF_IMPORT_2026-10-24.md)
 
-一条真实RAG提问已从网页完成：VGG步长和padding均为1像素，引用第2页；2模型请求、2805 token、约15.3秒，无arXiv请求。这是首次界面验收记录；后续比较题后端改动见上方当前状态。尚未做正式发布或持久会话。[启动说明](ui_prototype/README.md) · [本轮验收](evaluation/results/ui_prototype_20261023/report.md)
+旧8848页面和启动文件已删除。`ui_prototype/app.py`仍被新服务复用，保留它的辅助函数；不再单独启动旧服务。[保留原因](ui_prototype/README.md)
 
-## 运行
+## CLI与默认值
 
-本机环境为 `.venv` / Python 3.11.9，Embedding 和 BGE 使用 CPU；生成及问题分解走本机反代。新环境安装 `requirements.txt`，现有环境与配置无需重建。首次配置参照 `api.example.json` 填写本地 `api.local.json`，已有配置不要覆盖。启动本机反代后，在项目根目录执行：
+当前Mac环境为`.venv` / Python 3.11.9，Embedding/BGE使用CPU，分解与生成使用兼容Chat Completions的API。已有环境无需重建；新环境的依赖在`requirements.txt`，私有配置按[示例](api.example.json)填写为本机`api.local.json`。本机模型网关需要运行。首次建库与全新克隆的完整引导和验收仍待下一阶段完成。
+
+以下是真实问答入口，会产生API请求。在项目根目录执行：
 
 ```bash
 .venv/bin/python main.py --mode auto "What batch size does DPR use?"
 .venv/bin/python main.py --mode agent "What batch size does DPR use?"
 .venv/bin/python main.py --mode rag --kb-version all-papers-8-20261020 "What batch size does DPR use?"
 
-# 显式允许arXiv补证据；仍使用现有生成API，并产生相应调用。
+# 显式允许arXiv补证据；最多一次搜索和一次固定版本PDF读取。
 .venv/bin/python main.py --mode agent --allow-network "According to the Mamba paper, what inference throughput advantage over Transformers is stated in its abstract?"
 ```
 
-不传问题则交互输入。Windows 使用 `.venv\Scripts\python.exe` 替换解释器；配置说明见 [PyCharm API 指南](docs/PYCHARM_API_GUIDE.md)和 [Mac 接续指南](docs/MAC_HANDOFF.md)。上述问答会调用 API。
+不传问题则交互输入。Python函数默认`mode='rag'`，CLI默认`--mode auto`。Windows解释器入口可换为`.venv\Scripts\python.exe`，但网页PDF入库的Windows锁机制尚未验收。[API配置](docs/PYCHARM_API_GUIDE.md) · [Mac环境记录](docs/MAC_HANDOFF.md)
 
-| 模式 | 行为 | 知识库与调用预算 |
+| 路径 | 默认知识库 | 模型调用边界 |
 | --- | --- | --- |
-| `rag` | 固定检索、最多两轮规则补查、生成、必要时修复引用 | 不指定版本读取三篇激活指针；常规完整问题通常2调用 |
-| `agent` | 共用初检，再规划需求、检查证据、按需执行工具、生成并复核 | 当前仅八篇库；含分解最多11调用、3个工具行动 |
-| `auto` | 先完成原 RAG；明确缺口、无法回答/比较或引用失败才升级原 Agent | 当前仅八篇库；直答通常2调用，升级最坏13调用 |
+| RAG | 全局激活指针；本机为三篇`semantic-mac-20261019` | 常规完整题通常2次；含原引用检查/有限修复 |
+| Agent | 未指定时八篇`all-papers-8-20261020` | 含分解最多11次，工具最多3行动 |
+| Auto | 未指定时八篇`all-papers-8-20261020` | 直答通常2次，升级最坏13次 |
+| 网页三模式 | 提交时固定网页指针版本；本机当前9篇 | 复用上述模式预算 |
 
-Auto/Agent记录写入`logs/auto_runs/`、`logs/agent_runs/`，或用`--output-dir`指定新的空目录。Python入口`main(query, mode="auto")`省略mode时仍为RAG。三模式都有状态、非空答案/说明、原文、行动、停止原因及模型调用成本。运行时故障返回`failed`结果；`degraded`表示补查未完成但有有限交付，两者CLI退出码均为1。外部获取失败后可依据本地证据回答，全部缺失则直接说明尚未核实；Auto保留的初检草稿仅通过引用结构检查。隐性漏答未必触发升级。[返回约定与回答优先级](docs/BACKEND_RESULT.md)
+三模式都可用`--kb-version`或`kb_version`显式选择合法配对库。同库比较需显式选同一版本。`--allow-network`默认关闭，只支持Agent/Auto，仅开放arXiv；模型上限分别增为14/16。库中已有明确主论文时不会因为开启开关就必然联网，外部补证据也不自动入库。
 
-`--allow-network`仅开放arXiv补证据，默认关闭；Python对应`allow_network=True`，只支持Agent/Auto。它在本地正常缺源停止后，最多做3次联网决策、1次搜索和1次PDF读取；全部模型请求上限Agent为14、Auto为16。搜索最多3篇，选读1篇，追加最多6段，合并原文仍限32段/24000字符；未找到原论文则保留缺口，不使用摘要或后续论文替代原文。外部材料只用于本轮，不自动入库；失败不自动重试。[实现与取舍](evaluation/results/p3_integration_20261022/design.md)。
+Agent/Auto日志写入`logs/agent_runs/`、`logs/auto_runs/`，或指定新的空`--output-dir`。三模式返回答案/说明、证据、行动、停止原因、状态和成本；failed/degraded的CLI退出码为1。429/超时不等于论文未报告，完成或自动复核通过不等于独立事实验收。[返回约定](docs/BACKEND_RESULT.md)
 
-## 当前结果怎么理解
+## 模型、知识库与检索
 
-此前六题冻结Agent-off/on对照的任务完整且事实/引用通过4/6→5/6，开启路径token为关闭的2.532倍；Auto只预注册两道缺源题，1/2。随后书目修复298项离线通过，上一轮n04/Auto及n06/Agent却均遇搜索429，完整任务0/2。本轮修复后的n06遇超时，故障交付通过，原事实问题仍未核实。旧成绩不改，没有新的独立质量总分。[此前原文核对](evaluation/results/p3_validation_20261022/manual_review.md) · [本轮工程验证](evaluation/results/backend_reliability_20261023/report.md)。
+截至2026-10-24，本机请求模型为`cn:glm-5.3`，最近响应报告`glm-5.3`；历史冻结评测主要使用`cn:deepseek-v4.1-flash`。回答跟随提问语言，明确指定语言时优先；界面语言开关只改变界面。模型、语言和知识库变化后的结果不直接混入旧成绩。
 
-| 实验版本 | 固定 RAG | Agent | Auto |
-| --- | --- | --- | --- |
-| P2.5 首轮12题，严格通过 | 10/12 | 7/12 | 当时未加入 |
-| 第一版 Auto 的8题，严格事实/引用通过 | 8/8 | 6/8 | 6/8 |
-| 同8题，必答完整且可交付 | 8/8 | 7/8 | 6/8 |
+本机保留3/5/8篇库及当前9篇网页库；索引、chunks与manifest须成套保存。[版本操作及迁移边界](docs/KNOWLEDGE_BASE_VERSIONS.md)
 
-以上是历史冻结结果，失败保留在计划分母中；8题成绩属于旧 Auto。最新 RAG 优先 Auto 仅完成已知开发回归：a03/a04 恢复直答，旧h10 升级搜索后降级已保留；本轮反馈机制修复只作离线回归，尚无最终版本独立新题总成绩。不能把不同版本的成功案例拼成准确率。[详细对照与成本](docs/PROJECT_METRICS.md) · [最新改进与失败](evaluation/results/agent_auto_improvement_20261022/report.md)
-
-## 知识库与检索配置
-
-激活指针仍为三篇 `semantic-mac-20261019`（378段、384维）；八篇库 `all-papers-8-20261020` 为1397段，Auto/Agent显式使用它而不修改指针。另保留原三篇快照与五篇先导库。索引、分块和 manifest 必须成套保存，构建、切换与回退见[版本操作](docs/KNOWLEDGE_BASE_VERSIONS.md)。默认构建不会递归重建子目录中的全部八篇论文。
-
-当前每路和 RRF 候选120、最终 Top-10、子题局部 Top-3；最多两轮按来源信号补查，rewrite/HyDE关闭。42道历史可答题的 Top-10：Precision=.1310、整体 nP=.6790、宏 Recall=.7679、MAP=.4837、MRR=.5708；检索指标不等于回答质量。Top-20 的 Recall 只多4.37个百分点，未达到当时5点预算门槛，默认保持10。见[指标口径](docs/NORMALIZED_PRECISION_2026-10-20.md)和[预算依据](docs/EVIDENCE_RETENTION_AND_BUDGET_2026-10-20.md)。
+当前每路/RRF候选120、RRF常数60、最终Top-10、子题局部Top-3、按来源信号最多两轮补查；rewrite/HyDE关闭。Top-10/20检索对照和默认预算依据见[实验总览](docs/PROJECT_METRICS.md)。现有小样本结果没有证明当前Agent/Auto总体优于固定RAG；工程行为、已知题修复和独立质量分开记录。
 
 ## 验证与阅读入口
 
+最近一次完整行为回归已保存为345项后端、27项网页通过，见[测试汇总](evaluation/results/chinese_comparison_20261024/final_offline_test_summary.json)。本轮文档整理未重复全套测试或付费评测。以后行为变更时可在已具备模型缓存的环境运行：
+
 ```bash
-# 现有离线行为回归；模型缓存已具备，测试使用替身而非真实生成。
 PYTHONDONTWRITEBYTECODE=1 OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 \
 MKL_NUM_THREADS=1 VECLIB_MAXIMUM_THREADS=1 TOKENIZERS_PARALLELISM=false \
 HF_HUB_OFFLINE=1 TRANSFORMERS_OFFLINE=1 \
 .venv/bin/python -m unittest discover -s tests -v
 
-# 只从保存的结果生成新归一化报表，不调用API；输出目录须为新目录。
-.venv/bin/python -m evaluation.summarize_normalized_precision --output-dir evaluation/results/new_normalized_precision
+.venv/bin/python -B -m unittest webui.test_server webui.test_config webui.test_library
 ```
 
-`evaluation.run_evaluation`、`evaluation.run_answer_evaluation` 的默认运行可能调用 API；检索评估的补查须显式传 `--complete-evidence --completion-rounds 2`。预算对照、缓存回放和历史命令见[清理前完整交接](docs/history/PROGRESS_THROUGH_2026-10-22.md)，已有实验无需为恢复上下文重跑。
+测试使用模型替身；网页中的两项检查需允许临时本机HTTP端口。`evaluation.run_evaluation`与`evaluation.run_answer_evaluation`可能调用API，恢复上下文先读保存记录；无需因换对话重跑实验。检索评估的补查须显式启用`--complete-evidence --completion-rounds 2`，各K独立运行。
 
-| 目录/入口 | 用途 |
+| 入口 | 用途 |
 | --- | --- |
-| `main.py` / `agent.py` | 新问题统一入口 / 保存记录诊断与有预算循环 |
-| `src/` | 检索、证据、工具、回答、引用和知识库版本 |
-| `data/` | 原始论文、配对索引、版本清单和激活指针 |
-| `evaluation/` / `tests/` | 题集与评估入口 / 离线行为回归 |
-| `docs/` | 当前说明与历史索引，见[文档导航](docs/README.md) |
-
-[代码阅读顺序](docs/CODE_READING_GUIDE.md) · [Agent 工具与保存记录操作](docs/AGENT_REPLAY_GUIDE.md) · [历史归档与恢复](docs/history/README.md)
+| [PROGRESS](PROGRESS.md) | 当前完成范围、配置与待办 |
+| [PROJECT_METRICS](docs/PROJECT_METRICS.md) | RAG/Agent/Auto质量、成本、检索和失败证据 |
+| [代码阅读](docs/CODE_READING_GUIDE.md) / [Agent操作](docs/AGENT_REPLAY_GUIDE.md) | 文件职责、工具与保存记录 |
+| [实验索引](evaluation/results/README.md) / [历史归档](docs/history/README.md) | 原始报告、问题、Gold、失败和版本快照 |
+| [预期全流程](docs/PROJECT_WORKFLOW.md) | 阶段目标；不作为实际进度表 |

@@ -6,9 +6,11 @@
 
 | 目录 | 内容与结论边界 |
 | --- | --- |
+| [chinese_comparison_20261024](chinese_comparison_20261024/report.md) | 当前中文“区别是什么”绑定修复；345项后端/27项网页通过；真实Agent 102.13秒/9请求/34320 token，核心任务与机制人工核对通过；一次复核登记失败及修订保留，无独立新分数 |
+| [P4当前状态与总览整理](../../docs/maintenance/p4_closeout_20261024/report.md) | 只读取已有证据，更新当前入口/模型/库、归档旧文档、统一分版本质量与成本；本轮新增模型/公网请求0 |
 | [auto_comparison_20261023](auto_comparison_20261023/report.md) | 用户实际比较题修复与网页恢复；331项离线通过；最终30.98秒/2请求/4037 token，核心比较通过但附带训练句引用覆盖仍不全；五轮真实开发共21请求/54187 token，失败保留，无独立新分数 |
 | [ui_prototype_20261023](ui_prototype_20261023/report.md) | P4本地网页小版本；三个真实历史案例、实时提问与引用展示；浏览器真实RAG检查2模型请求/2805 token，无arXiv，无新独立质量分数，生产后端未改 |
-| [backend_reliability_20261023](backend_reliability_20261023/report.md) | 最新后端故障交付/诊断/统一结果修复；新增16项、全套314项离线通过；真实n06搜索超时后degraded并交付未核实说明，4模型POST/4915 token、1GET，无重试，无新独立分数 |
+| [backend_reliability_20261023](backend_reliability_20261023/report.md) | 10月23日后端故障交付/诊断/统一结果修复；新增16项、当时全套314项离线通过；真实n06搜索超时后degraded并交付未核实说明，4模型POST/4915 token、1GET，无重试，无新独立分数 |
 | [p3_closeout_20261023](p3_closeout_20261023/report.md) | 此前功能/瑕疵收尾与两条真实开发复验；均通过标题校验后遇搜索429，1降级/1失败，完整任务0/2；9模型POST/12278 token、2GET，未读PDF，原成绩不改 |
 | [p3_subject_fix_20261022](p3_subject_fix_20261022/report.md) | 10月22日起、23日收尾；修复来源修饰词的书目误拒绝，新增7项、全套298项离线通过，模型/公网新增请求0；原失败及成绩保留，未作真实模型复验 |
 | [p3_validation_20261022](p3_validation_20261022/report.md) | 修复前六题冻结Agent-off/on为4/6、5/6，Auto次级1/2；76请求，来源修饰词导致2路径失败/降级，当时稳定性未通过，原记录未重跑 |

@@ -262,7 +262,7 @@ class AnswerAuditTests(unittest.TestCase):
             root, upstream, loader = self.run_saved(temporary, call, missing(supported(0)), 'model_stop')
             with loader:
                 summary = agent.run_answer(root, upstream, root / 'answer', call)
-            self.assertIn('证据不足', (root / 'answer/answer.md').read_text())
+            self.assertIn('Insufficient evidence', (root / 'answer/answer.md').read_text())
         call.assert_not_called()
         self.assertEqual(summary['api_attempts'], 0)
         self.assertEqual(summary['answer_status'], 'insufficient_evidence')

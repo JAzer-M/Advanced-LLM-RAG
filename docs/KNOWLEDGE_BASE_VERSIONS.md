@@ -2,14 +2,19 @@
 
 当前已实现：每个版本独立保存索引、分块与清单；构建不会覆盖旧库，也不会默认切换正在使用的库。问答、答案评估、检索评估和 Gold 核对使用同一个版本读取模块。
 
-本次用原三篇论文建立了两个版本，并未新增论文：
+截至2026-10-24，本机保留以下版本；日期实验中的规模按当时版本理解：
 
 | 版本名 | 来源 | 分块数 / 向量维度 |
 | --- | --- | --- |
 | `legacy-3papers-20261019` | 原始 Semantic 索引与 JSON 的逐字节快照 | 378 / 384 |
 | `semantic-mac-20261019` | Mac 从原三篇 PDF 重新解析、分块、编码并构建 | 378 / 384 |
+| `arxiv-pilot-5-20261019` | 五篇先导论文 | 1019 / 384 |
+| `all-papers-8-20261020` | 八篇实验基线；Agent/Auto未指定版本时使用 | 1397 / 384 |
+| `webui-72bf8b69e9cf45f28135637e5ead075c` | 当前网页九篇库，含Mamba | 1767 / 384 |
 
-当前激活 `semantic-mac-20261019`。验证记录见 [本次操作结果](../evaluation/results/kb_versions_20261019/verification.json)。
+全局激活仍为 `semantic-mac-20261019`；RAG未指定版本时读它。Agent/Auto默认八篇，但三模式均可显式传入合法`kb_version`，工具资源必须与问题版本一致。网页另从`data/webui/library.json`读版本，当前为上表九篇库，三模式在提交时固定同一网页版本。[当前状态快照](maintenance/p4_closeout_20261024/current_state.json)
+
+网页指针、上传PDF和新版本不进入Git。本地提交后在另一台机器克隆，不会自动拥有当前九篇库；迁移须另行复制成对索引/chunks/manifest并校验。首次导入标题回退前的网页版本也保留。[PDF入库与去重/失败边界](WEBUI_PDF_IMPORT_2026-10-24.md)。10月19日原三篇版本的验证记录见[历史操作结果](../evaluation/results/kb_versions_20261019/verification.json)。
 
 ## 文件如何组织
 
@@ -49,7 +54,7 @@ data/processed/
 .venv/bin/python -m src.knowledge_base activate semantic-mac-20261019
 ```
 
-之后照常运行 `main.py`，启动信息会显示所用知识库版本。已开始的单次问答继续使用开始时加载的版本；答案评估还会在整轮开始时固定版本，避免中途切换后混用不同库。
+`activate`只改变全局指针，影响未显式指定版本的RAG；不改变默认八篇的Agent/Auto或网页指针。CLI默认auto，若要使用全局激活库需显式选`--mode rag`。启动信息显示实际版本；已开始的问答及整轮答案评估固定其加载版本，避免中途混用。
 
 ## 以后构建一个新版本
 
@@ -66,7 +71,7 @@ data/processed/
 .venv/bin/python -m src.knowledge_base activate semantic-v2
 ```
 
-Mac 构建沿用 [已验证的单线程与离线运行条件](MAC_AUDIT_2026-10-19.md)。本次实际构建进程设置了 OMP/OpenBLAS/MKL/Accelerate 线程上限、关闭 Tokenizers 并行，并设置 PyTorch intra-op / inter-op 线程为 1；这些不是全局或 PyCharm 的持久配置。默认线程批量崩溃的根因仍未定位。
+Mac 构建沿用[单线程与离线运行条件](MAC_AUDIT_2026-10-19.md)。10月19日构建进程设置了OMP/OpenBLAS/MKL/Accelerate线程上限、关闭Tokenizers并行，并将PyTorch intra-op/inter-op设为1；这些不是全局或PyCharm持久配置。默认线程批量崩溃的根因仍未定位。
 
 `--raw-dir` 可指定另一份 PDF 目录，默认为现有 `data/raw/`。如希望构建成功后立即切换，可额外加 `--activate`；校验失败时不会执行切换。`build_recursive_index.py` 仍是历史 Recursive 对照入口，不参与这里的 Semantic 版本选择。
 

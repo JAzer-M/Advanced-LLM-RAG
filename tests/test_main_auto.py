@@ -58,7 +58,7 @@ class MainAutoTests(unittest.TestCase):
         stop=missing(assessment());stop['next_action'].update(type='stop',query=None,source=None)
         replies=[response(fixtures.DECOMPOSE),answer_response('当前证据不足，无法回答。'),response(plan()),response(stop)]
         with TemporaryDirectory() as temporary:result,call=self.invoke(Path(temporary)/'run',replies)
-        self.assertEqual(result['status'],'completed');self.assertIn('证据不足',result['answer'])
+        self.assertEqual(result['status'],'completed');self.assertIn('Insufficient evidence',result['answer'])
         self.assertEqual(result['agent']['answer_summary']['api_attempts'],0)
         self.assertEqual(result['agent']['halt_reason'],'model_stop');self.assertEqual(call.call_count,4)
 
@@ -77,7 +77,7 @@ class MainAutoTests(unittest.TestCase):
         with TemporaryDirectory() as temporary:
             out=Path(temporary)/'run';result,call=self.invoke(out,replies)
             self.assertFalse((out/'fallback.md').exists())
-        self.assertEqual(result['status'],'failed');self.assertIn('未完成',result['answer'])
+        self.assertEqual(result['status'],'failed');self.assertIn('did not finish',result['answer'])
         self.assertNotIn('[99]', result['answer'])
         self.assertIn('citation_repair_failed',result['routing']['trigger_signals']);self.assertEqual(call.call_count,5)
 
@@ -88,7 +88,7 @@ class MainAutoTests(unittest.TestCase):
             out=Path(temporary)/'run';result,call=self.invoke(out,replies)
             self.assertEqual(json.loads((out/'loop/question.json').read_text())['status'],'failed')
             self.assertTrue((out/'fallback.md').exists())
-        self.assertEqual(result['status'],'degraded');self.assertIn('补查未完成',result['answer'])
+        self.assertEqual(result['status'],'degraded');self.assertIn('did not finish',result['answer'])
         self.assertIn(PARTIAL,result['answer']);self.assertEqual(result['fallback']['agent_status'],'failed')
         self.assertEqual(call.call_count,4)
 
@@ -111,7 +111,7 @@ class MainAutoTests(unittest.TestCase):
             out=Path(temporary)/'run'
             result=pipeline.main('Describe A.',mode='auto',output_dir=out)
             self.assertEqual(result['status'],'failed');self.assertIn('HTTP 503',result['error'])
-            self.assertIn('未完成',result['answer'])
+            self.assertIn('did not finish',result['answer'])
             self.assertEqual(json.loads((out/'result.json').read_text())['status'],'failed')
         self.assertEqual(call.call_count,2)
 

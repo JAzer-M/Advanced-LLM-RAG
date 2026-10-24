@@ -26,6 +26,7 @@ import time
 from sentence_transformers import CrossEncoder
 
 from src import api_llm as api
+from src.answer_language import LANGUAGE_RULE, answer_language, localized
 from src.api_llm import generate_final_answer, load_settings
 from src.bm25_retriever import build_bm25_index, retrieve_bm25
 from src.citation_validation import repair_citations_once
@@ -149,12 +150,12 @@ def build_prompt(query, context):
         "are rule-based; check them against the sources. For kernel H x W x C, "
         "H x W is the spatial size and C is channels per kernel; a kernel count "
         "is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n"
-        "11. Respond in Simplified Chinese unless the question explicitly requests "
-        "another language. Keep technical names in their original form.\n"
+        "11. " + LANGUAGE_RULE + "\n"
         "12. For unsupported parts of the question, state the missing evidence "
         "concisely. Do not substitute measurements from other hardware, datasets "
         "or settings, or append unrelated facts to a refusal. For an entirely "
-        "unsupported Chinese question, begin with 当前证据不足 and explain what is missing "
+        "unsupported question, begin with 当前证据不足 when answering in Chinese, or with "
+        "\"Insufficient evidence\" when answering in English, and explain what is missing "
         "in only one or two sentences, without any supplementary measurements.\n"
         "13. Answer only the scope actually requested. Missing unasked details "
         "are not grounds for an insufficiency warning. When the requested main "
@@ -525,10 +526,14 @@ def has_evidence_gap(query, answer):
         # 只忽略已有引文之后的未要求评测说明；夹带核心事实缺口时仍保留信号。
         kept, prefix = [], ''
         for sentence in re.split(r'(?<=[。；\n.!?])', answer):
-            optional = re.search(r'性能|优劣|基准|胜负|直接(?:比较|对比)|head.to.head|benchmark|performance', sentence, re.I)
+            optional = re.search(r'性能|优劣|基准|胜负|直接(?:比较|对比)|head.to.head|benchmark|performance'
+                                 r'|direct(?:ly)?\s+compar', sentence, re.I)
             core_gap = re.search(
                 r'(?:不足|未说明|未提供|未给出|未包含|没有|缺少|缺失|无法|不能).{0,30}'
-                r'(?:架构|机制|用途|定义|原理|输入|输出|任务目标|介绍|关于.{0,12}的信息)', sentence)
+                r'(?:架构|机制|用途|定义|原理|输入|输出|任务目标|介绍|关于.{0,12}的信息)'
+                r'|\b(?:no|not|lacks?|missing|insufficient|cannot)\b.{0,40}'
+                r'\b(?:architecture|mechanism|purpose|definition|principle|inputs?|outputs?|objective|description|information about)\b',
+                sentence, re.I)
             if not (optional and re.search(r'\[\d+\]', prefix) and not core_gap):
                 kept.append(sentence)
             prefix += sentence
@@ -589,7 +594,10 @@ def _answer_with_agent(initial, resources, output, call, mode='agent', allow_net
     def preserve_initial_answer():
         # 决策/复核失败保留可见失败，只用已完成且引用结构合格的初检回答降级交付。
         if probe and probe['citation_validation']['final_check']['structure_passed']:
-            result.update(status='degraded',answer=(network_notice or '补查未完成，以下仅依据初检证据回答，仍保留原有缺口：')+'\n'+probe['answer'],
+            result.update(status='degraded',answer=(network_notice or localized(
+                              initial['query'], '补查未完成，以下仅依据初检证据回答，仍保留原有缺口：',
+                              'Extra evidence checking did not finish. The answer below uses only the initial '
+                              'evidence and keeps its existing gaps:'))+'\n'+probe['answer'],
                           answer_strategy='initial_rag_after_agent_failure',
                           context=initial['context'],ledger=initial['ledger'],selected_ids=initial['selected_ids'],
                           fallback={'reason':result.get('error','Agent answer review failed.'),'agent_status':'failed'})
@@ -632,16 +640,25 @@ def _answer_with_agent(initial, resources, output, call, mode='agent', allow_net
                 return preserve_initial_answer()
             # 获取失败与论文未报告是两回事；仍可用已校验的本地原文完成有限回答。
             trace = failure['trace']
-            cause = {'rate_limited': 'arXiv请求受到限流（HTTP 429）', 'timeout': 'arXiv请求超时',
-                     'http_error': f"arXiv请求失败（HTTP {trace.get('http_status')}）",
-                     'transport_error': 'arXiv连接失败'}[kind]
-            network_notice = cause + '，补查未完成。尚未取得所需原文，暂时无法核实；不能据此判断论文是否报告了所问内容。'
             delay = trace.get('retry_after_seconds')
-            if delay is not None:
-                network_notice += f'服务端提示至少等待{delay}秒后再尝试，本轮未自动重试。'
+            if answer_language(initial['query']) == 'zh':
+                cause = {'rate_limited': 'arXiv请求受到限流（HTTP 429）', 'timeout': 'arXiv请求超时',
+                         'http_error': f"arXiv请求失败（HTTP {trace.get('http_status')}）",
+                         'transport_error': 'arXiv连接失败'}[kind]
+                network_notice = cause + '，补查未完成。尚未取得所需原文，暂时无法核实；不能据此判断论文是否报告了所问内容。'
+                network_notice += (f'服务端提示至少等待{delay}秒后再尝试，本轮未自动重试。' if delay is not None
+                                   else '服务端未提供有效等待时间，本轮未自动重试。')
+                network_notice += '\n以下仅依据本地证据回答，仍保留未核实的需求：'
             else:
-                network_notice += '服务端未提供有效等待时间，本轮未自动重试。'
-            network_notice += '\n以下仅依据本地证据回答，仍保留未核实的需求：'
+                cause = {'rate_limited': 'arXiv rate-limited the request (HTTP 429)', 'timeout': 'The arXiv request timed out',
+                         'http_error': f"The arXiv request failed (HTTP {trace.get('http_status')})",
+                         'transport_error': 'Could not connect to arXiv'}[kind]
+                network_notice = (cause + ', so extra checking did not finish. The needed original paper was not '
+                                  'retrieved, so these points cannot be verified yet; this does not show whether '
+                                  'the paper reports them. ')
+                network_notice += (f'The server asked to wait at least {delay} seconds; no automatic retry was made.'
+                                   if delay is not None else 'The server gave no valid wait time; no automatic retry was made.')
+                network_notice += '\nThe answer below uses only local evidence and keeps the unverified requirements:'
             result.update(answer_status='source_unavailable', stop_reason=f'external_{kind}')
             if probe and probe['citation_validation']['final_check']['structure_passed']:
                 return preserve_initial_answer()
@@ -710,14 +727,18 @@ def _finish_result(result, calls):
     checked = result.get('citation_validation', {}).get('final_check', {})
     if result['mode'] == 'rag' and checked and not checked['structure_passed']:
         result.update(status='failed', answer_status='citation_failed', stop_reason='citation_check_failed',
-                      answer='回答引用未通过校验，本轮无法交付可靠的事实性答案。')
+                      answer=localized(result.get('query'), '回答引用未通过校验，本轮无法交付可靠的事实性答案。',
+                                       'The answer failed the citation check, so no reliable factual answer '
+                                       'can be delivered this time.'))
     result.setdefault('answer_status', result.get('network', {}).get('answer_status') or
                       result.get('agent', {}).get('answer_summary', {}).get('answer_status') or
                       ('unavailable' if result['status'] == 'failed' else 'not_reviewed'))
     result.setdefault('stop_reason', 'processing_failed' if result['status'] == 'failed' else
                       result.get('agent', {}).get('halt_reason') or result.get('answer_strategy', 'rag_answer'))
     if not result.get('answer'):
-        result['answer'] = '本轮处理未完成，暂时无法核实答案。具体错误已保留在运行记录中。'
+        result['answer'] = localized(result.get('query'), '本轮处理未完成，暂时无法核实答案。具体错误已保留在运行记录中。',
+                                     'Processing did not finish, so the answer cannot be verified yet. '
+                                     'The error details are kept in the run log.')
     result.setdefault('ledger', {'citation_registry': []})
     result.setdefault('selected_ids', [])
     result.setdefault('actions', [])
@@ -820,7 +841,7 @@ def cli():
     parser = argparse.ArgumentParser(description='Paper QA: evidence-gated Auto, fixed RAG or bounded Agent.')
     parser.add_argument('query', nargs='?', help='Question; omit to enter it interactively')
     parser.add_argument('--mode', choices=('rag', 'agent', 'auto'), default='auto')
-    parser.add_argument('--kb-version', help='Explicit KB; Agent/Auto use the verified eight-paper version')
+    parser.add_argument('--kb-version', help='Explicit paired KB version; Agent/Auto default to the eight-paper baseline')
     parser.add_argument('--output-dir', type=Path, help='New empty Agent/Auto audit directory')
     parser.add_argument('--allow-network', action='store_true', help='Allow one bounded arXiv followup after a local missing-source stop')
     args = parser.parse_args()

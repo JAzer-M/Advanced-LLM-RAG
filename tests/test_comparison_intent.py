@@ -23,6 +23,36 @@ class ComparisonIntentTests(unittest.TestCase):
             self.assertNotIn('difference between vgg?', row['need'])
             self.assertNotIn('difference between rag?', row['need'])
 
+    def test_actual_chinese_trace_binds_descriptions_for_the_requested_comparison(self):
+        # 来自中文 Agent 失败记录；不能变成“VGG 自己有哪些区别”。
+        query = 'VGG和RAG的区别是什么？'
+        rows = agent.bind_requirements(self.proposal(query, ('VGG', 'RAG')), query)['requirements']
+        self.assertEqual([row['need'] for row in rows], [
+            'Describe vgg for the requested comparison.',
+            'Describe rag for the requested comparison.'])
+        self.assertTrue(all(row['question_quote'] == query for row in rows))
+
+    def test_chinese_comparisons_keep_their_requested_aspect(self):
+        for query, aspect in (
+                ('Atlas和Nova的差异是什么？', ''),
+                ('Atlas 与 Nova 在表示方式上的区别是什么？', '在表示方式上'),
+                ('Atlas和Nova在相同数据集上的性能差异是什么？', '在相同数据集上的性能')):
+            with self.subTest(query=query):
+                rows = agent.bind_requirements(self.proposal(query), query)['requirements']
+                for row in rows:
+                    self.assertIn('for the requested comparison', row['need'])
+                    self.assertIn(aspect, row['need'])
+                    self.assertEqual(row['question_quote'], query)
+                    other = 'Nova' if row['subject'] == 'Atlas' else 'Atlas'
+                    self.assertFalse(agent.names_subject(other, row['need']))
+
+    def test_old_chinese_one_sided_need_is_rejected(self):
+        query = 'VGG和RAG的区别是什么？'
+        bound = agent.bind_requirements(self.proposal(query, ('VGG', 'RAG')), query)
+        bound['requirements'][0]['need'] = 'vgg的区别是什么?'
+        with self.assertRaisesRegex(ValueError, 'bound question excerpt'):
+            agent.validate_plan(bound, query)
+
     def test_symmetric_comparisons_retain_the_relation_and_requested_aspect(self):
         for query in ('What is the difference between Atlas and Nova?',
                       'How do Atlas and Nova differ in their filter sizes?',

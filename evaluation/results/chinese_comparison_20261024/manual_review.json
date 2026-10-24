@@ -1,0 +1,122 @@
+{
+  "question": "VGG和RAG的区别是什么？",
+  "scope": "同一已知中文问题的开发回归；人工核对任务与机制，不作独立质量评分。",
+  "core_comparison": "pass",
+  "checks": [
+    {
+      "claim": "VGG 是用于 ILSVRC 图像分类的深度卷积网络方法",
+      "verdict": "pass",
+      "citations": [
+        5,
+        13,
+        11
+      ]
+    },
+    {
+      "claim": "VGG 使用堆叠的小尺寸3×3卷积，所引例子比较三个3×3与单个7×7",
+      "verdict": "pass",
+      "citations": [
+        13
+      ]
+    },
+    {
+      "claim": "RAG 检索文本文档并作为生成目标序列的额外上下文",
+      "verdict": "pass",
+      "citations": [
+        10
+      ]
+    },
+    {
+      "claim": "直接比较双方任务与方法，未再用各自内部配置或RAG/DPR比较替代原问题",
+      "verdict": "pass",
+      "citations": [
+        5,
+        13,
+        11,
+        10
+      ]
+    }
+  ],
+  "evidence": [
+    {
+      "number": 5,
+      "citation": 5,
+      "chunk_id": 304,
+      "source": "VGG.pdf",
+      "page": 8,
+      "title": "VGG",
+      "text": "Table 7: Comparison with the state of the art in ILSVRC classiﬁcation. Our method is denoted as “VGG”.",
+      "kb_version": "webui-72bf8b69e9cf45f28135637e5ead075c"
+    },
+    {
+      "number": 13,
+      "citation": 13,
+      "chunk_id": 245,
+      "source": "VGG.pdf",
+      "page": 3,
+      "title": "VGG",
+      "text": "Network A,A-LRN B C D E Number of parameters 133 133 134 138 144 such layers have a 7 × 7 effective receptive ﬁeld. So what have we gained by using, for instance, a stack of three 3×3 conv. layers instead of a single 7×7 layer? First, we incorporate three non-linear rectiﬁcation layers instead of a single one, which makes the decision function more discriminative.",
+      "kb_version": "webui-72bf8b69e9cf45f28135637e5ead075c"
+    },
+    {
+      "number": 11,
+      "citation": 11,
+      "chunk_id": 333,
+      "source": "VGG.pdf",
+      "page": 10,
+      "title": "VGG",
+      "text": "Apart from the last bounding box prediction layer, we use the ConvNet architecture D (Table 1), which contains 16 weight layers and was found to be the best-performing in the classiﬁcation task (Sect. Training of localisation ConvNets is similar to that of the classiﬁcation ConvNets (Sect. The main difference is that we replace the logistic regression objective with a Euclidean loss, which penalises the deviation of the predicted bounding box parameters from the ground-truth.",
+      "kb_version": "webui-72bf8b69e9cf45f28135637e5ead075c"
+    },
+    {
+      "number": 10,
+      "citation": 10,
+      "chunk_id": 736,
+      "source": "2005.11401v4.pdf",
+      "page": 2,
+      "title": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks",
+      "text": "2 Methods We explore RAG models, which use the input sequence x to retrieve text documents z and use them as additional context when generating the target sequence y.",
+      "kb_version": "webui-72bf8b69e9cf45f28135637e5ead075c"
+    }
+  ],
+  "condition_boundary": "附带的D/16权重层及best-performing只按引用[11]原段的分类/定位实验上下文理解；本轮不评判所有VGG配置的全局优劣。",
+  "review_repair": {
+    "first_error": "Review cites a source not cited by its answer quote.",
+    "existing_bounded_repair_used": true,
+    "final_answer_status": "review_passed",
+    "new_retry_policy": false
+  },
+  "initial_retrieval_comparison": {
+    "initial_ids_equal": false,
+    "context_equal": false,
+    "old_initial_ids": [
+      779,
+      336,
+      1289,
+      349,
+      803,
+      304,
+      832,
+      222,
+      331,
+      831
+    ],
+    "new_initial_ids": [
+      779,
+      336,
+      1289,
+      927,
+      304,
+      832,
+      331,
+      347,
+      247,
+      736
+    ],
+    "interpretation": "两次真实运行初检不同，不能将耗时或调用差异解释为严格受控收益。"
+  },
+  "limits": [
+    "仅一题真实Agent验证；Auto/英文由离线回归覆盖，未另发真实请求。",
+    "未重跑独立题集或重算旧成绩。"
+  ]
+}

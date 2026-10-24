@@ -1,6 +1,6 @@
 # 代码阅读说明与 Agent 当前边界
 
-更新：2026-10-23（Asia/Shanghai，后端稳定性修复）。外部失败现在仍交付本地有限回答或未核实说明，HTTP保留诊断，三模式返回结果统一。新增16项、全套314项离线通过；真实n06遇搜索超时后degraded/source_unavailable，4模型请求/4915 token、1GET，无重试。来源可用性尚未恢复，旧失败和成绩保留。[本轮修复](../evaluation/results/backend_reliability_20261023/report.md) · [字段与优先级](BACKEND_RESULT.md)。
+更新：2026-10-24（Asia/Shanghai）。当前保存的回归为345项后端与27项网页通过；中文比较、回答语言及JSON代码块兼容已修复，网页支持独立配对版本和PDF入库。完整现状以[PROGRESS](../PROGRESS.md)为准，[分版本结果](PROJECT_METRICS.md)区分历史失败与当前开发回归。下文按阶段保留实现演进和旧运行证据，不把旧测试数量或当时限制当成今天的状态。
 
 ## 1. 当前做出了什么
 
@@ -13,10 +13,12 @@
 | `main.py` | CLI默认RAG优先Auto，函数默认RAG；三模式共用初检 | Auto先检查原RAG回答的明确缺口/引用状态，再按需升级；Agent内部模型选行动 |
 | `src/evidence_gap.py` | 按来源覆盖和局部片段入选信号，实际补检索并重新选择证据 | 固定规则；不使用 LLM 判断具体事实是否已有支持 |
 | `agent.py` | 抽取需求、检查原文，单步或有限循环执行本地工具 | LLM提出建议，本地校验/预算约束执行；有记录的章节规则可改选重复或重叠行动 |
-| `src/agent_tools.py` | 搜索八篇库、读取同篇论文邻段，返回真实原文和轨迹 | 普通函数执行，由`agent.py`的执行入口分派 |
+| `src/agent_tools.py` | 搜索所选配对库（默认八篇）、读取同篇论文邻段，返回真实原文和轨迹 | 普通函数执行，由`agent.py`的执行入口分派 |
 | `src/agent_answer.py` | 生成答案、逐项复核、最多修订一次；全缺失时直接说明缺口 | 模型判断内容，本地严格核对复核结构与逐字引文，预算约束执行 |
 | `src/arxiv_tools.py` | arXiv题录搜索、固定版本PDF读取与原文保存 | 普通函数执行有预算GET，题录不作为回答证据 |
 | `src/arxiv_evidence.py` | 本地缺源后路由/选论文、原文选段登记、复用检查与回答复核 | LLM仅在三个决策点提建议，Python核对来源、原文和预算 |
+| `src/answer_language.py` / `src/model_json.py` | 程序固定提示的中英选择、回答语言规则；只剥整段JSON代码块 | 普通函数；不替代各处字段校验 |
+| `webui/server.py` / `webui/library.py` | 网页worker、公开字段/配置接口；上传、独立库指针和配对版本发布 | 本机服务调度，问答仍调用main |
 
 `agent.py`并非只做补查：它判断能否回答、应否停止及是否适合读邻段。默认模式保存建议，单步模式执行一次，循环模式最多执行三次；固定RAG的原有补查仍来自`main.py`调用的`evidence_gap.py`。
 
@@ -26,7 +28,7 @@
 2. `_run_pipeline()`共用原分解、混合检索、重排和规则补查。固定Agent不先生成RAG草稿；Auto的草稿在`_answer_with_agent()`内生成，原检索与五个辅助函数保持。
 3. `_answer_with_agent()`的Auto分支先调用原build_prompt/repair_citations_once，记录probe.json；无缺口则direct，Agent调用0。有明确缺口/引用失败则先写routing.json，再运行既有独立规划/判断和工具循环，最后原回答复核；草稿不进入Agent白名单。
 4. 循环失败时仅引用结构合格的初稿可标degraded保留；失败记录不抹掉，CLI非零。没有有效初稿则failed。原route_only暂停能力作为既有函数接口保留，最终Auto不依赖它；未采用的combined gate已删除。
-5. `cli()`支持三模式、版本、空审计目录及可选问题。Auto/Agent用八篇库，不切指针；日志在logs/auto_runs或agent_runs，原目录不重跑。
+5. `cli()`支持三模式、版本、空审计目录及可选问题。Auto/Agent默认八篇，也可显式选合法配对库，不切指针；网页提交时固定自己的版本。日志在logs/auto_runs或agent_runs，原目录不重跑。
 6. `--allow-network`将本地正常`model_stop`接到`run_arxiv_followup()`，不改原本地动作协议。证据已齐、明确主论文已在库或未开启时不做arXiv GET；最终答案仍复用原复核。独立`agent.py`诊断入口不会因此自动联网。
 7. 外部传输失败保持network.failed及工具轨迹，`_answer_with_agent()`交付有限本地结果并标degraded/source_unavailable。全部missing时零回答调用；部分支持仍复用`run_answer()`，其`source_unavailable=True`将回答输入的未完成缺口改为尚未核实，原loop判断保留。来源/版本/引文校验错误不走临时网络降级。
 8. `_record_call()`共用调用审计，`_finish_result()`补齐三模式的状态、答案/说明、证据、行动、停止原因和成本。运行时异常返回failed，CLI非零；评测采集必须保留该失败。RAG生成失败仍保留初检原文。[返回约定](BACKEND_RESULT.md)
@@ -128,7 +130,7 @@ P2.2当时全部142项测试通过；单步增加16项、循环再增加22项后
 
 - 46 个当前 Python 文件新增 180 行中文注释及 46 行分隔空行；执行语句、字符串字面量、函数签名、已有注释和文档字符串均保留。
 - 修改前保存源码副本，逐文件比较忽略位置信息的 AST 与去除注释/空白 NL 的代码词元，并进行纯编译检查；没有执行建库或付费评测入口。
-- 当前注释版重新运行全部 **123 项 unittest，通过，无失败或跳过**。测试期间阻断 socket 连接；真实项目生成 API 调用为 0，没有新增测试或依赖。
+- 当时注释版重新运行全部 **123 项 unittest，通过，无失败或跳过**。测试期间阻断 socket 连接；真实项目生成 API 调用为 0，没有新增测试或依赖。这是10月20日的注释整理记录，当前总数见本页开头。
 - 历史实验驱动/源码快照、题集、PDF、索引、激活指针、旧日志和统计结果保留；未编辑虚拟环境和第三方代码。完整源码前后哈希与核对结果见 [verification.json](code_comments_20261020_verification.json)。
 
 **源码哈希与历史续接：** 注释不改变执行语句，但会改变源码字节。`run_diagnostics()` 有意使用原文件哈希绑定实验协议，所以当前注释版不能直接向 P2.1 的旧输出目录续接。旧目录中“同源码续接新增调用 0”是当时的实测记录。查看历史结果无需运行；今后明确需要新实验时使用新目录并记录新的调用。旧源码快照和协议保持原样，不能为接受当前源码而修改历史哈希。

@@ -2,6 +2,8 @@
 
 本页从清理前 README 独立整理，保留 P2.1～P2.4 的输入输出、预算和历史命令。日常新问题从 [main 运行入口](../README.md)进入；最新 Auto、P2.5 结果及限制见 [PROGRESS](../PROGRESS.md)。以下阶段结果按当时版本理解，旧 h10 成功不能替代最新版升级失败记录。
 
+2026-10-24当前入口：main的Agent/Auto未指定版本时默认八篇，显式`kb_version`可选合法配对库；网页另用自己的当前版本。回答语言跟随问题，模型JSON支持整段代码块；中文比较需求修复见[报告](../evaluation/results/chinese_comparison_20261024/report.md)。历史命令/目录不因这些改动而重新运行或续写。
+
 所有命令在项目根目录执行。恢复上下文先读已有日志；使用新目录执行会产生真实 API 请求，旧目录受源码／输入哈希校验，不能用当前源码强行续写。
 
 ## P2第一步诊断入口
@@ -21,7 +23,7 @@ PYTHONDONTWRITEBYTECODE=1 .venv/bin/python agent.py \
 
 ## P2.2 本地搜索与邻段读取工具
 
-`load_search_resources()`加载一次八篇配对库和CPU模型；`search_local_kb(query, resources, source=None)`执行Dense/BM25 → RRF → BGE，候选120、返回最多10条。`source`须为库内精确文件名，传None则搜索全库；它只检索，不调用分解或生成API。
+`load_search_resources(version=SEARCH_KB_VERSION)`加载一次所选配对库和CPU模型，默认八篇实验基线，也支持显式版本。`search_local_kb(query, resources, source=None)`执行Dense/BM25 → RRF → BGE，候选120、返回最多10条。`source`须为库内精确文件名，传None则搜索全库；它只检索，不调用分解或生成API。
 
 ```python
 from src.agent_tools import load_search_resources, search_local_kb

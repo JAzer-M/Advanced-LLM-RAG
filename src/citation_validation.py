@@ -7,6 +7,8 @@ import json
 import re
 import unicodedata
 
+from src.model_json import loads_model_json
+
 
 def has_source_quote(quote, passage):
     """仅兼容原文排版：字母间连字符后的空白可忽略，保留连字符、数字和句序。"""
@@ -99,7 +101,7 @@ def repair_citations_once(query, context, answer, registry, generate):
     response = generate(prompt)
     result.update(repair_attempted=True, repair_prompt=prompt, repair_response=response)
     try:
-        mapping = json.loads(response)
+        mapping = loads_model_json(response)
     except json.JSONDecodeError:
         result['status'] = 'invalid_response'
         return result
