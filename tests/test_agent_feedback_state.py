@@ -12,7 +12,12 @@ from test_agent_feedback import tool_result
 from test_agent_step1 import response
 
 
+LOCAL_KB = Path(__file__).resolve().parents[1] / 'data/processed/versions' / tools.SEARCH_KB_VERSION / 'chunks.json'
+
+
 class SavedFeedbackStateTests(unittest.TestCase):
+    # 八篇实验库含论文分块原文，不随仓库发布；干净克隆（如CI）中跳过，本机完整环境照常运行。
+    @unittest.skipUnless(LOCAL_KB.is_file(), 'requires the local eight-paper experiment knowledge base')
     def test_unrelated_search_does_not_erase_an_already_supported_requirement(self):
         project = Path(__file__).resolve().parents[1]
         saved = project / 'evaluation/results/agent_auto_improvement_20261022/scoped_inputs/runs/h10_auto/loop'

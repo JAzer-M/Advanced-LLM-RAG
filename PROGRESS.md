@@ -55,6 +55,8 @@ Agent工具最多3行动；规划/状态修正或重复行动改选共用一次�
 
 **Mac 预览下载包（10月24日）：** 用户数据迁至`~/Library/Application Support/PaperLens/`，冻结程序自启后台进程，首次启动下载固定版本MiniLM/BGE（1.61 GB，可中断续传，完成前禁止上传），网页增加退出按钮。PyInstaller三次构建（缓存权限失败、torchvision本地库缺失、成功），生成`releases/PaperLens-0.1.0-macos-arm64-preview.zip`（276 MB，ad-hoc签名）。解压版从空数据目录和空模型缓存完成入库及RAG/Agent/Auto问答：9请求、17168 token、0失败；重复上传、无正文PDF、退出与重启通过；包内无密钥、论文或权重。验收由Codex完成，报告由Claude据原始记录补写。[报告](docs/maintenance/macos_package_20261024/report.md) · [构建说明](packaging/macos/README.md)
 
+**发布准备（10月24日）：** README改为展示页（截图、架构图、检索消融与回答对照、局限），旧版全文存于[历史目录](docs/history/README_BEFORE_SHOWCASE_2026-10-24.md)；新增MIT许可与GitHub Actions离线测试（CPU版torch，干净克隆中跳过1项依赖本机八篇库的测试）；`docs/chat_history/`改为仅本机保存、不再跟踪，但仍存在于未推送提交`00d7f6e`的历史中。CI尚未在GitHub上实际运行。
+
 **接下来交付工作：**
 
 1. 发布 Mac 预览包：决定是否办理 Developer ID 签名与公证（不办理则用户需右键打开），在另一台无开发环境的 Mac 上验收，再创建 GitHub Release。重建时带上断线提示文案更新。Windows 锁与启动方式需单独处理。[下载包验收](docs/maintenance/macos_package_20261024/report.md)
