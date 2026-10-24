@@ -47,8 +47,8 @@ class RuntimeTests(unittest.TestCase):
 
     def test_managed_models_live_with_user_data(self):
         with patch.dict(os.environ, {'PAPERLENS_DATA_DIR':'/test/paperlens'}):
-            self.assertEqual(model_location('BAAI/bge-reranker-base'),
-                             '/test/paperlens/models/BAAI--bge-reranker-base/2cfc18c9415c912f9d8155881c133215df768a70')
+            expected = Path('/test/paperlens').resolve()/'models/BAAI--bge-reranker-base/2cfc18c9415c912f9d8155881c133215df768a70'
+            self.assertEqual(model_location('BAAI/bge-reranker-base'), str(expected))
 
 
 if __name__ == '__main__':

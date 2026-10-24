@@ -67,7 +67,8 @@ class ModelConfigTests(unittest.TestCase):
         self.assertEqual(data['api_key'], 'test-secret')
         self.assertEqual(data['model'], 'new')
         self.assertEqual(data['chat_options'], {'temperature':0.2})
-        self.assertEqual(self.path.stat().st_mode & 0o777, 0o600)
+        if os.name != 'nt':  # Windows 没有 POSIX 权限位，chmod 只能控制只读，无法表达 0600
+            self.assertEqual(self.path.stat().st_mode & 0o777, 0o600)
         self.assertNotIn(b'test-secret', raw)
 
     def test_rejects_bad_and_cross_origin_config_without_mutation(self):
