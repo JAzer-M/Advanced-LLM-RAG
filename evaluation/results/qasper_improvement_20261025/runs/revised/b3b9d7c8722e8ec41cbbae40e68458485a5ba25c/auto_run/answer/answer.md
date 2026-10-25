@@ -1,0 +1,3 @@
+Speech alignment (audio-text) quality is evaluated by a manual human evaluation using a 3-point scale.
+
+The audio-text alignment quality was rated on a 3-point scale: 1 Wrong alignment, 2 Partial alignment (some words or sentences may be missing), 3 Correct alignment (allowing non-spoken syllables at start or end) [1]. Two annotators each rated 30 items from each of three bins split by hunalign confidence score ranges, with 10 overlapping items to measure inter-annotator reliability [1][9], and agreement was computed with Krippendorff's α-reliability score, yielding 1.00 for audio-text alignment ratings [7]. The evaluation found the audio-text alignment to be of high quality overall [10], averaged over 90 items and two raters [8].

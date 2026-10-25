@@ -1,0 +1,125 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "For the paper \"Verb Pattern: A Probabilistic Semantic Representation on Verbs\" (arXiv: 1710.07695), answer this question: what do they mean by description length?",
+  "kb_version": "qasper-holdout-20261025",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": false,
+    "drafts": [
+      "在本文中，\"description length\"(描述长度) L(f) 指对给定模式分配函数 f 的总编码长度。其思想来自最小描述长度(MDL),即数据压缩：动词模式可视为动词短语的压缩表示，若模式分配能对短语给出紧凑描述，就很好地刻画了动词的语义；因此目标是寻找使短语的 code length 最小的分配函数 f [4]。具体计算上，description length 是通过把所有 n 个短语的 code lengths 求和得到的 [9],并用于模拟退火中决定是否接受新的分配 f^(i+1) [3]。"
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "在本文中，\"description length\"(描述长度) L(f) 指对给定模式分配函数 f 的总编码长度。其思想来自最小描述长度(MDL),即数据压缩：动词模式可视为动词短语的压缩表示，若模式分配能对短语给出紧凑描述，就很好地刻画了动词的语义；因此目标是寻找使短语的 code length 最小的分配函数 f [4]。具体计算上，description length 是通过把所有 n 个短语的 code lengths 求和得到的 [9],并用于模拟退火中决定是否接受新的分配 f^(i+1) [3]。",
+              "reason": "回答准确解释了论文中 description length 的含义：来自 MDL/数据压缩思想，指对给定分配函数 f 的总编码长度，由所有 n 个短语 code lengths 求和得到，并用于 SA 接受准则。三个引用均与原文匹配且支持相应论述，无未支持断言。",
+              "citations": [
+                {
+                  "number": 4,
+                  "quote": "MDL is based on the idea of data compression. Verb patterns can be regarded as a compressed representation of verb phrases. Intuitively, if the pattern assignment provides a compact description of phrases, it captures the underlying verb semantics well. Given verb phrases, we seek for the best assignment func- tion f that minimizes the code length of phrases."
+                },
+                {
+                  "number": 9,
+                  "quote": "Next, we compute the description length for f (i+1) by summing up all n phrases’ code lengths."
+                },
+                {
+                  "number": 3,
+                  "quote": "where L(f (i+1)) is the description length for f (i+1), S is the number of steps performed in SA, and A is a constant to control the speed of cooling process."
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            3,
+            4,
+            9
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 3,
+              "chunk_id": 453,
+              "source": "1710.07695.pdf",
+              "page": 4,
+              "text": "2. Randomly select a new pattern a. For each p, ( t(p, a) > t(p, f (i)(p)) a f (i+1)(p) = (12) f (i)(p) otherwise , where f (i) is the assignment in the i-th iteration. 3. Accept f (i+1) with probability: ( L(f (i+1)) < L(f (i)) 1 p = L(f (i+1)) ≥L(f (i)) (13) e(L(f(i))−L(f(i+1)))/SA , where L(f (i+1)) is the description length for f (i+1), S is the number of steps performed in SA, and A is a constant to control the speed of cooling process."
+            },
+            {
+              "citation": 4,
+              "chunk_id": 434,
+              "source": "1710.07695.pdf",
+              "page": 3,
+              "text": "We ﬁrst discuss our intuition to use Mini- mum Description Length (MDL) (Barron, Rissanen, and Yu 1998). MDL is based on the idea of data compression. Verb patterns can be regarded as a compressed representation of verb phrases. Intuitively, if the pattern assignment provides a compact description of phrases, it captures the underlying verb semantics well. Given verb phrases, we seek for the best assignment func- tion f that minimizes the code length of phrases."
+            },
+            {
+              "citation": 9,
+              "chunk_id": 456,
+              "source": "1710.07695.pdf",
+              "page": 4,
+              "text": "Next, we compute the description length for f (i+1) by summing up all n phrases’ code lengths. This step also costs O(n) time. Suppose our algorithm terminates after S iterations. The entire complexity thus is O(Sn)."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "在本文中，\"description length\"(描述长度) L(f) 指对给定模式分配函数 f 的总编码长度。其思想来自最小描述长度(MDL),即数据压缩：动词模式可视为动词短语的压缩表示，若模式分配能对短语给出紧凑描述，就很好地刻画了动词的语义；因此目标是寻找使短语的 code length 最小的分配函数 f [4]。具体计算上，description length 是通过把所有 n 个短语的 code lengths 求和得到的 [9],并用于模拟退火中决定是否接受新的分配 f^(i+1) [3]。",
+    "citation_check": {
+      "cited_numbers": [
+        3,
+        4,
+        9
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 3,
+          "chunk_id": 453,
+          "source": "1710.07695.pdf",
+          "page": 4,
+          "text": "2. Randomly select a new pattern a. For each p, ( t(p, a) > t(p, f (i)(p)) a f (i+1)(p) = (12) f (i)(p) otherwise , where f (i) is the assignment in the i-th iteration. 3. Accept f (i+1) with probability: ( L(f (i+1)) < L(f (i)) 1 p = L(f (i+1)) ≥L(f (i)) (13) e(L(f(i))−L(f(i+1)))/SA , where L(f (i+1)) is the description length for f (i+1), S is the number of steps performed in SA, and A is a constant to control the speed of cooling process."
+        },
+        {
+          "citation": 4,
+          "chunk_id": 434,
+          "source": "1710.07695.pdf",
+          "page": 3,
+          "text": "We ﬁrst discuss our intuition to use Mini- mum Description Length (MDL) (Barron, Rissanen, and Yu 1998). MDL is based on the idea of data compression. Verb patterns can be regarded as a compressed representation of verb phrases. Intuitively, if the pattern assignment provides a compact description of phrases, it captures the underlying verb semantics well. Given verb phrases, we seek for the best assignment func- tion f that minimizes the code length of phrases."
+        },
+        {
+          "citation": 9,
+          "chunk_id": 456,
+          "source": "1710.07695.pdf",
+          "page": 4,
+          "text": "Next, we compute the description length for f (i+1) by summing up all n phrases’ code lengths. This step also costs O(n) time. Suppose our algorithm terminates after S iterations. The entire complexity thus is O(Sn)."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

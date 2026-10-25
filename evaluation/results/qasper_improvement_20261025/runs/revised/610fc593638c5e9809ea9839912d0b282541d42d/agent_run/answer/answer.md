@@ -1,0 +1,1 @@
+Other approaches use hand-crafted features such as lexical and syntactic features [3], which are mostly about syntactic-head or topic information [5]. The paper also notes these hand-crafted features heavily rely on system or human annotations [4][5], and are fed into a linear classifier with a fixed threshold [3].

@@ -1,0 +1,1 @@
+The paper repurposed a subset of **Newsroom** into a multi-domain summarization dataset called **MULTI-SUM**, which is specially designed for multi-domain learning in summarization tasks [3]. MULTI-SUM serves as a multi-domain testbed covering both IN-DOMAIN and OUT-OF-DOMAIN settings [6].

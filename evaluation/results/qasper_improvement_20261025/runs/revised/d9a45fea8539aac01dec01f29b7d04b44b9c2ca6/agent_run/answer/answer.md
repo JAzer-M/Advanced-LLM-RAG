@@ -1,0 +1,2 @@
+The answer failed review, so no reliable factual answer can be delivered this time.
+- Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection: For the paper "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection" (arXiv: 1909.01720), answer this question: What architecture does the rest of the multi-task learning setup use?; The answer to this requirement still needs checking.

@@ -1,0 +1,102 @@
+[
+  {
+    "number": 1,
+    "phase": "decompose",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n   For an open-ended \"difference between X and Y\" question, retrieve each\n   entity's purpose and core approach. Do not replace it with comparisons\n   between versions of X or versions of Y, or request unasked benchmark scores.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nDo they compare against state-of-the-art summarization approaches?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-25T02:59:41.818776+00:00",
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+      "requested_model": "cn:glm-5.3-flash",
+      "reported_model": "glm-5.3-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 640,
+        "cached_tokens": 640,
+        "completion_thinking_tokens": 11,
+        "completion_tokens": 29,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 11,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0,
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 39,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 679,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 640,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 708
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 4.051
+  },
+  {
+    "number": 2,
+    "phase": "probe",
+    "prompt": "You are an AI research assistant.\n\nRequired answer language: English.\nBegin with a short direct answer in its own paragraph, including any condition needed for correctness. Use Yes/No for a supported binary question, or the requested fact/keywords for a factual question. Then give only the necessary cited explanation after a blank line. A partial answer must keep the supported facts and explicitly identify the remaining gap.\n\nOnly when none of the requested facts can be supported, start with 'Insufficient evidence.' (or '当前证据不足。' when answering in Chinese). Do not use this refusal prefix for a partial answer.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in the same language as the user's question. If the question explicitly asks for a particular language, use that language instead. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported question, begin with 当前证据不足 when answering in Chinese, or with \"Insufficient evidence\" when answering in English, and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n14. Prioritize explicit subquestions, correct facts and citations, and conditions/units that change the conclusion. Add definitions or steps only when needed for the task. Optional background, stylistic preferences and unasked exceptions are not completeness requirements. Failure to retrieve a paper does not establish that the paper never reported a result.\n\n15. For a comparison, synthesize separately supported facts about the requested objects, citing each side. A literal sentence comparing both papers is NOT required. Different purposes, inputs or mechanisms can be contrasted from their respective descriptions. This does not establish causality or which method performs better. Do not call the comparison unsupported merely because no head-to-head experiment is provided.\n16. Lead with the main difference the user asked about. For a broad comparison, explain what each object does and its supported core approach; do not replace this with differences between versions of each object, benchmark tables or unasked numerical results.\n\nContext:\nOriginal passages:\n[1] Source: 1805.04579.pdf | Page: 1 | Section: 1 Introduction\nTitle: Using Statistical and Semantic Models for Multi-Document Summarization\n,1978) involves models to de- duce the crux of the document. It then presents a summary consisting of words and phrases that were not there in the actual document, sometimes even paraphrasing(Rockt¨aschel et al., 2015). A state of art method proposed by Wenyuan Zeng (Zeng et al., 2016) produces such summaries with length restricted to 75. There have been many re- cent developments that produce optimal results, but it is still in a developing phase.\n\n[2] Source: 1805.04579.pdf | Page: 6 | Section: 3.7 Domain-Speciﬁc Single Document\nTitle: Using Statistical and Semantic Models for Multi-Document Summarization\n3.7 Domain-Speciﬁc Single Document Summarization As we discussed earlier, summarization models are ﬁeld selective. Some models tend to perform remarkably better than others in certain ﬁelds. So, instead of assigning uniform weights to all models we can go by the following approach.\n\n[3] Source: 1805.04579.pdf | Page: 1 | Section: 2 Related Work\nTitle: Using Statistical and Semantic Models for Multi-Document Summarization\nSome of the methods include determining the length and positioning of sentences in the text (Radev et al., 2004), deducing centroid terms to ﬁnd the importance of text (Radev et al., 2004) and setting a threshold on average TF-IDF scores. Bag-of-words approach, i.e., making sentence/Word freq matrix, using a signature set of words and assigning them weights to use them as a criterion for importance measure (Lin and Hovy, 2000) have also been\n\n[4] Source: 1805.04579.pdf | Page: 1 | Section: None\nTitle: Using Statistical and Semantic Models for Multi-Document Summarization\nROUGE scores (Lin, 2004) were used to compare to other summarizers.\n\n[5] Source: 1805.04579.pdf | Page: 5 | Section: 3.3.4 Using Facebook’s InferSent\nTitle: Using Statistical and Semantic Models for Multi-Document Summarization\n3.3.4 Using Facebook’s InferSent Infersent is a state of the art supervised sentence encoding technique (Conneau et al., 2017). outperformed another state-of-the-art sentence encoder SkipThought on several benchmarks, (http://ixa2. like the STS benchmark si.ehu.es/stswiki/index.php/ STSbenchmark).\n\n[6] Source: 1805.04579.pdf | Page: 3 | Section: 3.2.2 PageRank\nTitle: Using Statistical and Semantic Models for Multi-Document Summarization\nFor the summarization task, they denote how strongly a sentence is connected with rest of document, or how well sentence cap- tures multiple views/concepts.\n\n[7] Source: 1805.04579.pdf | Page: 1 | Section: 1 Introduction\nTitle: Using Statistical and Semantic Models for Multi-Document Summarization\nIt highly relies on natural language processing techniques, which is still evolving to match human standards. These shortcomings make abstractive summariza- tion highly domain selective. As a result, their ap- plication is skewed to the areas where NLP tech- niques have been superlative. Extractive Summa- rization, on the other hand, uses different meth- ods to identify the most informative/dominant sen- tences through the text, and then present the re- sults, ranking them accordingly.\n\n[8] Source: 1805.04579.pdf | Page: 6 | Section: 3.6 Multi-Document/Domain-Speciﬁc\nTitle: Using Statistical and Semantic Models for Multi-Document Summarization\n3.6 Multi-Document/Domain-Speciﬁc Summarization We here use machine learning based approach to further increase the quality of our summa- rization technique. The elemental concept is that we use training set of u domain speciﬁc documents, with gold standard/human-composed summaries, provided we ﬁne tune our weights Wi∀i ∈(1, g) for different models taking F1- score/F-measure.(Powers, 2011) as factor.\n\n[9] Source: 1805.04579.pdf | Page: 1 | Section: 1 Introduction\nTitle: Using Statistical and Semantic Models for Multi-Document Summarization\n1 Introduction Automatic Text Summarization deals with the task of condensing documents into a summary, whose level is similar to a human-generated sum- mary. It is mostly distributed into two distinct domains, i.e., Abstractive Summarization and Ex- tractive Summarization. Abstractive summariza- ∗Both the authors have contributed equally to this work.\n\n[10] Source: 1805.04579.pdf | Page: 2 | Section: 2 Related Work\nTitle: Using Statistical and Semantic Models for Multi-Document Summarization\nSummarization using weights on high- frequency words (Nenkova et al., 2006) describes that high-frequency terms can be used to deduce the core of document. While semantic summarizers like Lexical similarity is based on the assumption that im- portant sentences are identiﬁed by strong chains (Gupta et al., 2011, Barrera and Verma, 2012, Murdock, 2006). In other words, it relates sentences that employ words with the same meaning (synonyms) or other semantic relation.\n\n[11] Source: 1805.04579.pdf | Page: 3 | Section: 3.2.2 PageRank\nTitle: Using Statistical and Semantic Models for Multi-Document Summarization\n3.2.2 PageRank PageRank algorithm (Page et al., 1999), devised to rank web pages, forms the core of Google Search. It roughly works by ranking pages accord- ing to the number and quality of outsourcing links from the page. For NLP, a PageRank based tech- nique ,TextRank has been a major breakthrough in the ﬁeld. TextRank based summarization has seeded exemplary results on benchmarks. We use a naive TextRank analogous for our task.\n\nEvidence guidance:\n- Rule-based subject attribution: TextRank; passage: “For the summarization task, they denote how strongly a sentence is connected with rest of document, or how well sentence cap- tures multiple views/concepts.” [6][11]\n\nQuestion:\nFor the paper \"Using Statistical and Semantic Models for Multi-Document Summarization\" (arXiv: 1805.04579), answer this question: Do they compare against state-of-the-art summarization approaches?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n- For a broad difference-between question with no requested aspect, use 3-5 sentences: lead with the purposes, then the supported core methods. Prefer primary-paper abstract/introductory definitions. Omit training/test hyperparameters and unasked performance caveats.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-25T02:59:52.129281+00:00",
+    "response": {
+      "answer": "Yes, they use ROUGE scores to compare with other summarizers, and they describe their approach as using a naive TextRank analogous method, where TextRank is noted as a major breakthrough with exemplary benchmark results.\n\nROUGE scores (Lin, 2004) were used to compare against other summarizers [4]. The paper also references state-of-the-art methods, noting that InferSent is a state-of-the-art supervised sentence encoding technique [5], and describes a state-of-the-art method by Wenyuan Zeng that produces summaries with length restricted to 75 [1].",
+      "requested_model": "cn:glm-5.3-flash",
+      "reported_model": "glm-5.3-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 2368,
+        "cached_tokens": 2368,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 118,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.02,
+        "prompt_cache_hit_tokens": 2368,
+        "prompt_cache_miss_tokens": 11,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2379,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 2368,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2497
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 5.381
+  }
+]

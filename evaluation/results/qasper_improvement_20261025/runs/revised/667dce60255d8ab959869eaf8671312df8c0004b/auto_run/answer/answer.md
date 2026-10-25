@@ -1,0 +1,1 @@
+Patterns correlated with emotional (FEELING) arguments include expressions with adjectives and active voice verb phrases [4], as well as patterns often based on the speaker's own beliefs or claims, or involving assessment or evaluation of arguments [7].

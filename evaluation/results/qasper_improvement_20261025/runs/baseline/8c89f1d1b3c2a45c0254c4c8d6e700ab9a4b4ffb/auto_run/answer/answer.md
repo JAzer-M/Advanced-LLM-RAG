@@ -1,0 +1,1 @@
+The paper states that it "suggest[s] sources of less sensitive data" [2], and one specific example given is the use of nationwide patient registries, as known for example in Scandinavian countries, as a way to increase data completeness and reduce selection bias [3].

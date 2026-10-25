@@ -1,0 +1,2 @@
+The answer failed review, so no reliable factual answer can be delivered this time.
+- And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue: For the paper "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue" (arXiv: 1709.05295), answer this question: What are the most discriminating patterns which are analyzed?; The answer to this requirement still needs checking.

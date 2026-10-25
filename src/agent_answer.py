@@ -8,7 +8,7 @@ import re
 import unicodedata
 
 from src import api_llm as api
-from src.answer_language import localized
+from src.answer_language import answer_language, localized
 from src.model_json import loads_model_json
 from src.citation_validation import check_citations, has_source_quote
 
@@ -86,6 +86,12 @@ Return only the user-facing answer, without JSON, a source list or process comme
 
 INPUT DATA:
 ''' + json.dumps(answer_input(payload), ensure_ascii=False)
+    language = 'Chinese' if answer_language(payload['question']) == 'zh' else 'English'
+    prompt += ('\nRequired response language: ' + language + '. Do not copy assessment prose in another language. '
+               'Begin with a short direct answer in its own paragraph, keeping material conditions; '
+               'use Yes/No for a supported binary question or the requested fact/keywords otherwise. '
+               'Give necessary cited explanation after a blank line. Keep supported parts and explicitly '
+               'state genuine gaps in a partial answer.\n')
     if draft is not None:
         prompt += '\nREVISE ONCE: correct the draft using the same passages; no new facts or retrieval.\n'
         prompt += json.dumps({'draft': draft, 'review_feedback': feedback}, ensure_ascii=False)

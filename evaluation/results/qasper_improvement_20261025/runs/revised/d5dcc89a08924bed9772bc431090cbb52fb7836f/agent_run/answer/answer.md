@@ -1,0 +1,2 @@
+The answer failed review, so no reliable factual answer can be delivered this time.
+- Using Statistical and Semantic Models for Multi-Document Summarization: For the paper "Using Statistical and Semantic Models for Multi-Document Summarization" (arXiv: 1805.04579), answer this question: What showed to be the best performing combination of semantic and statistical model on the summarization task in terms of ROUGE score?; The answer to this requirement still needs checking.

@@ -1,0 +1,137 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "For the paper \"Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\" (arXiv: 1909.01720), answer this question: How is the selected sharing layer trained?",
+  "kb_version": "qasper-holdout-20261025",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": false,
+    "drafts": [
+      "The selected sharing layer is trained jointly with the whole model via a global loss function: given the predictions of all tasks (stance detection and fake news detection), the model minimizes the cross-entropy between prediction and true distribution for all tasks, with each task weighted by λi (N = 2, and the fake news detection task is given more weight λ) [2][14].\n\nThe model is a sifted multi-task learning framework on a shared-private architecture that jointly trains stance detection and fake news detection, filtering the shared layer's outputs through a selected sharing layer [2]. The selected sharing layer's outputs (SSLi) are concatenated with task-private features Hi and fed to a softmax output layer for each task's prediction [4], and this whole model is then driven by the global cross-entropy loss [14]. Its internal parameters, such as Wfake and bfake of the gated sharing cell, are trainable parameters [1]. The passages do not specify a separate training procedure or learning details exclusive to the selected sharing layer beyond this joint global-loss training."
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "The selected sharing layer is trained jointly with the whole model via a global loss function: given the predictions of all tasks (stance detection and fake news detection), the model minimizes the cross-entropy between prediction and true distribution for all tasks, with each task weighted by λi (N = 2, and the fake news detection task is given more weight λ) [2][14].",
+              "reason": "答案明确指出selected sharing layer通过全局损失与整个模型联合训练，最小化所有任务预测与真实分布的交叉熵，各任务带权重λi，与原文[citation 14]及联合训练描述[citation 2]一致；补充的输出层拼接和可训练参数描述分别有citation 4和1支持；答案还明确承认 passages 未给出该层独有的单独训练细节，无未支持声明。",
+              "citations": [
+                {
+                  "number": 2,
+                  "quote": "We propose a novel sifted multi-task learning method on the ground of shared-private model to jointly train the tasks of stance detection and fake news detection, ﬁlter original outputs of shared layer by a selected sharing layer."
+                },
+                {
+                  "number": 14,
+                  "quote": "Given the prediction of all tasks, a global loss function forces the model to minimize the cross- entropy of prediction and true distribution for all the tasks"
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            1,
+            2,
+            4,
+            14
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 1,
+              "chunk_id": 931,
+              "source": "1909.01720.pdf",
+              "page": 4,
+              "text": "Formally, the gated sharing cell can be expressed as follows: gfake = σ(Wfake · Hshared + bfake) |G-A| G⨀A A G A G Transformer g Encoder ✔ ✘ ✔ σ 𝑯𝑠ℎ𝑎𝑟𝑒𝑑 Input Shared Shared Embeddings Features Features Attention Sharing Cell Gated Sharing Cell Figure 3: The details of selected sharing layer. R1×l(dp+dw) ∈ where Hshared denotes the ∈ outputs of shared layer upstream, Wfake Rl(dp+dw)×l(dp+dw) and bfake ∈R1×l(dp+dw) are trainable parameters."
+            },
+            {
+              "citation": 2,
+              "chunk_id": 917,
+              "source": "1909.01720.pdf",
+              "page": 3,
+              "text": "3 Method We propose a novel sifted multi-task learning method on the ground of shared-private model to jointly train the tasks of stance detection and fake news detection, ﬁlter original outputs of shared layer by a selected sharing layer. Our model con- sists of a 4-level hierarchical structure, as shown in Figure 2. Next, we will describe each level of our proposed model in detail."
+            },
+            {
+              "citation": 4,
+              "chunk_id": 939,
+              "source": "1909.01720.pdf",
+              "page": 5,
+              "text": "3.4 The Output Layer As the last layer, softmax functions are applied to achieve the classiﬁcation of different tasks, which emits the prediction of probability distribution for the speciﬁc task i. ˆyi = softmax(WiFi + bi) Fi = [Hi; SSLi] where ˆyi is the predictive result, Fi is the concatena- tion of private features Hi of task i and the outputs SSLi of selected sharing layer for task i. Wi and bi are trainable parameters."
+            },
+            {
+              "citation": 14,
+              "chunk_id": 940,
+              "source": "1909.01720.pdf",
+              "page": 5,
+              "text": "Given the prediction of all tasks, a global loss function forces the model to minimize the cross- entropy of prediction and true distribution for all the tasks: N X λiL(ˆyi, yi) L = i=1 L(ˆyi, yi) = yilogˆyi + (1 −yi)log(1 −ˆyi) (12) where λi is the weight for the task i, and N is the number of tasks. In this paper, N = 2, and we give more weight λ to the task of fake news detection."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "The selected sharing layer is trained jointly with the whole model via a global loss function: given the predictions of all tasks (stance detection and fake news detection), the model minimizes the cross-entropy between prediction and true distribution for all tasks, with each task weighted by λi (N = 2, and the fake news detection task is given more weight λ) [2][14].\n\nThe model is a sifted multi-task learning framework on a shared-private architecture that jointly trains stance detection and fake news detection, filtering the shared layer's outputs through a selected sharing layer [2]. The selected sharing layer's outputs (SSLi) are concatenated with task-private features Hi and fed to a softmax output layer for each task's prediction [4], and this whole model is then driven by the global cross-entropy loss [14]. Its internal parameters, such as Wfake and bfake of the gated sharing cell, are trainable parameters [1]. The passages do not specify a separate training procedure or learning details exclusive to the selected sharing layer beyond this joint global-loss training.",
+    "citation_check": {
+      "cited_numbers": [
+        1,
+        2,
+        4,
+        14
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 931,
+          "source": "1909.01720.pdf",
+          "page": 4,
+          "text": "Formally, the gated sharing cell can be expressed as follows: gfake = σ(Wfake · Hshared + bfake) |G-A| G⨀A A G A G Transformer g Encoder ✔ ✘ ✔ σ 𝑯𝑠ℎ𝑎𝑟𝑒𝑑 Input Shared Shared Embeddings Features Features Attention Sharing Cell Gated Sharing Cell Figure 3: The details of selected sharing layer. R1×l(dp+dw) ∈ where Hshared denotes the ∈ outputs of shared layer upstream, Wfake Rl(dp+dw)×l(dp+dw) and bfake ∈R1×l(dp+dw) are trainable parameters."
+        },
+        {
+          "citation": 2,
+          "chunk_id": 917,
+          "source": "1909.01720.pdf",
+          "page": 3,
+          "text": "3 Method We propose a novel sifted multi-task learning method on the ground of shared-private model to jointly train the tasks of stance detection and fake news detection, ﬁlter original outputs of shared layer by a selected sharing layer. Our model con- sists of a 4-level hierarchical structure, as shown in Figure 2. Next, we will describe each level of our proposed model in detail."
+        },
+        {
+          "citation": 4,
+          "chunk_id": 939,
+          "source": "1909.01720.pdf",
+          "page": 5,
+          "text": "3.4 The Output Layer As the last layer, softmax functions are applied to achieve the classiﬁcation of different tasks, which emits the prediction of probability distribution for the speciﬁc task i. ˆyi = softmax(WiFi + bi) Fi = [Hi; SSLi] where ˆyi is the predictive result, Fi is the concatena- tion of private features Hi of task i and the outputs SSLi of selected sharing layer for task i. Wi and bi are trainable parameters."
+        },
+        {
+          "citation": 14,
+          "chunk_id": 940,
+          "source": "1909.01720.pdf",
+          "page": 5,
+          "text": "Given the prediction of all tasks, a global loss function forces the model to minimize the cross- entropy of prediction and true distribution for all the tasks: N X λiL(ˆyi, yi) L = i=1 L(ˆyi, yi) = yilogˆyi + (1 −yi)log(1 −ˆyi) (12) where λi is the weight for the task i, and N is the number of tasks. In this paper, N = 2, and we give more weight λ to the task of fake news detection."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

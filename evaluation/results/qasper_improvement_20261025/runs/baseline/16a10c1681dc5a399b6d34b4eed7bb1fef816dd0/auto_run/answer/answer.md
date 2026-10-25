@@ -1,0 +1,1 @@
+No, they do not only look at tweets. The paper leverages both the community structure (represented as a graph) and the text of the messages [3], [8]. Specifically, they use a combination of embeddings built on the user-to-user mention graph, the user-to-hashtag mention graph, and the text of the tweets of the troll accounts [11].

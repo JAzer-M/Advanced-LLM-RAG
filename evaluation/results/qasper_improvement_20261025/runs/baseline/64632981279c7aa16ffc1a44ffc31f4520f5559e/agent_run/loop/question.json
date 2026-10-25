@@ -1,0 +1,199 @@
+{
+  "id": "question",
+  "query": "For the paper \"Verb Pattern: A Probabilistic Semantic Representation on Verbs\" (arXiv: 1710.07695), answer this question: what evaluation metrics are used?",
+  "kb_version": "qasper-holdout-20261025",
+  "status": "completed",
+  "actions_executed": 0,
+  "semantic_correctness": "requires_manual_review",
+  "validation_repairs": [
+    {
+      "phase": "plan",
+      "error": "Requirement question_quote must name its own subject and show its scope."
+    }
+  ],
+  "plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "question_quote": "\"Verb Pattern: A Probabilistic Semantic Representation on Verbs\" (arXiv: 1710.07695), answer this question: what evaluation metrics are used?",
+        "need": "\"Verb Pattern: A Probabilistic Semantic Representation on Verbs\" (arXiv: 1710.07695), answer this question: what evaluation metrics are used?"
+      }
+    ]
+  },
+  "assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 462,
+            "quote": "To evaluate the effectiveness of our pattern summarization approach, we report two metrics: (1) (coverage) how much of the verb phrases in natural language our solution can ﬁnd corresponding patterns (2) (precision) how much of the phrases and their corresponding patterns are correctly matched?"
+          },
+          {
+            "chunk_id": 463,
+            "quote": "We compute the two metrics by: coverage = n cover precision = n correct n all n cover"
+          }
+        ],
+        "supported_part": "评估使用的两个指标是 coverage 和 precision：coverage 衡量动词短语能找到对应 pattern 的比例，precision 衡量短语与其 pattern 正确匹配的比例，并通过人工标注 100 个短语来评估 precision。",
+        "reason": "chunk 462 明确说明评估报告两个指标 coverage 与 precision，chunk 463 给出其计算方式，完整回答所问的评估指标。",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "answer",
+      "reason": "所需评估指标已在原文中被完全确立。",
+      "requirement_ids": [],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "仅针对 r1 的评估指标问题进行范围检查，引用文本均来自该论文并直接回答该问题。"
+    }
+  },
+  "steps": [],
+  "evidence_after": [
+    {
+      "chunk_id": 462,
+      "source": "1710.07695.pdf",
+      "page": 5,
+      "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+      "text": "The case study veriﬁed that (1) our deﬁnition of verb pattern reﬂects verb’s polysemy; (2) most verb patterns we found are meaningful. Effectiveness To evaluate the effectiveness of our pattern summarization approach, we report two metrics: (1) (coverage) how much of the verb phrases in natural language our solution can ﬁnd corresponding patterns (2) (precision) how much of the phrases and their corresponding patterns are correctly matched?",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 463,
+      "source": "1710.07695.pdf",
+      "page": 5,
+      "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+      "text": "We compute the two metrics by: coverage = n cover precision = n correct n all n cover ,where n cover is the number of phrases in the test data for which our solution ﬁnds corresponding patterns, n all is the total number of phrases, n correct is the number of phrases whose corresponding patterns are correct. To evalu- ate precision, we randomly selected 100 verb phrases from the test data and ask volunteers to label the correctness of their assigned patterns.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 433,
+      "source": "1710.07695.pdf",
+      "page": 3,
+      "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+      "text": "So the goal of this paper is to ﬁnd f. With f, we can easily compute the pattern distribution P(A) by: X X P(a|p)P(p) = P(a) = P(p) p s.t. f(p)=a p , where P(p) is the probability to observe phrase p in all phrases of the verb of interest. Note that the second equa- tion holds due to the obvious fact that P(a|p) = 1 when f(p) = a. P(p) can be directly estimated as the ratio of p’s frequency as in Eq 14. Model Next, we formalize our model based on minimum descrip- tion length.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 431,
+      "source": "1710.07695.pdf",
+      "page": 3,
+      "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+      "text": "A verb pattern is either an idiom pattern or a conceptualized pattern. Idiom Pattern is in the form of verb $Iobject (e.g. eat $Ihumble pie). Conceptual- ized Pattern is in the form of verb $Cconcept (e.g. eat $Cmeal). We denote the concept in a conceptualized pattern a as ca. Deﬁnition 1 (Pattern Assignment). A pattern assignment is a function f : P →A that maps an arbitrary phrase p to its pattern a. f(p) = a means the pattern of p is a.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 406,
+      "source": "1710.07695.pdf",
+      "page": 1,
+      "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+      "text": "In this paper, we only focus on verbs that collocate with objects. As illus- trated in Example 1, most verbs are polysemous. Hence, a good semantic representation of verbs should be aware of their polysemy. Example 1 (Verb Polysemy). eat has the following senses: • a. Put food in mouth, chew it and swallow it, such as eat apple and eat hot dog. Have a meal, such as eat breakfast, eat lunch, and eat dinner. Idioms, such as eat humble pie, which means ad- mitting that you are wrong.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 404,
+      "source": "1710.07695.pdf",
+      "page": 1,
+      "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+      "text": "Traditional verb representations, such as FrameNet, PropBank, VerbNet, focus on verbs’ roles. These roles are too coarse to represent verbs’ semantics. In this paper, we in- troduce verb patterns to represent verbs’ semantics, such that each pattern corresponds to a single semantic of the verb. First we analyze the principles for verb patterns: generality and speciﬁcity. Then we propose a nonparametric model based on description length.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 425,
+      "source": "1710.07695.pdf",
+      "page": 2,
+      "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+      "text": "We will use min- imum description length (MDL) as the basic framework to reconcile the two objectives. More speciﬁcally, our contri- bution in this paper can be summarized as follows: • We proposed verb patterns, a novel semantic representa- tions of verb. We proposed two types of verb patterns: conceptualized patterns and idiom patterns. The verb pat- tern is polysemy-aware so that we can use it to distinguish different verb semantics.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 459,
+      "source": "1710.07695.pdf",
+      "page": 5,
+      "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+      "text": "For a ﬁxed verb, we compute the probability of phrase p by: n(p) P(p) = P pi n(pi) , where n(p) is the frequency of p in the corpus, and the denominator sums over all phrases of this verb. IsA Relationship We use Probase to compute the prob- ability of an entity given a concept PT (e|c), as well as the probability of the concept given an entity PT (c|e): n(e, c) n(e, c) PT (e|c) = PT (c|e) = P P ei n(ei, c) ci n(e, ci) ,where n(e, c) is the frequency that c and e co-occur in Probase.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 410,
+      "source": "1710.07695.pdf",
+      "page": 1,
+      "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+      "text": "weiwang1@fudan.edu.cn 2005), describe verbs’ semantic roles (e.g. ingestor and in- gestibles for “eat”). However, semantic roles in general are too coarse to differentiate a verb’s ﬁne-grained semantics. A verb in different phrases can have different semantics but similar roles. In Example 1, both “eat”s in “eat breakfast” and “eat apple” have ingestor. But they have different semantics.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 480,
+      "source": "1710.07695.pdf",
+      "page": 6,
+      "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+      "text": "Semantic Composition We represent verb phrases by verb patterns. while semantic composition works aim to represent the meaning of an arbitrary phrase as a vector or a tree. Vector-space model is widely used to represent the semantic of single word. A straightforward approach to characterize the semantic of a phrase thus is averag- ing the vectors over all the phrase’s words (Xinxiong et al. But this approach certainly ignores the syntac- tic relation (Landauer and Dumais 1997) between words.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 460,
+      "source": "1710.07695.pdf",
+      "page": 5,
+      "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+      "text": "Test data We use two data sets to show our solution can achieve consistent effectiveness on both short text and long text. The short text data set contains 1.6 millions of tweets from Twitter (Go, Bhayani, and Huang 2009). The long text data set contains 21,578 news articles from Reuters (Apt´e, Damerau, and Weiss 1994).",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 427,
+      "source": "1710.07695.pdf",
+      "page": 2,
+      "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+      "text": "• We conducted extensive experiments. The results verify the effectiveness of our model and algorithm. We pre- sented the applications of verb patterns in context-aware conceptualization. The application justiﬁes the effective- ness of verb patterns to represent verb semantics. Problem Model In this section, we deﬁne the problem of extracting patterns for verb phrases.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 458,
+      "source": "1710.07695.pdf",
+      "page": 5,
+      "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+      "text": "Experiments Settings Verb Phrase Data The pattern assignment uses the phrase distribution P(p). To do this, we use the “English All” dataset in Google Syntactic N-Grams. The dataset contains counted syntactic ngrams extracted from the English por- tion of the Google Books corpus. It contains 22,230 different verbs (without stemming), and 147,056 verb phrases.",
+      "kb_version": "qasper-holdout-20261025"
+    }
+  ],
+  "halt_reason": "answer_ready",
+  "final_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 462,
+            "quote": "To evaluate the effectiveness of our pattern summarization approach, we report two metrics: (1) (coverage) how much of the verb phrases in natural language our solution can ﬁnd corresponding patterns (2) (precision) how much of the phrases and their corresponding patterns are correctly matched?"
+          },
+          {
+            "chunk_id": 463,
+            "quote": "We compute the two metrics by: coverage = n cover precision = n correct n all n cover"
+          }
+        ],
+        "supported_part": "评估使用的两个指标是 coverage 和 precision：coverage 衡量动词短语能找到对应 pattern 的比例，precision 衡量短语与其 pattern 正确匹配的比例，并通过人工标注 100 个短语来评估 precision。",
+        "reason": "chunk 462 明确说明评估报告两个指标 coverage 与 precision，chunk 463 给出其计算方式，完整回答所问的评估指标。",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "answer",
+      "reason": "所需评估指标已在原文中被完全确立。",
+      "requirement_ids": [],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "仅针对 r1 的评估指标问题进行范围检查，引用文本均来自该论文并直接回答该问题。"
+    }
+  },
+  "elapsed_seconds": 10.709
+}

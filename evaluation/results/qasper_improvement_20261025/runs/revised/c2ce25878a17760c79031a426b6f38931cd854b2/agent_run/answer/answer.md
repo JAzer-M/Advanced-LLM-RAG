@@ -1,0 +1,2 @@
+Insufficient evidence to reliably answer these requirements:
+- Generating Major Types of Chinese Classical Poetry in a Uniformed Framework: For the paper "Generating Major Types of Chinese Classical Poetry in a Uniformed Framework" (arXiv: 2003.11528), answer this question: What is the source of the training/testing data?; no passage states where the training/testing data comes from (dataset source/collection)

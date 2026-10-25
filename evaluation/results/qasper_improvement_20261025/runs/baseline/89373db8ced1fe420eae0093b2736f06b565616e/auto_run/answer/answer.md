@@ -1,0 +1,1 @@
+No. The authors used two existing datasets: they evaluated on Czech Facebook posts and Mall product reviews, without collecting new data [1][3]. They performed an empirical survey of supervised learning algorithms on these existing datasets [1][3].

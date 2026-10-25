@@ -1,0 +1,1 @@
+Yes, the results are reported mainly on English data. The authors state that they "focus on accounts that use English as main language" [3], and that they "remove from these accounts non-English tweets, and maintain only tweets that were tweeted originally by them" [7]. This filtering was applied because their goal was to detect Russian accounts that mimic a regular US user [7].

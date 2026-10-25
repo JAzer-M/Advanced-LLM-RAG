@@ -1,0 +1,3 @@
+The four learning strategies investigated are: ModelI Basic, ModelII BERT, ModelIII Tag, and ModelIV Meta [6].
+
+These four models are presented as the columns of the reported results, described as "our four learning strategies" whose Rouge-1 performance is evaluated on the MULTI-SUM dataset [6]. The paper states these strategies are examined for their ability to handle the domain shift problem [1], under three evaluation settings: DOMAIN, OUT-OF-DOMAIN, and CROSS-DATASET [4], and are also applied to CNN/DailyMail [2]. Among them, ModelIV Meta uses a meta-learning gradient update mechanism to bridge communication gaps between domains [9], while ModelII BERT's results indicate BERT provides some domain generalization ability within MULTI-SUM [8].

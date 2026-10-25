@@ -1,0 +1,105 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "For the paper \"Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\" (arXiv: 1909.01720), answer this question: What are the hyperparameter setting of the MTL model?",
+  "kb_version": "qasper-holdout-20261025",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": false,
+    "drafts": [
+      "论文未给出 MTL 模型的具体超参数取值（如学习率、层数、注意力头数、dropout、batch size 等），仅说明了调优方式：对每个任务，所有超参数均在验证集上通过小网格搜索进行调整，以取得最佳性能 [21]。此外，全局损失中对假新闻检测任务赋予更大的权重 λ，任务数 N=2 [1]，但该 λ 的具体数值同样未在提供的段落中给出。"
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "论文未给出 MTL 模型的具体超参数取值（如学习率、层数、注意力头数、dropout、batch size 等），仅说明了调优方式：对每个任务，所有超参数均在验证集上通过小网格搜索进行调整，以取得最佳性能 [21]。此外，全局损失中对假新闻检测任务赋予更大的权重 λ，任务数 N=2 [1]，但该 λ 的具体数值同样未在提供的段落中给出。",
+              "reason": "回答正确指出论文未给出具体超参数取值，并引用原文说明调优方式（验证集上网格搜索），同时补充了N=2和更大任务权重λ这一相关设置，并明确承认缺少具体数值的缺口。引用[21]和[1]均与原文相符。",
+              "citations": [
+                {
+                  "number": 21,
+                  "quote": "Parameters - hyper-parameters conﬁgurations of our model: for each task, we strictly turn all the hyper-parameters on the validation dataset, and we achieve the best performance via a small grid search."
+                },
+                {
+                  "number": 1,
+                  "quote": "where λi is the weight for the task i, and N is the number of tasks. In this paper, N = 2, and we give more weight λ to the task of fake news detection."
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            1,
+            21
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 1,
+              "chunk_id": 940,
+              "source": "1909.01720.pdf",
+              "page": 5,
+              "text": "Given the prediction of all tasks, a global loss function forces the model to minimize the cross- entropy of prediction and true distribution for all the tasks: N X λiL(ˆyi, yi) L = i=1 L(ˆyi, yi) = yilogˆyi + (1 −yi)log(1 −ˆyi) (12) where λi is the weight for the task i, and N is the number of tasks. In this paper, N = 2, and we give more weight λ to the task of fake news detection."
+            },
+            {
+              "citation": 21,
+              "chunk_id": 946,
+              "source": "1909.01720.pdf",
+              "page": 5,
+              "text": "4.2 Settings (9) Pre-processing - Processing useless and inappro- (10) priate information in text: (1) removing nonalpha- betic characters; (2) removing website links of text content; (3) converting all words to lower case and tokenize texts. Parameters - hyper-parameters conﬁgurations of our model: for each task, we strictly turn all the hyper-parameters on the validation dataset, and we achieve the best performance via a small grid search."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "论文未给出 MTL 模型的具体超参数取值（如学习率、层数、注意力头数、dropout、batch size 等），仅说明了调优方式：对每个任务，所有超参数均在验证集上通过小网格搜索进行调整，以取得最佳性能 [21]。此外，全局损失中对假新闻检测任务赋予更大的权重 λ，任务数 N=2 [1]，但该 λ 的具体数值同样未在提供的段落中给出。",
+    "citation_check": {
+      "cited_numbers": [
+        1,
+        21
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 940,
+          "source": "1909.01720.pdf",
+          "page": 5,
+          "text": "Given the prediction of all tasks, a global loss function forces the model to minimize the cross- entropy of prediction and true distribution for all the tasks: N X λiL(ˆyi, yi) L = i=1 L(ˆyi, yi) = yilogˆyi + (1 −yi)log(1 −ˆyi) (12) where λi is the weight for the task i, and N is the number of tasks. In this paper, N = 2, and we give more weight λ to the task of fake news detection."
+        },
+        {
+          "citation": 21,
+          "chunk_id": 946,
+          "source": "1909.01720.pdf",
+          "page": 5,
+          "text": "4.2 Settings (9) Pre-processing - Processing useless and inappro- (10) priate information in text: (1) removing nonalpha- betic characters; (2) removing website links of text content; (3) converting all words to lower case and tokenize texts. Parameters - hyper-parameters conﬁgurations of our model: for each task, we strictly turn all the hyper-parameters on the validation dataset, and we achieve the best performance via a small grid search."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

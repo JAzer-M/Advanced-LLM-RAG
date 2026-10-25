@@ -1,0 +1,207 @@
+{
+  "id": "question",
+  "query": "For the paper \"Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\" (arXiv: 1909.01720), answer this question: What architecture does the rest of the multi-task learning setup use?",
+  "kb_version": "qasper-holdout-20261025",
+  "status": "completed",
+  "actions_executed": 0,
+  "semantic_correctness": "requires_manual_review",
+  "plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+        "question_quote": "For the paper \"Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\" (arXiv: 1909.01720), answer this question: What architecture does the rest of the multi-task learning setup use?",
+        "need": "For the paper \"Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\" (arXiv: 1909.01720), answer this question: What architecture does the rest of the multi-task learning setup use?"
+      }
+    ]
+  },
+  "validation_repairs": [
+    {
+      "phase": "assess",
+      "error": "Quoted text is not in chunk 917."
+    }
+  ],
+  "assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 917,
+            "quote": "We propose a novel sifted multi-task learning method on the ground of shared-private model to jointly train the tasks of stance detection and fake news detection, filter original outputs of shared layer by a selected sharing layer."
+          },
+          {
+            "chunk_id": 914,
+            "quote": "Figure 2: The architecture of the sifted multi-task learning method based on shared-private model."
+          },
+          {
+            "chunk_id": 934,
+            "quote": "The basic attention architecture of this cell, the same as shared-private feature extrac- tor, also adopts transformer encoder (the details in subsection 3.2)."
+          },
+          {
+            "chunk_id": 910,
+            "quote": "In this work, we utilize transformer encoder to acquire semantics from responses and forwarding of fake news for stance detection."
+          }
+        ],
+        "supported_part": "The multi-task learning setup is built on a shared-private model, whose architecture is shown in Figure 2, and its shared-private feature extractor (and the attention sharing cell) adopts transformer encoder.",
+        "reason": "The passages establish that the proposed sifted multi-task learning method uses a shared-private model architecture with transformer encoder as the feature extractor.",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "answer",
+      "reason": "The architecture of the rest of the multi-task learning setup (shared-private model with transformer encoder feature extractor) is established by the supplied passages of the paper.",
+      "requirement_ids": [],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "Assessment is limited to the architecture of the multi-task learning setup for the anchored paper; all evidence comes from its supplied passages."
+    }
+  },
+  "steps": [],
+  "evidence_after": [
+    {
+      "chunk_id": 914,
+      "source": "1909.01720.pdf",
+      "page": 3,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "Output Layer Softmax Selected Sharing ⊗ Layer Attention Transformer Shared-private Encoder Feature Extractor Input Embeddings WE Position Embeddings (PE) Task 1: Stance Detection Figure 2: The architecture of the sifted multi-task learning method based on shared-private model. In particular, the two blue boxes represent selected sharing layers of stance detection and fake news detection and the red box denotes shared layer between tasks.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 980,
+      "source": "1909.01720.pdf",
+      "page": 8,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "5 Conclusion In this paper, we explored a sifted multi-task learn- ing method with a novel selected sharing structure for fake news detection. The selected sharing struc- ture fused single gate mechanism for ﬁltering use- less shared features and attention mechanism for paying close attention to features that were helpful to target tasks.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 934,
+      "source": "1909.01720.pdf",
+      "page": 4,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "Specif- ically, this cell utilizes input embeddings of the speciﬁc task to weight shared features for paying more attention to helpful features. The inputs of this cell include two matrixes: the input embed- dings of the speciﬁc task and the shared features of both tasks. The basic attention architecture of this cell, the same as shared-private feature extrac- tor, also adopts transformer encoder (the details in subsection 3.2).",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 917,
+      "source": "1909.01720.pdf",
+      "page": 3,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "3 Method We propose a novel sifted multi-task learning method on the ground of shared-private model to jointly train the tasks of stance detection and fake news detection, ﬁlter original outputs of shared layer by a selected sharing layer. Our model con- sists of a 4-level hierarchical structure, as shown in Figure 2. Next, we will describe each level of our proposed model in detail.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 935,
+      "source": "1909.01720.pdf",
+      "page": 4,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "However, in this architecture, query matrix and key matrix are not projections of the same matrix, i.e., query matrix Efake is the input embeddings of fake news detection task, and key matrix Kshared and value matrix Vshared are the projections of shared features Hshared. For- mally, the attention sharing cell can be formalized as follows: headi = Attention( (6) EfakeWQ i , KsharedWK i , VsharedWV i ) Afake = MultiHead(Hfake, Kshared, Vshared) = Concat(head1, head2, ..., headh)Wo (4) (7)",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 951,
+      "source": "1909.01720.pdf",
+      "page": 6,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "MTL-LSTM A multi-task learning model based on LSTM networks (Kochkina et al., 2018) trains jointly the tasks of veracity classiﬁcation, rumor detection, and stance detection. TRNN Tree-structured RNN (Ma et al., 2018b) is a bottom-up and a top-down tree-structured model based on recursive neural networks.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 911,
+      "source": "1909.01720.pdf",
+      "page": 2,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "Multi-task Learning A collection of improved models (Chen and Cardie, 2018; Chen et al., 2018; Liu et al., 2019) are developed based on multi- task learning. Especially, shared-private model, as a popular multi-task learning model, divides the features of different tasks into private and shared spaces, where shared features, i.e., task-irrelevant features in shared space, as supplementary fea- tures are used for different tasks.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 939,
+      "source": "1909.01720.pdf",
+      "page": 5,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "3.4 The Output Layer As the last layer, softmax functions are applied to achieve the classiﬁcation of different tasks, which emits the prediction of probability distribution for the speciﬁc task i. ˆyi = softmax(WiFi + bi) Fi = [Hi; SSLi] where ˆyi is the predictive result, Fi is the concatena- tion of private features Hi of task i and the outputs SSLi of selected sharing layer for task i. Wi and bi are trainable parameters.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 945,
+      "source": "1909.01720.pdf",
+      "page": 5,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "We hold out 10% of the instances in each dataset for model tuning, and the rest of the instances are performed 5-fold cross-validation throughout all experiments.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 912,
+      "source": "1909.01720.pdf",
+      "page": 2,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "Nevertheless, the shared space usually mixes some task-relevant fea- tures, which makes the learning of different tasks introduce noise.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 910,
+      "source": "1909.01720.pdf",
+      "page": 2,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "In this work, we utilize transformer encoder to acquire semantics from responses and forwarding of fake news for stance detection.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 944,
+      "source": "1909.01720.pdf",
+      "page": 5,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "Distribution. RumourEval con- tains 325 Twitter threads discussing rumours and PHEME includes 6,425 Twitter threads. Threads, (8) tweets, and class distribution of the two datasets are shown in Table 1. In consideration of the imbalance label distribu- tions, in addition to accuracy (A) metric, we add Precision (P), Recall (R) and F1-score (F1) as com- plementary evaluation metrics for tasks.",
+      "kb_version": "qasper-holdout-20261025"
+    }
+  ],
+  "halt_reason": "answer_ready",
+  "final_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 917,
+            "quote": "We propose a novel sifted multi-task learning method on the ground of shared-private model to jointly train the tasks of stance detection and fake news detection, filter original outputs of shared layer by a selected sharing layer."
+          },
+          {
+            "chunk_id": 914,
+            "quote": "Figure 2: The architecture of the sifted multi-task learning method based on shared-private model."
+          },
+          {
+            "chunk_id": 934,
+            "quote": "The basic attention architecture of this cell, the same as shared-private feature extrac- tor, also adopts transformer encoder (the details in subsection 3.2)."
+          },
+          {
+            "chunk_id": 910,
+            "quote": "In this work, we utilize transformer encoder to acquire semantics from responses and forwarding of fake news for stance detection."
+          }
+        ],
+        "supported_part": "The multi-task learning setup is built on a shared-private model, whose architecture is shown in Figure 2, and its shared-private feature extractor (and the attention sharing cell) adopts transformer encoder.",
+        "reason": "The passages establish that the proposed sifted multi-task learning method uses a shared-private model architecture with transformer encoder as the feature extractor.",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "answer",
+      "reason": "The architecture of the rest of the multi-task learning setup (shared-private model with transformer encoder feature extractor) is established by the supplied passages of the paper.",
+      "requirement_ids": [],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "Assessment is limited to the architecture of the multi-task learning setup for the anchored paper; all evidence comes from its supplied passages."
+    }
+  },
+  "elapsed_seconds": 16.157
+}

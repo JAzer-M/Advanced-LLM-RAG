@@ -1,0 +1,1 @@
+Yes. The proposed QBM model is compared against baselines (Q-Q Mean, Q-Q Max, Bag-Con); it performs best among them, with R10@1 gains of 0.05 and 0.03 over the strongest baseline on the two datasets [1][2]. The comparison was conducted on the AliMe and Quora datasets, where the authors state that "Compared with baselines, we verify the effectiveness of our model" [4].

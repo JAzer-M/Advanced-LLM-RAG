@@ -1,0 +1,1 @@
+The multi-domain dataset repurposed is **MULTI-SUM** [1][4], which is a re-purposed subset of the Newsroom dataset, designed specifically for multi-domain learning in summarization tasks [4]. It is treated as a multi-domain dataset by viewing each news publication as a domain [7].

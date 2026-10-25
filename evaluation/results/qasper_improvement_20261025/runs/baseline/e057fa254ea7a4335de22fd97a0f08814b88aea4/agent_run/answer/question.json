@@ -1,0 +1,193 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "For the paper \"Fine-grained Entity Typing through Increased Discourse Context and Adaptive Classification Thresholds\" (arXiv: 1804.08000), answer this question: What is the architecture of the model?",
+  "kb_version": "qasper-holdout-20261025",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": true,
+    "drafts": [
+      "该论文的模型是一个神经架构(图1),它通过更好的注意力机制和利用句子级与文档级的语义语篇信息来学习更具上下文感知的表示 [6]。其 featurizer φ 包含三个编码器，将实体 e 及其上下文 x 编码为特征向量，同时考虑句子级上下文 xs 和文档级上下文 xd,这与先前仅使用句子级上下文的工作不同 [11]。在注意力方面，xs 的特征表示是隐藏状态的加权和 gs(xs, e) = Σ ai·hi,采用点积注意力,基于实体与上下文之间的对齐计算注意力权重 [9]。该架构被表述为多标签分类问题：给定实体及其上下文，从细粒度类型集合 T 中预测实体的类型集合 [2]。",
+      "该论文的模型是一个神经架构（图1），它通过更好的注意力机制并利用句子级与文档级的语义语篇信息来学习更具上下文感知的表示 [6]。其 featurizer φ 包含三个编码器，将实体 e 及其上下文 x 编码为特征向量，同时考虑句子级上下文 xs 和文档级上下文 xd，这与先前仅使用句子级上下文的工作不同 [11]。在注意力方面，xs 的特征表示是隐藏状态的加权和 gs(xs, e) = Σ ai·hi，采用点积注意力，基于实体与上下文之间的对齐计算注意力权重 [9]。该架构被表述为多标签分类问题：给定实体及其上下文，从细粒度类型集合 T 中预测实体的类型集合 [2]。"
+    ],
+    "reviews": [
+      {
+        "review_error": "Review answer_quote is not in the actual answer.",
+        "citation_check": {
+          "cited_numbers": [
+            2,
+            6,
+            9,
+            11
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 2,
+              "chunk_id": 508,
+              "source": "1804.08000.pdf",
+              "page": 2,
+              "text": "2 Model Fine-grained entity typing is considered a multi- label classiﬁcation problem: Each entity e in the text x is assigned a set of types T ∗drawn from the ﬁne-grained type set T . The goal of this task is to predict, given entity e and its context x, the assign- ment of types to the entity."
+            },
+            {
+              "citation": 6,
+              "chunk_id": 506,
+              "source": "1804.08000.pdf",
+              "page": 1,
+              "text": "To overcome these drawbacks, we propose a neural architecture (Figure 1) which learns more context-aware representations by using a better at- tention mechanism and taking advantage of se- mantic discourse information available in both the document as well as sentence-level contexts."
+            },
+            {
+              "citation": 9,
+              "chunk_id": 515,
+              "source": "1804.08000.pdf",
+              "page": 2,
+              "text": "(2017) who use two separate bi-directional RNNs for context on each side of the entity mention. Attention: The feature representation for xs is a weighted sum of the hidden states: gs(xs, e) = Pn i=1 aihi, where ai is the attention to hidden state hi. We employ the dot-product attention (Lu- (2) ong et al., 2015). It computes attention based on the alignment between the entity and its context: exp (h⊺ i Waf(e)) (3) jWaf(e)), ai = (6) j=1 exp (h⊺ Pn where Wa is the weight matrix."
+            },
+            {
+              "citation": 11,
+              "chunk_id": 512,
+              "source": "1804.08000.pdf",
+              "page": 2,
+              "text": "2.2 Featurizer As shown in Figure 1, featurizer ϕ in our model contains three encoders which encode entity e and its context x into feature vectors, and we consider both sentence-level context xs and document-level context xd in contrast to prior work which only takes sentence-level context (Gillick et al., 2014; Shimaoka et al., 2017). 1 1Document-level context has also been exploited in Yaghoobzadeh and Sch¨utze (2015); Yang et al. (2016); Karn et al. (2017); Gupta et al."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      },
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "该论文的模型是一个神经架构（图1），它通过更好的注意力机制并利用句子级与文档级的语义语篇信息来学习更具上下文感知的表示 [6]。其 featurizer φ 包含三个编码器，将实体 e 及其上下文 x 编码为特征向量，同时考虑句子级上下文 xs 和文档级上下文 xd，这与先前仅使用句子级上下文的工作不同 [11]。在注意力方面，xs 的特征表示是隐藏状态的加权和 gs(xs, e) = Σ ai·hi，采用点积注意力，基于实体与上下文之间的对齐计算注意力权重 [9]。该架构被表述为多标签分类问题：给定实体及其上下文，从细粒度类型集合 T 中预测实体的类型集合 [2]。",
+              "reason": "答案完整描述了模型架构：神经架构（图1）、利用句子级与文档级上下文的三个编码器 featurizer、点积注意力机制，以及多标签分类框架，均与原文引文一致，无未支持声明，无明显遗漏。",
+              "citations": [
+                {
+                  "number": 6,
+                  "quote": "To overcome these drawbacks, we propose a neural architecture (Figure 1) which learns more context-aware representations by using a better at- tention mechanism and taking advantage of se- mantic discourse information available in both the document as well as sentence-level contexts."
+                },
+                {
+                  "number": 11,
+                  "quote": "As shown in Figure 1, featurizer ϕ in our model contains three encoders which encode entity e and its context x into feature vectors, and we consider both sentence-level context xs and document-level context xd in contrast to prior work which only takes sentence-level context (Gillick et al., 2014; Shimaoka et al., 2017)."
+                },
+                {
+                  "number": 9,
+                  "quote": "Attention: The feature representation for xs is a weighted sum of the hidden states: gs(xs, e) = Pn i=1 aihi, where ai is the attention to hidden state hi. We employ the dot-product attention (Lu- (2) ong et al., 2015)."
+                },
+                {
+                  "number": 2,
+                  "quote": "Fine-grained entity typing is considered a multi- label classiﬁcation problem: Each entity e in the text x is assigned a set of types T ∗drawn from the ﬁne-grained type set T ."
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            2,
+            6,
+            9,
+            11
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 2,
+              "chunk_id": 508,
+              "source": "1804.08000.pdf",
+              "page": 2,
+              "text": "2 Model Fine-grained entity typing is considered a multi- label classiﬁcation problem: Each entity e in the text x is assigned a set of types T ∗drawn from the ﬁne-grained type set T . The goal of this task is to predict, given entity e and its context x, the assign- ment of types to the entity."
+            },
+            {
+              "citation": 6,
+              "chunk_id": 506,
+              "source": "1804.08000.pdf",
+              "page": 1,
+              "text": "To overcome these drawbacks, we propose a neural architecture (Figure 1) which learns more context-aware representations by using a better at- tention mechanism and taking advantage of se- mantic discourse information available in both the document as well as sentence-level contexts."
+            },
+            {
+              "citation": 9,
+              "chunk_id": 515,
+              "source": "1804.08000.pdf",
+              "page": 2,
+              "text": "(2017) who use two separate bi-directional RNNs for context on each side of the entity mention. Attention: The feature representation for xs is a weighted sum of the hidden states: gs(xs, e) = Pn i=1 aihi, where ai is the attention to hidden state hi. We employ the dot-product attention (Lu- (2) ong et al., 2015). It computes attention based on the alignment between the entity and its context: exp (h⊺ i Waf(e)) (3) jWaf(e)), ai = (6) j=1 exp (h⊺ Pn where Wa is the weight matrix."
+            },
+            {
+              "citation": 11,
+              "chunk_id": 512,
+              "source": "1804.08000.pdf",
+              "page": 2,
+              "text": "2.2 Featurizer As shown in Figure 1, featurizer ϕ in our model contains three encoders which encode entity e and its context x into feature vectors, and we consider both sentence-level context xs and document-level context xd in contrast to prior work which only takes sentence-level context (Gillick et al., 2014; Shimaoka et al., 2017). 1 1Document-level context has also been exploited in Yaghoobzadeh and Sch¨utze (2015); Yang et al. (2016); Karn et al. (2017); Gupta et al."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "该论文的模型是一个神经架构（图1），它通过更好的注意力机制并利用句子级与文档级的语义语篇信息来学习更具上下文感知的表示 [6]。其 featurizer φ 包含三个编码器，将实体 e 及其上下文 x 编码为特征向量，同时考虑句子级上下文 xs 和文档级上下文 xd，这与先前仅使用句子级上下文的工作不同 [11]。在注意力方面，xs 的特征表示是隐藏状态的加权和 gs(xs, e) = Σ ai·hi，采用点积注意力，基于实体与上下文之间的对齐计算注意力权重 [9]。该架构被表述为多标签分类问题：给定实体及其上下文，从细粒度类型集合 T 中预测实体的类型集合 [2]。",
+    "citation_check": {
+      "cited_numbers": [
+        2,
+        6,
+        9,
+        11
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 2,
+          "chunk_id": 508,
+          "source": "1804.08000.pdf",
+          "page": 2,
+          "text": "2 Model Fine-grained entity typing is considered a multi- label classiﬁcation problem: Each entity e in the text x is assigned a set of types T ∗drawn from the ﬁne-grained type set T . The goal of this task is to predict, given entity e and its context x, the assign- ment of types to the entity."
+        },
+        {
+          "citation": 6,
+          "chunk_id": 506,
+          "source": "1804.08000.pdf",
+          "page": 1,
+          "text": "To overcome these drawbacks, we propose a neural architecture (Figure 1) which learns more context-aware representations by using a better at- tention mechanism and taking advantage of se- mantic discourse information available in both the document as well as sentence-level contexts."
+        },
+        {
+          "citation": 9,
+          "chunk_id": 515,
+          "source": "1804.08000.pdf",
+          "page": 2,
+          "text": "(2017) who use two separate bi-directional RNNs for context on each side of the entity mention. Attention: The feature representation for xs is a weighted sum of the hidden states: gs(xs, e) = Pn i=1 aihi, where ai is the attention to hidden state hi. We employ the dot-product attention (Lu- (2) ong et al., 2015). It computes attention based on the alignment between the entity and its context: exp (h⊺ i Waf(e)) (3) jWaf(e)), ai = (6) j=1 exp (h⊺ Pn where Wa is the weight matrix."
+        },
+        {
+          "citation": 11,
+          "chunk_id": 512,
+          "source": "1804.08000.pdf",
+          "page": 2,
+          "text": "2.2 Featurizer As shown in Figure 1, featurizer ϕ in our model contains three encoders which encode entity e and its context x into feature vectors, and we consider both sentence-level context xs and document-level context xd in contrast to prior work which only takes sentence-level context (Gillick et al., 2014; Shimaoka et al., 2017). 1 1Document-level context has also been exploited in Yaghoobzadeh and Sch¨utze (2015); Yang et al. (2016); Karn et al. (2017); Gupta et al."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

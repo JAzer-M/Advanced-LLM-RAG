@@ -1,0 +1,3 @@
+They experimented with three evaluation settings: DOMAIN (IN-DOMAIN), OUT-OF-DOMAIN, and CROSS-DATASET [1].
+
+The IN-DOMAIN setting tests the model's ability to learn different domain distributions on a multi-domain set, while OUT-OF-DOMAIN investigates how models perform on unseen domains that were totally invisible during training [2]. The CROSS-DATASET setting evaluates transferability, with results suggesting the meta-learning strategy improves model transferability not only among the domains of MULTI-SUM but also across different datasets [7]. These settings make it possible to explicitly evaluate models both on the quality of domain-aware text representation and on their adaptation ability to derive reasonable representations in unfamiliar domains [1].

@@ -1,0 +1,121 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "For the paper \"Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce\" (arXiv: 1911.02747), answer this question: What datasets are used in experiments?",
+  "kb_version": "qasper-holdout-20261025",
+  "result": {
+    "status": "review_failed",
+    "repair_attempted": true,
+    "drafts": [
+      "实验使用了两个数据集：AliMe 和 Quora [1]。AliMe 数据集收集自 AliMe 智能助手系统，共 8,004 个 query-bag 对 [1];Quora 数据集由公开数据集构建而成 [1],其训练集为 20,354、验证集为 2,000、测试集为 10,000 [2],并且该组合的 Quora 数据集已被公开释放 [3]。",
+      "实验使用了两个数据集：AliMe 和 Quora [1]。AliMe 数据集收集自 AliMe 智能助手系统，共 8,004 个 query-bag 对 [1]；Quora 数据集由公开数据集构建而成 [1]，其训练集为 20,354、验证集为 2,000、测试集为 10,000 [4]，并且该组合的 Quora 数据集已被公开释放 [4]。"
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "fail",
+              "answer_quote": "Quora 数据集由公开数据集构建而成 [1],其训练集为 20,354、验证集为 2,000、测试集为 10,000 [2],并且该组合的 Quora 数据集已被公开释放 [3]。",
+              "reason": "数据集名称(AliMe 和 Quora)回答正确且被引文1支持,但引文编号错误:答案引用 [2](chunk 1338)支持 Quora 的 20,354/2,000/10,000 规模数字,该引文并无这些数字(实际来自 chunk 1362);引用 [3](chunk 1322,仅标题页)支持'Quora 数据集已公开释放',该引文亦无此内容(实际来自 chunk 1340 或 1362)。属引用错配。",
+              "citations": [
+                {
+                  "number": 1,
+                  "quote": "We conduct experiments on two datasets: AliMe and Quora. The Al- iMe dataset is collected from the AliMe intelligent assistant system and the Quora dataset is composed of a public dataset."
+                },
+                {
+                  "number": 2,
+                  "quote": "We conduct experiments on the AliMe and Quora dataset for the query-bag matching based information-seeking conversation."
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": false,
+            "unsupported_claims": false,
+            "gaps": true
+          },
+          "issues": [
+            "答案引用 [2] 声称支持 Quora 数据集规模(20,354/2,000/10,000),但被引段落(chunk 1338)不包含这些数字;这些数字实际来自另一个段落('Finally, we get 20,354 training set, 2,000 validation set, and 10,000 test set')。",
+            "答案引用 [3] 声称支持'组合的 Quora 数据集已被公开释放',但被引段落(chunk 1322)仅为标题页,无此内容;该声明实际由贡献列表('We release the composite Quora dataset...')或数据集段落支持。"
+          ]
+        },
+        "citation_check": {
+          "cited_numbers": [
+            1,
+            2,
+            3
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 1,
+              "chunk_id": 1357,
+              "source": "1911.02747.pdf",
+              "page": 3,
+              "text": "3 EXPERIMENTS 3.1 Dataset We conduct experiments on two datasets: AliMe and Quora. The Al- iMe dataset is collected from the AliMe intelligent assistant system and the Quora dataset is composed of a public dataset. AliMe For the AliMe service in E-commerce, we collect 8,004 query-bag pairs to form our dataset. Negative sampling is also an important part of the matching model. For each query, we use the Lucene2 to retrieval the top-20 most similar questions from the whole question candidates."
+            },
+            {
+              "citation": 2,
+              "chunk_id": 1338,
+              "source": "1911.02747.pdf",
+              "page": 2,
+              "text": "In addition to the mutual coverage, a bag representa- tion in word level is issued to help discover the main points of a bag. The bag representation then provides new matching evidence to the query-bag matching model. We conduct experiments on the AliMe and Quora dataset for the query-bag matching based information-seeking conversation. Compared with baselines, we verify the effectiveness of our model."
+            },
+            {
+              "citation": 3,
+              "chunk_id": 1322,
+              "source": "1911.02747.pdf",
+              "page": 1,
+              "text": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce Zhenxin Fu∗ fuzhenxin@pku.edu.cn zhongxiu.jf@alibaba-inc.com WICT, Peking University DAMO Academy, Alibaba Group Wei Zhou Dongyan Zhao fayi.zw@alibaba-inc.com zhaodongyan@pku.edu.cn DAMO Academy, Alibaba Group WICT, Peking University arXiv:1911.02747v1 [cs.CL] 7 Nov 2019 ruiyan@pku.edu.cn WICT, Peking University ABSTRACT Information-seeking conversation system aims at satisfying the information needs of users through conversations."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      },
+      {
+        "review_error": "Review cites a source not cited by its answer quote.",
+        "citation_check": {
+          "cited_numbers": [
+            1,
+            4
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 1,
+              "chunk_id": 1357,
+              "source": "1911.02747.pdf",
+              "page": 3,
+              "text": "3 EXPERIMENTS 3.1 Dataset We conduct experiments on two datasets: AliMe and Quora. The Al- iMe dataset is collected from the AliMe intelligent assistant system and the Quora dataset is composed of a public dataset. AliMe For the AliMe service in E-commerce, we collect 8,004 query-bag pairs to form our dataset. Negative sampling is also an important part of the matching model. For each query, we use the Lucene2 to retrieval the top-20 most similar questions from the whole question candidates."
+            },
+            {
+              "citation": 4,
+              "chunk_id": 1340,
+              "source": "1911.02747.pdf",
+              "page": 2,
+              "text": "The ablation study shows the usefulness of the components. The contributions in this paper are summarized as follows: 1) To the best of our knowledge, we are the first to adopt query-bag matching in the information-seeking conversation. 2) We propose the mutual coverage model to measure the information coverage in the query-bag matching. 3) We release the composite Quora dataset to facilitate the research in this area."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "The answer failed review, so no reliable factual answer can be delivered this time.\n- Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce: For the paper \"Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce\" (arXiv: 1911.02747), answer this question: What datasets are used in experiments?; The answer to this requirement still needs checking.",
+    "rejected_answer": "实验使用了两个数据集：AliMe 和 Quora [1]。AliMe 数据集收集自 AliMe 智能助手系统，共 8,004 个 query-bag 对 [1]；Quora 数据集由公开数据集构建而成 [1]，其训练集为 20,354、验证集为 2,000、测试集为 10,000 [4]，并且该组合的 Quora 数据集已被公开释放 [4]。"
+  }
+}

@@ -1,0 +1,183 @@
+{
+  "id": "question",
+  "query": "For the paper \"Using Statistical and Semantic Models for Multi-Document Summarization\" (arXiv: 1805.04579), answer this question: How exactly do they weigh between different statistical models?",
+  "kb_version": "qasper-holdout-20261025",
+  "status": "completed",
+  "actions_executed": 0,
+  "semantic_correctness": "requires_manual_review",
+  "validation_repairs": [
+    {
+      "phase": "plan",
+      "error": "Requirement question_quote must name its own subject and show its scope."
+    }
+  ],
+  "plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "Using Statistical and Semantic Models for Multi-Document Summarization",
+        "question_quote": "For the paper \"Using Statistical and Semantic Models for Multi-Document Summarization\" (arXiv: 1805.04579), answer this question: How exactly do they weigh between different statistical models?",
+        "need": "For the paper \"Using Statistical and Semantic Models for Multi-Document Summarization\" (arXiv: 1805.04579), answer this question: How exactly do they weigh between different statistical models?"
+      }
+    ]
+  },
+  "assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 635,
+            "quote": "For each model, assign the weights using j=1 f (j,i) Pv 1 , i ∈(1, g) Wi = u Here, f (j,i) denotes F1Score for jth model in 1 ith document."
+          },
+          {
+            "chunk_id": 633,
+            "quote": "we use training set of u domain speciﬁc documents, with gold standard/human-composed summaries, provided we ﬁne tune our weights Wi∀i ∈(1, g) for different models taking F1- score/F-measure.(Powers, 2011) as factor."
+          }
+        ],
+        "supported_part": "The paper weighs between different statistical models by assigning each model a weight Wi proportional to its F1-score on training documents: weights are fine-tuned using a training set of domain-specific documents with gold-standard summaries, taking F1-score/F-measure as the factor, and the weighted outputs of the different models are combined into a cumulative summary (cWeight) capturing the consensus of different models.",
+        "reason": "Chunks 633 and 635 directly establish the weighting mechanism: weights Wi for each model are computed from the model's F1-score on training documents and fine-tuned via supervised learning against gold-standard summaries.",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "answer",
+      "reason": "The weighting mechanism between models is fully established by the supplied passages.",
+      "requirement_ids": [],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "Evidence is restricted to the specified paper's passages and addresses exactly the operative need: how weights between the different statistical/semantic models are assigned."
+    }
+  },
+  "steps": [],
+  "evidence_after": [
+    {
+      "chunk_id": 587,
+      "source": "1805.04579.pdf",
+      "page": 2,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "For Multi-Document Summarization,after training on corpus, we assign weights among the different techniques .We store the sense vector for documents, along with weights, for future refer- ence. For Single document summarization, ﬁrstly we calculate the sense vector for that document and calculate the nearest vector from the stored Vectors, we use the weights of the nearest vector. We will describe the ﬂow for semantic and statis- tical models separately.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 635,
+      "source": "1805.04579.pdf",
+      "page": 6,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "2. For each model, assign the weights using j=1 f (j,i) Pv 1 , i ∈(1, g) Wi = u Here, f (j,i) denotes F1Score for jth model in 1 ith document. We now obtain cWeight as we did previously, and formulate cumulative summary, capturing the con- sensus of different models. We hence used a su- pervised learning algorithm to capture the mean performances of different models over the training data to ﬁne-tune our summary.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 578,
+      "source": "1805.04579.pdf",
+      "page": 1,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "In this paper, we have proposed two novel stand-alone summariza- tion methods.The ﬁrst method is based on Glove Model (Pennington et al., 2014),and other is based on Facebook’s InferSent (Conneau et al., 2017). We have also discussed how we can effectively subdue shortcomings of one model by using it in coalition with models which capture the view that other faintly held.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 584,
+      "source": "1805.04579.pdf",
+      "page": 2,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "There is a void of hybrid summarizers; there haven’t been many studies made in the area.Wong(Wong et al., 2008) conducted some preliminary research but there isn’t much there on benchmark tests to our knowledge. We use a mixture of statistical and semantic models, assign weights among them by training on ﬁeld-speciﬁc corpora. As there is a signiﬁcant variation in choices among different ﬁelds.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 572,
+      "source": "1805.04579.pdf",
+      "page": 1,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "Using weighing techniques in between various statistical models too further reﬁnes our result. For Statisti- cal models, we have used TF/IDF, Tex- tRAnk, Jaccard/Cosine Similarities. For Semantic Models, we have used WordNet- based Model and proposed two models based on Glove Vectors and Facebook’s InferSent. We tested our approach on DUC 2004 dataset, generating 100-word summaries. We have discussed the system, algorithms, analysis and also proposed and tested possible improvements.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 631,
+      "source": "1805.04579.pdf",
+      "page": 6,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "3.5 Single Document Summarization After generating summary from a particular model, our aim is to compute summaries through overlap of different models. Let us have g summaries from g different models. For pth sum- marization model, let the k sentences contained be:- Sump ←(s(1,p), s(2,p) . , s(k,p)) Now for our list of sentences < s1, s2, s3, ..sn > we deﬁne cWeight as weight obtained for each sentence using g models.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 583,
+      "source": "1805.04579.pdf",
+      "page": 2,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "Graphical summarizers like TextRank have also provided great benchmark results.TextRank assigns weights to important keywords from the document using graph-based model and sentences which capture most of those concepts/keywords are ranked higher) (Barrera and Verma, 2012, Mihalcea and Tarau, 2004) TextRank Google’s PageRank (Brin and Page, 1998) for graphical modeling. Though semantic and graphical models may better capture the sense of document but miss out on statistical view.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 643,
+      "source": "1805.04579.pdf",
+      "page": 7,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "Model ROUGE −2 Jaccard 0.03468 Cosine 0.02918 TextRank 0.03629 TFIDF 0.03371 WordNet Based Model 0.03354 Glove-vec Based Model 0.03054 InferSent Based Model 0.03812 In the Table 1, we try different model pairs with weights trained on corpus for Task 2. We have displayed mean ROUGE-2 scores for base Mod- els. We have calculated ﬁnal scores taking into consideration all normalizations, stemming, lem- matizing and clustering techniques, and the ones providing best results were used.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 570,
+      "source": "1805.04579.pdf",
+      "page": 1,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "Using Statistical and Semantic Models for Multi-Document Summarization Divyanshu Daiya ∗ Anukarsh Singh ∗ LNM Institute of Information LNM Institute of Information Technology Jaipur, Rajasthan 302031 Jaipur, Rajasthan 302031 daiyadivyanshu@gmail.com anukarshsingh1@gmail.com Abstract We report a series of experiments with arXiv:1805.04579v2 [cs.CL] 17 May 2018 different semantic models on top of var- ious statistical models for extractive text summarization.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 581,
+      "source": "1805.04579.pdf",
+      "page": 2,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "Summarization using weights on high- frequency words (Nenkova et al., 2006) describes that high-frequency terms can be used to deduce the core of document. While semantic summarizers like Lexical similarity is based on the assumption that im- portant sentences are identiﬁed by strong chains (Gupta et al., 2011, Barrera and Verma, 2012, Murdock, 2006). In other words, it relates sentences that employ words with the same meaning (synonyms) or other semantic relation.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 633,
+      "source": "1805.04579.pdf",
+      "page": 6,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "3.6 Multi-Document/Domain-Speciﬁc Summarization We here use machine learning based approach to further increase the quality of our summa- rization technique. The elemental concept is that we use training set of u domain speciﬁc documents, with gold standard/human-composed summaries, provided we ﬁne tune our weights Wi∀i ∈(1, g) for different models taking F1- score/F-measure.(Powers, 2011) as factor.",
+      "kb_version": "qasper-holdout-20261025"
+    }
+  ],
+  "halt_reason": "answer_ready",
+  "final_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 635,
+            "quote": "For each model, assign the weights using j=1 f (j,i) Pv 1 , i ∈(1, g) Wi = u Here, f (j,i) denotes F1Score for jth model in 1 ith document."
+          },
+          {
+            "chunk_id": 633,
+            "quote": "we use training set of u domain speciﬁc documents, with gold standard/human-composed summaries, provided we ﬁne tune our weights Wi∀i ∈(1, g) for different models taking F1- score/F-measure.(Powers, 2011) as factor."
+          }
+        ],
+        "supported_part": "The paper weighs between different statistical models by assigning each model a weight Wi proportional to its F1-score on training documents: weights are fine-tuned using a training set of domain-specific documents with gold-standard summaries, taking F1-score/F-measure as the factor, and the weighted outputs of the different models are combined into a cumulative summary (cWeight) capturing the consensus of different models.",
+        "reason": "Chunks 633 and 635 directly establish the weighting mechanism: weights Wi for each model are computed from the model's F1-score on training documents and fine-tuned via supervised learning against gold-standard summaries.",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "answer",
+      "reason": "The weighting mechanism between models is fully established by the supplied passages.",
+      "requirement_ids": [],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "Evidence is restricted to the specified paper's passages and addresses exactly the operative need: how weights between the different statistical/semantic models are assigned."
+    }
+  },
+  "elapsed_seconds": 12.138
+}

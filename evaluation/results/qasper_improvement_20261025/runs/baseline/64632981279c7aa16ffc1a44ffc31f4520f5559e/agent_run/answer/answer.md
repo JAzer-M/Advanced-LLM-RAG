@@ -1,0 +1,1 @@
+该论文使用了两个评估指标：**coverage（覆盖率）** 和 **precision（精确率）** [1]。coverage 衡量自然语言中的动词短语能找到对应 pattern 的比例；precision 衡量短语与其对应 pattern 正确匹配的比例 [1]。计算方式为：coverage = n_cover / n_all，precision = n_correct / n_cover，其中 n_cover 是测试数据中找到对应 pattern 的短语数，n_all 是短语总数，n_correct 是 pattern 正确的短语数；precision 通过从测试数据中随机抽取 100 个动词短语、由志愿者标注其 pattern 正确性来评估 [2]。

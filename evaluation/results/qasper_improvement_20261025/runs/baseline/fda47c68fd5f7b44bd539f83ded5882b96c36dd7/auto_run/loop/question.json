@@ -1,0 +1,980 @@
+{
+  "id": "question",
+  "query": "For the paper \"Unfolding and Shrinking Neural Machine Translation Ensembles\" (arXiv: 1704.03279), answer this question: What were the baselines?",
+  "kb_version": "qasper-holdout-20261025",
+  "status": "completed",
+  "actions_executed": 2,
+  "semantic_correctness": "requires_manual_review",
+  "plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "\"Unfolding and Shrinking Neural Machine Translation Ensembles\"",
+        "question_quote": "For the paper \"Unfolding and Shrinking Neural Machine Translation Ensembles\" (arXiv: 1704.03279), answer this question: What were the baselines?",
+        "need": "For the paper \"Unfolding and Shrinking Neural Machine Translation Ensembles\" (arXiv: 1704.03279), answer this question: What were the baselines?"
+      }
+    ]
+  },
+  "assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "missing",
+        "evidence": [],
+        "supported_part": "",
+        "reason": "The supplied passages from 1704.03279.pdf describe the unfolding/shrinking method, motivation relative to single NMT and ensembles, and Table 3 results by row letters, but none of them explicitly states which systems served as the baselines in the experiments. Chunks 168/169 discuss decoding speed and rows (a)-(g) of Table 3, yet never name or define the baseline systems.",
+        "gap": "The passages do not state what the baselines were (e.g., which systems, such as the single NMT model or the ensemble, were used as baselines in the paper's experiments)."
+      }
+    ],
+    "next_action": {
+      "type": "read_neighbors",
+      "reason": "The paper is in the inventory, and the baseline description is most likely in the experiments/results section near the Table 3 discussion (chunk 168 on page 6), which currently only references rows by letter without defining the baselines. Reading the neighboring passages should capture the experimental setup describing the baseline systems.",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": null,
+      "source": "1704.03279.pdf",
+      "chunk_id": 168
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "The check is limited to the single requirement r1 asking for the baselines of the paper 'Unfolding and Shrinking Neural Machine Translation Ensembles'; no other subjects, comparisons, or extra conditions were introduced."
+    }
+  },
+  "steps": [
+    {
+      "number": 1,
+      "action": {
+        "type": "read_neighbors",
+        "reason": "The paper is in the inventory, and the baseline description is most likely in the experiments/results section near the Table 3 discussion (chunk 168 on page 6), which currently only references rows by letter without defining the baselines. Reading the neighboring passages should capture the experimental setup describing the baseline systems.",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": null,
+        "source": "1704.03279.pdf",
+        "chunk_id": 168
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "read_neighbors",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "chunk_id": 168,
+          "source": "1704.03279.pdf",
+          "knowledge_base": {
+            "version": "qasper-holdout-20261025",
+            "chunk_count": 1459,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/manifest.json",
+            "manifest_sha256": "10bb244a150c260e5efc39b1a6ebeb939291e26f55d966ed102d27216e67718a",
+            "files": {
+              "faiss.index": "346ac08a63ebb5f367f8a886b0997c344fc084bf1fa8b27ae27de9a82be97617",
+              "chunks.json": "ef123dcc0b2180f3b957d9089c8b5207965dffb1d908fdbf348863efecdeb060"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 166,
+              "text": "Factor dev test - - - 1.00 20.8 23.5 2×1.00 - - - 22.7 25.2 - - SVD 1.85 22.7 25.1 - - SVD 1.77 22.7 25.1 Data-Free - SVD 1.05 21.6 24.2 25.3 Data-Bound - SVD 1.05 22.4 Data-Bound Data-Free SVD 1.00 16.9 19.3 Data-Bound Data-Bound SVD 1.00 21.9 24.6 Compensation Method BLEU Linear Combination SGD dev test (a) 16.3 18.0 ✓ (b) 22.1 24.3 ✓ (c) 21.7 24.4 ✓ ✓ (d) 22.4 25.3 Table 2: Compensating for neuron removal in the data-bound algorithm.",
+              "source": "1704.03279.pdf",
+              "page": 6,
+              "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+              "section": "4 Results",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -2
+            },
+            {
+              "chunk_id": 167,
+              "text": "Row (d) corresponds to row (f) in Tab. 1. weights during this process. 2 demonstrates that both mechanisms are crucial for minimizing the effect of shrinking on the BLEU score. Decoding Speed Our testing environment is an Ubuntu 16.04 with Linux 4.4.0 kernel, 32 GB RAM, an Intel R⃝Core i7-6700 CPU at 3.40 GHz and an Nvidia GeForce GTX Titan X GPU. CPU decoding uses a single thread.",
+              "source": "1704.03279.pdf",
+              "page": 6,
+              "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+              "section": "4 Results",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -1
+            },
+            {
+              "chunk_id": 168,
+              "text": "We used the ﬁrst 500 sentences of the Ja-En WAT development set for the time measurements. Our results in Tab. 3 show that decoding with ensembles (rows (b) and (e)) is slow: combin- ing the predictions of the individual models on the CPU is computationally expensive, and en- semble decoding requires K passes through the softmax layer which is also computationally ex- pensive.",
+              "source": "1704.03279.pdf",
+              "page": 6,
+              "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+              "section": "4 Results",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 0
+            },
+            {
+              "chunk_id": 169,
+              "text": "Unfolding the ensemble into a single net- work and shrinking the embedding and attention layers improves the runtimes on the GPU signiﬁ- cantly without noticeable impact on BLEU (rows (c) and (f)). This can be attributed to the fact that unfolding can reduce the communication overhead between CPU and GPU. Comparing rows (d) and (g) with row (a) reveals that shrinking the un- folded networks even further speeds up CPU and GPU decoding almost to the level of single sys- tem decoding.",
+              "source": "1704.03279.pdf",
+              "page": 6,
+              "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+              "section": "4 Results",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 1
+            },
+            {
+              "chunk_id": 170,
+              "text": "However, more aggressive shrink- ing yields a BLEU score of 25.3 when combining three systems (row (g)) – 1.8 BLEU better than the single system, but 0.6 BLEU worse than the 3-",
+              "source": "1704.03279.pdf",
+              "page": 6,
+              "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+              "section": "4 Results",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 2
+            }
+          ],
+          "trace": {
+            "window": 2,
+            "max_window": 2,
+            "selected_ids": [
+              166,
+              167,
+              168,
+              169,
+              170
+            ],
+            "read_chars": 1865,
+            "elapsed_seconds": 0.000215,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        166,
+        167,
+        170
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          166,
+          167,
+          170
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "missing",
+            "evidence": [],
+            "supported_part": "",
+            "reason": "The supplied passages describe the unfolding/shrinking methods, BLEU/speed results, and reference entries, but none explicitly states what the baselines were. Chunk 166 shows a garbled results table with single-system and ensemble rows and chunk 169 references 'single sys- tem decoding', but neither passage explicitly identifies the baselines used in the paper.",
+            "gap": "No passage explicitly names the baselines (e.g., single NMT systems, the ensemble, or other comparison systems) against which the unfolding and shrinking methods were evaluated."
+          }
+        ],
+        "next_action": {
+          "type": "search",
+          "reason": "The read_neighbors retrieval around chunk 168 did not establish what the baselines were; a targeted search for the paper's baseline description is needed.",
+          "requirement_ids": [
+            "r1"
+          ],
+          "query": "\"Unfolding and Shrinking Neural Machine Translation Ensembles\": For the paper \"Unfolding and Shrinking Neural Machine Translation Ensembles\" (arXiv: 1704.03279), answer this question: What were the baselines? | For the paper \"Unfolding and Shrinking Neural Machine Translation Ensembles\" (arXiv: 1704.03279), answer this question: What were the baselines?",
+          "source": "1704.03279.pdf",
+          "chunk_id": null
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "Scope limited to r1's operative need: identifying the baselines in the named paper; no expansion to method details or other requirements."
+        }
+      }
+    },
+    {
+      "number": 2,
+      "action": {
+        "type": "search",
+        "reason": "The read_neighbors retrieval around chunk 168 did not establish what the baselines were; a targeted search for the paper's baseline description is needed.",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": "\"Unfolding and Shrinking Neural Machine Translation Ensembles\": For the paper \"Unfolding and Shrinking Neural Machine Translation Ensembles\" (arXiv: 1704.03279), answer this question: What were the baselines? | For the paper \"Unfolding and Shrinking Neural Machine Translation Ensembles\" (arXiv: 1704.03279), answer this question: What were the baselines?",
+        "source": "1704.03279.pdf",
+        "chunk_id": null
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "search",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "query": "\"Unfolding and Shrinking Neural Machine Translation Ensembles\": For the paper \"Unfolding and Shrinking Neural Machine Translation Ensembles\" (arXiv: 1704.03279), answer this question: What were the baselines? | For the paper \"Unfolding and Shrinking Neural Machine Translation Ensembles\" (arXiv: 1704.03279), answer this question: What were the baselines?",
+          "source": "1704.03279.pdf",
+          "knowledge_base": {
+            "version": "qasper-holdout-20261025",
+            "chunk_count": 1459,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/manifest.json",
+            "manifest_sha256": "10bb244a150c260e5efc39b1a6ebeb939291e26f55d966ed102d27216e67718a",
+            "files": {
+              "faiss.index": "346ac08a63ebb5f367f8a886b0997c344fc084bf1fa8b27ae27de9a82be97617",
+              "chunks.json": "ef123dcc0b2180f3b957d9089c8b5207965dffb1d908fdbf348863efecdeb060"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 217,
+              "score": 0.025503573749187783,
+              "source": "1704.03279.pdf",
+              "page": 10,
+              "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+              "section": "6 Conclusion",
+              "text": "arXiv:1702.01802. Ian Goodfellow, David Warde-Farley, Mehdi Mirza, Aaron Courville, and Yoshua Bengio. 2013. Max- out networks. In ICML, pages 1319–1327. Song Han, Jeff Pool, John Tran, and William Dally. 2015. Learning both weights and connections for efﬁcient neural network. In Advances in Neural In- formation Processing Systems, pages 1135–1143. In Lars Kai Hansen and Peter Salamon. 1990. Neu- ral network ensembles.",
+              "rerank_score": 0.979150116443634,
+              "kb_version": "qasper-holdout-20261025"
+            },
+            {
+              "chunk_id": 169,
+              "score": 0.022451963241436924,
+              "source": "1704.03279.pdf",
+              "page": 6,
+              "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+              "section": "4 Results",
+              "text": "Unfolding the ensemble into a single net- work and shrinking the embedding and attention layers improves the runtimes on the GPU signiﬁ- cantly without noticeable impact on BLEU (rows (c) and (f)). This can be attributed to the fact that unfolding can reduce the communication overhead between CPU and GPU. Comparing rows (d) and (g) with row (a) reveals that shrinking the un- folded networks even further speeds up CPU and GPU decoding almost to the level of single sys- tem decoding.",
+              "rerank_score": 0.9608216285705566,
+              "kb_version": "qasper-holdout-20261025"
+            },
+            {
+              "chunk_id": 156,
+              "score": 0.014661654135338344,
+              "source": "1704.03279.pdf",
+              "page": 5,
+              "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+              "section": "4 Results",
+              "text": "We also report the size factor for each model which is the total number of model parameters (sum of all weight matrix sizes) di- vided by the number of parameters in the original NMT network (86M for Ja-En and 120M for En- De). We choose a widely used, simple ensembling method (prediction averaging) as our baseline. We feel that the prevalence of this method makes it a reasonable baseline for our experiments.",
+              "rerank_score": 0.9501650333404541,
+              "kb_version": "qasper-holdout-20261025"
+            },
+            {
+              "chunk_id": 103,
+              "score": 0.03252247488101534,
+              "source": "1704.03279.pdf",
+              "page": 1,
+              "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+              "section": null,
+              "text": "Unfolding and Shrinking Neural Machine Translation Ensembles Felix Stahlberg and Bill Byrne {fs439,wjb31}@cam.ac.uk Department of Engineering University of Cambridge, UK Abstract Ensembling is a well-known technique in neural machine translation (NMT) to im- arXiv:1704.03279v2 [cs.CL] 21 Jul 2017 prove system performance.",
+              "rerank_score": 0.945125937461853,
+              "kb_version": "qasper-holdout-20261025"
+            },
+            {
+              "chunk_id": 216,
+              "score": 0.02804284323271665,
+              "source": "1704.03279.pdf",
+              "page": 10,
+              "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+              "section": "6 Conclusion",
+              "text": "2011. Adaptive subgradient methods for online learning Journal of Machine and stochastic optimization. Learning Research, pages 2121–2159. Nadir Durrani, Fahim Dalvi, Hassan Sajjad, and Stephan Vogel. 2017. QCRI machine transla- arXiv preprint tion systems for IWSLT 16. arXiv:1701.03924. Markus Freitag, Yaser Al-Onaizan, and Baskaran Sankaran. 2017. Ensemble distillation for arXiv preprint neural machine translation.",
+              "rerank_score": 0.9371508955955505,
+              "kb_version": "qasper-holdout-20261025"
+            },
+            {
+              "chunk_id": 145,
+              "score": 0.018115942028985508,
+              "source": "1704.03279.pdf",
+              "page": 4,
+              "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+              "section": "3.2 Data-Bound Neuron Removal",
+              "text": "For example, for the decoder GRU layer, a batch size of 80, and target sentence lengths of 20, A has 20 · 80 · 450 = 720K rows and m (the number of neurons in the layer) columns.3 Similarly to Eq. 2 (3) we ﬁnd interpolation weights λ using the method of least squares on the following linear system. (4) A:,¬jλ = A:,j (5) The update rule for the outgoing weight matrix is the same as for our data-free method (Eq.",
+              "rerank_score": 0.9108270406723022,
+              "kb_version": "qasper-holdout-20261025"
+            },
+            {
+              "chunk_id": 189,
+              "score": 0.018018018018018018,
+              "source": "1704.03279.pdf",
+              "page": 8,
+              "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+              "section": "5 Related Work",
+              "text": "These approaches often use low rank matri- ces to approximate a full rank weight matrix in the original network. In contrast, we shrink an entire linear layer by applying SVD on the product of the incoming and outgoing weight matrices (Sec. In this paper we mimicked the output of the high performing but cumbersome ensemble by con- structing a large unfolded network, and shrank this network afterwards.",
+              "rerank_score": 0.8964067101478577,
+              "kb_version": "qasper-holdout-20261025"
+            },
+            {
+              "chunk_id": 107,
+              "score": 0.028438886647841874,
+              "source": "1704.03279.pdf",
+              "page": 1,
+              "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+              "section": "1 Introduction",
+              "text": "1 Introduction The top systems in recent machine translation evaluation campaigns on various language pairs use ensembles of a number of NMT systems (Bo- jar et al., 2016; Sennrich et al., 2016a; Chung et al., 2016; Neubig, 2016; Wu et al., 2016; Cromieres et al., 2016; Durrani et al., 2017). En- sembling (Dietterich, 2000; Hansen and Salamon, 1990) of neural networks is a simple yet very ef- fective technique to improve the accuracy of NMT.",
+              "rerank_score": 0.8877671957015991,
+              "kb_version": "qasper-holdout-20261025"
+            },
+            {
+              "chunk_id": 122,
+              "score": 0.01689664883131512,
+              "source": "1704.03279.pdf",
+              "page": 2,
+              "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+              "section": "2 Large Neural Network",
+              "text": "For a formal description of unfolding we ad- dress layers with indices d = 0, 1, . The special layer 0 has a single neuron for modelling bias vectors. Layer 1 holds the input neurons and layer D is the output layer. We denote the size of a layer in the individual models as s(d). When combining K networks, the layer size s′(d) in the unfolded network is increased by factor K if d is an inner layer, and equal to s(d) if d is the in-",
+              "rerank_score": 0.8859342932701111,
+              "kb_version": "qasper-holdout-20261025"
+            },
+            {
+              "chunk_id": 137,
+              "score": 0.016403361344537813,
+              "source": "1704.03279.pdf",
+              "page": 4,
+              "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+              "section": "3.1 Data-Free Neuron Removal",
+              "text": "We now ask the following ques- tion: How can we compensate as well as possible for the loss of neuron j such that the impact on the output of the whole network is minimized? Data- free shrinking represents the incoming weight vec- tor of neuron j (U:,j) as linear combination of the incoming weight vectors of the other neurons. The linear factors can be found by satisfying the fol- lowing linear system: U:,¬jλ = U:,j where U:,¬j is matrix U without the j-th col- umn.",
+              "rerank_score": 0.8721211552619934,
+              "kb_version": "qasper-holdout-20261025"
+            }
+          ],
+          "trace": {
+            "retrieval_depth": 1459,
+            "candidate_k": 120,
+            "rrf_k": 60,
+            "result_k": 10,
+            "dense_ids": [
+              225,
+              103,
+              229,
+              219,
+              227,
+              226,
+              223,
+              213,
+              206,
+              184,
+              221,
+              220,
+              212,
+              107,
+              175,
+              218,
+              209,
+              195,
+              216,
+              129,
+              217,
+              188,
+              158,
+              214,
+              119,
+              222,
+              154,
+              210,
+              110,
+              205,
+              111,
+              145,
+              190,
+              138,
+              192,
+              171,
+              215,
+              157,
+              168,
+              173,
+              104,
+              127,
+              165,
+              163,
+              153,
+              172,
+              113,
+              178,
+              133,
+              197,
+              189,
+              144,
+              117,
+              105,
+              118,
+              114,
+              126,
+              150,
+              137,
+              141,
+              148,
+              147,
+              185,
+              159,
+              134,
+              139,
+              140,
+              230,
+              186,
+              124,
+              109,
+              162,
+              156,
+              122,
+              160,
+              194,
+              125,
+              177,
+              228,
+              132,
+              120,
+              161,
+              202,
+              108,
+              121,
+              143,
+              199,
+              193,
+              142,
+              164,
+              200,
+              169,
+              152,
+              136,
+              106,
+              131,
+              224,
+              231,
+              115,
+              151,
+              174,
+              112,
+              181,
+              155,
+              170,
+              211,
+              166,
+              179,
+              182,
+              146,
+              149,
+              128,
+              201,
+              198,
+              167,
+              180,
+              176,
+              203,
+              187,
+              204
+            ],
+            "bm25_ids": [
+              103,
+              226,
+              169,
+              229,
+              216,
+              195,
+              107,
+              222,
+              117,
+              219,
+              110,
+              223,
+              118,
+              193,
+              225,
+              217,
+              206,
+              213,
+              190,
+              210,
+              147,
+              129,
+              105,
+              168,
+              212,
+              209,
+              174,
+              112,
+              119,
+              161,
+              218,
+              199,
+              227,
+              220,
+              197,
+              202,
+              162,
+              104,
+              165,
+              160,
+              157,
+              194,
+              139,
+              140,
+              150,
+              122,
+              214,
+              106,
+              136,
+              123,
+              189,
+              115,
+              163,
+              179,
+              111,
+              155,
+              128,
+              173,
+              177,
+              228,
+              167,
+              113,
+              205,
+              198,
+              137,
+              132,
+              184,
+              148,
+              121,
+              159,
+              181,
+              143,
+              127,
+              134,
+              120,
+              141,
+              196,
+              145,
+              158,
+              156,
+              186,
+              109,
+              124,
+              153,
+              133,
+              149,
+              192,
+              130,
+              164,
+              178,
+              185,
+              221,
+              172,
+              114,
+              152,
+              188,
+              215,
+              187,
+              138,
+              126,
+              144,
+              142,
+              125,
+              201,
+              151,
+              231,
+              146,
+              203,
+              230,
+              200,
+              108,
+              191,
+              175,
+              131,
+              170,
+              154,
+              183,
+              211,
+              116,
+              135
+            ],
+            "candidate_ids": [
+              103,
+              229,
+              226,
+              219,
+              225,
+              223,
+              107,
+              216,
+              195,
+              213,
+              206,
+              222,
+              227,
+              217,
+              212,
+              110,
+              129,
+              209,
+              220,
+              218,
+              210,
+              190,
+              117,
+              119,
+              169,
+              118,
+              184,
+              168,
+              214,
+              105,
+              221,
+              147,
+              193,
+              157,
+              104,
+              165,
+              111,
+              197,
+              158,
+              205,
+              175,
+              188,
+              173,
+              163,
+              161,
+              145,
+              189,
+              150,
+              162,
+              174,
+              199,
+              139,
+              113,
+              112,
+              140,
+              202,
+              160,
+              192,
+              127,
+              154,
+              194,
+              138,
+              122,
+              215,
+              153,
+              137,
+              148,
+              133,
+              172,
+              178,
+              159,
+              106,
+              141,
+              136,
+              177,
+              228,
+              134,
+              115,
+              144,
+              114,
+              132,
+              186,
+              126,
+              185,
+              179,
+              155,
+              124,
+              109,
+              156,
+              121,
+              120,
+              143,
+              128,
+              167,
+              198,
+              181,
+              230,
+              125,
+              164,
+              152,
+              142,
+              108,
+              149,
+              200,
+              231,
+              151,
+              131,
+              187,
+              201,
+              146,
+              170,
+              211,
+              203,
+              171,
+              123,
+              196,
+              130,
+              224,
+              166,
+              182
+            ],
+            "selected_ids": [
+              217,
+              169,
+              156,
+              103,
+              216,
+              145,
+              189,
+              107,
+              122,
+              137
+            ],
+            "elapsed_seconds": 9.508825,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        156,
+        189,
+        122,
+        137
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          156,
+          189,
+          122,
+          137
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "supported",
+            "evidence": [
+              {
+                "chunk_id": 156,
+                "quote": "We choose a widely used, simple ensembling method (prediction averaging) as our baseline. We feel that the prevalence of this method makes it a reasonable baseline for our experiments."
+              }
+            ],
+            "supported_part": "The baseline was a widely used, simple ensembling method, namely prediction averaging.",
+            "reason": "Chunk 156 explicitly states the paper's baseline: the simple ensembling method of prediction averaging, chosen because of its prevalence.",
+            "gap": ""
+          }
+        ],
+        "next_action": {
+          "type": "answer",
+          "reason": "r1 is fully supported by chunk 156, which explicitly names prediction averaging ensembling as the baseline.",
+          "requirement_ids": [],
+          "query": null,
+          "source": null,
+          "chunk_id": null
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "Check limited to the requested fact (the paper's baselines) within its excerpt; no scope expansion."
+        }
+      }
+    }
+  ],
+  "evidence_after": [
+    {
+      "chunk_id": 216,
+      "source": "1704.03279.pdf",
+      "page": 10,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "2011. Adaptive subgradient methods for online learning Journal of Machine and stochastic optimization. Learning Research, pages 2121–2159. Nadir Durrani, Fahim Dalvi, Hassan Sajjad, and Stephan Vogel. 2017. QCRI machine transla- arXiv preprint tion systems for IWSLT 16. arXiv:1701.03924. Markus Freitag, Yaser Al-Onaizan, and Baskaran Sankaran. 2017. Ensemble distillation for arXiv preprint neural machine translation.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 145,
+      "source": "1704.03279.pdf",
+      "page": 4,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "For example, for the decoder GRU layer, a batch size of 80, and target sentence lengths of 20, A has 20 · 80 · 450 = 720K rows and m (the number of neurons in the layer) columns.3 Similarly to Eq. 2 (3) we ﬁnd interpolation weights λ using the method of least squares on the following linear system. (4) A:,¬jλ = A:,j (5) The update rule for the outgoing weight matrix is the same as for our data-free method (Eq.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 110,
+      "source": "1704.03279.pdf",
+      "page": 1,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "This paper presents an alternative to knowl- edge distillation as we aim to speed up decoding to be comparable to single NMT while retaining the boost in translation accuracy from the ensem- ble. In a ﬁrst step, we describe how to construct a single large neural network which imitates the output of an ensemble of multiple networks with the same topology. We will refer to this process as unfolding.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 103,
+      "source": "1704.03279.pdf",
+      "page": 1,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "Unfolding and Shrinking Neural Machine Translation Ensembles Felix Stahlberg and Bill Byrne {fs439,wjb31}@cam.ac.uk Department of Engineering University of Cambridge, UK Abstract Ensembling is a well-known technique in neural machine translation (NMT) to im- arXiv:1704.03279v2 [cs.CL] 21 Jul 2017 prove system performance.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 217,
+      "source": "1704.03279.pdf",
+      "page": 10,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "arXiv:1702.01802. Ian Goodfellow, David Warde-Farley, Mehdi Mirza, Aaron Courville, and Yoshua Bengio. 2013. Max- out networks. In ICML, pages 1319–1327. Song Han, Jeff Pool, John Tran, and William Dally. 2015. Learning both weights and connections for efﬁcient neural network. In Advances in Neural In- formation Processing Systems, pages 1135–1143. In Lars Kai Hansen and Peter Salamon. 1990. Neu- ral network ensembles.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 229,
+      "source": "1704.03279.pdf",
+      "page": 11,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "2016. Se- quence student-teacher training of deep neural net- works. Interspeech 2016, pages 2761–2765. Yonghui Wu, Mike Schuster, Zhifeng Chen, Quoc V Le, Mohammad Norouzi, Wolfgang Macherey, Maxim Krikun, Yuan Cao, Qin Gao, Klaus Macherey, et al. 2016. Google’s neural ma- chine translation system: Bridging the gap between arXiv preprint human and machine translation. arXiv:1609.08144. Jian Xue, Jinyu Li, and Yifan Gong.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 107,
+      "source": "1704.03279.pdf",
+      "page": 1,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "1 Introduction The top systems in recent machine translation evaluation campaigns on various language pairs use ensembles of a number of NMT systems (Bo- jar et al., 2016; Sennrich et al., 2016a; Chung et al., 2016; Neubig, 2016; Wu et al., 2016; Cromieres et al., 2016; Durrani et al., 2017). En- sembling (Dietterich, 2000; Hansen and Salamon, 1990) of neural networks is a simple yet very ef- fective technique to improve the accuracy of NMT.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 169,
+      "source": "1704.03279.pdf",
+      "page": 6,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "Unfolding the ensemble into a single net- work and shrinking the embedding and attention layers improves the runtimes on the GPU signiﬁ- cantly without noticeable impact on BLEU (rows (c) and (f)). This can be attributed to the fact that unfolding can reduce the communication overhead between CPU and GPU. Comparing rows (d) and (g) with row (a) reveals that shrinking the un- folded networks even further speeds up CPU and GPU decoding almost to the level of single sys- tem decoding.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 222,
+      "source": "1704.03279.pdf",
+      "page": 11,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "Toshiaki Nakazawa, Manabu Yaguchi, Kiyotaka Uchi- moto, Masao Utiyama, Eiichiro Sumita, Sadao Kurohashi, and Hitoshi Isahara. 2016. ASPEC: In LREC, Asian scientiﬁc paper excerpt corpus. pages 2204–2208, Portoroz, Slovenia. Graham Neubig. 2016. Lexicons and minimum risk training for neural machine translation: NAIST- CMU at WAT2016. In Proceedings of the 3rd Work- shop on Asian Translation (WAT2016), pages 119– 125, Osaka, Japan. The COLING 2016 Organizing Committee.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 119,
+      "source": "1704.03279.pdf",
+      "page": 2,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "Our main motivation for unfolding is to obtain a single network with ensemble level performance which can be shrunk with the techniques in Sec. 3. Suppose we ensemble two single layer feed- forward neural nets as shown in Fig. 1. Nor- mally, ensembling is implemented by performing an isolated forward pass through the ﬁrst network (Fig. 1(a)), another isolated forward pass through the second network (Fig. 1(b)), and averaging the activities in the output layers of both networks.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 168,
+      "source": "1704.03279.pdf",
+      "page": 6,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "We used the ﬁrst 500 sentences of the Ja-En WAT development set for the time measurements. Our results in Tab. 3 show that decoding with ensembles (rows (b) and (e)) is slow: combin- ing the predictions of the individual models on the CPU is computationally expensive, and en- semble decoding requires K passes through the softmax layer which is also computationally ex- pensive.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 166,
+      "source": "1704.03279.pdf",
+      "page": 6,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "Factor dev test - - - 1.00 20.8 23.5 2×1.00 - - - 22.7 25.2 - - SVD 1.85 22.7 25.1 - - SVD 1.77 22.7 25.1 Data-Free - SVD 1.05 21.6 24.2 25.3 Data-Bound - SVD 1.05 22.4 Data-Bound Data-Free SVD 1.00 16.9 19.3 Data-Bound Data-Bound SVD 1.00 21.9 24.6 Compensation Method BLEU Linear Combination SGD dev test (a) 16.3 18.0 ✓ (b) 22.1 24.3 ✓ (c) 21.7 24.4 ✓ ✓ (d) 22.4 25.3 Table 2: Compensating for neuron removal in the data-bound algorithm.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 167,
+      "source": "1704.03279.pdf",
+      "page": 6,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "Row (d) corresponds to row (f) in Tab. 1. weights during this process. 2 demonstrates that both mechanisms are crucial for minimizing the effect of shrinking on the BLEU score. Decoding Speed Our testing environment is an Ubuntu 16.04 with Linux 4.4.0 kernel, 32 GB RAM, an Intel R⃝Core i7-6700 CPU at 3.40 GHz and an Nvidia GeForce GTX Titan X GPU. CPU decoding uses a single thread.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 170,
+      "source": "1704.03279.pdf",
+      "page": 6,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "However, more aggressive shrink- ing yields a BLEU score of 25.3 when combining three systems (row (g)) – 1.8 BLEU better than the single system, but 0.6 BLEU worse than the 3-",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 156,
+      "source": "1704.03279.pdf",
+      "page": 5,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "We also report the size factor for each model which is the total number of model parameters (sum of all weight matrix sizes) di- vided by the number of parameters in the original NMT network (86M for Ja-En and 120M for En- De). We choose a widely used, simple ensembling method (prediction averaging) as our baseline. We feel that the prevalence of this method makes it a reasonable baseline for our experiments.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 189,
+      "source": "1704.03279.pdf",
+      "page": 8,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "These approaches often use low rank matri- ces to approximate a full rank weight matrix in the original network. In contrast, we shrink an entire linear layer by applying SVD on the product of the incoming and outgoing weight matrices (Sec. In this paper we mimicked the output of the high performing but cumbersome ensemble by con- structing a large unfolded network, and shrank this network afterwards.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 122,
+      "source": "1704.03279.pdf",
+      "page": 2,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "For a formal description of unfolding we ad- dress layers with indices d = 0, 1, . The special layer 0 has a single neuron for modelling bias vectors. Layer 1 holds the input neurons and layer D is the output layer. We denote the size of a layer in the individual models as s(d). When combining K networks, the layer size s′(d) in the unfolded network is increased by factor K if d is an inner layer, and equal to s(d) if d is the in-",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 137,
+      "source": "1704.03279.pdf",
+      "page": 4,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "We now ask the following ques- tion: How can we compensate as well as possible for the loss of neuron j such that the impact on the output of the whole network is minimized? Data- free shrinking represents the incoming weight vec- tor of neuron j (U:,j) as linear combination of the incoming weight vectors of the other neurons. The linear factors can be found by satisfying the fol- lowing linear system: U:,¬jλ = U:,j where U:,¬j is matrix U without the j-th col- umn.",
+      "kb_version": "qasper-holdout-20261025"
+    }
+  ],
+  "action_attempts": 2,
+  "feedback_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 156,
+            "quote": "We choose a widely used, simple ensembling method (prediction averaging) as our baseline. We feel that the prevalence of this method makes it a reasonable baseline for our experiments."
+          }
+        ],
+        "supported_part": "The baseline was a widely used, simple ensembling method, namely prediction averaging.",
+        "reason": "Chunk 156 explicitly states the paper's baseline: the simple ensembling method of prediction averaging, chosen because of its prevalence.",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "answer",
+      "reason": "r1 is fully supported by chunk 156, which explicitly names prediction averaging ensembling as the baseline.",
+      "requirement_ids": [],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "Check limited to the requested fact (the paper's baselines) within its excerpt; no scope expansion."
+    }
+  },
+  "halt_reason": "answer_ready",
+  "final_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 156,
+            "quote": "We choose a widely used, simple ensembling method (prediction averaging) as our baseline. We feel that the prevalence of this method makes it a reasonable baseline for our experiments."
+          }
+        ],
+        "supported_part": "The baseline was a widely used, simple ensembling method, namely prediction averaging.",
+        "reason": "Chunk 156 explicitly states the paper's baseline: the simple ensembling method of prediction averaging, chosen because of its prevalence.",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "answer",
+      "reason": "r1 is fully supported by chunk 156, which explicitly names prediction averaging ensembling as the baseline.",
+      "requirement_ids": [],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "Check limited to the requested fact (the paper's baselines) within its excerpt; no scope expansion."
+    }
+  },
+  "elapsed_seconds": 39.339
+}

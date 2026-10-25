@@ -1,0 +1,205 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "For the paper \"Fine-grained Entity Typing through Increased Discourse Context and Adaptive Classification Thresholds\" (arXiv: 1804.08000), answer this question: What is the architecture of the model?",
+  "kb_version": "qasper-holdout-20261025",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": false,
+    "drafts": [
+      "The model is a neural architecture that combines sentence-level attention with a document-level context encoder to learn context-aware representations for fine-grained entity typing (Figure 1) [4], [5].\n\nSpecifically, the task is formulated as multi-label classification, and the general model uses logistic regression given a type embedding vector wt and a featurizer ϕ(e, x) to model the probability of entity e being assigned type t [9], [10]. For sentence-level context, the feature representation is a weighted sum of hidden states, using dot-product attention (Luong et al., 2015) that computes attention based on the alignment between the entity and its context — unlike the self-attention of Shimaoka et al. (2017), which only considers the context [11], [8]. The document-level context encoder is a multi-layer perceptron, gd(xd) = relu(Wd1 tanh(Wd2 DM(xd))), where DM is a pretrained distributed memory model (Le and Mikolov, 2014) that converts the document-level context into a distributed representation [8]. Overall, the architecture leverages both document-level and sentence-level semantic context to learn more context-aware representations than prior work [4], [5], [7]."
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "The model is a neural architecture that combines sentence-level attention with a document-level context encoder to learn context-aware representations for fine-grained entity typing (Figure 1) [4], [5]. Specifically, the task is formulated as multi-label classification, and the general model uses logistic regression given a type embedding vector wt and a featurizer ϕ(e, x) to model the probability of entity e being assigned type t [9], [10]. For sentence-level context, the feature representation is a weighted sum of hidden states, using dot-product attention (Luong et al., 2015) that computes attention based on the alignment between the entity and its context — unlike the self-attention of Shimaoka et al. (2017), which only considers the context [11], [8]. The document-level context encoder is a multi-layer perceptron, gd(xd) = relu(Wd1 tanh(Wd2 DM(xd))), where DM is a pretrained distributed memory model (Le and Mikolov, 2014) that converts the document-level context into a distributed representation [8]. Overall, the architecture leverages both document-level and sentence-level semantic context to learn more context-aware representations than prior work [4], [5], [7].",
+              "reason": "答案完整描述了模型架构：总体为结合句子级点积注意力与文档级上下文编码器（MLP，含DM预训练分布式记忆模型）的神经架构，并说明多标签分类的logistic回归建模。所有论断均可在引用段落中找到支持，引用编号与原文一致，无多余无支持声明。",
+              "citations": [
+                {
+                  "number": 4,
+                  "quote": "We propose a neural architecture which learns a distributional semantic repre- sentation that leverages a greater amount of se- mantic context – both document and sentence level information – than prior work."
+                },
+                {
+                  "number": 5,
+                  "quote": "we propose a neural architecture (Figure 1) which learns more context-aware representations by using a better at- tention mechanism and taking advantage of se- mantic discourse information available in both the document as well as sentence-level contexts."
+                },
+                {
+                  "number": 9,
+                  "quote": "2 Model Fine-grained entity typing is considered a multi- label classiﬁcation problem"
+                },
+                {
+                  "number": 10,
+                  "quote": "Given a type embedding vector wt and a featurizer ϕ that takes entity e and its context x, we employ the logistic regression (as shown in Figure 1) to model the probability of e assigned t"
+                },
+                {
+                  "number": 11,
+                  "quote": "We employ the dot-product attention (Lu- (2) ong et al., 2015). It computes attention based on the alignment between the entity and its context"
+                },
+                {
+                  "number": 8,
+                  "quote": "Document-level Context Encoder: The encoder gd for document-level context xd is a multi-layer perceptron: gd(xd) = relu(Wd1tanh(Wd2DM(xd))), (7) where DM is a pretrained distributed memory model (Le and Mikolov, 2014) which converts the document-level context into a distributed repre- sentation."
+                },
+                {
+                  "number": 7,
+                  "quote": "we pro- pose a neural architecture which learns a distribu- tional semantic representation that leverage both document and sentence level information"
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            4,
+            5,
+            7,
+            8,
+            9,
+            10,
+            11
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 4,
+              "chunk_id": 497,
+              "source": "1804.08000.pdf",
+              "page": 1,
+              "text": "We propose a neural architecture which learns a distributional semantic repre- sentation that leverages a greater amount of se- mantic context – both document and sentence level information – than prior work."
+            },
+            {
+              "citation": 5,
+              "chunk_id": 506,
+              "source": "1804.08000.pdf",
+              "page": 1,
+              "text": "To overcome these drawbacks, we propose a neural architecture (Figure 1) which learns more context-aware representations by using a better at- tention mechanism and taking advantage of se- mantic discourse information available in both the document as well as sentence-level contexts."
+            },
+            {
+              "citation": 7,
+              "chunk_id": 545,
+              "source": "1804.08000.pdf",
+              "page": 5,
+              "text": "4 Conclusion We propose a new approach for ﬁne-grained en- tity typing. The contributions are: (1) we pro- pose a neural architecture which learns a distribu- tional semantic representation that leverage both document and sentence level information, (2) we ﬁnd that context increased with document-level in- formation improves performance, and (3) we uti- lize adaptive classiﬁcation thresholds to further boost the performance."
+            },
+            {
+              "citation": 8,
+              "chunk_id": 516,
+              "source": "1804.08000.pdf",
+              "page": 2,
+              "text": "The dot-product attention differs from the self attention (Shimaoka et al., 2017) which only considers the context. Document-level Context Encoder: The encoder gd for document-level context xd is a multi-layer perceptron: gd(xd) = relu(Wd1tanh(Wd2DM(xd))), (7) where DM is a pretrained distributed memory model (Le and Mikolov, 2014) which converts the document-level context into a distributed repre- sentation. Wd1 and Wd2 are weight matrices."
+            },
+            {
+              "citation": 9,
+              "chunk_id": 508,
+              "source": "1804.08000.pdf",
+              "page": 2,
+              "text": "2 Model Fine-grained entity typing is considered a multi- label classiﬁcation problem: Each entity e in the text x is assigned a set of types T ∗drawn from the ﬁne-grained type set T . The goal of this task is to predict, given entity e and its context x, the assign- ment of types to the entity."
+            },
+            {
+              "citation": 10,
+              "chunk_id": 510,
+              "source": "1804.08000.pdf",
+              "page": 2,
+              "text": "2.1 General Model Given a type embedding vector wt and a featurizer ϕ that takes entity e and its context x, we employ the logistic regression (as shown in Figure 1) to model the probability of e assigned t (i.e., yt = 1) 1 P(yt = 1) = t ϕ(e, x)), 1 + exp (−w⊺ and we seek to learn a type embedding matrix W = [w1, ."
+            },
+            {
+              "citation": 11,
+              "chunk_id": 515,
+              "source": "1804.08000.pdf",
+              "page": 2,
+              "text": "(2017) who use two separate bi-directional RNNs for context on each side of the entity mention. Attention: The feature representation for xs is a weighted sum of the hidden states: gs(xs, e) = Pn i=1 aihi, where ai is the attention to hidden state hi. We employ the dot-product attention (Lu- (2) ong et al., 2015). It computes attention based on the alignment between the entity and its context: exp (h⊺ i Waf(e)) (3) jWaf(e)), ai = (6) j=1 exp (h⊺ Pn where Wa is the weight matrix."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "The model is a neural architecture that combines sentence-level attention with a document-level context encoder to learn context-aware representations for fine-grained entity typing (Figure 1) [4], [5].\n\nSpecifically, the task is formulated as multi-label classification, and the general model uses logistic regression given a type embedding vector wt and a featurizer ϕ(e, x) to model the probability of entity e being assigned type t [9], [10]. For sentence-level context, the feature representation is a weighted sum of hidden states, using dot-product attention (Luong et al., 2015) that computes attention based on the alignment between the entity and its context — unlike the self-attention of Shimaoka et al. (2017), which only considers the context [11], [8]. The document-level context encoder is a multi-layer perceptron, gd(xd) = relu(Wd1 tanh(Wd2 DM(xd))), where DM is a pretrained distributed memory model (Le and Mikolov, 2014) that converts the document-level context into a distributed representation [8]. Overall, the architecture leverages both document-level and sentence-level semantic context to learn more context-aware representations than prior work [4], [5], [7].",
+    "citation_check": {
+      "cited_numbers": [
+        4,
+        5,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 4,
+          "chunk_id": 497,
+          "source": "1804.08000.pdf",
+          "page": 1,
+          "text": "We propose a neural architecture which learns a distributional semantic repre- sentation that leverages a greater amount of se- mantic context – both document and sentence level information – than prior work."
+        },
+        {
+          "citation": 5,
+          "chunk_id": 506,
+          "source": "1804.08000.pdf",
+          "page": 1,
+          "text": "To overcome these drawbacks, we propose a neural architecture (Figure 1) which learns more context-aware representations by using a better at- tention mechanism and taking advantage of se- mantic discourse information available in both the document as well as sentence-level contexts."
+        },
+        {
+          "citation": 7,
+          "chunk_id": 545,
+          "source": "1804.08000.pdf",
+          "page": 5,
+          "text": "4 Conclusion We propose a new approach for ﬁne-grained en- tity typing. The contributions are: (1) we pro- pose a neural architecture which learns a distribu- tional semantic representation that leverage both document and sentence level information, (2) we ﬁnd that context increased with document-level in- formation improves performance, and (3) we uti- lize adaptive classiﬁcation thresholds to further boost the performance."
+        },
+        {
+          "citation": 8,
+          "chunk_id": 516,
+          "source": "1804.08000.pdf",
+          "page": 2,
+          "text": "The dot-product attention differs from the self attention (Shimaoka et al., 2017) which only considers the context. Document-level Context Encoder: The encoder gd for document-level context xd is a multi-layer perceptron: gd(xd) = relu(Wd1tanh(Wd2DM(xd))), (7) where DM is a pretrained distributed memory model (Le and Mikolov, 2014) which converts the document-level context into a distributed repre- sentation. Wd1 and Wd2 are weight matrices."
+        },
+        {
+          "citation": 9,
+          "chunk_id": 508,
+          "source": "1804.08000.pdf",
+          "page": 2,
+          "text": "2 Model Fine-grained entity typing is considered a multi- label classiﬁcation problem: Each entity e in the text x is assigned a set of types T ∗drawn from the ﬁne-grained type set T . The goal of this task is to predict, given entity e and its context x, the assign- ment of types to the entity."
+        },
+        {
+          "citation": 10,
+          "chunk_id": 510,
+          "source": "1804.08000.pdf",
+          "page": 2,
+          "text": "2.1 General Model Given a type embedding vector wt and a featurizer ϕ that takes entity e and its context x, we employ the logistic regression (as shown in Figure 1) to model the probability of e assigned t (i.e., yt = 1) 1 P(yt = 1) = t ϕ(e, x)), 1 + exp (−w⊺ and we seek to learn a type embedding matrix W = [w1, ."
+        },
+        {
+          "citation": 11,
+          "chunk_id": 515,
+          "source": "1804.08000.pdf",
+          "page": 2,
+          "text": "(2017) who use two separate bi-directional RNNs for context on each side of the entity mention. Attention: The feature representation for xs is a weighted sum of the hidden states: gs(xs, e) = Pn i=1 aihi, where ai is the attention to hidden state hi. We employ the dot-product attention (Lu- (2) ong et al., 2015). It computes attention based on the alignment between the entity and its context: exp (h⊺ i Waf(e)) (3) jWaf(e)), ai = (6) j=1 exp (h⊺ Pn where Wa is the weight matrix."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

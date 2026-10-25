@@ -1,0 +1,102 @@
+[
+  {
+    "number": 1,
+    "phase": "decompose",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n   For an open-ended \"difference between X and Y\" question, retrieve each\n   entity's purpose and core approach. Do not replace it with comparisons\n   between versions of X or versions of Y, or request unasked benchmark scores.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nFor the paper \"And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue\" (arXiv: 1709.05295), answer this question: What bootstrapping methodology was used to find new patterns?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-25T03:56:34.598212+00:00",
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+      "requested_model": "cn:glm-5.3",
+      "reported_model": "glm-5.3",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 640,
+        "cached_tokens": 640,
+        "completion_thinking_tokens": 7,
+        "completion_tokens": 25,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 7,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.05,
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 79,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 719,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 640,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 744
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.624
+  },
+  {
+    "number": 2,
+    "phase": "probe",
+    "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in the same language as the user's question. If the question explicitly asks for a particular language, use that language instead. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported question, begin with 当前证据不足 when answering in Chinese, or with \"Insufficient evidence\" when answering in English, and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n14. Prioritize explicit subquestions, correct facts and citations, and conditions/units that change the conclusion. Add definitions or steps only when needed for the task. Optional background, stylistic preferences and unasked exceptions are not completeness requirements. Failure to retrieve a paper does not establish that the paper never reported a result.\n\n15. For a comparison, synthesize separately supported facts about the requested objects, citing each side. A literal sentence comparing both papers is NOT required. Different purposes, inputs or mechanisms can be contrasted from their respective descriptions. This does not establish causality or which method performs better. Do not call the comparison unsupported merely because no head-to-head experiment is provided.\n16. Lead with the main difference the user asked about. For a broad comparison, explain what each object does and its supported core approach; do not replace this with differences between versions of each object, benchmark tables or unasked numerical results.\n\nContext:\n[1] Source: 1709.05295.pdf | Page: 1 | Section: None\nTitle: And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue\nUsing an annotated set of FACTUAL and FEELING debate forum posts, we extract patterns that are highly correlated with factual and emotional arguments, and then apply a bootstrapping methodology to ﬁnd new patterns in a larger pool of unanno- tated forum posts. This process automatically produces a large set of patterns representing linguistic expressions that are highly corre- lated with factual and emotional language.\n\n[2] Source: 1709.05295.pdf | Page: 8 | Section: 6 Conclusion\nTitle: And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue\n6 Conclusion In this paper, we use observed differences in argu- mentation styles in online debate forums to extract patterns that are highly correlated with factual and emotional argumentation. From an annotated set of forum post responses, we are able extract high- precision patterns that are associated with the argu- mentation style classes, and we are then able to use these patterns to get a larger set of indicative pat- terns using a bootstrapping methodology on a set of unannotated posts.\n\n[3] Source: 1709.05295.pdf | Page: 4 | Section: 2.2.1 Pattern Learning with AutoSlog-TS\nTitle: And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue\nThe right-hand side of Figure 3 shows an example of a speciﬁc lexico-syntactic pattern that corresponds to each general pattern template.2 Pattern Template Example Pattern <subj> PassVP <subj> was observed <subj> ActVP <subj> observed <subj> ActVP Dobj <subj> want explanation <subj> ActInfVP <subj> expected to ﬁnd <subj> PassInfVP <subj> was used to measure <subj> AuxVP Dobj <subj> was success <subj> AuxVP Adj <subj> is religious ActVP <dobj> create <dobj> InfVP <dobj> to limit <dobj> ActInfVP <dobj> like to see <dobj> PassInfVP <dobj> was interested to see <dobj> Subj AuxVP <dobj> question is <dobj> NP Prep <np> origins of <np> ActVP Prep <np> evolved from <np> PassVP Prep <np> was replaced by <np> InfVP Prep <np> to use as <np> <possessive> NP <possessive> son Figure 3: The Pattern Templates of AutoSlog-TS with Example Instantiations In addition to the original 17 pattern templates in AutoSlog-TS (shown in Figure 3), we deﬁned 7 new pattern templates for the following bigrams and tri- grams: Adj Noun, Adj Conj Adj, Adv Adv, Adv Adv Adv, Adj Adj, Adv Adj, Adv Adv Adj.\n\n[4] Source: 1709.05295.pdf | Page: 1 | Section: None\nTitle: And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue\nAnd That’s A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue Shereen Oraby∗, Lena Reed∗, Ryan Compton∗, Ellen Riloff †, Marilyn Walker∗and Steve Whittaker∗ ∗University of California Santa Cruz {soraby,lireed,rcompton,mawalker,swhittak}@ucsc.edu † University of Utah riloff@cs.utah.edu arXiv:1709.05295v1 [cs.CL] 15 Sep 2017 Abstract We investigate the characteristics of factual and emotional argumentation styles observed in online debates.\n\n[5] Source: 1709.05295.pdf | Page: 4 | Section: 2.2.2 Bootstrapping Procedure\nTitle: And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue\n2.2.2 Bootstrapping Procedure Since the IAC data set contains a large num- ber of unannotated debate forum posts, we embedd AutoSlog-TS in a bootstrapping framework to learn additional patterns. The ﬂow diagram for the boot- strapping system is shown in Figure 4. Figure 4: Flow Diagram for Bootstrapping Process Initially, we give the labeled training data to AutoSlog-TS, which generates patterns and asso- ciated statistics.\n\n[6] Source: 1709.05295.pdf | Page: 5 | Section: 2.2.2 Bootstrapping Procedure\nTitle: And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue\nThe high-precision patterns are then used in the bootstrapping framework to identify more FACTUAL and FEELING texts from the 11,561 unannotated posts, also from 4forums.com. For each round of bootstrapping, the current set of FACTUAL and FEELING patterns are matched against the unanno- tated texts, and posts that match at least 3 patterns associated with a given class are assigned to that class.\n\n[7] Source: 1709.05295.pdf | Page: 3 | Section: 2.2 Bootstrapped Pattern Learning\nTitle: And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue\nTo accomplish this, we use the AutoSlog-TS sys- tem (Riloff, 1996) to extract linguistic expressions from the annotated texts. Since the IAC also con- tains a large collection of unannotated texts, we then embed AutoSlog-TS in a bootstrapping framework to learn additional linguistic expressions from the unannotated texts. First, we brieﬂy describe the AutoSlog-TS pattern learner and the set of pattern templates that we used.\n\n[8] Source: 1709.05295.pdf | Page: 5 | Section: 2.2.2 Bootstrapping Procedure\nTitle: And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue\nAs shown in Figure 4, the Bootstrapped Data Balancer then randomly selects a balanced subset of the newly classiﬁed posts to maintain the same proportion of FACTUAL vs. FEELING documents throughout the bootstrapping process. These new documents are added to the set of labeled docu- ments, and the bootstrapping process repeats. We use the same threshold values to select new high- precision patterns for all iterations.\n\n[9] Source: 1709.05295.pdf | Page: 2 | Section: 1 Introduction\nTitle: And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue\nHowever none of this work has documented the linguistic patterns that characterize the differences in these argument types, which is a necessary ﬁrst step to their automatic recognition or classiﬁcation. Thus the goal of this paper is to use computational methods for pattern-learning on conversational argu- ments to catalog linguistic expressions and stylistic properties that distinguish Factual from Emotional arguments in these on-line debate forums.\n\n[10] Source: 1709.05295.pdf | Page: 9 | Section: 6 Conclusion\nTitle: And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue\napparently bootstrapping improves the perfor- mance of sarcasm and nastiness classiﬁers for online dialogue. NAACL 2013, page 30. Emo- Fabrizio Macagno and Douglas Walton. 2014. tive language in argumentation. Cambridge Univer- sity Press. Marwell and D. 1967. Dimensions of compliance-gaining behavior: An empirical analysis.\n\nQuestion:\nFor the paper \"And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue\" (arXiv: 1709.05295), answer this question: What bootstrapping methodology was used to find new patterns?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n- For a broad difference-between question with no requested aspect, use 3-5 sentences: lead with the purposes, then the supported core methods. Prefer primary-paper abstract/introductory definitions. Omit training/test hyperparameters and unasked performance caveats.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-25T03:56:46.309873+00:00",
+    "response": {
+      "answer": "The paper embeds the AutoSlog-TS pattern learner in a bootstrapping framework to learn additional patterns from the large pool of unannotated debate forum posts in the IAC dataset [7]. The process works as follows: the labeled training data is first given to AutoSlog-TS, which generates patterns and associated statistics [5]. The resulting high-precision patterns are then used to identify more FACTUAL and FEELING texts from 11,561 unannotated posts from 4forums.com, where posts that match at least 3 patterns associated with a given class are assigned to that class [6]. A Bootstrapped Data Balancer then randomly selects a balanced subset of the newly classified posts to maintain the same proportion of FACTUAL vs. FEELING documents throughout the process, these new documents are added to the labeled set, and the bootstrapping process repeats using the same threshold values to select new high-precision patterns [8].",
+      "requested_model": "cn:glm-5.3",
+      "reported_model": "glm-5.3",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 512,
+        "cached_tokens": 512,
+        "completion_thinking_tokens": 103,
+        "completion_tokens": 301,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 103,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.51,
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 2004,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2516,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 512,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2817
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 6.074
+  }
+]

@@ -1,0 +1,102 @@
+[
+  {
+    "number": 1,
+    "phase": "decompose",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n   For an open-ended \"difference between X and Y\" question, retrieve each\n   entity's purpose and core approach. Do not replace it with comparisons\n   between versions of X or versions of Y, or request unasked benchmark scores.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nFor the paper \"TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\" (arXiv: 1910.01340), answer this question: What textual features are used?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-25T03:51:33.264962+00:00",
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+      "requested_model": "cn:glm-5.3",
+      "reported_model": "glm-5.3",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cached_tokens": 0,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 18,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.12,
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 712,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 712,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 730
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.705
+  },
+  {
+    "number": 2,
+    "phase": "probe",
+    "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in the same language as the user's question. If the question explicitly asks for a particular language, use that language instead. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported question, begin with 当前证据不足 when answering in Chinese, or with \"Insufficient evidence\" when answering in English, and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n14. Prioritize explicit subquestions, correct facts and citations, and conditions/units that change the conclusion. Add definitions or steps only when needed for the task. Optional background, stylistic preferences and unasked exceptions are not completeness requirements. Failure to retrieve a paper does not establish that the paper never reported a result.\n\n15. For a comparison, synthesize separately supported facts about the requested objects, citing each side. A literal sentence comparing both papers is NOT required. Different purposes, inputs or mechanisms can be contrasted from their respective descriptions. This does not establish causality or which method performs better. Do not call the comparison unsupported merely because no head-to-head experiment is provided.\n16. Lead with the main difference the user asked about. For a broad comparison, explain what each object does and its supported core approach; do not replace this with differences between versions of each object, benchmark tables or unasked numerical results.\n\nContext:\n[1] Source: 1910.01340.pdf | Page: 1 | Section: None\nTitle: TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\nTherefore, in this paper, we propose a text-based approach to detect the online trolls such as those that were discovered during the US 2016 presidential elections. Our approach is mainly based on textual features which uti- lize thematic information, and proﬁling features to identify the accounts from their way of writing tweets. We deduced the thematic information in a unsupervised way and we show that coupling them with the textual features enhanced the performance of the proposed model.\n\n[2] Source: 1910.01340.pdf | Page: 14 | Section: None\nTitle: TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\nBloomsbury Pub- lishing (2018) 19. Im, J., Chandrasekharan, E., Sargent, J., Lighthammer, P., Denby, T., Bhargava, A., Hemphill, L., Jurgens, D., Gilbert, E.: Still out there: Modeling and Identifying Russian Troll Accounts on Twitter. arXiv preprint arXiv:1901.11162 (2019) 20. Karttunen, L.: Implicative Verbs. Language pp. 340–358 (1971) 21. Kiparsky, P., Kiparsky, C.: Fact.\n\n[3] Source: 1910.01340.pdf | Page: 5 | Section: None\nTitle: TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\nBased on our thematic information, we model the users textual features w.r.t. each of these themes. In other words, we model a set of textual features inde- pendently for each of the former themes to capture the emotional, stance, and others changes in the users tweets. 1: (a) Supporting Trump and (b) Attacking Hillary themes words clouds.\n\n[4] Source: 1910.01340.pdf | Page: 6 | Section: None\nTitle: TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\nThus, we propose the following features to identify these users using only their tweets text: – Native Language Identiﬁcation (NLI): This feature was inspired by earlier works on identifying native language of essays writers [22]. We aim to detect IRA trolls by identifying their way of writing English tweets. As shown in [31], English tweets generated by non-English speakers have a diﬀerent syntactic pattern .\n\n[5] Source: 1910.01340.pdf | Page: 1 | Section: None\nTitle: TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\nTexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective Bilal Ghanem1, Davide Buscaldi2, and Paolo Rosso1 1 PRHLT Research Center, Universitat Polit`ecnica de Val`encia, Spain {bigha@doctor, prosso@dsic}.upv.es 2 CNRS / Laboratoire LIPN, Universit´e Paris 13, France arXiv:1910.01340v1 [cs.CL] 3 Oct 2019 buscaldi@lipn.univ-paris13.fr Abstract.\n\n[6] Source: 1910.01340.pdf | Page: 8 | Section: None\nTitle: TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\nIRA dataset provided by Twitter contains less information about the ac- counts details, and they limited to: proﬁle description, account creation date, number of followers and followees, location, and account language. Therefore, as another baseline we use the number of followers and followees to assess their identiﬁcation ability (we will mention them as Network Features in the rest of the paper).\n\n[7] Source: 1910.01340.pdf | Page: 8 | Section: None\nTitle: TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\nreads tweets and predicts their hashtags. We aim to assess if the tweets hashtags can help identifying the IRA tweets. The model reads the tweets in a form of character one-hot encodings and uses them for training with their hashtags as labels. To train the model, we use our collected dataset which consists of ∼3.7M tweets13. To represent the tweets in this baseline, we use the decoded embedding produced by the model and we feed them to the Logistic Regression classiﬁer.\n\n[8] Source: 1910.01340.pdf | Page: 4 | Section: None\nTitle: TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\nFrom Table 1, we can notice that the number of total tweets of the IRA trolls is similar to the one obtained from the regular users. This is due to the fact that IRA trolls were posting a lot of tweets before and during the elections in an attempt to try to make their messages reach the largest possible audience. 4 Textual Representation In order to identify IRA trolls, we use a rich set of textual features.\n\n[9] Source: 1910.01340.pdf | Page: 12 | Section: None\nTitle: TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\nOur experiments showed that the extracted themes boosted the per- formance of the proposed model when coupled with other surface text features. In addition, we proposed NLI features to identify IRA trolls from their writing style, which showed to be very eﬀective. Finally, for a better understanding we analyzed the IRA accounts from emotional and linguistic perspectives. Through the manually checking of IRA accounts, we noticed that frequently irony was employed.\n\n[10] Source: 1910.01340.pdf | Page: 9 | Section: None\nTitle: TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\nTexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective Table 2: Classiﬁcation results.\n\nQuestion:\nFor the paper \"TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\" (arXiv: 1910.01340), answer this question: What textual features are used?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n- For a broad difference-between question with no requested aspect, use 3-5 sentences: lead with the purposes, then the supported core methods. Prefer primary-paper abstract/introductory definitions. Omit training/test hyperparameters and unasked performance caveats.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-25T03:51:41.874491+00:00",
+    "response": {
+      "answer": "The paper uses a rich set of textual features to identify IRA trolls, relying only on the text of their tweets [8]. These features are grounded in thematic information, which the authors deduced in an unsupervised way; coupling thematic features with other textual features enhanced the model's performance [1]. Based on the extracted themes (e.g., supporting Trump, attacking Hillary), they model textual features independently for each theme to capture emotional, stance, and other changes in users' tweets [3]. The features also include Native Language Identification (NLI), inspired by earlier work on identifying the native language of essay writers, which detects IRA trolls by their way of writing English tweets—non-native English speakers' tweets show different syntactic patterns [4]. Profiling features that identify accounts from their way of writing tweets are also mentioned as part of the text-based approach [1], and the NLI features were reported to be very effective [9].",
+      "requested_model": "cn:glm-5.3",
+      "reported_model": "glm-5.3",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 512,
+        "cached_tokens": 512,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 189,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.39,
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 1641,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2153,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 512,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2342
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 5.665
+  }
+]

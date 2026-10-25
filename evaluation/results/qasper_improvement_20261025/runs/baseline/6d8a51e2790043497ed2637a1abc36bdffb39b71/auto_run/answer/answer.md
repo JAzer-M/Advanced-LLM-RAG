@@ -1,0 +1,1 @@
+The experiments are conducted on two datasets: AliMe and Quora. The AliMe dataset is collected from the AliMe intelligent assistant system, consisting of 8,004 query-bag pairs [1], and the Quora dataset is a public (composite) dataset released by the authors [1][4].

@@ -1,0 +1,260 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "For the paper \"TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\" (arXiv: 1910.01340), answer this question: What textual features are used?",
+  "kb_version": "qasper-holdout-20261025",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": true,
+    "drafts": [
+      "The paper uses theme-based textual features — Emotions, Sentiment, Bad & Sexual Cues, and Stance Cues — plus NLI (native-language-identification) features.\n\nThe theme-based features are modeled independently for each extracted theme to capture emotional, stance, and other changes in users' tweets [1]:\n\n- **Emotions**: extracted using the NRC emotions lexicon (~14K words labeled with Plutchik's eight emotions) to detect emotional manipulation attempts such as fear spreading [9].\n- **Sentiment**: positive and negative sentiment extracted from NRC [12].\n- **Bad & Sexual Cues**: presence of bad slang and sexual words (from a list in [11]) used to mimic the language of a US citizen [12].\n- **Stance Cues**: user stance toward the extracted topics, modeled with a set of stance lexicons from previous works [13].\n\nAdditionally, NLI features are used to capture the trolls' writing style, consisting of a bag of stopwords, part-of-speech tags (POS), and syntactic dependency relations (DEPREL) [6].",
+      "The paper uses theme-based textual features — Emotions, Sentiment, Bad & Sexual Cues, and Stance Cues — plus NLI (native-language-identification) features.\n\nThe theme-based features are modeled independently for each extracted theme to capture emotional, stance, and other changes in users' tweets [1]:\n\n- **Emotions**: extracted using the NRC emotions lexicon (~14K words labeled with Plutchik's eight emotions) to detect emotional manipulation attempts such as fear spreading [9].\n- **Sentiment**: positive and negative sentiment extracted from NRC [12].\n- **Bad & Sexual Cues**: presence of bad slang and sexual words used to mimic the language of a US citizen, modeled with a list of such words [12].\n- **Stance Cues**: user stance toward the extracted topics, modeled with a set of stance lexicons from previous works [13].\n\nAdditionally, NLI features are used to capture the trolls' writing style, consisting of a bag of stopwords, part-of-speech tags (POS), and syntactic dependency relations (DEPREL) [6]."
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "fail",
+              "answer_quote": "- **Bad & Sexual Cues**: presence of bad slang and sexual words (from a list in [11]) used to mimic the language of a US citizen [12].",
+              "reason": "答案列举的文本特征内容本身基本正确（主题型特征 Emotions/Sentiment/Bad & Sexual Cues/Stance Cues，以及 NLI 特征 bag of stopwords、POS、DEPREL），且有 [1][6][9][12][13] 支持。但引用 [11] 属于错误归属：答案写 'a list of bad and sexual words (from a list in [11])'，此处答案把原文中指向外部文献的编号 [11] 误当作本题的引用编号 11。而题目提供的引用 11（chunk 1038）的内容是关于 Facebook 广告帖子与 IRA 行为比较，与 'bad and sexual words 列表' 完全无关，不能支持该句。这是一个错误/冗余引用，构成引用错误缺陷。",
+              "citations": [
+                {
+                  "number": 11,
+                  "quote": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective Facebook advertised posts in [7], and this emphasizes that IRA eﬀorts organized in a similar manner in both social media platforms."
+                },
+                {
+                  "number": 12,
+                  "quote": "– Sentiment: We extract the sentiment of the tweets from NRC [25], positive and negative. – Bad & Sexual Cues: During the manual analysis of a sample from IRA tweets, we found that some users use bad slang word to mimic the language of a US citizen. Thus, we model the presence of such words using a list of bad and sexual words from [11]."
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": false,
+            "unsupported_claims": false,
+            "gaps": true
+          },
+          "issues": [
+            "答案中 '(from a list in [11])' 将论文内部文献编号 [11] 误用作本题引用编号。本题引用 11 的原文（chunk 1038）讨论的是 Facebook 广告帖子与 IRA 行为的比较，与 bad/sexual words 列表无关，属于引用错误/错误归属；该事实实际由引用 12 支持，应删除或更正 [11] 引用。"
+          ]
+        },
+        "citation_check": {
+          "cited_numbers": [
+            1,
+            6,
+            9,
+            11,
+            12,
+            13
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 1,
+              "chunk_id": 1039,
+              "source": "1910.01340.pdf",
+              "page": 5,
+              "text": "Based on our thematic information, we model the users textual features w.r.t. each of these themes. In other words, we model a set of textual features inde- pendently for each of the former themes to capture the emotional, stance, and others changes in the users tweets. 1: (a) Supporting Trump and (b) Attacking Hillary themes words clouds."
+            },
+            {
+              "citation": 6,
+              "chunk_id": 1048,
+              "source": "1910.01340.pdf",
+              "page": 6,
+              "text": "Thus, we use state-of-the-art NLI features to detect this unique pattern [8,23,14]; the feature set consists of bag of stopwords, Part- of-speech tags (POS), and syntactic dependency relations (DEPREL). We 9 Total pronouns, Anxiety, Cognitive processes, Insight, Causation, Discrepancy, Ten- tative, Certainty, Inhibition, and Inclusive respectively."
+            },
+            {
+              "citation": 9,
+              "chunk_id": 1040,
+              "source": "1910.01340.pdf",
+              "page": 5,
+              "text": "For the theme-based features, we use the following features that we believe that they change based on the themes: – Emotions: Since the results of the previous works [7,26] showed that IRA eﬀorts engineered to seed discord among individuals in US, we use emotions features to detect their emotional attempts to manipulate the public opinions (e.g. fear spreading behavior). For that, we use the NRC emotions lexicon [25] that contains ∼14K words labeled using the eight Plutchik’s emotions."
+            },
+            {
+              "citation": 11,
+              "chunk_id": 1038,
+              "source": "1910.01340.pdf",
+              "page": 5,
+              "text": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective Facebook advertised posts in [7], and this emphasizes that IRA eﬀorts organized in a similar manner in both social media platforms."
+            },
+            {
+              "citation": 12,
+              "chunk_id": 1041,
+              "source": "1910.01340.pdf",
+              "page": 5,
+              "text": "– Sentiment: We extract the sentiment of the tweets from NRC [25], positive and negative. – Bad & Sexual Cues: During the manual analysis of a sample from IRA tweets, we found that some users use bad slang word to mimic the language of a US citizen. Thus, we model the presence of such words using a list of bad and sexual words from [11]."
+            },
+            {
+              "citation": 13,
+              "chunk_id": 1042,
+              "source": "1910.01340.pdf",
+              "page": 5,
+              "text": "– Stance Cues: Stance detection has been studied in diﬀerent contexts to detect the stance of a tweet reply with respect to a main tweet/thread [24]. Using this feature, we aim to detect the stance of the users regarding the diﬀerent topics we extracted. To model the stance we use a set of stance lexicons employed in previous works [3,12]. Concretely, we focus on the fol- 5 (b)"
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      },
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "The paper uses theme-based textual features — Emotions, Sentiment, Bad & Sexual Cues, and Stance Cues — plus NLI (native-language-identification) features.\n\nThe theme-based features are modeled independently for each extracted theme to capture emotional, stance, and other changes in users' tweets [1]:\n\n- **Emotions**: extracted using the NRC emotions lexicon (~14K words labeled with Plutchik's eight emotions) to detect emotional manipulation attempts such as fear spreading [9].\n- **Sentiment**: positive and negative sentiment extracted from NRC [12].\n- **Bad & Sexual Cues**: presence of bad slang and sexual words used to mimic the language of a US citizen, modeled with a list of such words [12].\n- **Stance Cues**: user stance toward the extracted topics, modeled with a set of stance lexicons from previous works [13].\n\nAdditionally, NLI features are used to capture the trolls' writing style, consisting of a bag of stopwords, part-of-speech tags (POS), and syntactic dependency relations (DEPREL) [6].",
+              "reason": "答案完整列出了论文使用的文本特征：基于主题的 Emotions（NRC情感词典、Plutchik八类情感）、Sentiment（NRC正负情感）、Bad & Sexual Cues（不良与性词汇表）、Stance Cues（立场词典），以及NLI特征（停用词袋、POS标签、DEPREL依存关系）。每项特征均有原文引文直接支持，数字（~14K词、八类情感）与来源（NRC、[11]词汇表、立场词典）均与原文一致，无未支持的说法。",
+              "citations": [
+                {
+                  "number": 9,
+                  "quote": "For the theme-based features, we use the following features that we believe that they change based on the themes: – Emotions: Since the results of the previous works [7,26] showed that IRA eﬀorts engineered to seed discord among individuals in US, we use emotions features to detect their emotional attempts to manipulate the public opinions (e.g. fear spreading behavior). For that, we use the NRC emotions lexicon [25] that contains ∼14K words labeled using the eight Plutchik’s emotions."
+                },
+                {
+                  "number": 12,
+                  "quote": "– Sentiment: We extract the sentiment of the tweets from NRC [25], positive and negative. – Bad & Sexual Cues: During the manual analysis of a sample from IRA tweets, we found that some users use bad slang word to mimic the language of a US citizen. Thus, we model the presence of such words using a list of bad and sexual words from [11]."
+                },
+                {
+                  "number": 13,
+                  "quote": "– Stance Cues: Stance detection has been studied in diﬀerent contexts to detect the stance of a tweet reply with respect to a main tweet/thread [24]. Using this feature, we aim to detect the stance of the users regarding the diﬀerent topics we extracted. To model the stance we use a set of stance lexicons employed in previous works [3,12]. Concretely, we focus on the fol- 5 (b)"
+                },
+                {
+                  "number": 6,
+                  "quote": "Thus, we use state-of-the-art NLI features to detect this unique pattern [8,23,14]; the feature set consists of bag of stopwords, Part- of-speech tags (POS), and syntactic dependency relations (DEPREL). We 9 Total pronouns, Anxiety, Cognitive processes, Insight, Causation, Discrepancy, Ten- tative, Certainty, Inhibition, and Inclusive respectively."
+                },
+                {
+                  "number": 1,
+                  "quote": "Based on our thematic information, we model the users textual features w.r.t. each of these themes. In other words, we model a set of textual features inde- pendently for each of the former themes to capture the emotional, stance, and others changes in the users tweets."
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            1,
+            6,
+            9,
+            12,
+            13
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 1,
+              "chunk_id": 1039,
+              "source": "1910.01340.pdf",
+              "page": 5,
+              "text": "Based on our thematic information, we model the users textual features w.r.t. each of these themes. In other words, we model a set of textual features inde- pendently for each of the former themes to capture the emotional, stance, and others changes in the users tweets. 1: (a) Supporting Trump and (b) Attacking Hillary themes words clouds."
+            },
+            {
+              "citation": 6,
+              "chunk_id": 1048,
+              "source": "1910.01340.pdf",
+              "page": 6,
+              "text": "Thus, we use state-of-the-art NLI features to detect this unique pattern [8,23,14]; the feature set consists of bag of stopwords, Part- of-speech tags (POS), and syntactic dependency relations (DEPREL). We 9 Total pronouns, Anxiety, Cognitive processes, Insight, Causation, Discrepancy, Ten- tative, Certainty, Inhibition, and Inclusive respectively."
+            },
+            {
+              "citation": 9,
+              "chunk_id": 1040,
+              "source": "1910.01340.pdf",
+              "page": 5,
+              "text": "For the theme-based features, we use the following features that we believe that they change based on the themes: – Emotions: Since the results of the previous works [7,26] showed that IRA eﬀorts engineered to seed discord among individuals in US, we use emotions features to detect their emotional attempts to manipulate the public opinions (e.g. fear spreading behavior). For that, we use the NRC emotions lexicon [25] that contains ∼14K words labeled using the eight Plutchik’s emotions."
+            },
+            {
+              "citation": 12,
+              "chunk_id": 1041,
+              "source": "1910.01340.pdf",
+              "page": 5,
+              "text": "– Sentiment: We extract the sentiment of the tweets from NRC [25], positive and negative. – Bad & Sexual Cues: During the manual analysis of a sample from IRA tweets, we found that some users use bad slang word to mimic the language of a US citizen. Thus, we model the presence of such words using a list of bad and sexual words from [11]."
+            },
+            {
+              "citation": 13,
+              "chunk_id": 1042,
+              "source": "1910.01340.pdf",
+              "page": 5,
+              "text": "– Stance Cues: Stance detection has been studied in diﬀerent contexts to detect the stance of a tweet reply with respect to a main tweet/thread [24]. Using this feature, we aim to detect the stance of the users regarding the diﬀerent topics we extracted. To model the stance we use a set of stance lexicons employed in previous works [3,12]. Concretely, we focus on the fol- 5 (b)"
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "The paper uses theme-based textual features — Emotions, Sentiment, Bad & Sexual Cues, and Stance Cues — plus NLI (native-language-identification) features.\n\nThe theme-based features are modeled independently for each extracted theme to capture emotional, stance, and other changes in users' tweets [1]:\n\n- **Emotions**: extracted using the NRC emotions lexicon (~14K words labeled with Plutchik's eight emotions) to detect emotional manipulation attempts such as fear spreading [9].\n- **Sentiment**: positive and negative sentiment extracted from NRC [12].\n- **Bad & Sexual Cues**: presence of bad slang and sexual words used to mimic the language of a US citizen, modeled with a list of such words [12].\n- **Stance Cues**: user stance toward the extracted topics, modeled with a set of stance lexicons from previous works [13].\n\nAdditionally, NLI features are used to capture the trolls' writing style, consisting of a bag of stopwords, part-of-speech tags (POS), and syntactic dependency relations (DEPREL) [6].",
+    "citation_check": {
+      "cited_numbers": [
+        1,
+        6,
+        9,
+        12,
+        13
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 1039,
+          "source": "1910.01340.pdf",
+          "page": 5,
+          "text": "Based on our thematic information, we model the users textual features w.r.t. each of these themes. In other words, we model a set of textual features inde- pendently for each of the former themes to capture the emotional, stance, and others changes in the users tweets. 1: (a) Supporting Trump and (b) Attacking Hillary themes words clouds."
+        },
+        {
+          "citation": 6,
+          "chunk_id": 1048,
+          "source": "1910.01340.pdf",
+          "page": 6,
+          "text": "Thus, we use state-of-the-art NLI features to detect this unique pattern [8,23,14]; the feature set consists of bag of stopwords, Part- of-speech tags (POS), and syntactic dependency relations (DEPREL). We 9 Total pronouns, Anxiety, Cognitive processes, Insight, Causation, Discrepancy, Ten- tative, Certainty, Inhibition, and Inclusive respectively."
+        },
+        {
+          "citation": 9,
+          "chunk_id": 1040,
+          "source": "1910.01340.pdf",
+          "page": 5,
+          "text": "For the theme-based features, we use the following features that we believe that they change based on the themes: – Emotions: Since the results of the previous works [7,26] showed that IRA eﬀorts engineered to seed discord among individuals in US, we use emotions features to detect their emotional attempts to manipulate the public opinions (e.g. fear spreading behavior). For that, we use the NRC emotions lexicon [25] that contains ∼14K words labeled using the eight Plutchik’s emotions."
+        },
+        {
+          "citation": 12,
+          "chunk_id": 1041,
+          "source": "1910.01340.pdf",
+          "page": 5,
+          "text": "– Sentiment: We extract the sentiment of the tweets from NRC [25], positive and negative. – Bad & Sexual Cues: During the manual analysis of a sample from IRA tweets, we found that some users use bad slang word to mimic the language of a US citizen. Thus, we model the presence of such words using a list of bad and sexual words from [11]."
+        },
+        {
+          "citation": 13,
+          "chunk_id": 1042,
+          "source": "1910.01340.pdf",
+          "page": 5,
+          "text": "– Stance Cues: Stance detection has been studied in diﬀerent contexts to detect the stance of a tweet reply with respect to a main tweet/thread [24]. Using this feature, we aim to detect the stance of the users regarding the diﬀerent topics we extracted. To model the stance we use a set of stance lexicons employed in previous works [3,12]. Concretely, we focus on the fol- 5 (b)"
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

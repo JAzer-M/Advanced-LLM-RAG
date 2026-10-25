@@ -1,0 +1,3 @@
+No — while tweet text is their primary data, they also derive other signals from those tweets, such as user mentions used to build graphs and the news outlets cited by trolls.
+
+The paper notes that for the banned troll accounts "we only have access to their tweets thanks to the 'IRA Russian Trolls' dataset" [1]. However, beyond the raw tweets, they construct a User-to-Mentioned-User (U2M) graph based on mentions ("@v") contained in tweets [2], and in the distant-supervision scenario they rely on "more common labels for news outlets cited by the trolls" [6]. The overall approach analyzes troll behavior using "features from social media, i.e., from Twitter" rather than tweet text alone [6].

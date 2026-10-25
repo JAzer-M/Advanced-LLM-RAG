@@ -1,0 +1,704 @@
+{
+  "id": "question",
+  "query": "For the paper \"Using Statistical and Semantic Models for Multi-Document Summarization\" (arXiv: 1805.04579), answer this question: Do they compare against state-of-the-art summarization approaches?",
+  "kb_version": "qasper-holdout-20261025",
+  "status": "completed",
+  "actions_executed": 3,
+  "semantic_correctness": "requires_manual_review",
+  "validation_repairs": [
+    {
+      "phase": "plan",
+      "error": "Requirement question_quote must name its own subject and show its scope."
+    }
+  ],
+  "plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "Using Statistical and Semantic Models for Multi-Document Summarization",
+        "question_quote": "For the paper \"Using Statistical and Semantic Models for Multi-Document Summarization\" (arXiv: 1805.04579), answer this question: Do they compare against state-of-the-art summarization approaches?",
+        "need": "For the paper \"Using Statistical and Semantic Models for Multi-Document Summarization\" (arXiv: 1805.04579), answer this question: Do they compare against state-of-the-art summarization approaches?"
+      }
+    ]
+  },
+  "assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "missing",
+        "evidence": [],
+        "supported_part": "",
+        "reason": "提供的段落介绍了TextRank、InferSent等模型，但它们均被纳入作者自己的系统组合中（如 'We use a naive TextRank analogous for our task'），或仅在背景中提及（如 Zeng et al. 2016 的 state of art 方法）。没有任何段落表明作者在实验或评估中与 state-of-the-art 汇总方法进行了对比。",
+        "gap": "缺少论文实验/结果部分与 state-of-the-art 汇总方法进行对比的证据。"
+      }
+    ],
+    "next_action": {
+      "type": "read_neighbors",
+      "reason": "实验与结果部分（紧邻 chunk 572 和 599 的结果/评估章节）可能包含与基准方法的对比结果，应读取其相邻段落以查找是否与 state-of-the-art 方法进行了比较。",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": null,
+      "source": "1805.04579.pdf",
+      "chunk_id": 599
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "仅针对 r1 的需求范围检查：需确认是否与 state-of-the-art 汇总方法对比；现有证据未建立该事实，行动仅针对该需求本身。"
+    }
+  },
+  "steps": [
+    {
+      "number": 1,
+      "action": {
+        "type": "read_neighbors",
+        "reason": "实验与结果部分（紧邻 chunk 572 和 599 的结果/评估章节）可能包含与基准方法的对比结果，应读取其相邻段落以查找是否与 state-of-the-art 方法进行了比较。",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": null,
+        "source": "1805.04579.pdf",
+        "chunk_id": 599
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "read_neighbors",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "chunk_id": 599,
+          "source": "1805.04579.pdf",
+          "knowledge_base": {
+            "version": "qasper-holdout-20261025",
+            "chunk_count": 1459,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/manifest.json",
+            "manifest_sha256": "10bb244a150c260e5efc39b1a6ebeb939291e26f55d966ed102d27216e67718a",
+            "files": {
+              "faiss.index": "346ac08a63ebb5f367f8a886b0997c344fc084bf1fa8b27ae27de9a82be97617",
+              "chunks.json": "ef123dcc0b2180f3b957d9089c8b5207965dffb1d908fdbf348863efecdeb060"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 597,
+              "text": "We now compute, similarity(Sfi, Sfj) Sentence We use two similarity measures : 1. Jaccard Similarity 2. Cosine Similarity We generate the similarity matrix Simj n×n for each of the similarity Measure, where j indexes the similarity Measure. Element Eij of Simj denotes similarity between ith and jth sentence. Consequentially, we will end up with Sim1 n×n and Sim2 n×n, corresponding to each similarity mea- sure. Jaccard Similarity: For some sets A and B, <a,b,c,... >and <x,y,z,...",
+              "source": "1805.04579.pdf",
+              "page": 3,
+              "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+              "section": "3.2.1 Similarity/Correlation Matrices",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -2
+            },
+            {
+              "chunk_id": 598,
+              "text": ">respectively, the Jac- card Similarity is deﬁned as:- similarity(A, B) ←n(A ∩B) Jaccard n(A ∪B) Cosine Similarity: The Cosine distance be- tween ‘u’ and ‘v’, is deﬁned as:- u · v similarity(A, B) ←1 − Cosine ||u||||v|| where ‘u · v‘ is the dot product of ‘u‘ and ‘v‘.",
+              "source": "1805.04579.pdf",
+              "page": 3,
+              "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+              "section": "3.2.1 Similarity/Correlation Matrices",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -1
+            },
+            {
+              "chunk_id": 599,
+              "text": "3.2.2 PageRank PageRank algorithm (Page et al., 1999), devised to rank web pages, forms the core of Google Search. It roughly works by ranking pages accord- ing to the number and quality of outsourcing links from the page. For NLP, a PageRank based tech- nique ,TextRank has been a major breakthrough in the ﬁeld. TextRank based summarization has seeded exemplary results on benchmarks. We use a naive TextRank analogous for our task.",
+              "source": "1805.04579.pdf",
+              "page": 3,
+              "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+              "section": "3.2.2 PageRank",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 0
+            },
+            {
+              "chunk_id": 600,
+              "text": "Given n sentences <s1, s2, s3, ..sn>, we intend to generate PageRank or probability distribution ma- trix Rn×1,   Pr(s1) Pr(s2)   ... Pr(sn) , where Pr(sk) in original paper denoted proba- bility with which a randomly browsing user lands on a particular page.",
+              "source": "1805.04579.pdf",
+              "page": 3,
+              "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+              "section": "3.2.2 PageRank",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 1
+            },
+            {
+              "chunk_id": 601,
+              "text": "For the summarization task, they denote how strongly a sentence is connected with rest of document, or how well sentence cap- tures multiple views/concepts.",
+              "source": "1805.04579.pdf",
+              "page": 3,
+              "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+              "section": "3.2.2 PageRank",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 2
+            }
+          ],
+          "trace": {
+            "window": 2,
+            "max_window": 2,
+            "selected_ids": [
+              597,
+              598,
+              599,
+              600,
+              601
+            ],
+            "read_chars": 1610,
+            "elapsed_seconds": 0.000153,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        597,
+        598,
+        600
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          597,
+          598,
+          600
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "missing",
+            "evidence": [],
+            "supported_part": "",
+            "reason": "提供的段落描述了所提出的方法（统计和语义模型、DUC 2004 测试集、组件（如 TextRank、TF/IDF、WordNet、GloVe、InferSent）），并提及了相关工作背景（例如，'A state of art method proposed by Wenyuan Zeng (Zeng et al., 2016)'，'Graphical summarizers like TextRank have also provided great benchmark results'），但没有段落表明作者的模型是与最先进的总结方法进行比较进行评估的（例如，带有基准的对比表格或消融实验）。TextRank 被用作他们自身方法中的组成部分（'We use a naive TextRank analogous for our task'），而不是比较基准。",
+            "gap": "没有证据表明他们将自己的总结方法与最先进的总结方法进行了比较（对比结果/基准表格）。"
+          }
+        ],
+        "next_action": {
+          "type": "read_neighbors",
+          "reason": "该论文存在于清单中，且结果/评估部分可能位于所提供段落附近；在提供的评估/结果部分周围读取文本可能会发现与基准的比较。",
+          "requirement_ids": [
+            "r1"
+          ],
+          "query": null,
+          "source": "1805.04579.pdf",
+          "chunk_id": 631
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "r1 仅针对该论文关于与最先进总结方法进行比较的问题进行了检查；没有将范围外的事实用于支持。"
+        }
+      }
+    },
+    {
+      "number": 2,
+      "action": {
+        "type": "read_neighbors",
+        "reason": "该论文存在于清单中，且结果/评估部分可能位于所提供段落附近；在提供的评估/结果部分周围读取文本可能会发现与基准的比较。",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": null,
+        "source": "1805.04579.pdf",
+        "chunk_id": 631
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "read_neighbors",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "chunk_id": 631,
+          "source": "1805.04579.pdf",
+          "knowledge_base": {
+            "version": "qasper-holdout-20261025",
+            "chunk_count": 1459,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/manifest.json",
+            "manifest_sha256": "10bb244a150c260e5efc39b1a6ebeb939291e26f55d966ed102d27216e67718a",
+            "files": {
+              "faiss.index": "346ac08a63ebb5f367f8a886b0997c344fc084bf1fa8b27ae27de9a82be97617",
+              "chunks.json": "ef123dcc0b2180f3b957d9089c8b5207965dffb1d908fdbf348863efecdeb060"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 629,
+              "text": "2. Hierarchical Clustering Given a similarity matrix SimN×N, let sa,b denote an individual element, then Hierarchi- cal clustering is performed as follows:- (a) Initialize a empty list R. (b) Choose element with highest similarity value let it be si,j where, i̸ = j, si,j̸ = 0 (c) Replace values in column and row i in It following manner:- sd,i = sd,i+sd,j , d ∈(1, N) 2 si,d = si,d+sj,d , d ∈(1, N) 2 (d) Replace entries corresponding to col- umn and row i by zeros.",
+              "source": "1805.04579.pdf",
+              "page": 5,
+              "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+              "section": "2. Hierarchical Clustering",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -2
+            },
+            {
+              "chunk_id": 630,
+              "text": "(e) Add i and j to R, if they are not already and there. (f) Repeat steps 2-5 until single single non- zero element remains, for remaining non-zero element apply Step 5 and ter- minate.",
+              "source": "1805.04579.pdf",
+              "page": 5,
+              "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+              "section": "2. Hierarchical Clustering",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -1
+            },
+            {
+              "chunk_id": 631,
+              "text": "3.5 Single Document Summarization After generating summary from a particular model, our aim is to compute summaries through overlap of different models. Let us have g summaries from g different models. For pth sum- marization model, let the k sentences contained be:- Sump ←(s(1,p), s(2,p) . , s(k,p)) Now for our list of sentences < s1, s2, s3, ..sn > we deﬁne cWeight as weight obtained for each sentence using g models.",
+              "source": "1805.04579.pdf",
+              "page": 6,
+              "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+              "section": "3.5 Single Document Summarization",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 0
+            },
+            {
+              "chunk_id": 632,
+              "text": "cWeight(si) = Pg j=1 WiB(j, si) Here, B(j, si) is a function which returns 1 if sentence is in summary of jth model, otherwise zero. Wi is weight assigned to each model without training, Wi = 1 g, i ∈(1, g)",
+              "source": "1805.04579.pdf",
+              "page": 6,
+              "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+              "section": "3.5 Single Document Summarization",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 1
+            },
+            {
+              "chunk_id": 633,
+              "text": "3.6 Multi-Document/Domain-Speciﬁc Summarization We here use machine learning based approach to further increase the quality of our summa- rization technique. The elemental concept is that we use training set of u domain speciﬁc documents, with gold standard/human-composed summaries, provided we ﬁne tune our weights Wi∀i ∈(1, g) for different models taking F1- score/F-measure.(Powers, 2011) as factor.",
+              "source": "1805.04579.pdf",
+              "page": 6,
+              "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+              "section": "3.6 Multi-Document/Domain-Speciﬁc",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 2
+            }
+          ],
+          "trace": {
+            "window": 2,
+            "max_window": 2,
+            "selected_ids": [
+              629,
+              630,
+              631,
+              632,
+              633
+            ],
+            "read_chars": 1684,
+            "elapsed_seconds": 0.000249,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        629,
+        630,
+        632,
+        633
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          629,
+          630,
+          632,
+          633
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "missing",
+            "evidence": [],
+            "supported_part": "",
+            "reason": "Supplied passages mention state-of-the-art methods only as background (e.g., abstractive SOTA by Zeng et al., TextRank benchmarks) and use TextRank/TF-IDF etc. as components of their own system; no passage shows the authors comparing their results against state-of-the-art summarization approaches or external baselines.",
+            "gap": "No passage establishes whether the paper's experimental results are compared against state-of-the-art summarization approaches; a results/comparison section appears to be missing from the supplied chunks."
+          }
+        ],
+        "next_action": {
+          "type": "read_neighbors",
+          "reason": "The results/evaluation section is likely between chunk 633 (page 6, where F-score fine-tuning is described) and chunk 648 (page 8); reading neighbors around 633 may surface comparison results against state-of-the-art approaches.",
+          "requirement_ids": [
+            "r1"
+          ],
+          "query": null,
+          "source": "1805.04579.pdf",
+          "chunk_id": 633
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "Assessed r1 independently: only its subject (the paper), predicate (do they compare against SOTA approaches) was checked; scope limited to comparison evidence, not background mentions."
+        }
+      }
+    },
+    {
+      "number": 3,
+      "action": {
+        "type": "read_neighbors",
+        "reason": "The results/evaluation section is likely between chunk 633 (page 6, where F-score fine-tuning is described) and chunk 648 (page 8); reading neighbors around 633 may surface comparison results against state-of-the-art approaches.",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": null,
+        "source": "1805.04579.pdf",
+        "chunk_id": 633
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "read_neighbors",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "chunk_id": 633,
+          "source": "1805.04579.pdf",
+          "knowledge_base": {
+            "version": "qasper-holdout-20261025",
+            "chunk_count": 1459,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/manifest.json",
+            "manifest_sha256": "10bb244a150c260e5efc39b1a6ebeb939291e26f55d966ed102d27216e67718a",
+            "files": {
+              "faiss.index": "346ac08a63ebb5f367f8a886b0997c344fc084bf1fa8b27ae27de9a82be97617",
+              "chunks.json": "ef123dcc0b2180f3b957d9089c8b5207965dffb1d908fdbf348863efecdeb060"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 631,
+              "text": "3.5 Single Document Summarization After generating summary from a particular model, our aim is to compute summaries through overlap of different models. Let us have g summaries from g different models. For pth sum- marization model, let the k sentences contained be:- Sump ←(s(1,p), s(2,p) . , s(k,p)) Now for our list of sentences < s1, s2, s3, ..sn > we deﬁne cWeight as weight obtained for each sentence using g models.",
+              "source": "1805.04579.pdf",
+              "page": 6,
+              "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+              "section": "3.5 Single Document Summarization",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -2
+            },
+            {
+              "chunk_id": 632,
+              "text": "cWeight(si) = Pg j=1 WiB(j, si) Here, B(j, si) is a function which returns 1 if sentence is in summary of jth model, otherwise zero. Wi is weight assigned to each model without training, Wi = 1 g, i ∈(1, g)",
+              "source": "1805.04579.pdf",
+              "page": 6,
+              "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+              "section": "3.5 Single Document Summarization",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -1
+            },
+            {
+              "chunk_id": 633,
+              "text": "3.6 Multi-Document/Domain-Speciﬁc Summarization We here use machine learning based approach to further increase the quality of our summa- rization technique. The elemental concept is that we use training set of u domain speciﬁc documents, with gold standard/human-composed summaries, provided we ﬁne tune our weights Wi∀i ∈(1, g) for different models taking F1- score/F-measure.(Powers, 2011) as factor.",
+              "source": "1805.04579.pdf",
+              "page": 6,
+              "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+              "section": "3.6 Multi-Document/Domain-Speciﬁc",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 0
+            },
+            {
+              "chunk_id": 634,
+              "text": "F1Score = 2.precision.recall precision + recall We proceed in the following manner:- 1. For each document in training set generate summary using each model independently, compute the F1Score w.r.t. gold summary.",
+              "source": "1805.04579.pdf",
+              "page": 6,
+              "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+              "section": "3.6 Multi-Document/Domain-Speciﬁc",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 1
+            },
+            {
+              "chunk_id": 635,
+              "text": "2. For each model, assign the weights using j=1 f (j,i) Pv 1 , i ∈(1, g) Wi = u Here, f (j,i) denotes F1Score for jth model in 1 ith document. We now obtain cWeight as we did previously, and formulate cumulative summary, capturing the con- sensus of different models. We hence used a su- pervised learning algorithm to capture the mean performances of different models over the training data to ﬁne-tune our summary.",
+              "source": "1805.04579.pdf",
+              "page": 6,
+              "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+              "section": "3.6 Multi-Document/Domain-Speciﬁc",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 2
+            }
+          ],
+          "trace": {
+            "window": 2,
+            "max_window": 2,
+            "selected_ids": [
+              631,
+              632,
+              633,
+              634,
+              635
+            ],
+            "read_chars": 1658,
+            "elapsed_seconds": 0.000201,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        634,
+        635
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          634,
+          635
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "missing",
+            "evidence": [],
+            "supported_part": "",
+            "reason": "所提供的段落只描述了模型组成(统计/语义模型)、在DUC 2004上的测试设置与训练加权方法,并提到TextRank曾取得benchmark结果及Zeng等人的SOTA方法,但没有任何段落表明作者将自己的方法与state-of-the-art方法进行了对比评测(如与基线的得分比较)。",
+            "gap": "缺少论文结果部分中将本方法与state-of-the-art汇总方法进行对比评测的证据。"
+          }
+        ],
+        "next_action": {
+          "type": "read_neighbors",
+          "reason": "已读完方法与训练加权部分,仍未看到结果/评测对比;chunk 635 位于第6页末尾,其后的段落很可能包含实验结果与对比,继续向后读取以寻找比较实验。",
+          "requirement_ids": [
+            "r1"
+          ],
+          "query": null,
+          "source": "1805.04579.pdf",
+          "chunk_id": 635
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "仅针对r1的问题摘录(该论文是否与state-of-the-art汇总方法比较)进行核查,未扩大范围。"
+        }
+      }
+    }
+  ],
+  "evidence_after": [
+    {
+      "chunk_id": 587,
+      "source": "1805.04579.pdf",
+      "page": 2,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "For Multi-Document Summarization,after training on corpus, we assign weights among the different techniques .We store the sense vector for documents, along with weights, for future refer- ence. For Single document summarization, ﬁrstly we calculate the sense vector for that document and calculate the nearest vector from the stored Vectors, we use the weights of the nearest vector. We will describe the ﬂow for semantic and statis- tical models separately.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 572,
+      "source": "1805.04579.pdf",
+      "page": 1,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "Using weighing techniques in between various statistical models too further reﬁnes our result. For Statisti- cal models, we have used TF/IDF, Tex- tRAnk, Jaccard/Cosine Similarities. For Semantic Models, we have used WordNet- based Model and proposed two models based on Glove Vectors and Facebook’s InferSent. We tested our approach on DUC 2004 dataset, generating 100-word summaries. We have discussed the system, algorithms, analysis and also proposed and tested possible improvements.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 576,
+      "source": "1805.04579.pdf",
+      "page": 1,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": ",1978) involves models to de- duce the crux of the document. It then presents a summary consisting of words and phrases that were not there in the actual document, sometimes even paraphrasing(Rockt¨aschel et al., 2015). A state of art method proposed by Wenyuan Zeng (Zeng et al., 2016) produces such summaries with length restricted to 75. There have been many re- cent developments that produce optimal results, but it is still in a developing phase.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 648,
+      "source": "1805.04579.pdf",
+      "page": 8,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "4. For generating summary through model over- laps, we can also try Graph-based methods or different Clustering techniques. References [Bahdanau et al.2014] Dzmitry Bahdanau, Kyunghyun Cho, and Yoshua Bengio. 2014. Neural machine translation by jointly learning to align and translate. arXiv preprint arXiv:1409.0473. [Barrera and Verma2012] Araly Barrera and Rakesh Verma.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 583,
+      "source": "1805.04579.pdf",
+      "page": 2,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "Graphical summarizers like TextRank have also provided great benchmark results.TextRank assigns weights to important keywords from the document using graph-based model and sentences which capture most of those concepts/keywords are ranked higher) (Barrera and Verma, 2012, Mihalcea and Tarau, 2004) TextRank Google’s PageRank (Brin and Page, 1998) for graphical modeling. Though semantic and graphical models may better capture the sense of document but miss out on statistical view.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 571,
+      "source": "1805.04579.pdf",
+      "page": 1,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "Though statistical models may better capture word co-occurrences and distribution around the text, they fail to detect the context and the sense of sen- tences /words as a whole. Semantic mod- els help us gain better insight into the con- text of sentences. We show that how tun- ing weights between different models can help us achieve signiﬁcant results on var- ious benchmarks. Learning pre-trained vectors used in semantic models further, on given corpus, can give addition spike in performance.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 601,
+      "source": "1805.04579.pdf",
+      "page": 3,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "For the summarization task, they denote how strongly a sentence is connected with rest of document, or how well sentence cap- tures multiple views/concepts.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 570,
+      "source": "1805.04579.pdf",
+      "page": 1,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "Using Statistical and Semantic Models for Multi-Document Summarization Divyanshu Daiya ∗ Anukarsh Singh ∗ LNM Institute of Information LNM Institute of Information Technology Jaipur, Rajasthan 302031 Jaipur, Rajasthan 302031 daiyadivyanshu@gmail.com anukarshsingh1@gmail.com Abstract We report a series of experiments with arXiv:1805.04579v2 [cs.CL] 17 May 2018 different semantic models on top of var- ious statistical models for extractive text summarization.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 631,
+      "source": "1805.04579.pdf",
+      "page": 6,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "3.5 Single Document Summarization After generating summary from a particular model, our aim is to compute summaries through overlap of different models. Let us have g summaries from g different models. For pth sum- marization model, let the k sentences contained be:- Sump ←(s(1,p), s(2,p) . , s(k,p)) Now for our list of sentences < s1, s2, s3, ..sn > we deﬁne cWeight as weight obtained for each sentence using g models.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 574,
+      "source": "1805.04579.pdf",
+      "page": 1,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "1 Introduction Automatic Text Summarization deals with the task of condensing documents into a summary, whose level is similar to a human-generated sum- mary. It is mostly distributed into two distinct domains, i.e., Abstractive Summarization and Ex- tractive Summarization. Abstractive summariza- ∗Both the authors have contributed equally to this work.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 599,
+      "source": "1805.04579.pdf",
+      "page": 3,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "3.2.2 PageRank PageRank algorithm (Page et al., 1999), devised to rank web pages, forms the core of Google Search. It roughly works by ranking pages accord- ing to the number and quality of outsourcing links from the page. For NLP, a PageRank based tech- nique ,TextRank has been a major breakthrough in the ﬁeld. TextRank based summarization has seeded exemplary results on benchmarks. We use a naive TextRank analogous for our task.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 597,
+      "source": "1805.04579.pdf",
+      "page": 3,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "We now compute, similarity(Sfi, Sfj) Sentence We use two similarity measures : 1. Jaccard Similarity 2. Cosine Similarity We generate the similarity matrix Simj n×n for each of the similarity Measure, where j indexes the similarity Measure. Element Eij of Simj denotes similarity between ith and jth sentence. Consequentially, we will end up with Sim1 n×n and Sim2 n×n, corresponding to each similarity mea- sure. Jaccard Similarity: For some sets A and B, <a,b,c,... >and <x,y,z,...",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 598,
+      "source": "1805.04579.pdf",
+      "page": 3,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": ">respectively, the Jac- card Similarity is deﬁned as:- similarity(A, B) ←n(A ∩B) Jaccard n(A ∪B) Cosine Similarity: The Cosine distance be- tween ‘u’ and ‘v’, is deﬁned as:- u · v similarity(A, B) ←1 − Cosine ||u||||v|| where ‘u · v‘ is the dot product of ‘u‘ and ‘v‘.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 600,
+      "source": "1805.04579.pdf",
+      "page": 3,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "Given n sentences <s1, s2, s3, ..sn>, we intend to generate PageRank or probability distribution ma- trix Rn×1,   Pr(s1) Pr(s2)   ... Pr(sn) , where Pr(sk) in original paper denoted proba- bility with which a randomly browsing user lands on a particular page.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 629,
+      "source": "1805.04579.pdf",
+      "page": 5,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "2. Hierarchical Clustering Given a similarity matrix SimN×N, let sa,b denote an individual element, then Hierarchi- cal clustering is performed as follows:- (a) Initialize a empty list R. (b) Choose element with highest similarity value let it be si,j where, i̸ = j, si,j̸ = 0 (c) Replace values in column and row i in It following manner:- sd,i = sd,i+sd,j , d ∈(1, N) 2 si,d = si,d+sj,d , d ∈(1, N) 2 (d) Replace entries corresponding to col- umn and row i by zeros.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 630,
+      "source": "1805.04579.pdf",
+      "page": 5,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "(e) Add i and j to R, if they are not already and there. (f) Repeat steps 2-5 until single single non- zero element remains, for remaining non-zero element apply Step 5 and ter- minate.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 632,
+      "source": "1805.04579.pdf",
+      "page": 6,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "cWeight(si) = Pg j=1 WiB(j, si) Here, B(j, si) is a function which returns 1 if sentence is in summary of jth model, otherwise zero. Wi is weight assigned to each model without training, Wi = 1 g, i ∈(1, g)",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 633,
+      "source": "1805.04579.pdf",
+      "page": 6,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "3.6 Multi-Document/Domain-Speciﬁc Summarization We here use machine learning based approach to further increase the quality of our summa- rization technique. The elemental concept is that we use training set of u domain speciﬁc documents, with gold standard/human-composed summaries, provided we ﬁne tune our weights Wi∀i ∈(1, g) for different models taking F1- score/F-measure.(Powers, 2011) as factor.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 634,
+      "source": "1805.04579.pdf",
+      "page": 6,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "F1Score = 2.precision.recall precision + recall We proceed in the following manner:- 1. For each document in training set generate summary using each model independently, compute the F1Score w.r.t. gold summary.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 635,
+      "source": "1805.04579.pdf",
+      "page": 6,
+      "title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "text": "2. For each model, assign the weights using j=1 f (j,i) Pv 1 , i ∈(1, g) Wi = u Here, f (j,i) denotes F1Score for jth model in 1 ith document. We now obtain cWeight as we did previously, and formulate cumulative summary, capturing the con- sensus of different models. We hence used a su- pervised learning algorithm to capture the mean performances of different models over the training data to ﬁne-tune our summary.",
+      "kb_version": "qasper-holdout-20261025"
+    }
+  ],
+  "action_attempts": 3,
+  "feedback_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "missing",
+        "evidence": [],
+        "supported_part": "",
+        "reason": "所提供的段落只描述了模型组成(统计/语义模型)、在DUC 2004上的测试设置与训练加权方法,并提到TextRank曾取得benchmark结果及Zeng等人的SOTA方法,但没有任何段落表明作者将自己的方法与state-of-the-art方法进行了对比评测(如与基线的得分比较)。",
+        "gap": "缺少论文结果部分中将本方法与state-of-the-art汇总方法进行对比评测的证据。"
+      }
+    ],
+    "next_action": {
+      "type": "read_neighbors",
+      "reason": "已读完方法与训练加权部分,仍未看到结果/评测对比;chunk 635 位于第6页末尾,其后的段落很可能包含实验结果与对比,继续向后读取以寻找比较实验。",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": null,
+      "source": "1805.04579.pdf",
+      "chunk_id": 635
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "仅针对r1的问题摘录(该论文是否与state-of-the-art汇总方法比较)进行核查,未扩大范围。"
+    }
+  },
+  "halt_reason": "action_budget",
+  "final_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "missing",
+        "evidence": [],
+        "supported_part": "",
+        "reason": "所提供的段落只描述了模型组成(统计/语义模型)、在DUC 2004上的测试设置与训练加权方法,并提到TextRank曾取得benchmark结果及Zeng等人的SOTA方法,但没有任何段落表明作者将自己的方法与state-of-the-art方法进行了对比评测(如与基线的得分比较)。",
+        "gap": "缺少论文结果部分中将本方法与state-of-the-art汇总方法进行对比评测的证据。"
+      }
+    ],
+    "next_action": {
+      "type": "read_neighbors",
+      "reason": "已读完方法与训练加权部分,仍未看到结果/评测对比;chunk 635 位于第6页末尾,其后的段落很可能包含实验结果与对比,继续向后读取以寻找比较实验。",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": null,
+      "source": "1805.04579.pdf",
+      "chunk_id": 635
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "仅针对r1的问题摘录(该论文是否与state-of-the-art汇总方法比较)进行核查,未扩大范围。"
+    }
+  },
+  "elapsed_seconds": 50.37
+}

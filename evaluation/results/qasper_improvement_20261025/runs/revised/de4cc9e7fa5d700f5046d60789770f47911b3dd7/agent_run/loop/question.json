@@ -1,0 +1,747 @@
+{
+  "id": "question",
+  "query": "For the paper \"Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce\" (arXiv: 1911.02747), answer this question: Which natural language(s) is/are studied?",
+  "kb_version": "qasper-holdout-20261025",
+  "status": "completed",
+  "actions_executed": 3,
+  "semantic_correctness": "requires_manual_review",
+  "plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+        "question_quote": "For the paper \"Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce\" (arXiv: 1911.02747), answer this question: Which natural language(s) is/are studied?",
+        "need": "For the paper \"Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce\" (arXiv: 1911.02747), answer this question: Which natural language(s) is/are studied?"
+      }
+    ]
+  },
+  "assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "partial",
+        "evidence": [
+          {
+            "chunk_id": 1369,
+            "quote": "com/fuzhenxin/Query-Bag-Matching-CIKM 5https://github.com/Embedding/Chinese-Word-Vectors 6https://nlp.stanford.edu/projects/glove"
+          },
+          {
+            "chunk_id": 1362,
+            "quote": "we follow the same strategy as AliMe dataset. Finally, we get 20,354 training set, 2,000 validation set, and 10,000 test set. To facilitate the research in this area, the composed Quora dataset are released4"
+          }
+        ],
+        "supported_part": "实验使用了两个数据集（AliMe 电商数据集与 Quora 数据集），并分别使用了中文词向量资源（Chinese-Word-Vectors）和 GloVe 词向量，暗示涉及中文和英文，但文中未明确陈述所研究的语言。",
+        "reason": "提供的段落只间接通过词向量资源（Chinese-Word-Vectors、GloVe）和数据集（AliMe、Quora）暗示语言，没有一段文字明确说明论文研究了哪种自然语言。",
+        "gap": "缺少明确陈述所研究自然语言（如中文/英文）的原文句子。"
+      }
+    ],
+    "next_action": {
+      "type": "read_neighbors",
+      "reason": "chunk 1369 提到中文词向量与 GloVe，位于实验设置附近；读取其前后段落（实验/数据集部分）很可能找到明确说明所研究语言的句子。",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": null,
+      "source": "1911.02747.pdf",
+      "chunk_id": 1369
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "仅针对 r1 的需求（该论文研究了哪些自然语言）评估证据范围，未引入其他要求。"
+    }
+  },
+  "steps": [
+    {
+      "number": 1,
+      "action": {
+        "type": "read_neighbors",
+        "reason": "chunk 1369 提到中文词向量与 GloVe，位于实验设置附近；读取其前后段落（实验/数据集部分）很可能找到明确说明所研究语言的句子。",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": null,
+        "source": "1911.02747.pdf",
+        "chunk_id": 1369
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "read_neighbors",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "chunk_id": 1369,
+          "source": "1911.02747.pdf",
+          "knowledge_base": {
+            "version": "qasper-holdout-20261025",
+            "chunk_count": 1459,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/manifest.json",
+            "manifest_sha256": "10bb244a150c260e5efc39b1a6ebeb939291e26f55d966ed102d27216e67718a",
+            "files": {
+              "faiss.index": "346ac08a63ebb5f367f8a886b0997c344fc084bf1fa8b27ae27de9a82be97617",
+              "chunks.json": "ef123dcc0b2180f3b957d9089c8b5207965dffb1d908fdbf348863efecdeb060"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 1367,
+              "text": "An hCNN model is applied to train the new dataset. In the testing stage, each query- question pair is assigned with a probability indicating the matching degree. To compare with our model, we rank the bags based on the query-bag matching scores and the scores are defined as the max or mean matching probability of the query-question pairs in the query-bag pair. We name the two instances Q-Q Max and Q-Q Mean respectively.",
+              "source": "1911.02747.pdf",
+              "page": 3,
+              "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+              "section": "3 EXPERIMENTS",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -2
+            },
+            {
+              "chunk_id": 1368,
+              "text": "Query-bag Matching To verify the effectiveness of our pro- posed models, We design a new query-bag matching based baseline. We concatenate the questions in the bag to form a new long “ques- tion”, then the hCNN model is applied to measure the matching 3https://data.quora.com/First-Quora-Dataset-Release-Question-Pairs 4The composed Quora dataset and more detailed experiments are in https://github.",
+              "source": "1911.02747.pdf",
+              "page": 3,
+              "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+              "section": "3 EXPERIMENTS",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -1
+            },
+            {
+              "chunk_id": 1369,
+              "text": "com/fuzhenxin/Query-Bag-Matching-CIKM 5https://github.com/Embedding/Chinese-Word-Vectors 6https://nlp.stanford.edu/projects/glove",
+              "source": "1911.02747.pdf",
+              "page": 3,
+              "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+              "section": "3 EXPERIMENTS",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 0
+            },
+            {
+              "chunk_id": 1370,
+              "text": "Table 1: Results of models and baselines with ablation study. MC and BR denote Mutual Coverage and Bag Representation respectively. “BR w/o Cov” denotes Bag Representation component without coverage module. ‡ and § means the results are significant with p-value < 0.05 measured by the Student’s paired t-test over the best baseline and the base model respectively.",
+              "source": "1911.02747.pdf",
+              "page": 4,
+              "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+              "section": "3 EXPERIMENTS",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 1
+            },
+            {
+              "chunk_id": 1371,
+              "text": "AliMe Model MRR R10@1 R10@2 R10@5 Q-Q Mean 0.6122 0.5050 0.5623 0.7287 Q-Q Max 0.6470 0.5477 0.6000 0.7590 Bag-Con 0.6552 0.5610 0.6087 0.7607 Base 0.6845 0.6027 0.6397 0.7700 Base+MC 0.6936 0.6137 0.6497 0.7807 Base+BR 0.6913 0.6103 0.6443 0.7833 Base+(BR w/o Cov) 0.6849 0.6013 0.6410 0.7810 0.7007‡§ 0.6197‡§ 0.6600‡§ 0.7923‡§ QBM (Base+BR+MC) Table 2: Some words and their corresponding weights (e in Equation 4) in mutual coverage module.",
+              "source": "1911.02747.pdf",
+              "page": 4,
+              "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+              "section": "3 EXPERIMENTS",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 2
+            }
+          ],
+          "trace": {
+            "window": 2,
+            "max_window": 2,
+            "selected_ids": [
+              1367,
+              1368,
+              1369,
+              1370,
+              1371
+            ],
+            "read_chars": 1758,
+            "elapsed_seconds": 0.000292,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        1367,
+        1368,
+        1370,
+        1371
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          1367,
+          1368,
+          1370,
+          1371
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "missing",
+            "evidence": [],
+            "supported_part": "",
+            "reason": "No supplied passage explicitly states which natural language(s) the paper studies; the GitHub link to 'Chinese-Word-Vectors' (chunk 1369) and the use of AliMe/Quora datasets are only indirect hints, not an explicit statement of the studied language(s).",
+            "gap": "The paper's statement of which natural language(s) its data and experiments are in (e.g., Chinese and/or English) is not established in the supplied passages."
+          }
+        ],
+        "next_action": {
+          "type": "read_neighbors",
+          "reason": "The dataset description near chunk 1362 (AliMe/Quora composition) is the most likely place where the studied language(s) are stated; read passages around it.",
+          "requirement_ids": [
+            "r1"
+          ],
+          "query": null,
+          "source": "1911.02747.pdf",
+          "chunk_id": 1362
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "Only requirement r1 was checked against its bound question about which natural language(s) are studied; no out-of-scope facts were used."
+        }
+      }
+    },
+    {
+      "number": 2,
+      "action": {
+        "type": "read_neighbors",
+        "reason": "The dataset description near chunk 1362 (AliMe/Quora composition) is the most likely place where the studied language(s) are stated; read passages around it.",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": null,
+        "source": "1911.02747.pdf",
+        "chunk_id": 1362
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "read_neighbors",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "chunk_id": 1362,
+          "source": "1911.02747.pdf",
+          "knowledge_base": {
+            "version": "qasper-holdout-20261025",
+            "chunk_count": 1459,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/manifest.json",
+            "manifest_sha256": "10bb244a150c260e5efc39b1a6ebeb939291e26f55d966ed102d27216e67718a",
+            "files": {
+              "faiss.index": "346ac08a63ebb5f367f8a886b0997c344fc084bf1fa8b27ae27de9a82be97617",
+              "chunks.json": "ef123dcc0b2180f3b957d9089c8b5207965dffb1d908fdbf348863efecdeb060"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 1360,
+              "text": "Finally, we get 12,008 training cases, 2,000 valid cases, and 10,000 test cases. Please notice, for the testing, we sampled 2http://lucene.apache.org 9 negative bags instead of 1, and thus formed 10 candidates for ranking. Quora The Quora dataset is originally released for the duplicated question detection task3. The dataset contains 400,000 question pairs and each pair is marked whether they are asking the same question.",
+              "source": "1911.02747.pdf",
+              "page": 3,
+              "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+              "section": "3 EXPERIMENTS",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -2
+            },
+            {
+              "chunk_id": 1361,
+              "text": "Due to the huge amount of duplicated question pairs, we group the questions as question bag via the union-find algorithm from the duplicated questions. We get 60,400 bags, and all the questions in a bag are asking the same question. We filter the bags that contain questions less than 3 to make the bag not too small. The new bag dataset will help similar questions recommendation on the (4) Quora website.",
+              "source": "1911.02747.pdf",
+              "page": 3,
+              "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+              "section": "3 EXPERIMENTS",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -1
+            },
+            {
+              "chunk_id": 1362,
+              "text": "We then extract one question in the bag as query and the other questions make up the bag in our task. Considering the negative samples, we follow the same strategy as AliMe dataset. Finally, we get 20,354 training set, 2,000 validation set, and 10,000 test set. To facilitate the research in this area, the composed Quora dataset are released4. 3.2 Setup (5) We use the Adam optimizer with learning rate 0.0001 to optimize the parameters.",
+              "source": "1911.02747.pdf",
+              "page": 3,
+              "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+              "section": "3 EXPERIMENTS",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 0
+            },
+            {
+              "chunk_id": 1363,
+              "text": "The batch size is 32. The dropout rate is 0.5. The max length of the query and questions is 20 to cover most of the words in a sentence. We use padding to handle the various lengths of the text.",
+              "source": "1911.02747.pdf",
+              "page": 3,
+              "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+              "section": "3 EXPERIMENTS",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 1
+            },
+            {
+              "chunk_id": 1364,
+              "text": "The model checkpoint is chosen according to the best F-score on the validation set.",
+              "source": "1911.02747.pdf",
+              "page": 3,
+              "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+              "section": "3 EXPERIMENTS",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 2
+            }
+          ],
+          "trace": {
+            "window": 2,
+            "max_window": 2,
+            "selected_ids": [
+              1360,
+              1361,
+              1362,
+              1363,
+              1364
+            ],
+            "read_chars": 1546,
+            "elapsed_seconds": 0.000193,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        1360,
+        1361,
+        1363,
+        1364
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          1360,
+          1361,
+          1363,
+          1364
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "partial",
+            "evidence": [
+              {
+                "chunk_id": 1369,
+                "quote": "5https://github.com/Embedding/Chinese-Word-Vectors 6https://nlp.stanford.edu/projects/glove"
+              },
+              {
+                "chunk_id": 1360,
+                "quote": "Finally, we get 12,008 training cases, 2,000 valid cases, and 10,000 test cases."
+              }
+            ],
+            "supported_part": "间接证据表明研究涉及中文（使用了 Chinese-Word-Vectors 中文词向量资源）和英文（使用了 GloVe 词向量，Quora 数据集），但 passages 中没有明确陈述所研究的自然语言是什么。",
+            "reason": "提供的段落只显示使用了中文词向量和 GloVe 等资源以及 Quora/AliMe 数据集的规模，没有任何文字直接说明论文研究的是哪种或哪些自然语言。",
+            "gap": "缺少明确陈述所研究自然语言（如中文/英文）的原文。"
+          }
+        ],
+        "next_action": {
+          "type": "read_neighbors",
+          "reason": "数据集描述段落（AliMe 数据集部分）可能明确说明其语言；读取 1360 之前的相邻段落以查找数据集语言描述。",
+          "requirement_ids": [
+            "r1"
+          ],
+          "query": null,
+          "source": "1911.02747.pdf",
+          "chunk_id": 1360
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "各检查均限于 r1 的问题节选：仅判断论文研究了哪些自然语言，未引入其他主题或条件。"
+        }
+      }
+    },
+    {
+      "number": 3,
+      "action": {
+        "type": "read_neighbors",
+        "reason": "数据集描述段落（AliMe 数据集部分）可能明确说明其语言；读取 1360 之前的相邻段落以查找数据集语言描述。",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": null,
+        "source": "1911.02747.pdf",
+        "chunk_id": 1360
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "read_neighbors",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "chunk_id": 1360,
+          "source": "1911.02747.pdf",
+          "knowledge_base": {
+            "version": "qasper-holdout-20261025",
+            "chunk_count": 1459,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/manifest.json",
+            "manifest_sha256": "10bb244a150c260e5efc39b1a6ebeb939291e26f55d966ed102d27216e67718a",
+            "files": {
+              "faiss.index": "346ac08a63ebb5f367f8a886b0997c344fc084bf1fa8b27ae27de9a82be97617",
+              "chunks.json": "ef123dcc0b2180f3b957d9089c8b5207965dffb1d908fdbf348863efecdeb060"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 1358,
+              "text": "Then we filter the questions which are in the corresponding right bag. After that, we randomly sample one in the retrieved candidate and use the bag that the retrieved candidate belongs to as the negative case. In the bag construction stage, the annotators have already merged all the questions of the same meaning, so we can ensure that the after filtering retrieved cases are negative in our setting.",
+              "source": "1911.02747.pdf",
+              "page": 3,
+              "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+              "section": "3 EXPERIMENTS",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -2
+            },
+            {
+              "chunk_id": 1359,
+              "text": "We also restrict the number of questions in a bag not more than 5 and discard the redundant questions.",
+              "source": "1911.02747.pdf",
+              "page": 3,
+              "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+              "section": "3 EXPERIMENTS",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -1
+            },
+            {
+              "chunk_id": 1360,
+              "text": "Finally, we get 12,008 training cases, 2,000 valid cases, and 10,000 test cases. Please notice, for the testing, we sampled 2http://lucene.apache.org 9 negative bags instead of 1, and thus formed 10 candidates for ranking. Quora The Quora dataset is originally released for the duplicated question detection task3. The dataset contains 400,000 question pairs and each pair is marked whether they are asking the same question.",
+              "source": "1911.02747.pdf",
+              "page": 3,
+              "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+              "section": "3 EXPERIMENTS",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 0
+            },
+            {
+              "chunk_id": 1361,
+              "text": "Due to the huge amount of duplicated question pairs, we group the questions as question bag via the union-find algorithm from the duplicated questions. We get 60,400 bags, and all the questions in a bag are asking the same question. We filter the bags that contain questions less than 3 to make the bag not too small. The new bag dataset will help similar questions recommendation on the (4) Quora website.",
+              "source": "1911.02747.pdf",
+              "page": 3,
+              "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+              "section": "3 EXPERIMENTS",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 1
+            },
+            {
+              "chunk_id": 1362,
+              "text": "We then extract one question in the bag as query and the other questions make up the bag in our task. Considering the negative samples, we follow the same strategy as AliMe dataset. Finally, we get 20,354 training set, 2,000 validation set, and 10,000 test set. To facilitate the research in this area, the composed Quora dataset are released4. 3.2 Setup (5) We use the Adam optimizer with learning rate 0.0001 to optimize the parameters.",
+              "source": "1911.02747.pdf",
+              "page": 3,
+              "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+              "section": "3 EXPERIMENTS",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 2
+            }
+          ],
+          "trace": {
+            "window": 2,
+            "max_window": 2,
+            "selected_ids": [
+              1358,
+              1359,
+              1360,
+              1361,
+              1362
+            ],
+            "read_chars": 1773,
+            "elapsed_seconds": 0.00024,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        1358,
+        1359
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          1358,
+          1359
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "supported",
+            "evidence": [
+              {
+                "chunk_id": 1369,
+                "quote": "com/fuzhenxin/Query-Bag-Matching-CIKM 5https://github.com/Embedding/Chinese-Word-Vectors 6https://nlp.stanford.edu/projects/glove"
+              },
+              {
+                "chunk_id": 1377,
+                "quote": "“Refund” in E-commerce is a very important element in a user query sentence. And “America” is important in Quora, because question like “what is the capital in <location>?” is highly related to location “<location>”."
+              }
+            ],
+            "supported_part": "The paper studies both Chinese and English: the implementation uses Chinese word vectors (for the AliMe/E-commerce data) and English example questions are shown for the Quora dataset, alongside GloVe embeddings.",
+            "reason": "The resource links show Chinese word vectors are used for the E-commerce dataset, and the quoted example questions in English plus GloVe embeddings show English is studied for the Quora dataset; together the two natural languages (Chinese and English) are established.",
+            "gap": ""
+          }
+        ],
+        "next_action": {
+          "type": "answer",
+          "reason": "The requirement about which natural languages are studied is supported by the supplied passages, and no unmet requirements remain.",
+          "requirement_ids": [],
+          "query": null,
+          "source": null,
+          "chunk_id": null
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "The check only addressed r1's operative need (languages studied in the referenced paper) using passages from that paper's inventory source; no other obligations were merged or expanded."
+        }
+      }
+    }
+  ],
+  "evidence_after": [
+    {
+      "chunk_id": 1381,
+      "source": "1911.02747.pdf",
+      "page": 4,
+      "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+      "text": "2017. Enhanced LSTM for Natural Language Inference. 1657–1668. [3] Hang Li and Jun Xu.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1333,
+      "source": "1911.02747.pdf",
+      "page": 1,
+      "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+      "text": "To our knowl- edge, there is no query-bag matching study exists, and we focus on the new approach in this paper. Recalling the text matching task [7], recently, researchers have adopted the deep neural network to model the matching relation- ship. ESIM [2] judges the inference relationship between two sen- tences by enhanced LSTM and interaction space. SMN [6] performs the context-response matching for the open-domain dialog system.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1384,
+      "source": "1911.02747.pdf",
+      "page": 4,
+      "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+      "text": "208–213. [5] Gaurav Singh Tomar, Thyago Duque, Oscar Täckström, Jakob Uszkoreit, and Dipanjan Das. 2017. Neural Paraphrase Identification of Questions with Noisy Pretraining. In Proceedings of the First Workshop on Subword and Character Level Models in NLP. Association for Computational Linguistics, 142–147. [6] Yu Wu, Wei Wu, Chen Xing, Ming Zhou, and Zhoujun Li. 2017. Sequential Matching Network: A New Architecture for Multi-turn Response Selection in Retrieval-Based Chatbots.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1369,
+      "source": "1911.02747.pdf",
+      "page": 3,
+      "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+      "text": "com/fuzhenxin/Query-Bag-Matching-CIKM 5https://github.com/Embedding/Chinese-Word-Vectors 6https://nlp.stanford.edu/projects/glove",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1380,
+      "source": "1911.02747.pdf",
+      "page": 4,
+      "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+      "text": "This work also shows that learning the query-bag matching directly in some sce- narios may outperform the query-question matching in ranking bags. One advantage of our model is that it is extensible in replacing the query-question matching component. REFERENCES [1] Dzmitry Bahdanau, Kyunghyun Cho, and Yoshua Bengio. 2015. Neural machine translation by jointly learning to align and translate. ICLR (2015). [2] Qian Chen, Xiaodan Zhu, Zhen-Hua Ling, Si Wei, Hui Jiang, and Diana Inkpen.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1382,
+      "source": "1911.02747.pdf",
+      "page": 4,
+      "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+      "text": "2012. Machine Learning for Query-Document Matching in Web Search.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1383,
+      "source": "1911.02747.pdf",
+      "page": 4,
+      "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+      "text": "[4] Minghui Qiu, Liu Yang, Feng Ji, Wei Zhou, Jun Huang, Haiqing Chen, Bruce Croft, and Wei Lin. 2018. Transfer Learning for Context-Aware Question Matching in Information-seeking Conversations in E-commerce.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1385,
+      "source": "1911.02747.pdf",
+      "page": 4,
+      "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+      "text": "496–505. [7] Runqi Yang, Jianhai Zhang, Xing Gao, Feng Ji, and Haiqing Chen. 2019. Simple and Effective Text Matching with Richer Alignment Features. 4699–4709. [8] Jianfei Yu, Minghui Qiu, Jing Jiang, Jun Huang, Shuangyong Song, Wei Chu, and Haiqing Chen. 2018. Modelling domain relationships for transfer learning on retrieval-based question answering systems in e-commerce.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1362,
+      "source": "1911.02747.pdf",
+      "page": 3,
+      "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+      "text": "We then extract one question in the bag as query and the other questions make up the bag in our task. Considering the negative samples, we follow the same strategy as AliMe dataset. Finally, we get 20,354 training set, 2,000 validation set, and 10,000 test set. To facilitate the research in this area, the composed Quora dataset are released4. 3.2 Setup (5) We use the Adam optimizer with learning rate 0.0001 to optimize the parameters.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1377,
+      "source": "1911.02747.pdf",
+      "page": 4,
+      "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+      "text": "“Refund” in E-commerce is a very important element in a user query sentence. And “America” is important in Quora, because question like “what is the capital in <location>?” is highly related to location “<location>”.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1332,
+      "source": "1911.02747.pdf",
+      "page": 1,
+      "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+      "text": "Obviously, the bag contains diverse expres- sions of a question, which may provide more matching evidence than only one question due to the rich information contained in the bag. Motivated by the fact, different from existing query-question (Q-Q) matching method, we propose a new query-bag matching ap- proach for retrieval-based chatbots. Concretely, when a user raises a query, the query-bag matching model provides the most suitable bag and returns the corresponding answer of the bag.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1367,
+      "source": "1911.02747.pdf",
+      "page": 3,
+      "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+      "text": "An hCNN model is applied to train the new dataset. In the testing stage, each query- question pair is assigned with a probability indicating the matching degree. To compare with our model, we rank the bags based on the query-bag matching scores and the scores are defined as the max or mean matching probability of the query-question pairs in the query-bag pair. We name the two instances Q-Q Max and Q-Q Mean respectively.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1368,
+      "source": "1911.02747.pdf",
+      "page": 3,
+      "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+      "text": "Query-bag Matching To verify the effectiveness of our pro- posed models, We design a new query-bag matching based baseline. We concatenate the questions in the bag to form a new long “ques- tion”, then the hCNN model is applied to measure the matching 3https://data.quora.com/First-Quora-Dataset-Release-Question-Pairs 4The composed Quora dataset and more detailed experiments are in https://github.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1370,
+      "source": "1911.02747.pdf",
+      "page": 4,
+      "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+      "text": "Table 1: Results of models and baselines with ablation study. MC and BR denote Mutual Coverage and Bag Representation respectively. “BR w/o Cov” denotes Bag Representation component without coverage module. ‡ and § means the results are significant with p-value < 0.05 measured by the Student’s paired t-test over the best baseline and the base model respectively.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1371,
+      "source": "1911.02747.pdf",
+      "page": 4,
+      "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+      "text": "AliMe Model MRR R10@1 R10@2 R10@5 Q-Q Mean 0.6122 0.5050 0.5623 0.7287 Q-Q Max 0.6470 0.5477 0.6000 0.7590 Bag-Con 0.6552 0.5610 0.6087 0.7607 Base 0.6845 0.6027 0.6397 0.7700 Base+MC 0.6936 0.6137 0.6497 0.7807 Base+BR 0.6913 0.6103 0.6443 0.7833 Base+(BR w/o Cov) 0.6849 0.6013 0.6410 0.7810 0.7007‡§ 0.6197‡§ 0.6600‡§ 0.7923‡§ QBM (Base+BR+MC) Table 2: Some words and their corresponding weights (e in Equation 4) in mutual coverage module.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1360,
+      "source": "1911.02747.pdf",
+      "page": 3,
+      "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+      "text": "Finally, we get 12,008 training cases, 2,000 valid cases, and 10,000 test cases. Please notice, for the testing, we sampled 2http://lucene.apache.org 9 negative bags instead of 1, and thus formed 10 candidates for ranking. Quora The Quora dataset is originally released for the duplicated question detection task3. The dataset contains 400,000 question pairs and each pair is marked whether they are asking the same question.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1361,
+      "source": "1911.02747.pdf",
+      "page": 3,
+      "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+      "text": "Due to the huge amount of duplicated question pairs, we group the questions as question bag via the union-find algorithm from the duplicated questions. We get 60,400 bags, and all the questions in a bag are asking the same question. We filter the bags that contain questions less than 3 to make the bag not too small. The new bag dataset will help similar questions recommendation on the (4) Quora website.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1363,
+      "source": "1911.02747.pdf",
+      "page": 3,
+      "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+      "text": "The batch size is 32. The dropout rate is 0.5. The max length of the query and questions is 20 to cover most of the words in a sentence. We use padding to handle the various lengths of the text.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1364,
+      "source": "1911.02747.pdf",
+      "page": 3,
+      "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+      "text": "The model checkpoint is chosen according to the best F-score on the validation set.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1358,
+      "source": "1911.02747.pdf",
+      "page": 3,
+      "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+      "text": "Then we filter the questions which are in the corresponding right bag. After that, we randomly sample one in the retrieved candidate and use the bag that the retrieved candidate belongs to as the negative case. In the bag construction stage, the annotators have already merged all the questions of the same meaning, so we can ensure that the after filtering retrieved cases are negative in our setting.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1359,
+      "source": "1911.02747.pdf",
+      "page": 3,
+      "title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+      "text": "We also restrict the number of questions in a bag not more than 5 and discard the redundant questions.",
+      "kb_version": "qasper-holdout-20261025"
+    }
+  ],
+  "action_attempts": 3,
+  "feedback_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 1369,
+            "quote": "com/fuzhenxin/Query-Bag-Matching-CIKM 5https://github.com/Embedding/Chinese-Word-Vectors 6https://nlp.stanford.edu/projects/glove"
+          },
+          {
+            "chunk_id": 1377,
+            "quote": "“Refund” in E-commerce is a very important element in a user query sentence. And “America” is important in Quora, because question like “what is the capital in <location>?” is highly related to location “<location>”."
+          }
+        ],
+        "supported_part": "The paper studies both Chinese and English: the implementation uses Chinese word vectors (for the AliMe/E-commerce data) and English example questions are shown for the Quora dataset, alongside GloVe embeddings.",
+        "reason": "The resource links show Chinese word vectors are used for the E-commerce dataset, and the quoted example questions in English plus GloVe embeddings show English is studied for the Quora dataset; together the two natural languages (Chinese and English) are established.",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "answer",
+      "reason": "The requirement about which natural languages are studied is supported by the supplied passages, and no unmet requirements remain.",
+      "requirement_ids": [],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "The check only addressed r1's operative need (languages studied in the referenced paper) using passages from that paper's inventory source; no other obligations were merged or expanded."
+    }
+  },
+  "halt_reason": "answer_ready",
+  "final_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 1369,
+            "quote": "com/fuzhenxin/Query-Bag-Matching-CIKM 5https://github.com/Embedding/Chinese-Word-Vectors 6https://nlp.stanford.edu/projects/glove"
+          },
+          {
+            "chunk_id": 1377,
+            "quote": "“Refund” in E-commerce is a very important element in a user query sentence. And “America” is important in Quora, because question like “what is the capital in <location>?” is highly related to location “<location>”."
+          }
+        ],
+        "supported_part": "The paper studies both Chinese and English: the implementation uses Chinese word vectors (for the AliMe/E-commerce data) and English example questions are shown for the Quora dataset, alongside GloVe embeddings.",
+        "reason": "The resource links show Chinese word vectors are used for the E-commerce dataset, and the quoted example questions in English plus GloVe embeddings show English is studied for the Quora dataset; together the two natural languages (Chinese and English) are established.",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "answer",
+      "reason": "The requirement about which natural languages are studied is supported by the supplied passages, and no unmet requirements remain.",
+      "requirement_ids": [],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "The check only addressed r1's operative need (languages studied in the referenced paper) using passages from that paper's inventory source; no other obligations were merged or expanded."
+    }
+  },
+  "elapsed_seconds": 43.558
+}

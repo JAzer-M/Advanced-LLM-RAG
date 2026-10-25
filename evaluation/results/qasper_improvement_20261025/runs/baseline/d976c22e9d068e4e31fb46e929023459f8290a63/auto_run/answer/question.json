@@ -1,0 +1,121 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "For the paper \"Recognizing Arrow Of Time In The Short Stories\" (arXiv: 1903.10548), answer this question: Are the two paragraphs encoded independently?",
+  "kb_version": "qasper-holdout-20261025",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": false,
+    "drafts": [
+      "Yes — in the LSTM/Gated CNN encoding method, the two paragraphs are encoded independently: \"paragraphs are encoded separately, and the concatenation of the resulted encoding is going through the classifier,\" where each paragraph is first encoded with LSTM, whose end-of-sentence hidden states are passed through a gated CNN to produce a single encoding per paragraph [3]. This applies to that method; the passages do not state that the two paragraphs are encoded independently in the BERT variants (e.g., fine-tuning) [8][9]."
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "Yes — in the LSTM/Gated CNN encoding method, the two paragraphs are encoded independently: \"paragraphs are encoded separately, and the concatenation of the resulted encoding is going through the classifier,\" where each paragraph is first encoded with LSTM, whose end-of-sentence hidden states are passed through a gated CNN to produce a single encoding per paragraph [3]. This applies to that method; the passages do not state that the two paragraphs are encoded independently in the BERT variants (e.g., fine-tuning) [8][9].",
+              "reason": "答案正确回应了问题：引用[3]明确说明在LSTM/Gated CNN编码方法中两个段落被独立(separately)编码，随后拼接送入分类器；答案还明确了BERT变体中未说明独立编码的剩余缺口，引用[8][9]是描述BERT方法的段落，作为说明该范围限定的上下文，无事实错误或无依据声明。",
+              "citations": [
+                {
+                  "number": 3,
+                  "quote": "3.1 Encoding with LSTM and Gated CNN In this method, paragraphs are encoded separately, and the concatenation of the resulted encoding is going through the classiﬁer. First, each paragraph is encoded with LSTM. The hidden state at the end of each sentence is extracted, and the resulting matrix is going through gated CNN (Dauphin et al., 2017) for extraction of single encoding for each paragraph."
+                },
+                {
+                  "number": 8,
+                  "quote": "In the case of feature extraction, the network weights freeze and CLS token are fed to the classiﬁer. In the case of ﬁne-tuning, we have used different numbers for maximum sequence length to test the capability of BERT in this task. First, just the last sentence of the ﬁrst paragraph and the beginning sentence of the second paragraph has been used for classiﬁcation. We wanted to know whether two sentences are enough for ordering classiﬁcation or not."
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            3,
+            8,
+            9
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 3,
+              "chunk_id": 753,
+              "source": "1903.10548.pdf",
+              "page": 2,
+              "text": "3.1 Encoding with LSTM and Gated CNN In this method, paragraphs are encoded separately, and the concatenation of the resulted encoding is going through the classiﬁer. First, each paragraph is encoded with LSTM. The hidden state at the end of each sentence is extracted, and the resulting matrix is going through gated CNN (Dauphin et al., 2017) for extraction of single encoding for each paragraph."
+            },
+            {
+              "citation": 8,
+              "chunk_id": 756,
+              "source": "1903.10548.pdf",
+              "page": 2,
+              "text": "In the case of feature extraction, the network weights freeze and CLS token are fed to the classiﬁer. In the case of ﬁne-tuning, we have used different numbers for maximum sequence length to test the capability of BERT in this task. First, just the last sentence of the ﬁrst paragraph and the beginning sentence of the second paragraph has been used for classiﬁcation. We wanted to know whether two sentences are enough for ordering classiﬁcation or not."
+            },
+            {
+              "citation": 9,
+              "chunk_id": 757,
+              "source": "1903.10548.pdf",
+              "page": 2,
+              "text": "After that, we increased the number of tokens and accuracy respectively increases. We found this method very promising and the accuracy signiﬁcantly increases with respect to previous methods (Table 3). This result reveals ﬁne-tuning pre-trained BERT can approximately learn the order of the paragraphs and arrow of the time in the stories."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "Yes — in the LSTM/Gated CNN encoding method, the two paragraphs are encoded independently: \"paragraphs are encoded separately, and the concatenation of the resulted encoding is going through the classifier,\" where each paragraph is first encoded with LSTM, whose end-of-sentence hidden states are passed through a gated CNN to produce a single encoding per paragraph [3]. This applies to that method; the passages do not state that the two paragraphs are encoded independently in the BERT variants (e.g., fine-tuning) [8][9].",
+    "citation_check": {
+      "cited_numbers": [
+        3,
+        8,
+        9
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 3,
+          "chunk_id": 753,
+          "source": "1903.10548.pdf",
+          "page": 2,
+          "text": "3.1 Encoding with LSTM and Gated CNN In this method, paragraphs are encoded separately, and the concatenation of the resulted encoding is going through the classiﬁer. First, each paragraph is encoded with LSTM. The hidden state at the end of each sentence is extracted, and the resulting matrix is going through gated CNN (Dauphin et al., 2017) for extraction of single encoding for each paragraph."
+        },
+        {
+          "citation": 8,
+          "chunk_id": 756,
+          "source": "1903.10548.pdf",
+          "page": 2,
+          "text": "In the case of feature extraction, the network weights freeze and CLS token are fed to the classiﬁer. In the case of ﬁne-tuning, we have used different numbers for maximum sequence length to test the capability of BERT in this task. First, just the last sentence of the ﬁrst paragraph and the beginning sentence of the second paragraph has been used for classiﬁcation. We wanted to know whether two sentences are enough for ordering classiﬁcation or not."
+        },
+        {
+          "citation": 9,
+          "chunk_id": 757,
+          "source": "1903.10548.pdf",
+          "page": 2,
+          "text": "After that, we increased the number of tokens and accuracy respectively increases. We found this method very promising and the accuracy signiﬁcantly increases with respect to previous methods (Table 3). This result reveals ﬁne-tuning pre-trained BERT can approximately learn the order of the paragraphs and arrow of the time in the stories."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

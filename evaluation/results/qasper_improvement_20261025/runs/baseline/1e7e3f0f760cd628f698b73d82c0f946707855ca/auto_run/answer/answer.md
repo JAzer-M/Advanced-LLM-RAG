@@ -1,0 +1,1 @@
+Yes, the paper focuses on English verbs. Their experiments use the "English All" dataset from Google Syntactic N-Grams, extracted from the English portion of the Google Books corpus, containing 22,230 different verbs (without stemming) and 147,056 verb phrases [12].

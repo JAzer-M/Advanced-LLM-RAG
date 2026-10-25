@@ -1,0 +1,1 @@
+The main dataset contains 2,973,371 tweets by 2848 Twitter users, which the US House Intelligence Committee has linked to the Russian Internet Research Agency (IRA) [16]. The data was collected and published by Linvill and Warren (2018) and made available online, with a time span covering the period from February 2012 to May 2018 [5].

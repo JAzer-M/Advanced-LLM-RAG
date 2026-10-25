@@ -1,0 +1,185 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "For the paper \"Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce\" (arXiv: 1911.02747), answer this question: Is model compared to some baseline?",
+  "kb_version": "qasper-holdout-20261025",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": false,
+    "drafts": [
+      "Yes, the model is compared to baselines.\n\nThe paper's model (QBM) is compared against baselines including Q-Q Mean, Q-Q Max, and Bag-con, and performs best among them in Table 1 [1]. The authors propose two baselines from different aspects—a Q-Q matching based baseline and a query-bag matching based baseline—to prove the effectiveness of their models [5], with the Q-Q baseline instantiated as Q-Q Max and Q-Q Mean [13] and the query-bag baseline built by concatenating bag questions with an hCNN model [7]. Experiments on the AliMe and Quora datasets show the model obtains 0.05 and 0.03 R10@1 gains over the strongest baseline on the two datasets respectively [3][4]."
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "Yes, the model is compared to baselines.\n\nThe paper's model (QBM) is compared against baselines including Q-Q Mean, Q-Q Max, and Bag-con, and performs best among them in Table 1 [1]. The authors propose two baselines from different aspects—a Q-Q matching based baseline and a query-bag matching based baseline—to prove the effectiveness of their models [5], with the Q-Q baseline instantiated as Q-Q Max and Q-Q Mean [13] and the query-bag baseline built by concatenating bag questions with an hCNN model [7]. Experiments on the AliMe and Quora datasets show the model obtains 0.05 and 0.03 R10@1 gains over the strongest baseline on the two datasets respectively [3][4].",
+              "reason": "回答明确给出“是，模型与基线比较”，并引用原文逐点支持：Table 1 中 QBM 优于 Q-Q Mean、Q-Q Max、Bag-con（引文1）；两类基线的提出（引文5）；Q-Q 基线的两个实例（引文13）与 query-bag 基线的构造（引文7）；以及 AliMe/Quora 两个数据集上相对最强基线 0.05 与 0.03 的 R10@1 提升（引文3、4）。数字、单位、数据集条件均与原文一致，无未支持声明，无遗漏缺口。",
+              "citations": [
+                {
+                  "number": 1,
+                  "quote": "Our model (QBM) performs best compared to baselines (Q-Q Mean, Q-Q Max, Bag-con)."
+                },
+                {
+                  "number": 5,
+                  "quote": "To prove the effectiveness of our models, we propose two baselines from different aspects: the Q-Q matching based baseline and the query-bag matching based baseline."
+                },
+                {
+                  "number": 13,
+                  "quote": "We name the two instances Q-Q Max and Q-Q Mean respectively."
+                },
+                {
+                  "number": 7,
+                  "quote": "We design a new query-bag matching based baseline. We concatenate the questions in the bag to form a new long “ques- tion”, then the hCNN model is applied to measure the matching"
+                },
+                {
+                  "number": 3,
+                  "quote": "We conduct experiments on the AliMe and Quora dataset for the query-bag matching based information-seeking conversation. Compared with baselines, we verify the effectiveness of our model."
+                },
+                {
+                  "number": 4,
+                  "quote": "Our model obtains 0.05 and 0.03 R10@1 gains comparing to the strongest baseline in the two datasets."
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            1,
+            3,
+            4,
+            5,
+            7,
+            13
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 1,
+              "chunk_id": 1374,
+              "source": "1911.02747.pdf",
+              "page": 4,
+              "text": "4 RESULTS AND ANALYSIS Results and Ablation Study The results are shown in Table 1. Our model (QBM) performs best compared to baselines (Q-Q Mean, Q-Q Max, Bag-con). Comparing Bag-Con and Base model, we find that modelling the query-question relationship following aggrega- tion works better. We assume that the pooling-based aggregation can reduce the redundant information cross sentences in a bag. Con- sidering the Q-Q matching based methods and query-bag based methods."
+            },
+            {
+              "citation": 3,
+              "chunk_id": 1338,
+              "source": "1911.02747.pdf",
+              "page": 2,
+              "text": "In addition to the mutual coverage, a bag representa- tion in word level is issued to help discover the main points of a bag. The bag representation then provides new matching evidence to the query-bag matching model. We conduct experiments on the AliMe and Quora dataset for the query-bag matching based information-seeking conversation. Compared with baselines, we verify the effectiveness of our model."
+            },
+            {
+              "citation": 4,
+              "chunk_id": 1339,
+              "source": "1911.02747.pdf",
+              "page": 2,
+              "text": "Our model obtains 0.05 and 0.03 R10@1 gains comparing to the strongest baseline in the two datasets."
+            },
+            {
+              "citation": 5,
+              "chunk_id": 1365,
+              "source": "1911.02747.pdf",
+              "page": 3,
+              "text": "The word embedding dimension is 300, and the pre-trained word embedding is from Sina5 and Glove6 for AliMe and Quora dataset respectively. Besides, the embedding is tuned while the model training to get better performance. 3.3 Baselines To prove the effectiveness of our models, we propose two baselines from different aspects: the Q-Q matching based baseline and the query-bag matching based baseline."
+            },
+            {
+              "citation": 7,
+              "chunk_id": 1368,
+              "source": "1911.02747.pdf",
+              "page": 3,
+              "text": "Query-bag Matching To verify the effectiveness of our pro- posed models, We design a new query-bag matching based baseline. We concatenate the questions in the bag to form a new long “ques- tion”, then the hCNN model is applied to measure the matching 3https://data.quora.com/First-Quora-Dataset-Release-Question-Pairs 4The composed Quora dataset and more detailed experiments are in https://github."
+            },
+            {
+              "citation": 13,
+              "chunk_id": 1367,
+              "source": "1911.02747.pdf",
+              "page": 3,
+              "text": "An hCNN model is applied to train the new dataset. In the testing stage, each query- question pair is assigned with a probability indicating the matching degree. To compare with our model, we rank the bags based on the query-bag matching scores and the scores are defined as the max or mean matching probability of the query-question pairs in the query-bag pair. We name the two instances Q-Q Max and Q-Q Mean respectively."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "Yes, the model is compared to baselines.\n\nThe paper's model (QBM) is compared against baselines including Q-Q Mean, Q-Q Max, and Bag-con, and performs best among them in Table 1 [1]. The authors propose two baselines from different aspects—a Q-Q matching based baseline and a query-bag matching based baseline—to prove the effectiveness of their models [5], with the Q-Q baseline instantiated as Q-Q Max and Q-Q Mean [13] and the query-bag baseline built by concatenating bag questions with an hCNN model [7]. Experiments on the AliMe and Quora datasets show the model obtains 0.05 and 0.03 R10@1 gains over the strongest baseline on the two datasets respectively [3][4].",
+    "citation_check": {
+      "cited_numbers": [
+        1,
+        3,
+        4,
+        5,
+        7,
+        13
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 1374,
+          "source": "1911.02747.pdf",
+          "page": 4,
+          "text": "4 RESULTS AND ANALYSIS Results and Ablation Study The results are shown in Table 1. Our model (QBM) performs best compared to baselines (Q-Q Mean, Q-Q Max, Bag-con). Comparing Bag-Con and Base model, we find that modelling the query-question relationship following aggrega- tion works better. We assume that the pooling-based aggregation can reduce the redundant information cross sentences in a bag. Con- sidering the Q-Q matching based methods and query-bag based methods."
+        },
+        {
+          "citation": 3,
+          "chunk_id": 1338,
+          "source": "1911.02747.pdf",
+          "page": 2,
+          "text": "In addition to the mutual coverage, a bag representa- tion in word level is issued to help discover the main points of a bag. The bag representation then provides new matching evidence to the query-bag matching model. We conduct experiments on the AliMe and Quora dataset for the query-bag matching based information-seeking conversation. Compared with baselines, we verify the effectiveness of our model."
+        },
+        {
+          "citation": 4,
+          "chunk_id": 1339,
+          "source": "1911.02747.pdf",
+          "page": 2,
+          "text": "Our model obtains 0.05 and 0.03 R10@1 gains comparing to the strongest baseline in the two datasets."
+        },
+        {
+          "citation": 5,
+          "chunk_id": 1365,
+          "source": "1911.02747.pdf",
+          "page": 3,
+          "text": "The word embedding dimension is 300, and the pre-trained word embedding is from Sina5 and Glove6 for AliMe and Quora dataset respectively. Besides, the embedding is tuned while the model training to get better performance. 3.3 Baselines To prove the effectiveness of our models, we propose two baselines from different aspects: the Q-Q matching based baseline and the query-bag matching based baseline."
+        },
+        {
+          "citation": 7,
+          "chunk_id": 1368,
+          "source": "1911.02747.pdf",
+          "page": 3,
+          "text": "Query-bag Matching To verify the effectiveness of our pro- posed models, We design a new query-bag matching based baseline. We concatenate the questions in the bag to form a new long “ques- tion”, then the hCNN model is applied to measure the matching 3https://data.quora.com/First-Quora-Dataset-Release-Question-Pairs 4The composed Quora dataset and more detailed experiments are in https://github."
+        },
+        {
+          "citation": 13,
+          "chunk_id": 1367,
+          "source": "1911.02747.pdf",
+          "page": 3,
+          "text": "An hCNN model is applied to train the new dataset. In the testing stage, each query- question pair is assigned with a probability indicating the matching degree. To compare with our model, we rank the bags based on the query-bag matching scores and the scores are defined as the max or mean matching probability of the query-question pairs in the query-bag pair. We name the two instances Q-Q Max and Q-Q Mean respectively."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

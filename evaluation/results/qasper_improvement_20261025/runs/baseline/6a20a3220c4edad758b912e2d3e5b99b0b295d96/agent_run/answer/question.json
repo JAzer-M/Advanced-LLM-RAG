@@ -1,0 +1,137 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "For the paper \"Using Statistical and Semantic Models for Multi-Document Summarization\" (arXiv: 1805.04579), answer this question: How exactly do they weigh between different statistical models?",
+  "kb_version": "qasper-holdout-20261025",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": true,
+    "drafts": [
+      "They weigh the models supervisedly: using a training set of u domain-specific documents with gold-standard/human-composed summaries, they fine-tune weights Wi for the g different models, taking the F1-score/F-measure as the factor [3]. Concretely, each model's weight is assigned via Wi = (Σ_{j=1}^{u} f(j,i)) / u, where f(j,i) denotes the F1-score of the jth model on the ith document [2]. The weighted outputs of the models are then combined into a cWeight per sentence, forming a cumulative summary that captures the consensus of different models, using a supervised learning algorithm to capture the mean performances over the training data [2].",
+      "They weigh the models supervisedly: using a training set of u domain-specific documents with gold-standard/human-composed summaries, they fine-tune weights Wi for the g different models, taking the F1-score/F-measure as the factor [11]. Concretely, each model's weight is assigned via Wi = (Σ_{j=1}^{u} f(j,i)) / u, where f(j,i) denotes the F1-score of the jth model on the ith document [2]. The weighted outputs of the models are then combined into a cWeight per sentence, forming a cumulative summary that captures the consensus of different models, using a supervised learning algorithm to capture the mean performances over the training data [2]."
+    ],
+    "reviews": [
+      {
+        "review_error": "Review cites a source not cited by its answer quote.",
+        "citation_check": {
+          "cited_numbers": [
+            2,
+            3
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 2,
+              "chunk_id": 635,
+              "source": "1805.04579.pdf",
+              "page": 6,
+              "text": "2. For each model, assign the weights using j=1 f (j,i) Pv 1 , i ∈(1, g) Wi = u Here, f (j,i) denotes F1Score for jth model in 1 ith document. We now obtain cWeight as we did previously, and formulate cumulative summary, capturing the con- sensus of different models. We hence used a su- pervised learning algorithm to capture the mean performances of different models over the training data to ﬁne-tune our summary."
+            },
+            {
+              "citation": 3,
+              "chunk_id": 578,
+              "source": "1805.04579.pdf",
+              "page": 1,
+              "text": "In this paper, we have proposed two novel stand-alone summariza- tion methods.The ﬁrst method is based on Glove Model (Pennington et al., 2014),and other is based on Facebook’s InferSent (Conneau et al., 2017). We have also discussed how we can effectively subdue shortcomings of one model by using it in coalition with models which capture the view that other faintly held."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      },
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "using a training set of u domain-specific documents with gold-standard/human-composed summaries, they fine-tune weights Wi for the g different models, taking the F1-score/F-measure as the factor [11]. Concretely, each model's weight is assigned via Wi = (Σ_{j=1}^{u} f(j,i)) / u, where f(j,i) denotes the F1-score of the jth model on the ith document [2]. The weighted outputs of the models are then combined into a cWeight per sentence, forming a cumulative summary that captures the consensus of different models, using a supervised learning algorithm to capture the mean performances over the training data [2].",
+              "reason": "答案准确回答了论文如何在统计模型之间加权：使用u篇领域特定文档及金标准摘要的训练集微调各模型权重Wi，以F1分数/F度量作为因子，并给出权重公式（对训练文档求均值），随后将加权输出合并为cWeight形成捕获模型共识的累积摘要。这与原文第6页3.6节和权重分配步骤完全一致，引用[2][11]均直接支持所述内容；公式中求和上界u、除以u的均值形式以及f(j,i)的含义均照原文表述，无未经支持的主张，也无遗漏的显式缺口。",
+              "citations": [
+                {
+                  "number": 11,
+                  "quote": "The elemental concept is that we use training set of u domain speciﬁc documents, with gold standard/human-composed summaries, provided we ﬁne tune our weights Wi∀i ∈(1, g) for different models taking F1- score/F-measure.(Powers, 2011) as factor."
+                },
+                {
+                  "number": 2,
+                  "quote": "2. For each model, assign the weights using j=1 f (j,i) Pv 1 , i ∈(1, g) Wi = u Here, f (j,i) denotes F1Score for jth model in 1 ith document. We now obtain cWeight as we did previously, and formulate cumulative summary, capturing the con- sensus of different models. We hence used a su- pervised learning algorithm to capture the mean performances of different models over the training data to ﬁne-tune our summary."
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            2,
+            11
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 2,
+              "chunk_id": 635,
+              "source": "1805.04579.pdf",
+              "page": 6,
+              "text": "2. For each model, assign the weights using j=1 f (j,i) Pv 1 , i ∈(1, g) Wi = u Here, f (j,i) denotes F1Score for jth model in 1 ith document. We now obtain cWeight as we did previously, and formulate cumulative summary, capturing the con- sensus of different models. We hence used a su- pervised learning algorithm to capture the mean performances of different models over the training data to ﬁne-tune our summary."
+            },
+            {
+              "citation": 11,
+              "chunk_id": 633,
+              "source": "1805.04579.pdf",
+              "page": 6,
+              "text": "3.6 Multi-Document/Domain-Speciﬁc Summarization We here use machine learning based approach to further increase the quality of our summa- rization technique. The elemental concept is that we use training set of u domain speciﬁc documents, with gold standard/human-composed summaries, provided we ﬁne tune our weights Wi∀i ∈(1, g) for different models taking F1- score/F-measure.(Powers, 2011) as factor."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "They weigh the models supervisedly: using a training set of u domain-specific documents with gold-standard/human-composed summaries, they fine-tune weights Wi for the g different models, taking the F1-score/F-measure as the factor [11]. Concretely, each model's weight is assigned via Wi = (Σ_{j=1}^{u} f(j,i)) / u, where f(j,i) denotes the F1-score of the jth model on the ith document [2]. The weighted outputs of the models are then combined into a cWeight per sentence, forming a cumulative summary that captures the consensus of different models, using a supervised learning algorithm to capture the mean performances over the training data [2].",
+    "citation_check": {
+      "cited_numbers": [
+        2,
+        11
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 2,
+          "chunk_id": 635,
+          "source": "1805.04579.pdf",
+          "page": 6,
+          "text": "2. For each model, assign the weights using j=1 f (j,i) Pv 1 , i ∈(1, g) Wi = u Here, f (j,i) denotes F1Score for jth model in 1 ith document. We now obtain cWeight as we did previously, and formulate cumulative summary, capturing the con- sensus of different models. We hence used a su- pervised learning algorithm to capture the mean performances of different models over the training data to ﬁne-tune our summary."
+        },
+        {
+          "citation": 11,
+          "chunk_id": 633,
+          "source": "1805.04579.pdf",
+          "page": 6,
+          "text": "3.6 Multi-Document/Domain-Speciﬁc Summarization We here use machine learning based approach to further increase the quality of our summa- rization technique. The elemental concept is that we use training set of u domain speciﬁc documents, with gold standard/human-composed summaries, provided we ﬁne tune our weights Wi∀i ∈(1, g) for different models taking F1- score/F-measure.(Powers, 2011) as factor."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

@@ -1,0 +1,2 @@
+Insufficient evidence to reliably answer these requirements:
+- Fine-grained Entity Typing through Increased Discourse Context and Adaptive Classification Thresholds: For the paper "Fine-grained Entity Typing through Increased Discourse Context and Adaptive Classification Thresholds" (arXiv: 1804.08000), answer this question: What fine-grained semantic types are considered?; 缺少该论文所考虑的具体细粒度语义类型集合的明确列举。

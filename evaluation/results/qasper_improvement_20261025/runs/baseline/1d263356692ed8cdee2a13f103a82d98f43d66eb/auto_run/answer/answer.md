@@ -1,0 +1,1 @@
+The paper generates the two primary categories of Chinese classical poetry: SHI and CI [3]. Specifically, the framework generates the two major forms of SHI — Jueju and Lvshi — as well as 121 major forms (Cipai) of CI, using a single model [1].

@@ -1,0 +1,1 @@
+The thematic information was deduced in an unsupervised way by applying a topic modeling algorithm to the tweets, in order to go beyond the superficial textual information of the tweets [1][17]. Using this approach, the authors tested multiple numbers of themes and chose seven, which they manually labeled (e.g., Police shootings, Islam and War, Supporting Trump, etc.) [15].

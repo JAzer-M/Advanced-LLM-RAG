@@ -1,0 +1,1377 @@
+{
+  "seed": 20261025,
+  "target_questions": 50,
+  "sampling": "shuffle sorted eligible paper IDs; all questions from each paper until at least 50",
+  "excluded_previous_papers": [
+    "1606.07043",
+    "1612.05202",
+    "1703.10152",
+    "1706.02427",
+    "1804.00982",
+    "1808.10059",
+    "1811.00051",
+    "1906.01502",
+    "1906.01615",
+    "1908.06259",
+    "1909.10481",
+    "1909.11232",
+    "1911.00202",
+    "2003.03728",
+    "2003.07459"
+  ],
+  "eligible_new_papers": 401,
+  "papers": 16,
+  "dataset": "https://qasper-dataset.s3.us-west-2.amazonaws.com/qasper-test-and-evaluator-v0.3.tgz",
+  "archive_sha256": "72a52a41193e2838b8074f80ac074b94f956b84886c36a61c58a7df4171bdd72",
+  "questions": [
+    {
+      "question_id": "da077b385d619305033785af5b204696d6145bd8",
+      "paper_id": "1911.02747",
+      "paper_title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+      "question": "Does the query-bag matching model use a neural network?",
+      "references": [
+        {
+          "answer": "Yes",
+          "type": "boolean",
+          "evidence": [
+            "In the following subsections, we will introduce our proposed Query-bag Matching (QBM) model which output is the matching probability indicating whether the query and bag are asking the same questions. The basic Q-Q (query-question) matching model hybrid CNN (hCNN) BIBREF5 is presented as the background. Then we will show the base model and its two components designed to promote the performance: Mutual Coverage and Bag Representation. For better understanding, the whole model is shown in Figure FIGREF2.",
+            "After getting the Q-Q matching representation $r_i$, we combine the $\\lbrace r_1, \\dots , r_n\\rbrace $ by element-wise max and mean pooling in order to get $r_p$ to represent the query-bag matching representation: rp = [ max_pooling { r1, ..., rn }; mean_pooling { r1, ..., rn } ] where [;] denotes concatenation. After that, an MLP with softmax is applied to predict whether the query and the bag is asking the same question. Finally, the loss function minimizes the cross entropy of the training data. Due to the out-of-order of the bag, we do not model the bag representation by CNN or LSTM, and experiments show the pooling-based method works well."
+          ]
+        },
+        {
+          "answer": "Yes",
+          "type": "boolean",
+          "evidence": [
+            "We adopt the hCNN model, which measures the relationship between query-question pairs, to obtain the Q-Q matching representation. The model can be easily adapted to other query-question matching models. hCNN is a CNN based matching model which is fast enough to work on the industry application. The input of hCNN is a query $q$ and the $i$-th question $b_i$ in the bag. $q$ and $b_i$ are fed into a CNN respectively. A cross-attention matrix $M^i$ is fed into another CNN to get the interaction representation between them. Each element of $M^i$ is defined as $M^i_{a,b}=q_a^\\top \\cdot b_{i,b}$ where $q_a$ is the word embedding of the $a$-th word in query $q$ and $b_{i,b}$ is the embedding of the $b$-th word in $b_i$. Finally, the outputs of CNNs are combined via Equation SECREF3 to get the representation $r_i$, which indicates the matching representation of the query $q$ and the $i$-th question $b_i$ in the bag. For the Q-Q matching task, the $r_i$ is fed into an MLP (Multi-Layer Perceptron) to predict the matching score. In our query-bag matching setting, we will aggregate the $\\lbrace r_1, \\dots , r_n\\rbrace $ to predict the query-bag matching score. Due to the page limitation, please refer to BIBREF5 BIBREF5 for more details on hCNN. h1 = CNN1(q) h2i = CNN1(bi) hmi = CNN2(qbi)"
+          ]
+        },
+        {
+          "answer": "Yes",
+          "type": "boolean",
+          "evidence": [
+            "In the following subsections, we will introduce our proposed Query-bag Matching (QBM) model which output is the matching probability indicating whether the query and bag are asking the same questions. The basic Q-Q (query-question) matching model hybrid CNN (hCNN) BIBREF5 is presented as the background. Then we will show the base model and its two components designed to promote the performance: Mutual Coverage and Bag Representation. For better understanding, the whole model is shown in Figure FIGREF2.",
+            "We adopt the hCNN model, which measures the relationship between query-question pairs, to obtain the Q-Q matching representation. The model can be easily adapted to other query-question matching models. hCNN is a CNN based matching model which is fast enough to work on the industry application. The input of hCNN is a query $q$ and the $i$-th question $b_i$ in the bag. $q$ and $b_i$ are fed into a CNN respectively. A cross-attention matrix $M^i$ is fed into another CNN to get the interaction representation between them. Each element of $M^i$ is defined as $M^i_{a,b}=q_a^\\top \\cdot b_{i,b}$ where $q_a$ is the word embedding of the $a$-th word in query $q$ and $b_{i,b}$ is the embedding of the $b$-th word in $b_i$. Finally, the outputs of CNNs are combined via Equation SECREF3 to get the representation $r_i$, which indicates the matching representation of the query $q$ and the $i$-th question $b_i$ in the bag. For the Q-Q matching task, the $r_i$ is fed into an MLP (Multi-Layer Perceptron) to predict the matching score. In our query-bag matching setting, we will aggregate the $\\lbrace r_1, \\dots , r_n\\rbrace $ to predict the query-bag matching score. Due to the page limitation, please refer to BIBREF5 BIBREF5 for more details on hCNN. h1 = CNN1(q) h2i = CNN1(bi) hmi = CNN2(qbi)",
+            "After getting the Q-Q matching representation $r_i$, we combine the $\\lbrace r_1, \\dots , r_n\\rbrace $ by element-wise max and mean pooling in order to get $r_p$ to represent the query-bag matching representation: rp = [ max_pooling { r1, ..., rn }; mean_pooling { r1, ..., rn } ] where [;] denotes concatenation. After that, an MLP with softmax is applied to predict whether the query and the bag is asking the same question. Finally, the loss function minimizes the cross entropy of the training data. Due to the out-of-order of the bag, we do not model the bag representation by CNN or LSTM, and experiments show the pooling-based method works well."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "6d8a51e2790043497ed2637a1abc36bdffb39b71",
+      "paper_id": "1911.02747",
+      "paper_title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+      "question": "What datasets are used for experiments?",
+      "references": [
+        {
+          "answer": "the AliMe and Quora dataset",
+          "type": "extractive",
+          "evidence": [
+            "We conduct experiments on the AliMe and Quora dataset for the query-bag matching based information-seeking conversation. Compared with baselines, we verify the effectiveness of our model. Our model obtains 0.05 and 0.03 $\\text{R}_{10}@1$ gains comparing to the strongest baseline in the two datasets. The ablation study shows the usefulness of the components. The contributions in this paper are summarized as follows: 1) To the best of our knowledge, we are the first to adopt query-bag matching in the information-seeking conversation. 2) We propose the mutual coverage model to measure the information coverage in the query-bag matching. 3) We release the composite Quora dataset to facilitate the research in this area."
+          ]
+        },
+        {
+          "answer": "AliMe and Quora",
+          "type": "extractive",
+          "evidence": [
+            "We conduct experiments on two datasets: AliMe and Quora. The AliMe dataset is collected from the AliMe intelligent assistant system and the Quora dataset is composed of a public dataset."
+          ]
+        },
+        {
+          "answer": "AliMe , Quora",
+          "type": "extractive",
+          "evidence": [
+            "We conduct experiments on two datasets: AliMe and Quora. The AliMe dataset is collected from the AliMe intelligent assistant system and the Quora dataset is composed of a public dataset.",
+            "AliMe For the AliMe service in E-commerce, we collect 8,004 query-bag pairs to form our dataset. Negative sampling is also an important part of the matching model. For each query, we use the Lucene to retrieval the top-20 most similar questions from the whole question candidates. Then we filter the questions which are in the corresponding right bag. After that, we randomly sample one in the retrieved candidate and use the bag that the retrieved candidate belongs to as the negative case. In the bag construction stage, the annotators have already merged all the questions of the same meaning, so we can ensure that the after filtering retrieved cases are negative in our setting. We also restrict the number of questions in a bag not more than 5 and discard the redundant questions. Finally, we get 12,008 training cases, 2,000 valid cases, and 10,000 test cases. Please notice, for the testing, we sampled 9 negative bags instead of 1, and thus formed 10 candidates for ranking.",
+            "Quora The Quora dataset is originally released for the duplicated question detection task. The dataset contains 400,000 question pairs and each pair is marked whether they are asking the same question. Due to the huge amount of duplicated question pairs, we group the questions as question bag via the union-find algorithm from the duplicated questions. We get 60,400 bags, and all the questions in a bag are asking the same question. We filter the bags that contain questions less than 3 to make the bag not too small. The new bag dataset will help similar questions recommendation on the Quora website. We then extract one question in the bag as query and the other questions make up the bag in our task. Considering the negative samples, we follow the same strategy as AliMe dataset. Finally, we get 20,354 training set, 2,000 validation set, and 10,000 test set. To facilitate the research in this area, the composed Quora dataset are released."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "de4cc9e7fa5d700f5046d60789770f47911b3dd7",
+      "paper_id": "1911.02747",
+      "paper_title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+      "question": "Which natural language(s) is/are studied?",
+      "references": [
+        {
+          "answer": "Unanswerable",
+          "type": "none",
+          "evidence": []
+        },
+        {
+          "answer": "Chinese and English",
+          "type": "abstractive",
+          "evidence": []
+        },
+        {
+          "answer": "Unanswerable",
+          "type": "none",
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "question_id": "8ad5ebca2f69023b60ccfa3aac0ed426234437ac",
+      "paper_id": "1911.02747",
+      "paper_title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+      "question": "Is model compared to some baseline?",
+      "references": [
+        {
+          "answer": "Yes",
+          "type": "boolean",
+          "evidence": [
+            "We conduct experiments on the AliMe and Quora dataset for the query-bag matching based information-seeking conversation. Compared with baselines, we verify the effectiveness of our model. Our model obtains 0.05 and 0.03 $\\text{R}_{10}@1$ gains comparing to the strongest baseline in the two datasets. The ablation study shows the usefulness of the components. The contributions in this paper are summarized as follows: 1) To the best of our knowledge, we are the first to adopt query-bag matching in the information-seeking conversation. 2) We propose the mutual coverage model to measure the information coverage in the query-bag matching. 3) We release the composite Quora dataset to facilitate the research in this area.",
+            "To prove the effectiveness of our models, we propose two baselines from different aspects: the Q-Q matching based baseline and the query-bag matching based baseline."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "4afd4cfcb30433714b135b977baff346323af1e3",
+      "paper_id": "1911.02747",
+      "paper_title": "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce",
+      "question": "What datasets are used in experiments?",
+      "references": [
+        {
+          "answer": " the AliMe and Quora dataset ",
+          "type": "extractive",
+          "evidence": [
+            "We conduct experiments on the AliMe and Quora dataset for the query-bag matching based information-seeking conversation. Compared with baselines, we verify the effectiveness of our model. Our model obtains 0.05 and 0.03 $\\text{R}_{10}@1$ gains comparing to the strongest baseline in the two datasets. The ablation study shows the usefulness of the components. The contributions in this paper are summarized as follows: 1) To the best of our knowledge, we are the first to adopt query-bag matching in the information-seeking conversation. 2) We propose the mutual coverage model to measure the information coverage in the query-bag matching. 3) We release the composite Quora dataset to facilitate the research in this area."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "e057fa254ea7a4335de22fd97a0f08814b88aea4",
+      "paper_id": "1804.08000",
+      "paper_title": "Fine-grained Entity Typing through Increased Discourse Context and Adaptive Classification Thresholds",
+      "question": "What is the architecture of the model?",
+      "references": [
+        {
+          "answer": "logistic regression",
+          "type": "extractive",
+          "evidence": [
+            "General Model",
+            "Given a type embedding vector INLINEFORM0 and a featurizer INLINEFORM1 that takes entity INLINEFORM2 and its context INLINEFORM3 , we employ the logistic regression (as shown in fig:arch) to model the probability of INLINEFORM4 assigned INLINEFORM5 (i.e., INLINEFORM6 ) DISPLAYFORM0",
+            "and we seek to learn a type embedding matrix INLINEFORM0 and a featurizer INLINEFORM1 such that DISPLAYFORM0"
+          ]
+        },
+        {
+          "answer": "Document-level context encoder, entity and sentence-level context encoders with common attention, then logistic regression, followed by adaptive thresholds.",
+          "type": "abstractive",
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "question_id": "134a66580c363287ec079f353ead8f770ac6d17b",
+      "paper_id": "1804.08000",
+      "paper_title": "Fine-grained Entity Typing through Increased Discourse Context and Adaptive Classification Thresholds",
+      "question": "What fine-grained semantic types are considered?",
+      "references": [
+        {
+          "answer": "Unanswerable",
+          "type": "none",
+          "evidence": []
+        },
+        {
+          "answer": "/other/event/accident, /person/artist/music, /other/product/mobile phone, /other/event/sports event, /other/product/car",
+          "type": "abstractive",
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "question_id": "610fc593638c5e9809ea9839912d0b282541d42d",
+      "paper_id": "1804.08000",
+      "paper_title": "Fine-grained Entity Typing through Increased Discourse Context and Adaptive Classification Thresholds",
+      "question": "What hand-crafted features do other approaches use?",
+      "references": [
+        {
+          "answer": "lexical and syntactic features",
+          "type": "extractive",
+          "evidence": [
+            "The state-of-the-art approach BIBREF8 for fine-grained entity typing employs an attentive neural architecture to learn representations of the entity mention as well as its context. These representations are then combined with hand-crafted features (e.g., lexical and syntactic features), and fed into a linear classifier with a fixed threshold. While this approach outperforms previous approaches which only use sparse binary features BIBREF4 , BIBREF6 or distributed representations BIBREF9 , it has a few drawbacks: (1) the representations of left and right contexts are learnt independently, ignoring their mutual connection; (2) the attention on context is computed solely upon the context, considering no alignment to the entity; (3) document-level contexts which could be useful in classification are not exploited; and (4) hand-crafted features heavily rely on system or human annotations."
+          ]
+        },
+        {
+          "answer": "e.g., lexical and syntactic features",
+          "type": "extractive",
+          "evidence": [
+            "The state-of-the-art approach BIBREF8 for fine-grained entity typing employs an attentive neural architecture to learn representations of the entity mention as well as its context. These representations are then combined with hand-crafted features (e.g., lexical and syntactic features), and fed into a linear classifier with a fixed threshold. While this approach outperforms previous approaches which only use sparse binary features BIBREF4 , BIBREF6 or distributed representations BIBREF9 , it has a few drawbacks: (1) the representations of left and right contexts are learnt independently, ignoring their mutual connection; (2) the attention on context is computed solely upon the context, considering no alignment to the entity; (3) document-level contexts which could be useful in classification are not exploited; and (4) hand-crafted features heavily rely on system or human annotations."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "c2ce25878a17760c79031a426b6f38931cd854b2",
+      "paper_id": "2003.11528",
+      "paper_title": "Generating Major Types of Chinese Classical Poetry in a Uniformed Framework",
+      "question": "What is the source of the training/testing data?",
+      "references": [
+        {
+          "answer": "CCPC1.0",
+          "type": "extractive",
+          "evidence": [
+            "Chinese Classical poetry can be classified into two primary categories, SHI and CI. According to the statistical data from CCPC1.0, a Chinese Classical Poetry Corpus consisting of 834,902 poems in total (We believe it is almost a full collection of Chinese Classical poems). 92.87% poems in CCPC1.0 fall into the category of SHI and 7.13% fall into the category of CI. SHI and CI can be further divided into many different types in terms of their forms. We briefly introduce the related background knowledge as follows.",
+            "We implement the GPT-2 model based on the transformers library BIBREF8. The model configuration is 8 attention heads per layer, 8 layers, 512 embedding dimensions, and 1024 feed-forward layer dimensions. We employ the OpenAIAdam optimizer and train the model with 400,000 steps in total on 4 NVIDIA 1080Ti GPUs. The characters with frequency less than 3 in CCPC1.0 are treated as UNK and a vocabulary with 11259 tokens (characters) is finally built up."
+          ]
+        },
+        {
+          "answer": "Two major forms(Jueju and Lvshi) of SHI and 121 major forms of CI from Chinese Classical Poerty Corpus (CCPC1.0)",
+          "type": "abstractive",
+          "evidence": [
+            "Chinese Classical poetry can be classified into two primary categories, SHI and CI. According to the statistical data from CCPC1.0, a Chinese Classical Poetry Corpus consisting of 834,902 poems in total (We believe it is almost a full collection of Chinese Classical poems). 92.87% poems in CCPC1.0 fall into the category of SHI and 7.13% fall into the category of CI. SHI and CI can be further divided into many different types in terms of their forms. We briefly introduce the related background knowledge as follows.",
+            "In this paper, we propose a uniformed computational framework that tries to generate major types of Chinese classical poems with two major forms of SHI, Jueju, and Lvshi, as well as 121 major forms (Cipai) of CI using a single model. Preliminary experimental results validate the effectiveness of the proposed framework. The implemented model has been incorporated into Jiuge BIBREF0, the most influential Chinese classical poetry generation system developed by Tsinghua University (refer to http://jiuge.thunlp.cn/)."
+          ]
+        },
+        {
+          "answer": "Chinese poem corpus with 250,000 Jueju and Lvshi, 20,000 CIs, 700,000 pairs of couplets",
+          "type": "extractive",
+          "evidence": [
+            "liao2019gpt applied GPT to Chinese classical poetry generation. They pre-trained the model on a Chinese news corpus with 235M sentences and then fine-tuning the model on Chinese poem corpus with 250,000 Jueju and Lvshi, 20,000 CIs, 700,000 pairs of couplets. A key point is they defined a unified format to formulate different types of training samples, as [form, identifier 1, theme, identifier 2, body], where “body” accommodates the full content of an SHI, CI, or couplet in corresponding “form” with “theme” as its title. Experiments demonstrated GPT-based poem generation gained promising performance, meanwhile still faced some limitations, for instance, only 70% of the generated CIs for the Cipai Shuidiaogetou, a sort of CI with quite long body, are correct in form.",
+            "Regarding this, we think the work of liao2019gpt could be improved in the following three respects. First, there is a large improving room for better fitting the form requirement of CI in the process of generation, especially for those with relatively long body length. Second, their formulation format for training samples can be supplemented, for example, the stanza structure of CI is missing. Third, using contemporary Chinese news corpus to pre-train the model may not be necessary, owing to distinctive differences in both meaning and form between contemporary Chinese and Chinese classical poetry language."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "1d263356692ed8cdee2a13f103a82d98f43d66eb",
+      "paper_id": "2003.11528",
+      "paper_title": "Generating Major Types of Chinese Classical Poetry in a Uniformed Framework",
+      "question": "What are the types of chinese poetry that are generated?",
+      "references": [
+        {
+          "answer": "SHI , CI ",
+          "type": "extractive",
+          "evidence": [
+            "Chinese Classical poetry can be classified into two primary categories, SHI and CI. According to the statistical data from CCPC1.0, a Chinese Classical Poetry Corpus consisting of 834,902 poems in total (We believe it is almost a full collection of Chinese Classical poems). 92.87% poems in CCPC1.0 fall into the category of SHI and 7.13% fall into the category of CI. SHI and CI can be further divided into many different types in terms of their forms. We briefly introduce the related background knowledge as follows.",
+            "With this naive GPT-2 model, we see from the experimental results that the generated poems appear pretty good in both meaning and sound(including rhyme), though if being observed carefully, there still exist some in-depth problems in sentence fluency and thematic coherence of the whole poem which are uneasy to solve. As for form, the model can perform well in generating Jueju and Lvshi of SHI whereas rather poorly in generating various Cipai of CI, with quite high form errors. Figure 4(a) is an example of a generated CI by this model, under Cipai of Busuanzi, where two characters are mistakenly missing which obviously violates the form requirement."
+          ]
+        },
+        {
+          "answer": "two major forms of SHI, Jueju, and Lvshi,, 121 major forms (Cipai) of CI ",
+          "type": "extractive",
+          "evidence": [
+            "Chinese Classical poetry can be classified into two primary categories, SHI and CI. According to the statistical data from CCPC1.0, a Chinese Classical Poetry Corpus consisting of 834,902 poems in total (We believe it is almost a full collection of Chinese Classical poems). 92.87% poems in CCPC1.0 fall into the category of SHI and 7.13% fall into the category of CI. SHI and CI can be further divided into many different types in terms of their forms. We briefly introduce the related background knowledge as follows.",
+            "In this paper, we propose a uniformed computational framework that tries to generate major types of Chinese classical poems with two major forms of SHI, Jueju, and Lvshi, as well as 121 major forms (Cipai) of CI using a single model. Preliminary experimental results validate the effectiveness of the proposed framework. The implemented model has been incorporated into Jiuge BIBREF0, the most influential Chinese classical poetry generation system developed by Tsinghua University (refer to http://jiuge.thunlp.cn/)."
+          ]
+        },
+        {
+          "answer": "two primary categories, SHI and CI, SHI and CI can be further divided into many different types",
+          "type": "extractive",
+          "evidence": [
+            "Chinese Classical poetry can be classified into two primary categories, SHI and CI. According to the statistical data from CCPC1.0, a Chinese Classical Poetry Corpus consisting of 834,902 poems in total (We believe it is almost a full collection of Chinese Classical poems). 92.87% poems in CCPC1.0 fall into the category of SHI and 7.13% fall into the category of CI. SHI and CI can be further divided into many different types in terms of their forms. We briefly introduce the related background knowledge as follows."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "22225ba18a6efe74b1315cc08405011d5431498e",
+      "paper_id": "1705.00571",
+      "paper_title": "Lancaster A at SemEval-2017 Task 5: Evaluation metrics matter: predicting sentiment from financial news headlines",
+      "question": "Do they use external financial knowledge in their approach?",
+      "references": [
+        {
+          "answer": "Yes",
+          "type": "boolean",
+          "evidence": [
+            "The BLSTM models take as input a headline sentence of size L tokens where L is the length of the longest sentence in the training texts. Each word is converted into a 300 dimension vector using the word2vec model trained over the financial text. Any text that is not recognised by the word2vec model is represented as a vector of zeros; this is also used to pad out the sentence if it is shorter than L.",
+            "We additionally trained a word2vec BIBREF10 word embedding model on a set of 189,206 financial articles containing 161,877,425 tokens, that were manually downloaded from Factiva. The articles stem from a range of sources including the Financial Times and relate to companies from the United States only. We trained the model on domain specific data as it has been shown many times that the financial domain can contain very different language."
+          ]
+        },
+        {
+          "answer": "No",
+          "type": "boolean",
+          "evidence": [
+            "Domain specific terminology is expected to play a key part in this task, as reporters, investors and analysts in the financial domain will use a specific set of terminology when discussing financial performance. Potentially, this may also vary across different financial domains and industry sectors. Therefore, we took an exploratory approach and investigated how various features and learning algorithms perform differently, specifically SVR and BLSTMs. We found that BLSTMs outperform an SVR without having any knowledge of the company that the sentiment is with respect to. For replicability purposes, with this paper we are releasing our source code and the finance specific BLSTM word embedding model.",
+            "The training data published by the organisers for this track was a set of headline sentences from financial news articles where each sentence was tagged with the company name (which we treat as the aspect) and the polarity of the sentence with respect to the company. There is the possibility that the same sentence occurs more than once if there is more than one company mentioned. The polarity was a real value between -1 (negative sentiment) and 1 (positive sentiment).",
+            "We additionally trained a word2vec BIBREF10 word embedding model on a set of 189,206 financial articles containing 161,877,425 tokens, that were manually downloaded from Factiva. The articles stem from a range of sources including the Financial Times and relate to companies from the United States only. We trained the model on domain specific data as it has been shown many times that the financial domain can contain very different language."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "bd3562d2b3c162e9d27404d56b77e15f707d8b0f",
+      "paper_id": "1705.00571",
+      "paper_title": "Lancaster A at SemEval-2017 Task 5: Evaluation metrics matter: predicting sentiment from financial news headlines",
+      "question": "Which evaluation metrics do they use?",
+      "references": [
+        {
+          "answer": " Metric 1, Metric 2, Metric 3",
+          "type": "extractive",
+          "evidence": [
+            "The main evaluation over the test data is based on the best performing SVR and the two BLSTM models once trained on all of the training data. The result table TABREF28 shows three columns based on the three evaluation metrics that the organisers have used. Metric 1 is the original metric, weighted cosine similarity (the metric used to evaluate the final version of the results, where we were ranked 5th; metric provided on the task website). This was then changed after the evaluation deadline to equation EQREF25 (which we term metric 2; this is what the first version of the results were actually based on, where we were ranked 4th), which then changed by the organisers to their equation as presented in BIBREF18 (which we term metric 3 and what the second version of the results were based on, where we were ranked 5th).",
+            "As you can see from the results table TABREF28 , the difference between the metrics is quite substantial. This is due to the system's optimisation being based on metric 1 rather than 2. Metric 2 is a classification metric for sentences with one aspect as it penalises values that are of opposite sign (giving -1 score) and rewards values with the same sign (giving +1 score). Our systems are not optimised for this because it would predict scores of -0.01 and true value of 0.01 as very close (within vector of other results) with low error whereas metric 2 would give this the highest error rating of -1 as they are not the same sign. Metric 3 is more similar to metric 1 as shown by the results, however the crucial difference is that again if you get opposite signs it will penalise more. We analysed the top 50 errors based on Mean Absolute Error (MAE) in the test dataset specifically to examine the number of sentences containing more than one aspect. Our investigation shows that no one system is better at predicting the sentiment of sentences that have more than one aspect (i.e. company) within them. Within those top 50 errors we found that the BLSTM systems do not know which parts of the sentence are associated to the company the sentiment is with respect to. Also they do not know the strength/existence of certain sentiment words."
+          ]
+        },
+        {
+          "answer": "weighted cosine similarity, classification metric for sentences with one aspect",
+          "type": "extractive",
+          "evidence": [
+            "The main evaluation over the test data is based on the best performing SVR and the two BLSTM models once trained on all of the training data. The result table TABREF28 shows three columns based on the three evaluation metrics that the organisers have used. Metric 1 is the original metric, weighted cosine similarity (the metric used to evaluate the final version of the results, where we were ranked 5th; metric provided on the task website). This was then changed after the evaluation deadline to equation EQREF25 (which we term metric 2; this is what the first version of the results were actually based on, where we were ranked 4th), which then changed by the organisers to their equation as presented in BIBREF18 (which we term metric 3 and what the second version of the results were based on, where we were ranked 5th).",
+            "As you can see from the results table TABREF28 , the difference between the metrics is quite substantial. This is due to the system's optimisation being based on metric 1 rather than 2. Metric 2 is a classification metric for sentences with one aspect as it penalises values that are of opposite sign (giving -1 score) and rewards values with the same sign (giving +1 score). Our systems are not optimised for this because it would predict scores of -0.01 and true value of 0.01 as very close (within vector of other results) with low error whereas metric 2 would give this the highest error rating of -1 as they are not the same sign. Metric 3 is more similar to metric 1 as shown by the results, however the crucial difference is that again if you get opposite signs it will penalise more. We analysed the top 50 errors based on Mean Absolute Error (MAE) in the test dataset specifically to examine the number of sentences containing more than one aspect. Our investigation shows that no one system is better at predicting the sentiment of sentences that have more than one aspect (i.e. company) within them. Within those top 50 errors we found that the BLSTM systems do not know which parts of the sentence are associated to the company the sentiment is with respect to. Also they do not know the strength/existence of certain sentiment words."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "9c529bd3f7565b2178a79aae01c98c90f9d372ad",
+      "paper_id": "1705.00571",
+      "paper_title": "Lancaster A at SemEval-2017 Task 5: Evaluation metrics matter: predicting sentiment from financial news headlines",
+      "question": "Which finance specific word embedding model do they use?",
+      "references": [
+        {
+          "answer": "word2vec",
+          "type": "extractive",
+          "evidence": [
+            "We additionally trained a word2vec BIBREF10 word embedding model on a set of 189,206 financial articles containing 161,877,425 tokens, that were manually downloaded from Factiva. The articles stem from a range of sources including the Financial Times and relate to companies from the United States only. We trained the model on domain specific data as it has been shown many times that the financial domain can contain very different language."
+          ]
+        },
+        {
+          "answer": "a word2vec BIBREF10 word embedding model on a set of 189,206 financial articles containing 161,877,425 tokens",
+          "type": "extractive",
+          "evidence": [
+            "We additionally trained a word2vec BIBREF10 word embedding model on a set of 189,206 financial articles containing 161,877,425 tokens, that were manually downloaded from Factiva. The articles stem from a range of sources including the Financial Times and relate to companies from the United States only. We trained the model on domain specific data as it has been shown many times that the financial domain can contain very different language."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "2895a3fc63f6f403445c11043460584e949fb16c",
+      "paper_id": "1710.07695",
+      "paper_title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+      "question": "what do they mean by description length?",
+      "references": [
+        {
+          "answer": "the code length of phrases.",
+          "type": "extractive",
+          "evidence": [
+            "Given verb phrases, we seek for the best assignment function INLINEFORM0 that minimizes the code length of phrases. Let INLINEFORM1 be the code length derived by INLINEFORM2 . The problem of verb pattern assignment thus can be formalized as below:"
+          ]
+        },
+        {
+          "answer": "Minimum description length (MDL) as the basic framework to reconcile the two contradicting objectives: generality and specificity.",
+          "type": "abstractive",
+          "evidence": [
+            "Contributions Generality and specificity obviously contradict to each other. How to find a good trade-off between them is the main challenge in this paper. We will use minimum description length (MDL) as the basic framework to reconcile the two objectives. More specifically, our contribution in this paper can be summarized as follows:"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "1e7e3f0f760cd628f698b73d82c0f946707855ca",
+      "paper_id": "1710.07695",
+      "paper_title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+      "question": "do they focus on english verbs?",
+      "references": [
+        {
+          "answer": "Yes",
+          "type": "boolean",
+          "evidence": [
+            "Verb Phrase Data The pattern assignment uses the phrase distribution INLINEFORM0 . To do this, we use the “English All” dataset in Google Syntactic N-Grams. The dataset contains counted syntactic ngrams extracted from the English portion of the Google Books corpus. It contains 22,230 different verbs (without stemming), and 147,056 verb phrases. For a fixed verb, we compute the probability of phrase INLINEFORM1 by: DISPLAYFORM0"
+          ]
+        },
+        {
+          "answer": "Yes",
+          "type": "boolean",
+          "evidence": [
+            "Verb Phrase Data The pattern assignment uses the phrase distribution INLINEFORM0 . To do this, we use the “English All” dataset in Google Syntactic N-Grams. The dataset contains counted syntactic ngrams extracted from the English portion of the Google Books corpus. It contains 22,230 different verbs (without stemming), and 147,056 verb phrases. For a fixed verb, we compute the probability of phrase INLINEFORM1 by: DISPLAYFORM0"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "64632981279c7aa16ffc1a44ffc31f4520f5559e",
+      "paper_id": "1710.07695",
+      "paper_title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+      "question": "what evaluation metrics are used?",
+      "references": [
+        {
+          "answer": "coverage and precision",
+          "type": "abstractive",
+          "evidence": [
+            "To evaluate the effectiveness of our pattern summarization approach, we report two metrics: (1) ( INLINEFORM0 ) how much of the verb phrases in natural language our solution can find corresponding patterns (2) ( INLINEFORM1 ) how much of the phrases and their corresponding patterns are correctly matched? We compute the two metrics by: DISPLAYFORM0"
+          ]
+        },
+        {
+          "answer": "INLINEFORM0 , INLINEFORM1 ",
+          "type": "extractive",
+          "evidence": [
+            "To evaluate the effectiveness of our pattern summarization approach, we report two metrics: (1) ( INLINEFORM0 ) how much of the verb phrases in natural language our solution can find corresponding patterns (2) ( INLINEFORM1 ) how much of the phrases and their corresponding patterns are correctly matched? We compute the two metrics by: DISPLAYFORM0"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "6a20a3220c4edad758b912e2d3e5b99b0b295d96",
+      "paper_id": "1805.04579",
+      "paper_title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "question": "How exactly do they weigh between different statistical models?",
+      "references": [
+        {
+          "answer": "They define cWeight as weight obtained for each sentence using all the models where the sentences is in the summary of predicted by each model.",
+          "type": "abstractive",
+          "evidence": [
+            "After generating summary from a particular model, our aim is to compute summaries through overlap of different models. Let us have INLINEFORM0 summaries from INLINEFORM1 different models. For INLINEFORM2 summarization model, let the INLINEFORM3 sentences contained be:-",
+            "Given a document INLINEFORM0 we tokenize it into sentences as < INLINEFORM1 >.",
+            "Now for our list of sentences INLINEFORM0 we define cWeight as weight obtained for each sentence using INLINEFORM1 models.",
+            "Here, INLINEFORM0 is a function which returns 1 if sentence is in summary of INLINEFORM1 model, otherwise zero. INLINEFORM2 is weight assigned to each model without training, INLINEFORM3"
+          ]
+        },
+        {
+          "answer": "by training on field-specific corpora",
+          "type": "extractive",
+          "evidence": [
+            "There is a void of hybrid summarizers; there haven't been many studies made in the area.Wong BIBREF13 conducted some preliminary research but there isn't much there on benchmark tests to our knowledge. We use a mixture of statistical and semantic models, assign weights among them by training on field-specific corpora. As there is a significant variation in choices among different fields. We support our proposal with expectations that shortcomings posed by one model can be filled with positives from others. We deploy experimental analysis to test our proposition."
+          ]
+        },
+        {
+          "answer": "after training on corpus, we assign weights among the different techniques",
+          "type": "extractive",
+          "evidence": [
+            "For Statistical analysis we use Similarity matrices, word co-occurrence/ n-gram model, andTF/IDF matrix. For semantic analysis we use custom Glove based model, WordNet based Model and Facebook InferSent BIBREF4 based Model. For Multi-Document Summarization,after training on corpus, we assign weights among the different techniques .We store the sense vector for documents, along with weights, for future reference. For Single document summarization, firstly we calculate the sense vector for that document and calculate the nearest vector from the stored Vectors, we use the weights of the nearest vector. We will describe the flow for semantic and statistical models separately.",
+            "Now for our list of sentences INLINEFORM0 we define cWeight as weight obtained for each sentence using INLINEFORM1 models.",
+            "Here, INLINEFORM0 denotes INLINEFORM1 for INLINEFORM2 model in INLINEFORM3 document.",
+            "We now obtain cWeight as we did previously, and formulate cumulative summary, capturing the consensus of different models. We hence used a supervised learning algorithm to capture the mean performances of different models over the training data to fine-tune our summary."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "c2745e44ebe7dd57126b784ac065f0b7fc2630f1",
+      "paper_id": "1805.04579",
+      "paper_title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "question": "Do they compare against state-of-the-art summarization approaches?",
+      "references": [
+        {
+          "answer": "Yes",
+          "type": "boolean",
+          "evidence": [
+            "Infersent is a state of the art supervised sentence encoding technique BIBREF4 . It outperformed another state-of-the-art sentence encoder SkipThought on several benchmarks, like the STS benchmark (http://ixa2.si.ehu.es/stswiki/index.php/STSbenchmark). The model is trained on Stanford Natural Language Inference (SNLI) dataset BIBREF22 using seven architectures Long Short-Term Memory (LSTM), Gated Recurrent Units (GRU), forward and backward GRU with hidden states concatenated, Bi-directional LSTMs (BiLSTM) with min/max pooling, self-attentive network and (HCN's) Hierarchical convolutional networks. The network performances are task/corpus specific."
+          ]
+        },
+        {
+          "answer": "No",
+          "type": "boolean",
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "question_id": "d5dcc89a08924bed9772bc431090cbb52fb7836f",
+      "paper_id": "1805.04579",
+      "paper_title": "Using Statistical and Semantic Models for Multi-Document Summarization",
+      "question": "What showed to be the best performing combination of semantic and statistical model on the summarization task in terms of ROUGE score?",
+      "references": [
+        {
+          "answer": "Combination of Jaccard/Cosine Similarity Matrix, TextRank and  InferSent Based Model",
+          "type": "abstractive",
+          "evidence": [
+            "In the Table 1, we try different model pairs with weights trained on corpus for Task 2. We have displayed mean ROUGE-2 scores for base Models. We have calculated final scores taking into consideration all normalizations, stemming, lemmatizing and clustering techniques, and the ones providing best results were used. We generally expected WordNet, Glove based semantic models to perform better given they better capture crux of the sentence and compute similarity using the same, but instead, they performed average. This is attributed to the fact they assigned high similarity scores to not so semantically related sentences. We also observe that combinations with TF/IDF and Similarity Matrices(Jaccard/Cosine) offer nearly same results. The InferSent based Summarizer performed exceptionally well. We initially used pre-trained features to generate sentence vectors through InferSent."
+          ]
+        },
+        {
+          "answer": "Jaccard/Cosine Similarity Matrix+TextRank\n+InferSent Based Model",
+          "type": "abstractive",
+          "evidence": []
+        },
+        {
+          "answer": "Best result was obtained by using combination of: Jaccard/Cosine Similarity Matrix, TextRank and InferSent Based Model",
+          "type": "abstractive",
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "question_id": "2f142cd11731d29d0c3fa426e26ef80d997862e0",
+      "paper_id": "1909.01720",
+      "paper_title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "question": "Do they report results only on English data?",
+      "references": [
+        {
+          "answer": "Yes",
+          "type": "boolean",
+          "evidence": []
+        },
+        {
+          "answer": "Unanswerable",
+          "type": "none",
+          "evidence": []
+        },
+        {
+          "answer": "Unanswerable",
+          "type": "none",
+          "evidence": []
+        }
+      ]
+    },
+    {
+      "question_id": "ce23849e9e9a22626965f1ca8ca948a5c87280e9",
+      "paper_id": "1909.01720",
+      "paper_title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "question": "What are the hyperparameter setting of the MTL model?",
+      "references": [
+        {
+          "answer": "size of word embeddings is 200, size of position embedding is 100, the number of attention heads in transformer block is 6, the number of attention block Is 2, dropout of multi-head attention is 0.7, minibatch size is 64, the initiall learning rate is .001. In fake news detection, the dropout rate is 0.3 and lambda is 0.6.",
+          "type": "abstractive",
+          "evidence": [
+            "Parameters - hyper-parameters configurations of our model: for each task, we strictly turn all the hyper-parameters on the validation dataset, and we achieve the best performance via a small grid search. The sizes of word embeddings and position embeddings are set to 200 and 100. In transformer encoder, attention heads and blocks are set to 6 and 2 respectively, and the dropout of multi-head attention is set to 0.7. Moreover, the minibatch size is 64; the initial learning rate is set to 0.001, the dropout rate to 0.3, and $\\lambda $ to 0.6 for fake news detection."
+          ]
+        },
+        {
+          "answer": "The sizes of word embeddings and position embeddings are set to 200 and 100, attention heads and blocks are set to 6 and 2 respectively, and the dropout of multi-head attention is set to 0.7,  the minibatch size is 64, the initial learning rate is set to 0.001, the dropout rate to 0.3, and $\\lambda $ to 0.6 for fake news detection.",
+          "type": "abstractive",
+          "evidence": [
+            "Parameters - hyper-parameters configurations of our model: for each task, we strictly turn all the hyper-parameters on the validation dataset, and we achieve the best performance via a small grid search. The sizes of word embeddings and position embeddings are set to 200 and 100. In transformer encoder, attention heads and blocks are set to 6 and 2 respectively, and the dropout of multi-head attention is set to 0.7. Moreover, the minibatch size is 64; the initial learning rate is set to 0.001, the dropout rate to 0.3, and $\\lambda $ to 0.6 for fake news detection."
+          ]
+        },
+        {
+          "answer": "Size of word embeddings is 200, size of position embeddings is 100, 6 attention heads and 2 blocks in encoder, dropout in multi-head attention is 0.7, minibatch size is 64, initial learning rate is 0.001, dropout rate is 0.3, lambda is 0.6.",
+          "type": "abstractive",
+          "evidence": [
+            "Parameters - hyper-parameters configurations of our model: for each task, we strictly turn all the hyper-parameters on the validation dataset, and we achieve the best performance via a small grid search. The sizes of word embeddings and position embeddings are set to 200 and 100. In transformer encoder, attention heads and blocks are set to 6 and 2 respectively, and the dropout of multi-head attention is set to 0.7. Moreover, the minibatch size is 64; the initial learning rate is set to 0.001, the dropout rate to 0.3, and $\\lambda $ to 0.6 for fake news detection."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "d9a45fea8539aac01dec01f29b7d04b44b9c2ca6",
+      "paper_id": "1909.01720",
+      "paper_title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "question": "What architecture does the rest of the multi-task learning setup use?",
+      "references": [
+        {
+          "answer": "shared features in the shared layer are equally sent to their respective tasks without filtering",
+          "type": "extractive",
+          "evidence": [
+            "There is an effective and novel way to improve the performance of fake news detection combined with stance analysis, which is to build multi-task learning models to jointly train both tasks BIBREF13, BIBREF14, BIBREF15. These approaches model information sharing and representation reinforcement between the two tasks, which expands valuable features for their respective tasks. However, prominent drawback to these methods and even typical multi-task learning methods, like the shared-private model, is that the shared features in the shared layer are equally sent to their respective tasks without filtering, which causes that some useless and even adverse features are mixed in different tasks, as shown in Figure FIGREF2(a). By that the network would be confused by these features, interfering effective sharing, and even mislead the predictions."
+          ]
+        },
+        {
+          "answer": "transformer",
+          "type": "extractive",
+          "evidence": [
+            "To address the above problems, we design a sifted multi-task learning model with filtering mechanism (Figure FIGREF2(b)) to detect fake news by joining stance detection task. Specifically, we introduce a selected sharing layer into each task after the shared layer of the model for filtering shared features. The selected sharing layer composes of two cells: gated sharing cell for discarding useless features and attention sharing cell for focusing on features that are conducive to their respective tasks. Besides, to better capture long-range dependencies and improve the parallelism of the model, we apply transformer encoder module BIBREF16 to our model for encoding input representations of both tasks. Experimental results reveal that the proposed model outperforms the compared methods and gains new benchmarks."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "246e924017c48fa1f069361c44133fdf4f0386e1",
+      "paper_id": "1909.01720",
+      "paper_title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "question": "How is the selected sharing layer trained?",
+      "references": [
+        {
+          "answer": "The selected sharing layer is trained jointly on the tasks of stance detection and fake news detection",
+          "type": "abstractive",
+          "evidence": [
+            "We propose a novel sifted multi-task learning method on the ground of shared-private model to jointly train the tasks of stance detection and fake news detection, filter original outputs of shared layer by a selected sharing layer. Our model consists of a 4-level hierarchical structure, as shown in Figure FIGREF6. Next, we will describe each level of our proposed model in detail."
+          ]
+        },
+        {
+          "answer": "By jointly training the tasks of stance and fake news detection.",
+          "type": "abstractive",
+          "evidence": [
+            "We propose a novel sifted multi-task learning method on the ground of shared-private model to jointly train the tasks of stance detection and fake news detection, filter original outputs of shared layer by a selected sharing layer. Our model consists of a 4-level hierarchical structure, as shown in Figure FIGREF6. Next, we will describe each level of our proposed model in detail."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "8c89f1d1b3c2a45c0254c4c8d6e700ab9a4b4ffb",
+      "paper_id": "1703.10090",
+      "paper_title": "A Short Review of Ethical Challenges in Clinical Natural Language Processing",
+      "question": "What sources of less sensitive data are available?",
+      "references": [
+        {
+          "answer": "MIMICII(I), THYME, results from i2b2 and ShARe/CLEF shared task, MiPACQ, Blulab, EMC Dutch Clinical Corpus, 2010 i2b2/VA, VetCompass",
+          "type": "abstractive",
+          "evidence": [
+            "Because of legal and institutional concerns arising from the sensitivity of clinical data, it is difficult for the NLP community to gain access to relevant data BIBREF9 , BIBREF10 . This is especially true for the researchers not connected with a healthcare organization. Corpora with transparent access policies that are within reach of NLP researchers exist, but are few. An often used corpus is MIMICII(I) BIBREF11 , BIBREF12 . Despite its large size (covering over 58,000 hospital admissions), it is only representative of patients from a particular clinical domain (the intensive care in this case) and geographic location (a single hospital in the United States). Assuming that such a specific sample is representative of a larger population is an example of sampling bias (we discuss further sources of bias in section \"Social impact and biases\" ). Increasing the size of a sample without recognizing that this sample is atypical for the general population (e.g. not all patients are critical care patients) could also increase sampling bias BIBREF13 . We need more large corpora for various medical specialties, narrative types, as well as languages and geographic areas.",
+            "Related to difficult access to raw clinical data is the lack of available annotated datasets for model training and benchmarking. The reality is that annotation projects do take place, but are typically constrained to a single healthcare organization. Therefore, much of the effort put into annotation is lost afterwards due to impossibility of sharing with the larger research community BIBREF6 , BIBREF14 . Again, exceptions are either few—e.g. THYME BIBREF15 , a corpus annotated with temporal information—or consist of small datasets resulting from shared tasks like the i2b2 and ShARe/CLEF. In addition, stringent access policies hamper reproduction efforts, impede scientific oversight and limit collaboration, not only between institutions but also more broadly between the clinical and NLP communities.",
+            "There are known cases of datasets that had been used in published research (including reproduction) in its full form, like MiPACQ, Blulab, EMC Dutch Clinical Corpus and 2010 i2b2/VA BIBREF16 , BIBREF17 , BIBREF18 , BIBREF19 , but were later trimmed down or made unavailable, likely due to legal issues. Even if these datasets were still available in full, their small size is still a concern, and the comments above regarding sampling bias certainly apply. For example, a named entity recognizer trained on 2010 i2b2/VA data, which consists of 841 annotated patient records from three different specialty areas, will due to its size only contain a small portion of possible named entities. Similarly, in linking clinical concepts to an ontology, where the number of output classes is larger BIBREF20 , the small amount of training data is a major obstacle to deployment of systems suitable for general use.",
+            "Finally, clinical NLP is also possible on veterinary texts. Records of companion animals are perhaps less likely to involve legal issues, while still amounting to a large pool of data. As an example, around 40M clinical documents from different veterinary clinics in UK and Australia are stored centrally in the VetCompass repository. First NLP steps in this direction were described in the invited talk at the Clinical NLP 2016 workshop BIBREF43 ."
+          ]
+        },
+        {
+          "answer": "deceased persons, surrogate data, derived data, veterinary texts",
+          "type": "extractive",
+          "evidence": [
+            "paragraph4 0.9ex plus1ex minus.2ex-1em Are there less sensitive data? One criterion which may have influence on data accessibility is whether the data is about living subjects or not. The HIPAA privacy rule under certain conditions allows disclosure of personal health information of deceased persons, without the need to seek IRB agreement and without the need for sanitization BIBREF39 . It is not entirely clear though how often this possibility has been used in clinical NLP research or broader.",
+            "Next, the work on surrogate data has recently seen a surge in activity. Increasingly more health-related texts are produced in social media BIBREF40 , and patient-generated data are available online. Admittedly, these may not resemble the clinical discourse, yet they bear to the same individuals whose health is documented in the clinical reports. Indeed, linking individuals' health information from online resources to their health records to improve documentation is an active line of research BIBREF41 . Although it is generally easier to obtain access to social media data, the use of social media still requires similar ethical considerations as in the clinical domain. See for example the influential study on emotional contagion in Facebook posts by Kramer et al. KramerEtAl2014, which has been criticized for not properly gaining prior consent from the users who were involved in the study BIBREF42 .",
+            "Another way of reducing sensitivity of data and improving chances for IRB approval is to work on derived data. Data that can not be used to reconstruct the original text (and when sanitized, can not directly re-identify the individual) include text fragments, various statistics and trained models. Working on randomized subsets of clinical notes may also improve the chances of obtaining the data. When we only have access to trained models from disparate sources, we can refine them through ensembling and creation of silver standard corpora, cf. Rebholz-Schuhmann et al. RebholzSchuhmannEtAl2011.",
+            "Finally, clinical NLP is also possible on veterinary texts. Records of companion animals are perhaps less likely to involve legal issues, while still amounting to a large pool of data. As an example, around 40M clinical documents from different veterinary clinics in UK and Australia are stored centrally in the VetCompass repository. First NLP steps in this direction were described in the invited talk at the Clinical NLP 2016 workshop BIBREF43 ."
+          ]
+        },
+        {
+          "answer": "personal health information of deceased persons, surrogate data, derived data. Data that can not be used to reconstruct the original text, veterinary texts",
+          "type": "extractive",
+          "evidence": [
+            "paragraph4 0.9ex plus1ex minus.2ex-1em Are there less sensitive data? One criterion which may have influence on data accessibility is whether the data is about living subjects or not. The HIPAA privacy rule under certain conditions allows disclosure of personal health information of deceased persons, without the need to seek IRB agreement and without the need for sanitization BIBREF39 . It is not entirely clear though how often this possibility has been used in clinical NLP research or broader.",
+            "Next, the work on surrogate data has recently seen a surge in activity. Increasingly more health-related texts are produced in social media BIBREF40 , and patient-generated data are available online. Admittedly, these may not resemble the clinical discourse, yet they bear to the same individuals whose health is documented in the clinical reports. Indeed, linking individuals' health information from online resources to their health records to improve documentation is an active line of research BIBREF41 . Although it is generally easier to obtain access to social media data, the use of social media still requires similar ethical considerations as in the clinical domain. See for example the influential study on emotional contagion in Facebook posts by Kramer et al. KramerEtAl2014, which has been criticized for not properly gaining prior consent from the users who were involved in the study BIBREF42 .",
+            "Another way of reducing sensitivity of data and improving chances for IRB approval is to work on derived data. Data that can not be used to reconstruct the original text (and when sanitized, can not directly re-identify the individual) include text fragments, various statistics and trained models. Working on randomized subsets of clinical notes may also improve the chances of obtaining the data. When we only have access to trained models from disparate sources, we can refine them through ensembling and creation of silver standard corpora, cf. Rebholz-Schuhmann et al. RebholzSchuhmannEtAl2011.",
+            "Finally, clinical NLP is also possible on veterinary texts. Records of companion animals are perhaps less likely to involve legal issues, while still amounting to a large pool of data. As an example, around 40M clinical documents from different veterinary clinics in UK and Australia are stored centrally in the VetCompass repository. First NLP steps in this direction were described in the invited talk at the Clinical NLP 2016 workshop BIBREF43 ."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "f5bc07df5c61dcb589a848bd36f4ce9c22abd46a",
+      "paper_id": "1703.10090",
+      "paper_title": "A Short Review of Ethical Challenges in Clinical Natural Language Processing",
+      "question": "Other than privacy, what are the other major ethical challenges in clinical data?",
+      "references": [
+        {
+          "answer": "Texts produced in the clinical settings do not always tell a complete or accurate patient story (e.g. due to time constraints or due to patient treatment in different hospitals), yet important decisions can be based on them. As language is situated, a lot of information may be implicit, such as the circumstances in which treatment decisions are made, discrimination can occur when individuals or groups receive unfair treatment as a result of automated processing, which might be a result of biases in the data that were used to train models., Clinical texts may include bias coming from both patient's and clinician's reporting., prejudices held by healthcare practitioners which may impact patients' perceptions, communication difficulties in the case of ethnic differences, Observational bias Although variance in health outcome is affected by social, environmental and behavioral factors, these are rarely noted in clinical reports, Dual use",
+          "type": "extractive",
+          "evidence": [
+            "Unlocking knowledge from free text in the health domain has a tremendous societal value. However, discrimination can occur when individuals or groups receive unfair treatment as a result of automated processing, which might be a result of biases in the data that were used to train models. The question is therefore what the most important biases are and how to overcome them, not only out of ethical but also legal responsibility. Related to the question of bias is so-called algorithm transparency BIBREF44 , BIBREF45 , as this right to explanation requires that influences of bias in training data are charted. In addition to sampling bias, which we introduced in section 2, we discuss in this section further sources of bias. Unlike sampling bias, which is a corpus-level bias, these biases here are already present in documents, and therefore hard to account for by introducing larger corpora.",
+            "paragraph4 0.9ex plus1ex minus.2ex-1em Data quality Texts produced in the clinical settings do not always tell a complete or accurate patient story (e.g. due to time constraints or due to patient treatment in different hospitals), yet important decisions can be based on them. As language is situated, a lot of information may be implicit, such as the circumstances in which treatment decisions are made BIBREF47 . If we fail to detect a medical concept during automated processing, this can not necessarily be a sign of negative evidence. Work on identifying and imputing missing values holds promise for reducing incompleteness, see Lipton et al. LiptonEtAl2016 for an example in sequential modeling applied to diagnosis classification.",
+            "paragraph4 0.9ex plus1ex minus.2ex-1em Reporting bias Clinical texts may include bias coming from both patient's and clinician's reporting. Clinicians apply their subjective judgments to what is important during the encounter with patients. In other words, there is separation between, on the one side, what is observed by the clinician and communicated by the patient, and on the other, what is noted down. Cases of more serious illness may be more accurately documented as a result of clinician's bias (increased attention) and patient's recall bias. On the other hand, the cases of stigmatized diseases may include suppressed information. In the case of traffic injuries, documentation may even be distorted to avoid legal consequences BIBREF48 .",
+            "We need to be aware that clinical notes may reflect health disparities. These can originate from prejudices held by healthcare practitioners which may impact patients' perceptions; they can also originate from communication difficulties in the case of ethnic differences BIBREF49 . Finally, societal norms can play a role. Brady et al. BradyEtAl2016 find that obesity is often not documented equally well for both sexes in weight-addressing clinics. Young males are less likely to be recognized as obese, possibly due to societal norms seeing them as “stocky\" as opposed to obese. Unless we are aware of such bias, we may draw premature conclusions about the impact of our results.",
+            "paragraph4 0.9ex plus1ex minus.2ex-1em Observational bias Although variance in health outcome is affected by social, environmental and behavioral factors, these are rarely noted in clinical reports BIBREF13 . The bias of missing explanatory factors because they can not be identified within the given experimental setting is also known as the streetlight effect. In certain cases, we could obtain important prior knowledge (e.g. demographic characteristics) from data other than clinical notes.",
+            "paragraph4 0.9ex plus1ex minus.2ex-1em Dual use We have already mentioned linking personal health information from online texts to clinical records as a motivation for exploring surrogate data sources. However, this and many other applications also have potential to be applied in both beneficial and harmful ways. It is easy to imagine how sensitive information from clinical notes can be revealed about an individual who is present in social media with a known identity. More general examples of dual use are when the NLP tools are used to analyze clinical notes with a goal of determining individuals' insurability and employability."
+          ]
+        },
+        {
+          "answer": "sampling bias, unfair treatment due to biased data,  incomplete clinical stories, and reflection of health disparities.",
+          "type": "abstractive",
+          "evidence": [
+            "Because of legal and institutional concerns arising from the sensitivity of clinical data, it is difficult for the NLP community to gain access to relevant data BIBREF9 , BIBREF10 . This is especially true for the researchers not connected with a healthcare organization. Corpora with transparent access policies that are within reach of NLP researchers exist, but are few. An often used corpus is MIMICII(I) BIBREF11 , BIBREF12 . Despite its large size (covering over 58,000 hospital admissions), it is only representative of patients from a particular clinical domain (the intensive care in this case) and geographic location (a single hospital in the United States). Assuming that such a specific sample is representative of a larger population is an example of sampling bias (we discuss further sources of bias in section \"Social impact and biases\" ). Increasing the size of a sample without recognizing that this sample is atypical for the general population (e.g. not all patients are critical care patients) could also increase sampling bias BIBREF13 . We need more large corpora for various medical specialties, narrative types, as well as languages and geographic areas.",
+            "Unlocking knowledge from free text in the health domain has a tremendous societal value. However, discrimination can occur when individuals or groups receive unfair treatment as a result of automated processing, which might be a result of biases in the data that were used to train models. The question is therefore what the most important biases are and how to overcome them, not only out of ethical but also legal responsibility. Related to the question of bias is so-called algorithm transparency BIBREF44 , BIBREF45 , as this right to explanation requires that influences of bias in training data are charted. In addition to sampling bias, which we introduced in section 2, we discuss in this section further sources of bias. Unlike sampling bias, which is a corpus-level bias, these biases here are already present in documents, and therefore hard to account for by introducing larger corpora.",
+            "paragraph4 0.9ex plus1ex minus.2ex-1em Data quality Texts produced in the clinical settings do not always tell a complete or accurate patient story (e.g. due to time constraints or due to patient treatment in different hospitals), yet important decisions can be based on them. As language is situated, a lot of information may be implicit, such as the circumstances in which treatment decisions are made BIBREF47 . If we fail to detect a medical concept during automated processing, this can not necessarily be a sign of negative evidence. Work on identifying and imputing missing values holds promise for reducing incompleteness, see Lipton et al. LiptonEtAl2016 for an example in sequential modeling applied to diagnosis classification.",
+            "We need to be aware that clinical notes may reflect health disparities. These can originate from prejudices held by healthcare practitioners which may impact patients' perceptions; they can also originate from communication difficulties in the case of ethnic differences BIBREF49 . Finally, societal norms can play a role. Brady et al. BradyEtAl2016 find that obesity is often not documented equally well for both sexes in weight-addressing clinics. Young males are less likely to be recognized as obese, possibly due to societal norms seeing them as “stocky\" as opposed to obese. Unless we are aware of such bias, we may draw premature conclusions about the impact of our results."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "73d87f6ead32653a518fbe8cdebd81b4a3ffcac0",
+      "paper_id": "1704.03279",
+      "paper_title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "question": "What were the performance results of their network?",
+      "references": [
+        {
+          "answer": "For the test set a BLEU score of 25.7 on Ja-En and 20.7 (2014 test set), 23.1 (2015 test set), and 26.1 (2016 test set) on En-De",
+          "type": "abstractive",
+          "evidence": []
+        },
+        {
+          "answer": "gain of 2.2 BLEU compared to the original single NMT network",
+          "type": "extractive",
+          "evidence": [
+            "We have described a generic method for improving the decoding speed and BLEU score of single system NMT. Our approach involves unfolding an ensemble of multiple systems into a single large neural network and shrinking this network by removing redundant neurons. Our best results on Japanese-English either yield a gain of 2.2 BLEU compared to the original single NMT network at about the same decoding speed, or a INLINEFORM0 CPU decoding speed up with only a minor drop in BLEU."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "fda47c68fd5f7b44bd539f83ded5882b96c36dd7",
+      "paper_id": "1704.03279",
+      "paper_title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "question": "What were the baselines?",
+      "references": [
+        {
+          "answer": "simple ensembling method (prediction averaging)",
+          "type": "extractive",
+          "evidence": [
+            "The individual NMT systems we use as source for constructing the unfolded networks are trained using AdaDelta BIBREF21 on the Blocks/Theano implementation BIBREF22 , BIBREF23 of the standard attention-based NMT model BIBREF19 with: 1000 dimensional GRU layers BIBREF18 in both the decoder and bidrectional encoder; a single maxout output layer BIBREF24 ; and 620 dimensional embedding layers. We follow Sennrich et al. nmt-bpe and use subword units based on byte pair encoding rather than words as modelling units. Our SGNMT decoder BIBREF25 with a beam size of 12 is used in all experiments. Our primary corpus is the Japanese-English (Ja-En) ASPEC data set BIBREF26 . We select a subset of 500K sentence pairs to train our models as suggested by Neubig et al. sys-neubig-wat15. We report cased BLEU scores calculated with Moses' multi-bleu.pl to be strictly comparable to the evaluation done in the Workshop of Asian Translation (WAT). We also apply our method to the WMT data set for English-German (En-De), using the news-test2014 as a development set, and keeping news-test2015 and news-test2016 as test sets. En-De BLEU scores are computed using mteval-v13a.pl as in the WMT evaluation. We set the vocabulary sizes to 30K for Ja-En and 50K for En-De. We also report the size factor for each model which is the total number of model parameters (sum of all weight matrix sizes) divided by the number of parameters in the original NMT network (86M for Ja-En and 120M for En-De). We choose a widely used, simple ensembling method (prediction averaging) as our baseline. We feel that the prevalence of this method makes it a reasonable baseline for our experiments."
+          ]
+        },
+        {
+          "answer": "a widely used, simple ensembling method (prediction averaging) ",
+          "type": "extractive",
+          "evidence": [
+            "The individual NMT systems we use as source for constructing the unfolded networks are trained using AdaDelta BIBREF21 on the Blocks/Theano implementation BIBREF22 , BIBREF23 of the standard attention-based NMT model BIBREF19 with: 1000 dimensional GRU layers BIBREF18 in both the decoder and bidrectional encoder; a single maxout output layer BIBREF24 ; and 620 dimensional embedding layers. We follow Sennrich et al. nmt-bpe and use subword units based on byte pair encoding rather than words as modelling units. Our SGNMT decoder BIBREF25 with a beam size of 12 is used in all experiments. Our primary corpus is the Japanese-English (Ja-En) ASPEC data set BIBREF26 . We select a subset of 500K sentence pairs to train our models as suggested by Neubig et al. sys-neubig-wat15. We report cased BLEU scores calculated with Moses' multi-bleu.pl to be strictly comparable to the evaluation done in the Workshop of Asian Translation (WAT). We also apply our method to the WMT data set for English-German (En-De), using the news-test2014 as a development set, and keeping news-test2015 and news-test2016 as test sets. En-De BLEU scores are computed using mteval-v13a.pl as in the WMT evaluation. We set the vocabulary sizes to 30K for Ja-En and 50K for En-De. We also report the size factor for each model which is the total number of model parameters (sum of all weight matrix sizes) divided by the number of parameters in the original NMT network (86M for Ja-En and 120M for En-De). We choose a widely used, simple ensembling method (prediction averaging) as our baseline. We feel that the prevalence of this method makes it a reasonable baseline for our experiments."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "643645e02ffe8fde45918615ec92013a035d1b92",
+      "paper_id": "1704.03279",
+      "paper_title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "question": "What dataset is used?",
+      "references": [
+        {
+          "answer": " Japanese-English (Ja-En) ASPEC data set BIBREF26, WMT data set for English-German (En-De), using the news-test2014 as a development set, and keeping news-test2015 and news-test2016 as test sets. ",
+          "type": "extractive",
+          "evidence": [
+            "The individual NMT systems we use as source for constructing the unfolded networks are trained using AdaDelta BIBREF21 on the Blocks/Theano implementation BIBREF22 , BIBREF23 of the standard attention-based NMT model BIBREF19 with: 1000 dimensional GRU layers BIBREF18 in both the decoder and bidrectional encoder; a single maxout output layer BIBREF24 ; and 620 dimensional embedding layers. We follow Sennrich et al. nmt-bpe and use subword units based on byte pair encoding rather than words as modelling units. Our SGNMT decoder BIBREF25 with a beam size of 12 is used in all experiments. Our primary corpus is the Japanese-English (Ja-En) ASPEC data set BIBREF26 . We select a subset of 500K sentence pairs to train our models as suggested by Neubig et al. sys-neubig-wat15. We report cased BLEU scores calculated with Moses' multi-bleu.pl to be strictly comparable to the evaluation done in the Workshop of Asian Translation (WAT). We also apply our method to the WMT data set for English-German (En-De), using the news-test2014 as a development set, and keeping news-test2015 and news-test2016 as test sets. En-De BLEU scores are computed using mteval-v13a.pl as in the WMT evaluation. We set the vocabulary sizes to 30K for Ja-En and 50K for En-De. We also report the size factor for each model which is the total number of model parameters (sum of all weight matrix sizes) divided by the number of parameters in the original NMT network (86M for Ja-En and 120M for En-De). We choose a widely used, simple ensembling method (prediction averaging) as our baseline. We feel that the prevalence of this method makes it a reasonable baseline for our experiments."
+          ]
+        },
+        {
+          "answer": "Japanese-English (Ja-En) ASPEC data set BIBREF26, WMT data set for English-German (En-De), news-test2014, news-test2015 and news-test2016",
+          "type": "extractive",
+          "evidence": [
+            "The individual NMT systems we use as source for constructing the unfolded networks are trained using AdaDelta BIBREF21 on the Blocks/Theano implementation BIBREF22 , BIBREF23 of the standard attention-based NMT model BIBREF19 with: 1000 dimensional GRU layers BIBREF18 in both the decoder and bidrectional encoder; a single maxout output layer BIBREF24 ; and 620 dimensional embedding layers. We follow Sennrich et al. nmt-bpe and use subword units based on byte pair encoding rather than words as modelling units. Our SGNMT decoder BIBREF25 with a beam size of 12 is used in all experiments. Our primary corpus is the Japanese-English (Ja-En) ASPEC data set BIBREF26 . We select a subset of 500K sentence pairs to train our models as suggested by Neubig et al. sys-neubig-wat15. We report cased BLEU scores calculated with Moses' multi-bleu.pl to be strictly comparable to the evaluation done in the Workshop of Asian Translation (WAT). We also apply our method to the WMT data set for English-German (En-De), using the news-test2014 as a development set, and keeping news-test2015 and news-test2016 as test sets. En-De BLEU scores are computed using mteval-v13a.pl as in the WMT evaluation. We set the vocabulary sizes to 30K for Ja-En and 50K for En-De. We also report the size factor for each model which is the total number of model parameters (sum of all weight matrix sizes) divided by the number of parameters in the original NMT network (86M for Ja-En and 120M for En-De). We choose a widely used, simple ensembling method (prediction averaging) as our baseline. We feel that the prevalence of this method makes it a reasonable baseline for our experiments."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "a994cc18046912a8c9328dc572f4e4310736c0e2",
+      "paper_id": "1704.03279",
+      "paper_title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "question": "Do they explore other language pairs?",
+      "references": [
+        {
+          "answer": "Yes",
+          "type": "boolean",
+          "evidence": [
+            "The individual NMT systems we use as source for constructing the unfolded networks are trained using AdaDelta BIBREF21 on the Blocks/Theano implementation BIBREF22 , BIBREF23 of the standard attention-based NMT model BIBREF19 with: 1000 dimensional GRU layers BIBREF18 in both the decoder and bidrectional encoder; a single maxout output layer BIBREF24 ; and 620 dimensional embedding layers. We follow Sennrich et al. nmt-bpe and use subword units based on byte pair encoding rather than words as modelling units. Our SGNMT decoder BIBREF25 with a beam size of 12 is used in all experiments. Our primary corpus is the Japanese-English (Ja-En) ASPEC data set BIBREF26 . We select a subset of 500K sentence pairs to train our models as suggested by Neubig et al. sys-neubig-wat15. We report cased BLEU scores calculated with Moses' multi-bleu.pl to be strictly comparable to the evaluation done in the Workshop of Asian Translation (WAT). We also apply our method to the WMT data set for English-German (En-De), using the news-test2014 as a development set, and keeping news-test2015 and news-test2016 as test sets. En-De BLEU scores are computed using mteval-v13a.pl as in the WMT evaluation. We set the vocabulary sizes to 30K for Ja-En and 50K for En-De. We also report the size factor for each model which is the total number of model parameters (sum of all weight matrix sizes) divided by the number of parameters in the original NMT network (86M for Ja-En and 120M for En-De). We choose a widely used, simple ensembling method (prediction averaging) as our baseline. We feel that the prevalence of this method makes it a reasonable baseline for our experiments."
+          ]
+        },
+        {
+          "answer": "English-German (En-De)",
+          "type": "extractive",
+          "evidence": [
+            "The individual NMT systems we use as source for constructing the unfolded networks are trained using AdaDelta BIBREF21 on the Blocks/Theano implementation BIBREF22 , BIBREF23 of the standard attention-based NMT model BIBREF19 with: 1000 dimensional GRU layers BIBREF18 in both the decoder and bidrectional encoder; a single maxout output layer BIBREF24 ; and 620 dimensional embedding layers. We follow Sennrich et al. nmt-bpe and use subword units based on byte pair encoding rather than words as modelling units. Our SGNMT decoder BIBREF25 with a beam size of 12 is used in all experiments. Our primary corpus is the Japanese-English (Ja-En) ASPEC data set BIBREF26 . We select a subset of 500K sentence pairs to train our models as suggested by Neubig et al. sys-neubig-wat15. We report cased BLEU scores calculated with Moses' multi-bleu.pl to be strictly comparable to the evaluation done in the Workshop of Asian Translation (WAT). We also apply our method to the WMT data set for English-German (En-De), using the news-test2014 as a development set, and keeping news-test2015 and news-test2016 as test sets. En-De BLEU scores are computed using mteval-v13a.pl as in the WMT evaluation. We set the vocabulary sizes to 30K for Ja-En and 50K for En-De. We also report the size factor for each model which is the total number of model parameters (sum of all weight matrix sizes) divided by the number of parameters in the original NMT network (86M for Ja-En and 120M for En-De). We choose a widely used, simple ensembling method (prediction averaging) as our baseline. We feel that the prevalence of this method makes it a reasonable baseline for our experiments."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "d976c22e9d068e4e31fb46e929023459f8290a63",
+      "paper_id": "1903.10548",
+      "paper_title": "Recognizing Arrow Of Time In The Short Stories",
+      "question": "Are the two paragraphs encoded independently?",
+      "references": [
+        {
+          "answer": "Yes",
+          "type": "boolean",
+          "evidence": [
+            "In this method, paragraphs are encoded separately, and the concatenation of the resulted encoding is going through the classifier. First, each paragraph is encoded with LSTM. The hidden state at the end of each sentence is extracted, and the resulting matrix is going through gated CNN BIBREF1 for extraction of single encoding for each paragraph. The accuracy is barely above $50\\%$ , which depicts that this method is not very promising."
+          ]
+        },
+        {
+          "answer": "Yes",
+          "type": "boolean",
+          "evidence": [
+            "In this method, paragraphs are encoded separately, and the concatenation of the resulted encoding is going through the classifier. First, each paragraph is encoded with LSTM. The hidden state at the end of each sentence is extracted, and the resulting matrix is going through gated CNN BIBREF1 for extraction of single encoding for each paragraph. The accuracy is barely above $50\\%$ , which depicts that this method is not very promising."
+          ]
+        },
+        {
+          "answer": "Yes",
+          "type": "boolean",
+          "evidence": [
+            "In this method, paragraphs are encoded separately, and the concatenation of the resulted encoding is going through the classifier. First, each paragraph is encoded with LSTM. The hidden state at the end of each sentence is extracted, and the resulting matrix is going through gated CNN BIBREF1 for extraction of single encoding for each paragraph. The accuracy is barely above $50\\%$ , which depicts that this method is not very promising."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "89373db8ced1fe420eae0093b2736f06b565616e",
+      "paper_id": "1901.02780",
+      "paper_title": "Sentiment Analysis of Czech Texts: An Algorithmic Survey",
+      "question": "Did the authors collect new data for evaluation?",
+      "references": [
+        {
+          "answer": "No",
+          "type": "boolean",
+          "evidence": [
+            "Sentiment Analysis is considered as the automated analysis of sentiments, emotions or opinions expressed in texts towards certain entities BIBREF0 . The proliferation of online commerce and customer feedback has significantly motivated companies to invest in intelligent text analysis tools and technologies where sentiment analysis plays a crucial role. There have traditionally been two main approaches to sentiment analysis. The first one uses unsupervised algorithms, sentiment lexicons and word similarity measures to mine emotions in raw texts. The second uses emotionally-labeled text datasets to train supervised (or deep supervised) algorithms and use them to predict emotions in other documents. Naturally, most of sentiment analysis research has been conducted for the English language. Chinese BIBREF1 , BIBREF2 , BIBREF3 and Spanish BIBREF4 , BIBREF5 have also received a considerable extra attention in the last years. Smaller languages like Czech have seen fewer efforts in this aspect. It is thus much easier to find online data resources for English than for other languages BIBREF6 . One of the first attempts to create sentiment annotated resources of Czech texts dates back in 2012 BIBREF7 . Authors released three datasets of news articles, movie reviews, and product reviews. A subsequent work consisted in creating a Czech dataset of information technology product reviews, their aspects and customers' attitudes towards those aspects BIBREF8 . This latter dataset is an essential basis for performing aspect-based sentiment analysis experiments BIBREF9 . Another available resource is a dataset of ten thousand Czech Facebook posts and the corresponding emotional labels BIBREF10 . The authors report various experimental results with Support Vector Machine (SVM) and Maximum Entropy (ME) classifiers. Despite the creation of the resources mentioned above and the results reported by the corresponding authors, there is still little evidence about the performance of various techniques and algorithms on sentiment analysis of Czech texts. In this paper, we perform an empirical survey, probing many popular supervised learning algorithms on sentiment prediction of Czech Facebook posts and product reviews. We perform document-level analysis considering the text part (that is usually short) as a single document and explore various parameters of Tf-Idf vectorizer and each classification algorithms reporting the optimal ones. According to our results, SVM (Support Vector Machine) is the best player, shortly followed by Logistic Regression (LR) and Naïve Bayes (NB). Moreover, we observe that ensemble techniques like Random Forests (RF), Adaptive Boosting (AdaBoost) or voting schemes do not increase the performance of the basic classifiers. The rest of the paper is structured as follows: Section \"Czech Facebook Dataset\" presents some details and statistics about the two Czech datasets we used. Section \"PREPROCESSING AND VECTORIZATION\" describes the text preprocessing steps and vectorizer parameters we grid-searched. Section \"SUPERVISED ALGORITHMS\" presents in details the grid-searched parameters and values of all classifiers. In Section \"RESULTS\" , we report the optimal parameter values and test scores in each dataset. Finally, Section \"CONCLUSIONS\" concludes and presents possible future contributions.",
+            "Czech Facebook dataset was created by collecting posts from popular Facebook pages in Czech BIBREF10 . The ten thousand records were independently revised by two annotators. Two other annotators were involved in cases of disagreement. To estimate inter-annotator agreement, they used Cohen's kappa coefficient which was about 0.66. Each post was labeled as negative, neutral or positive. There were yet a few samples that revealed both negative and positive sentiments and were marked as bipolar. Same as the authors in their paper, we removed the bipolar category from our experimental set to avoid ambiguity and used the remaining 9752 samples. A few data samples are illustrated in Figure 1 .",
+            "The second dataset we use contains user reviews about household devices purchased at mall.cz BIBREF7 . The reviews are evaluative in nature (users apprising items they bought) and were categorized as negative or positive only. Some minor problems they carry are the grammatical or typing errors that frequently appear in their texts BIBREF11 . In Table 1 we present some rounded statistics about the two datasets. As we can see, Mall product reviews are slightly longer (13 vs. 10 tokens) than Czech Facebook posts. We also see that the number of data samples in each sentiment category are unbalanced in both cases. A few samples of Mall reviews are illustrated in Figure 2 ."
+          ]
+        },
+        {
+          "answer": "No",
+          "type": "boolean",
+          "evidence": [
+            "In this paper, we tried various supervised learning algorithms for sentiment analysis of Czech texts using two existing datasets of Facebook posts and Mall product reviews. We grid-searched various parameters of Tf-Idf vectorizer and each of the machine learning algorithms. According to our observations, best sentiment predictions are achieved when bigrams are added, Czech stop words are not removed and l2 normalization is applied in vectorization. We also reported the optimal parameter values of each explored classifier which can serve as guidelines for other researchers. The accuracy and F $_1$ scores on the test part of each dataset indicate that the best-performing algorithms are Support Vector Machine, Logistic Regression, and Naïve Bayes. Their simplicity and speed make them optimal choices for sentiment analysis of texts in cases when few thousands of sentiment-labeled data samples are available. We also observed that ensemble methods like bagging (e.g., Random Forest), boosting (e.g., AdaBoost) or even voting ensemble schemes do not add value to any of the three basic classifiers. This is probably because all Tf-Idf vectorized features are relevant and necessary for the classification process and extra combinations of their subsets are not able to further improve classification performance. Finally, as future work, we would like to create additional labeled datasets with texts of other languages and perform similar sentiment analysis experiments. That way, valuable metalinguistic insights could be drawn and reported."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "46aa61557c8d20b1223a30366a0704d7af68bbbe",
+      "paper_id": "1910.07924",
+      "paper_title": "LibriVoxDeEn: A Corpus for German-to-English Speech Translation and German Speech Recognition",
+      "question": "How is the sentence alignment quality evaluated?",
+      "references": [
+        {
+          "answer": "Through human evaluation on a 5-point scale for text alignment and 3-point scale for audio-text",
+          "type": "abstractive",
+          "evidence": [
+            "The evaluation of the text alignment quality was conducted according to the 5-point scale used in KocabiyikogluETAL:18:",
+            "Wrong alignment",
+            "Partial alignment with slightly compositional translational equivalence",
+            "Partial alignment with compositional translation and additional or missing information",
+            "Correct alignment with compositional translation and few additional or missing information",
+            "Correct alignment and fully compositional translation",
+            "The evaluation of the audio-text alignment quality was conducted according to the following 3-point scale:",
+            "Partial alignment, some words or sentences may be missing",
+            "Correct alignment, allowing non-spoken syllables at start or end.",
+            "The evaluation experiment was performed by two annotators who each rated 30 items from each bin, where 10 items were the same for both annotators in order to calculate inter-annotator reliability."
+          ]
+        },
+        {
+          "answer": "The evaluation of the text alignment quality was conducted according to the 5-point scale used in KocabiyikogluETAL:18:\n\nWrong alignment\n\nPartial alignment with slightly compositional translational equivalence\n\nPartial alignment with compositional translation and additional or missing information\n\nCorrect alignment with compositional translation and few additional or missing information\n\nCorrect alignment and fully compositional translation\n\nThe evaluation of the audio-text alignment quality was conducted according to the following 3-point scale:\n\nWrong alignment\n\nPartial alignment, some words or sentences may be missing\n\nCorrect alignment, allowing non-spoken syllables at start or end.\n\nThe evaluation experiment was performed by two annotators who each rated 30 items from each bin, where 10 items were the same for both annotators in order to calculate inter-annotator reliability.",
+          "type": "extractive",
+          "evidence": [
+            "The evaluation of the text alignment quality was conducted according to the 5-point scale used in KocabiyikogluETAL:18:",
+            "Wrong alignment",
+            "Partial alignment with slightly compositional translational equivalence",
+            "Partial alignment with compositional translation and additional or missing information",
+            "Correct alignment with compositional translation and few additional or missing information",
+            "Correct alignment and fully compositional translation",
+            "The evaluation of the audio-text alignment quality was conducted according to the following 3-point scale:",
+            "Partial alignment, some words or sentences may be missing",
+            "Correct alignment, allowing non-spoken syllables at start or end.",
+            "The evaluation experiment was performed by two annotators who each rated 30 items from each bin, where 10 items were the same for both annotators in order to calculate inter-annotator reliability."
+          ]
+        },
+        {
+          "answer": "5-point scale used in KocabiyikogluETAL:18",
+          "type": "extractive",
+          "evidence": [
+            "The evaluation of the text alignment quality was conducted according to the 5-point scale used in KocabiyikogluETAL:18:",
+            "Wrong alignment",
+            "Partial alignment with slightly compositional translational equivalence",
+            "Partial alignment with compositional translation and additional or missing information",
+            "Correct alignment with compositional translation and few additional or missing information",
+            "Correct alignment and fully compositional translation"
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "b3b9d7c8722e8ec41cbbae40e68458485a5ba25c",
+      "paper_id": "1910.07924",
+      "paper_title": "LibriVoxDeEn: A Corpus for German-to-English Speech Translation and German Speech Recognition",
+      "question": "How is the speech alignment quality evaluated?",
+      "references": [
+        {
+          "answer": "Through a 3-point scale by annotators.",
+          "type": "abstractive",
+          "evidence": [
+            "The evaluation of the audio-text alignment quality was conducted according to the following 3-point scale:",
+            "Wrong alignment",
+            "Partial alignment, some words or sentences may be missing",
+            "Correct alignment, allowing non-spoken syllables at start or end."
+          ]
+        },
+        {
+          "answer": "Wrong alignment, Partial alignment, some words or sentences may be missing, Correct alignment, allowing non-spoken syllables at start or end.",
+          "type": "extractive",
+          "evidence": [
+            "The evaluation of the audio-text alignment quality was conducted according to the following 3-point scale:",
+            "Wrong alignment",
+            "Partial alignment, some words or sentences may be missing",
+            "Correct alignment, allowing non-spoken syllables at start or end."
+          ]
+        },
+        {
+          "answer": "The evaluation of the audio-text alignment quality was conducted according to the following 3-point scale:\n\nWrong alignment\n\nPartial alignment, some words or sentences may be missing\n\nCorrect alignment, allowing non-spoken syllables at start or end.\n\nThe evaluation experiment was performed by two annotators who each rated 30 items from each bin, where 10 items were the same for both annotators in order to calculate inter-annotator reliability.",
+          "type": "extractive",
+          "evidence": [
+            "The evaluation of the audio-text alignment quality was conducted according to the following 3-point scale:",
+            "Wrong alignment",
+            "Partial alignment, some words or sentences may be missing",
+            "Correct alignment, allowing non-spoken syllables at start or end.",
+            "The evaluation experiment was performed by two annotators who each rated 30 items from each bin, where 10 items were the same for both annotators in order to calculate inter-annotator reliability."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "ec70c7c560e08cff2820bad93f5216bc0a469f5a",
+      "paper_id": "1908.11664",
+      "paper_title": "Exploring Domain Shift in Extractive Text Summarization",
+      "question": "What settings did they experiment with?",
+      "references": [
+        {
+          "answer": "in-domain, out-of-domain and cross-dataset",
+          "type": "extractive",
+          "evidence": [
+            "We investigate the effectiveness of the above four strategies under three evaluation settings: in-domain, out-of-domain and cross-dataset. These settings make it possible to explicitly evaluate models both on the quality of domain-aware text representation and on their adaptation ability to derive reasonable representations in unfamiliar domains."
+          ]
+        },
+        {
+          "answer": "in-domain, out-of-domain, cross-dataset",
+          "type": "extractive",
+          "evidence": [
+            "We investigate the effectiveness of the above four strategies under three evaluation settings: in-domain, out-of-domain and cross-dataset. These settings make it possible to explicitly evaluate models both on the quality of domain-aware text representation and on their adaptation ability to derive reasonable representations in unfamiliar domains."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "940a16e9db8be5b5f4e67d9c7622b3df99ac10a5",
+      "paper_id": "1908.11664",
+      "paper_title": "Exploring Domain Shift in Extractive Text Summarization",
+      "question": "what domains are explored in this paper?",
+      "references": [
+        {
+          "answer": "Unanswerable",
+          "type": "none",
+          "evidence": []
+        },
+        {
+          "answer": "NYTimes, WashingtonPost, FoxNews, TheGuardian, NYDailyNews, WSJ, USAToday, CNN, Time, Mashable",
+          "type": "extractive",
+          "evidence": [
+            "The recently proposed dataset Newsroom BIBREF16 is used, which was scraped from 38 major news publications. We select top ten publications (NYTimes, WashingtonPost, FoxNews, TheGuardian, NYDailyNews, WSJ, USAToday, CNN, Time and Mashable) and process them in the way of BIBREF22. To obtain the ground truth labels for extractive summarization task, we follow the greedy approach introduced by BIBREF1. Finally, we randomly divide ten domains into two groups, one for training and the other for test. We call this re-purposed subset of Newsroom MULTI-SUM to indicate it is specially designed for multi-domain learning in summarization tasks.",
+            "From Table TABREF6, we can find that data from those news publications vary in indicators that are closely relevant to summarization. This means that (document, summary) pairs from different publications will have unique summarization formation, and models might need to learn different semantic features for different publications. Furthermore, we follow the simple experiment by BIBREF23 to train a classifier for the top five domains. A simple classification model with GloVe initializing words can also achieve 74.84% accuracy (the chance is 20%), which ensures us that there is a built-in bias in each publication. Therefore, it is reasonable to view one publication as a domain and use our multi-publication MULTI-SUM as a multi-domain dataset."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "0b1cc6c0de286eb724b1fd18dbc93e67ab89a236",
+      "paper_id": "1908.11664",
+      "paper_title": "Exploring Domain Shift in Extractive Text Summarization",
+      "question": "what multi-domain dataset is repurposed?",
+      "references": [
+        {
+          "answer": "MULTI-SUM",
+          "type": "extractive",
+          "evidence": [
+            "In this paper, we focus on the extractive summarization and demonstrate that news publications can cause data distribution differences, which means that they can also be defined as domains. Based on this, we re-purpose a multi-domain summarization dataset MULTI-SUM and further explore the issue of domain shift."
+          ]
+        },
+        {
+          "answer": "dataset Newsroom BIBREF16",
+          "type": "extractive",
+          "evidence": [
+            "The recently proposed dataset Newsroom BIBREF16 is used, which was scraped from 38 major news publications. We select top ten publications (NYTimes, WashingtonPost, FoxNews, TheGuardian, NYDailyNews, WSJ, USAToday, CNN, Time and Mashable) and process them in the way of BIBREF22. To obtain the ground truth labels for extractive summarization task, we follow the greedy approach introduced by BIBREF1. Finally, we randomly divide ten domains into two groups, one for training and the other for test. We call this re-purposed subset of Newsroom MULTI-SUM to indicate it is specially designed for multi-domain learning in summarization tasks.",
+            "From Table TABREF6, we can find that data from those news publications vary in indicators that are closely relevant to summarization. This means that (document, summary) pairs from different publications will have unique summarization formation, and models might need to learn different semantic features for different publications. Furthermore, we follow the simple experiment by BIBREF23 to train a classifier for the top five domains. A simple classification model with GloVe initializing words can also achieve 74.84% accuracy (the chance is 20%), which ensures us that there is a built-in bias in each publication. Therefore, it is reasonable to view one publication as a domain and use our multi-publication MULTI-SUM as a multi-domain dataset."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "1c2d4dc1e842b962c6407d6436f3dc73dd44ce55",
+      "paper_id": "1908.11664",
+      "paper_title": "Exploring Domain Shift in Extractive Text Summarization",
+      "question": "what four learning strategies are investigated?",
+      "references": [
+        {
+          "answer": "Model@!START@$^{I}_{Base}$@!END@, $Model^{I}_{Base}$ with BERT BIBREF28, Model@!START@$^{III}_{Tag}$@!END@, Model@!START@$^{IV}_{Meta}$@!END@",
+          "type": "extractive",
+          "evidence": [
+            "Multi-domain Summarization ::: Four Learning Strategies ::: Model@!START@$^{I}_{Base}$@!END@",
+            "This is a simple but effective model for multi-domain learning, in which all domains are aggregated together and will be further used for training a set of shared parameters. Notably, domains in this model are not explicitly informed of their differences.",
+            "We achieve this by pre-training our basic model $Model^{I}_{Base}$ with BERT BIBREF28, which is one of the most successful learning frameworks. Then we investigate if BERT can provide domain information and bring the model good domain adaptability. To avoid introducing new structures, we use the feature-based BERT with its parameters fixed.",
+            "Multi-domain Summarization ::: Four Learning Strategies ::: Model@!START@$^{III}_{Tag}$@!END@",
+            "The domain type can also be introduced directly as a feature vector, which can augment learned representations with domain-aware ability.",
+            "Multi-domain Summarization ::: Four Learning Strategies ::: Model@!START@$^{IV}_{Meta}$@!END@",
+            "In order to overcome the above limitations, we try to bridge the communication gap between different domains when updating shared parameters via meta-learning BIBREF33, BIBREF34, BIBREF35."
+          ]
+        },
+        {
+          "answer": "Model@!START@$^{I}_{Base}$@!END@, Model@!START@$^{II}_{BERT}$@!END@, Model@!START@$^{III}_{Tag}$@!END@, Model@!START@$^{IV}_{Meta}$@!END@",
+          "type": "extractive",
+          "evidence": [
+            "Multi-domain Summarization ::: Four Learning Strategies ::: Model@!START@$^{I}_{Base}$@!END@",
+            "This is a simple but effective model for multi-domain learning, in which all domains are aggregated together and will be further used for training a set of shared parameters. Notably, domains in this model are not explicitly informed of their differences.",
+            "Multi-domain Summarization ::: Four Learning Strategies ::: Model@!START@$^{II}_{BERT}$@!END@",
+            "More recently, unsupervised pre-training has achieved massive success in NLP community BIBREF28, BIBREF29, which usually provides tremendous external knowledge. However, there are few works on building the connection between large-scale pre-trained models and multi-domain learning. In this model, we explore how the external knowledge unsupervised pre-trained models bring can contribute to multi-domain learning and new domain adaption .",
+            "Multi-domain Summarization ::: Four Learning Strategies ::: Model@!START@$^{III}_{Tag}$@!END@",
+            "The domain type can also be introduced directly as a feature vector, which can augment learned representations with domain-aware ability.",
+            "Multi-domain Summarization ::: Four Learning Strategies ::: Model@!START@$^{IV}_{Meta}$@!END@",
+            "In order to overcome the above limitations, we try to bridge the communication gap between different domains when updating shared parameters via meta-learning BIBREF33, BIBREF34, BIBREF35."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "a786cceba4372f6041187c426432853eda03dca6",
+      "paper_id": "1910.02001",
+      "paper_title": "Predicting the Role of Political Trolls in Social Media",
+      "question": "What is the state-of-the-art?",
+      "references": [
+        {
+          "answer": "BIBREF2, who predict the roles of the Russian trolls on Twitter by leveraging social theory and Actor-Network Theory approaches",
+          "type": "extractive",
+          "evidence": [
+            "None of the above work has focused on understanding the role of political trolls. The only closely relevant work is that of BIBREF2, who predict the roles of the Russian trolls on Twitter by leveraging social theory and Actor-Network Theory approaches. They characterize trolls using the digital traces they leave behind, which is modeled using a time-sensitive semantic edit distance."
+          ]
+        },
+        {
+          "answer": "BIBREF2",
+          "type": "extractive",
+          "evidence": [
+            "None of the above work has focused on understanding the role of political trolls. The only closely relevant work is that of BIBREF2, who predict the roles of the Russian trolls on Twitter by leveraging social theory and Actor-Network Theory approaches. They characterize trolls using the digital traces they leave behind, which is modeled using a time-sensitive semantic edit distance."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "a837dcbd339e27a974e28944178c790a5b0b37c0",
+      "paper_id": "1910.02001",
+      "paper_title": "Predicting the Role of Political Trolls in Social Media",
+      "question": "How large is the dataset?",
+      "references": [
+        {
+          "answer": "2973371 tweets by 2848 Twitter users",
+          "type": "extractive",
+          "evidence": [
+            "Our main dataset contains 2973371 tweets by 2848 Twitter users, which the US House Intelligence Committee has linked to the Russian Internet Research Agency (IRA). The data was collected and published by BIBREF0, and then made available online. The time span covers the period from February 2012 to May 2018."
+          ]
+        },
+        {
+          "answer": "2973371 tweets",
+          "type": "extractive",
+          "evidence": [
+            "Our main dataset contains 2973371 tweets by 2848 Twitter users, which the US House Intelligence Committee has linked to the Russian Internet Research Agency (IRA). The data was collected and published by BIBREF0, and then made available online. The time span covers the period from February 2012 to May 2018."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "c135e1f8ecaf7965f6a6d3e30b537eb37ad74230",
+      "paper_id": "1910.02001",
+      "paper_title": "Predicting the Role of Political Trolls in Social Media",
+      "question": "How are labels for trolls obtained?",
+      "references": [
+        {
+          "answer": "the ground truth labels for the troll users are available, we leverage more persistent entities and their labels: news media. We assume a learning scenario with distant supervision where labels for news media are available. By combining these labels with a citation graph from the troll accounts to news media, we can infer the final labeling on the accounts themselves",
+          "type": "extractive",
+          "evidence": [
+            "We consider two possible scenarios. The first, prototypical ML scenario is supervised learning, where we want to learn a function from users to categories {left, right, news feed}, and the ground truth labels for the troll users are available. This scenario has been considered previously in the literature by BIBREF2. Unfortunately, a solution for such a scenario is not directly applicable to a real-world use case. Suppose a new troll farm trying to sway the upcoming European or US elections has just been discovered. While the identities of the accounts might be available, the labels to learn from would not be present. Thus, any supervised machine learning approach would fall short of being a fully automated solution to our initial problem.",
+            "A more realistic scenario assumes that labels for troll accounts are not available. In this case, we need to use some external information in order to learn a labeling function. Indeed, we leverage more persistent entities and their labels: news media. We assume a learning scenario with distant supervision where labels for news media are available. By combining these labels with a citation graph from the troll accounts to news media, we can infer the final labeling on the accounts themselves without any need for manual labeling."
+          ]
+        },
+        {
+          "answer": "We assume a learning scenario with distant supervision where labels for news media are available. By combining these labels with a citation graph from the troll accounts to news media, we can infer the final labeling on the accounts themselves without any need for manual labeling.",
+          "type": "extractive",
+          "evidence": [
+            "A more realistic scenario assumes that labels for troll accounts are not available. In this case, we need to use some external information in order to learn a labeling function. Indeed, we leverage more persistent entities and their labels: news media. We assume a learning scenario with distant supervision where labels for news media are available. By combining these labels with a citation graph from the troll accounts to news media, we can infer the final labeling on the accounts themselves without any need for manual labeling."
+          ]
+        },
+        {
+          "answer": "manual labeling, more realistic scenario assumes that labels for troll accounts are not available",
+          "type": "extractive",
+          "evidence": [
+            "A more realistic scenario assumes that labels for troll accounts are not available. In this case, we need to use some external information in order to learn a labeling function. Indeed, we leverage more persistent entities and their labels: news media. We assume a learning scenario with distant supervision where labels for news media are available. By combining these labels with a citation graph from the troll accounts to news media, we can infer the final labeling on the accounts themselves without any need for manual labeling."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "16a10c1681dc5a399b6d34b4eed7bb1fef816dd0",
+      "paper_id": "1910.02001",
+      "paper_title": "Predicting the Role of Political Trolls in Social Media",
+      "question": "Do they only look at tweets?",
+      "references": [
+        {
+          "answer": "Yes",
+          "type": "boolean",
+          "evidence": [
+            "Our main dataset contains 2973371 tweets by 2848 Twitter users, which the US House Intelligence Committee has linked to the Russian Internet Research Agency (IRA). The data was collected and published by BIBREF0, and then made available online. The time span covers the period from February 2012 to May 2018."
+          ]
+        },
+        {
+          "answer": "No",
+          "type": "boolean",
+          "evidence": [
+            "We use data from Media Bias/Fact Check (MBFC) to label news media sites. MBFC divides news media into the following bias categories: Extreme-Left, Left, Center-Left, Center, Center-Right, Right, and Extreme-Right. We reduce the granularity to three categories by grouping Extreme-Left and Left as LEFT, Extreme-Right and Right as RIGHT, and Center-Left, Center-Right, and Center as CENTER."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "c176eb1ccaa0e50fb7512153f0716e60bf74aa53",
+      "paper_id": "1910.01340",
+      "paper_title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+      "question": "Are results reported only on English data?",
+      "references": [
+        {
+          "answer": "Yes",
+          "type": "boolean",
+          "evidence": [
+            "We used the IRA dataset that was released by Twitter after identifying the Russian trolls. The original dataset contains $3,841$ accounts, but we use a lower number of accounts and tweets after filtering them. We focus on accounts that use English as main language. In fact, our goal is to detect Russian accounts that mimic a regular US user. Then, we remove from these accounts non-English tweets, and maintain only tweets that were tweeted originally by them. Our final IRA accounts list contains 2,023 accounts.",
+            "Recent years have seen a large increase in the amount of disinformation and fake news spread on social media. False information was used to spread fear and anger among people, which in turn, provoked crimes in some countries. The US in the recent years experienced many similar cases during the presidential elections, such as the one commonly known as “Pizzagate\" . Later on, Twitter declared that they had detected a suspicious campaign originated in Russia by an organization named Internet Research Agency (IRA), and targeted the US to affect the results of the 2016 presidential elections. The desired goals behind these accounts are to spread fake and hateful news to further polarize the public opinion. Such attempts are not limited to Twitter, since Facebook announced in mid-2019 that they detected a similar attempt originating from UAE, Egypt and Saudi Arabia and targeting other countries such as Qatar, Palestine, Lebanon and Jordan. This attempt used Facebook pages, groups, and user accounts with fake identities to spread fake news supporting their ideological agendas. The automatic detection of such attempts is very challenging, since the true identity of these suspicious accounts is hidden by imitating the profiles of real persons from the targeted audience; in addition, sometimes they publish their suspicious idea in a vague way through their tweets' messages.",
+            "In this work, we identify online trolls in Twitter, namely IRA trolls, from a textual perspective. We study the effect of a set of text-based features and we propose a machine learning model to detect them. We aim to answer three research questions: RQ1. Does the thematic information improve the detection performance?, RQ2. Can we detect IRA trolls from only a textual perspective? and RQ3. How IRA campaign utilized the emotions to affect the public opinions?"
+          ]
+        },
+        {
+          "answer": "Yes",
+          "type": "boolean",
+          "evidence": [
+            "We used the IRA dataset that was released by Twitter after identifying the Russian trolls. The original dataset contains $3,841$ accounts, but we use a lower number of accounts and tweets after filtering them. We focus on accounts that use English as main language. In fact, our goal is to detect Russian accounts that mimic a regular US user. Then, we remove from these accounts non-English tweets, and maintain only tweets that were tweeted originally by them. Our final IRA accounts list contains 2,023 accounts.",
+            "To contrast IRA behaviour, we sampled a large set of accounts to represent the ordinary behaviour of accounts from US. We collected a random sample of users that they post at least 5 tweets between 1st of August and 31 of December, 2016 (focusing on the US 2016 debates: first, second, third and vice president debates and the election day) by querying Twitter API hashtags related to the elections and its parties (e.g #trump, #clinton, #election, #debate, #vote, etc.). In addition, we selected the accounts that have location within US and use English as language of the Twitter interface. We focus on users during the presidential debates and elections dates because we suppose that the peak of trolls efforts concentrated during this period."
+          ]
+        },
+        {
+          "answer": "Yes",
+          "type": "boolean",
+          "evidence": [
+            "We used the IRA dataset that was released by Twitter after identifying the Russian trolls. The original dataset contains $3,841$ accounts, but we use a lower number of accounts and tweets after filtering them. We focus on accounts that use English as main language. In fact, our goal is to detect Russian accounts that mimic a regular US user. Then, we remove from these accounts non-English tweets, and maintain only tweets that were tweeted originally by them. Our final IRA accounts list contains 2,023 accounts."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "e0b54906184a4ad87d127bed22194e62de38222b",
+      "paper_id": "1910.01340",
+      "paper_title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+      "question": "What type of model were the features used in?",
+      "references": [
+        {
+          "answer": "character-based Bidirectional Gated Recurrent neural network",
+          "type": "extractive",
+          "evidence": [
+            "In order to evaluate our feature set, we use Random Selection, Majority Class, and bag-of-words baselines. In the bag-of-words baseline, we aggregate all the tweets of a user into one document. A previous work BIBREF30 showed that IRA trolls were playing a hashtag game which is a popular word game played on Twitter, where users add a hashtag to their tweets and then answer an implied question BIBREF31. IRA trolls used this game in a similar way but focusing more on offending or attacking others; an example from IRA tweets: \"#OffendEveryoneIn4Words undocumented immigrants are ILLEGALS\". Thus, we use as a baseline Tweet2vec BIBREF32 which is a a character-based Bidirectional Gated Recurrent neural network reads tweets and predicts their hashtags. We aim to assess if the tweets hashtags can help identifying the IRA tweets. The model reads the tweets in a form of character one-hot encodings and uses them for training with their hashtags as labels. To train the model, we use our collected dataset which consists of $\\sim $3.7M tweets. To represent the tweets in this baseline, we use the decoded embedding produced by the model and we feed them to the Logistic Regression classifier."
+          ]
+        },
+        {
+          "answer": "Random Selection, Majority Class, bag-of-words, Tweet2vec BIBREF32",
+          "type": "extractive",
+          "evidence": [
+            "In order to evaluate our feature set, we use Random Selection, Majority Class, and bag-of-words baselines. In the bag-of-words baseline, we aggregate all the tweets of a user into one document. A previous work BIBREF30 showed that IRA trolls were playing a hashtag game which is a popular word game played on Twitter, where users add a hashtag to their tweets and then answer an implied question BIBREF31. IRA trolls used this game in a similar way but focusing more on offending or attacking others; an example from IRA tweets: \"#OffendEveryoneIn4Words undocumented immigrants are ILLEGALS\". Thus, we use as a baseline Tweet2vec BIBREF32 which is a a character-based Bidirectional Gated Recurrent neural network reads tweets and predicts their hashtags. We aim to assess if the tweets hashtags can help identifying the IRA tweets. The model reads the tweets in a form of character one-hot encodings and uses them for training with their hashtags as labels. To train the model, we use our collected dataset which consists of $\\sim $3.7M tweets. To represent the tweets in this baseline, we use the decoded embedding produced by the model and we feed them to the Logistic Regression classifier."
+          ]
+        },
+        {
+          "answer": "Logistic Regression classifier",
+          "type": "extractive",
+          "evidence": [
+            "We report precision, recall and F1 score. Given the substantial class imbalance in the dataset, we use the macro weighted version of the F1 metric. We tested several classifiers and Logistic Regression showed the best F1$_{macro}$ value. We kept the default parameters values. We report results for 5-folds cross-validation."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "1f8044487af39244d723582b8a68f94750eed2cc",
+      "paper_id": "1910.01340",
+      "paper_title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+      "question": "What unsupervised approach was used to deduce the thematic information?",
+      "references": [
+        {
+          "answer": " Latent Dirichlet Allocation (LDA)",
+          "type": "extractive",
+          "evidence": [
+            "Recent years have seen a large increase in the amount of disinformation and fake news spread on social media. False information was used to spread fear and anger among people, which in turn, provoked crimes in some countries. The US in the recent years experienced many similar cases during the presidential elections, such as the one commonly known as “Pizzagate\" . Later on, Twitter declared that they had detected a suspicious campaign originated in Russia by an organization named Internet Research Agency (IRA), and targeted the US to affect the results of the 2016 presidential elections. The desired goals behind these accounts are to spread fake and hateful news to further polarize the public opinion. Such attempts are not limited to Twitter, since Facebook announced in mid-2019 that they detected a similar attempt originating from UAE, Egypt and Saudi Arabia and targeting other countries such as Qatar, Palestine, Lebanon and Jordan. This attempt used Facebook pages, groups, and user accounts with fake identities to spread fake news supporting their ideological agendas. The automatic detection of such attempts is very challenging, since the true identity of these suspicious accounts is hidden by imitating the profiles of real persons from the targeted audience; in addition, sometimes they publish their suspicious idea in a vague way through their tweets' messages.",
+            "Previous works BIBREF7 have investigated IRA campaign efforts on Facebook, and they found that IRA pages have posted more than $\\sim $80K posts focused on division issues in US. Later on, the work in BIBREF2 has analyzed Facebook advertised posts by IRA and they specified the main themes that these advertisements discussed. Given the results of the previous works, we applied a topic modeling technique on our dataset to extract its main themes. We aim to detect IRA trolls by identifying their suspicious ideological changes across a set of themes.",
+            "Given our dataset, we applied Latent Dirichlet Allocation (LDA) topic modeling algorithm BIBREF8 on the tweets after a prepossessing step where we maintained only nouns and proper nouns. In addition, we removed special characters (except HASH \"#\" sign for the hashtags) and lowercase the final tweet. To ensure the quality of the themes, we removed the hashtags we used in the collecting process where they may bias the modeling algorithm. We tested multiple number of themes and we chose seven of them. We manually observed the content of these themes to label them. The extracted themes are: Police shootings, Islam and War, Supporting Trump, Black People, Civil Rights, Attacking Hillary, and Crimes. In some themes, like Supporting Trump and Attacking Hillary, we found contradicted opinions, in favor and against the main themes, but we chose the final stance based on the most representative hashtags and words in each of them (see Figure FIGREF11). Also, the themes Police Shooting and Crimes are similar, but we found that some words such as: police, officers, cops, shooting, gun, shot, etc. are the most discriminative between these two themes. In addition, we found that the Crimes theme focuses more on raping crimes against children and women. Our resulted themes are generally consistent with the ones obtained from the Facebook advertised posts in BIBREF2, and this emphasizes that IRA efforts organized in a similar manner in both social media platforms."
+          ]
+        },
+        {
+          "answer": "Latent Dirichlet Allocation (LDA) topic modeling algorithm BIBREF8",
+          "type": "extractive",
+          "evidence": [
+            "Given our dataset, we applied Latent Dirichlet Allocation (LDA) topic modeling algorithm BIBREF8 on the tweets after a prepossessing step where we maintained only nouns and proper nouns. In addition, we removed special characters (except HASH \"#\" sign for the hashtags) and lowercase the final tweet. To ensure the quality of the themes, we removed the hashtags we used in the collecting process where they may bias the modeling algorithm. We tested multiple number of themes and we chose seven of them. We manually observed the content of these themes to label them. The extracted themes are: Police shootings, Islam and War, Supporting Trump, Black People, Civil Rights, Attacking Hillary, and Crimes. In some themes, like Supporting Trump and Attacking Hillary, we found contradicted opinions, in favor and against the main themes, but we chose the final stance based on the most representative hashtags and words in each of them (see Figure FIGREF11). Also, the themes Police Shooting and Crimes are similar, but we found that some words such as: police, officers, cops, shooting, gun, shot, etc. are the most discriminative between these two themes. In addition, we found that the Crimes theme focuses more on raping crimes against children and women. Our resulted themes are generally consistent with the ones obtained from the Facebook advertised posts in BIBREF2, and this emphasizes that IRA efforts organized in a similar manner in both social media platforms."
+          ]
+        },
+        {
+          "answer": "Latent Dirichlet Allocation (LDA) topic modeling",
+          "type": "extractive",
+          "evidence": [
+            "Previous works BIBREF7 have investigated IRA campaign efforts on Facebook, and they found that IRA pages have posted more than $\\sim $80K posts focused on division issues in US. Later on, the work in BIBREF2 has analyzed Facebook advertised posts by IRA and they specified the main themes that these advertisements discussed. Given the results of the previous works, we applied a topic modeling technique on our dataset to extract its main themes. We aim to detect IRA trolls by identifying their suspicious ideological changes across a set of themes.",
+            "Given our dataset, we applied Latent Dirichlet Allocation (LDA) topic modeling algorithm BIBREF8 on the tweets after a prepossessing step where we maintained only nouns and proper nouns. In addition, we removed special characters (except HASH \"#\" sign for the hashtags) and lowercase the final tweet. To ensure the quality of the themes, we removed the hashtags we used in the collecting process where they may bias the modeling algorithm. We tested multiple number of themes and we chose seven of them. We manually observed the content of these themes to label them. The extracted themes are: Police shootings, Islam and War, Supporting Trump, Black People, Civil Rights, Attacking Hillary, and Crimes. In some themes, like Supporting Trump and Attacking Hillary, we found contradicted opinions, in favor and against the main themes, but we chose the final stance based on the most representative hashtags and words in each of them (see Figure FIGREF11). Also, the themes Police Shooting and Crimes are similar, but we found that some words such as: police, officers, cops, shooting, gun, shot, etc. are the most discriminative between these two themes. In addition, we found that the Crimes theme focuses more on raping crimes against children and women. Our resulted themes are generally consistent with the ones obtained from the Facebook advertised posts in BIBREF2, and this emphasizes that IRA efforts organized in a similar manner in both social media platforms."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "595fe416a100bc7247444f25b11baca6e08d9291",
+      "paper_id": "1910.01340",
+      "paper_title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+      "question": "What profile features are used?",
+      "references": [
+        {
+          "answer": "Part-of-speech tags (POS), syntactic dependency relations, count of special characters, consecutive characters and letters, URLs, hashtags, users' mentions, uppercase ratio, tweet length",
+          "type": "extractive",
+          "evidence": [
+            "Recent years have seen a large increase in the amount of disinformation and fake news spread on social media. False information was used to spread fear and anger among people, which in turn, provoked crimes in some countries. The US in the recent years experienced many similar cases during the presidential elections, such as the one commonly known as “Pizzagate\" . Later on, Twitter declared that they had detected a suspicious campaign originated in Russia by an organization named Internet Research Agency (IRA), and targeted the US to affect the results of the 2016 presidential elections. The desired goals behind these accounts are to spread fake and hateful news to further polarize the public opinion. Such attempts are not limited to Twitter, since Facebook announced in mid-2019 that they detected a similar attempt originating from UAE, Egypt and Saudi Arabia and targeting other countries such as Qatar, Palestine, Lebanon and Jordan. This attempt used Facebook pages, groups, and user accounts with fake identities to spread fake news supporting their ideological agendas. The automatic detection of such attempts is very challenging, since the true identity of these suspicious accounts is hidden by imitating the profiles of real persons from the targeted audience; in addition, sometimes they publish their suspicious idea in a vague way through their tweets' messages.",
+            "As Twitter declared, although the IRA campaign was originated in Russia, it has been found that IRA trolls concealed their identity by tweeting in English. Furthermore, for any possibility of unmasking their identity, the majority of IRA trolls changed their location to other countries and the language of the Twitter interface they use. Thus, we propose the following features to identify these users using only their tweets text:",
+            "Native Language Identification (NLI): This feature was inspired by earlier works on identifying native language of essays writers BIBREF22. We aim to detect IRA trolls by identifying their way of writing English tweets. As shown in BIBREF19, English tweets generated by non-English speakers have a different syntactic pattern . Thus, we use state-of-the-art NLI features to detect this unique pattern BIBREF23, BIBREF24, BIBREF25; the feature set consists of bag of stopwords, Part-of-speech tags (POS), and syntactic dependency relations (DEPREL). We extract the POS and the DEPREL information using spaCy, an off-the-shelf POS tagger. We clean the tweets from the special characters and maintained dots, commas, and first-letter capitalization of words. We use regular expressions to convert a sequence of dots to a single dot, and similarly for sequence of characters.",
+            "Stylistic: We extract a set of stylistic features following previous works in the authorship attribution domain BIBREF27, BIBREF28, BIBREF29, such as: the count of special characters, consecutive characters and letters, URLs, hashtags, users' mentions. In addition, we extract the uppercase ratio and the tweet length."
+          ]
+        },
+        {
+          "answer": "bag of stopwords, Part-of-speech tags, syntactic dependency relations, count of special characters, consecutive characters and letters, URLs, hashtags, users' mentions, uppercase ratio, tweet length",
+          "type": "extractive",
+          "evidence": [
+            "Native Language Identification (NLI): This feature was inspired by earlier works on identifying native language of essays writers BIBREF22. We aim to detect IRA trolls by identifying their way of writing English tweets. As shown in BIBREF19, English tweets generated by non-English speakers have a different syntactic pattern . Thus, we use state-of-the-art NLI features to detect this unique pattern BIBREF23, BIBREF24, BIBREF25; the feature set consists of bag of stopwords, Part-of-speech tags (POS), and syntactic dependency relations (DEPREL). We extract the POS and the DEPREL information using spaCy, an off-the-shelf POS tagger. We clean the tweets from the special characters and maintained dots, commas, and first-letter capitalization of words. We use regular expressions to convert a sequence of dots to a single dot, and similarly for sequence of characters.",
+            "Stylistic: We extract a set of stylistic features following previous works in the authorship attribution domain BIBREF27, BIBREF28, BIBREF29, such as: the count of special characters, consecutive characters and letters, URLs, hashtags, users' mentions. In addition, we extract the uppercase ratio and the tweet length.",
+            "Textual Representation ::: Profiling IRA Accounts"
+          ]
+        },
+        {
+          "answer": "bag of stopwords, Part-of-speech tags (POS), and syntactic dependency relations (DEPREL), count of special characters, consecutive characters and letters, URLs, hashtags, users' mentions, uppercase ratio and the tweet length",
+          "type": "extractive",
+          "evidence": [
+            "As Twitter declared, although the IRA campaign was originated in Russia, it has been found that IRA trolls concealed their identity by tweeting in English. Furthermore, for any possibility of unmasking their identity, the majority of IRA trolls changed their location to other countries and the language of the Twitter interface they use. Thus, we propose the following features to identify these users using only their tweets text:",
+            "Native Language Identification (NLI): This feature was inspired by earlier works on identifying native language of essays writers BIBREF22. We aim to detect IRA trolls by identifying their way of writing English tweets. As shown in BIBREF19, English tweets generated by non-English speakers have a different syntactic pattern . Thus, we use state-of-the-art NLI features to detect this unique pattern BIBREF23, BIBREF24, BIBREF25; the feature set consists of bag of stopwords, Part-of-speech tags (POS), and syntactic dependency relations (DEPREL). We extract the POS and the DEPREL information using spaCy, an off-the-shelf POS tagger. We clean the tweets from the special characters and maintained dots, commas, and first-letter capitalization of words. We use regular expressions to convert a sequence of dots to a single dot, and similarly for sequence of characters.",
+            "Stylistic: We extract a set of stylistic features following previous works in the authorship attribution domain BIBREF27, BIBREF28, BIBREF29, such as: the count of special characters, consecutive characters and letters, URLs, hashtags, users' mentions. In addition, we extract the uppercase ratio and the tweet length."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "1f011fa772ce802e74eda89f706cdb1aa2833686",
+      "paper_id": "1910.01340",
+      "paper_title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+      "question": "What textual features are used?",
+      "references": [
+        {
+          "answer": "eight Plutchik's emotions, positive and negative, list of bad and sexual words from BIBREF10, belief, denial, doubt, fake, knowledge, negation, question, and report, assertives verbs BIBREF14, bias BIBREF15, factive verbs BIBREF16, implicative verbs BIBREF17, hedges BIBREF18, report verbs BIBREF15, pronoun, anx, cogmech, insight, cause, discrep, tentat, certain, inhib, incl, care, harm, fairness, cheating, loyalty, betrayal, authority, subversion, sanctity, and degradation",
+          "type": "extractive",
+          "evidence": [
+            "Based on our thematic information, we model the users textual features w.r.t. each of these themes. In other words, we model a set of textual features independently for each of the former themes to capture the emotional, stance, and others changes in the users tweets.",
+            "For the theme-based features, we use the following features that we believe that they change based on the themes:",
+            "Emotions: Since the results of the previous works BIBREF2, BIBREF7 showed that IRA efforts engineered to seed discord among individuals in US, we use emotions features to detect their emotional attempts to manipulate the public opinions (e.g. fear spreading behavior). For that, we use the NRC emotions lexicon BIBREF9 that contains $\\sim $14K words labeled using the eight Plutchik's emotions.",
+            "Sentiment: We extract the sentiment of the tweets from NRC BIBREF9, positive and negative.",
+            "Bad & Sexual Cues: During the manual analysis of a sample from IRA tweets, we found that some users use bad slang word to mimic the language of a US citizen. Thus, we model the presence of such words using a list of bad and sexual words from BIBREF10.",
+            "Stance Cues: Stance detection has been studied in different contexts to detect the stance of a tweet reply with respect to a main tweet/thread BIBREF11. Using this feature, we aim to detect the stance of the users regarding the different topics we extracted. To model the stance we use a set of stance lexicons employed in previous works BIBREF12, BIBREF13. Concretely, we focus on the following categories: belief, denial, doubt, fake, knowledge, negation, question, and report.",
+            "Bias Cues: We rely on a set of lexicons to capture the bias in text. We model the presence of the words in one of the following cues categories: assertives verbs BIBREF14, bias BIBREF15, factive verbs BIBREF16, implicative verbs BIBREF17, hedges BIBREF18, report verbs BIBREF15. A previous work has used these bias cues to identify bias in suspicious news posts in Twitter BIBREF19.",
+            "LIWC: We use a set of linguistic categories from the LIWC linguistic dictionary BIBREF20. The used categories are: pronoun, anx, cogmech, insight, cause, discrep, tentat, certain, inhib, incl.",
+            "Morality: Cues based on the morality foundation theory BIBREF21 where words labeled in one of a set of categories: care, harm, fairness, cheating, loyalty, betrayal, authority, subversion, sanctity, and degradation."
+          ]
+        },
+        {
+          "answer": "emotion features, bad and sexual language features, stance towards some topics, bias cues, linguistic features from LIWC and morality cues",
+          "type": "abstractive",
+          "evidence": [
+            "Given our dataset, we applied Latent Dirichlet Allocation (LDA) topic modeling algorithm BIBREF8 on the tweets after a prepossessing step where we maintained only nouns and proper nouns. In addition, we removed special characters (except HASH \"#\" sign for the hashtags) and lowercase the final tweet. To ensure the quality of the themes, we removed the hashtags we used in the collecting process where they may bias the modeling algorithm. We tested multiple number of themes and we chose seven of them. We manually observed the content of these themes to label them. The extracted themes are: Police shootings, Islam and War, Supporting Trump, Black People, Civil Rights, Attacking Hillary, and Crimes. In some themes, like Supporting Trump and Attacking Hillary, we found contradicted opinions, in favor and against the main themes, but we chose the final stance based on the most representative hashtags and words in each of them (see Figure FIGREF11). Also, the themes Police Shooting and Crimes are similar, but we found that some words such as: police, officers, cops, shooting, gun, shot, etc. are the most discriminative between these two themes. In addition, we found that the Crimes theme focuses more on raping crimes against children and women. Our resulted themes are generally consistent with the ones obtained from the Facebook advertised posts in BIBREF2, and this emphasizes that IRA efforts organized in a similar manner in both social media platforms.",
+            "Based on our thematic information, we model the users textual features w.r.t. each of these themes. In other words, we model a set of textual features independently for each of the former themes to capture the emotional, stance, and others changes in the users tweets.",
+            "Emotions: Since the results of the previous works BIBREF2, BIBREF7 showed that IRA efforts engineered to seed discord among individuals in US, we use emotions features to detect their emotional attempts to manipulate the public opinions (e.g. fear spreading behavior). For that, we use the NRC emotions lexicon BIBREF9 that contains $\\sim $14K words labeled using the eight Plutchik's emotions.",
+            "Sentiment: We extract the sentiment of the tweets from NRC BIBREF9, positive and negative.",
+            "Bad & Sexual Cues: During the manual analysis of a sample from IRA tweets, we found that some users use bad slang word to mimic the language of a US citizen. Thus, we model the presence of such words using a list of bad and sexual words from BIBREF10.",
+            "Stance Cues: Stance detection has been studied in different contexts to detect the stance of a tweet reply with respect to a main tweet/thread BIBREF11. Using this feature, we aim to detect the stance of the users regarding the different topics we extracted. To model the stance we use a set of stance lexicons employed in previous works BIBREF12, BIBREF13. Concretely, we focus on the following categories: belief, denial, doubt, fake, knowledge, negation, question, and report.",
+            "Bias Cues: We rely on a set of lexicons to capture the bias in text. We model the presence of the words in one of the following cues categories: assertives verbs BIBREF14, bias BIBREF15, factive verbs BIBREF16, implicative verbs BIBREF17, hedges BIBREF18, report verbs BIBREF15. A previous work has used these bias cues to identify bias in suspicious news posts in Twitter BIBREF19.",
+            "LIWC: We use a set of linguistic categories from the LIWC linguistic dictionary BIBREF20. The used categories are: pronoun, anx, cogmech, insight, cause, discrep, tentat, certain, inhib, incl.",
+            "Morality: Cues based on the morality foundation theory BIBREF21 where words labeled in one of a set of categories: care, harm, fairness, cheating, loyalty, betrayal, authority, subversion, sanctity, and degradation."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "74cc0300e22f60232812019011a09df92bbec803",
+      "paper_id": "1709.05295",
+      "paper_title": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+      "question": "Do they report results only on English data?",
+      "references": [
+        {
+          "answer": "Unanswerable",
+          "type": "none",
+          "evidence": []
+        },
+        {
+          "answer": "Yes",
+          "type": "boolean",
+          "evidence": [
+            "The IAC includes 10,003 Quote-Response (Q-R) pairs with annotations for factual vs. feeling argument style, across a range of topics. Figure FIGREF4 shows the wording of the survey question used to collect the annotations. Fact vs. Feeling was measured as a scalar ranging from -5 to +5, because previous work suggested that taking the means of scalar annotations reduces noise in Mechanical Turk annotations BIBREF26 . Each of the pairs was annotated by 5-7 annotators. For our experiments, we use only the response texts and assign a binary Fact or Feel label to each response: texts with score INLINEFORM0 1 are assigned to the fact class and texts with score INLINEFORM1 -1 are assigned to the feeling class. We did not use the responses with scores between -1 and 1 because they had a very weak Fact/Feeling assessment, which could be attributed to responses either containing aspects of both factual and feeling expression, or neither. The resulting set contains 3,466 fact and 2,382 feeling posts. We randomly partitioned the fact/feel responses into three subsets: a training set with 70% of the data (2,426 fact and 1,667 feeling posts), a development (tuning) set with 20% of the data (693 fact and 476 feeling posts), and a test set with 10% of the data (347 fact and 239 feeling posts). For the bootstrapping method, we also used 11,560 responses from the unannotated data."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "865811dcf63a1dd3f22c62ec39ffbca4b182de31",
+      "paper_id": "1709.05295",
+      "paper_title": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+      "question": "What are the most discriminating patterns which are analyzed?",
+      "references": [
+        {
+          "answer": "Patterns containing the preposition \"of\" make up the vast majority of prepositional phrases for both the fact and feel classes and  patterns with the preposition “for” are substantially more common in the feel class than the fact class.",
+          "type": "abstractive",
+          "evidence": [
+            "Next, we further examine the NP Prep patterns since they are so prevalent. Figure FIGREF19 shows the percentages of the most frequently occurring prepositions found in the NP Prep patterns learned for each class. Patterns containing the preposition \"of\" make up the vast majority of prepositional phrases for both the fact and feel classes, but is more common in the fact class. In contrast, we observe that patterns with the preposition “for” are substantially more common in the feel class than the fact class."
+          ]
+        },
+        {
+          "answer": "forms associated with the fact and feel",
+          "type": "extractive",
+          "evidence": [
+            "From the learned patterns, we derive some characteristic syntactic forms associated with the fact and feel that we use to discriminate between the classes. We observe distinctions between the way that different arguments are expressed, with respect to the technical and more opinionated terminologies used, which we analyze on the basis of grammatical forms and more direct syntactic patterns, such as the use of different prepositional phrases. Overall, we demonstrate how the learned patterns can be used to more precisely gather similarly-styled argument responses from a pool of unannotated responses, carrying the characteristics of factual and emotional argumentation style."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "9e378361b6462034aaf752adf04595ef56370b86",
+      "paper_id": "1709.05295",
+      "paper_title": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+      "question": "What bootstrapping methodology was used to find new patterns?",
+      "references": [
+        {
+          "answer": "flow diagram for the bootstrapping system is shown in Figure FIGREF10",
+          "type": "extractive",
+          "evidence": [
+            "Since the IAC data set contains a large number of unannotated debate forum posts, we embedd AutoSlog-TS in a bootstrapping framework to learn additional patterns. The flow diagram for the bootstrapping system is shown in Figure FIGREF10 ."
+          ]
+        },
+        {
+          "answer": "They embed AutoSlog-TS in a bootstrapping framework to learn additional linguistic expressions from the unannotated texts -  they give the labeled training data to AutoSlog-TS, which generates patterns and associated statistics and then identifies high-precision patterns that can be used to label some of the unannotated texts as factual or feeling.",
+          "type": "abstractive",
+          "evidence": [
+            "To accomplish this, we use the AutoSlog-TS system BIBREF27 to extract linguistic expressions from the annotated texts. Since the IAC also contains a large collection of unannotated texts, we then embed AutoSlog-TS in a bootstrapping framework to learn additional linguistic expressions from the unannotated texts. First, we briefly describe the AutoSlog-TS pattern learner and the set of pattern templates that we used. Then, we present the bootstrapping process to learn more Fact/Feeling patterns from unannotated texts.",
+            "Initially, we give the labeled training data to AutoSlog-TS, which generates patterns and associated statistics. The next step identifies high-precision patterns that can be used to label some of the unannotated texts as factual or feeling. We define two thresholds: INLINEFORM0 to represent a minimum frequency value, and INLINEFORM1 to represent a minimum probability value. We found that using only a small set of patterns (when INLINEFORM2 is set to a high value) achieves extremely high precision, yet results in a very low recall. Instead, we adopt a strategy of setting a moderate probability threshold to identify reasonably reliable patterns, but labeling a text as factual or feeling only if it contains at least a certain number different patterns for that category, INLINEFORM3 . In order to calibrate the thresholds, we experimented with a range of threshold values on the development (tuning) data and identified INLINEFORM4 =3, INLINEFORM5 =.70, and INLINEFORM6 =3 for the factual class, and INLINEFORM7 =3, INLINEFORM8 =.55, and INLINEFORM9 =3 for the feeling class as having the highest classification precision (with non-trivial recall)."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "667dce60255d8ab959869eaf8671312df8c0004b",
+      "paper_id": "1709.05295",
+      "paper_title": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+      "question": "What patterns were extracted which were correlated with emotional arguments?",
+      "references": [
+        {
+          "answer": "Examples of extracted patters with high probability that contain of are: MARRIAGE FOR, STANDING FOR, SAME FOR, TREATMENT FOR, DEMAND FOR, ATTENTION FOR, ADVOCATE FOR, NO EVIDENCE FOR, JUSTIFICATION FOR, EXCUSE FOR",
+          "type": "abstractive",
+          "evidence": [
+            "Table TABREF20 shows examples of learned NP Prep patterns with the preposition \"of\" in the fact class and \"for\" in the feel class. The \"of\" preposition in the factual arguments often attaches to objective terminology. The \"for\" preposition in the feeling-based arguments is commonly used to express advocacy (e.g., demand for) or refer to affected population groups (e.g., treatment for). Interestingly, these phrases are subtle indicators of feeling-based arguments rather than explicit expressions of emotion or sentiment."
+          ]
+        },
+        {
+          "answer": "Pattrn based on the speaker's own beliefs or claims, perhaps assuming that they themselves are credible or they involve assessment or evaluations of the arguments of the other speaker.  They are typically also very creative and diverse.",
+          "type": "abstractive",
+          "evidence": [
+            "Table TABREF13 provides examples of patterns learned for each class that are characteristic of that class. We observe that patterns associated with factual arguments often include topic-specific terminology, explanatory language, and argument phrases. In contrast, the patterns associated with feeling based arguments are often based on the speaker's own beliefs or claims, perhaps assuming that they themselves are credible BIBREF20 , BIBREF24 , or they involve assessment or evaluations of the arguments of the other speaker BIBREF29 . They are typically also very creative and diverse, which may be why it is hard to get higher accuracies for feeling classification, as shown by Table TABREF11 ."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "d5e716c1386b6485e63075e980f80d44564d0aa2",
+      "paper_id": "1709.05295",
+      "paper_title": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+      "question": "What patterns were extracted which were correlated with factual arguments?",
+      "references": [
+        {
+          "answer": " patterns associated with factual arguments often include topic-specific terminology, explanatory language, and argument phrases",
+          "type": "extractive",
+          "evidence": [
+            "Table TABREF13 provides examples of patterns learned for each class that are characteristic of that class. We observe that patterns associated with factual arguments often include topic-specific terminology, explanatory language, and argument phrases. In contrast, the patterns associated with feeling based arguments are often based on the speaker's own beliefs or claims, perhaps assuming that they themselves are credible BIBREF20 , BIBREF24 , or they involve assessment or evaluations of the arguments of the other speaker BIBREF29 . They are typically also very creative and diverse, which may be why it is hard to get higher accuracies for feeling classification, as shown by Table TABREF11 ."
+          ]
+        },
+        {
+          "answer": "Examples of extracted patters with high probability that correlate with factual argument are: RESULT OF, ORIGIN OF, THEORY OF, EVIDENCE OF, PARTS OF, EVOLUTION OF, PERCENT OF, THOUSANDS OF, EXAMPLE OF, LAW OF",
+          "type": "abstractive",
+          "evidence": [
+            "Table TABREF20 shows examples of learned NP Prep patterns with the preposition \"of\" in the fact class and \"for\" in the feel class. The \"of\" preposition in the factual arguments often attaches to objective terminology. The \"for\" preposition in the feeling-based arguments is commonly used to express advocacy (e.g., demand for) or refer to affected population groups (e.g., treatment for). Interestingly, these phrases are subtle indicators of feeling-based arguments rather than explicit expressions of emotion or sentiment."
+          ]
+        }
+      ]
+    },
+    {
+      "question_id": "1fd31fdfff93d65f36e93f6919f6976f5f172197",
+      "paper_id": "1709.05295",
+      "paper_title": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+      "question": "How were the factual and feeling forum posts annotated?",
+      "references": [
+        {
+          "answer": "binary Fact or Feel label to each response: texts with score INLINEFORM0 1 are assigned to the fact class and texts with score INLINEFORM1 -1 are assigned to the feeling class.",
+          "type": "extractive",
+          "evidence": [
+            "The IAC includes 10,003 Quote-Response (Q-R) pairs with annotations for factual vs. feeling argument style, across a range of topics. Figure FIGREF4 shows the wording of the survey question used to collect the annotations. Fact vs. Feeling was measured as a scalar ranging from -5 to +5, because previous work suggested that taking the means of scalar annotations reduces noise in Mechanical Turk annotations BIBREF26 . Each of the pairs was annotated by 5-7 annotators. For our experiments, we use only the response texts and assign a binary Fact or Feel label to each response: texts with score INLINEFORM0 1 are assigned to the fact class and texts with score INLINEFORM1 -1 are assigned to the feeling class. We did not use the responses with scores between -1 and 1 because they had a very weak Fact/Feeling assessment, which could be attributed to responses either containing aspects of both factual and feeling expression, or neither. The resulting set contains 3,466 fact and 2,382 feeling posts. We randomly partitioned the fact/feel responses into three subsets: a training set with 70% of the data (2,426 fact and 1,667 feeling posts), a development (tuning) set with 20% of the data (693 fact and 476 feeling posts), and a test set with 10% of the data (347 fact and 239 feeling posts). For the bootstrapping method, we also used 11,560 responses from the unannotated data."
+          ]
+        },
+        {
+          "answer": "manually",
+          "type": "extractive",
+          "evidence": [
+            "Our research examines factual versus feeling argument styles, drawing on annotations provided in the Internet Argument Corpus (IAC) BIBREF6 . This corpus includes quote-response pairs that were manually annotated with respect to whether the response is primarily a factual or feeling based argument, as Section SECREF2 describes in more detail. Figure FIGREF1 provides examples of responses in the IAC (paired with preceding quotes to provide context), along with the response's factual vs. feeling label."
+          ]
+        }
+      ]
+    }
+  ],
+  "frozen_at_utc": "2026-10-25T02:12:11.125440+00:00"
+}

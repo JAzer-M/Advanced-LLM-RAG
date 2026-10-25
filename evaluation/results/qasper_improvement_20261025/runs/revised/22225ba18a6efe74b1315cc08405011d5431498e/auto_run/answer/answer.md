@@ -1,0 +1,3 @@
+No, they do not use external financial knowledge in their approach.
+
+The paper describes their solutions to SemEval Task 5 Track 2 as utilising only SVR and BLSTM approaches, and states that "our approaches acted as sentence level classifiers as they take no target company into consideration" [15]. Consistent with this, their error analysis of the top 50 MAE errors found that the BLSTM systems "do not know which parts of the sentence are associated to the company the sentiment is with respect to" [14]. The proposed future work to "implement aspect specific information into an LSTM model" further indicates that such company/aspect-specific knowledge was not used in the systems described in this paper [6].

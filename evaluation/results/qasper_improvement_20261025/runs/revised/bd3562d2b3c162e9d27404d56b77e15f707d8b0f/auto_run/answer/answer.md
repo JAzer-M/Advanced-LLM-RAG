@@ -1,0 +1,3 @@
+They use three evaluation metrics: Metric 1 (weighted cosine similarity), Metric 2, and Metric 3.
+
+Metric 1 is the original metric, weighted cosine similarity, used to evaluate the final version of the results where they were ranked 5th [1]. Metric 2 was adopted after the evaluation deadline and was the basis for the first version of the results (ranked 4th) [5]. Metric 3, as presented in Cortis et al. (2017), was the basis for the second version of the results (ranked 5th) [5]. The metrics differ notably in how they penalize opposite signs between predicted and true values: Metric 2 assigns the highest error rating when signs differ, while Metric 3 penalizes opposite signs more, being otherwise similar to Metric 1 [7].

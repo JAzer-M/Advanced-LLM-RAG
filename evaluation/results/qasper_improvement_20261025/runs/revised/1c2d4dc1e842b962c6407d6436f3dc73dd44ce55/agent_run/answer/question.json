@@ -1,0 +1,261 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "For the paper \"Exploring Domain Shift in Extractive Text Summarization\" (arXiv: 1908.11664), answer this question: what four learning strategies are investigated?",
+  "kb_version": "qasper-holdout-20261025",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": true,
+    "drafts": [
+      "The four learning strategies investigated are: ModelI Base (a simple multi-domain learning approach where all domains are aggregated to train shared parameters, with no explicit domain-difference information) [14], ModelII BERT (a BERT-based strategy that shows some domain generalization ability) [8], ModelIII Tag (a domain-tag-informed strategy) [6], and ModelIV Meta (a meta-learning-based strategy that bridges the communication gap between domains when updating shared parameters) [9]. These four are named in the results table of the MULTI-SUM experiments [6], and the paper states it investigates \"four learning strategies\" and examines their abilities to deal with the domain shift problem [1].",
+      "The four learning strategies investigated are: ModelI Base, ModelII BERT, ModelIII Tag, and ModelIV Meta [6].\n\nThe paper states that it investigates four learning strategies and examines their abilities to deal with the domain shift problem [1]. All four strategy names are listed in the results table of the experiments on the MULTI-SUM dataset [6]. Specifically: ModelI Base is a simple multi-domain learning model in which all domains are aggregated and used to train a set of shared parameters, with domains not explicitly informed of their differences [14]; ModelII BERT is a BERT-based strategy, and its smaller ∆R compared with ModelI Base suggests BERT shows some domain generalization ability within MULTI-SUM [8]; and ModelIV Meta uses meta-learning to bridge the communication gap between different domains when updating shared parameters [9]. The passages provided only name ModelIII Tag [6] and do not describe its mechanism further."
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "fail",
+              "answer_quote": "The four learning strategies investigated are: ModelI Base (a simple multi-domain learning approach where all domains are aggregated to train shared parameters, with no explicit domain-difference information) [14], ModelII BERT (a BERT-based strategy that shows some domain generalization ability) [8], ModelIII Tag (a domain-tag-informed strategy) [6], and ModelIV Meta (a meta-learning-based strategy that bridges the communication gap between domains when updating shared parameters) [9].",
+              "reason": "四个策略的名称与总体框架回答正确且有文献支持(ModelI Base [14]、ModelII BERT [8]、ModelIV Meta [9] 的描述均有原文支撑,且 [6] 的结果表列出了全部四个策略名称)。但答案对 ModelIII Tag 的额外描述“(a domain-tag-informed strategy)”在所引原文 [6] 中仅有名称 \"ModelIII T ag\",没有任何段落说明该策略是“通过领域标签信息实现的”,该描述属于无文献支持的推断。核心答案正确,但包含一处未经支持的附加断言,构成缺陷。",
+              "citations": [
+                {
+                  "number": 6,
+                  "quote": "Domains ModelI Basic ModelII BERT ModelIII T ag ModelIV Meta IN-DOMAIN SETTING FN 49.13 49.70 49.54 49.06"
+                },
+                {
+                  "number": 14,
+                  "quote": "ModelI This is a simple but effective model Base for multi-domain learning, in which all domains are aggregated together and will be further used for training a set of shared parameters."
+                },
+                {
+                  "number": 8,
+                  "quote": "ModelII Supported by the smaller ∆R com- BERT pared with ModelI Base, we can draw the conclu- sion that BERT shows some domain generalization ability 7 within MULTI-SUM."
+                },
+                {
+                  "number": 9,
+                  "quote": "ModelIV In order to overcome the above lim- Meta itations, we try to bridge the communication gap between different domains when updating shared parameters via meta-learning (Finn et al., 2017; Li et al., 2017; Liu and Huang, 2018)."
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": false,
+            "unsupported_claims": false,
+            "gaps": true
+          },
+          "issues": [
+            "答案中 “ModelIII Tag (a domain-tag-informed strategy)” 的定性描述缺乏原文支持:引用 [6] 只给出名称 \"ModelIII T ag\",没有任何提供的段落说明该策略使用领域标签(domain tag)信息,属于未经支持的额外断言。",
+            "引用 [6] 仅支持 ModelIII 的名称存在,不支持答案所赋予它的“domain-tag-informed”特性;应仅以名称作答或补充描述性原文。"
+          ]
+        },
+        "citation_check": {
+          "cited_numbers": [
+            1,
+            6,
+            8,
+            9,
+            14
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 1,
+              "chunk_id": 765,
+              "source": "1908.11664.pdf",
+              "page": 1,
+              "text": "Then we re-purpose a multi- domain summarization dataset and verify how the gap between different domains inﬂuences the performance of neural summarization mod- els. Furthermore, we investigate four learning strategies and examine their abilities to deal with the domain shift problem. Experimental results on three different settings show their different characteristics in our new testbed."
+            },
+            {
+              "citation": 6,
+              "chunk_id": 830,
+              "source": "1908.11664.pdf",
+              "page": 6,
+              "text": "Domains ModelI Basic ModelII BERT ModelIII T ag ModelIV Meta IN-DOMAIN SETTING FN 49.13 49.70 49.54 49.06 IN- CNN 41.84 41.59 42.14 41.73 MA 35.40 36.46 35.51 34.85 NYT 30.68 31.92 30.70 30.20 WTP 23.88 24.47 24.02 23.51 Average 35.04 34.24 34.40 33.95 OUT-OF-DOMAIN SETTING NTDN 48.62 49.37 49.44 49.47 WSJ 38.55 39.63 39.00 38.93 USAT 28.85 29.57 29.09 28.99 TG 24.15 24.89 24.10 24.18 TIME 21.67 22.45 22.20 22.12 Average 33.68 32.78 33.17 33.24 1.47 ↓ 1.35 ↓ 1.24 ↓ 0.71 ↓ ∆R CROSS-DATASET SETTING 40.30 CNN/DM 40.11 39.82 40.28 Table 3: Rouge-1 performance of our four learning ∆R = strategies on the MULTI-SUM dataset."
+            },
+            {
+              "citation": 8,
+              "chunk_id": 833,
+              "source": "1908.11664.pdf",
+              "page": 6,
+              "text": "The excellent results under CROSS-DATASET settings further suggest the meta-learning strategy successfully improve the model transferability not only among the domains of MULTI-SUM but also across different datasets. ModelII Supported by the smaller ∆R com- BERT pared with ModelI Base, we can draw the conclu- sion that BERT shows some domain generalization ability 7 within MULTI-SUM."
+            },
+            {
+              "citation": 9,
+              "chunk_id": 819,
+              "source": "1908.11664.pdf",
+              "page": 5,
+              "text": "Figure 1: The gradient update mechanism of the meta learning strategy of ModelIV Meta. modify shared parameters, which makes it easier to update parameters along different directions. ModelIV In order to overcome the above lim- Meta itations, we try to bridge the communication gap between different domains when updating shared parameters via meta-learning (Finn et al., 2017; Li et al., 2017; Liu and Huang, 2018)."
+            },
+            {
+              "citation": 14,
+              "chunk_id": 809,
+              "source": "1908.11664.pdf",
+              "page": 4,
+              "text": "ModelI This is a simple but effective model Base for multi-domain learning, in which all domains are aggregated together and will be further used for training a set of shared parameters. Notably, domains in this model are not explicitly informed of their differences. Therefore, the loss function of each domain can be written as: L(k) = L(BASIC(S(k), θ(s)), Y(k)) (1) I where BASIC denotes our CNN-Transformer en- coder framework (As described in Section 3)."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      },
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "The four learning strategies investigated are: ModelI Base, ModelII BERT, ModelIII Tag, and ModelIV Meta [6].\n\nThe paper states that it investigates four learning strategies and examines their abilities to deal with the domain shift problem [1]. All four strategy names are listed in the results table of the experiments on the MULTI-SUM dataset [6]. Specifically: ModelI Base is a simple multi-domain learning model in which all domains are aggregated and used to train a set of shared parameters, with domains not explicitly informed of their differences [14]; ModelII BERT is a BERT-based strategy, and its smaller ∆R compared with ModelI Base suggests BERT shows some domain generalization ability within MULTI-SUM [8]; and ModelIV Meta uses meta-learning to bridge the communication gap between different domains when updating shared parameters [9]. The passages provided only name ModelIII Tag [6] and do not describe its mechanism further.",
+              "reason": "答案准确列出四种学习策略：ModelI Base、ModelII BERT、ModelIII Tag 和 ModelIV Meta，名称与原文表格一致（注意原文拼写\"Basic\"，答案写\"Base\"属于可接受的轻微转写）；各策略的描述均可在引文中找到对应支撑，且答案明确承认 ModelIII Tag 仅有名称、无机制描述的缺口。",
+              "citations": [
+                {
+                  "number": 1,
+                  "quote": "Furthermore, we investigate four learning strategies and examine their abilities to deal with the domain shift problem."
+                },
+                {
+                  "number": 6,
+                  "quote": "Domains ModelI Basic ModelII BERT ModelIII T ag ModelIV Meta"
+                },
+                {
+                  "number": 14,
+                  "quote": "ModelI This is a simple but effective model Base for multi-domain learning, in which all domains are aggregated together and will be further used for training a set of shared parameters."
+                },
+                {
+                  "number": 8,
+                  "quote": "ModelII Supported by the smaller ∆R com- BERT pared with ModelI Base, we can draw the conclu- sion that BERT shows some domain generalization ability 7 within MULTI-SUM."
+                },
+                {
+                  "number": 9,
+                  "quote": "ModelIV In order to overcome the above lim- Meta itations, we try to bridge the communication gap between different domains when updating shared parameters via meta-learning"
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            1,
+            6,
+            8,
+            9,
+            14
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 1,
+              "chunk_id": 765,
+              "source": "1908.11664.pdf",
+              "page": 1,
+              "text": "Then we re-purpose a multi- domain summarization dataset and verify how the gap between different domains inﬂuences the performance of neural summarization mod- els. Furthermore, we investigate four learning strategies and examine their abilities to deal with the domain shift problem. Experimental results on three different settings show their different characteristics in our new testbed."
+            },
+            {
+              "citation": 6,
+              "chunk_id": 830,
+              "source": "1908.11664.pdf",
+              "page": 6,
+              "text": "Domains ModelI Basic ModelII BERT ModelIII T ag ModelIV Meta IN-DOMAIN SETTING FN 49.13 49.70 49.54 49.06 IN- CNN 41.84 41.59 42.14 41.73 MA 35.40 36.46 35.51 34.85 NYT 30.68 31.92 30.70 30.20 WTP 23.88 24.47 24.02 23.51 Average 35.04 34.24 34.40 33.95 OUT-OF-DOMAIN SETTING NTDN 48.62 49.37 49.44 49.47 WSJ 38.55 39.63 39.00 38.93 USAT 28.85 29.57 29.09 28.99 TG 24.15 24.89 24.10 24.18 TIME 21.67 22.45 22.20 22.12 Average 33.68 32.78 33.17 33.24 1.47 ↓ 1.35 ↓ 1.24 ↓ 0.71 ↓ ∆R CROSS-DATASET SETTING 40.30 CNN/DM 40.11 39.82 40.28 Table 3: Rouge-1 performance of our four learning ∆R = strategies on the MULTI-SUM dataset."
+            },
+            {
+              "citation": 8,
+              "chunk_id": 833,
+              "source": "1908.11664.pdf",
+              "page": 6,
+              "text": "The excellent results under CROSS-DATASET settings further suggest the meta-learning strategy successfully improve the model transferability not only among the domains of MULTI-SUM but also across different datasets. ModelII Supported by the smaller ∆R com- BERT pared with ModelI Base, we can draw the conclu- sion that BERT shows some domain generalization ability 7 within MULTI-SUM."
+            },
+            {
+              "citation": 9,
+              "chunk_id": 819,
+              "source": "1908.11664.pdf",
+              "page": 5,
+              "text": "Figure 1: The gradient update mechanism of the meta learning strategy of ModelIV Meta. modify shared parameters, which makes it easier to update parameters along different directions. ModelIV In order to overcome the above lim- Meta itations, we try to bridge the communication gap between different domains when updating shared parameters via meta-learning (Finn et al., 2017; Li et al., 2017; Liu and Huang, 2018)."
+            },
+            {
+              "citation": 14,
+              "chunk_id": 809,
+              "source": "1908.11664.pdf",
+              "page": 4,
+              "text": "ModelI This is a simple but effective model Base for multi-domain learning, in which all domains are aggregated together and will be further used for training a set of shared parameters. Notably, domains in this model are not explicitly informed of their differences. Therefore, the loss function of each domain can be written as: L(k) = L(BASIC(S(k), θ(s)), Y(k)) (1) I where BASIC denotes our CNN-Transformer en- coder framework (As described in Section 3)."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "The four learning strategies investigated are: ModelI Base, ModelII BERT, ModelIII Tag, and ModelIV Meta [6].\n\nThe paper states that it investigates four learning strategies and examines their abilities to deal with the domain shift problem [1]. All four strategy names are listed in the results table of the experiments on the MULTI-SUM dataset [6]. Specifically: ModelI Base is a simple multi-domain learning model in which all domains are aggregated and used to train a set of shared parameters, with domains not explicitly informed of their differences [14]; ModelII BERT is a BERT-based strategy, and its smaller ∆R compared with ModelI Base suggests BERT shows some domain generalization ability within MULTI-SUM [8]; and ModelIV Meta uses meta-learning to bridge the communication gap between different domains when updating shared parameters [9]. The passages provided only name ModelIII Tag [6] and do not describe its mechanism further.",
+    "citation_check": {
+      "cited_numbers": [
+        1,
+        6,
+        8,
+        9,
+        14
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 765,
+          "source": "1908.11664.pdf",
+          "page": 1,
+          "text": "Then we re-purpose a multi- domain summarization dataset and verify how the gap between different domains inﬂuences the performance of neural summarization mod- els. Furthermore, we investigate four learning strategies and examine their abilities to deal with the domain shift problem. Experimental results on three different settings show their different characteristics in our new testbed."
+        },
+        {
+          "citation": 6,
+          "chunk_id": 830,
+          "source": "1908.11664.pdf",
+          "page": 6,
+          "text": "Domains ModelI Basic ModelII BERT ModelIII T ag ModelIV Meta IN-DOMAIN SETTING FN 49.13 49.70 49.54 49.06 IN- CNN 41.84 41.59 42.14 41.73 MA 35.40 36.46 35.51 34.85 NYT 30.68 31.92 30.70 30.20 WTP 23.88 24.47 24.02 23.51 Average 35.04 34.24 34.40 33.95 OUT-OF-DOMAIN SETTING NTDN 48.62 49.37 49.44 49.47 WSJ 38.55 39.63 39.00 38.93 USAT 28.85 29.57 29.09 28.99 TG 24.15 24.89 24.10 24.18 TIME 21.67 22.45 22.20 22.12 Average 33.68 32.78 33.17 33.24 1.47 ↓ 1.35 ↓ 1.24 ↓ 0.71 ↓ ∆R CROSS-DATASET SETTING 40.30 CNN/DM 40.11 39.82 40.28 Table 3: Rouge-1 performance of our four learning ∆R = strategies on the MULTI-SUM dataset."
+        },
+        {
+          "citation": 8,
+          "chunk_id": 833,
+          "source": "1908.11664.pdf",
+          "page": 6,
+          "text": "The excellent results under CROSS-DATASET settings further suggest the meta-learning strategy successfully improve the model transferability not only among the domains of MULTI-SUM but also across different datasets. ModelII Supported by the smaller ∆R com- BERT pared with ModelI Base, we can draw the conclu- sion that BERT shows some domain generalization ability 7 within MULTI-SUM."
+        },
+        {
+          "citation": 9,
+          "chunk_id": 819,
+          "source": "1908.11664.pdf",
+          "page": 5,
+          "text": "Figure 1: The gradient update mechanism of the meta learning strategy of ModelIV Meta. modify shared parameters, which makes it easier to update parameters along different directions. ModelIV In order to overcome the above lim- Meta itations, we try to bridge the communication gap between different domains when updating shared parameters via meta-learning (Finn et al., 2017; Li et al., 2017; Liu and Huang, 2018)."
+        },
+        {
+          "citation": 14,
+          "chunk_id": 809,
+          "source": "1908.11664.pdf",
+          "page": 4,
+          "text": "ModelI This is a simple but effective model Base for multi-domain learning, in which all domains are aggregated together and will be further used for training a set of shared parameters. Notably, domains in this model are not explicitly informed of their differences. Therefore, the loss function of each domain can be written as: L(k) = L(BASIC(S(k), θ(s)), Y(k)) (1) I where BASIC denotes our CNN-Transformer en- coder framework (As described in Section 3)."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

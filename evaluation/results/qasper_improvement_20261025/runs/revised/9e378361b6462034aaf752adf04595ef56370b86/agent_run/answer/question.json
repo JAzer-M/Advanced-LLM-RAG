@@ -1,0 +1,185 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "For the paper \"And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue\" (arXiv: 1709.05295), answer this question: What bootstrapping methodology was used to find new patterns?",
+  "kb_version": "qasper-holdout-20261025",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": false,
+    "drafts": [
+      "The paper used AutoSlog-TS embedded in a bootstrapping framework: initial patterns were learned from labeled training data, then high-precision patterns were matched against unannotated posts to acquire new patterns, with the process repeating over four iterations.\n\nSpecifically, the authors use AutoSlog-TS (Riloff, 1996) to extract linguistic expressions from annotated texts, and because the IAC contains many unannotated debate posts, they embed AutoSlog-TS in a bootstrapping framework to learn additional patterns from the unannotated texts [8], [3]. Initially, the labeled training data is given to AutoSlog-TS, which generates patterns and associated statistics [3]. The high-precision patterns are then matched against the 11,561 unannotated posts from 4forums.com; in each bootstrapping round, posts matching at least 3 patterns associated with a given class are assigned to that class [5]. A Bootstrapped Data Balancer then randomly selects a balanced subset of the newly classified posts to maintain the same proportion of FACTUAL vs. FEELING documents, and these new documents are added to the labeled set so the bootstrapping process repeats, using the same threshold values to select new high-precision patterns across iterations [6]. The algorithm was run for four iterations [9], with new patterns added after each round [7]."
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "The paper used AutoSlog-TS embedded in a bootstrapping framework: initial patterns were learned from labeled training data, then high-precision patterns were matched against unannotated posts to acquire new patterns, with the process repeating over four iterations.\n\nSpecifically, the authors use AutoSlog-TS (Riloff, 1996) to extract linguistic expressions from annotated texts, and because the IAC contains many unannotated debate posts, they embed AutoSlog-TS in a bootstrapping framework to learn additional patterns from the unannotated texts [8], [3]. Initially, the labeled training data is given to AutoSlog-TS, which generates patterns and associated statistics [3]. The high-precision patterns are then matched against the 11,561 unannotated posts from 4forums.com; in each bootstrapping round, posts matching at least 3 patterns associated with a given class are assigned to that class [5]. A Bootstrapped Data Balancer then randomly selects a balanced subset of the newly classified posts to maintain the same proportion of FACTUAL vs. FEELING documents, and these new documents are added to the labeled set so the bootstrapping process repeats, using the same threshold values to select new high-precision patterns across iterations [6]. The algorithm was run for four iterations [9], with new patterns added after each round [7].",
+              "reason": "答案完整且准确地描述了论文的自举方法论：将AutoSlog-TS嵌入自举框架，从标注训练数据学习初始模式，用高精度模式匹配未标注帖子（至少匹配3个模式归入该类），由Bootstrapped Data Balancer随机选择平衡子集加入标注集并重复，共运行四次迭代。所有关键数字（11,561篇未标注帖子、至少3个模式、四次迭代）和细节均与原文一致，且每个引用均在其标注位置支持相应陈述，无多余无依据断言。",
+              "citations": [
+                {
+                  "number": 3,
+                  "quote": "Since the IAC data set contains a large num- ber of unannotated debate forum posts, we embedd AutoSlog-TS in a bootstrapping framework to learn additional patterns. The ﬂow diagram for the boot- strapping system is shown in Figure 4. Figure 4: Flow Diagram for Bootstrapping Process Initially, we give the labeled training data to AutoSlog-TS, which generates patterns and asso- ciated statistics."
+                },
+                {
+                  "number": 5,
+                  "quote": "The high-precision patterns are then used in the bootstrapping framework to identify more FACTUAL and FEELING texts from the 11,561 unannotated posts, also from 4forums.com. For each round of bootstrapping, the current set of FACTUAL and FEELING patterns are matched against the unanno- tated texts, and posts that match at least 3 patterns associated with a given class are assigned to that class."
+                },
+                {
+                  "number": 6,
+                  "quote": "As shown in Figure 4, the Bootstrapped Data Balancer then randomly selects a balanced subset of the newly classiﬁed posts to maintain the same proportion of FACTUAL vs. FEELING documents throughout the bootstrapping process. These new documents are added to the set of labeled docu- ments, and the bootstrapping process repeats. We use the same threshold values to select new high-precision patterns for all iterations."
+                },
+                {
+                  "number": 7,
+                  "quote": "Table 3 shows the number of patterns learned from the annotated data (Iter 0) and the number of new patterns added after each bootstrapping itera- tion."
+                },
+                {
+                  "number": 8,
+                  "quote": "To accomplish this, we use the AutoSlog-TS sys- tem (Riloff, 1996) to extract linguistic expressions from the annotated texts. Since the IAC also con- tains a large collection of unannotated texts, we then embed AutoSlog-TS in a bootstrapping framework to learn additional linguistic expressions from the unannotated texts."
+                },
+                {
+                  "number": 9,
+                  "quote": "We ran the bootstrapping algorithm for four iterations."
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            3,
+            5,
+            6,
+            7,
+            8,
+            9
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 3,
+              "chunk_id": 333,
+              "source": "1709.05295.pdf",
+              "page": 4,
+              "text": "2.2.2 Bootstrapping Procedure Since the IAC data set contains a large num- ber of unannotated debate forum posts, we embedd AutoSlog-TS in a bootstrapping framework to learn additional patterns. The ﬂow diagram for the boot- strapping system is shown in Figure 4. Figure 4: Flow Diagram for Bootstrapping Process Initially, we give the labeled training data to AutoSlog-TS, which generates patterns and asso- ciated statistics."
+            },
+            {
+              "citation": 5,
+              "chunk_id": 337,
+              "source": "1709.05295.pdf",
+              "page": 5,
+              "text": "The high-precision patterns are then used in the bootstrapping framework to identify more FACTUAL and FEELING texts from the 11,561 unannotated posts, also from 4forums.com. For each round of bootstrapping, the current set of FACTUAL and FEELING patterns are matched against the unanno- tated texts, and posts that match at least 3 patterns associated with a given class are assigned to that class."
+            },
+            {
+              "citation": 6,
+              "chunk_id": 338,
+              "source": "1709.05295.pdf",
+              "page": 5,
+              "text": "As shown in Figure 4, the Bootstrapped Data Balancer then randomly selects a balanced subset of the newly classiﬁed posts to maintain the same proportion of FACTUAL vs. FEELING documents throughout the bootstrapping process. These new documents are added to the set of labeled docu- ments, and the bootstrapping process repeats. We use the same threshold values to select new high- precision patterns for all iterations."
+            },
+            {
+              "citation": 7,
+              "chunk_id": 349,
+              "source": "1709.05295.pdf",
+              "page": 6,
+              "text": "Table 3: Number of New Patterns Added after Each Round of Bootstrapping FACT FEEL Total Iter 0 1,212 662 1,874 Iter 1 2,170 1,609 3,779 Iter 2 2,522 1,728 4,520 Iter 3 3,147 2,037 5,184 Iter 4 3,696 2,134 5,830 Table 3 shows the number of patterns learned from the annotated data (Iter 0) and the number of new patterns added after each bootstrapping itera- tion."
+            },
+            {
+              "citation": 8,
+              "chunk_id": 323,
+              "source": "1709.05295.pdf",
+              "page": 3,
+              "text": "To accomplish this, we use the AutoSlog-TS sys- tem (Riloff, 1996) to extract linguistic expressions from the annotated texts. Since the IAC also con- tains a large collection of unannotated texts, we then embed AutoSlog-TS in a bootstrapping framework to learn additional linguistic expressions from the unannotated texts. First, we brieﬂy describe the AutoSlog-TS pattern learner and the set of pattern templates that we used."
+            },
+            {
+              "citation": 9,
+              "chunk_id": 341,
+              "source": "1709.05295.pdf",
+              "page": 5,
+              "text": "We ran the bootstrapping algorithm for four iterations. The upper section of Table 1 shows the Preci- sion and Recall results for the patterns learned dur- ing bootstrapping. The Iter 0 row shows the perfor- mance of the patterns learned only from the original, annotated training data. The remaining rows show the results for the patterns learned from the unan- notated texts during bootstrapping, added cumula- tively. We show the results after each iteration of bootstrapping."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "The paper used AutoSlog-TS embedded in a bootstrapping framework: initial patterns were learned from labeled training data, then high-precision patterns were matched against unannotated posts to acquire new patterns, with the process repeating over four iterations.\n\nSpecifically, the authors use AutoSlog-TS (Riloff, 1996) to extract linguistic expressions from annotated texts, and because the IAC contains many unannotated debate posts, they embed AutoSlog-TS in a bootstrapping framework to learn additional patterns from the unannotated texts [8], [3]. Initially, the labeled training data is given to AutoSlog-TS, which generates patterns and associated statistics [3]. The high-precision patterns are then matched against the 11,561 unannotated posts from 4forums.com; in each bootstrapping round, posts matching at least 3 patterns associated with a given class are assigned to that class [5]. A Bootstrapped Data Balancer then randomly selects a balanced subset of the newly classified posts to maintain the same proportion of FACTUAL vs. FEELING documents, and these new documents are added to the labeled set so the bootstrapping process repeats, using the same threshold values to select new high-precision patterns across iterations [6]. The algorithm was run for four iterations [9], with new patterns added after each round [7].",
+    "citation_check": {
+      "cited_numbers": [
+        3,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 3,
+          "chunk_id": 333,
+          "source": "1709.05295.pdf",
+          "page": 4,
+          "text": "2.2.2 Bootstrapping Procedure Since the IAC data set contains a large num- ber of unannotated debate forum posts, we embedd AutoSlog-TS in a bootstrapping framework to learn additional patterns. The ﬂow diagram for the boot- strapping system is shown in Figure 4. Figure 4: Flow Diagram for Bootstrapping Process Initially, we give the labeled training data to AutoSlog-TS, which generates patterns and asso- ciated statistics."
+        },
+        {
+          "citation": 5,
+          "chunk_id": 337,
+          "source": "1709.05295.pdf",
+          "page": 5,
+          "text": "The high-precision patterns are then used in the bootstrapping framework to identify more FACTUAL and FEELING texts from the 11,561 unannotated posts, also from 4forums.com. For each round of bootstrapping, the current set of FACTUAL and FEELING patterns are matched against the unanno- tated texts, and posts that match at least 3 patterns associated with a given class are assigned to that class."
+        },
+        {
+          "citation": 6,
+          "chunk_id": 338,
+          "source": "1709.05295.pdf",
+          "page": 5,
+          "text": "As shown in Figure 4, the Bootstrapped Data Balancer then randomly selects a balanced subset of the newly classiﬁed posts to maintain the same proportion of FACTUAL vs. FEELING documents throughout the bootstrapping process. These new documents are added to the set of labeled docu- ments, and the bootstrapping process repeats. We use the same threshold values to select new high- precision patterns for all iterations."
+        },
+        {
+          "citation": 7,
+          "chunk_id": 349,
+          "source": "1709.05295.pdf",
+          "page": 6,
+          "text": "Table 3: Number of New Patterns Added after Each Round of Bootstrapping FACT FEEL Total Iter 0 1,212 662 1,874 Iter 1 2,170 1,609 3,779 Iter 2 2,522 1,728 4,520 Iter 3 3,147 2,037 5,184 Iter 4 3,696 2,134 5,830 Table 3 shows the number of patterns learned from the annotated data (Iter 0) and the number of new patterns added after each bootstrapping itera- tion."
+        },
+        {
+          "citation": 8,
+          "chunk_id": 323,
+          "source": "1709.05295.pdf",
+          "page": 3,
+          "text": "To accomplish this, we use the AutoSlog-TS sys- tem (Riloff, 1996) to extract linguistic expressions from the annotated texts. Since the IAC also con- tains a large collection of unannotated texts, we then embed AutoSlog-TS in a bootstrapping framework to learn additional linguistic expressions from the unannotated texts. First, we brieﬂy describe the AutoSlog-TS pattern learner and the set of pattern templates that we used."
+        },
+        {
+          "citation": 9,
+          "chunk_id": 341,
+          "source": "1709.05295.pdf",
+          "page": 5,
+          "text": "We ran the bootstrapping algorithm for four iterations. The upper section of Table 1 shows the Preci- sion and Recall results for the patterns learned dur- ing bootstrapping. The Iter 0 row shows the perfor- mance of the patterns learned only from the original, annotated training data. The remaining rows show the results for the patterns learned from the unan- notated texts during bootstrapping, added cumula- tively. We show the results after each iteration of bootstrapping."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

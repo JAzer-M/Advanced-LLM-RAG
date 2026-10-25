@@ -1,0 +1,2 @@
+The answer failed review, so no reliable factual answer can be delivered this time.
+- Generating Major Types of Chinese Classical Poetry in a Uniformed Framework: For the paper "Generating Major Types of Chinese Classical Poetry in a Uniformed Framework" (arXiv: 2003.11528), answer this question: What are the types of chinese poetry that are generated?; The answer to this requirement still needs checking.

@@ -19,6 +19,7 @@ from src import api_llm as api
 from src.answer_language import localized
 from src.model_json import loads_model_json
 from src.citation_validation import has_source_quote
+from src.query_scope import paper_question
 
 # 整个诊断批次最多六次请求（通常三题各两次），不是每题六次。
 MAX_API_CALLS = 6
@@ -59,6 +60,9 @@ def names_subject(subject, text):
 def search_query(requirement):
     """Bind the query to one reviewed requirement instead of inventing new scope."""
     # 原始联合引文只用于审计；搜索不能把已投影掉的另一个主体重新带回。
+    bound = paper_question(requirement['need'])
+    if bound and normalize(requirement['subject']) == normalize(bound['title']):
+        return bound['question']
     return f"{requirement['subject']}: {requirement['need']} | {requirement['need']}"
 
 
@@ -171,6 +175,11 @@ def bind_requirements(proposal, query):
     requirements = []
     for item in proposal['requirements']:
         quote = item['question_quote']
+        bound = paper_question(query)
+        if (bound and len(subjects) == 1 and normalize(item['subject']) == normalize(bound['title'])
+                and normalize(quote) == normalize(bound['question'])):
+            # 题名是用户明确提供的唯一上下文；扩展为真实连续原题，不猜测跨论文主体。
+            quote = query
         prefix=scoped_prefix(query,subjects)
         if (not names_subject(item['subject'],quote) and prefix
                 and normalize(item['subject']) in prefix[0]

@@ -1,0 +1,102 @@
+[
+  {
+    "number": 1,
+    "phase": "decompose",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n   For an open-ended \"difference between X and Y\" question, retrieve each\n   entity's purpose and core approach. Do not replace it with comparisons\n   between versions of X or versions of Y, or request unasked benchmark scores.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nwhat domains are explored in this paper?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-25T03:32:26.211222+00:00",
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+      "requested_model": "cn:glm-5.3",
+      "reported_model": "glm-5.3",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 576,
+        "cached_tokens": 576,
+        "completion_thinking_tokens": 7,
+        "completion_tokens": 25,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 7,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.05,
+        "prompt_cache_hit_tokens": 576,
+        "prompt_cache_miss_tokens": 99,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 675,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 576,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 700
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.185
+  },
+  {
+    "number": 2,
+    "phase": "probe",
+    "prompt": "You are an AI research assistant.\n\nRequired answer language: English.\nBegin with a short direct answer in its own paragraph, including any condition needed for correctness. Use Yes/No for a supported binary question, or the requested fact/keywords for a factual question. Then give only the necessary cited explanation after a blank line. A partial answer must keep the supported facts and explicitly identify the remaining gap.\n\nOnly when none of the requested facts can be supported, start with 'Insufficient evidence.' (or '当前证据不足。' when answering in Chinese). Do not use this refusal prefix for a partial answer.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in the same language as the user's question. If the question explicitly asks for a particular language, use that language instead. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported question, begin with 当前证据不足 when answering in Chinese, or with \"Insufficient evidence\" when answering in English, and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n14. Prioritize explicit subquestions, correct facts and citations, and conditions/units that change the conclusion. Add definitions or steps only when needed for the task. Optional background, stylistic preferences and unasked exceptions are not completeness requirements. Failure to retrieve a paper does not establish that the paper never reported a result.\n\n15. For a comparison, synthesize separately supported facts about the requested objects, citing each side. A literal sentence comparing both papers is NOT required. Different purposes, inputs or mechanisms can be contrasted from their respective descriptions. This does not establish causality or which method performs better. Do not call the comparison unsupported merely because no head-to-head experiment is provided.\n16. Lead with the main difference the user asked about. For a broad comparison, explain what each object does and its supported core approach; do not replace this with differences between versions of each object, benchmark tables or unasked numerical results.\n\nContext:\nOriginal passages:\n[1] Source: 1908.11664.pdf | Page: 9 | Section: 7 Conclusion\nTitle: Exploring Domain Shift in Extractive Text Summarization\n7 Conclusion In this paper, we explore publication in the con- text of the domain and investigate the domain shift problem in summarization. When veriﬁed its exis- tence, we propose to build a multi-domain testbed for summarization that requires both training and measuring performance on a set of domains.\n\n[2] Source: 1908.11664.pdf | Page: 4 | Section: 3 Analytical Experiment for Domain\nTitle: Exploring Domain Shift in Extractive Text Summarization\nThe other cells Vij = Rij −Rjj, i̸ = j, which represents that for the same test domain j, how many improvements we obtained when we switch from training domain i to j. Positive values are higher than the benchmark, and negative values are less than the benchmark. In this paper, we implement a simple but pow- erful model based on the encoder-decoder archi- tecture.\n\n[3] Source: 1908.11664.pdf | Page: 3 | Section: 2.2 Publications as Domain\nTitle: Exploring Domain Shift in Extractive Text Summarization\nThree measures refer to COVERAGE, DENSITY and COM- PRESSION respectively. LEAD and EXT-ORACLE are two common baselines for summarization. All measures and baselines are calculated on the test set of the corresponding publication. The top ﬁve publication are used as source domains for training and the bottom ones are viewed as OUT-OF-DOMAIN. LEAD baseline concatenates the ﬁrst few sen- tences as the summary and calculates its ROUGE score.\n\n[4] Source: 1908.11664.pdf | Page: 1 | Section: None\nTitle: Exploring Domain Shift in Extractive Text Summarization\nAs a result, the model is under- utilizing the nature of the training data due to ignoring the difference in the distribution of training sets and shows poor generalization on the unseen domain. With the above limi- tation in mind, in this paper, we ﬁrst extend the conventional deﬁnition of the domain from categories into data sources for the text sum- marization task.\n\n[5] Source: 1908.11664.pdf | Page: 6 | Section: 5.2 Quantitative Results\nTitle: Exploring Domain Shift in Extractive Text Summarization\n5.2 Quantitative Results We compare our models by ROUGE-1 scores in Table 3. Note that we select two sentences for MULTI-SUM domains and three sentences for CNN/Daily Mail due to the different average lengths of reference summaries. ModelI Basic vs ModelIII From Table 3, we ob- Tag serve that the domain-aware model outperforms the monolithic model under both IN-DOMAIN and OUT- OF-DOMAIN settings.\n\n[6] Source: 1908.11664.pdf | Page: 2 | Section: 2.2 Publications as Domain\nTitle: Exploring Domain Shift in Extractive Text Summarization\n2.2 Publications as Domain In this paper, we extend the concept into the article sources, which can be easily obtained and clearly deﬁned4. Three Measures We assume that the publica- tions of news may also affect data distribution and thus inﬂuence the summarization styles. In order to verify our hypothesis, we make use of three indicators (COVERAGE, DENSITY and COMPRES- SION) deﬁned by Grusky et al. (2018) to measure the overlap and compression between the (docu- ment, summary) pair.\n\n[7] Source: 1908.11664.pdf | Page: 9 | Section: 7 Conclusion\nTitle: Exploring Domain Shift in Extractive Text Summarization\nProceedings of the 54th Annual Meeting of the As- sociation for Computational Linguistics (Volume 1: Long Papers), volume 1, pages 484–494. Jackie Chi Kit Cheung and Gerald Penn. Prob- abilistic domain modelling with contextualized dis- tributional semantic vectors. In Proceedings of the 51st Annual Meeting of the Association for Compu- tational Linguistics (Volume 1: Long Papers), vol- ume 1, pages 392–401. Jackie Chi Kit Cheung and Gerald Penn.\n\n[8] Source: 1908.11664.pdf | Page: 4 | Section: 4.1 Four Learning Strategies\nTitle: Exploring Domain Shift in Extractive Text Summarization\nAssuming that there are K related domains, we refer to Dk as a dataset with Nk samples for domain k. Dk = {(S(k) , Y (k) i=1, where S(k) and Y (k) )}Nk represent i i i i a sequence of sentences and the corresponding la- bel sequence from a document of domain k, re- spectively. The goal is to estimate the conditional probability P(Y |S) by utilizing the complementar- ities among different domains.\n\n[9] Source: 1908.11664.pdf | Page: 5 | Section: 4.1 Four Learning Strategies\nTitle: Exploring Domain Shift in Extractive Text Summarization\nHere, the introduced communicating protocol claims that each domain should tell others what its updating details (gradients) are. Through its different updating behaviors of different domains can be more consistent. Formally, given a main domain A and an aux- iliary domain B, the model will ﬁrst compute the gradients of A ∇θLA with regard to the model pa- rameters θ. Then the model will be updated with the gradients and calculate the gradients of B.\n\n[10] Source: 1908.11664.pdf | Page: 2 | Section: 1 Introduction\nTitle: Exploring Domain Shift in Extractive Text Summarization\ndeﬁnition.2 Both of these prevent previous work from the full use of domains in existing datasets or building a new multi-domain dataset that not only can be used for multi-domain learning but also is easy to explore domain connection across datasets. In this paper, we focus on the extractive summa- rization and demonstrate that news publications can cause data distribution differences, which means that they can also be deﬁned as domains.\n\n[11] Source: 1908.11664.pdf | Page: 9 | Section: 7 Conclusion\nTitle: Exploring Domain Shift in Extractive Text Summarization\nUn- der these new settings, we propose four learning schemes to give a preliminary explore in character- istics of different learning strategies when dealing with multi-domain summarization tasks. Acknowledgment We thank Jackie Chi Kit Cheung for useful com- ments and discussions. The research work is sup- ported by National Natural Science Foundation of China (No.\n\n[12] Source: 1908.11664.pdf | Page: 1 | Section: 1 Introduction\nTitle: Exploring Domain Shift in Extractive Text Summarization\nOnly DUC and NYT are annotated with document categories, and DUC is designed only for com- petition test.\n\nEvidence guidance:\n- Rule-based subject attribution: DUC; passage: “2 Both of these prevent previous work from the full use of domains in existing datasets or building a new multi-domain dataset that not only can be used for multi-domain learning but also is easy to explore domain connection across datasets.” [10][12]\n- Rule-based subject attribution: DUC; passage: “In this paper, we focus on the extractive summa- rization and demonstrate that news publications can cause data distribution differences, which means that they can also be deﬁned as domains.” [10][12]\n\nQuestion:\nFor the paper \"Exploring Domain Shift in Extractive Text Summarization\" (arXiv: 1908.11664), answer this question: what domains are explored in this paper?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n- For a broad difference-between question with no requested aspect, use 3-5 sentences: lead with the purposes, then the supported core methods. Prefer primary-paper abstract/introductory definitions. Omit training/test hyperparameters and unasked performance caveats.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-25T03:32:34.768988+00:00",
+    "response": {
+      "answer": "The paper explores domains defined by news publications (data sources) for extractive text summarization, extending the concept of domain from conventional categories into article sources, with the top five publications used as source domains for training and the bottom ones viewed as OUT-OF-DOMAIN.\n\nThe authors extend the conventional definition of the domain from categories into data sources for the text summarization task [4], focusing on extractive summarization and demonstrating that news publications can cause data distribution differences, meaning they can also be defined as domains [10]. Publications are used as domains because they can be easily obtained and clearly defined [6]. The top five publications are used as source domains for training and the bottom ones are viewed as OUT-OF-DOMAIN [3].",
+      "requested_model": "cn:glm-5.3",
+      "reported_model": "glm-5.3",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 2560,
+        "cached_tokens": 2560,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 152,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.19,
+        "prompt_cache_hit_tokens": 2560,
+        "prompt_cache_miss_tokens": 17,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2577,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 2560,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2729
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 3.859
+  }
+]

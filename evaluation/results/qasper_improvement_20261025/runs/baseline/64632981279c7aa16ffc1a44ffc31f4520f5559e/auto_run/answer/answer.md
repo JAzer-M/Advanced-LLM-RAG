@@ -1,0 +1,3 @@
+The paper evaluates effectiveness with two metrics: coverage, i.e., how much of the verb phrases in natural language the solution can find corresponding patterns for, and precision, i.e., how much of the phrases and their corresponding patterns are correctly matched [1].
+
+They are computed as coverage = n_cover / n_all and precision = n_correct / n_cover, where n_cover is the number of test phrases for which the solution finds corresponding patterns, n_all is the total number of phrases, and n_correct is the number of phrases whose assigned patterns are correct. Precision is evaluated by randomly selecting 100 verb phrases from the test data and having volunteers label the correctness of their assigned patterns [2].

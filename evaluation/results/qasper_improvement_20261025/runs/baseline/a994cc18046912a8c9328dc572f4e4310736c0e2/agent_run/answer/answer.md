@@ -1,0 +1,2 @@
+Insufficient evidence to reliably answer these requirements:
+- "Unfolding and Shrinking Neural Machine Translation Ensembles": For the paper "Unfolding and Shrinking Neural Machine Translation Ensembles" (arXiv: 1704.03279), answer this question: Do they explore other language pairs?; No passage establishes whether the paper explores language pairs other than the Ja-En WAT pair; an explicit statement of the experimental language pairs (or their limitation to a single pair) is still unsupported.

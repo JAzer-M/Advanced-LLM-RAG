@@ -1,0 +1,183 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "For the paper \"Hard but Robust, Easy but Sensitive: How Encoder and Decoder Perform in Neural Machine Translation\" (arXiv: 1908.06259), answer this question: How do they determine that a decoder handles an easier task than the encoder?",
+  "kb_version": "qasper-test50-20261024",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": true,
+    "drafts": [
+      "They determine this via two experiments: varying layer depth and comparing convergence speed, both showing the encoder's task is harder.\n\nFirst, they vary the number of layers for the encoder and decoder respectively; adding more layers to the encoder achieves larger improvements than to the decoder, and deeper components with more gains indicate a task needing more representation capability, which is harder to learn [2, 9].\n\nSecond, they compare convergence speed by fixing the parameters of a well-trained decoder (encoder) and just updating the parameters of the encoder (decoder), reasoning that a component needing more training time handles a more difficult task; measuring BLEU scores along training on four datasets shows the decoder converges faster than the encoder [2, 7, 10]. Together these results suggest the decoder handles an easier task than the encoder in NMT [2, 8].",
+      "They determine this via two experiments: varying layer depth and comparing convergence speed, both showing the encoder's task is harder.\n\nFirst, they vary the number of layers for the encoder and decoder respectively; adding more layers to the encoder achieves larger improvements than to the decoder, and deeper components with more gains indicate a task needing more representation capability, which is harder to learn [2][9].\n\nSecond, they compare convergence speed by fixing the parameters of a well-trained decoder (encoder) and just updating the parameters of the encoder (decoder), reasoning that a component needing more training time handles a more difficult task; measuring BLEU scores along the training process on all four datasets shows the decoder converges faster than the encoder [2][7][10]. Together these results suggest the decoder handles an easier task than the encoder in NMT [2][8]."
+    ],
+    "reviews": [
+      {
+        "review_error": "Review answer_quote is not in the actual answer.",
+        "citation_check": {
+          "cited_numbers": [],
+          "invalid_numbers": [],
+          "malformed_markers": [
+            "2, 9",
+            "2, 7, 10",
+            "2, 8"
+          ],
+          "has_citations": false,
+          "require_citations": true,
+          "structure_passed": false,
+          "cited_sources": [],
+          "semantic_support": "requires_manual_review"
+        }
+      },
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "They determine this via two experiments: varying layer depth and comparing convergence speed, both showing the encoder's task is harder. First, they vary the number of layers for the encoder and decoder respectively; adding more layers to the encoder achieves larger improvements than to the decoder, and deeper components with more gains indicate a task needing more representation capability, which is harder to learn [2][9]. Second, they compare convergence speed by fixing the parameters of a well-trained decoder (encoder) and just updating the parameters of the encoder (decoder), reasoning that a component needing more training time handles a more difficult task; measuring BLEU scores along the training process on all four datasets shows the decoder converges faster than the encoder [2][7][10]. Together these results suggest the decoder handles an easier task than the encoder in NMT [2][8].",
+              "reason": "答案准确覆盖论文判断解码器任务更简单的两个实验依据：层数加深收益对比和固定另一组件参数比较收敛速度，均与原文一致；引用2、7、9、10、8均恰当地支持对应陈述，无无根据的额外断言。",
+              "citations": [
+                {
+                  "number": 2,
+                  "quote": "1) We ﬁnd that adding more layers to the encoder achieves larger improvements than adding more layers to the decoder. 2) We also compare the training time of the en- coder and decoder by ﬁxing the parameters of a well-trained decoder (encoder), and just up- date the parameters of the encoder (decoder). We found that the decoder converges faster than the encoder. These two results suggest that the decoder handles an easier task than the encoder in NMT."
+                },
+                {
+                  "number": 9,
+                  "quote": "We vary the number of layers for the encoder and decoder respectively, to investigate which can achieve more gains with deeper layers. Deeper en- coder (decoder) with more gains can indicate the task that encoder (decoder) handles needs more representation capability, which is harder to learn."
+                },
+                {
+                  "number": 7,
+                  "quote": "We further investigate the difﬁculty of the task for the encoder and decoder by comparing their convergence speed. Encoder (decoder) that needs more training time indicates the task that encoder (decoder) handles is more difﬁcult."
+                },
+                {
+                  "number": 10,
+                  "quote": "We show the BLEU scores along the training process on all the four datasets in Fig- ure 1c, which demonstrates that the decoder con- verges faster than the encoder."
+                },
+                {
+                  "number": 8,
+                  "quote": "increasing the layer of encoder brings more gains than increasing the layer of the decoder, and encoder needs more training time than the decoder, which demonstrate that the encoder of the NMT model handles a more difﬁcult task than the decoder."
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            2,
+            7,
+            8,
+            9,
+            10
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 2,
+              "chunk_id": 1047,
+              "source": "1908.06259.pdf",
+              "page": 1,
+              "text": "1) We ﬁnd that adding more layers to the encoder achieves larger improvements than adding more layers to the decoder. 2) We also compare the training time of the en- coder and decoder by ﬁxing the parameters of a well-trained decoder (encoder), and just up- date the parameters of the encoder (decoder). We found that the decoder converges faster than the encoder. These two results suggest that the decoder handles an easier task than the encoder in NMT."
+            },
+            {
+              "citation": 7,
+              "chunk_id": 1061,
+              "source": "1908.06259.pdf",
+              "page": 2,
+              "text": "3.2 Encoder Converges Slower than Decoder We further investigate the difﬁculty of the task for the encoder and decoder by comparing their convergence speed. Encoder (decoder) that needs more training time indicates the task that encoder (decoder) handles is more difﬁcult. We evaluate the convergence speed for the en- coder by initializing the model with the param- eters of a well-trained decoder and ﬁxing them during training, and initializing other components with random variables."
+            },
+            {
+              "citation": 8,
+              "chunk_id": 1066,
+              "source": "1908.06259.pdf",
+              "page": 3,
+              "text": "Discussion From the analyses in the last two subsections, it can be seen that increasing the layer of encoder brings more gains than increasing the layer of the decoder, and encoder needs more training time than the decoder, which demonstrate that the encoder of the NMT model handles a more difﬁcult task than the decoder."
+            },
+            {
+              "citation": 9,
+              "chunk_id": 1058,
+              "source": "1908.06259.pdf",
+              "page": 2,
+              "text": "3.1 Deeper Encoder Brings More Gains Than Deeper Decoder We vary the number of layers for the encoder and decoder respectively, to investigate which can achieve more gains with deeper layers. Deeper en- coder (decoder) with more gains can indicate the task that encoder (decoder) handles needs more representation capability, which is harder to learn."
+            },
+            {
+              "citation": 10,
+              "chunk_id": 1062,
+              "source": "1908.06259.pdf",
+              "page": 2,
+              "text": "We follow the opposite practice when evaluating the convergence speed for the decoder. We show the BLEU scores along the training process on all the four datasets in Fig- ure 1c, which demonstrates that the decoder con- verges faster than the encoder."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "They determine this via two experiments: varying layer depth and comparing convergence speed, both showing the encoder's task is harder.\n\nFirst, they vary the number of layers for the encoder and decoder respectively; adding more layers to the encoder achieves larger improvements than to the decoder, and deeper components with more gains indicate a task needing more representation capability, which is harder to learn [2][9].\n\nSecond, they compare convergence speed by fixing the parameters of a well-trained decoder (encoder) and just updating the parameters of the encoder (decoder), reasoning that a component needing more training time handles a more difficult task; measuring BLEU scores along the training process on all four datasets shows the decoder converges faster than the encoder [2][7][10]. Together these results suggest the decoder handles an easier task than the encoder in NMT [2][8].",
+    "citation_check": {
+      "cited_numbers": [
+        2,
+        7,
+        8,
+        9,
+        10
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 2,
+          "chunk_id": 1047,
+          "source": "1908.06259.pdf",
+          "page": 1,
+          "text": "1) We ﬁnd that adding more layers to the encoder achieves larger improvements than adding more layers to the decoder. 2) We also compare the training time of the en- coder and decoder by ﬁxing the parameters of a well-trained decoder (encoder), and just up- date the parameters of the encoder (decoder). We found that the decoder converges faster than the encoder. These two results suggest that the decoder handles an easier task than the encoder in NMT."
+        },
+        {
+          "citation": 7,
+          "chunk_id": 1061,
+          "source": "1908.06259.pdf",
+          "page": 2,
+          "text": "3.2 Encoder Converges Slower than Decoder We further investigate the difﬁculty of the task for the encoder and decoder by comparing their convergence speed. Encoder (decoder) that needs more training time indicates the task that encoder (decoder) handles is more difﬁcult. We evaluate the convergence speed for the en- coder by initializing the model with the param- eters of a well-trained decoder and ﬁxing them during training, and initializing other components with random variables."
+        },
+        {
+          "citation": 8,
+          "chunk_id": 1066,
+          "source": "1908.06259.pdf",
+          "page": 3,
+          "text": "Discussion From the analyses in the last two subsections, it can be seen that increasing the layer of encoder brings more gains than increasing the layer of the decoder, and encoder needs more training time than the decoder, which demonstrate that the encoder of the NMT model handles a more difﬁcult task than the decoder."
+        },
+        {
+          "citation": 9,
+          "chunk_id": 1058,
+          "source": "1908.06259.pdf",
+          "page": 2,
+          "text": "3.1 Deeper Encoder Brings More Gains Than Deeper Decoder We vary the number of layers for the encoder and decoder respectively, to investigate which can achieve more gains with deeper layers. Deeper en- coder (decoder) with more gains can indicate the task that encoder (decoder) handles needs more representation capability, which is harder to learn."
+        },
+        {
+          "citation": 10,
+          "chunk_id": 1062,
+          "source": "1908.06259.pdf",
+          "page": 2,
+          "text": "We follow the opposite practice when evaluating the convergence speed for the decoder. We show the BLEU scores along the training process on all the four datasets in Fig- ure 1c, which demonstrates that the decoder con- verges faster than the encoder."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

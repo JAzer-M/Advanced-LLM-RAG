@@ -77,7 +77,7 @@ def plan_evidence_gap(query, global_ranking, local_evidence, selected, chunks, t
 # 保留基线已入选的局部证据，再按任务检索并在同一最终 K 内重新选择。
 def complete_evidence(query, global_ranking, local_evidence, retrieval_anchor_ids,
                       embedding_model, index, chunks, bm25, reranker_model,
-                      top_k=10, candidate_k=60, max_rounds=1, score_cache=None):
+                      top_k=10, candidate_k=60, max_rounds=1, score_cache=None, sources=None):
     """Deepen the same scoped searches for up to three passes, with early stops."""
     if max_rounds not in (1, 2, 3):
         raise ValueError('max_rounds must be 1, 2 or 3')
@@ -86,7 +86,8 @@ def complete_evidence(query, global_ranking, local_evidence, retrieval_anchor_id
     baseline = select_evidence(global_ranking, local_evidence, top_k, retrieval_anchor_ids)
     local_ids = {cid for item in local_evidence for cid in item['top_ids']}
     retained_local_ids = [c['chunk_id'] for c in baseline if c['chunk_id'] in local_ids]
-    trace = plan_evidence_gap(query, global_ranking, local_evidence, baseline, chunks, top_k)
+    scope_chunks = [c for c in chunks if c['source'] in sources] if sources else chunks
+    trace = plan_evidence_gap(query, global_ranking, local_evidence, baseline, scope_chunks, top_k)
     trace.update(rounds=0, supplement_queries=0, max_rounds=max_rounds,
                  completed_passes=0, round_history=[],
                  selected_ids_before=[c['chunk_id'] for c in baseline],

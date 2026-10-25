@@ -40,6 +40,7 @@ from src.grounded_evidence import build_ledger, render_complete, render_guidance
 from src.knowledge_base import load_knowledge_base
 from src.query_decomposer import decompose_query
 from src.query_rewriter import rewrite_query
+from src.query_scope import resolve_query_scope
 from src.reranker import rank_evidence, select_evidence
 from src.retriever import retrieve
 
@@ -131,6 +132,13 @@ def build_prompt(query, context):
     """Create the grounded-answer prompt with citation requirements."""
     return (
         "You are an AI research assistant.\n\n"
+        "Required answer language: " + ('Chinese' if answer_language(query) == 'zh' else 'English') + ".\n"
+        "Begin with a short direct answer in its own paragraph, including any condition needed "
+        "for correctness. Use Yes/No for a supported binary question, or the requested fact/keywords "
+        "for a factual question. Then give only the necessary cited explanation after a blank line. "
+        "A partial answer must keep the supported facts and explicitly identify the remaining gap.\n\n"
+        "Only when none of the requested facts can be supported, start with 'Insufficient evidence.' "
+        "(or '当前证据不足。' when answering in Chinese). Do not use this refusal prefix for a partial answer.\n\n"
         "Answer the user's question based only on the provided context.\n\n"
         "Rules:\n"
         "1. Do not invent information or introduce unsupported claims.\n"
@@ -214,12 +222,13 @@ def comparison_introductions(query, chunks):
 
 
 # 账本可补入主体识别所需的原文锚点，因此引用登记表可能比初选片段更多。
-def build_evidence_context(chunks, results, query=None):
+def build_evidence_context(chunks, results, query=None, sources=None):
     """Preserve ranked raw passages and number any identity anchors consistently."""
     ledger = build_ledger(chunks, [r['chunk_id'] for r in results])
     seen = {c['chunk_id'] for c in ledger['citation_registry']}
     added = []
-    for chunk in comparison_introductions(query, chunks):
+    scope_chunks = [c for c in chunks if c['source'] in sources] if sources else chunks
+    for chunk in comparison_introductions(query, scope_chunks):
         if chunk['chunk_id'] not in seen:
             ledger['citation_registry'].append(chunk)
             seen.add(chunk['chunk_id'])
@@ -238,7 +247,7 @@ def build_evidence_context(chunks, results, query=None):
 
 # 主调用链从这里开始；传入 kb_version 可固定实验库，返回字典供评估保存。
 def _run_pipeline(query=None, kb_version=None, complete_evidence=None, completion_rounds=2,
-                  agent_output=None, agent_call=None, agent_mode='agent', agent_allow_network=False):
+                  agent_output=None, agent_call=None, agent_mode='agent', agent_allow_network=False, sources=None):
     if completion_rounds not in (1, 2, 3):
         raise ValueError('completion_rounds must be 1, 2 or 3')
     # 1. Load the Semantic FAISS index and its corresponding chunks.
@@ -260,9 +269,12 @@ def _run_pipeline(query=None, kb_version=None, complete_evidence=None, completio
         return
 
     print("\nOriginal Query:", query)
+    scope = resolve_query_scope(query, chunks, sources)
+    source_scope, retrieval_query = scope['sources'], scope['retrieval_query']
+    source_options = {'sources': source_scope} if source_scope else {}
 
-    decomposition = (decompose_query(query, call=lambda prompt: agent_call(prompt, 'decompose'))
-                     if agent_call else decompose_query(query))
+    decomposition = (decompose_query(retrieval_query, call=lambda prompt: agent_call(prompt, 'decompose'))
+                     if agent_call else decompose_query(retrieval_query))
     print("Decomposition:", decomposition)
 
     if decomposition["needs_decomposition"]:
@@ -278,15 +290,17 @@ def _run_pipeline(query=None, kb_version=None, complete_evidence=None, completio
         model=embedding_model,
         index=index,
         chunks=chunks,
-        query=query,
+        query=retrieval_query,
         top_k=RETRIEVAL_TOP_K,
+        **source_options,
     )
 
     bm25_results = retrieve_bm25(
         bm25=bm25,
         chunks=chunks,
-        query=query,
+        query=retrieval_query,
         top_k=RETRIEVAL_TOP_K,
+        **source_options,
     )
 
     # Freeze the original query's independent retrieval anchor before augmentation.
@@ -311,6 +325,7 @@ def _run_pipeline(query=None, kb_version=None, complete_evidence=None, completio
                 chunks=chunks,
                 query=rewritten_query,
                 top_k=RETRIEVAL_TOP_K,
+                **source_options,
             )
 
             rewritten_bm25_results = retrieve_bm25(
@@ -318,6 +333,7 @@ def _run_pipeline(query=None, kb_version=None, complete_evidence=None, completio
                 chunks=chunks,
                 query=rewritten_query,
                 top_k=RETRIEVAL_TOP_K,
+                **source_options,
             )
 
             extra_results.extend(
@@ -344,6 +360,7 @@ def _run_pipeline(query=None, kb_version=None, complete_evidence=None, completio
             chunks=chunks,
             query=hypothetical_document,
             top_k=RETRIEVAL_TOP_K,
+            **source_options,
         )
 
         extra_results.append(hyde_results)
@@ -364,6 +381,7 @@ def _run_pipeline(query=None, kb_version=None, complete_evidence=None, completio
                 chunks=chunks,
                 query=sub_query,
                 top_k=RETRIEVAL_TOP_K,
+                **source_options,
             )
 
             sub_bm25_results = retrieve_bm25(
@@ -371,6 +389,7 @@ def _run_pipeline(query=None, kb_version=None, complete_evidence=None, completio
                 chunks=chunks,
                 query=sub_query,
                 top_k=RETRIEVAL_TOP_K,
+                **source_options,
             )
 
             sub_rrf_results = reciprocal_rank_fusion(
@@ -427,12 +446,17 @@ def _run_pipeline(query=None, kb_version=None, complete_evidence=None, completio
     # 同一请求内复用完全相同的模型/查询/原文分数，不减少候选、补查或证据预算。
     score_cache = {}
     global_ranking, sub_query_evidence = rank_evidence(
-        query, unique_candidates, sub_query_results, reranker_model, SUB_QUERY_EVIDENCE_K,
+        retrieval_query, unique_candidates, sub_query_results, reranker_model, SUB_QUERY_EVIDENCE_K,
         score_cache=score_cache)
     results = select_evidence(global_ranking, sub_query_evidence, RERANK_TOP_K,
                               retrieval_anchor_ids)
     retrieval_diagnostics = {
         'candidate_count': len(unique_candidates),
+        'source_scope': source_scope, 'retrieval_query': retrieval_query,
+        'dense_ids': [c['chunk_id'] for c in dense_results],
+        'bm25_ids': [c['chunk_id'] for c in bm25_results],
+        'candidate_ids': [c['chunk_id'] for c in unique_candidates],
+        'global_ranking_ids': [c['chunk_id'] for c in global_ranking],
         'global_top_ids': [c['chunk_id'] for c in global_ranking[:RERANK_TOP_K]],
         'protected_ids': list(dict.fromkeys(item['top_ids'][0] for item in sub_query_evidence
                                            if item['top_ids'])),
@@ -441,7 +465,7 @@ def _run_pipeline(query=None, kb_version=None, complete_evidence=None, completio
     }
     # 此处调用固定规则补查；触发与停止不由 agent.py 的行动建议控制。
     completion_enabled = USE_EVIDENCE_COMPLETION if complete_evidence is None else complete_evidence
-    introductions = comparison_introductions(query, chunks)
+    introductions = comparison_introductions(query, [c for c in chunks if c["source"] in source_scope] if source_scope else chunks)
     if completion_enabled and introductions and complete_evidence is None:
         # 概念概览已有双方摘要，先生成；语义缺口仍由Auto升级处理。
         # 显式complete_evidence=True仍强制原补查，两轮上限与其他题型不变。
@@ -455,7 +479,7 @@ def _run_pipeline(query=None, kb_version=None, complete_evidence=None, completio
             query, global_ranking, sub_query_evidence, retrieval_anchor_ids,
             embedding_model, index, chunks, bm25, reranker_model,
             top_k=RERANK_TOP_K, candidate_k=RETRIEVAL_TOP_K, max_rounds=completion_rounds,
-            score_cache=score_cache)
+            score_cache=score_cache, **source_options)
         retrieval_diagnostics['evidence_completion'] = completion
 
     print("Selected Chunk IDs:", [r["chunk_id"] for r in results])
@@ -466,7 +490,7 @@ def _run_pipeline(query=None, kb_version=None, complete_evidence=None, completio
     )
 
     # 8. Add evidence guidance without dropping the original ranked passages.
-    context, ledger = build_evidence_context(chunks, results, query=query)
+    context, ledger = build_evidence_context(chunks, results, query=query, **source_options)
 
     print("\n=== Evidence: parsed facts and source quotations ===")
     print(render_complete(ledger)['answer'])
@@ -476,11 +500,13 @@ def _run_pipeline(query=None, kb_version=None, complete_evidence=None, completio
 
     initial = {'query': query, 'status': 'retrieval_completed', 'decomposition': decomposition,
                'knowledge_base': knowledge_base, 'retrieval_diagnostics': retrieval_diagnostics,
-               'selected_ids': [r['chunk_id'] for r in results], 'context': context, 'ledger': ledger}
+               'selected_ids': [r['chunk_id'] for r in results], 'context': context, 'ledger': ledger,
+               'source_scope': source_scope, 'retrieval_query': retrieval_query}
     if agent_output is not None:
         # 只初检一次，不生成固定RAG草稿；把同一批模型/索引交给Agent工具复用。
         resources = {'index': index, 'chunks': chunks, 'knowledge_base': knowledge_base,
-                     'embedding_model': embedding_model, 'bm25': bm25, 'reranker_model': reranker_model}
+                     'embedding_model': embedding_model, 'bm25': bm25, 'reranker_model': reranker_model,
+                     'source_scope': source_scope}
         return _answer_with_agent(initial, resources, agent_output, agent_call, mode=agent_mode,
                                   allow_network=agent_allow_network)
 
@@ -511,6 +537,7 @@ def _run_pipeline(query=None, kb_version=None, complete_evidence=None, completio
             'retrieval_diagnostics': retrieval_diagnostics,
             'selected_ids': [r['chunk_id'] for r in results],
             'context': context, 'prompt': prompt, 'ledger': ledger, 'answer': answer,
+            'source_scope': source_scope, 'retrieval_query': retrieval_query,
             'original_answer': original_answer, 'citation_validation': citation_validation}
 
 
@@ -554,7 +581,8 @@ def _answer_with_agent(initial, resources, output, call, mode='agent', allow_net
     evidence, _ = agent.merge_evidence(initial['ledger']['citation_registry'], resources)
     chunks = resources['chunks']
     inventory = [{'source': source, 'title': next(c['title'] for c in chunks if c['source'] == source)}
-                 for source in sorted({c['source'] for c in chunks})]
+                 for source in sorted({c['source'] for c in chunks})
+                 if not resources.get('source_scope') or source in resources['source_scope']]
     cases = {'question': {'query': initial['query'], 'kb_version': initial['knowledge_base']['version'],
                           'evidence': evidence, 'inventory': inventory}}
     agent.save_json(output / 'retrieval.json', initial)
@@ -753,8 +781,43 @@ def _finish_result(result, calls):
     return result
 
 
+def _agent_rag_fallback(result, initial, call, remaining, output):
+    """仅在本题余量内生成RAG后备答案；原Agent失败和实际成本保持可见。"""
+    if (remaining <= 0 or not initial.get('context') or not initial.get('ledger', {}).get('citation_registry')
+            or re.search(r'反代 API|HTTP (?:401|402|403|429|50\d)|finish_reason=length', result.get('error', ''))):
+        return
+    used = 0
+
+    def generate(prompt):
+        nonlocal used
+        if used >= min(2, remaining):
+            raise RuntimeError('No remaining request budget for fallback citation repair.')
+        used += 1
+        return call(prompt, 'fallback')['answer']
+
+    fallback = {'agent_status': 'failed', 'reason': result.get('error', result.get('answer_status', 'Agent failed.'))}
+    try:
+        draft = generate(build_prompt(initial['query'], initial['context']))
+        checked = repair_citations_once(initial['query'], initial['context'], draft,
+                                       initial['ledger']['citation_registry'], generate)
+        if not checked['final_check']['structure_passed']:
+            raise ValueError('Fallback citations did not pass validation.')
+        fallback.update(status='completed', api_attempts=used, citation_validation=checked)
+        result.update(status='degraded', answer=checked['answer'] + '\n\n' + localized(initial['query'],
+            'Agent处理未完成，本回答仅依据初检证据，尚未通过Agent复核。',
+            'Agent processing did not finish. This answer uses only the initial evidence.'),
+            answer_status='fallback_not_reviewed', answer_strategy='rag_after_agent_failure',
+            stop_reason='agent_failed_rag_fallback',
+            context=initial['context'], ledger=initial['ledger'], selected_ids=initial['selected_ids'])
+        (output / 'fallback.md').write_text(result['answer'] + '\n', encoding='utf-8')
+    except Exception as exc:
+        fallback.update(status='failed', api_attempts=used, error=f'{type(exc).__name__}: {exc}')
+    result['fallback'] = fallback
+    (output / 'fallback.json').write_text(json.dumps(fallback, ensure_ascii=False, indent=2), encoding='utf-8')
+
+
 def main(query=None, kb_version=None, complete_evidence=None, completion_rounds=2,
-         mode='rag', output_dir=None, allow_network=False):
+         mode='rag', output_dir=None, allow_network=False, sources=None):
     """函数默认RAG；显式联网时Agent/Auto最多14/16模型请求，另最多两次公网工具。"""
     if type(allow_network) is not bool:
         raise ValueError('allow_network must be a boolean.')
@@ -770,7 +833,7 @@ def main(query=None, kb_version=None, complete_evidence=None, completion_rounds=
         calls = []
         try:
             result = _run_pipeline(query, kb_version, complete_evidence, completion_rounds,
-                                   agent_call=lambda prompt, phase: _record_call(prompt, phase, calls))
+                                   agent_call=lambda prompt, phase: _record_call(prompt, phase, calls), sources=sources)
             if result is None:
                 return None
         except Exception as exc:
@@ -801,10 +864,14 @@ def main(query=None, kb_version=None, complete_evidence=None, completion_rounds=
         limits['network'] = MAX_NETWORK_DECISIONS
     if mode=='auto':
         limits['probe']=2  # 原RAG初稿及最多一次引用修复；与升级后的回答复核独立记账。
+    total_limit = sum(limits.values())
+    if mode == 'agent':
+        # 回退与原阶段共享11次总预算；增加阶段名不增加总请求上限。
+        limits['fallback'] = 2
     protocol = {'stage': f'fresh main {mode} run', 'mode': mode, 'query': query, 'allow_network': allow_network,
                 'kb_version': selected_version, 'api_public_settings': public,
                 'completion_rounds': completion_rounds, 'complete_evidence': complete_evidence,
-                'stage_call_limits': limits, 'max_actual_attempts': sum(limits.values()),
+                'stage_call_limits': limits, 'max_actual_attempts': total_limit,
                 'automatic_retries': 0, 'max_tool_actions': agent.MAX_LOOP_ACTIONS,
                 'frozen_at_utc': datetime.now(timezone.utc).isoformat(),
                 'source_hashes': {str(p.relative_to(project)): agent.digest(p) for p in
@@ -816,7 +883,7 @@ def main(query=None, kb_version=None, complete_evidence=None, completion_rounds=
     agent.save_json(output / 'actual_chat_calls.json', calls)
 
     def audited_call(prompt, phase):
-        if len(calls) >= sum(limits.values()) or sum(c['phase'] == phase for c in calls) >= limits[phase]:
+        if len(calls) >= total_limit or sum(c['phase'] == phase for c in calls) >= limits[phase]:
             raise RuntimeError('Main Agent call budget exhausted; no retry.')
         if {key: api.load_settings().get(key) for key in public} != public:
             raise RuntimeError('API options changed after this run was frozen.')
@@ -826,13 +893,16 @@ def main(query=None, kb_version=None, complete_evidence=None, completion_rounds=
     try:
         result = _run_pipeline(query, selected_version, complete_evidence, completion_rounds,
                                agent_output=output, agent_call=audited_call, agent_mode=mode,
-                               agent_allow_network=allow_network)
+                               agent_allow_network=allow_network, sources=sources)
     except Exception as exc:
         # 输入/配置校验仍在请求前抛出；运行时故障返回可展示结果，CLI照常非零。
         if (output / 'retrieval.json').is_file():
             result.update(json.loads((output / 'retrieval.json').read_text()))
         result.update(status='failed', error=f'{type(exc).__name__}: {exc}')
     finally:
+        if mode == 'agent' and not allow_network and result.get('status') == 'failed' and (output / 'retrieval.json').exists():
+            _agent_rag_fallback(result, json.loads((output / 'retrieval.json').read_text()),
+                                audited_call, total_limit - len(calls), output)
         _finish_result(result, calls)
         agent.save_json(output / 'result.json', result)
     return result

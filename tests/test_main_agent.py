@@ -100,6 +100,18 @@ class MainAgentTests(unittest.TestCase):
         loop.assert_not_called()
         pipeline.load_knowledge_base.assert_called_once_with(Path(pipeline.__file__).resolve().parent/'data/processed',None)
 
+    def test_explicit_source_scope_reaches_retrieval_and_agent_resources(self):
+        source = self.fixture['chunks'][0]['source']
+        replies=[response(DECOMPOSE),response(plan()),response(supported(0)),
+                 answer_response(ANSWER),answer_response(review())]
+        with TemporaryDirectory() as temporary, patch.object(api,'chat_completion',side_effect=replies), \
+                patch.object(agent,'run_diagnostics', wraps=agent.run_diagnostics) as loop:
+            result = pipeline.main('Describe A.',mode='agent',sources=[source],output_dir=Path(temporary)/'run')
+        self.assertEqual(result['source_scope'], [source])
+        self.assertEqual(pipeline.retrieve.call_args.kwargs['sources'], [source])
+        self.assertEqual(pipeline.retrieve_bm25.call_args.kwargs['sources'], [source])
+        self.assertEqual(loop.call_args.kwargs['resources']['source_scope'], [source])
+
     def test_agent_selects_the_supported_eight_paper_version_without_changing_a_pointer(self):
         with TemporaryDirectory() as temporary:
             self.invoke(Path(temporary)/'run',[response(DECOMPOSE),response(plan()),response(supported(0)),
@@ -155,32 +167,36 @@ class MainAgentTests(unittest.TestCase):
         self.assertIn('Insufficient evidence',result['answer'])
         self.assertEqual(call.call_count,3)
 
-    def test_invalid_planning_keeps_failure_without_generating_a_rag_fallback(self):
+    def test_invalid_planning_preserves_failure_and_uses_one_bounded_rag_fallback(self):
         invalid=plan();invalid['requirements'][0]['question_quote']='A on another benchmark'
         with TemporaryDirectory() as temporary:
             out=Path(temporary)/'run'
-            result,call=self.invoke(out,[response(DECOMPOSE),response(invalid),response(invalid)])
+            result,call=self.invoke(out,[response(DECOMPOSE),response(invalid),response(invalid),answer_response(ANSWER)])
             self.assertFalse((out/'answer/answer.md').exists())
-        self.assertEqual(result['status'],'failed')
-        self.assertEqual(result['answer_status'], 'unavailable')
+            self.assertEqual(json.loads((out/'protocol.json').read_text())['max_actual_attempts'],11)
+        self.assertEqual(result['status'],'degraded')
+        self.assertEqual(result['answer_status'], 'fallback_not_reviewed')
         self.assertIn('did not finish', result['answer'])
-        self.assertNotIn(ANSWER, result['answer'])
-        self.assertEqual(call.call_count,3)
+        self.assertTrue(result['answer'].startswith(ANSWER))
+        self.assertEqual(result['fallback']['agent_status'],'failed')
+        self.assertIn('error',result)
+        self.assertEqual(call.call_count,4)
 
-    def test_failed_final_review_is_reported_as_failure_with_a_boundary_answer(self):
+    def test_failed_final_review_is_preserved_when_delivering_a_degraded_rag_answer(self):
         rejected=review()
         rejected['requirements'][0]['verdict']='fail'
         rejected['checks']['coverage']=False
         rejected['issues']=['回答仍有缺口。']
         replies=[response(DECOMPOSE),response(plan()),response(supported(0)),
                  answer_response(ANSWER),answer_response(rejected),
-                 answer_response(ANSWER),answer_response(rejected)]
+                 answer_response(ANSWER),answer_response(rejected),answer_response(ANSWER)]
         with TemporaryDirectory() as temporary:
             result,call=self.invoke(Path(temporary)/'run',replies)
-        self.assertEqual(result['status'],'failed')
+        self.assertEqual(result['status'],'degraded')
         self.assertEqual(result['agent']['answer_summary']['answer_status'],'review_failed')
-        self.assertIn('failed review',result['answer'])
-        self.assertEqual(call.call_count,7)
+        self.assertEqual(result['answer_status'],'fallback_not_reviewed')
+        self.assertIn('did not finish',result['answer'])
+        self.assertEqual(call.call_count,8)
 
     def test_empty_agent_question_does_not_load_models_or_make_requests(self):
         with patch.object(api,'chat_completion') as call:

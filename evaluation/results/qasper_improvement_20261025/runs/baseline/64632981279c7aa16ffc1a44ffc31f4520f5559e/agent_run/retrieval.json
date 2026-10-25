@@ -1,0 +1,1295 @@
+{
+  "query": "For the paper \"Verb Pattern: A Probabilistic Semantic Representation on Verbs\" (arXiv: 1710.07695), answer this question: what evaluation metrics are used?",
+  "status": "retrieval_completed",
+  "decomposition": {
+    "needs_decomposition": false,
+    "sub_queries": [],
+    "status": "not_needed"
+  },
+  "knowledge_base": {
+    "version": "qasper-holdout-20261025",
+    "chunk_count": 1459,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/manifest.json",
+    "manifest_sha256": "10bb244a150c260e5efc39b1a6ebeb939291e26f55d966ed102d27216e67718a",
+    "files": {
+      "faiss.index": "346ac08a63ebb5f367f8a886b0997c344fc084bf1fa8b27ae27de9a82be97617",
+      "chunks.json": "ef123dcc0b2180f3b957d9089c8b5207965dffb1d908fdbf348863efecdeb060"
+    }
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 120,
+    "global_top_ids": [
+      462,
+      463,
+      433,
+      431,
+      406,
+      404,
+      425,
+      459,
+      410,
+      480
+    ],
+    "protected_ids": [],
+    "sub_query_evidence": [],
+    "retrieval_anchor_ids": [
+      462
+    ],
+    "evidence_completion": {
+      "requested_sources": [
+        "1710.07695.pdf"
+      ],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        462,
+        463,
+        433,
+        431,
+        406,
+        404,
+        425,
+        459,
+        410,
+        480
+      ],
+      "retained_local_ids": [],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        462,
+        463,
+        433,
+        431,
+        406,
+        404,
+        425,
+        459,
+        410,
+        480
+      ],
+      "elapsed_seconds": 0.000433
+    }
+  },
+  "selected_ids": [
+    462,
+    463,
+    433,
+    431,
+    406,
+    404,
+    425,
+    459,
+    410,
+    480
+  ],
+  "context": "[1] Source: 1710.07695.pdf | Page: 5 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nThe case study veriﬁed that (1) our deﬁnition of verb pattern reﬂects verb’s polysemy; (2) most verb patterns we found are meaningful. Effectiveness To evaluate the effectiveness of our pattern summarization approach, we report two metrics: (1) (coverage) how much of the verb phrases in natural language our solution can ﬁnd corresponding patterns (2) (precision) how much of the phrases and their corresponding patterns are correctly matched?\n\n[2] Source: 1710.07695.pdf | Page: 5 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nWe compute the two metrics by: coverage = n cover precision = n correct n all n cover ,where n cover is the number of phrases in the test data for which our solution ﬁnds corresponding patterns, n all is the total number of phrases, n correct is the number of phrases whose corresponding patterns are correct. To evalu- ate precision, we randomly selected 100 verb phrases from the test data and ask volunteers to label the correctness of their assigned patterns.\n\n[3] Source: 1710.07695.pdf | Page: 3 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nSo the goal of this paper is to ﬁnd f. With f, we can easily compute the pattern distribution P(A) by: X X P(a|p)P(p) = P(a) = P(p) p s.t. f(p)=a p , where P(p) is the probability to observe phrase p in all phrases of the verb of interest. Note that the second equa- tion holds due to the obvious fact that P(a|p) = 1 when f(p) = a. P(p) can be directly estimated as the ratio of p’s frequency as in Eq 14. Model Next, we formalize our model based on minimum descrip- tion length.\n\n[4] Source: 1710.07695.pdf | Page: 3 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nA verb pattern is either an idiom pattern or a conceptualized pattern. Idiom Pattern is in the form of verb $Iobject (e.g. eat $Ihumble pie). Conceptual- ized Pattern is in the form of verb $Cconcept (e.g. eat $Cmeal). We denote the concept in a conceptualized pattern a as ca. Deﬁnition 1 (Pattern Assignment). A pattern assignment is a function f : P →A that maps an arbitrary phrase p to its pattern a. f(p) = a means the pattern of p is a.\n\n[5] Source: 1710.07695.pdf | Page: 1 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nIn this paper, we only focus on verbs that collocate with objects. As illus- trated in Example 1, most verbs are polysemous. Hence, a good semantic representation of verbs should be aware of their polysemy. Example 1 (Verb Polysemy). eat has the following senses: • a. Put food in mouth, chew it and swallow it, such as eat apple and eat hot dog. Have a meal, such as eat breakfast, eat lunch, and eat dinner. Idioms, such as eat humble pie, which means ad- mitting that you are wrong.\n\n[6] Source: 1710.07695.pdf | Page: 1 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nTraditional verb representations, such as FrameNet, PropBank, VerbNet, focus on verbs’ roles. These roles are too coarse to represent verbs’ semantics. In this paper, we in- troduce verb patterns to represent verbs’ semantics, such that each pattern corresponds to a single semantic of the verb. First we analyze the principles for verb patterns: generality and speciﬁcity. Then we propose a nonparametric model based on description length.\n\n[7] Source: 1710.07695.pdf | Page: 2 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nWe will use min- imum description length (MDL) as the basic framework to reconcile the two objectives. More speciﬁcally, our contri- bution in this paper can be summarized as follows: • We proposed verb patterns, a novel semantic representa- tions of verb. We proposed two types of verb patterns: conceptualized patterns and idiom patterns. The verb pat- tern is polysemy-aware so that we can use it to distinguish different verb semantics.\n\n[8] Source: 1710.07695.pdf | Page: 5 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nFor a ﬁxed verb, we compute the probability of phrase p by: n(p) P(p) = P pi n(pi) , where n(p) is the frequency of p in the corpus, and the denominator sums over all phrases of this verb. IsA Relationship We use Probase to compute the prob- ability of an entity given a concept PT (e|c), as well as the probability of the concept given an entity PT (c|e): n(e, c) n(e, c) PT (e|c) = PT (c|e) = P P ei n(ei, c) ci n(e, ci) ,where n(e, c) is the frequency that c and e co-occur in Probase.\n\n[9] Source: 1710.07695.pdf | Page: 1 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nweiwang1@fudan.edu.cn 2005), describe verbs’ semantic roles (e.g. ingestor and in- gestibles for “eat”). However, semantic roles in general are too coarse to differentiate a verb’s ﬁne-grained semantics. A verb in different phrases can have different semantics but similar roles. In Example 1, both “eat”s in “eat breakfast” and “eat apple” have ingestor. But they have different semantics.\n\n[10] Source: 1710.07695.pdf | Page: 6 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nSemantic Composition We represent verb phrases by verb patterns. while semantic composition works aim to represent the meaning of an arbitrary phrase as a vector or a tree. Vector-space model is widely used to represent the semantic of single word. A straightforward approach to characterize the semantic of a phrase thus is averag- ing the vectors over all the phrase’s words (Xinxiong et al. But this approach certainly ignores the syntac- tic relation (Landauer and Dumais 1997) between words.\n\n[11] Source: 1710.07695.pdf | Page: 5 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nTest data We use two data sets to show our solution can achieve consistent effectiveness on both short text and long text. The short text data set contains 1.6 millions of tweets from Twitter (Go, Bhayani, and Huang 2009). The long text data set contains 21,578 news articles from Reuters (Apt´e, Damerau, and Weiss 1994).\n\n[12] Source: 1710.07695.pdf | Page: 2 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\n• We conducted extensive experiments. The results verify the effectiveness of our model and algorithm. We pre- sented the applications of verb patterns in context-aware conceptualization. The application justiﬁes the effective- ness of verb patterns to represent verb semantics. Problem Model In this section, we deﬁne the problem of extracting patterns for verb phrases.\n\n[13] Source: 1710.07695.pdf | Page: 5 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nExperiments Settings Verb Phrase Data The pattern assignment uses the phrase distribution P(p). To do this, we use the “English All” dataset in Google Syntactic N-Grams. The dataset contains counted syntactic ngrams extracted from the English por- tion of the Google Books corpus. It contains 22,230 different verbs (without stemming), and 147,056 verb phrases.",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": "The case study veriﬁed that (1) our deﬁnition of verb pattern reﬂects verb’s polysemy; (2) most verb patterns we found are meaningful.",
+        "evidence_start": 0,
+        "evidence_end": 134,
+        "subject": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "identity": {
+          "subject": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            462,
+            461,
+            460
+          ],
+          "identity_quote": "Test data We use two data sets to show our solution can achieve consistent effectiveness on both short text and long text. The short text data set contains 1.6 millions of tweets from Twitter (Go, Bhayani, and Huang 2009). The long text data set contains 21,578 news articles from Reuters (Apt´e, Damerau, and Weiss 1994).",
+          "identity_chunk_id": 460
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 462,
+        "page": 5,
+        "citations": [
+          1,
+          11
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Effectiveness To evaluate the effectiveness of our pattern summarization approach, we report two metrics: (1) (coverage) how much of the verb phrases in natural language our solution can ﬁnd corresponding patterns (2) (precision) how much of the phrases and their corresponding patterns are correctly matched?",
+        "evidence_start": 134,
+        "evidence_end": 444,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            462,
+            461,
+            460,
+            459
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 462,
+        "page": 5,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "We compute the two metrics by: coverage = n cover precision = n correct n all n cover ,where n cover is the number of phrases in the test data for which our solution ﬁnds corresponding patterns, n all is the total number of phrases, n correct is the number of phrases whose corresponding patterns are correct.",
+        "evidence_start": 0,
+        "evidence_end": 309,
+        "subject": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "identity": {
+          "subject": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            463,
+            462,
+            461,
+            460
+          ],
+          "identity_quote": "Test data We use two data sets to show our solution can achieve consistent effectiveness on both short text and long text. The short text data set contains 1.6 millions of tweets from Twitter (Go, Bhayani, and Huang 2009). The long text data set contains 21,578 news articles from Reuters (Apt´e, Damerau, and Weiss 1994).",
+          "identity_chunk_id": 460
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 463,
+        "page": 5,
+        "citations": [
+          2,
+          11
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " To evalu- ate precision, we randomly selected 100 verb phrases from the test data and ask volunteers to label the correctness of their assigned patterns.",
+        "evidence_start": 309,
+        "evidence_end": 463,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            463,
+            462,
+            461,
+            460,
+            459
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 463,
+        "page": 5,
+        "citations": [
+          2
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "So the goal of this paper is to ﬁnd f.",
+        "evidence_start": 0,
+        "evidence_end": 38,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            433,
+            432,
+            431,
+            430,
+            429
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 433,
+        "page": 3,
+        "citations": [
+          3
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " f(p)=a p , where P(p) is the probability to observe phrase p in all phrases of the verb of interest.",
+        "evidence_start": 138,
+        "evidence_end": 239,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            433,
+            432,
+            431,
+            430,
+            429
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 433,
+        "page": 3,
+        "citations": [
+          3
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Note that the second equa- tion holds due to the obvious fact that P(a|p) = 1 when f(p) = a.",
+        "evidence_start": 239,
+        "evidence_end": 332,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            433,
+            432,
+            431,
+            430,
+            429
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 433,
+        "page": 3,
+        "citations": [
+          3
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " P(p) can be directly estimated as the ratio of p’s frequency as in Eq 14.",
+        "evidence_start": 332,
+        "evidence_end": 406,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            433,
+            432,
+            431,
+            430,
+            429
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 433,
+        "page": 3,
+        "citations": [
+          3
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Model Next, we formalize our model based on minimum descrip- tion length.",
+        "evidence_start": 406,
+        "evidence_end": 480,
+        "subject": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "identity": {
+          "subject": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            433
+          ],
+          "identity_quote": "So the goal of this paper is to ﬁnd f. With f, we can easily compute the pattern distribution P(A) by: X X P(a|p)P(p) = P(a) = P(p) p s.t. f(p)=a p , where P(p) is the probability to observe phrase p in all phrases of the verb of interest. Note that the second equa- tion holds due to the obvious fact that P(a|p) = 1 when f(p) = a. P(p) can be directly estimated as the ratio of p’s frequency as in Eq 14. Model Next, we formalize our model based on minimum descrip- tion length.",
+          "identity_chunk_id": 433
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 433,
+        "page": 3,
+        "citations": [
+          3
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "A verb pattern is either an idiom pattern or a conceptualized pattern.",
+        "evidence_start": 0,
+        "evidence_end": 70,
+        "subject": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "identity": {
+          "subject": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            431,
+            430,
+            429,
+            428,
+            427
+          ],
+          "identity_quote": "• We conducted extensive experiments. The results verify the effectiveness of our model and algorithm. We pre- sented the applications of verb patterns in context-aware conceptualization. The application justiﬁes the effective- ness of verb patterns to represent verb semantics. Problem Model In this section, we deﬁne the problem of extracting patterns for verb phrases.",
+          "identity_chunk_id": 427
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 431,
+        "page": 3,
+        "citations": [
+          4,
+          12
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We denote the concept in a conceptualized pattern a as ca.",
+        "evidence_start": 218,
+        "evidence_end": 277,
+        "subject": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "identity": {
+          "subject": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            431,
+            430,
+            429,
+            428,
+            427
+          ],
+          "identity_quote": "• We conducted extensive experiments. The results verify the effectiveness of our model and algorithm. We pre- sented the applications of verb patterns in context-aware conceptualization. The application justiﬁes the effective- ness of verb patterns to represent verb semantics. Problem Model In this section, we deﬁne the problem of extracting patterns for verb phrases.",
+          "identity_chunk_id": 427
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 431,
+        "page": 3,
+        "citations": [
+          4,
+          12
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Deﬁnition 1 (Pattern Assignment).",
+        "evidence_start": 277,
+        "evidence_end": 311,
+        "subject": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "identity": {
+          "subject": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            431,
+            430,
+            429,
+            428,
+            427
+          ],
+          "identity_quote": "• We conducted extensive experiments. The results verify the effectiveness of our model and algorithm. We pre- sented the applications of verb patterns in context-aware conceptualization. The application justiﬁes the effective- ness of verb patterns to represent verb semantics. Problem Model In this section, we deﬁne the problem of extracting patterns for verb phrases.",
+          "identity_chunk_id": 427
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 431,
+        "page": 3,
+        "citations": [
+          4,
+          12
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " A pattern assignment is a function f : P →A that maps an arbitrary phrase p to its pattern a.",
+        "evidence_start": 311,
+        "evidence_end": 405,
+        "subject": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "identity": {
+          "subject": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            431,
+            430,
+            429,
+            428,
+            427
+          ],
+          "identity_quote": "• We conducted extensive experiments. The results verify the effectiveness of our model and algorithm. We pre- sented the applications of verb patterns in context-aware conceptualization. The application justiﬁes the effective- ness of verb patterns to represent verb semantics. Problem Model In this section, we deﬁne the problem of extracting patterns for verb phrases.",
+          "identity_chunk_id": 427
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 431,
+        "page": 3,
+        "citations": [
+          4,
+          12
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " f(p) = a means the pattern of p is a.",
+        "evidence_start": 405,
+        "evidence_end": 443,
+        "subject": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "identity": {
+          "subject": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            431,
+            430,
+            429,
+            428,
+            427
+          ],
+          "identity_quote": "• We conducted extensive experiments. The results verify the effectiveness of our model and algorithm. We pre- sented the applications of verb patterns in context-aware conceptualization. The application justiﬁes the effective- ness of verb patterns to represent verb semantics. Problem Model In this section, we deﬁne the problem of extracting patterns for verb phrases.",
+          "identity_chunk_id": 427
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 431,
+        "page": 3,
+        "citations": [
+          4,
+          12
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "In this paper, we only focus on verbs that collocate with objects.",
+        "evidence_start": 0,
+        "evidence_end": 66,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            406,
+            405,
+            404
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 406,
+        "page": 1,
+        "citations": [
+          5
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " As illus- trated in Example 1, most verbs are polysemous.",
+        "evidence_start": 66,
+        "evidence_end": 124,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            406,
+            405,
+            404
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 406,
+        "page": 1,
+        "citations": [
+          5
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Hence, a good semantic representation of verbs should be aware of their polysemy.",
+        "evidence_start": 124,
+        "evidence_end": 206,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            406,
+            405,
+            404
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 406,
+        "page": 1,
+        "citations": [
+          5
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " eat has the following senses: • a.",
+        "evidence_start": 233,
+        "evidence_end": 268,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            406,
+            405,
+            404
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 406,
+        "page": 1,
+        "citations": [
+          5
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Put food in mouth, chew it and swallow it, such as eat apple and eat hot dog.",
+        "evidence_start": 268,
+        "evidence_end": 346,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            406,
+            405,
+            404
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 406,
+        "page": 1,
+        "citations": [
+          5
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Have a meal, such as eat breakfast, eat lunch, and eat dinner.",
+        "evidence_start": 346,
+        "evidence_end": 409,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            406,
+            405,
+            404
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 406,
+        "page": 1,
+        "citations": [
+          5
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Idioms, such as eat humble pie, which means ad- mitting that you are wrong.",
+        "evidence_start": 409,
+        "evidence_end": 485,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            406,
+            405,
+            404
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 406,
+        "page": 1,
+        "citations": [
+          5
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Traditional verb representations, such as FrameNet, PropBank, VerbNet, focus on verbs’ roles.",
+        "evidence_start": 0,
+        "evidence_end": 93,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            404
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 404,
+        "page": 1,
+        "citations": [
+          6
+        ],
+        "record_id": "E22"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " These roles are too coarse to represent verbs’ semantics.",
+        "evidence_start": 93,
+        "evidence_end": 151,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            404
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 404,
+        "page": 1,
+        "citations": [
+          6
+        ],
+        "record_id": "E23"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In this paper, we in- troduce verb patterns to represent verbs’ semantics, such that each pattern corresponds to a single semantic of the verb.",
+        "evidence_start": 151,
+        "evidence_end": 295,
+        "subject": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "identity": {
+          "subject": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            404
+          ],
+          "identity_quote": "Traditional verb representations, such as FrameNet, PropBank, VerbNet, focus on verbs’ roles. These roles are too coarse to represent verbs’ semantics. In this paper, we in- troduce verb patterns to represent verbs’ semantics, such that each pattern corresponds to a single semantic of the verb. First we analyze the principles for verb patterns: generality and speciﬁcity. Then we propose a nonparametric model based on description length.",
+          "identity_chunk_id": 404
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 404,
+        "page": 1,
+        "citations": [
+          6
+        ],
+        "record_id": "E24"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " First we analyze the principles for verb patterns: generality and speciﬁcity.",
+        "evidence_start": 295,
+        "evidence_end": 373,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            404
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 404,
+        "page": 1,
+        "citations": [
+          6
+        ],
+        "record_id": "E25"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Then we propose a nonparametric model based on description length.",
+        "evidence_start": 373,
+        "evidence_end": 440,
+        "subject": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "identity": {
+          "subject": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            404
+          ],
+          "identity_quote": "Traditional verb representations, such as FrameNet, PropBank, VerbNet, focus on verbs’ roles. These roles are too coarse to represent verbs’ semantics. In this paper, we in- troduce verb patterns to represent verbs’ semantics, such that each pattern corresponds to a single semantic of the verb. First we analyze the principles for verb patterns: generality and speciﬁcity. Then we propose a nonparametric model based on description length.",
+          "identity_chunk_id": 404
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 404,
+        "page": 1,
+        "citations": [
+          6
+        ],
+        "record_id": "E26"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "We will use min- imum description length (MDL) as the basic framework to reconcile the two objectives.",
+        "evidence_start": 0,
+        "evidence_end": 102,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            425,
+            424,
+            423,
+            422,
+            421
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 425,
+        "page": 2,
+        "citations": [
+          7
+        ],
+        "record_id": "E27"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " More speciﬁcally, our contri- bution in this paper can be summarized as follows: • We proposed verb patterns, a novel semantic representa- tions of verb.",
+        "evidence_start": 102,
+        "evidence_end": 256,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            425,
+            424,
+            423,
+            422,
+            421
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 425,
+        "page": 2,
+        "citations": [
+          7
+        ],
+        "record_id": "E28"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " We proposed two types of verb patterns: conceptualized patterns and idiom patterns.",
+        "evidence_start": 256,
+        "evidence_end": 340,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            425,
+            424,
+            423,
+            422,
+            421
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 425,
+        "page": 2,
+        "citations": [
+          7
+        ],
+        "record_id": "E29"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The verb pat- tern is polysemy-aware so that we can use it to distinguish different verb semantics.",
+        "evidence_start": 340,
+        "evidence_end": 440,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            425,
+            424,
+            423,
+            422,
+            421
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 425,
+        "page": 2,
+        "citations": [
+          7
+        ],
+        "record_id": "E30"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "For a ﬁxed verb, we compute the probability of phrase p by: n(p) P(p) = P pi n(pi) , where n(p) is the frequency of p in the corpus, and the denominator sums over all phrases of this verb.",
+        "evidence_start": 0,
+        "evidence_end": 188,
+        "subject": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "identity": {
+          "subject": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            459,
+            458
+          ],
+          "identity_quote": "Experiments Settings Verb Phrase Data The pattern assignment uses the phrase distribution P(p). To do this, we use the “English All” dataset in Google Syntactic N-Grams. The dataset contains counted syntactic ngrams extracted from the English por- tion of the Google Books corpus. It contains 22,230 different verbs (without stemming), and 147,056 verb phrases.",
+          "identity_chunk_id": 458
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 459,
+        "page": 5,
+        "citations": [
+          8,
+          13
+        ],
+        "record_id": "E31"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " IsA Relationship We use Probase to compute the prob- ability of an entity given a concept PT (e|c), as well as the probability of the concept given an entity PT (c|e): n(e, c) n(e, c) PT (e|c) = PT (c|e) = P P ei n(ei, c) ci n(e, ci) ,where n(e, c) is the frequency that c and e co-occur in Probase.",
+        "evidence_start": 188,
+        "evidence_end": 488,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_subject",
+          "context_chunk_ids": [
+            459
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 459,
+        "page": 5,
+        "citations": [
+          8
+        ],
+        "record_id": "E32"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " ingestor and in- gestibles for “eat”).",
+        "evidence_start": 65,
+        "evidence_end": 104,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            410,
+            409,
+            408,
+            407
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 410,
+        "page": 1,
+        "citations": [
+          9
+        ],
+        "record_id": "E33"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " However, semantic roles in general are too coarse to differentiate a verb’s ﬁne-grained semantics.",
+        "evidence_start": 104,
+        "evidence_end": 203,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            410,
+            409,
+            408,
+            407
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 410,
+        "page": 1,
+        "citations": [
+          9
+        ],
+        "record_id": "E34"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " A verb in different phrases can have different semantics but similar roles.",
+        "evidence_start": 203,
+        "evidence_end": 279,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            410,
+            409,
+            408,
+            407
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 410,
+        "page": 1,
+        "citations": [
+          9
+        ],
+        "record_id": "E35"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In Example 1, both “eat”s in “eat breakfast” and “eat apple” have ingestor.",
+        "evidence_start": 279,
+        "evidence_end": 355,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            410,
+            409,
+            408,
+            407
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 410,
+        "page": 1,
+        "citations": [
+          9
+        ],
+        "record_id": "E36"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " But they have different semantics.",
+        "evidence_start": 355,
+        "evidence_end": 390,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            410,
+            409,
+            408,
+            407
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 410,
+        "page": 1,
+        "citations": [
+          9
+        ],
+        "record_id": "E37"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Semantic Composition We represent verb phrases by verb patterns.",
+        "evidence_start": 0,
+        "evidence_end": 64,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            480,
+            479,
+            478
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 480,
+        "page": 6,
+        "citations": [
+          10
+        ],
+        "record_id": "E38"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " while semantic composition works aim to represent the meaning of an arbitrary phrase as a vector or a tree.",
+        "evidence_start": 64,
+        "evidence_end": 172,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            480,
+            479,
+            478
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 480,
+        "page": 6,
+        "citations": [
+          10
+        ],
+        "record_id": "E39"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Vector-space model is widely used to represent the semantic of single word.",
+        "evidence_start": 172,
+        "evidence_end": 248,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            480,
+            479,
+            478
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 480,
+        "page": 6,
+        "citations": [
+          10
+        ],
+        "record_id": "E40"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " A straightforward approach to characterize the semantic of a phrase thus is averag- ing the vectors over all the phrase’s words (Xinxiong et al.",
+        "evidence_start": 248,
+        "evidence_end": 393,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            480,
+            479,
+            478
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 480,
+        "page": 6,
+        "citations": [
+          10
+        ],
+        "record_id": "E41"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " But this approach certainly ignores the syntac- tic relation (Landauer and Dumais 1997) between words.",
+        "evidence_start": 393,
+        "evidence_end": 496,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            480,
+            479,
+            478
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1710.07695.pdf",
+        "chunk_id": 480,
+        "page": 6,
+        "citations": [
+          10
+        ],
+        "record_id": "E42"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 462,
+        "text": "The case study veriﬁed that (1) our deﬁnition of verb pattern reﬂects verb’s polysemy; (2) most verb patterns we found are meaningful. Effectiveness To evaluate the effectiveness of our pattern summarization approach, we report two metrics: (1) (coverage) how much of the verb phrases in natural language our solution can ﬁnd corresponding patterns (2) (precision) how much of the phrases and their corresponding patterns are correctly matched?",
+        "source": "1710.07695.pdf",
+        "page": 5,
+        "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "section": null
+      },
+      {
+        "chunk_id": 463,
+        "text": "We compute the two metrics by: coverage = n cover precision = n correct n all n cover ,where n cover is the number of phrases in the test data for which our solution ﬁnds corresponding patterns, n all is the total number of phrases, n correct is the number of phrases whose corresponding patterns are correct. To evalu- ate precision, we randomly selected 100 verb phrases from the test data and ask volunteers to label the correctness of their assigned patterns.",
+        "source": "1710.07695.pdf",
+        "page": 5,
+        "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "section": null
+      },
+      {
+        "chunk_id": 433,
+        "text": "So the goal of this paper is to ﬁnd f. With f, we can easily compute the pattern distribution P(A) by: X X P(a|p)P(p) = P(a) = P(p) p s.t. f(p)=a p , where P(p) is the probability to observe phrase p in all phrases of the verb of interest. Note that the second equa- tion holds due to the obvious fact that P(a|p) = 1 when f(p) = a. P(p) can be directly estimated as the ratio of p’s frequency as in Eq 14. Model Next, we formalize our model based on minimum descrip- tion length.",
+        "source": "1710.07695.pdf",
+        "page": 3,
+        "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "section": null
+      },
+      {
+        "chunk_id": 431,
+        "text": "A verb pattern is either an idiom pattern or a conceptualized pattern. Idiom Pattern is in the form of verb $Iobject (e.g. eat $Ihumble pie). Conceptual- ized Pattern is in the form of verb $Cconcept (e.g. eat $Cmeal). We denote the concept in a conceptualized pattern a as ca. Deﬁnition 1 (Pattern Assignment). A pattern assignment is a function f : P →A that maps an arbitrary phrase p to its pattern a. f(p) = a means the pattern of p is a.",
+        "source": "1710.07695.pdf",
+        "page": 3,
+        "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "section": null
+      },
+      {
+        "chunk_id": 406,
+        "text": "In this paper, we only focus on verbs that collocate with objects. As illus- trated in Example 1, most verbs are polysemous. Hence, a good semantic representation of verbs should be aware of their polysemy. Example 1 (Verb Polysemy). eat has the following senses: • a. Put food in mouth, chew it and swallow it, such as eat apple and eat hot dog. Have a meal, such as eat breakfast, eat lunch, and eat dinner. Idioms, such as eat humble pie, which means ad- mitting that you are wrong.",
+        "source": "1710.07695.pdf",
+        "page": 1,
+        "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "section": null
+      },
+      {
+        "chunk_id": 404,
+        "text": "Traditional verb representations, such as FrameNet, PropBank, VerbNet, focus on verbs’ roles. These roles are too coarse to represent verbs’ semantics. In this paper, we in- troduce verb patterns to represent verbs’ semantics, such that each pattern corresponds to a single semantic of the verb. First we analyze the principles for verb patterns: generality and speciﬁcity. Then we propose a nonparametric model based on description length.",
+        "source": "1710.07695.pdf",
+        "page": 1,
+        "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "section": null
+      },
+      {
+        "chunk_id": 425,
+        "text": "We will use min- imum description length (MDL) as the basic framework to reconcile the two objectives. More speciﬁcally, our contri- bution in this paper can be summarized as follows: • We proposed verb patterns, a novel semantic representa- tions of verb. We proposed two types of verb patterns: conceptualized patterns and idiom patterns. The verb pat- tern is polysemy-aware so that we can use it to distinguish different verb semantics.",
+        "source": "1710.07695.pdf",
+        "page": 2,
+        "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "section": null
+      },
+      {
+        "chunk_id": 459,
+        "text": "For a ﬁxed verb, we compute the probability of phrase p by: n(p) P(p) = P pi n(pi) , where n(p) is the frequency of p in the corpus, and the denominator sums over all phrases of this verb. IsA Relationship We use Probase to compute the prob- ability of an entity given a concept PT (e|c), as well as the probability of the concept given an entity PT (c|e): n(e, c) n(e, c) PT (e|c) = PT (c|e) = P P ei n(ei, c) ci n(e, ci) ,where n(e, c) is the frequency that c and e co-occur in Probase.",
+        "source": "1710.07695.pdf",
+        "page": 5,
+        "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "section": null
+      },
+      {
+        "chunk_id": 410,
+        "text": "weiwang1@fudan.edu.cn 2005), describe verbs’ semantic roles (e.g. ingestor and in- gestibles for “eat”). However, semantic roles in general are too coarse to differentiate a verb’s ﬁne-grained semantics. A verb in different phrases can have different semantics but similar roles. In Example 1, both “eat”s in “eat breakfast” and “eat apple” have ingestor. But they have different semantics.",
+        "source": "1710.07695.pdf",
+        "page": 1,
+        "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "section": null
+      },
+      {
+        "chunk_id": 480,
+        "text": "Semantic Composition We represent verb phrases by verb patterns. while semantic composition works aim to represent the meaning of an arbitrary phrase as a vector or a tree. Vector-space model is widely used to represent the semantic of single word. A straightforward approach to characterize the semantic of a phrase thus is averag- ing the vectors over all the phrase’s words (Xinxiong et al. But this approach certainly ignores the syntac- tic relation (Landauer and Dumais 1997) between words.",
+        "source": "1710.07695.pdf",
+        "page": 6,
+        "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "section": null
+      },
+      {
+        "chunk_id": 460,
+        "text": "Test data We use two data sets to show our solution can achieve consistent effectiveness on both short text and long text. The short text data set contains 1.6 millions of tweets from Twitter (Go, Bhayani, and Huang 2009). The long text data set contains 21,578 news articles from Reuters (Apt´e, Damerau, and Weiss 1994).",
+        "source": "1710.07695.pdf",
+        "page": 5,
+        "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "section": null
+      },
+      {
+        "chunk_id": 427,
+        "text": "• We conducted extensive experiments. The results verify the effectiveness of our model and algorithm. We pre- sented the applications of verb patterns in context-aware conceptualization. The application justiﬁes the effective- ness of verb patterns to represent verb semantics. Problem Model In this section, we deﬁne the problem of extracting patterns for verb phrases.",
+        "source": "1710.07695.pdf",
+        "page": 2,
+        "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "section": null
+      },
+      {
+        "chunk_id": 458,
+        "text": "Experiments Settings Verb Phrase Data The pattern assignment uses the phrase distribution P(p). To do this, we use the “English All” dataset in Google Syntactic N-Grams. The dataset contains counted syntactic ngrams extracted from the English por- tion of the Google Books corpus. It contains 22,230 different verbs (without stemming), and 147,056 verb phrases.",
+        "source": "1710.07695.pdf",
+        "page": 5,
+        "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "section": null
+      }
+    ],
+    "selected_ids": [
+      462,
+      463,
+      433,
+      431,
+      406,
+      404,
+      425,
+      459,
+      410,
+      480
+    ]
+  }
+}

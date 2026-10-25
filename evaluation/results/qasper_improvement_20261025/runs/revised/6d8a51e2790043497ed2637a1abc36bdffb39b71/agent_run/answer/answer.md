@@ -1,0 +1,3 @@
+The paper uses two datasets for experiments: AliMe and Quora [1].
+
+The AliMe dataset is collected from the AliMe intelligent assistant system in E-commerce, with 8,004 query-bag pairs (12,008 training, 2,000 validation, and 10,000 test cases after negative sampling) [1][6]. The Quora dataset is composed of a public dataset originally released for duplicated question detection, containing 400,000 question pairs; the authors extract one question as query with the remaining questions forming the bag, yielding 20,354 training, 2,000 validation, and 10,000 test cases, and they release this composed Quora dataset [1][6][7][5].

@@ -1,0 +1,1 @@
+The profile features available/used are: profile description, account creation date, number of followers and followees, location, and account language [1]. The number of followers and followees is used as a baseline, referred to as "Network Features" in the paper [1].

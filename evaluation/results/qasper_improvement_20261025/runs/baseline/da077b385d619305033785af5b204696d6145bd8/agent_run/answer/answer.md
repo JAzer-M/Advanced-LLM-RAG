@@ -1,0 +1,1 @@
+Yes. The query-bag matching model's matching component, hCNN, is a CNN-based model: the query q and each question bᵢ in the bag are fed into a CNN respectively, and a cross-attention matrix Mᵢ is fed into another CNN to obtain the interaction representation [5]. Thus, the model uses neural networks (CNNs).

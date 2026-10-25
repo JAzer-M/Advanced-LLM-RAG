@@ -13,6 +13,7 @@ from src.knowledge_base import load_knowledge_base
 from src.reranker import rerank_results
 from src.retriever import retrieve
 from src.runtime_paths import data_root, model_location
+from src.query_scope import paper_question
 
 
 # 固定实验库和预算；加载八篇库不会修改当前仍指向三篇库的激活指针。
@@ -46,15 +47,25 @@ def search_local_kb(query, resources, source=None):
     sources = {chunk['source'] for chunk in chunks}
     if source is not None and (not isinstance(source, str) or source not in sources):
         raise ValueError('source 必须是当前知识库中的精确论文文件名，或为 None。')
+    allowed = resources.get('source_scope', [])
+    if source is not None and allowed and source not in allowed:
+        raise ValueError('source 超出本题明确限定的论文范围。')
+    if allowed and len(allowed) == 1:
+        source = allowed[0]
+    bound = paper_question(query)
+    if bound and allowed:
+        query = bound['question']
 
     started = time.perf_counter()
     # 小语料的定向搜索先取完整排名，再按论文过滤，最后截断到每路 120。
     # 若先取全库 Top-120，目标论文可能被其他论文挤掉，之后再过滤也找不回来。
-    depth = len(chunks) if source is not None else CANDIDATE_K
+    depth = len(chunks) if source is not None or allowed else CANDIDATE_K
     dense = retrieve(resources['embedding_model'], resources['index'], chunks, query, top_k=depth)
     sparse = retrieve_bm25(resources['bm25'], chunks, query, top_k=depth)
-    dense = [item for item in dense if source is None or item['source'] == source][:CANDIDATE_K]
-    sparse = [item for item in sparse if source is None or item['source'] == source][:CANDIDATE_K]
+    dense = [item for item in dense if (source is None or item['source'] == source)
+             and (not allowed or item['source'] in allowed)][:CANDIDATE_K]
+    sparse = [item for item in sparse if (source is None or item['source'] == source)
+              and (not allowed or item['source'] in allowed)][:CANDIDATE_K]
 
     candidates = reciprocal_rank_fusion(dense, sparse, k=RRF_K, top_k=CANDIDATE_K)
     ranked = rerank_results(query, candidates, resources['reranker_model'],
@@ -91,6 +102,8 @@ def read_neighbors(chunk_id, resources, source, window=1):
     anchor = chunks[chunk_id]
     if not isinstance(source, str) or source != anchor['source']:
         raise ValueError('source 必须是中心片段所属论文的精确文件名。')
+    if resources.get('source_scope') and source not in resources['source_scope']:
+        raise ValueError('source 超出本题明确限定的论文范围。')
     if type(window) is not int or not 0 <= window <= MAX_NEIGHBOR_WINDOW:
         raise ValueError(f'window 必须是 0 到 {MAX_NEIGHBOR_WINDOW} 之间的整数。')
 

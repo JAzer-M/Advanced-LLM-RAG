@@ -1,0 +1,2 @@
+The answer failed review, so no reliable factual answer can be delivered this time.
+- Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce: For the paper "Query-bag Matching with Mutual Coverage for Information-seeking Conversations in E-commerce" (arXiv: 1911.02747), answer this question: What datasets are used in experiments?; The answer to this requirement still needs checking.

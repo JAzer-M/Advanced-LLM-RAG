@@ -1,0 +1,3 @@
+The posts were annotated as quote-response pairs, with each response manually labeled for whether it is primarily a FACTUAL or FEELING based argument, measured as a scalar from -5 to +5, and each pair was annotated by 5–7 annotators.
+
+The IAC includes 10,003 Quote-Response pairs annotated for FACTUAL vs. FEELING argument style [7], with each pair annotated by 5–7 annotators [5]. Fact vs. Feeling was measured as a scalar ranging from -5 to +5, following prior work suggesting that taking the means of scalar annotations reduces noise in Mechanical Turk annotations [5]. The corpus consists of manually annotated quote-response pairs indicating whether the response is primarily a FACTUAL or FEELING based argument, with quotes providing context [6].

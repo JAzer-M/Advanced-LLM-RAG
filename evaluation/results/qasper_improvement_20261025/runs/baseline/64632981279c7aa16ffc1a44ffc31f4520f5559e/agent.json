@@ -1,0 +1,603 @@
+{
+  "query": "For the paper \"Verb Pattern: A Probabilistic Semantic Representation on Verbs\" (arXiv: 1710.07695), answer this question: what evaluation metrics are used?",
+  "status": "completed",
+  "decomposition": {
+    "needs_decomposition": false,
+    "sub_queries": [],
+    "status": "not_needed"
+  },
+  "knowledge_base": {
+    "version": "qasper-holdout-20261025",
+    "chunk_count": 1459,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/manifest.json",
+    "manifest_sha256": "10bb244a150c260e5efc39b1a6ebeb939291e26f55d966ed102d27216e67718a",
+    "files": {
+      "faiss.index": "346ac08a63ebb5f367f8a886b0997c344fc084bf1fa8b27ae27de9a82be97617",
+      "chunks.json": "ef123dcc0b2180f3b957d9089c8b5207965dffb1d908fdbf348863efecdeb060"
+    }
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 120,
+    "global_top_ids": [
+      462,
+      463,
+      433,
+      431,
+      406,
+      404,
+      425,
+      459,
+      410,
+      480
+    ],
+    "protected_ids": [],
+    "sub_query_evidence": [],
+    "retrieval_anchor_ids": [
+      462
+    ],
+    "evidence_completion": {
+      "requested_sources": [
+        "1710.07695.pdf"
+      ],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        462,
+        463,
+        433,
+        431,
+        406,
+        404,
+        425,
+        459,
+        410,
+        480
+      ],
+      "retained_local_ids": [],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        462,
+        463,
+        433,
+        431,
+        406,
+        404,
+        425,
+        459,
+        410,
+        480
+      ],
+      "elapsed_seconds": 0.000433
+    }
+  },
+  "selected_ids": [
+    462,
+    463,
+    433,
+    431,
+    406,
+    404,
+    425,
+    459,
+    410,
+    480,
+    460,
+    427,
+    458
+  ],
+  "context": "[1] Source: 1710.07695.pdf | Page: 5 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nThe case study veriﬁed that (1) our deﬁnition of verb pattern reﬂects verb’s polysemy; (2) most verb patterns we found are meaningful. Effectiveness To evaluate the effectiveness of our pattern summarization approach, we report two metrics: (1) (coverage) how much of the verb phrases in natural language our solution can ﬁnd corresponding patterns (2) (precision) how much of the phrases and their corresponding patterns are correctly matched?\n\n[2] Source: 1710.07695.pdf | Page: 5 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nWe compute the two metrics by: coverage = n cover precision = n correct n all n cover ,where n cover is the number of phrases in the test data for which our solution ﬁnds corresponding patterns, n all is the total number of phrases, n correct is the number of phrases whose corresponding patterns are correct. To evalu- ate precision, we randomly selected 100 verb phrases from the test data and ask volunteers to label the correctness of their assigned patterns.\n\n[3] Source: 1710.07695.pdf | Page: 3 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nSo the goal of this paper is to ﬁnd f. With f, we can easily compute the pattern distribution P(A) by: X X P(a|p)P(p) = P(a) = P(p) p s.t. f(p)=a p , where P(p) is the probability to observe phrase p in all phrases of the verb of interest. Note that the second equa- tion holds due to the obvious fact that P(a|p) = 1 when f(p) = a. P(p) can be directly estimated as the ratio of p’s frequency as in Eq 14. Model Next, we formalize our model based on minimum descrip- tion length.\n\n[4] Source: 1710.07695.pdf | Page: 3 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nA verb pattern is either an idiom pattern or a conceptualized pattern. Idiom Pattern is in the form of verb $Iobject (e.g. eat $Ihumble pie). Conceptual- ized Pattern is in the form of verb $Cconcept (e.g. eat $Cmeal). We denote the concept in a conceptualized pattern a as ca. Deﬁnition 1 (Pattern Assignment). A pattern assignment is a function f : P →A that maps an arbitrary phrase p to its pattern a. f(p) = a means the pattern of p is a.\n\n[5] Source: 1710.07695.pdf | Page: 1 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nIn this paper, we only focus on verbs that collocate with objects. As illus- trated in Example 1, most verbs are polysemous. Hence, a good semantic representation of verbs should be aware of their polysemy. Example 1 (Verb Polysemy). eat has the following senses: • a. Put food in mouth, chew it and swallow it, such as eat apple and eat hot dog. Have a meal, such as eat breakfast, eat lunch, and eat dinner. Idioms, such as eat humble pie, which means ad- mitting that you are wrong.\n\n[6] Source: 1710.07695.pdf | Page: 1 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nTraditional verb representations, such as FrameNet, PropBank, VerbNet, focus on verbs’ roles. These roles are too coarse to represent verbs’ semantics. In this paper, we in- troduce verb patterns to represent verbs’ semantics, such that each pattern corresponds to a single semantic of the verb. First we analyze the principles for verb patterns: generality and speciﬁcity. Then we propose a nonparametric model based on description length.\n\n[7] Source: 1710.07695.pdf | Page: 2 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nWe will use min- imum description length (MDL) as the basic framework to reconcile the two objectives. More speciﬁcally, our contri- bution in this paper can be summarized as follows: • We proposed verb patterns, a novel semantic representa- tions of verb. We proposed two types of verb patterns: conceptualized patterns and idiom patterns. The verb pat- tern is polysemy-aware so that we can use it to distinguish different verb semantics.\n\n[8] Source: 1710.07695.pdf | Page: 5 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nFor a ﬁxed verb, we compute the probability of phrase p by: n(p) P(p) = P pi n(pi) , where n(p) is the frequency of p in the corpus, and the denominator sums over all phrases of this verb. IsA Relationship We use Probase to compute the prob- ability of an entity given a concept PT (e|c), as well as the probability of the concept given an entity PT (c|e): n(e, c) n(e, c) PT (e|c) = PT (c|e) = P P ei n(ei, c) ci n(e, ci) ,where n(e, c) is the frequency that c and e co-occur in Probase.\n\n[9] Source: 1710.07695.pdf | Page: 1 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nweiwang1@fudan.edu.cn 2005), describe verbs’ semantic roles (e.g. ingestor and in- gestibles for “eat”). However, semantic roles in general are too coarse to differentiate a verb’s ﬁne-grained semantics. A verb in different phrases can have different semantics but similar roles. In Example 1, both “eat”s in “eat breakfast” and “eat apple” have ingestor. But they have different semantics.\n\n[10] Source: 1710.07695.pdf | Page: 6 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nSemantic Composition We represent verb phrases by verb patterns. while semantic composition works aim to represent the meaning of an arbitrary phrase as a vector or a tree. Vector-space model is widely used to represent the semantic of single word. A straightforward approach to characterize the semantic of a phrase thus is averag- ing the vectors over all the phrase’s words (Xinxiong et al. But this approach certainly ignores the syntac- tic relation (Landauer and Dumais 1997) between words.\n\n[11] Source: 1710.07695.pdf | Page: 5 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nTest data We use two data sets to show our solution can achieve consistent effectiveness on both short text and long text. The short text data set contains 1.6 millions of tweets from Twitter (Go, Bhayani, and Huang 2009). The long text data set contains 21,578 news articles from Reuters (Apt´e, Damerau, and Weiss 1994).\n\n[12] Source: 1710.07695.pdf | Page: 2 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\n• We conducted extensive experiments. The results verify the effectiveness of our model and algorithm. We pre- sented the applications of verb patterns in context-aware conceptualization. The application justiﬁes the effective- ness of verb patterns to represent verb semantics. Problem Model In this section, we deﬁne the problem of extracting patterns for verb phrases.\n\n[13] Source: 1710.07695.pdf | Page: 5 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nExperiments Settings Verb Phrase Data The pattern assignment uses the phrase distribution P(p). To do this, we use the “English All” dataset in Google Syntactic N-Grams. The dataset contains counted syntactic ngrams extracted from the English por- tion of the Google Books corpus. It contains 22,230 different verbs (without stemming), and 147,056 verb phrases.",
+  "ledger": {
+    "citation_registry": [
+      {
+        "citation": 1,
+        "chunk_id": 462,
+        "source": "1710.07695.pdf",
+        "page": 5,
+        "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "text": "The case study veriﬁed that (1) our deﬁnition of verb pattern reﬂects verb’s polysemy; (2) most verb patterns we found are meaningful. Effectiveness To evaluate the effectiveness of our pattern summarization approach, we report two metrics: (1) (coverage) how much of the verb phrases in natural language our solution can ﬁnd corresponding patterns (2) (precision) how much of the phrases and their corresponding patterns are correctly matched?",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 2,
+        "chunk_id": 463,
+        "source": "1710.07695.pdf",
+        "page": 5,
+        "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "text": "We compute the two metrics by: coverage = n cover precision = n correct n all n cover ,where n cover is the number of phrases in the test data for which our solution ﬁnds corresponding patterns, n all is the total number of phrases, n correct is the number of phrases whose corresponding patterns are correct. To evalu- ate precision, we randomly selected 100 verb phrases from the test data and ask volunteers to label the correctness of their assigned patterns.",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 3,
+        "chunk_id": 433,
+        "source": "1710.07695.pdf",
+        "page": 3,
+        "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "text": "So the goal of this paper is to ﬁnd f. With f, we can easily compute the pattern distribution P(A) by: X X P(a|p)P(p) = P(a) = P(p) p s.t. f(p)=a p , where P(p) is the probability to observe phrase p in all phrases of the verb of interest. Note that the second equa- tion holds due to the obvious fact that P(a|p) = 1 when f(p) = a. P(p) can be directly estimated as the ratio of p’s frequency as in Eq 14. Model Next, we formalize our model based on minimum descrip- tion length.",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 4,
+        "chunk_id": 431,
+        "source": "1710.07695.pdf",
+        "page": 3,
+        "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "text": "A verb pattern is either an idiom pattern or a conceptualized pattern. Idiom Pattern is in the form of verb $Iobject (e.g. eat $Ihumble pie). Conceptual- ized Pattern is in the form of verb $Cconcept (e.g. eat $Cmeal). We denote the concept in a conceptualized pattern a as ca. Deﬁnition 1 (Pattern Assignment). A pattern assignment is a function f : P →A that maps an arbitrary phrase p to its pattern a. f(p) = a means the pattern of p is a.",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 5,
+        "chunk_id": 406,
+        "source": "1710.07695.pdf",
+        "page": 1,
+        "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "text": "In this paper, we only focus on verbs that collocate with objects. As illus- trated in Example 1, most verbs are polysemous. Hence, a good semantic representation of verbs should be aware of their polysemy. Example 1 (Verb Polysemy). eat has the following senses: • a. Put food in mouth, chew it and swallow it, such as eat apple and eat hot dog. Have a meal, such as eat breakfast, eat lunch, and eat dinner. Idioms, such as eat humble pie, which means ad- mitting that you are wrong.",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 6,
+        "chunk_id": 404,
+        "source": "1710.07695.pdf",
+        "page": 1,
+        "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "text": "Traditional verb representations, such as FrameNet, PropBank, VerbNet, focus on verbs’ roles. These roles are too coarse to represent verbs’ semantics. In this paper, we in- troduce verb patterns to represent verbs’ semantics, such that each pattern corresponds to a single semantic of the verb. First we analyze the principles for verb patterns: generality and speciﬁcity. Then we propose a nonparametric model based on description length.",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 7,
+        "chunk_id": 425,
+        "source": "1710.07695.pdf",
+        "page": 2,
+        "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "text": "We will use min- imum description length (MDL) as the basic framework to reconcile the two objectives. More speciﬁcally, our contri- bution in this paper can be summarized as follows: • We proposed verb patterns, a novel semantic representa- tions of verb. We proposed two types of verb patterns: conceptualized patterns and idiom patterns. The verb pat- tern is polysemy-aware so that we can use it to distinguish different verb semantics.",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 8,
+        "chunk_id": 459,
+        "source": "1710.07695.pdf",
+        "page": 5,
+        "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "text": "For a ﬁxed verb, we compute the probability of phrase p by: n(p) P(p) = P pi n(pi) , where n(p) is the frequency of p in the corpus, and the denominator sums over all phrases of this verb. IsA Relationship We use Probase to compute the prob- ability of an entity given a concept PT (e|c), as well as the probability of the concept given an entity PT (c|e): n(e, c) n(e, c) PT (e|c) = PT (c|e) = P P ei n(ei, c) ci n(e, ci) ,where n(e, c) is the frequency that c and e co-occur in Probase.",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 9,
+        "chunk_id": 410,
+        "source": "1710.07695.pdf",
+        "page": 1,
+        "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "text": "weiwang1@fudan.edu.cn 2005), describe verbs’ semantic roles (e.g. ingestor and in- gestibles for “eat”). However, semantic roles in general are too coarse to differentiate a verb’s ﬁne-grained semantics. A verb in different phrases can have different semantics but similar roles. In Example 1, both “eat”s in “eat breakfast” and “eat apple” have ingestor. But they have different semantics.",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 10,
+        "chunk_id": 480,
+        "source": "1710.07695.pdf",
+        "page": 6,
+        "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "text": "Semantic Composition We represent verb phrases by verb patterns. while semantic composition works aim to represent the meaning of an arbitrary phrase as a vector or a tree. Vector-space model is widely used to represent the semantic of single word. A straightforward approach to characterize the semantic of a phrase thus is averag- ing the vectors over all the phrase’s words (Xinxiong et al. But this approach certainly ignores the syntac- tic relation (Landauer and Dumais 1997) between words.",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 11,
+        "chunk_id": 460,
+        "source": "1710.07695.pdf",
+        "page": 5,
+        "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "text": "Test data We use two data sets to show our solution can achieve consistent effectiveness on both short text and long text. The short text data set contains 1.6 millions of tweets from Twitter (Go, Bhayani, and Huang 2009). The long text data set contains 21,578 news articles from Reuters (Apt´e, Damerau, and Weiss 1994).",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 12,
+        "chunk_id": 427,
+        "source": "1710.07695.pdf",
+        "page": 2,
+        "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "text": "• We conducted extensive experiments. The results verify the effectiveness of our model and algorithm. We pre- sented the applications of verb patterns in context-aware conceptualization. The application justiﬁes the effective- ness of verb patterns to represent verb semantics. Problem Model In this section, we deﬁne the problem of extracting patterns for verb phrases.",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 13,
+        "chunk_id": 458,
+        "source": "1710.07695.pdf",
+        "page": 5,
+        "title": "Verb Pattern: A Probabilistic Semantic Representation on Verbs",
+        "text": "Experiments Settings Verb Phrase Data The pattern assignment uses the phrase distribution P(p). To do this, we use the “English All” dataset in Google Syntactic N-Grams. The dataset contains counted syntactic ngrams extracted from the English por- tion of the Google Books corpus. It contains 22,230 different verbs (without stemming), and 147,056 verb phrases.",
+        "kb_version": "qasper-holdout-20261025"
+      }
+    ]
+  },
+  "mode": "agent",
+  "answer": "该论文使用了两个评估指标：**coverage（覆盖率）** 和 **precision（精确率）** [1]。coverage 衡量自然语言中的动词短语能找到对应 pattern 的比例；precision 衡量短语与其对应 pattern 正确匹配的比例 [1]。计算方式为：coverage = n_cover / n_all，precision = n_correct / n_cover，其中 n_cover 是测试数据中找到对应 pattern 的短语数，n_all 是短语总数，n_correct 是 pattern 正确的短语数；precision 通过从测试数据中随机抽取 100 个动词短语、由志愿者标注其 pattern 正确性来评估 [2]。",
+  "run_dir": "/Users/j/Desktop/Advanced-LLM-RAG/evaluation/results/qasper_improvement_20261025/runs/baseline/64632981279c7aa16ffc1a44ffc31f4520f5559e/agent_run",
+  "initial_selected_ids": [
+    462,
+    463,
+    433,
+    431,
+    406,
+    404,
+    425,
+    459,
+    410,
+    480
+  ],
+  "agent": {
+    "invoked": true,
+    "actions_executed": 0,
+    "decision_summary": {
+      "planned_cases": 1,
+      "completed_cases": 1,
+      "api_attempts": 3,
+      "failed_api_attempts": 0,
+      "automatic_retries": 0,
+      "actions_executed": 0,
+      "usage_missing_calls": [],
+      "reported_usage": {
+        "prompt_tokens": 5183,
+        "completion_tokens": 470,
+        "total_tokens": 5653
+      },
+      "proposed_actions": {
+        "question": {
+          "type": "answer",
+          "reason": "所需评估指标已在原文中被完全确立。",
+          "requirement_ids": [],
+          "query": null,
+          "source": null,
+          "chunk_id": null
+        }
+      },
+      "action_attempts": 0,
+      "reassessment_api_attempts": 0,
+      "reassessed_actions": {
+        "question": null
+      },
+      "final_answer_generations": 0,
+      "automatic_action_loop": true,
+      "validation_repair_attempts": 1,
+      "paused_cases": 0,
+      "halt_reasons": {
+        "question": "answer_ready"
+      }
+    },
+    "halt_reason": "answer_ready",
+    "answer_summary": {
+      "question_id": "question",
+      "status": "completed",
+      "answer_status": "review_passed",
+      "api_attempts": 2,
+      "failed_api_attempts": 0,
+      "automatic_retries": 0,
+      "repair_attempted": false,
+      "usage_missing_calls": [],
+      "reported_usage": {
+        "prompt_tokens": 6707,
+        "completion_tokens": 535,
+        "total_tokens": 7242
+      },
+      "semantic_correctness": "requires_manual_review"
+    }
+  },
+  "actions": [],
+  "answer_status": "review_passed",
+  "stop_reason": "answer_ready",
+  "network": {
+    "status": "not_requested",
+    "http_tool_calls": 0,
+    "papers_read": 0
+  },
+  "api_summary": {
+    "attempts": 6,
+    "failed_attempts": 0,
+    "automatic_retries": 0,
+    "usage_missing_calls": [],
+    "reported_usage": {
+      "prompt_tokens": 12597,
+      "completion_tokens": 1027,
+      "total_tokens": 13624
+    }
+  },
+  "original_question": "what evaluation metrics are used?",
+  "eval_api_calls": [
+    {
+      "number": 1,
+      "requested_model": "cn:glm-5.3-flash",
+      "started_at_utc": "2026-10-25T02:51:30.897449+00:00",
+      "status": "completed",
+      "prompt_characters": 3355,
+      "prompt_sha256": "7f9da7b1e9d004b6c457b90af0e63cec3b6a426d1b1ea582df8e0366dffeb03b",
+      "reported_model": "glm-5.3-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 704,
+        "cached_tokens": 704,
+        "completion_thinking_tokens": 4,
+        "completion_tokens": 22,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 4,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0,
+        "prompt_cache_hit_tokens": 704,
+        "prompt_cache_miss_tokens": 3,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 707,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 704,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 729
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      },
+      "seconds": 2.156
+    },
+    {
+      "number": 2,
+      "requested_model": "cn:glm-5.3-flash",
+      "started_at_utc": "2026-10-25T02:51:39.286677+00:00",
+      "status": "completed",
+      "prompt_characters": 2672,
+      "prompt_sha256": "f01f4931b389216da4ea79e4fd24adc00fd2f264899fda470e56f50758efa2e0",
+      "reported_model": "glm-5.3-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cached_tokens": 0,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 36,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.01,
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 554,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 554,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 590
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      },
+      "seconds": 2.015
+    },
+    {
+      "number": 3,
+      "requested_model": "cn:glm-5.3-flash",
+      "started_at_utc": "2026-10-25T02:51:41.309356+00:00",
+      "status": "completed",
+      "prompt_characters": 3127,
+      "prompt_sha256": "3b3f198f4a4a0db53ad4b934c7f9898e84b9446fa5e3c7e80853fda682a70ebe",
+      "reported_model": "glm-5.3-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cached_tokens": 0,
+        "completion_thinking_tokens": 94,
+        "completion_tokens": 161,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 94,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.02,
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 641,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 641,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 802
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      },
+      "seconds": 3.6
+    },
+    {
+      "number": 4,
+      "requested_model": "cn:glm-5.3-flash",
+      "started_at_utc": "2026-10-25T02:51:44.917785+00:00",
+      "status": "completed",
+      "prompt_characters": 16249,
+      "prompt_sha256": "ba04e48ee0c4a6913f7c9ad41dc19a7d06dac1b6aca608d8b07083b9def7e634",
+      "reported_model": "glm-5.3-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cached_tokens": 0,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 273,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.07,
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 3988,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 3988,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 4261
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      },
+      "seconds": 5.07
+    },
+    {
+      "number": 5,
+      "requested_model": "cn:glm-5.3-flash",
+      "started_at_utc": "2026-10-25T02:51:50.014001+00:00",
+      "status": "completed",
+      "prompt_characters": 12172,
+      "prompt_sha256": "2554a7f3be4e64854b8cc375eebc7aab1905702d1f670530d30e92e23dab650f",
+      "reported_model": "glm-5.3-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cached_tokens": 0,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 134,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.05,
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 3104,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 3104,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 3238
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      },
+      "seconds": 4.818
+    },
+    {
+      "number": 6,
+      "requested_model": "cn:glm-5.3-flash",
+      "started_at_utc": "2026-10-25T02:51:54.841081+00:00",
+      "status": "completed",
+      "prompt_characters": 13896,
+      "prompt_sha256": "01eaeb6ad43a18c93384d9f290b32ad2e562f1a51fbe905fdde8f8f9f825a3a3",
+      "reported_model": "glm-5.3-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cached_tokens": 0,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 401,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.07,
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 3603,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 3603,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 4004
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      },
+      "seconds": 5.318
+    }
+  ],
+  "eval_elapsed_seconds": 29.29,
+  "evaluation": {
+    "version": "baseline",
+    "requested_model": "cn:glm-5.3-flash",
+    "stage": "runs",
+    "source_root": "/Users/j/Desktop/Advanced-LLM-RAG/evaluation/results/qasper_improvement_20261025/baseline_source",
+    "started_at_utc": "2026-10-25T02:51:30.897449+00:00",
+    "kb_version": "qasper-holdout-20261025"
+  }
+}

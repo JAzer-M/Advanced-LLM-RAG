@@ -1,6 +1,8 @@
 # 代码阅读说明与 Agent 当前边界
 
-更新：2026-10-24（Asia/Shanghai）。当前保存的回归为345项后端与27项网页通过；中文比较、回答语言及JSON代码块兼容已修复，网页支持独立配对版本和PDF入库。完整现状以[PROGRESS](../PROGRESS.md)为准，[分版本结果](PROJECT_METRICS.md)区分历史失败与当前开发回归。下文按阶段保留实现演进和旧运行证据，不把旧测试数量或当时限制当成今天的状态。
+更新：2026-10-25（Asia/Shanghai）。当前回归为378项后端与43项网页通过；新加入明确论文范围、题头/检索问题分离、有限断行引文兼容及Agent本地失败的有预算RAG回退。中文比较、回答语言及JSON代码块兼容此前已修复，网页支持独立配对版本和PDF入库。完整现状以[PROGRESS](../PROGRESS.md)为准，[分版本结果](PROJECT_METRICS.md)区分历史失败与当前开发回归。下文按阶段保留实现演进和旧运行证据，不把旧测试数量或当时限制当成今天的状态。
+
+最新改动从`src/query_scope.py`的`resolve_query_scope()`、`main.py`的`_run_pipeline()`与`_agent_rag_fallback()`读起。来源约束贯穿检索和Agent工具，ID不重新编号；回退只作degraded交付，原失败记录仍在。QASPER短答与拒答适配单列在`evaluation/qasper_scoring.py`，原评分脚本保留。[新轮协议与边界](../evaluation/results/qasper_improvement_20261025/protocol.md)
 
 ## 1. 当前做出了什么
 

@@ -1,0 +1,221 @@
+{
+  "reviewer": "Codex",
+  "method": "fixed sample; compare full answers with reference facts and cited original passages; not independent human grading",
+  "questions": [
+    {
+      "question_id": "da077b385d619305033785af5b204696d6145bd8",
+      "paper_id": "1911.02747",
+      "core_facts": "QBM uses hCNN/CNN; answer Yes.",
+      "results": [
+        {
+          "version": "baseline",
+          "mode": "rag",
+          "core_answer": "supported",
+          "citation_support": "core_claim_supported",
+          "notes": "CNN input and cross-attention source passage supports the neural-network answer."
+        },
+        {
+          "version": "baseline",
+          "mode": "agent",
+          "core_answer": "supported",
+          "citation_support": "core_claim_supported",
+          "notes": "CNN input and cross-attention source passage supports the neural-network answer."
+        },
+        {
+          "version": "baseline",
+          "mode": "auto",
+          "core_answer": "supported",
+          "citation_support": "core_claim_supported",
+          "notes": "CNN input and cross-attention source passage supports the neural-network answer."
+        },
+        {
+          "version": "revised",
+          "mode": "rag",
+          "core_answer": "supported",
+          "citation_support": "minor_section_attribution_error",
+          "notes": "Revised RAG calls introduction text the conclusion; main Yes/CNN answer remains supported."
+        },
+        {
+          "version": "revised",
+          "mode": "agent",
+          "core_answer": "supported",
+          "citation_support": "core_claim_supported",
+          "notes": "CNN input and cross-attention source passage supports the neural-network answer."
+        },
+        {
+          "version": "revised",
+          "mode": "auto",
+          "core_answer": "supported",
+          "citation_support": "core_claim_supported",
+          "notes": "CNN input and cross-attention source passage supports the neural-network answer."
+        }
+      ],
+      "format_boundary": "Revised Agent has one long paragraph despite the requested standalone short paragraph; first paragraph and full answer remain separate metrics only when an actual paragraph boundary exists."
+    },
+    {
+      "question_id": "e057fa254ea7a4335de22fd97a0f08814b88aea4",
+      "paper_id": "1804.08000",
+      "core_facts": "Classifier uses logistic regression over entity, sentence and document features; own sentence encoder is one bidirectional RNN. Reference variants differ in detail.",
+      "source_chunk_ids": [
+        513,
+        515
+      ],
+      "results": [
+        {
+          "version": "baseline",
+          "mode": "rag",
+          "core_answer": "omits_reference_classifier",
+          "citation_support": "cited_reported_facts_supported",
+          "notes": "Classifier absent in baseline; revised classifier citation is chunk510/registry10, with document and attention details."
+        },
+        {
+          "version": "baseline",
+          "mode": "agent",
+          "core_answer": "omits_reference_classifier",
+          "citation_support": "cited_reported_facts_supported",
+          "notes": "Wrong language (Chinese) for English question; also omits logistic regression."
+        },
+        {
+          "version": "baseline",
+          "mode": "auto",
+          "core_answer": "omits_reference_classifier",
+          "citation_support": "cited_reported_facts_supported",
+          "notes": "Classifier absent in baseline; revised classifier citation is chunk510/registry10, with document and attention details."
+        },
+        {
+          "version": "revised",
+          "mode": "rag",
+          "core_answer": "contains_supported_logistic_regression",
+          "citation_support": "cited_reported_facts_supported",
+          "notes": "Classifier absent in baseline; revised classifier citation is chunk510/registry10, with document and attention details."
+        },
+        {
+          "version": "revised",
+          "mode": "agent",
+          "core_answer": "contains_supported_logistic_regression",
+          "citation_support": "cited_reported_facts_supported",
+          "notes": "Classifier absent in baseline; revised classifier citation is chunk510/registry10, with document and attention details."
+        },
+        {
+          "version": "revised",
+          "mode": "auto",
+          "core_answer": "contains_supported_logistic_regression",
+          "citation_support": "incorrect_prior_work_attribution",
+          "notes": "States own sentence encoder uses two RNNs by quoting prior work. Chunk513 says own model uses one; chunk515 starts with prior-work continuation."
+        }
+      ],
+      "boundary": "Same-paper source filtering does not prevent confusing related work with the proposed model; lexical overlap can improve while an auxiliary fact is wrong."
+    },
+    {
+      "question_id": "c2ce25878a17760c79031a426b6f38931cd854b2",
+      "paper_id": "2003.11528",
+      "core_facts": "Reference data source is CCPC1.0 / Chinese classical poetry corpus, with SHI and CI subsets.",
+      "source_chunk_ids": [
+        1393
+      ],
+      "results": [
+        {
+          "version": "baseline",
+          "mode": "rag",
+          "core_answer": "matches_reference_corpus",
+          "citation_support": "Corpus identity/statistics supported by page1 chunk1393.",
+          "notes": "Baseline RAG/Auto give CCPC1.0; baseline Agent and all revised modes decline. Processing completed does not mean a correct refusal."
+        },
+        {
+          "version": "baseline",
+          "mode": "agent",
+          "core_answer": "incorrect_refusal",
+          "citation_support": "The selected evidence was judged insufficient, although a corpus reference is available in the KB.",
+          "notes": "Baseline RAG/Auto give CCPC1.0; baseline Agent and all revised modes decline. Processing completed does not mean a correct refusal."
+        },
+        {
+          "version": "baseline",
+          "mode": "auto",
+          "core_answer": "matches_reference_corpus",
+          "citation_support": "Corpus identity/statistics supported by page1 chunk1393.",
+          "notes": "Baseline RAG/Auto give CCPC1.0; baseline Agent and all revised modes decline. Processing completed does not mean a correct refusal."
+        },
+        {
+          "version": "revised",
+          "mode": "rag",
+          "core_answer": "incorrect_refusal",
+          "citation_support": "The selected evidence was judged insufficient, although a corpus reference is available in the KB.",
+          "notes": "Baseline RAG/Auto give CCPC1.0; baseline Agent and all revised modes decline. Processing completed does not mean a correct refusal."
+        },
+        {
+          "version": "revised",
+          "mode": "agent",
+          "core_answer": "incorrect_refusal",
+          "citation_support": "The selected evidence was judged insufficient, although a corpus reference is available in the KB.",
+          "notes": "Baseline RAG/Auto give CCPC1.0; baseline Agent and all revised modes decline. Processing completed does not mean a correct refusal."
+        },
+        {
+          "version": "revised",
+          "mode": "auto",
+          "core_answer": "incorrect_refusal",
+          "citation_support": "The selected evidence was judged insufficient, although a corpus reference is available in the KB.",
+          "notes": "Baseline RAG/Auto give CCPC1.0; baseline Agent and all revised modes decline. Processing completed does not mean a correct refusal."
+        }
+      ],
+      "retrieval_boundary": {
+        "ccpc_chunk_in_revised_candidates": true,
+        "ccpc_rank": 68
+      },
+      "boundary": "Concrete regression: revised initial ranking selects preprocessing/training-format passages and misses the corpus-identification passage; no code changed after observing this."
+    },
+    {
+      "question_id": "22225ba18a6efe74b1315cc08405011d5431498e",
+      "paper_id": "1705.00571",
+      "core_facts": "Gold references disagree (Yes and No). Paper explicitly uses externally downloaded Factiva financial articles to train domain word2vec; missing company/aspect handling does not entail absence of external financial information.",
+      "source_chunk_ids": [
+        244,
+        245,
+        274,
+        276,
+        277
+      ],
+      "results": [
+        {
+          "version": "baseline",
+          "mode": "rag",
+          "core_answer": "insufficient_evidence_refusal",
+          "citation_support": "Failure/refusal does not resolve the question; initial retrieved context omitted external-corpus details."
+        },
+        {
+          "version": "baseline",
+          "mode": "agent",
+          "core_answer": "planning_failed",
+          "citation_support": "Failure/refusal does not resolve the question; initial retrieved context omitted external-corpus details."
+        },
+        {
+          "version": "baseline",
+          "mode": "auto",
+          "core_answer": "yes_with_external_financial_corpus",
+          "citation_support": "External corpus and word2vec details directly supported by chunks244/245."
+        },
+        {
+          "version": "revised",
+          "mode": "rag",
+          "core_answer": "insufficient_evidence_refusal",
+          "citation_support": "Failure/refusal does not resolve the question; initial retrieved context omitted external-corpus details."
+        },
+        {
+          "version": "revised",
+          "mode": "agent",
+          "core_answer": "fallback_refusal_after_planning_failure",
+          "citation_support": "Failure/refusal does not resolve the question; initial retrieved context omitted external-corpus details."
+        },
+        {
+          "version": "revised",
+          "mode": "auto",
+          "core_answer": "no_with_unsupported_exclusion_inference",
+          "citation_support": "Quoted passages support absent company/aspect handling, but do not support the broad No-external-knowledge conclusion."
+        }
+      ],
+      "boundary": "At-least-one-reference scoring can accept opposite binary answers here. Do not use that acceptance as proof that the detailed reasoning is valid."
+    }
+  ],
+  "completed_fixed_questions": 4,
+  "completed_fixed_outputs": 24,
+  "summary": "Spot checks expose supported answers, missing classifier facts, same-paper prior-work confusion, a revised retrieval regression, and contradictory binary references; these 24 checks are not an accuracy estimate."
+}

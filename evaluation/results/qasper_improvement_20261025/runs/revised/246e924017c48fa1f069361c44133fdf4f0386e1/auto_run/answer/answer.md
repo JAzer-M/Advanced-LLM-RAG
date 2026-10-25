@@ -1,0 +1,2 @@
+Insufficient evidence to reliably answer these requirements:
+- Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection: For the paper "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection" (arXiv: 1909.01720), answer this question: How is the selected sharing layer trained?; 关于所选择的共享层如何被训练的描述（训练目标/损失、联合多任务训练）缺失。

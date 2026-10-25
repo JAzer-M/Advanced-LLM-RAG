@@ -1,0 +1,402 @@
+{
+  "id": "question",
+  "query": "For the paper \"And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue\" (arXiv: 1709.05295), answer this question: How were the factual and feeling forum posts annotated?",
+  "kb_version": "qasper-holdout-20261025",
+  "status": "completed",
+  "actions_executed": 1,
+  "semantic_correctness": "requires_manual_review",
+  "validation_repairs": [
+    {
+      "phase": "plan",
+      "error": "Requirement question_quote must name its own subject and show its scope."
+    }
+  ],
+  "plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+        "question_quote": "For the paper \"And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue\" (arXiv: 1709.05295), answer this question: How were the factual and feeling forum posts annotated?",
+        "need": "For the paper \"And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue\" (arXiv: 1709.05295), answer this question: How were the factual and feeling forum posts annotated?"
+      }
+    ]
+  },
+  "assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "partial",
+        "evidence": [
+          {
+            "chunk_id": 321,
+            "quote": "Slider Scale -5,5: Survey Question Fact/Emotion: Is the respondent attempting to make a fact based argument or appealing to feelings and emo- tions? Figure 2: Mechanical Turk Survey Question used for Fact/Feeling annotation."
+          }
+        ],
+        "supported_part": "The factual and feeling forum posts were annotated using a Mechanical Turk survey question asking whether the respondent is attempting to make a fact-based argument or appealing to feelings and emotions, with a -5,5 slider scale.",
+        "reason": "The passage shows the survey question and slider scale used for Fact/Feeling annotation, but does not describe the full annotation process (e.g., who annotated, how many annotators, how labels were derived/aggregated).",
+        "gap": "The full annotation procedure is not established: number of annotators per post, agreement measures, and how the slider scores were converted into FACTUAL/FEELING labels remain undescribed in the supplied passages."
+      }
+    ],
+    "next_action": {
+      "type": "read_neighbors",
+      "reason": "The annotation detail is likely near the Mechanical Turk survey figure on page 3 (chunk 321); reading its neighboring passages should reveal the full annotation process.",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": null,
+      "source": "1709.05295.pdf",
+      "chunk_id": 321
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "Assessment is limited to how factual and feeling forum posts were annotated in the specified paper; no comparison or extra conditions were introduced."
+    }
+  },
+  "steps": [
+    {
+      "number": 1,
+      "action": {
+        "type": "read_neighbors",
+        "reason": "The annotation detail is likely near the Mechanical Turk survey figure on page 3 (chunk 321); reading its neighboring passages should reveal the full annotation process.",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": null,
+        "source": "1709.05295.pdf",
+        "chunk_id": 321
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "read_neighbors",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "chunk_id": 321,
+          "source": "1709.05295.pdf",
+          "knowledge_base": {
+            "version": "qasper-holdout-20261025",
+            "chunk_count": 1459,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/manifest.json",
+            "manifest_sha256": "10bb244a150c260e5efc39b1a6ebeb939291e26f55d966ed102d27216e67718a",
+            "files": {
+              "faiss.index": "346ac08a63ebb5f367f8a886b0997c344fc084bf1fa8b27ae27de9a82be97617",
+              "chunks.json": "ef123dcc0b2180f3b957d9089c8b5207965dffb1d908fdbf348863efecdeb060"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 319,
+              "text": "For our experiments, we use only the response texts and assign a binary FACT or FEEL label to each response: texts with score > 1 are assigned to the FACT class and texts with score < -1 are assigned to the FEELING class. We did not use the responses with scores between -1 and 1 because they had a very weak Fact/Feeling assessment, which could be attributed to responses either containing aspects of both factual and feeling expression, or neither.",
+              "source": "1709.05295.pdf",
+              "page": 3,
+              "title": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+              "section": "2.1 Data",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -2
+            },
+            {
+              "chunk_id": 320,
+              "text": "The resulting set contains 3,466 FACT and 2,382 FEEL- ING posts. We randomly partitioned the FACT/FEEL responses into three subsets: a training set with 70% of the data (2,426 FACT and 1,667 FEELING posts), a development (tuning) set with 20% of the data (693 FACT and 476 FEELING posts), and a test set with 10% of the data (347 FACT and 239 FEELING posts). For the bootstrapping method, we also used 11,560 responses from the unannotated data.",
+              "source": "1709.05295.pdf",
+              "page": 3,
+              "title": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+              "section": "2.1 Data",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -1
+            },
+            {
+              "chunk_id": 321,
+              "text": "1https://nlds.soe.ucsc.edu/iac Slider Scale -5,5: Survey Question Fact/Emotion: Is the respondent attempting to make a fact based argument or appealing to feelings and emo- tions? Figure 2: Mechanical Turk Survey Question used for Fact/Feeling annotation.",
+              "source": "1709.05295.pdf",
+              "page": 3,
+              "title": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+              "section": "2.1 Data",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 0
+            },
+            {
+              "chunk_id": 322,
+              "text": "2.2 Bootstrapped Pattern Learning The goal of our research is to gain insights into the types of linguistic expressions and properties that are distinctive and common in factual and feeling based argumentation. We also explore whether it is possible to develop a high-precision FACT vs. FEEL- ING classiﬁer that can be applied to unannotated data to ﬁnd new linguistic expressions that did not occur in our original labeled corpus.",
+              "source": "1709.05295.pdf",
+              "page": 3,
+              "title": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+              "section": "2.2 Bootstrapped Pattern Learning",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 1
+            },
+            {
+              "chunk_id": 323,
+              "text": "To accomplish this, we use the AutoSlog-TS sys- tem (Riloff, 1996) to extract linguistic expressions from the annotated texts. Since the IAC also con- tains a large collection of unannotated texts, we then embed AutoSlog-TS in a bootstrapping framework to learn additional linguistic expressions from the unannotated texts. First, we brieﬂy describe the AutoSlog-TS pattern learner and the set of pattern templates that we used.",
+              "source": "1709.05295.pdf",
+              "page": 3,
+              "title": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+              "section": "2.2 Bootstrapped Pattern Learning",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 2
+            }
+          ],
+          "trace": {
+            "window": 2,
+            "max_window": 2,
+            "selected_ids": [
+              319,
+              320,
+              321,
+              322,
+              323
+            ],
+            "read_chars": 2009,
+            "elapsed_seconds": 0.000163,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        319,
+        320,
+        322,
+        323
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          319,
+          320,
+          322,
+          323
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "supported",
+            "evidence": [
+              {
+                "chunk_id": 321,
+                "quote": "Slider Scale -5,5: Survey Question Fact/Emotion: Is the respondent attempting to make a fact based argument or appealing to feelings and emo- tions? Figure 2: Mechanical Turk Survey Question used for Fact/Feeling annotation."
+              },
+              {
+                "chunk_id": 319,
+                "quote": "For our experiments, we use only the response texts and assign a binary FACT or FEEL label to each response: texts with score > 1 are assigned to the FACT class and texts with score < -1 are assigned to the FEELING class. We did not use the responses with scores between -1 and 1 because they had a very weak Fact/Feeling assessment, which could be attributed to responses either containing aspects of both factual and feeling expression, or neither."
+              }
+            ],
+            "supported_part": "The forum posts were annotated using a Mechanical Turk survey with a slider scale from -5 to 5, asking whether the respondent is attempting to make a fact-based argument or appealing to feelings and emotions; responses with score > 1 were assigned the FACT label, those with score < -1 the FEELING label, and responses between -1 and 1 were discarded.",
+            "reason": "The passages directly describe the annotation procedure: the Mechanical Turk Fact/Feeling survey question with a -5 to 5 slider scale (chunk 321) and the rule converting scores into binary FACT/FEEL labels while excluding weak-assessment posts (chunk 319).",
+            "gap": ""
+          }
+        ],
+        "next_action": {
+          "type": "answer",
+          "reason": "The annotation method for factual and feeling forum posts is fully established by the supplied passages.",
+          "requirement_ids": [],
+          "query": null,
+          "source": null,
+          "chunk_id": null
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "The check addresses only the requirement's excerpt about how the factual and feeling posts were annotated; no scope was exceeded."
+        }
+      }
+    }
+  ],
+  "evidence_after": [
+    {
+      "chunk_id": 371,
+      "source": "1709.05295.pdf",
+      "page": 8,
+      "title": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+      "text": "6 Conclusion In this paper, we use observed differences in argu- mentation styles in online debate forums to extract patterns that are highly correlated with factual and emotional argumentation. From an annotated set of forum post responses, we are able extract high- precision patterns that are associated with the argu- mentation style classes, and we are then able to use these patterns to get a larger set of indicative pat- terns using a bootstrapping methodology on a set of unannotated posts.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 293,
+      "source": "1709.05295.pdf",
+      "page": 1,
+      "title": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+      "text": "Using an annotated set of FACTUAL and FEELING debate forum posts, we extract patterns that are highly correlated with factual and emotional arguments, and then apply a bootstrapping methodology to ﬁnd new patterns in a larger pool of unanno- tated forum posts. This process automatically produces a large set of patterns representing linguistic expressions that are highly corre- lated with factual and emotional language.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 292,
+      "source": "1709.05295.pdf",
+      "page": 1,
+      "title": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+      "text": "And That’s A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue Shereen Oraby∗, Lena Reed∗, Ryan Compton∗, Ellen Riloff †, Marilyn Walker∗and Steve Whittaker∗ ∗University of California Santa Cruz {soraby,lireed,rcompton,mawalker,swhittak}@ucsc.edu † University of Utah riloff@cs.utah.edu arXiv:1709.05295v1 [cs.CL] 15 Sep 2017 Abstract We investigate the characteristics of factual and emotional argumentation styles observed in online debates.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 381,
+      "source": "1709.05295.pdf",
+      "page": 9,
+      "title": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+      "text": "2014. Extracting relevant knowledge for the detection of sarcasm and Knowledge-Based Sys- nastiness in the social web. tems, 69:124–133. Soo-Min Kim and Eduard Hovy. 2004. Determining the sentiment of opinions. In Proceedings of the 20th In- ternational Conference on Computational Linguistics (COLING 2004), pages 1267–1373, Geneva, Switzer- land. Stephanie Lukin and Marilyn Walker. 2013. Really?",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 321,
+      "source": "1709.05295.pdf",
+      "page": 3,
+      "title": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+      "text": "1https://nlds.soe.ucsc.edu/iac Slider Scale -5,5: Survey Question Fact/Emotion: Is the respondent attempting to make a fact based argument or appealing to feelings and emo- tions? Figure 2: Mechanical Turk Survey Question used for Fact/Feeling annotation.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 360,
+      "source": "1709.05295.pdf",
+      "page": 8,
+      "title": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+      "text": "patterns with the preposition “for” are substantially more common in the FEEL class than the FACT class. Table 4 shows examples of learned NP Prep pat- terns with the preposition “of” in the FACT class and “for” in the FEEL class. The “of” preposition in the factual arguments often attaches to objective terminology. The “for” preposition in the feeling- based arguments is commonly used to express advo- cacy (e.g., demand for) or refer to affected popula- tion groups (e.g., treatment for).",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 382,
+      "source": "1709.05295.pdf",
+      "page": 9,
+      "title": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+      "text": "apparently bootstrapping improves the perfor- mance of sarcasm and nastiness classiﬁers for online dialogue. NAACL 2013, page 30. Emo- Fabrizio Macagno and Douglas Walton. 2014. tive language in argumentation. Cambridge Univer- sity Press. Marwell and D. 1967. Dimensions of compliance-gaining behavior: An empirical analysis.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 388,
+      "source": "1709.05295.pdf",
+      "page": 10,
+      "title": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+      "text": "Ashequl Qadir and Ellen Riloff. 2013. Bootstrapped learning of emotion hashtags# hashtags4you. In Pro- ceedings of the 4th workshop on computational ap- proaches to subjectivity, sentiment and social media analysis, pages 2–11. Chris Reed and Glenn Rowe. 2004. Araucaria: Software for argument analysis, diagramming and representa- tion. International Journal on Artiﬁcial Intelligence Tools, 13(04):961–979. Ellen Riloff and William Phillips.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 374,
+      "source": "1709.05295.pdf",
+      "page": 9,
+      "title": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+      "text": "We also hope to understand in more detail the relationship between these argument styles and the heurstic routes to persuasion and as- sociated strategies that have been identiﬁed in previ- ous work on argumentation and persuasion (Marwell and Schmitt, 1967; Cialdini, 2000; Reed and Rowe, 2004). Acknowledgments This work was funded by NSF Grant IIS-1302668- 002 under the Robust Intelligence Program.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 332,
+      "source": "1709.05295.pdf",
+      "page": 4,
+      "title": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+      "text": "bels associated with the texts to compute statistics for how often each pattern occurs in each class of texts. For each pattern p, we collect P(FACTUAL | p) and P(FEELING | p), as well as the pattern’s overall frequency in the corpus.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 331,
+      "source": "1709.05295.pdf",
+      "page": 4,
+      "title": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+      "text": "The learning process in AutoSlog-TS has two phases. In the ﬁrst phase, the pattern templates are applied to the texts exhaustively, so that lexico- syntactic patterns are generated for (literally) every instantiation of the templates that appear in the cor- pus. In the second phase, AutoSlog-TS uses the la- 2The examples are shown as general expressions for read- ability, but the actual patterns must match the syntactic con- straints associated with the pattern template.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 319,
+      "source": "1709.05295.pdf",
+      "page": 3,
+      "title": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+      "text": "For our experiments, we use only the response texts and assign a binary FACT or FEEL label to each response: texts with score > 1 are assigned to the FACT class and texts with score < -1 are assigned to the FEELING class. We did not use the responses with scores between -1 and 1 because they had a very weak Fact/Feeling assessment, which could be attributed to responses either containing aspects of both factual and feeling expression, or neither.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 320,
+      "source": "1709.05295.pdf",
+      "page": 3,
+      "title": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+      "text": "The resulting set contains 3,466 FACT and 2,382 FEEL- ING posts. We randomly partitioned the FACT/FEEL responses into three subsets: a training set with 70% of the data (2,426 FACT and 1,667 FEELING posts), a development (tuning) set with 20% of the data (693 FACT and 476 FEELING posts), and a test set with 10% of the data (347 FACT and 239 FEELING posts). For the bootstrapping method, we also used 11,560 responses from the unannotated data.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 322,
+      "source": "1709.05295.pdf",
+      "page": 3,
+      "title": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+      "text": "2.2 Bootstrapped Pattern Learning The goal of our research is to gain insights into the types of linguistic expressions and properties that are distinctive and common in factual and feeling based argumentation. We also explore whether it is possible to develop a high-precision FACT vs. FEEL- ING classiﬁer that can be applied to unannotated data to ﬁnd new linguistic expressions that did not occur in our original labeled corpus.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 323,
+      "source": "1709.05295.pdf",
+      "page": 3,
+      "title": "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue",
+      "text": "To accomplish this, we use the AutoSlog-TS sys- tem (Riloff, 1996) to extract linguistic expressions from the annotated texts. Since the IAC also con- tains a large collection of unannotated texts, we then embed AutoSlog-TS in a bootstrapping framework to learn additional linguistic expressions from the unannotated texts. First, we brieﬂy describe the AutoSlog-TS pattern learner and the set of pattern templates that we used.",
+      "kb_version": "qasper-holdout-20261025"
+    }
+  ],
+  "action_attempts": 1,
+  "feedback_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 321,
+            "quote": "Slider Scale -5,5: Survey Question Fact/Emotion: Is the respondent attempting to make a fact based argument or appealing to feelings and emo- tions? Figure 2: Mechanical Turk Survey Question used for Fact/Feeling annotation."
+          },
+          {
+            "chunk_id": 319,
+            "quote": "For our experiments, we use only the response texts and assign a binary FACT or FEEL label to each response: texts with score > 1 are assigned to the FACT class and texts with score < -1 are assigned to the FEELING class. We did not use the responses with scores between -1 and 1 because they had a very weak Fact/Feeling assessment, which could be attributed to responses either containing aspects of both factual and feeling expression, or neither."
+          }
+        ],
+        "supported_part": "The forum posts were annotated using a Mechanical Turk survey with a slider scale from -5 to 5, asking whether the respondent is attempting to make a fact-based argument or appealing to feelings and emotions; responses with score > 1 were assigned the FACT label, those with score < -1 the FEELING label, and responses between -1 and 1 were discarded.",
+        "reason": "The passages directly describe the annotation procedure: the Mechanical Turk Fact/Feeling survey question with a -5 to 5 slider scale (chunk 321) and the rule converting scores into binary FACT/FEEL labels while excluding weak-assessment posts (chunk 319).",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "answer",
+      "reason": "The annotation method for factual and feeling forum posts is fully established by the supplied passages.",
+      "requirement_ids": [],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "The check addresses only the requirement's excerpt about how the factual and feeling posts were annotated; no scope was exceeded."
+    }
+  },
+  "halt_reason": "answer_ready",
+  "final_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 321,
+            "quote": "Slider Scale -5,5: Survey Question Fact/Emotion: Is the respondent attempting to make a fact based argument or appealing to feelings and emo- tions? Figure 2: Mechanical Turk Survey Question used for Fact/Feeling annotation."
+          },
+          {
+            "chunk_id": 319,
+            "quote": "For our experiments, we use only the response texts and assign a binary FACT or FEEL label to each response: texts with score > 1 are assigned to the FACT class and texts with score < -1 are assigned to the FEELING class. We did not use the responses with scores between -1 and 1 because they had a very weak Fact/Feeling assessment, which could be attributed to responses either containing aspects of both factual and feeling expression, or neither."
+          }
+        ],
+        "supported_part": "The forum posts were annotated using a Mechanical Turk survey with a slider scale from -5 to 5, asking whether the respondent is attempting to make a fact-based argument or appealing to feelings and emotions; responses with score > 1 were assigned the FACT label, those with score < -1 the FEELING label, and responses between -1 and 1 were discarded.",
+        "reason": "The passages directly describe the annotation procedure: the Mechanical Turk Fact/Feeling survey question with a -5 to 5 slider scale (chunk 321) and the rule converting scores into binary FACT/FEEL labels while excluding weak-assessment posts (chunk 319).",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "answer",
+      "reason": "The annotation method for factual and feeling forum posts is fully established by the supplied passages.",
+      "requirement_ids": [],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "The check addresses only the requirement's excerpt about how the factual and feeling posts were annotated; no scope was exceeded."
+    }
+  },
+  "elapsed_seconds": 20.337
+}

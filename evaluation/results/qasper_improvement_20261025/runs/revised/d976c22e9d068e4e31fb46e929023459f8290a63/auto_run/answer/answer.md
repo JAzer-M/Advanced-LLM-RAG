@@ -1,0 +1,3 @@
+It depends on the method: in the LSTM/Gated CNN approach, yes, the two paragraphs are encoded separately; in the BERT approach, they are not — the two paragraphs are represented as a single packed sequence.
+
+In the LSTM and gated CNN method, "paragraphs are encoded separately, and the concatenation of the resulted encoding is going through the classifier," with each paragraph encoded by LSTM followed by a gated CNN to obtain a single encoding per paragraph [1]. In contrast, for BERT, "we represent the first and second paragraph as a single packed sequence, with the first paragraph using the A embedding and the second paragraph using the B embedding" [7].

@@ -1,0 +1,2 @@
+The answer failed review, so no reliable factual answer can be delivered this time.
+- Using Statistical and Semantic Models for Multi-Document Summarization: For the paper "Using Statistical and Semantic Models for Multi-Document Summarization" (arXiv: 1805.04579), answer this question: How exactly do they weigh between different statistical models?; The answer to this requirement still needs checking.

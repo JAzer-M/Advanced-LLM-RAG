@@ -1,0 +1,1 @@
+They use a finance-specific word2vec word embedding model, trained on 189,206 financial articles (161,877,425 tokens) manually downloaded from Factiva, with articles from sources including the Financial Times relating to United States companies [4]. They also released this finance-specific BLSTM word embedding model for replicability [3].

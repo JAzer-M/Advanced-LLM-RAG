@@ -1,0 +1,3 @@
+The answer failed review, so no reliable factual answer can be delivered this time.
+- Fine-grained Entity Typing through Increased Discourse Context and Adaptive Classification Thresholds: For the paper "Fine-grained Entity Typing through Increased Discourse Context and Adaptive Classification Thresholds" (arXiv: 1804.08000), answer this question: What fine-grained semantic types are considered?; The complete list/specification of the fine-grained semantic types considered (including for the other datasets beyond OntoNotes) is missing.
+The retrieval budget for this run is used up, and the points above are still unverified.

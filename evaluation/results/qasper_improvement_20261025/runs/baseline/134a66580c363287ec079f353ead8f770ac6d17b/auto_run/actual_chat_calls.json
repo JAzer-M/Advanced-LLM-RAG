@@ -1,0 +1,102 @@
+[
+  {
+    "number": 1,
+    "phase": "decompose",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n   For an open-ended \"difference between X and Y\" question, retrieve each\n   entity's purpose and core approach. Do not replace it with comparisons\n   between versions of X or versions of Y, or request unasked benchmark scores.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nFor the paper \"Fine-grained Entity Typing through Increased Discourse Context and Adaptive Classification Thresholds\" (arXiv: 1804.08000), answer this question: What fine-grained semantic types are considered?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-25T02:31:42.642255+00:00",
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+      "requested_model": "cn:glm-5.3-flash",
+      "reported_model": "glm-5.3-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 704,
+        "cached_tokens": 704,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 18,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0,
+        "prompt_cache_hit_tokens": 704,
+        "prompt_cache_miss_tokens": 10,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 714,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 704,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 732
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.109
+  },
+  {
+    "number": 2,
+    "phase": "probe",
+    "prompt": "You are an AI research assistant.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in the same language as the user's question. If the question explicitly asks for a particular language, use that language instead. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported question, begin with 当前证据不足 when answering in Chinese, or with \"Insufficient evidence\" when answering in English, and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n14. Prioritize explicit subquestions, correct facts and citations, and conditions/units that change the conclusion. Add definitions or steps only when needed for the task. Optional background, stylistic preferences and unasked exceptions are not completeness requirements. Failure to retrieve a paper does not establish that the paper never reported a result.\n\n15. For a comparison, synthesize separately supported facts about the requested objects, citing each side. A literal sentence comparing both papers is NOT required. Different purposes, inputs or mechanisms can be contrasted from their respective descriptions. This does not establish causality or which method performs better. Do not call the comparison unsupported merely because no head-to-head experiment is provided.\n16. Lead with the main difference the user asked about. For a broad comparison, explain what each object does and its supported core approach; do not replace this with differences between versions of each object, benchmark tables or unasked numerical results.\n\nContext:\n[1] Source: 1804.08000.pdf | Page: 1 | Section: None\nTitle: Fine-grained Entity Typing through Increased Discourse Context and Adaptive Classification Thresholds\nFine-grained Entity Typing through Increased Discourse Context and Adaptive Classiﬁcation Thresholds Sheng Zhang Johns Hopkins University Johns Hopkins University zsheng2@jhu.edu kevinduh@cs.jhu.edu Abstract Fine-grained entity typing is the task of as- signing ﬁne-grained semantic types to entity arXiv:1804.08000v1 [cs.CL] 21 Apr 2018 mentions.\n\n[2] Source: 1804.08000.pdf | Page: 2 | Section: 2 Model\nTitle: Fine-grained Entity Typing through Increased Discourse Context and Adaptive Classification Thresholds\n2 Model Fine-grained entity typing is considered a multi- label classiﬁcation problem: Each entity e in the text x is assigned a set of types T ∗drawn from the ﬁne-grained type set T . The goal of this task is to predict, given entity e and its context x, the assign- ment of types to the entity.\n\n[3] Source: 1804.08000.pdf | Page: 1 | Section: 1 Introduction\nTitle: Fine-grained Entity Typing through Increased Discourse Context and Adaptive Classification Thresholds\nMo- tivated by its application to downstream tasks, re- cent work on entity typing has moved beyond stan- dard coarse types towards ﬁner-grained semantic types with richer ontologies (Lee et al., 2006; Ling and Weld, 2012; Yosef et al., 2012; Gillick et al., 2014; Del Corro et al., 2015). Rather than as- suming an entity can be uniquely categorized into a single type, the task has been approached as a multi-label classiﬁcation problem: e.g., in “... be- came a top seller ...\n\n[4] Source: 1804.08000.pdf | Page: 5 | Section: 4 Conclusion\nTitle: Fine-grained Entity Typing through Increased Discourse Context and Adaptive Classification Thresholds\n4 Conclusion We propose a new approach for ﬁne-grained en- tity typing. The contributions are: (1) we pro- pose a neural architecture which learns a distribu- tional semantic representation that leverage both document and sentence level information, (2) we ﬁnd that context increased with document-level in- formation improves performance, and (3) we uti- lize adaptive classiﬁcation thresholds to further boost the performance.\n\n[5] Source: 1804.08000.pdf | Page: 5 | Section: 4 Conclusion\nTitle: Fine-grained Entity Typing through Increased Discourse Context and Adaptive Classification Thresholds\nDan Gillick, Nevena Lazic, Kuzman Ganchev, Jesse Kirchner, and David Huynh. 2014. Context- arXiv dependent ﬁne-grained entity type tagging. preprint arXiv:1412.1820. Nitish Gupta, Sameer Singh, and Dan Roth. 2017. En- tity linking via joint encoding of types, descriptions, and context. In Proceedings of the 2017 Conference on Empirical Methods in Natural Language Pro- cessing, pages 2681–2690, Copenhagen, Denmark. Association for Computational Linguistics.\n\n[6] Source: 1804.08000.pdf | Page: 1 | Section: 1 Introduction\nTitle: Fine-grained Entity Typing through Increased Discourse Context and Adaptive Classification Thresholds\nThese representations are then combined Kevin Duh Benjamin Van Durme Johns Hopkins University vandurme@cs.jhu.edu [ /game, /product ] Output types: Adaptive Thresholds Type embeddings Logistic Regression … Feature representation Featurizer Attention Document-level Entity Sentence-level Context Encoder Encoder Context Encoder “… became a top seller … is played in 114 countries.\n\n[7] Source: 1804.08000.pdf | Page: 1 | Section: None\nTitle: Fine-grained Entity Typing through Increased Discourse Context and Adaptive Classification Thresholds\nWe propose a neural architecture which learns a distributional semantic repre- sentation that leverages a greater amount of se- mantic context – both document and sentence level information – than prior work.\n\n[8] Source: 1804.08000.pdf | Page: 5 | Section: 4 Conclusion\nTitle: Fine-grained Entity Typing through Increased Discourse Context and Adaptive Classification Thresholds\nSepp Hochreiter and J¨urgen Schmidhuber. 1997. Neural computation, Long short-term memory. 9(8):1735–1780. Sanjeev Karn, Ulli Waltinger, and Hinrich Sch¨utze. 2017. End-to-end trainable attentive decoder for hi- erarchical entity classiﬁcation. In Proceedings of the 15th Conference of the European Chapter of the As- sociation for Computational Linguistics: Volume 2, Short Papers, pages 752–758, Valencia, Spain. As- sociation for Computational Linguistics.\n\n[9] Source: 1804.08000.pdf | Page: 2 | Section: 2.2 Featurizer\nTitle: Fine-grained Entity Typing through Increased Discourse Context and Adaptive Classification Thresholds\n(2017) who use two separate bi-directional RNNs for context on each side of the entity mention. Attention: The feature representation for xs is a weighted sum of the hidden states: gs(xs, e) = Pn i=1 aihi, where ai is the attention to hidden state hi. We employ the dot-product attention (Lu- (2) ong et al., 2015). It computes attention based on the alignment between the entity and its context: exp (h⊺ i Waf(e)) (3) jWaf(e)), ai = (6) j=1 exp (h⊺ Pn where Wa is the weight matrix.\n\n[10] Source: 1804.08000.pdf | Page: 1 | Section: 1 Introduction\nTitle: Fine-grained Entity Typing through Increased Discourse Context and Adaptive Classification Thresholds\n1 Introduction Named entity typing is the task of detecting the type (e.g., person, location, or organization) of a named entity in natural language text. Entity type information has shown to be useful in natural language tasks such as question answering (Lee et al., 2006), knowledge-base population (Carl- son et al., 2010; Mitchell et al., 2015), and co- reference resolution (Recasens et al., 2013).\n\n[11] Source: 1804.08000.pdf | Page: 2 | Section: 2.2 Featurizer\nTitle: Fine-grained Entity Typing through Increased Discourse Context and Adaptive Classification Thresholds\n2.2 Featurizer As shown in Figure 1, featurizer ϕ in our model contains three encoders which encode entity e and its context x into feature vectors, and we consider both sentence-level context xs and document-level context xd in contrast to prior work which only takes sentence-level context (Gillick et al., 2014; Shimaoka et al., 2017). 1 1Document-level context has also been exploited in Yaghoobzadeh and Sch¨utze (2015); Yang et al. (2016); Karn et al. (2017); Gupta et al.\n\nQuestion:\nFor the paper \"Fine-grained Entity Typing through Increased Discourse Context and Adaptive Classification Thresholds\" (arXiv: 1804.08000), answer this question: What fine-grained semantic types are considered?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n- For a broad difference-between question with no requested aspect, use 3-5 sentences: lead with the purposes, then the supported core methods. Prefer primary-paper abstract/introductory definitions. Omit training/test hyperparameters and unasked performance caveats.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-25T02:31:51.437561+00:00",
+    "response": {
+      "answer": "The paper does not enumerate the complete fine-grained type set. It states that each entity is assigned types drawn from a fine-grained type set T as part of a multi-label classification task [2], but only example types are shown in the context, such as /game and /product [6]. The introduction also mentions standard coarse types such as person, location, or organization as the types that fine-grained typing moves beyond [3], [10]. The specific full list of fine-grained semantic types considered is not provided in the given context.",
+      "requested_model": "cn:glm-5.3-flash",
+      "reported_model": "glm-5.3-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 2368,
+        "cached_tokens": 2368,
+        "completion_thinking_tokens": 104,
+        "completion_tokens": 217,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 104,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.02,
+        "prompt_cache_hit_tokens": 2368,
+        "prompt_cache_miss_tokens": 62,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2430,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 2368,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2647
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 5.077
+  }
+]

@@ -1,0 +1,102 @@
+[
+  {
+    "number": 1,
+    "phase": "decompose",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n   For an open-ended \"difference between X and Y\" question, retrieve each\n   entity's purpose and core approach. Do not replace it with comparisons\n   between versions of X or versions of Y, or request unasked benchmark scores.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nWhat sources of less sensitive data are available?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-25T03:16:45.330111+00:00",
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+      "requested_model": "cn:glm-5.3-flash",
+      "reported_model": "glm-5.3-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cached_tokens": 0,
+        "completion_thinking_tokens": 3,
+        "completion_tokens": 21,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 3,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.01,
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 676,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 676,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 697
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.24
+  },
+  {
+    "number": 2,
+    "phase": "probe",
+    "prompt": "You are an AI research assistant.\n\nRequired answer language: English.\nBegin with a short direct answer in its own paragraph, including any condition needed for correctness. Use Yes/No for a supported binary question, or the requested fact/keywords for a factual question. Then give only the necessary cited explanation after a blank line. A partial answer must keep the supported facts and explicitly identify the remaining gap.\n\nOnly when none of the requested facts can be supported, start with 'Insufficient evidence.' (or '当前证据不足。' when answering in Chinese). Do not use this refusal prefix for a partial answer.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in the same language as the user's question. If the question explicitly asks for a particular language, use that language instead. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported question, begin with 当前证据不足 when answering in Chinese, or with \"Insufficient evidence\" when answering in English, and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n14. Prioritize explicit subquestions, correct facts and citations, and conditions/units that change the conclusion. Add definitions or steps only when needed for the task. Optional background, stylistic preferences and unasked exceptions are not completeness requirements. Failure to retrieve a paper does not establish that the paper never reported a result.\n\n15. For a comparison, synthesize separately supported facts about the requested objects, citing each side. A literal sentence comparing both papers is NOT required. Different purposes, inputs or mechanisms can be contrasted from their respective descriptions. This does not establish causality or which method performs better. Do not call the comparison unsupported merely because no head-to-head experiment is provided.\n16. Lead with the main difference the user asked about. For a broad comparison, explain what each object does and its supported core approach; do not replace this with differences between versions of each object, benchmark tables or unasked numerical results.\n\nContext:\nOriginal passages:\n[1] Source: 1703.10090.pdf | Page: 1 | Section: None\nTitle: A Short Review of Ethical Challenges in Clinical Natural Language Processing\nHow- ever, this potential has remained largely untapped due to slow progress primarily caused by strict data access policies for re- searchers. In this paper, we discuss the concern for privacy and the measures it entails. We also suggest sources of less sensitive data. Finally, we draw attention to biases that can compromise the validity of empirical research and lead to socially harmful applications.\n\n[2] Source: 1703.10090.pdf | Page: 3 | Section: 2.1 Protecting the individual\nTitle: A Short Review of Ethical Challenges in Clinical Natural Language Processing\nInteroperability is crucial for epidemiol- ogy and rare disease research, where data from one institution can not yield sufﬁcient statistical power (Kaplan et al., 2014). Are there less sensitive data? One criterion which may have inﬂuence on data accessibility is whether the data is about living subjects or not. The HIPAA privacy rule under certain conditions\n\n[3] Source: 1703.10090.pdf | Page: 4 | Section: 2.1 Protecting the individual\nTitle: A Short Review of Ethical Challenges in Clinical Natural Language Processing\n(2014), which has been criticized for not properly gaining prior consent from the users who were involved in the study (Schroeder, 2014). Another way of reducing sensitivity of data and improving chances for IRB approval is to work on derived data. Data that can not be used to reconstruct the original text (and when sanitized, can not directly re-identify the individual) include text fragments, various statistics and trained mod- els.\n\n[4] Source: 1703.10090.pdf | Page: 4 | Section: 2.1 Protecting the individual\nTitle: A Short Review of Ethical Challenges in Clinical Natural Language Processing\nIt is not entirely clear though how often this possibility has been used in clinical NLP research or broader. Next, the work on surrogate data has re- cently seen a surge in activity. Increasingly more health-related texts are produced in social media (Abbasi et al., 2014), and patient-generated data are available online. Admittedly, these may not resemble the clinical discourse, yet they bear to the same individuals whose health is documented in the clinical reports.\n\n[5] Source: 1703.10090.pdf | Page: 5 | Section: 3 Social impact and biases\nTitle: A Short Review of Ethical Challenges in Clinical Natural Language Processing\nDual use We have already mentioned linking personal health information from online texts to clinical records as a motivation for exploring sur- rogate data sources. However, this and many other applications also have potential to be applied in both beneﬁcial and harmful ways. It is easy to imagine how sensitive information from clinical notes can be revealed about an individual who is present in social media with a known identity.\n\n[6] Source: 1703.10090.pdf | Page: 3 | Section: 2.1 Protecting the individual\nTitle: A Short Review of Ethical Challenges in Clinical Natural Language Processing\nis largely due to the well-known fact that orig- inal sensitive data can be re-identiﬁed through deductive disclosure (Amblard et al., 2014; De Mazancourt et al., 2015; Hardt et al., 2016; Malin et al., 2013; Tene, 2011).3 Finally, sanitiza- tion focuses on protecting the individual, whereas ethical harms are still possible on the group level (O’Doherty et al., 2016; Taylor et al., 2017).\n\n[7] Source: 1703.10090.pdf | Page: 2 | Section: 2.1 Protecting the individual\nTitle: A Short Review of Ethical Challenges in Clinical Natural Language Processing\nSan- itization of sensitive data categories and individu- als’ informed consent are in the forefront of those legislative acts and bear immediate consequences for the NLP research. The GDPR lists general principles relating to processing of personal data, including that pro- cessing must be lawful (e.g. by means of con- sent), fair and transparent; it must be done for ex- plicit and legitimate purposes; and the data should be kept limited to what is necessary and as long as necessary.\n\n[8] Source: 1703.10090.pdf | Page: 2 | Section: 2.1 Protecting the individual\nTitle: A Short Review of Ethical Challenges in Clinical Natural Language Processing\nDocuments can be sanitized by replacing, removing or oth- erwise manipulating the sensitive mentions such as names and geographic locations. A distinc- tion is normally drawn between anonymization, pseudonymization and de-identiﬁcation.\n\n[9] Source: 1703.10090.pdf | Page: 7 | Section: 4 Conclusion\nTitle: A Short Review of Ethical Challenges in Clinical Natural Language Processing\nJournal of the American Medical Informatics Association, 21(1):8–12. [Indrayan2013] Abhaya Indrayan. Varieties of bias to guard against. https://goo.gl/SqnuZY. [Johnson et al.2016] Alistair EW Johnson, Tom J. Pol- lard, Lu Shen, Li-wei H. Lehman, Mengling Feng, Mohammad Ghassemi, Benjamin Moody, Peter Szolovits, Leo Anthony Celi, and Roger G. 2016. MIMIC-III, a freely accessible critical care database.\n\n[10] Source: 1703.10090.pdf | Page: 8 | Section: 4 Conclusion\nTitle: A Short Review of Ethical Challenges in Clinical Natural Language Processing\n2014. Big data and the brave new world of social media research. Big Data & Society, 1(2):2053951714563194. [Styler IV et al.2014] William Styler IV, Steven Bethard, Sean Finan, Martha Palmer, Sameer Prad- han, Piet de Groen, Brad Erickson, Timothy Miller, Chen Lin, Guergana Savova, and James Pustejovsky. 2014. Temporal annotation in the clinical domain. Transactions of the Association for Computational Linguistics, 2:143–154. [Tasioulas2016] John Tasioulas.\n\n[11] Source: 1703.10090.pdf | Page: 1 | Section: None\nTitle: A Short Review of Ethical Challenges in Clinical Natural Language Processing\nA Short Review of Ethical Challenges in Clinical Natural Language Processing Simon ˇSuster1,2, St´ephan Tulkens1 and Walter Daelemans1 1CLiPS, University of Antwerp 2Antwerp University Hospital {simon.suster,stephan.tulkens,walter.daelemans}@uantwerpen.be Abstract arXiv:1703.10090v1 [cs.CL] 29 Mar 2017 Clinical NLP has an immense potential in contributing to how clinical practice will be revolutionized by the advent of large scale processing of clinical records.\n\nEvidence guidance:\n- Rule-based subject attribution: NLP; passage: “How- ever, this potential has remained largely untapped due to slow progress primarily caused by strict data access policies for re- searchers.” [1][11]\n- Rule-based subject attribution: NLP; passage: “In this paper, we discuss the concern for privacy and the measures it entails.” [1][11]\n- Rule-based subject attribution: NLP; passage: “We also suggest sources of less sensitive data.” [1][11]\n- Rule-based subject attribution: NLP; passage: “Finally, we draw attention to biases that can compromise the validity of empirical research and lead to socially harmful applications.” [1][11]\n\nQuestion:\nFor the paper \"A Short Review of Ethical Challenges in Clinical Natural Language Processing\" (arXiv: 1703.10090), answer this question: What sources of less sensitive data are available?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n- For a broad difference-between question with no requested aspect, use 3-5 sentences: lead with the purposes, then the supported core methods. Prefer primary-paper abstract/introductory definitions. Omit training/test hyperparameters and unasked performance caveats.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-25T03:16:51.673885+00:00",
+    "response": {
+      "answer": "The paper suggests derived data and surrogate data sources (e.g., social media and online patient-generated data) as less sensitive alternatives.\n\nThe authors state that working on derived data—such as text fragments, various statistics, and trained models that cannot be used to reconstruct the original text and, when sanitized, cannot directly re-identify individuals—can reduce data sensitivity and improve chances for IRB approval [3]. They also note that increasingly more health-related texts are produced in social media and that patient-generated data are available online; although these may not resemble clinical discourse, they relate to the same individuals whose health is documented in clinical reports [4].",
+      "requested_model": "cn:glm-5.3-flash",
+      "reported_model": "glm-5.3-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 2560,
+        "cached_tokens": 2560,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 130,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.02,
+        "prompt_cache_hit_tokens": 2560,
+        "prompt_cache_miss_tokens": 51,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2611,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 2560,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2741
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 4.205
+  }
+]

@@ -1,0 +1,102 @@
+[
+  {
+    "number": 1,
+    "phase": "decompose",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n   For an open-ended \"difference between X and Y\" question, retrieve each\n   entity's purpose and core approach. Do not replace it with comparisons\n   between versions of X or versions of Y, or request unasked benchmark scores.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nDid the authors collect new data for evaluation?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-25T03:27:09.668038+00:00",
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+      "requested_model": "cn:glm-5.3",
+      "reported_model": "glm-5.3",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cached_tokens": 0,
+        "completion_thinking_tokens": 11,
+        "completion_tokens": 29,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 11,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.12,
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 676,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 676,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 705
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.608
+  },
+  {
+    "number": 2,
+    "phase": "probe",
+    "prompt": "You are an AI research assistant.\n\nRequired answer language: English.\nBegin with a short direct answer in its own paragraph, including any condition needed for correctness. Use Yes/No for a supported binary question, or the requested fact/keywords for a factual question. Then give only the necessary cited explanation after a blank line. A partial answer must keep the supported facts and explicitly identify the remaining gap.\n\nOnly when none of the requested facts can be supported, start with 'Insufficient evidence.' (or '当前证据不足。' when answering in Chinese). Do not use this refusal prefix for a partial answer.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in the same language as the user's question. If the question explicitly asks for a particular language, use that language instead. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported question, begin with 当前证据不足 when answering in Chinese, or with \"Insufficient evidence\" when answering in English, and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n14. Prioritize explicit subquestions, correct facts and citations, and conditions/units that change the conclusion. Add definitions or steps only when needed for the task. Optional background, stylistic preferences and unasked exceptions are not completeness requirements. Failure to retrieve a paper does not establish that the paper never reported a result.\n\n15. For a comparison, synthesize separately supported facts about the requested objects, citing each side. A literal sentence comparing both papers is NOT required. Different purposes, inputs or mechanisms can be contrasted from their respective descriptions. This does not establish causality or which method performs better. Do not call the comparison unsupported merely because no head-to-head experiment is provided.\n16. Lead with the main difference the user asked about. For a broad comparison, explain what each object does and its supported core approach; do not replace this with differences between versions of each object, benchmark tables or unasked numerical results.\n\nContext:\nOriginal passages:\n[1] Source: 1901.02780.pdf | Page: 6 | Section: 69.8 NB\nTitle: Sentiment Analysis of Czech Texts: An Algorithmic Survey\nreported in other works like (Sheshasaayee and Thail- ambal, 2017) where again, SVM and Na¨ıve Bayes outrun Random Forest on text analysis tasks. From the top three algorithms, Na¨ıve Bayes was the fastest to train, followed by Logistic Regression. SVM was instead considerably slower. The 91.6 % of SVM in F1 score on Mall dataset is considerably higher than the 78.1 % F1 score reported in Table 7 of (Veselovsk´a et al., 2012).\n\n[2] Source: 1901.02780.pdf | Page: 1 | Section: 1 INTRODUCTION\nTitle: Sentiment Analysis of Czech Texts: An Algorithmic Survey\nThe authors report various experi- mental results with Support Vector Machine (SVM) and Maximum Entropy (ME) classiﬁers. Despite the creation of the resources mentioned above and the re- sults reported by the corresponding authors, there is still little evidence about the performance of various techniques and algorithms on sentiment analysis of Czech texts.\n\n[3] Source: 1901.02780.pdf | Page: 4 | Section: 5.2 Test Scores Results\nTitle: Sentiment Analysis of Czech Texts: An Algorithmic Survey\nNuSVM and Na¨ıve Bayes perform slightly worse. MLP and Random Forest, on the other hand, fall dis- cretely behind. On the Mall dataset, SVM is domi- nant in both accuracy and F1. It is followed by Logis- tic Regression, Na¨ıve Bayes and NuSVM. Maximum Entropy is near whereas MLP and Random Forest are again considerably weaker. Similar results are also\n\n[4] Source: 1901.02780.pdf | Page: 1 | Section: 1 INTRODUCTION\nTitle: Sentiment Analysis of Czech Texts: An Algorithmic Survey\n“Smaller” languages like Czech have seen fewer efforts in this aspect. It is thus much easier to ﬁnd online data resources for English than for other languages (C¸ ano Erion and Maurizio, 2015). One of the ﬁrst attempts to create sentiment annotated resources of Czech texts dates back in 2012 (Veselovsk´a et al., 2012). Authors re- leased three datasets of news articles, movie reviews, and product reviews.\n\n[5] Source: 1901.02780.pdf | Page: 2 | Section: 2.1 Czech Facebook Dataset\nTitle: Sentiment Analysis of Czech Texts: An Algorithmic Survey\nSame as the authors in their paper, we removed the bipolar category from our experimental set to avoid ambiguity and used the remaining 9752 samples. A few data samples are illustrated in Figure 1. Figure 1: Samples from Czech Facebook dataset\n\n[6] Source: 1901.02780.pdf | Page: 1 | Section: 1 INTRODUCTION\nTitle: Sentiment Analysis of Czech Texts: An Algorithmic Survey\n1 INTRODUCTION Sentiment Analysis is considered as the automated analysis of sentiments, emotions or opinions ex- pressed in texts towards certain entities (Medhat et al., 2014). The proliferation of online commerce and customer feedback has signiﬁcantly motivated com- panies to invest in intelligent text analysis tools and technologies where sentiment analysis plays a cru- cial role. There have traditionally been two main ap- proaches to sentiment analysis.\n\n[7] Source: 1901.02780.pdf | Page: 3 | Section: 4 SUPERVISED ALGORITHMS\nTitle: Sentiment Analysis of Czech Texts: An Algorithmic Survey\n4 SUPERVISED ALGORITHMS We explored various supervised algorithms that have become popular in recent years and grid- searched their main parameters. Support Vector Ma- chines have been successfully used for solving both classiﬁcation and regression problems since back in the nineties when they were invented (Boser et al., 1992; Cortes and Vapnik, 1995). They introduced the notion of hard and soft margins (separation hy- perplanes) for optimal separation of class samples.\n\n[8] Source: 1901.02780.pdf | Page: 6 | Section: 5.3 Boosting Results\nTitle: Sentiment Analysis of Czech Texts: An Algorithmic Survey\nIncreasing the number of estimators increased accu- racy and F1 scores until some point (about 5000 es- timators) and was further useless. The detailed re- sults are presented in Table 7. As we can see, no improvements over the top scores of each algorithm were gained. The results we got are actually slightly lower.\n\n[9] Source: 1901.02780.pdf | Page: 6 | Section: 6 CONCLUSIONS\nTitle: Sentiment Analysis of Czech Texts: An Algorithmic Survey\nCharacterization of In 2015 public datasets for recommender systems. IEEE 1st International Forum on Research and Tech- nologies for Society and Industry Leveraging a better tomorrow (RTSI), pages 249–257.\n\n[10] Source: 1901.02780.pdf | Page: 1 | Section: 1 INTRODUCTION\nTitle: Sentiment Analysis of Czech Texts: An Algorithmic Survey\nChinese (Zhang et al., 2018; Peng et al., 2017; Wu et al., 2015) and Spanish (Tellez et al., 2017; Miranda and Guzm´an, 2017) have also received a considerable ex- tra attention in the last years.\n\n[11] Source: 1901.02780.pdf | Page: 6 | Section: 5.3 Boosting Results\nTitle: Sentiment Analysis of Czech Texts: An Algorithmic Survey\nIt tries to tweak future classiﬁers based on the wrong predictions of the previous ones and selects only the features known to improve prediction quality. On the negative side, AdaBoost is sensitive to noisy data and outliers which means that it requires careful data pre- processing. First, we experimented with a few estima- tors in Adaboost and got poor results in both datasets.\n\nEvidence guidance:\n- Rule-based subject attribution: SVM; passage: “SVM was instead considerably slower.” [1]\n- Rule-based subject attribution: SVM; passage: “On the Mall dataset, SVM is domi- nant in both accuracy and F1.” [3]\n- Rule-based subject attribution: SVM; passage: “It is followed by Logis- tic Regression, Na¨ıve Bayes and NuSVM.” [3]\n- Rule-based subject attribution: SVM; passage: “Maximum Entropy is near whereas MLP and Random Forest are again considerably weaker.” [3]\n- Rule-based subject attribution: AdaBoost; passage: “Increasing the number of estimators increased accu- racy and F1 scores until some point (about 5000 es- timators) and was further useless.” [8][11]\n- Rule-based subject attribution: AdaBoost; passage: “The detailed re- sults are presented in Table 7.” [8][11]\n- Rule-based subject attribution: AdaBoost; passage: “As we can see, no improvements over the top scores of each algorithm were gained.” [8][11]\n- Rule-based subject attribution: AdaBoost; passage: “The results we got are actually slightly lower.” [8][11]\n\nQuestion:\nFor the paper \"Sentiment Analysis of Czech Texts: An Algorithmic Survey\" (arXiv: 1901.02780), answer this question: Did the authors collect new data for evaluation?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n- For a broad difference-between question with no requested aspect, use 3-5 sentences: lead with the purposes, then the supported core methods. Prefer primary-paper abstract/introductory definitions. Omit training/test hyperparameters and unasked performance caveats.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-25T03:27:18.974718+00:00",
+    "response": {
+      "answer": "No, the paper evaluated on existing datasets rather than collecting new data; it used a previously released Czech Facebook dataset (9752 samples after removing the bipolar category) [5] and mentions datasets released in 2012 by Veselovská et al. [4]. The context provides no evidence that the authors collected new data themselves.",
+      "requested_model": "cn:glm-5.3",
+      "reported_model": "glm-5.3",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 512,
+        "cached_tokens": 512,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 69,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.39,
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 2040,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2552,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 512,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2621
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 4.514
+  }
+]

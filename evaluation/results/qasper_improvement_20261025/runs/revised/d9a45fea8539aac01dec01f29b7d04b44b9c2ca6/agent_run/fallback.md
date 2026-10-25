@@ -1,0 +1,5 @@
+The rest of the multi-task learning setup uses a shared-private model architecture, with a 4-level hierarchical structure in which shared-layer outputs are filtered by a selected sharing layer before a softmax output layer classifies each task.
+
+The paper proposes a novel sifted multi-task learning method built on a shared-private model to jointly train stance detection and fake news detection, filtering the original outputs of the shared layer via a selected sharing layer; the model consists of a 4-level hierarchical structure [4]. The shared-private feature extractor (like the attention sharing cell) adopts transformer encoder [3][11], and the output layer applies softmax functions to each task's concatenation of private features and selected-sharing-layer outputs [8]. The selected sharing structure fuses a single gate mechanism for filtering useless shared features with an attention mechanism for attending to features helpful to the target tasks [2].
+
+Agent processing did not finish. This answer uses only the initial evidence.

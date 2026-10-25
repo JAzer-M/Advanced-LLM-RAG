@@ -1,0 +1,1 @@
+The paper's main dataset (the IRA Russian Troll Tweets) contains 2,973,371 tweets by 2,848 Twitter users [1]. These tweets were linked to the Russian Internet Research Agency (IRA) by the US House Intelligence Committee [1].

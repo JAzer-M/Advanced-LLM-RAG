@@ -1,0 +1,583 @@
+{
+  "query": "For the paper \"Predicting the Role of Political Trolls in Social Media\" (arXiv: 1910.02001), answer this question: How are labels for trolls obtained?",
+  "status": "completed",
+  "decomposition": {
+    "needs_decomposition": false,
+    "sub_queries": [],
+    "status": "not_needed"
+  },
+  "knowledge_base": {
+    "version": "qasper-holdout-20261025",
+    "chunk_count": 1459,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/manifest.json",
+    "manifest_sha256": "10bb244a150c260e5efc39b1a6ebeb939291e26f55d966ed102d27216e67718a",
+    "files": {
+      "faiss.index": "346ac08a63ebb5f367f8a886b0997c344fc084bf1fa8b27ae27de9a82be97617",
+      "chunks.json": "ef123dcc0b2180f3b957d9089c8b5207965dffb1d908fdbf348863efecdeb060"
+    }
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 120,
+    "global_top_ids": [
+      1167,
+      1116,
+      1152,
+      1120,
+      1106,
+      1179,
+      1148,
+      1170,
+      1205,
+      1107
+    ],
+    "protected_ids": [],
+    "sub_query_evidence": [],
+    "retrieval_anchor_ids": [
+      1106
+    ],
+    "evidence_completion": {
+      "requested_sources": [
+        "1910.02001.pdf"
+      ],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        1167,
+        1116,
+        1152,
+        1120,
+        1106,
+        1179,
+        1148,
+        1170,
+        1205,
+        1107
+      ],
+      "retained_local_ids": [],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        1167,
+        1116,
+        1152,
+        1120,
+        1106,
+        1179,
+        1148,
+        1170,
+        1205,
+        1107
+      ],
+      "elapsed_seconds": 0.000431
+    }
+  },
+  "selected_ids": [
+    1167,
+    1116,
+    1152,
+    1120,
+    1106,
+    1179,
+    1148,
+    1170,
+    1205,
+    1107,
+    1118
+  ],
+  "context": "[1] Source: 1910.02001.pdf | Page: 5 | Section: None\nTitle: Predicting the Role of Political Trolls in Social Media\nWe propagate labels from the given media to the troll user that mentions them according to the fol- lowing media-to-user mapping: LEFT→left RIGHT→right (1) CENTER→news feed This propagation can be done in different ways: (a) by training a proxy model for media and then applying it to users, (b) by additionally using label propagation (LP) for semi-supervised learning. Let us describe the proxy model propagation for (a) ﬁrst.\n\n[2] Source: 1910.02001.pdf | Page: 2 | Section: None\nTitle: Predicting the Role of Political Trolls in Social Media\nBy combining these labels with a citation graph from the troll accounts to news media, we can infer the ﬁnal labeling on the accounts them- selves without any need for manual labeling.\n\n[3] Source: 1910.02001.pdf | Page: 4 | Section: None\nTitle: Predicting the Role of Political Trolls in Social Media\nThen, armed with these representations, we tackle the following tasks: T1 A fully supervised learning task, where we have labeled training data with example troll and their roles; T2 A distant supervision learning task, in which labels for the troll roles are not available at training time, and thus we use labels for news media as a proxy, from which we infer labels for the troll users.\n\n[4] Source: 1910.02001.pdf | Page: 2 | Section: None\nTitle: Predicting the Role of Political Trolls in Social Media\nWe show that even by hiding the labels from the ML algo- rithm, we can recover 78.5% of the correct labels. The contributions of this paper can be summa- rized as follows: • We predict the political role of Internet trolls (left, news feed, right) in a realistic, unsuper- vised scenario, where labels for the trolls are not available, and which has not been explored in the literature before.\n\n[5] Source: 1910.02001.pdf | Page: 1 | Section: None\nTitle: Predicting the Role of Political Trolls in Social Media\nIn particular, we show how to classify trolls according to their political role —left, news feed, right— by using features extracted from social media, i.e., Twitter, in two scenarios: (i) in a traditional supervised learning scenario, where labels for trolls are available, and (ii) in a distant supervision sce- nario, where labels for trolls are not available, and we rely on more-commonly-available la- bels for news outlets mentioned by the trolls.\n\n[6] Source: 1910.02001.pdf | Page: 6 | Section: None\nTitle: Predicting the Role of Political Trolls in Social Media\nThe data was collected and published by Linvill and Warren (2018), and then made available online.1 The time span covers the period from February 2012 to May 2018. The trolls belong to the following manually as- signed roles: Left Troll, Right Troll, News Feed, Commercial, Fearmonger, Hashtag Gamer, Non English, Unknown.\n\n[7] Source: 1910.02001.pdf | Page: 4 | Section: None\nTitle: Predicting the Role of Political Trolls in Social Media\n3 Method Given a set of known political troll users (each user being represented as a collection of their tweets), we aim to detect their role: left, right, or news feed. Linvill and Warren (2018) describe these roles as follows: Right Trolls spread nativist and right-leaning populist messages. Such trolls support the candi- dacy and Presidency of Donald Trump and den- igrate the Democratic Party; moreover, they of- ten send divisive messages about mainstream and moderate Republicans.\n\n[8] Source: 1910.02001.pdf | Page: 5 | Section: None\nTitle: Predicting the Role of Political Trolls in Social Media\nThis model can be applied to predict the label of a user u by using the same type of representation R(u), and the label mapping in Equation 1. Label Propagation (b) is a transductive, graph- based, semi-supervised machine learning algo- rithm that, given a small set of labeled examples, assigns labels to previously unlabeled examples. The labels of each example change in relationship to the labels of neighboring ones in a properly- deﬁned graph.\n\n[9] Source: 1910.02001.pdf | Page: 8 | Section: None\nTitle: Predicting the Role of Political Trolls in Social Media\nThis suggests that the relationship between trolls and media goes both ways, and thus we can use labels for media as a way to label users, and we can also use labels for troll users as a way to label media.\n\n[10] Source: 1910.02001.pdf | Page: 1 | Section: None\nTitle: Predicting the Role of Political Trolls in Social Media\nTechnically, we leverage the community struc- ture and the text of the messages in the on- line social network of trolls represented as a graph, from which we extract several types of learned representations, i.e., embeddings, for the trolls. Experiments on the “IRA Russian Troll” dataset show that our methodology im- proves over the state-of-the-art in the ﬁrst sce- nario, while providing a compelling case for the second scenario, which has not been ex- plored in the literature thus far.\n\n[11] Source: 1910.02001.pdf | Page: 2 | Section: None\nTitle: Predicting the Role of Political Trolls in Social Media\nIn particular, we use a combination of em- beddings built on the user-to-user mention graph, the user-to-hashtag mention graph, and the text of the tweets of the troll accounts. We further explore several possible approaches using label propaga- tion for the distant supervision scenario. As a result of our approach, we improve the classiﬁcation accuracy by more than 5 percent- age points for the supervised learning scenario.",
+  "ledger": {
+    "citation_registry": [
+      {
+        "citation": 1,
+        "chunk_id": 1167,
+        "source": "1910.02001.pdf",
+        "page": 5,
+        "title": "Predicting the Role of Political Trolls in Social Media",
+        "text": "We propagate labels from the given media to the troll user that mentions them according to the fol- lowing media-to-user mapping: LEFT→left RIGHT→right (1) CENTER→news feed This propagation can be done in different ways: (a) by training a proxy model for media and then applying it to users, (b) by additionally using label propagation (LP) for semi-supervised learning. Let us describe the proxy model propagation for (a) ﬁrst.",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 2,
+        "chunk_id": 1116,
+        "source": "1910.02001.pdf",
+        "page": 2,
+        "title": "Predicting the Role of Political Trolls in Social Media",
+        "text": "By combining these labels with a citation graph from the troll accounts to news media, we can infer the ﬁnal labeling on the accounts them- selves without any need for manual labeling.",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 3,
+        "chunk_id": 1152,
+        "source": "1910.02001.pdf",
+        "page": 4,
+        "title": "Predicting the Role of Political Trolls in Social Media",
+        "text": "Then, armed with these representations, we tackle the following tasks: T1 A fully supervised learning task, where we have labeled training data with example troll and their roles; T2 A distant supervision learning task, in which labels for the troll roles are not available at training time, and thus we use labels for news media as a proxy, from which we infer labels for the troll users.",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 4,
+        "chunk_id": 1120,
+        "source": "1910.02001.pdf",
+        "page": 2,
+        "title": "Predicting the Role of Political Trolls in Social Media",
+        "text": "We show that even by hiding the labels from the ML algo- rithm, we can recover 78.5% of the correct labels. The contributions of this paper can be summa- rized as follows: • We predict the political role of Internet trolls (left, news feed, right) in a realistic, unsuper- vised scenario, where labels for the trolls are not available, and which has not been explored in the literature before.",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 5,
+        "chunk_id": 1106,
+        "source": "1910.02001.pdf",
+        "page": 1,
+        "title": "Predicting the Role of Political Trolls in Social Media",
+        "text": "In particular, we show how to classify trolls according to their political role —left, news feed, right— by using features extracted from social media, i.e., Twitter, in two scenarios: (i) in a traditional supervised learning scenario, where labels for trolls are available, and (ii) in a distant supervision sce- nario, where labels for trolls are not available, and we rely on more-commonly-available la- bels for news outlets mentioned by the trolls.",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 6,
+        "chunk_id": 1179,
+        "source": "1910.02001.pdf",
+        "page": 6,
+        "title": "Predicting the Role of Political Trolls in Social Media",
+        "text": "The data was collected and published by Linvill and Warren (2018), and then made available online.1 The time span covers the period from February 2012 to May 2018. The trolls belong to the following manually as- signed roles: Left Troll, Right Troll, News Feed, Commercial, Fearmonger, Hashtag Gamer, Non English, Unknown.",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 7,
+        "chunk_id": 1148,
+        "source": "1910.02001.pdf",
+        "page": 4,
+        "title": "Predicting the Role of Political Trolls in Social Media",
+        "text": "3 Method Given a set of known political troll users (each user being represented as a collection of their tweets), we aim to detect their role: left, right, or news feed. Linvill and Warren (2018) describe these roles as follows: Right Trolls spread nativist and right-leaning populist messages. Such trolls support the candi- dacy and Presidency of Donald Trump and den- igrate the Democratic Party; moreover, they of- ten send divisive messages about mainstream and moderate Republicans.",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 8,
+        "chunk_id": 1170,
+        "source": "1910.02001.pdf",
+        "page": 5,
+        "title": "Predicting the Role of Political Trolls in Social Media",
+        "text": "This model can be applied to predict the label of a user u by using the same type of representation R(u), and the label mapping in Equation 1. Label Propagation (b) is a transductive, graph- based, semi-supervised machine learning algo- rithm that, given a small set of labeled examples, assigns labels to previously unlabeled examples. The labels of each example change in relationship to the labels of neighboring ones in a properly- deﬁned graph.",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 9,
+        "chunk_id": 1205,
+        "source": "1910.02001.pdf",
+        "page": 8,
+        "title": "Predicting the Role of Political Trolls in Social Media",
+        "text": "This suggests that the relationship between trolls and media goes both ways, and thus we can use labels for media as a way to label users, and we can also use labels for troll users as a way to label media.",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 10,
+        "chunk_id": 1107,
+        "source": "1910.02001.pdf",
+        "page": 1,
+        "title": "Predicting the Role of Political Trolls in Social Media",
+        "text": "Technically, we leverage the community struc- ture and the text of the messages in the on- line social network of trolls represented as a graph, from which we extract several types of learned representations, i.e., embeddings, for the trolls. Experiments on the “IRA Russian Troll” dataset show that our methodology im- proves over the state-of-the-art in the ﬁrst sce- nario, while providing a compelling case for the second scenario, which has not been ex- plored in the literature thus far.",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 11,
+        "chunk_id": 1118,
+        "source": "1910.02001.pdf",
+        "page": 2,
+        "title": "Predicting the Role of Political Trolls in Social Media",
+        "text": "In particular, we use a combination of em- beddings built on the user-to-user mention graph, the user-to-hashtag mention graph, and the text of the tweets of the troll accounts. We further explore several possible approaches using label propaga- tion for the distant supervision scenario. As a result of our approach, we improve the classiﬁcation accuracy by more than 5 percent- age points for the supervised learning scenario.",
+        "kb_version": "qasper-holdout-20261025"
+      }
+    ]
+  },
+  "mode": "agent",
+  "answer": "Troll labels are obtained in two ways depending on the scenario. In the fully supervised setting, the troll roles are manually assigned labels (Left Troll, Right Troll, News Feed, Commercial, Fearmonger, Hashtag Gamer, Non English, Unknown) from the dataset collected and published by Linvill and Warren (2018) [6]. In the distant supervision scenario, troll role labels are not available at training time, so labels for news media are used as a proxy, from which labels for the troll users are inferred [3]. These media labels are propagated to troll users that mention them via the mapping LEFT→left, RIGHT→right, CENTER→news feed, either by training a proxy model on media and applying it to users, or by using label propagation for semi-supervised learning [1]. By combining the media labels with the citation graph from troll accounts to news media, the final labeling of accounts can be inferred without any manual labeling [2].",
+  "run_dir": "/Users/j/Desktop/Advanced-LLM-RAG/evaluation/results/qasper_improvement_20261025/runs/baseline/c135e1f8ecaf7965f6a6d3e30b537eb37ad74230/agent_run",
+  "initial_selected_ids": [
+    1167,
+    1116,
+    1152,
+    1120,
+    1106,
+    1179,
+    1148,
+    1170,
+    1205,
+    1107
+  ],
+  "agent": {
+    "invoked": true,
+    "actions_executed": 0,
+    "decision_summary": {
+      "planned_cases": 1,
+      "completed_cases": 1,
+      "api_attempts": 3,
+      "failed_api_attempts": 0,
+      "automatic_retries": 0,
+      "actions_executed": 0,
+      "usage_missing_calls": [],
+      "reported_usage": {
+        "prompt_tokens": 4628,
+        "completion_tokens": 525,
+        "total_tokens": 5153
+      },
+      "proposed_actions": {
+        "question": {
+          "type": "answer",
+          "reason": "All requested parts of r1 are established by the supplied passages.",
+          "requirement_ids": [],
+          "query": null,
+          "source": null,
+          "chunk_id": null
+        }
+      },
+      "action_attempts": 0,
+      "reassessment_api_attempts": 0,
+      "reassessed_actions": {
+        "question": null
+      },
+      "final_answer_generations": 0,
+      "automatic_action_loop": true,
+      "validation_repair_attempts": 1,
+      "paused_cases": 0,
+      "halt_reasons": {
+        "question": "answer_ready"
+      }
+    },
+    "halt_reason": "answer_ready",
+    "answer_summary": {
+      "question_id": "question",
+      "status": "completed",
+      "answer_status": "review_passed",
+      "api_attempts": 2,
+      "failed_api_attempts": 0,
+      "automatic_retries": 0,
+      "repair_attempted": false,
+      "usage_missing_calls": [],
+      "reported_usage": {
+        "prompt_tokens": 6020,
+        "completion_tokens": 890,
+        "total_tokens": 6910
+      },
+      "semantic_correctness": "requires_manual_review"
+    }
+  },
+  "actions": [],
+  "answer_status": "review_passed",
+  "stop_reason": "answer_ready",
+  "network": {
+    "status": "not_requested",
+    "http_tool_calls": 0,
+    "papers_read": 0
+  },
+  "api_summary": {
+    "attempts": 6,
+    "failed_attempts": 0,
+    "automatic_retries": 0,
+    "usage_missing_calls": [],
+    "reported_usage": {
+      "prompt_tokens": 11356,
+      "completion_tokens": 1437,
+      "total_tokens": 12793
+    }
+  },
+  "original_question": "How are labels for trolls obtained?",
+  "eval_api_calls": [
+    {
+      "number": 1,
+      "requested_model": "cn:glm-5.3",
+      "started_at_utc": "2026-10-25T03:40:27.979854+00:00",
+      "status": "completed",
+      "prompt_characters": 3350,
+      "prompt_sha256": "2db0886b58e0305d685be47dc73a1b87a9ae6c002b03de2b829e5384f182244e",
+      "reported_model": "glm-5.3",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cached_tokens": 0,
+        "completion_thinking_tokens": 4,
+        "completion_tokens": 22,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 4,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.13,
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 708,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 708,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 730
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      },
+      "seconds": 2.143
+    },
+    {
+      "number": 2,
+      "requested_model": "cn:glm-5.3",
+      "started_at_utc": "2026-10-25T03:40:37.573449+00:00",
+      "status": "completed",
+      "prompt_characters": 2667,
+      "prompt_sha256": "72298c32510b3b2cdd0a91eac5071e4ffdd342ed91d6328ea2830d5cbad48268",
+      "reported_model": "glm-5.3",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 512,
+        "cached_tokens": 512,
+        "completion_thinking_tokens": 35,
+        "completion_tokens": 36,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 35,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.05,
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 43,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 555,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 512,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 591
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      },
+      "seconds": 2.854
+    },
+    {
+      "number": 3,
+      "requested_model": "cn:glm-5.3",
+      "started_at_utc": "2026-10-25T03:40:40.433414+00:00",
+      "status": "completed",
+      "prompt_characters": 3117,
+      "prompt_sha256": "377434d9743d0b0913a69dd957a2012efdb2338b3ee84de4c8cc879cd800d366",
+      "reported_model": "glm-5.3",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cached_tokens": 0,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 70,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.14,
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 642,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 642,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 712
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      },
+      "seconds": 2.836
+    },
+    {
+      "number": 4,
+      "requested_model": "cn:glm-5.3",
+      "started_at_utc": "2026-10-25T03:40:43.276815+00:00",
+      "status": "completed",
+      "prompt_characters": 14435,
+      "prompt_sha256": "cf326ed22bf457ed50a7c81c509e9d8943945843b118b50f7170adf3b23779d1",
+      "reported_model": "glm-5.3",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cached_tokens": 0,
+        "completion_thinking_tokens": 31,
+        "completion_tokens": 419,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 31,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.78,
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 3431,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 3431,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 3850
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      },
+      "seconds": 6.045
+    },
+    {
+      "number": 5,
+      "requested_model": "cn:glm-5.3",
+      "started_at_utc": "2026-10-25T03:40:49.331587+00:00",
+      "status": "completed",
+      "prompt_characters": 10828,
+      "prompt_sha256": "427e38bd3a4a38fcbf75ba2545aff5bcd33d35832f678484b5b774d85d09a768",
+      "reported_model": "glm-5.3",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 512,
+        "cached_tokens": 512,
+        "completion_thinking_tokens": 1,
+        "completion_tokens": 196,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 1,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.47,
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 2130,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2642,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 512,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2838
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      },
+      "seconds": 4.511
+    },
+    {
+      "number": 6,
+      "requested_model": "cn:glm-5.3",
+      "started_at_utc": "2026-10-25T03:40:53.850983+00:00",
+      "status": "completed",
+      "prompt_characters": 13749,
+      "prompt_sha256": "008e2cb5fbc8cfe3983b5f2ff6175c1eb7191c5ed9828a05aa5eb2b25912b82f",
+      "reported_model": "glm-5.3",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cached_tokens": 0,
+        "completion_thinking_tokens": 27,
+        "completion_tokens": 694,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 27,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.93,
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 3378,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 3378,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 4072
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      },
+      "seconds": 6.768
+    }
+  ],
+  "eval_elapsed_seconds": 32.655,
+  "evaluation": {
+    "version": "baseline",
+    "requested_model": "cn:glm-5.3",
+    "stage": "runs",
+    "source_root": "/Users/j/Desktop/Advanced-LLM-RAG/evaluation/results/qasper_improvement_20261025/baseline_source",
+    "started_at_utc": "2026-10-25T03:40:27.979854+00:00",
+    "kb_version": "qasper-holdout-20261025"
+  }
+}

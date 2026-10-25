@@ -1,0 +1,3 @@
+Their best results on Japanese–English either yield a gain of 2.2 BLEU compared to the original single NMT network at about the same decoding speed, or a 3.4× CPU decoding speedup with only a minor drop in BLEU [4][9].
+
+The method unfolds an ensemble of multiple NMT systems into a single large network and then shrinks it by removing redundant neurons [4]. Depending on the aggressiveness of shrinking, they could reduce the unfolded network to the size of the single NMT network while keeping the BLEU boost from the ensemble [9]. Note that the passages only report these headline numbers for the Japanese–English task; no comparable headline results for English–German are given in the provided excerpts.

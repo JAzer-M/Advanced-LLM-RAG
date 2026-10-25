@@ -1,0 +1,105 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "For the paper \"Recognizing Arrow Of Time In The Short Stories\" (arXiv: 1903.10548), answer this question: Are the two paragraphs encoded independently?",
+  "kb_version": "qasper-holdout-20261025",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": false,
+    "drafts": [
+      "Yes. In the LSTM and gated CNN method (Section 3.1), the two paragraphs are encoded independently: \"paragraphs are encoded separately, and the concatenation of the resulted encoding is going through the classifier,\" with each paragraph encoded by LSTM followed by a gated CNN to produce a single encoding per paragraph [1].\n\nNote that this applies to the LSTM/gated CNN method; the BERT approach instead represents the two paragraphs as a single packed sequence, not independently [7]."
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "Yes. In the LSTM and gated CNN method (Section 3.1), the two paragraphs are encoded independently: \"paragraphs are encoded separately, and the concatenation of the resulted encoding is going through the classifier,\" with each paragraph encoded by LSTM followed by a gated CNN to produce a single encoding per paragraph [1].\n\nNote that this applies to the LSTM/gated CNN method; the BERT approach instead represents the two paragraphs as a single packed sequence, not independently [7].",
+              "reason": "答案正确回应了问题：在 LSTM + gated CNN 方法（Section 3.1）中，两段是分别独立编码的，仅在得到编码后才拼接送入分类器，引用 [1] 原文直接支持。答案还补充说明 BERT 方法是作为单个打包序列处理而非独立编码，引用 [7] 原文（\"we represent the ﬁrst and second paragraph as a single packed sequence\"）同样支持，无事实错误或无依据的断言。",
+              "citations": [
+                {
+                  "number": 1,
+                  "quote": "3.1 Encoding with LSTM and Gated CNN In this method, paragraphs are encoded separately, and the concatenation of the resulted encoding is going through the classiﬁer. First, each paragraph is encoded with LSTM. The hidden state at the end of each sentence is extracted, and the resulting matrix is going through gated CNN (Dauphin et al., 2017) for extraction of single encoding for each paragraph."
+                },
+                {
+                  "number": 7,
+                  "quote": "3.2 Fine-tuning BERT We have used a pre-trained BERT in two different ways. First, as a feature extractor without ﬁne-tuning, and second, by ﬁne-tuning the weights during training. The classiﬁcation is completely based on the BERT paper, i.e., we represent the ﬁrst and second paragraph as a single packed sequence, with the ﬁrst paragraph using the A embedding and the second paragraph using the B embedding."
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            1,
+            7
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 1,
+              "chunk_id": 753,
+              "source": "1903.10548.pdf",
+              "page": 2,
+              "text": "3.1 Encoding with LSTM and Gated CNN In this method, paragraphs are encoded separately, and the concatenation of the resulted encoding is going through the classiﬁer. First, each paragraph is encoded with LSTM. The hidden state at the end of each sentence is extracted, and the resulting matrix is going through gated CNN (Dauphin et al., 2017) for extraction of single encoding for each paragraph."
+            },
+            {
+              "citation": 7,
+              "chunk_id": 755,
+              "source": "1903.10548.pdf",
+              "page": 2,
+              "text": "3.2 Fine-tuning BERT We have used a pre-trained BERT in two different ways. First, as a feature extractor without ﬁne-tuning, and second, by ﬁne-tuning the weights during training. The classiﬁcation is completely based on the BERT paper, i.e., we represent the ﬁrst and second paragraph as a single packed sequence, with the ﬁrst paragraph using the A embedding and the second paragraph using the B embedding."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "Yes. In the LSTM and gated CNN method (Section 3.1), the two paragraphs are encoded independently: \"paragraphs are encoded separately, and the concatenation of the resulted encoding is going through the classifier,\" with each paragraph encoded by LSTM followed by a gated CNN to produce a single encoding per paragraph [1].\n\nNote that this applies to the LSTM/gated CNN method; the BERT approach instead represents the two paragraphs as a single packed sequence, not independently [7].",
+    "citation_check": {
+      "cited_numbers": [
+        1,
+        7
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 753,
+          "source": "1903.10548.pdf",
+          "page": 2,
+          "text": "3.1 Encoding with LSTM and Gated CNN In this method, paragraphs are encoded separately, and the concatenation of the resulted encoding is going through the classiﬁer. First, each paragraph is encoded with LSTM. The hidden state at the end of each sentence is extracted, and the resulting matrix is going through gated CNN (Dauphin et al., 2017) for extraction of single encoding for each paragraph."
+        },
+        {
+          "citation": 7,
+          "chunk_id": 755,
+          "source": "1903.10548.pdf",
+          "page": 2,
+          "text": "3.2 Fine-tuning BERT We have used a pre-trained BERT in two different ways. First, as a feature extractor without ﬁne-tuning, and second, by ﬁne-tuning the weights during training. The classiﬁcation is completely based on the BERT paper, i.e., we represent the ﬁrst and second paragraph as a single packed sequence, with the ﬁrst paragraph using the A embedding and the second paragraph using the B embedding."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

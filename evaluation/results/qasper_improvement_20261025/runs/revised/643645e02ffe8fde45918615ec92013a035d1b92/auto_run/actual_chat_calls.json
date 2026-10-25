@@ -1,0 +1,102 @@
+[
+  {
+    "number": 1,
+    "phase": "decompose",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n   For an open-ended \"difference between X and Y\" question, retrieve each\n   entity's purpose and core approach. Do not replace it with comparisons\n   between versions of X or versions of Y, or request unasked benchmark scores.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nWhat dataset is used?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-25T03:22:22.077867+00:00",
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+      "requested_model": "cn:glm-5.3",
+      "reported_model": "glm-5.3",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cached_tokens": 0,
+        "completion_thinking_tokens": 1,
+        "completion_tokens": 18,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 1,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.12,
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 672,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 672,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 690
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 1.944
+  },
+  {
+    "number": 2,
+    "phase": "probe",
+    "prompt": "You are an AI research assistant.\n\nRequired answer language: English.\nBegin with a short direct answer in its own paragraph, including any condition needed for correctness. Use Yes/No for a supported binary question, or the requested fact/keywords for a factual question. Then give only the necessary cited explanation after a blank line. A partial answer must keep the supported facts and explicitly identify the remaining gap.\n\nOnly when none of the requested facts can be supported, start with 'Insufficient evidence.' (or '当前证据不足。' when answering in Chinese). Do not use this refusal prefix for a partial answer.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in the same language as the user's question. If the question explicitly asks for a particular language, use that language instead. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported question, begin with 当前证据不足 when answering in Chinese, or with \"Insufficient evidence\" when answering in English, and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n14. Prioritize explicit subquestions, correct facts and citations, and conditions/units that change the conclusion. Add definitions or steps only when needed for the task. Optional background, stylistic preferences and unasked exceptions are not completeness requirements. Failure to retrieve a paper does not establish that the paper never reported a result.\n\n15. For a comparison, synthesize separately supported facts about the requested objects, citing each side. A literal sentence comparing both papers is NOT required. Different purposes, inputs or mechanisms can be contrasted from their respective descriptions. This does not establish causality or which method performs better. Do not call the comparison unsupported merely because no head-to-head experiment is provided.\n16. Lead with the main difference the user asked about. For a broad comparison, explain what each object does and its supported core approach; do not replace this with differences between versions of each object, benchmark tables or unasked numerical results.\n\nContext:\nOriginal passages:\n[1] Source: 1704.03279.pdf | Page: 5 | Section: 4 Results\nTitle: Unfolding and Shrinking Neural Machine Translation Ensembles\n(2016b) and use sub- word units based on byte pair encoding rather than words as modelling units. Our SGNMT de- coder (Stahlberg et al., 2017)4 with a beam size of 12 is used in all experiments. Our primary cor- pus is the Japanese-English (Ja-En) ASPEC data set (Nakazawa et al., 2016). We select a sub- set of 500K sentence pairs to train our models as suggested by Neubig et al.\n\n[2] Source: 1704.03279.pdf | Page: 5 | Section: 4 Results\nTitle: Unfolding and Shrinking Neural Machine Translation Ensembles\nWe re- port cased BLEU scores calculated with Moses’ multi-bleu.pl to be strictly comparable to the evaluation done in the Workshop of Asian Translation (WAT). We also apply our method to We the WMT data set for English-German (En-De), using the news-test2014 as a development set, and keeping news-test2015 and news-test2016 as test sets. En-De BLEU scores are computed using (6) mteval-v13a.pl as in the WMT evaluation. We set the vocabulary sizes to 30K for Ja-En and 50K for En-De.\n\n[3] Source: 1704.03279.pdf | Page: 4 | Section: 3.2 Data-Bound Neuron Removal\nTitle: Unfolding and Shrinking Neural Machine Translation Ensembles\n3In practice, we use a random sample of 50K rows rather than the full matrix to keep the complexity of the least- squares analysis under control.\n\n[4] Source: 1704.03279.pdf | Page: 1 | Section: None\nTitle: Unfolding and Shrinking Neural Machine Translation Ensembles\nInstead of a single neural net, multiple neural nets with the same topology are trained separately, and the decoder generates predictions by averaging over the individual models.\n\n[5] Source: 1704.03279.pdf | Page: 6 | Section: 4 Results\nTitle: Unfolding and Shrinking Neural Machine Translation Ensembles\nWe used the ﬁrst 500 sentences of the Ja-En WAT development set for the time measurements. Our results in Tab. 3 show that decoding with ensembles (rows (b) and (e)) is slow: combin- ing the predictions of the individual models on the CPU is computationally expensive, and en- semble decoding requires K passes through the softmax layer which is also computationally ex- pensive.\n\n[6] Source: 1704.03279.pdf | Page: 5 | Section: 4 Results\nTitle: Unfolding and Shrinking Neural Machine Translation Ensembles\n4 Results The individual NMT systems we use as source for constructing the unfolded networks are trained us- ing AdaDelta (Zeiler, 2012) on the Blocks/Theano implementation (van Merri¨enboer et al., 2015; Bastien et al., 2012) of the standard attention- based NMT model (Bahdanau et al., 2015) with: 1000 dimensional GRU layers (Cho et al., 2014) in both the decoder and bidrectional encoder; a single maxout output layer (Goodfellow et al., 2013); and 620 dimensional embedding layers.\n\n[7] Source: 1704.03279.pdf | Page: 8 | Section: 4 Results\nTitle: Unfolding and Shrinking Neural Machine Translation Ensembles\nSystem Wrds/Min. BLEU on news-test* (GPU) 2014 2015 2016 Single 2128.7 19.6 21.9 24.6 2-Ensemble 1135.3 20.5 22.9 26.1 2-Unfold-Norm. 2099.1 20.7 23.1 25.8 Table 6: Our best models on En-De.\n\n[8] Source: 1704.03279.pdf | Page: 11 | Section: 6 Conclusion\nTitle: Unfolding and Shrinking Neural Machine Translation Ensembles\n2016. Compression of neural machine In Proceedings translation models via pruning. of The 20th SIGNLL Conference on Computational Natural Language Learning, pages 291–301. Asso- ciation for Computational Linguistics.\n\n[9] Source: 1704.03279.pdf | Page: 1 | Section: 1 Introduction\nTitle: Unfolding and Shrinking Neural Machine Translation Ensembles\nShrinking the unfolded network leads to a smaller model which consumes less space on the disk and in the memory; a crucial factor on mobile devices.\n\n[10] Source: 1704.03279.pdf | Page: 5 | Section: 4 Results\nTitle: Unfolding and Shrinking Neural Machine Translation Ensembles\nWe also report the size factor for each model which is the total number of model parameters (sum of all weight matrix sizes) di- vided by the number of parameters in the original NMT network (86M for Ja-En and 120M for En- De). We choose a widely used, simple ensembling method (prediction averaging) as our baseline. We feel that the prevalence of this method makes it a reasonable baseline for our experiments.\n\n[11] Source: 1704.03279.pdf | Page: 7 | Section: 4 Results\nTitle: Unfolding and Shrinking Neural Machine Translation Ensembles\nTherefore, we think that similar results are possi- ble on other platforms as well. CPU decoding speed directly beneﬁts even more from smaller setups – 3-Unfold-Tiny is only 0.3 BLEU worse than Single but decoding on a single CPU is 3.4 times faster (row (a) vs. row (e) in Tab. This is of great practical use: batch de- coding with only two CPU threads surpasses pro- duction speed which is often set to 2000 words per minute (Beck et al., 2016). Our initial experiments in Tab.\n\nEvidence guidance:\n- Rule-based subject attribution: CPU; passage: “3 show that decoding with ensembles (rows (b) and (e)) is slow: combin- ing the predictions of the individual models on the CPU is computationally expensive, and en- semble decoding requires K passes through the softmax layer which is also computationally ex- pensive.” [5]\n- Rule-based subject attribution: CPU; passage: “8 Table 6: Our best models on En-De.” [7][11]\n\nQuestion:\nFor the paper \"Unfolding and Shrinking Neural Machine Translation Ensembles\" (arXiv: 1704.03279), answer this question: What dataset is used?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n- For a broad difference-between question with no requested aspect, use 3-5 sentences: lead with the purposes, then the supported core methods. Prefer primary-paper abstract/introductory definitions. Omit training/test hyperparameters and unasked performance caveats.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-25T03:22:30.975205+00:00",
+    "response": {
+      "answer": "The primary corpus is the Japanese–English (Ja-En) ASPEC dataset, with a subset of 500K sentence pairs used for training; the method is also applied to the WMT English–German (En-De) dataset, using news-test2014 as a development set and news-test2015/2016 as test sets. [1][2]\n\nThe Ja-En models use subword units based on byte pair encoding, and BLEU is computed with Moses' multi-bleu.pl to match WAT evaluation; En-De BLEU is computed with mteval-v13a.pl as in WMT. [1][2]",
+      "requested_model": "cn:glm-5.3",
+      "reported_model": "glm-5.3",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 512,
+        "cached_tokens": 512,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 135,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.4,
+        "prompt_cache_hit_tokens": 512,
+        "prompt_cache_miss_tokens": 1871,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2383,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 512,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2518
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 3.459
+  }
+]

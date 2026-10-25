@@ -1,0 +1,3 @@
+The best-performing combination was TFIDF (statistical) with the InferSent Based Model (semantic), which achieved the highest ROUGE-2 score of 0.04003 [6]. Overall, the InferSent based Summarizer performed exceptionally well, achieving the best mean base-model ROUGE-2 score of 0.03812, higher than the statistical models (TextRank 0.03629, TFIDF 0.03371, Jaccard 0.03468, Cosine 0.02918) and the other semantic models (WordNet 0.03354, Glove-vec 0.03054) [4] [3]. The paper also reports that using a mixture of semantic and statistical models offers an improvement over stand-alone models [1].
+
+Agent processing did not finish. This answer uses only the initial evidence.

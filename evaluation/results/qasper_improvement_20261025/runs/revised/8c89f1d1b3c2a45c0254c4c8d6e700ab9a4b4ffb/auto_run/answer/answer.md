@@ -1,0 +1,3 @@
+The paper suggests derived data and surrogate data sources (e.g., social media and online patient-generated data) as less sensitive alternatives.
+
+The authors state that working on derived data—such as text fragments, various statistics, and trained models that cannot be used to reconstruct the original text and, when sanitized, cannot directly re-identify individuals—can reduce data sensitivity and improve chances for IRB approval [3]. They also note that increasingly more health-related texts are produced in social media and that patient-generated data are available online; although these may not resemble clinical discourse, they relate to the same individuals whose health is documented in clinical reports [4].

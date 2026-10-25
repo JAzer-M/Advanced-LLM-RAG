@@ -1,0 +1,3 @@
+Other than privacy, the paper highlights social impact and biases emanating from clinical notes and their processing, as well as the commercial use of clinical data as distinct ethical concerns.
+
+The paper's introduction explicitly states that it does not only discuss the right to privacy, but also draws attention to the social impact and biases emanating from clinical notes and their processing [1]. Additionally, it raises the concern that the public is more willing to allow academic research than commercial exploitation of clinical data, suggesting a distinction between research and commercial use should be implemented [3].

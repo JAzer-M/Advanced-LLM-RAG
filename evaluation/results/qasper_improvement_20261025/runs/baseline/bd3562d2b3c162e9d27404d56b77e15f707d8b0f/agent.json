@@ -1,0 +1,573 @@
+{
+  "query": "For the paper \"Lancaster A at SemEval-2017 Task 5: Evaluation metrics matter: predicting sentiment from financial news headlines\" (arXiv: 1705.00571), answer this question: Which evaluation metrics do they use?",
+  "status": "completed",
+  "decomposition": {
+    "needs_decomposition": false,
+    "sub_queries": [],
+    "status": "not_needed"
+  },
+  "knowledge_base": {
+    "version": "qasper-holdout-20261025",
+    "chunk_count": 1459,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/manifest.json",
+    "manifest_sha256": "10bb244a150c260e5efc39b1a6ebeb939291e26f55d966ed102d27216e67718a",
+    "files": {
+      "faiss.index": "346ac08a63ebb5f367f8a886b0997c344fc084bf1fa8b27ae27de9a82be97617",
+      "chunks.json": "ef123dcc0b2180f3b957d9089c8b5207965dffb1d908fdbf348863efecdeb060"
+    }
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 120,
+    "global_top_ids": [
+      232,
+      272,
+      269,
+      234,
+      270,
+      271,
+      282,
+      281,
+      235,
+      239
+    ],
+    "protected_ids": [],
+    "sub_query_evidence": [],
+    "retrieval_anchor_ids": [
+      232
+    ],
+    "evidence_completion": {
+      "requested_sources": [
+        "1705.00571.pdf"
+      ],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        232,
+        272,
+        269,
+        234,
+        270,
+        271,
+        282,
+        281,
+        235,
+        239
+      ],
+      "retained_local_ids": [],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        232,
+        272,
+        269,
+        234,
+        270,
+        271,
+        282,
+        281,
+        235,
+        239
+      ],
+      "elapsed_seconds": 0.000475
+    }
+  },
+  "selected_ids": [
+    232,
+    272,
+    269,
+    234,
+    270,
+    271,
+    282,
+    281,
+    235,
+    239
+  ],
+  "context": "[1] Source: 1705.00571.pdf | Page: 1 | Section: None\nTitle: Lancaster A at SemEval-2017 Task 5: Evaluation metrics matter: predicting sentiment from financial news headlines\nLancaster A at SemEval-2017 Task 5: Evaluation metrics matter: predicting sentiment from ﬁnancial news headlines Andrew Moore and Paul Rayson School of Computing and Communications, Lancaster University, Lancaster, UK initial.surname@lancaster.ac.uk Abstract This paper describes our participation in Task 5 track 2 of SemEval 2017 to pre- dict the sentiment of ﬁnancial news head- arXiv:1705.00571v1 [cs.CL] 1 May 2017 lines for a speciﬁc company on a contin- uous scale between -1 and 1. We tack- led the problem using a number of ap- proaches, utilising a Support Vector Re- gression (SVR) and a Bidirectional Long Short-Term Memory (BLSTM).\n\n[2] Source: 1705.00571.pdf | Page: 4 | Section: None\nTitle: Lancaster A at SemEval-2017 Task 5: Evaluation metrics matter: predicting sentiment from financial news headlines\nThis is due to the system’s optimisation being based on metric 1 rather than 2. Metric 2 is a clas- siﬁcation metric for sentences with one aspect as 9http://alt.qcri.org/semeval2017/ task5/index.php?id=evaluation 10Where N is the number of unique sentences, ˆyn is the predicted and yn are the true sentiment value(s) of all senti- ments in sentence n. it penalises values that are of opposite sign (giving -1 score) and rewards values with the same sign (giving +1 score).\n\n[3] Source: 1705.00571.pdf | Page: 4 | Section: None\nTitle: Lancaster A at SemEval-2017 Task 5: Evaluation metrics matter: predicting sentiment from financial news headlines\nThe result table 1 shows three columns based on the three evaluation metrics that the organisers have used. Metric 1 is the original metric, weighted co- sine similarity (the metric used to evaluate the ﬁnal version of the results, where we were ranked 5th; metric provided on the task website9).\n\n[4] Source: 1705.00571.pdf | Page: 1 | Section: None\nTitle: Lancaster A at SemEval-2017 Task 5: Evaluation metrics matter: predicting sentiment from financial news headlines\n1 Introduction The objective of Task 5 Track 2 of SemEval (2017) was to predict the sentiment of news headlines with respect to companies mentioned within the headlines. This task can be seen as a ﬁnance- speciﬁc aspect-based sentiment task (Nasukawa and Yi, 2003). The main motivations of this task is to ﬁnd speciﬁc features and learning algorithms that will perform better for this domain as as- pect based sentiment analysis tasks have been con- ducted before at SemEval (Pontiki et al., 2014).\n\n[5] Source: 1705.00571.pdf | Page: 4 | Section: None\nTitle: Lancaster A at SemEval-2017 Task 5: Evaluation metrics matter: predicting sentiment from financial news headlines\nThis was then changed after the evaluation deadline to equa- tion 110 (which we term metric 2; this is what the ﬁrst version of the results were actually based on, where we were ranked 4th), which then changed by the organisers to their equation as presented in Cortis et al. (2017) (which we term metric 3 and what the second version of the results were based on, where we were ranked 5th).\n\n[6] Source: 1705.00571.pdf | Page: 4 | Section: None\nTitle: Lancaster A at SemEval-2017 Task 5: Evaluation metrics matter: predicting sentiment from financial news headlines\nModel Metric 1 Metric 2 Metric 3 SVR 62.14 54.59 62.34 SLSTM 72.89 61.55 68.64 ELSTM 73.20 61.98 69.24 Table 1: Results As you can see from the results table 1, the difference between the metrics is quite substan- tial.\n\n[7] Source: 1705.00571.pdf | Page: 5 | Section: None\nTitle: Lancaster A at SemEval-2017 Task 5: Evaluation metrics matter: predicting sentiment from financial news headlines\n2017. Semeval-2017 task 5: Fine-grained sentiment anal- ysis on ﬁnancial microblogs and news. Proceedings of SemEval . Harris Drucker, Christopher JC Burges, Linda Kauf- man, Alex Smola, Vladimir Vapnik, et al. 1997. Advances in Support vector regression machines. neural information processing systems 9:155–161. Alex Graves and J¨urgen Schmidhuber. 2005. Frame- wise phoneme classiﬁcation with bidirectional lstm and other neural network architectures.\n\n[8] Source: 1705.00571.pdf | Page: 5 | Section: None\nTitle: Lancaster A at SemEval-2017 Task 5: Evaluation metrics matter: predicting sentiment from financial news headlines\n2016. Xrce at semeval-2016 task 5: Feedbacked ensemble modelling on syntactico-semantic knowledge for as- pect based sentiment analysis. Proceedings of Se- mEval pages 277–281. Franc¸ois Chollet. 2015. Keras. https://github. com/fchollet/keras. Keith Cortis, Andre Freitas, Tobias Daudert, Manuela Huerlimann, Manel Zarrouk, and Brian Davis.\n\n[9] Source: 1705.00571.pdf | Page: 1 | Section: None\nTitle: Lancaster A at SemEval-2017 Task 5: Evaluation metrics matter: predicting sentiment from financial news headlines\nDomain speciﬁc terminology is expected to play a key part in this task, as reporters, investors and analysts in the ﬁnancial domain will use a speciﬁc set of terminology when discussing ﬁ- nancial performance. Potentially, this may also vary across different ﬁnancial domains and indus- try sectors.\n\n[10] Source: 1705.00571.pdf | Page: 1 | Section: None\nTitle: Lancaster A at SemEval-2017 Task 5: Evaluation metrics matter: predicting sentiment from financial news headlines\nIn aspect based sentiment analysis, there have been many different techniques used to predict the polarity of an aspect as shown in SemEval-2016 task 5 (Pontiki et al., 2014). The winning system (Brun et al., 2016) used many different linguistic features and an ensemble model, and the runner up (Kumar et al., 2016) used uni-grams, bi-grams and sentiment lexicons as features for a Support Vector Machine (SVM). Deep learning methods have also been applied to aspect polarity predic- tion.",
+  "ledger": {
+    "citation_registry": [
+      {
+        "citation": 1,
+        "chunk_id": 232,
+        "source": "1705.00571.pdf",
+        "page": 1,
+        "title": "Lancaster A at SemEval-2017 Task 5: Evaluation metrics matter: predicting sentiment from financial news headlines",
+        "text": "Lancaster A at SemEval-2017 Task 5: Evaluation metrics matter: predicting sentiment from ﬁnancial news headlines Andrew Moore and Paul Rayson School of Computing and Communications, Lancaster University, Lancaster, UK initial.surname@lancaster.ac.uk Abstract This paper describes our participation in Task 5 track 2 of SemEval 2017 to pre- dict the sentiment of ﬁnancial news head- arXiv:1705.00571v1 [cs.CL] 1 May 2017 lines for a speciﬁc company on a contin- uous scale between -1 and 1. We tack- led the problem using a number of ap- proaches, utilising a Support Vector Re- gression (SVR) and a Bidirectional Long Short-Term Memory (BLSTM).",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 2,
+        "chunk_id": 272,
+        "source": "1705.00571.pdf",
+        "page": 4,
+        "title": "Lancaster A at SemEval-2017 Task 5: Evaluation metrics matter: predicting sentiment from financial news headlines",
+        "text": "This is due to the system’s optimisation being based on metric 1 rather than 2. Metric 2 is a clas- siﬁcation metric for sentences with one aspect as 9http://alt.qcri.org/semeval2017/ task5/index.php?id=evaluation 10Where N is the number of unique sentences, ˆyn is the predicted and yn are the true sentiment value(s) of all senti- ments in sentence n. it penalises values that are of opposite sign (giving -1 score) and rewards values with the same sign (giving +1 score).",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 3,
+        "chunk_id": 269,
+        "source": "1705.00571.pdf",
+        "page": 4,
+        "title": "Lancaster A at SemEval-2017 Task 5: Evaluation metrics matter: predicting sentiment from financial news headlines",
+        "text": "The result table 1 shows three columns based on the three evaluation metrics that the organisers have used. Metric 1 is the original metric, weighted co- sine similarity (the metric used to evaluate the ﬁnal version of the results, where we were ranked 5th; metric provided on the task website9).",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 4,
+        "chunk_id": 234,
+        "source": "1705.00571.pdf",
+        "page": 1,
+        "title": "Lancaster A at SemEval-2017 Task 5: Evaluation metrics matter: predicting sentiment from financial news headlines",
+        "text": "1 Introduction The objective of Task 5 Track 2 of SemEval (2017) was to predict the sentiment of news headlines with respect to companies mentioned within the headlines. This task can be seen as a ﬁnance- speciﬁc aspect-based sentiment task (Nasukawa and Yi, 2003). The main motivations of this task is to ﬁnd speciﬁc features and learning algorithms that will perform better for this domain as as- pect based sentiment analysis tasks have been con- ducted before at SemEval (Pontiki et al., 2014).",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 5,
+        "chunk_id": 270,
+        "source": "1705.00571.pdf",
+        "page": 4,
+        "title": "Lancaster A at SemEval-2017 Task 5: Evaluation metrics matter: predicting sentiment from financial news headlines",
+        "text": "This was then changed after the evaluation deadline to equa- tion 110 (which we term metric 2; this is what the ﬁrst version of the results were actually based on, where we were ranked 4th), which then changed by the organisers to their equation as presented in Cortis et al. (2017) (which we term metric 3 and what the second version of the results were based on, where we were ranked 5th).",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 6,
+        "chunk_id": 271,
+        "source": "1705.00571.pdf",
+        "page": 4,
+        "title": "Lancaster A at SemEval-2017 Task 5: Evaluation metrics matter: predicting sentiment from financial news headlines",
+        "text": "Model Metric 1 Metric 2 Metric 3 SVR 62.14 54.59 62.34 SLSTM 72.89 61.55 68.64 ELSTM 73.20 61.98 69.24 Table 1: Results As you can see from the results table 1, the difference between the metrics is quite substan- tial.",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 7,
+        "chunk_id": 282,
+        "source": "1705.00571.pdf",
+        "page": 5,
+        "title": "Lancaster A at SemEval-2017 Task 5: Evaluation metrics matter: predicting sentiment from financial news headlines",
+        "text": "2017. Semeval-2017 task 5: Fine-grained sentiment anal- ysis on ﬁnancial microblogs and news. Proceedings of SemEval . Harris Drucker, Christopher JC Burges, Linda Kauf- man, Alex Smola, Vladimir Vapnik, et al. 1997. Advances in Support vector regression machines. neural information processing systems 9:155–161. Alex Graves and J¨urgen Schmidhuber. 2005. Frame- wise phoneme classiﬁcation with bidirectional lstm and other neural network architectures.",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 8,
+        "chunk_id": 281,
+        "source": "1705.00571.pdf",
+        "page": 5,
+        "title": "Lancaster A at SemEval-2017 Task 5: Evaluation metrics matter: predicting sentiment from financial news headlines",
+        "text": "2016. Xrce at semeval-2016 task 5: Feedbacked ensemble modelling on syntactico-semantic knowledge for as- pect based sentiment analysis. Proceedings of Se- mEval pages 277–281. Franc¸ois Chollet. 2015. Keras. https://github. com/fchollet/keras. Keith Cortis, Andre Freitas, Tobias Daudert, Manuela Huerlimann, Manel Zarrouk, and Brian Davis.",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 9,
+        "chunk_id": 235,
+        "source": "1705.00571.pdf",
+        "page": 1,
+        "title": "Lancaster A at SemEval-2017 Task 5: Evaluation metrics matter: predicting sentiment from financial news headlines",
+        "text": "Domain speciﬁc terminology is expected to play a key part in this task, as reporters, investors and analysts in the ﬁnancial domain will use a speciﬁc set of terminology when discussing ﬁ- nancial performance. Potentially, this may also vary across different ﬁnancial domains and indus- try sectors.",
+        "kb_version": "qasper-holdout-20261025"
+      },
+      {
+        "citation": 10,
+        "chunk_id": 239,
+        "source": "1705.00571.pdf",
+        "page": 1,
+        "title": "Lancaster A at SemEval-2017 Task 5: Evaluation metrics matter: predicting sentiment from financial news headlines",
+        "text": "In aspect based sentiment analysis, there have been many different techniques used to predict the polarity of an aspect as shown in SemEval-2016 task 5 (Pontiki et al., 2014). The winning system (Brun et al., 2016) used many different linguistic features and an ensemble model, and the runner up (Kumar et al., 2016) used uni-grams, bi-grams and sentiment lexicons as features for a Support Vector Machine (SVM). Deep learning methods have also been applied to aspect polarity predic- tion.",
+        "kb_version": "qasper-holdout-20261025"
+      }
+    ]
+  },
+  "mode": "agent",
+  "answer": "该论文使用了主办方采用的三种评估指标 [3]：\n\n1. **Metric 1**：原始指标——加权余弦相似度（weighted cosine similarity），用于评估最终版本结果（排名5th）[3]。\n2. **Metric 2**：公式1（evaluation deadline 后更改的指标），第一版结果基于该指标（排名4th）。它对符号相反的预测给予 -1 分、符号相同的给予 +1 分的奖惩 [5][2]。\n3. **Metric 3**：主办方在 Cortis et al. (2017) 中给出的公式，第二版结果基于该指标（排名5th）[5]。\n\n结果表中同时报告了三种指标下的分数（如 ELSTM：73.20 / 61.98 / 69.24）[6]。",
+  "run_dir": "/Users/j/Desktop/Advanced-LLM-RAG/evaluation/results/qasper_improvement_20261025/runs/baseline/bd3562d2b3c162e9d27404d56b77e15f707d8b0f/agent_run",
+  "initial_selected_ids": [
+    232,
+    272,
+    269,
+    234,
+    270,
+    271,
+    282,
+    281,
+    235,
+    239
+  ],
+  "agent": {
+    "invoked": true,
+    "actions_executed": 0,
+    "decision_summary": {
+      "planned_cases": 1,
+      "completed_cases": 1,
+      "api_attempts": 3,
+      "failed_api_attempts": 0,
+      "automatic_retries": 0,
+      "actions_executed": 0,
+      "usage_missing_calls": [],
+      "reported_usage": {
+        "prompt_tokens": 4939,
+        "completion_tokens": 618,
+        "total_tokens": 5557
+      },
+      "proposed_actions": {
+        "question": {
+          "type": "answer",
+          "reason": "所有需求已由所给段落充分支持，可直接回答评估指标问题。",
+          "requirement_ids": [],
+          "query": null,
+          "source": null,
+          "chunk_id": null
+        }
+      },
+      "action_attempts": 0,
+      "reassessment_api_attempts": 0,
+      "reassessed_actions": {
+        "question": null
+      },
+      "final_answer_generations": 0,
+      "automatic_action_loop": true,
+      "validation_repair_attempts": 1,
+      "paused_cases": 0,
+      "halt_reasons": {
+        "question": "answer_ready"
+      }
+    },
+    "halt_reason": "answer_ready",
+    "answer_summary": {
+      "question_id": "question",
+      "status": "completed",
+      "answer_status": "review_passed",
+      "api_attempts": 2,
+      "failed_api_attempts": 0,
+      "automatic_retries": 0,
+      "repair_attempted": false,
+      "usage_missing_calls": [],
+      "reported_usage": {
+        "prompt_tokens": 6608,
+        "completion_tokens": 784,
+        "total_tokens": 7392
+      },
+      "semantic_correctness": "requires_manual_review"
+    }
+  },
+  "actions": [],
+  "answer_status": "review_passed",
+  "stop_reason": "answer_ready",
+  "network": {
+    "status": "not_requested",
+    "http_tool_calls": 0,
+    "papers_read": 0
+  },
+  "api_summary": {
+    "attempts": 6,
+    "failed_attempts": 0,
+    "automatic_retries": 0,
+    "usage_missing_calls": [],
+    "reported_usage": {
+      "prompt_tokens": 12267,
+      "completion_tokens": 1420,
+      "total_tokens": 13687
+    }
+  },
+  "original_question": "Which evaluation metrics do they use?",
+  "eval_api_calls": [
+    {
+      "number": 1,
+      "requested_model": "cn:glm-5.3-flash",
+      "started_at_utc": "2026-10-25T02:43:29.399560+00:00",
+      "status": "completed",
+      "prompt_characters": 3410,
+      "prompt_sha256": "4c2e6c87b700343cb38ed7b1229aa20c9d945fa6ac92ed2cb2e62a2747b3732f",
+      "reported_model": "glm-5.3-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 704,
+        "cached_tokens": 704,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 18,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0,
+        "prompt_cache_hit_tokens": 704,
+        "prompt_cache_miss_tokens": 16,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 720,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 704,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 738
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      },
+      "seconds": 15.535
+    },
+    {
+      "number": 2,
+      "requested_model": "cn:glm-5.3-flash",
+      "started_at_utc": "2026-10-25T02:43:51.565073+00:00",
+      "status": "completed",
+      "prompt_characters": 2727,
+      "prompt_sha256": "5fc1cf9a3a26d2a502abc050e7f833a26337cae8706be6eb74afd654dee429f8",
+      "reported_model": "glm-5.3-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cached_tokens": 0,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 49,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.01,
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 567,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 567,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 616
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      },
+      "seconds": 2.307
+    },
+    {
+      "number": 3,
+      "requested_model": "cn:glm-5.3-flash",
+      "started_at_utc": "2026-10-25T02:43:53.881473+00:00",
+      "status": "completed",
+      "prompt_characters": 3237,
+      "prompt_sha256": "106575c014d13bc9f5ae130f450686a78573517dc9c669be51162d6bfe7da234",
+      "reported_model": "glm-5.3-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cached_tokens": 0,
+        "completion_thinking_tokens": 56,
+        "completion_tokens": 151,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 56,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.02,
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 667,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 667,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 818
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      },
+      "seconds": 3.527
+    },
+    {
+      "number": 4,
+      "requested_model": "cn:glm-5.3-flash",
+      "started_at_utc": "2026-10-25T02:43:57.418498+00:00",
+      "status": "completed",
+      "prompt_characters": 14993,
+      "prompt_sha256": "4a15f5bb1eeab1be5c4ff0c3662ea9e9832ee940f7cd076e4c6b44c9c27e02f4",
+      "reported_model": "glm-5.3-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cached_tokens": 0,
+        "completion_thinking_tokens": 16,
+        "completion_tokens": 418,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 16,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.08,
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 3705,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 3705,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 4123
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      },
+      "seconds": 6.736
+    },
+    {
+      "number": 5,
+      "requested_model": "cn:glm-5.3-flash",
+      "started_at_utc": "2026-10-25T02:44:04.173717+00:00",
+      "status": "completed",
+      "prompt_characters": 11042,
+      "prompt_sha256": "03c42fc0022cb9676eb64eb1a27c8705aa92614f0d9bd637dee807eb2205aae8",
+      "reported_model": "glm-5.3-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cached_tokens": 0,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 174,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.05,
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 2907,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2907,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 3081
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      },
+      "seconds": 4.344
+    },
+    {
+      "number": 6,
+      "requested_model": "cn:glm-5.3-flash",
+      "started_at_utc": "2026-10-25T02:44:08.525665+00:00",
+      "status": "completed",
+      "prompt_characters": 13424,
+      "prompt_sha256": "8ae68f8cc78e07a8d34fa48dd68578b9e4d6858b125285405cb695f4a328e758",
+      "reported_model": "glm-5.3-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 0,
+        "cached_tokens": 0,
+        "completion_thinking_tokens": 13,
+        "completion_tokens": 610,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 13,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.09,
+        "prompt_cache_hit_tokens": 0,
+        "prompt_cache_miss_tokens": 3701,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 3701,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 4311
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      },
+      "seconds": 8.563
+    }
+  ],
+  "eval_elapsed_seconds": 47.721,
+  "evaluation": {
+    "version": "baseline",
+    "requested_model": "cn:glm-5.3-flash",
+    "stage": "runs",
+    "source_root": "/Users/j/Desktop/Advanced-LLM-RAG/evaluation/results/qasper_improvement_20261025/baseline_source",
+    "started_at_utc": "2026-10-25T02:43:29.399560+00:00",
+    "kb_version": "qasper-holdout-20261025"
+  }
+}

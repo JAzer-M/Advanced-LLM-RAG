@@ -1,0 +1,113 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "For the paper \"Verb Pattern: A Probabilistic Semantic Representation on Verbs\" (arXiv: 1710.07695), answer this question: what do they mean by description length?",
+  "kb_version": "qasper-holdout-20261025",
+  "result": {
+    "status": "review_failed",
+    "repair_attempted": true,
+    "drafts": [
+      "In this paper, \"description length\" refers to the total code length, under the Minimum Description Length (MDL) framework, of describing all verb phrases given a pattern assignment function f — i.e., the cost of using verb patterns as a compressed representation of the phrases, denoted L(f).\n\nMDL is based on the idea of data compression: verb patterns can be regarded as a compressed representation of verb phrases, and if the pattern assignment provides a compact description of phrases, it captures the underlying verb semantics well. Given verb phrases, the model seeks the best assignment function f that minimizes the code length of the phrases [1]. Operationally, the description length for an assignment f(i+1) is computed by summing up all n phrases' code lengths [2], and L(f(i+1)) is explicitly called \"the description length for f(i+1)\" in the simulated-annealing acceptance step, where a new assignment is accepted if its description length is smaller than that of the previous round [3][5].",
+      "In this paper, \"description length\" refers to the total code length, under the Minimum Description Length (MDL) framework, of describing all verb phrases given a pattern assignment function f — i.e., the cost of using verb patterns as a compressed representation of the phrases, denoted L(f).\n\nMDL is based on the idea of data compression: verb patterns can be regarded as a compressed representation of verb phrases, and if the pattern assignment provides a compact description of phrases, it captures the underlying verb semantics well. Given verb phrases, the model seeks the best assignment function f that minimizes the code length of the phrases [1]. Operationally, the description length for an assignment f(i+1) is computed by summing up all n phrases' code lengths [2], and L(f(i+1)) is explicitly called \"the description length for f(i+1)\" in the simulated-annealing acceptance step [5], where the new assignment is accepted if its description length is smaller than that of the last round [9]."
+    ],
+    "reviews": [
+      {
+        "review_error": "Review cites a source not cited by its answer quote.",
+        "citation_check": {
+          "cited_numbers": [
+            1,
+            2,
+            3,
+            5
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 1,
+              "chunk_id": 434,
+              "source": "1710.07695.pdf",
+              "page": 3,
+              "text": "We ﬁrst discuss our intuition to use Mini- mum Description Length (MDL) (Barron, Rissanen, and Yu 1998). MDL is based on the idea of data compression. Verb patterns can be regarded as a compressed representation of verb phrases. Intuitively, if the pattern assignment provides a compact description of phrases, it captures the underlying verb semantics well. Given verb phrases, we seek for the best assignment func- tion f that minimizes the code length of phrases."
+            },
+            {
+              "citation": 2,
+              "chunk_id": 456,
+              "source": "1710.07695.pdf",
+              "page": 4,
+              "text": "Next, we compute the description length for f (i+1) by summing up all n phrases’ code lengths. This step also costs O(n) time. Suppose our algorithm terminates after S iterations. The entire complexity thus is O(Sn)."
+            },
+            {
+              "citation": 3,
+              "chunk_id": 426,
+              "source": "1710.07695.pdf",
+              "page": 2,
+              "text": "• We proposed the principles for verb pattern extraction: generality and speciﬁcity. We show that the trade-off be- tween them is the main challenge of pattern generation. We further proposed an unsupervised model based on minimum description length to generate verb patterns."
+            },
+            {
+              "citation": 5,
+              "chunk_id": 453,
+              "source": "1710.07695.pdf",
+              "page": 4,
+              "text": "2. Randomly select a new pattern a. For each p, ( t(p, a) > t(p, f (i)(p)) a f (i+1)(p) = (12) f (i)(p) otherwise , where f (i) is the assignment in the i-th iteration. 3. Accept f (i+1) with probability: ( L(f (i+1)) < L(f (i)) 1 p = L(f (i+1)) ≥L(f (i)) (13) e(L(f(i))−L(f(i+1)))/SA , where L(f (i+1)) is the description length for f (i+1), S is the number of steps performed in SA, and A is a constant to control the speed of cooling process."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      },
+      {
+        "review_error": "Review cites a source not cited by its answer quote.",
+        "citation_check": {
+          "cited_numbers": [
+            1,
+            2,
+            5,
+            9
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 1,
+              "chunk_id": 434,
+              "source": "1710.07695.pdf",
+              "page": 3,
+              "text": "We ﬁrst discuss our intuition to use Mini- mum Description Length (MDL) (Barron, Rissanen, and Yu 1998). MDL is based on the idea of data compression. Verb patterns can be regarded as a compressed representation of verb phrases. Intuitively, if the pattern assignment provides a compact description of phrases, it captures the underlying verb semantics well. Given verb phrases, we seek for the best assignment func- tion f that minimizes the code length of phrases."
+            },
+            {
+              "citation": 2,
+              "chunk_id": 456,
+              "source": "1710.07695.pdf",
+              "page": 4,
+              "text": "Next, we compute the description length for f (i+1) by summing up all n phrases’ code lengths. This step also costs O(n) time. Suppose our algorithm terminates after S iterations. The entire complexity thus is O(Sn)."
+            },
+            {
+              "citation": 5,
+              "chunk_id": 453,
+              "source": "1710.07695.pdf",
+              "page": 4,
+              "text": "2. Randomly select a new pattern a. For each p, ( t(p, a) > t(p, f (i)(p)) a f (i+1)(p) = (12) f (i)(p) otherwise , where f (i) is the assignment in the i-th iteration. 3. Accept f (i+1) with probability: ( L(f (i+1)) < L(f (i)) 1 p = L(f (i+1)) ≥L(f (i)) (13) e(L(f(i))−L(f(i+1)))/SA , where L(f (i+1)) is the description length for f (i+1), S is the number of steps performed in SA, and A is a constant to control the speed of cooling process."
+            },
+            {
+              "citation": 9,
+              "chunk_id": 454,
+              "source": "1710.07695.pdf",
+              "page": 4,
+              "text": "4. Repeat Step 2 and Step 3, until there is no change in the last β iterations. Step 2 and Step 3 distinguish our algorithm from the generic SA based solution. In Step 2, for each randomly se- lected pattern a, we compute its typicality. If its typicality is larger than that of the currently assigned pattern, we assign the phrase to a. In Step 3, we accept the new assignment if its description length is smaller than that in the last round."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "The answer failed review, so no reliable factual answer can be delivered this time.\n- Verb Pattern: A Probabilistic Semantic Representation on Verbs: For the paper \"Verb Pattern: A Probabilistic Semantic Representation on Verbs\" (arXiv: 1710.07695), answer this question: what do they mean by description length?; The answer to this requirement still needs checking.",
+    "rejected_answer": "In this paper, \"description length\" refers to the total code length, under the Minimum Description Length (MDL) framework, of describing all verb phrases given a pattern assignment function f — i.e., the cost of using verb patterns as a compressed representation of the phrases, denoted L(f).\n\nMDL is based on the idea of data compression: verb patterns can be regarded as a compressed representation of verb phrases, and if the pattern assignment provides a compact description of phrases, it captures the underlying verb semantics well. Given verb phrases, the model seeks the best assignment function f that minimizes the code length of the phrases [1]. Operationally, the description length for an assignment f(i+1) is computed by summing up all n phrases' code lengths [2], and L(f(i+1)) is explicitly called \"the description length for f(i+1)\" in the simulated-annealing acceptance step [5], where the new assignment is accepted if its description length is smaller than that of the last round [9]."
+  }
+}

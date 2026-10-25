@@ -1,0 +1,3 @@
+The paper uses three evaluation metrics, all set by the task organisers: Metric 1 (weighted cosine similarity), Metric 2, and Metric 3 [1][5].
+
+Metric 1 is the original metric, weighted cosine similarity, used to evaluate the final version of the results [1]. Metric 2 was a changed equation applied after the evaluation deadline, on which the first version of results was based; Metric 3 is the organisers' equation as presented in Cortis et al. (2017), on which the second version of results was based [5]. Metric 3 is more similar to Metric 1, but penalises opposite-sign predictions more heavily [7]. The results table reports all three metrics for their systems (SVR, SLSTM, ELSTM) [2].

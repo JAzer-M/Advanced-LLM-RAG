@@ -1,0 +1,3 @@
+Yes — they only look at tweets.
+
+The authors state they do not have access to user attributes, since the users were banned from Twitter and their accounts suspended, and "we only have access to their tweets thanks to the 'IRA Russian Trolls' dataset" [1]. Each user is represented as a collection of their tweets [4], with the main dataset containing 2,973,371 tweets by 2,848 Twitter users linked to the Russian Internet Research Agency [10]. Even their graph-based approach (the U2M user-to-mentioned-user graph with node2vec) is derived from tweet content, as an edge (u, v) exists if user u mentions user v in their tweets [2].

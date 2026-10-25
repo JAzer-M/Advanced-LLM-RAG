@@ -251,7 +251,8 @@ class BackendDeliveryTests(unittest.TestCase):
         self.assertEqual(result['status'], 'failed')
         self.assertIn('did not finish', result['answer'])
         self.assertNotIn('invented scope', result['answer'])
-        self.assertEqual(call.call_count, 3)
+        self.assertEqual(call.call_count, 4)
+        self.assertEqual(result['fallback']['status'], 'failed')
         http.assert_not_called()
 
 

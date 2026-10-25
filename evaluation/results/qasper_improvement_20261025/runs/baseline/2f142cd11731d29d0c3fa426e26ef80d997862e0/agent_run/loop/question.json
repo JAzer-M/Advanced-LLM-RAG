@@ -1,0 +1,1192 @@
+{
+  "id": "question",
+  "query": "For the paper \"Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\" (arXiv: 1909.01720), answer this question: Do they report results only on English data?",
+  "kb_version": "qasper-holdout-20261025",
+  "status": "completed",
+  "actions_executed": 3,
+  "semantic_correctness": "requires_manual_review",
+  "validation_repairs": [
+    {
+      "phase": "plan",
+      "error": "Requirement question_quote must name its own subject and show its scope."
+    }
+  ],
+  "plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "they",
+        "question_quote": "For the paper \"Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\" (arXiv: 1909.01720), answer this question: Do they report results only on English data?",
+        "need": "For the paper \"Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\" (arXiv: 1909.01720), answer this question: Do they report results only on English data?"
+      }
+    ]
+  },
+  "assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "missing",
+        "evidence": [],
+        "supported_part": "",
+        "reason": "提供的段落仅涵盖模型结构（选共享层、门控/注意力单元、损失函数）和参考文献；没有片段说明实验使用的数据集或其语言，因此无法确定结果是否仅在英文数据上报告。",
+        "gap": "缺少关于实验所用数据集及其语言（是否仅英文）的说明"
+      }
+    ],
+    "next_action": {
+      "type": "search",
+      "reason": "目标论文 1909.01720.pdf 在清单中，但检索到的片段均未涉及实验数据集的语言，需要检索其实验/数据集部分。",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": "they: For the paper \"Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\" (arXiv: 1909.01720), answer this question: Do they report results only on English data? | For the paper \"Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\" (arXiv: 1909.01720), answer this question: Do they report results only on English data?",
+      "source": "1909.01720.pdf",
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "仅针对 r1 的需求范围（该论文的实验数据语言）进行检查，未混入其他需求或额外条件。"
+    }
+  },
+  "steps": [
+    {
+      "number": 1,
+      "action": {
+        "type": "search",
+        "reason": "目标论文 1909.01720.pdf 在清单中，但检索到的片段均未涉及实验数据集的语言，需要检索其实验/数据集部分。",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": "they: For the paper \"Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\" (arXiv: 1909.01720), answer this question: Do they report results only on English data? | For the paper \"Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\" (arXiv: 1909.01720), answer this question: Do they report results only on English data?",
+        "source": "1909.01720.pdf",
+        "chunk_id": null
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "search",
+        "status": "executed",
+        "query_context": "For the paper \"Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\" (arXiv: 1909.01720)",
+        "tool_result": {
+          "query": "For the paper \"Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\" (arXiv: 1909.01720): they: For the paper \"Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\" (arXiv: 1909.01720), answer this question: Do they report results only on English data? | For the paper \"Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\" (arXiv: 1909.01720), answer this question: Do they report results only on English data?",
+          "source": "1909.01720.pdf",
+          "knowledge_base": {
+            "version": "qasper-holdout-20261025",
+            "chunk_count": 1459,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/manifest.json",
+            "manifest_sha256": "10bb244a150c260e5efc39b1a6ebeb939291e26f55d966ed102d27216e67718a",
+            "files": {
+              "faiss.index": "346ac08a63ebb5f367f8a886b0997c344fc084bf1fa8b27ae27de9a82be97617",
+              "chunks.json": "ef123dcc0b2180f3b957d9089c8b5207965dffb1d908fdbf348863efecdeb060"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 927,
+              "score": 0.012987012987012988,
+              "source": "1909.01720.pdf",
+              "page": 4,
+              "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+              "section": "3.2 Shared-private Feature Extractor",
+              "text": "Formally, the multi-head attention can be formulated as follows: headi = Attention(QWQ i , VWV i , KWK i ) H = MultiHead(Q, K, V) = Concat(head1, head2, ..., headh)Wo (3) where WQ i ∈R(dp+dw)×dk, WK ∈R(dp+dw)×dk, i ∈R(dp+dw)×dk are trainable projection pa- WV i rameters. dk is (dp + dw)/h, h is the number of heads. In Eq.(3), Wo ∈R(dp+dw)×(dp+dw) is also trainable parameter.",
+              "rerank_score": 0.9956632256507874,
+              "kb_version": "qasper-holdout-20261025"
+            },
+            {
+              "chunk_id": 925,
+              "score": 0.012719880851748983,
+              "source": "1909.01720.pdf",
+              "page": 4,
+              "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+              "section": "3.2 Shared-private Feature Extractor",
+              "text": "where Q ∈Rl×(dp+dw), K ∈Rl×(dp+dw), and V ∈ Rl×(dp+dw) are query matrix, key matrix, and value matrix, respectively. In our setting, the query Q stems from the inputs itself, i.e., Q = K = V = E.",
+              "rerank_score": 0.9950301647186279,
+              "kb_version": "qasper-holdout-20261025"
+            },
+            {
+              "chunk_id": 919,
+              "score": 0.011804443206351416,
+              "source": "1909.01720.pdf",
+              "page": 3,
+              "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+              "section": "3.1 Input Embeddings",
+              "text": "Position embeddings refer to vectorization representations of position informa- tion of words in a sentence. We employ one- hot encoding to represent position embeddings pi of token xi, where pi ∈Rdp, dp is the posi- tional embedding dimension. Therefore, the em- beddings of a sentence are represented as E = {[w1; p1], [w2; p2], ..., [wl; pl]}, E ∈Rl×(dp+dw).",
+              "rerank_score": 0.9936297535896301,
+              "kb_version": "qasper-holdout-20261025"
+            },
+            {
+              "chunk_id": 896,
+              "score": 0.01918656056587091,
+              "source": "1909.01720.pdf",
+              "page": 1,
+              "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+              "section": "1 Introduction",
+              "text": "Most existing methods devise deep neural net- works to capture credibility features for fake news detection. Some methods provide in-depth analy- sis of text features, e.g., linguistic (Conroy et al., 2015), semantic (Yang et al., 2012), emotional (Wang et al., 2015), stylistic (Potthast et al., 2017), etc. On this basis, some work additionally ex- tracts social context features (a.k.a.",
+              "rerank_score": 0.9935373663902283,
+              "kb_version": "qasper-holdout-20261025"
+            },
+            {
+              "chunk_id": 999,
+              "score": 0.025195618153364633,
+              "source": "1909.01720.pdf",
+              "page": 10,
+              "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+              "section": "5 Conclusion",
+              "text": "2018. A survey on natural language process- arXiv preprint ing for fake news detection. arXiv:1811.00770. Kashyap Popat, Subhabrata Mukherjee, Andrew Yates, and Gerhard Weikum. 2018. Declare: Debunking fake news and false claims using evidence-aware deep learning. In EMNLP, pages 22–32. Martin Potthast, Johannes Kiesel, Kevin Reinartz, Janek Bevendorff, and Benno Stein. 2017. A sty- lometric inquiry into hyperpartisan and fake news.",
+              "rerank_score": 0.9935101866722107,
+              "kb_version": "qasper-holdout-20261025"
+            },
+            {
+              "chunk_id": 907,
+              "score": 0.014164164164164165,
+              "source": "1909.01720.pdf",
+              "page": 2,
+              "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+              "section": "2 Related Work",
+              "text": "One is to capture linguistic features from text content, such as semantic (Wang, 2017; Wu et al., 2018), writing styles (Potthast et al., 2017), and textual entailments (Oshikawa et al., 2018). The other is to focus on gaining effective features from the or- ganic integration of text and user interactions (Qian et al., 2018; Wu et al., 2019). User interactions include users’ behaviours, proﬁles, and networks between users.",
+              "rerank_score": 0.9933308959007263,
+              "kb_version": "qasper-holdout-20261025"
+            },
+            {
+              "chunk_id": 990,
+              "score": 0.019070512820512822,
+              "source": "1909.01720.pdf",
+              "page": 9,
+              "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+              "section": "5 Conclusion",
+              "text": "2018. Semi-supervised content-based detection of misinformation via ten- sor embeddings. In 2018 IEEE/ACM International Conference on Advances in Social Networks Analy- sis and Mining (ASONAM), pages 322–325. IEEE. Sepp Hochreiter and J¨urgen Schmidhuber. 1997. Neural computation, Long short-term memory. 9(8):1735–1780. Elena Kochkina, Maria Liakata, and Isabelle Augen- stein. 2017. Turing at semeval-2017 task 8: Sequen- tial approach to rumour stance classiﬁcation with branch-lstm.",
+              "rerank_score": 0.9931449890136719,
+              "kb_version": "qasper-holdout-20261025"
+            },
+            {
+              "chunk_id": 911,
+              "score": 0.019760940813572395,
+              "source": "1909.01720.pdf",
+              "page": 2,
+              "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+              "section": "2 Related Work",
+              "text": "Multi-task Learning A collection of improved models (Chen and Cardie, 2018; Chen et al., 2018; Liu et al., 2019) are developed based on multi- task learning. Especially, shared-private model, as a popular multi-task learning model, divides the features of different tasks into private and shared spaces, where shared features, i.e., task-irrelevant features in shared space, as supplementary fea- tures are used for different tasks.",
+              "rerank_score": 0.9928332567214966,
+              "kb_version": "qasper-holdout-20261025"
+            },
+            {
+              "chunk_id": 961,
+              "score": 0.023752012882447666,
+              "source": "1909.01720.pdf",
+              "page": 7,
+              "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+              "section": "4.4.1 Model Ablation",
+              "text": "In our proposed method, typical tokens are captured by shared layer (SL), selected sharing layer for fake news detection (SSL- FND), selected sharing layer for stance detection (SSL-SD), private layer for fake news detection (PL-FND), and private layer for stance detection (PL-SD) respectively. A column of the same color represents the distribution of one token in different layers, while the last two columns denote unique tokens captured by different layers.",
+              "rerank_score": 0.9927230477333069,
+              "kb_version": "qasper-holdout-20261025"
+            },
+            {
+              "chunk_id": 991,
+              "score": 0.021279003961516697,
+              "source": "1909.01720.pdf",
+              "page": 9,
+              "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+              "section": "5 Conclusion",
+              "text": "arXiv preprint arXiv:1704.07221. Elena Kochkina, Maria Liakata, and Arkaitz Zubiaga. 2018. All-in-one: Multi-task learning for rumour veriﬁcation. arXiv preprint arXiv:1806.03713. Sizhen Li, Shuai Zhao, Bo Cheng, and Hao Yang. 2018. An end-to-end multi-task learning model for fact checking. EMNLP 2018, page 138. Boyang Liu, Pang-Ning Tan, and Jiayu Zhou. 2019. Augmented multi-task learning by optimal transport.",
+              "rerank_score": 0.9920721650123596,
+              "kb_version": "qasper-holdout-20261025"
+            }
+          ],
+          "trace": {
+            "retrieval_depth": 1459,
+            "candidate_k": 120,
+            "rrf_k": 60,
+            "result_k": 10,
+            "dense_ids": [
+              889,
+              904,
+              980,
+              902,
+              964,
+              890,
+              994,
+              898,
+              894,
+              905,
+              999,
+              908,
+              973,
+              906,
+              941,
+              1002,
+              1000,
+              990,
+              917,
+              986,
+              901,
+              942,
+              1001,
+              957,
+              974,
+              988,
+              896,
+              982,
+              924,
+              944,
+              969,
+              1004,
+              893,
+              892,
+              991,
+              968,
+              976,
+              959,
+              984,
+              975,
+              897,
+              933,
+              1006,
+              978,
+              985,
+              947,
+              993,
+              961,
+              912,
+              910,
+              949,
+              965,
+              900,
+              911,
+              972,
+              997,
+              920,
+              995,
+              928,
+              1005,
+              953,
+              914,
+              1003,
+              948,
+              971,
+              922,
+              960,
+              915,
+              967,
+              987,
+              935,
+              909,
+              946,
+              931,
+              907,
+              998,
+              979,
+              951,
+              921,
+              977,
+              940,
+              932,
+              923,
+              956,
+              996,
+              926,
+              903,
+              895,
+              954,
+              989,
+              950,
+              891,
+              913,
+              927,
+              929,
+              955,
+              918,
+              992,
+              945,
+              981,
+              943,
+              939,
+              952,
+              963,
+              934,
+              962,
+              958,
+              936,
+              925,
+              930,
+              970,
+              966,
+              919,
+              916,
+              937,
+              983,
+              938,
+              899
+            ],
+            "bm25_ids": [
+              889,
+              890,
+              914,
+              980,
+              976,
+              902,
+              933,
+              908,
+              961,
+              917,
+              972,
+              969,
+              894,
+              964,
+              898,
+              971,
+              959,
+              974,
+              979,
+              935,
+              904,
+              967,
+              957,
+              940,
+              960,
+              978,
+              1000,
+              942,
+              994,
+              999,
+              911,
+              947,
+              991,
+              932,
+              973,
+              906,
+              901,
+              985,
+              941,
+              910,
+              988,
+              939,
+              951,
+              928,
+              912,
+              924,
+              993,
+              934,
+              1001,
+              926,
+              1002,
+              893,
+              962,
+              905,
+              975,
+              949,
+              920,
+              965,
+              909,
+              986,
+              982,
+              930,
+              922,
+              984,
+              966,
+              1005,
+              931,
+              963,
+              977,
+              896,
+              900,
+              995,
+              936,
+              996,
+              892,
+              1003,
+              953,
+              903,
+              946,
+              998,
+              921,
+              929,
+              923,
+              1006,
+              958,
+              916,
+              925,
+              907,
+              952,
+              915,
+              981,
+              945,
+              992,
+              927,
+              897,
+              983,
+              937,
+              891,
+              987,
+              990,
+              955,
+              944,
+              956,
+              954,
+              989,
+              919,
+              1004,
+              968,
+              997,
+              950,
+              913,
+              948
+            ],
+            "candidate_ids": [
+              889,
+              980,
+              890,
+              902,
+              964,
+              908,
+              904,
+              894,
+              898,
+              917,
+              994,
+              976,
+              999,
+              969,
+              933,
+              974,
+              1000,
+              973,
+              914,
+              957,
+              906,
+              961,
+              942,
+              941,
+              959,
+              905,
+              972,
+              901,
+              1002,
+              988,
+              991,
+              978,
+              1001,
+              971,
+              986,
+              924,
+              947,
+              935,
+              979,
+              967,
+              911,
+              985,
+              893,
+              960,
+              982,
+              896,
+              910,
+              990,
+              940,
+              912,
+              975,
+              993,
+              984,
+              892,
+              928,
+              932,
+              949,
+              965,
+              944,
+              920,
+              951,
+              1004,
+              1006,
+              900,
+              968,
+              897,
+              1005,
+              922,
+              995,
+              909,
+              939,
+              926,
+              953,
+              1003,
+              931,
+              934,
+              977,
+              962,
+              946,
+              997,
+              998,
+              915,
+              996,
+              921,
+              907,
+              930,
+              903,
+              923,
+              987,
+              963,
+              948,
+              966,
+              929,
+              936,
+              956,
+              927,
+              891,
+              958,
+              981,
+              945,
+              992,
+              952,
+              954,
+              989,
+              925,
+              955,
+              916,
+              950,
+              913,
+              983,
+              937,
+              919,
+              895,
+              918,
+              943,
+              970,
+              938,
+              899
+            ],
+            "selected_ids": [
+              927,
+              925,
+              919,
+              896,
+              999,
+              907,
+              990,
+              911,
+              961,
+              991
+            ],
+            "elapsed_seconds": 11.713752,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        927,
+        925,
+        919,
+        896,
+        907,
+        990,
+        911,
+        961,
+        991
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          927,
+          925,
+          919,
+          896,
+          907,
+          990,
+          911,
+          961,
+          991
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "missing",
+            "evidence": [],
+            "supported_part": "",
+            "reason": "提供的段落只涵盖模型结构、损失函数、结论和参考文献，没有任何数据集语言属性或实验结果的信息，无法判断是否仅在英文数据上报告结果。",
+            "gap": "缺少论文实验/数据集部分关于所用数据集及其语言的原文证据。"
+          }
+        ],
+        "next_action": {
+          "type": "read_neighbors",
+          "reason": "搜索只加入了方法相关段落，实验与数据集部分未出现；应围绕第7页的图表分析段落（chunk 961）向前读，定位数据集描述和结果表。",
+          "requirement_ids": [
+            "r1"
+          ],
+          "query": null,
+          "source": "1909.01720.pdf",
+          "chunk_id": 961
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "仅针对r1的问题摘要在提供的原文段落范围内核查，未超出范围。"
+        }
+      }
+    },
+    {
+      "number": 2,
+      "action": {
+        "type": "read_neighbors",
+        "reason": "搜索只加入了方法相关段落，实验与数据集部分未出现；应围绕第7页的图表分析段落（chunk 961）向前读，定位数据集描述和结果表。",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": null,
+        "source": "1909.01720.pdf",
+        "chunk_id": 961
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "read_neighbors",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "chunk_id": 961,
+          "source": "1909.01720.pdf",
+          "knowledge_base": {
+            "version": "qasper-holdout-20261025",
+            "chunk_count": 1459,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/manifest.json",
+            "manifest_sha256": "10bb244a150c260e5efc39b1a6ebeb939291e26f55d966ed102d27216e67718a",
+            "files": {
+              "faiss.index": "346ac08a63ebb5f367f8a886b0997c344fc084bf1fa8b27ae27de9a82be97617",
+              "chunks.json": "ef123dcc0b2180f3b957d9089c8b5207965dffb1d908fdbf348863efecdeb060"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 959,
+              "text": "The details of these methods are described as follows: Single-task Single-task is a model with trans- former encoder as the encoder layer of the model for fake news detection. MT-lstm The tasks of fake news detection and stance detection are integrated into a shared-private model and the encoder of the model is achieved by LSTM.",
+              "source": "1909.01720.pdf",
+              "page": 6,
+              "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+              "section": "4.4.1 Model Ablation",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -2
+            },
+            {
+              "chunk_id": 960,
+              "text": "RumourEval A(%) P(%) Single-task 62.86 54.21 MT-lstm 65.90 56.61 MT-trans 71.67 58.43 MT-trans-G 74.89 64.32 MT-trans-A 79.22 68.97 MT-trans-G-A 82.10 72.24 Table 3: Ablation analysis of the sifted multi-task learning method. what why wrong scary SL: what wrong scary SSL-FND: why wrong SSL-SD: what scary PL-FND: why PL-SD: Figure 4: Typical tokens obtained by different layers of the sifted multi-task learning method.",
+              "source": "1909.01720.pdf",
+              "page": 7,
+              "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+              "section": "4.4.1 Model Ablation",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -1
+            },
+            {
+              "chunk_id": 961,
+              "text": "In our proposed method, typical tokens are captured by shared layer (SL), selected sharing layer for fake news detection (SSL- FND), selected sharing layer for stance detection (SSL-SD), private layer for fake news detection (PL-FND), and private layer for stance detection (PL-SD) respectively. A column of the same color represents the distribution of one token in different layers, while the last two columns denote unique tokens captured by different layers.",
+              "source": "1909.01720.pdf",
+              "page": 7,
+              "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+              "section": "4.4.1 Model Ablation",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 0
+            },
+            {
+              "chunk_id": 962,
+              "text": "MT-trans The only difference between MT- trans and MT-lstm is that encoder of MT-trans is composed of transformer encoder. MT-trans-G On the basis of MT-trans, MT- trans-G adds gated sharing cell behind the shared layer of MT-trans to ﬁlter shared features. MT-trans-A Unlike MT-trans-G, MT-trans-A replaces gated sharing cell with attention sharing cell for selecting shared features.",
+              "source": "1909.01720.pdf",
+              "page": 7,
+              "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+              "section": "4.4.1 Model Ablation",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 1
+            },
+            {
+              "chunk_id": 963,
+              "text": "MT-trans-G-A Gated sharing cell and attention sharing cell are organically combined as selected sharing layer behind the shared layer of MT-trans, called MT-trans-G-A.",
+              "source": "1909.01720.pdf",
+              "page": 7,
+              "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+              "section": "4.4.1 Model Ablation",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 2
+            }
+          ],
+          "trace": {
+            "window": 2,
+            "max_window": 2,
+            "selected_ids": [
+              959,
+              960,
+              961,
+              962,
+              963
+            ],
+            "read_chars": 1764,
+            "elapsed_seconds": 0.000201,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        959,
+        960,
+        962,
+        963
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          959,
+          960,
+          962,
+          963
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "missing",
+            "evidence": [],
+            "supported_part": "",
+            "reason": "提供的段落只包含方法描述、RumourEval 上的消融实验表格与参考文献，没有任何段落说明实验数据集的语言（是否仅使用英文数据）。",
+            "gap": "缺少论文实验所使用数据集的语言信息（是否仅英文）"
+          }
+        ],
+        "next_action": {
+          "type": "read_neighbors",
+          "reason": "实验设置/数据集描述应位于第6页基线方法描述（chunk 959）附近，读取其相邻段落可能找到数据集及语言信息。",
+          "requirement_ids": [
+            "r1"
+          ],
+          "query": null,
+          "source": "1909.01720.pdf",
+          "chunk_id": 959
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "scope checked against each bound question excerpt"
+        }
+      }
+    },
+    {
+      "number": 3,
+      "action": {
+        "type": "read_neighbors",
+        "reason": "实验设置/数据集描述应位于第6页基线方法描述（chunk 959）附近，读取其相邻段落可能找到数据集及语言信息。",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": null,
+        "source": "1909.01720.pdf",
+        "chunk_id": 959
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "read_neighbors",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "chunk_id": 959,
+          "source": "1909.01720.pdf",
+          "knowledge_base": {
+            "version": "qasper-holdout-20261025",
+            "chunk_count": 1459,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/manifest.json",
+            "manifest_sha256": "10bb244a150c260e5efc39b1a6ebeb939291e26f55d966ed102d27216e67718a",
+            "files": {
+              "faiss.index": "346ac08a63ebb5f367f8a886b0997c344fc084bf1fa8b27ae27de9a82be97617",
+              "chunks.json": "ef123dcc0b2180f3b957d9089c8b5207965dffb1d908fdbf348863efecdeb060"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 957,
+              "text": "Taking into account the tradeoff among different perfor- mance measures, this reveals the effectiveness of our method in the task of fake news detec- tion.",
+              "source": "1909.01720.pdf",
+              "page": 6,
+              "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+              "section": "4.3.2 Compared with State-of-the-art",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -2
+            },
+            {
+              "chunk_id": 958,
+              "text": "4.4.1 Model Ablation To evaluate the effectiveness of different compo- nents in our method, we ablate our method into several simpliﬁed models and compare their per- formance against related methods.",
+              "source": "1909.01720.pdf",
+              "page": 6,
+              "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+              "section": "4.4.1 Model Ablation",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -1
+            },
+            {
+              "chunk_id": 959,
+              "text": "The details of these methods are described as follows: Single-task Single-task is a model with trans- former encoder as the encoder layer of the model for fake news detection. MT-lstm The tasks of fake news detection and stance detection are integrated into a shared-private model and the encoder of the model is achieved by LSTM.",
+              "source": "1909.01720.pdf",
+              "page": 6,
+              "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+              "section": "4.4.1 Model Ablation",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 0
+            },
+            {
+              "chunk_id": 960,
+              "text": "RumourEval A(%) P(%) Single-task 62.86 54.21 MT-lstm 65.90 56.61 MT-trans 71.67 58.43 MT-trans-G 74.89 64.32 MT-trans-A 79.22 68.97 MT-trans-G-A 82.10 72.24 Table 3: Ablation analysis of the sifted multi-task learning method. what why wrong scary SL: what wrong scary SSL-FND: why wrong SSL-SD: what scary PL-FND: why PL-SD: Figure 4: Typical tokens obtained by different layers of the sifted multi-task learning method.",
+              "source": "1909.01720.pdf",
+              "page": 7,
+              "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+              "section": "4.4.1 Model Ablation",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 1
+            },
+            {
+              "chunk_id": 961,
+              "text": "In our proposed method, typical tokens are captured by shared layer (SL), selected sharing layer for fake news detection (SSL- FND), selected sharing layer for stance detection (SSL-SD), private layer for fake news detection (PL-FND), and private layer for stance detection (PL-SD) respectively. A column of the same color represents the distribution of one token in different layers, while the last two columns denote unique tokens captured by different layers.",
+              "source": "1909.01720.pdf",
+              "page": 7,
+              "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+              "section": "4.4.1 Model Ablation",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 2
+            }
+          ],
+          "trace": {
+            "window": 2,
+            "max_window": 2,
+            "selected_ids": [
+              957,
+              958,
+              959,
+              960,
+              961
+            ],
+            "read_chars": 1566,
+            "elapsed_seconds": 0.000169,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        957,
+        958
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          957,
+          958
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "missing",
+            "evidence": [],
+            "supported_part": "",
+            "reason": "提供的段落描述了模型结构、消融实验和结果表格，但均未说明实验所用数据集的语言或是否仅使用英文数据，无法确立该事实。",
+            "gap": "缺少论文实验所用数据集（如 RumourEval、LIAR 等）的语言信息，无法判断是否仅报告英文数据结果。"
+          }
+        ],
+        "next_action": {
+          "type": "read_neighbors",
+          "reason": "结果部分（chunk 958 附近，第6页）应包含实验数据集描述，其相邻段落可能说明数据集语言，以判断是否仅用英文数据。",
+          "requirement_ids": [
+            "r1"
+          ],
+          "query": null,
+          "source": "1909.01720.pdf",
+          "chunk_id": 958
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "仅针对 r1 的 operative need（数据集语言/是否仅英文数据）检查，未引入其他要求或额外条件。"
+        }
+      }
+    }
+  ],
+  "evidence_after": [
+    {
+      "chunk_id": 932,
+      "source": "1909.01720.pdf",
+      "page": 4,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "σ is a non-linear activation - sigmoid, which makes ﬁnal choices for retaining and discarding features in shared layer. Then the shared features after ﬁltering via gated (2) sharing cell gfake for the task of fake news detec- tion are represented as: Gfake = gfake ⊙Hshared (5) where ⊙denotes element-wise multiplication.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 999,
+      "source": "1909.01720.pdf",
+      "page": 10,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "2018. A survey on natural language process- arXiv preprint ing for fake news detection. arXiv:1811.00770. Kashyap Popat, Subhabrata Mukherjee, Andrew Yates, and Gerhard Weikum. 2018. Declare: Debunking fake news and false claims using evidence-aware deep learning. In EMNLP, pages 22–32. Martin Potthast, Johannes Kiesel, Kevin Reinartz, Janek Bevendorff, and Benno Stein. 2017. A sty- lometric inquiry into hyperpartisan and fake news.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 940,
+      "source": "1909.01720.pdf",
+      "page": 5,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "Given the prediction of all tasks, a global loss function forces the model to minimize the cross- entropy of prediction and true distribution for all the tasks: N X λiL(ˆyi, yi) L = i=1 L(ˆyi, yi) = yilogˆyi + (1 −yi)log(1 −ˆyi) (12) where λi is the weight for the task i, and N is the number of tasks. In this paper, N = 2, and we give more weight λ to the task of fake news detection.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1002,
+      "source": "1909.01720.pdf",
+      "page": 10,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "In Advances in neural information pro- cessing systems, pages 5998–6008. William Yang Wang. 2017. ” liar, liar pants on ﬁre”: A new benchmark dataset for fake news detection. arXiv preprint arXiv:1705.00648. Yilin Wang, Suhang Wang, Jiliang Tang, Huan Liu, and Baoxin Li. 2015. Unsupervised sentiment analysis for social media images. In Twenty-Fourth Interna- tional Joint Conference on Artiﬁcial Intelligence. Lianwei Wu, Yuan Rao, Hualei Yu, Yiming Wang, and Nazir Ambreen.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1001,
+      "source": "1909.01720.pdf",
+      "page": 10,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "2015. Highway networks. preprint arXiv:1505.00387. James Thorne, Mingjie Chen, Giorgos Myrianthous, Jiashu Pu, Xiaoxuan Wang, and Andreas Vlachos. 2017. Fake news stance detection using stacked en- In Proceedings of the 2017 semble of classiﬁers. EMNLP Workshop: Natural Language Processing meets Journalism, pages 80–83. Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N Gomez, Łukasz Kaiser, and Illia Polosukhin. 2017. Attention is all you need.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 985,
+      "source": "1909.01720.pdf",
+      "page": 9,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "arXiv preprint arXiv:1810.03552. Xilun Chen and Claire Cardie. 2018. Multinomial ad- versarial networks for multi-domain text classiﬁca- tion. In Proceedings of the 2018 Conference of the North American Chapter of the Association for Com- putational Linguistics: Human Language Technolo- gies, pages 1226–1240. Yi-Chin Chen, Zhao-Yang Liu, and Hung-Yu Kao. 2017. Ikm at semeval-2017 task 8: Convolutional neural networks for stance detection and rumor veri- ﬁcation.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 890,
+      "source": "1909.01720.pdf",
+      "page": 1,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "However, in most of the existing approaches, the shared features are completely assigned to different tasks without selection, which may lead to some useless and even adverse fea- tures integrated into speciﬁc tasks. In this paper, we design a sifted multi-task learning method with a selected sharing layer for fake news detection. The selected sharing layer adopts gate mechanism and attention mecha- nism to ﬁlter and select shared feature ﬂows between tasks.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 889,
+      "source": "1909.01720.pdf",
+      "page": 1,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection Lianwei Wu, Yuan Rao, Haolin Jin, Ambreen Nazir, Ling Sun Lab of Social Intelligence and Complexity Data Processing School of Software Engineering, Xi’an Jiaotong University, Xi’an, 710049, China {stayhungry,jinhaolin,ambreen.nazir,sunling}@stu.xjtu.edu.cn raoyuan@mail.xjtu.edu.cn Abstract Recently, neural networks based on multi- task learning have achieved promising perfor- arXiv:1909.01720v1 [cs.CL] 4 Sep 2019 mance on fake news detection, which focus on learning shared features among tasks as com- plementary features to serve different tasks.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 980,
+      "source": "1909.01720.pdf",
+      "page": 8,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "5 Conclusion In this paper, we explored a sifted multi-task learn- ing method with a novel selected sharing structure for fake news detection. The selected sharing struc- ture fused single gate mechanism for ﬁltering use- less shared features and attention mechanism for paying close attention to features that were helpful to target tasks.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 904,
+      "source": "1909.01720.pdf",
+      "page": 2,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "In summary, the contributions of this paper are as follows: • We explore a selected sharing layer relying on gate mechanism and attention mechanism, which can selectively capture valuable shared features between tasks of fake news detection and stance detection for respective tasks. • The transformer encoder is introduced into our model for encoding inputs of both tasks, which enhances the performance of our method by taking advantages of its long-range dependencies and parallelism.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 928,
+      "source": "1909.01720.pdf",
+      "page": 4,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "3.3 Selected Sharing Layer In order to select valuable and appropriate shared features for different tasks, we design a selected sharing layer following the shared layer. The se- lected sharing layer consists of two cells: gated sharing cell for ﬁltering useless features and atten- tion sharing cell for focusing on valuable shared features for speciﬁc tasks. The description of this layer is depicted in Figure 2 and Figure 3. In the following, we introduce two cells in details.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 903,
+      "source": "1909.01720.pdf",
+      "page": 2,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "Besides, to better capture long-range dependencies and improve the parallelism of the model, we apply transformer encoder module (Vaswani et al., 2017) to our model for encoding input representations of both tasks. Experimental results reveal that the pro- posed model outperforms the compared methods and gains new benchmarks.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 927,
+      "source": "1909.01720.pdf",
+      "page": 4,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "Formally, the multi-head attention can be formulated as follows: headi = Attention(QWQ i , VWV i , KWK i ) H = MultiHead(Q, K, V) = Concat(head1, head2, ..., headh)Wo (3) where WQ i ∈R(dp+dw)×dk, WK ∈R(dp+dw)×dk, i ∈R(dp+dw)×dk are trainable projection pa- WV i rameters. dk is (dp + dw)/h, h is the number of heads. In Eq.(3), Wo ∈R(dp+dw)×(dp+dw) is also trainable parameter.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 925,
+      "source": "1909.01720.pdf",
+      "page": 4,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "where Q ∈Rl×(dp+dw), K ∈Rl×(dp+dw), and V ∈ Rl×(dp+dw) are query matrix, key matrix, and value matrix, respectively. In our setting, the query Q stems from the inputs itself, i.e., Q = K = V = E.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 919,
+      "source": "1909.01720.pdf",
+      "page": 3,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "Position embeddings refer to vectorization representations of position informa- tion of words in a sentence. We employ one- hot encoding to represent position embeddings pi of token xi, where pi ∈Rdp, dp is the posi- tional embedding dimension. Therefore, the em- beddings of a sentence are represented as E = {[w1; p1], [w2; p2], ..., [wl; pl]}, E ∈Rl×(dp+dw).",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 896,
+      "source": "1909.01720.pdf",
+      "page": 1,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "Most existing methods devise deep neural net- works to capture credibility features for fake news detection. Some methods provide in-depth analy- sis of text features, e.g., linguistic (Conroy et al., 2015), semantic (Yang et al., 2012), emotional (Wang et al., 2015), stylistic (Potthast et al., 2017), etc. On this basis, some work additionally ex- tracts social context features (a.k.a.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 907,
+      "source": "1909.01720.pdf",
+      "page": 2,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "One is to capture linguistic features from text content, such as semantic (Wang, 2017; Wu et al., 2018), writing styles (Potthast et al., 2017), and textual entailments (Oshikawa et al., 2018). The other is to focus on gaining effective features from the or- ganic integration of text and user interactions (Qian et al., 2018; Wu et al., 2019). User interactions include users’ behaviours, proﬁles, and networks between users.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 990,
+      "source": "1909.01720.pdf",
+      "page": 9,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "2018. Semi-supervised content-based detection of misinformation via ten- sor embeddings. In 2018 IEEE/ACM International Conference on Advances in Social Networks Analy- sis and Mining (ASONAM), pages 322–325. IEEE. Sepp Hochreiter and J¨urgen Schmidhuber. 1997. Neural computation, Long short-term memory. 9(8):1735–1780. Elena Kochkina, Maria Liakata, and Isabelle Augen- stein. 2017. Turing at semeval-2017 task 8: Sequen- tial approach to rumour stance classiﬁcation with branch-lstm.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 911,
+      "source": "1909.01720.pdf",
+      "page": 2,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "Multi-task Learning A collection of improved models (Chen and Cardie, 2018; Chen et al., 2018; Liu et al., 2019) are developed based on multi- task learning. Especially, shared-private model, as a popular multi-task learning model, divides the features of different tasks into private and shared spaces, where shared features, i.e., task-irrelevant features in shared space, as supplementary fea- tures are used for different tasks.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 961,
+      "source": "1909.01720.pdf",
+      "page": 7,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "In our proposed method, typical tokens are captured by shared layer (SL), selected sharing layer for fake news detection (SSL- FND), selected sharing layer for stance detection (SSL-SD), private layer for fake news detection (PL-FND), and private layer for stance detection (PL-SD) respectively. A column of the same color represents the distribution of one token in different layers, while the last two columns denote unique tokens captured by different layers.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 991,
+      "source": "1909.01720.pdf",
+      "page": 9,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "arXiv preprint arXiv:1704.07221. Elena Kochkina, Maria Liakata, and Arkaitz Zubiaga. 2018. All-in-one: Multi-task learning for rumour veriﬁcation. arXiv preprint arXiv:1806.03713. Sizhen Li, Shuai Zhao, Bo Cheng, and Hao Yang. 2018. An end-to-end multi-task learning model for fact checking. EMNLP 2018, page 138. Boyang Liu, Pang-Ning Tan, and Jiayu Zhou. 2019. Augmented multi-task learning by optimal transport.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 959,
+      "source": "1909.01720.pdf",
+      "page": 6,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "The details of these methods are described as follows: Single-task Single-task is a model with trans- former encoder as the encoder layer of the model for fake news detection. MT-lstm The tasks of fake news detection and stance detection are integrated into a shared-private model and the encoder of the model is achieved by LSTM.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 960,
+      "source": "1909.01720.pdf",
+      "page": 7,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "RumourEval A(%) P(%) Single-task 62.86 54.21 MT-lstm 65.90 56.61 MT-trans 71.67 58.43 MT-trans-G 74.89 64.32 MT-trans-A 79.22 68.97 MT-trans-G-A 82.10 72.24 Table 3: Ablation analysis of the sifted multi-task learning method. what why wrong scary SL: what wrong scary SSL-FND: why wrong SSL-SD: what scary PL-FND: why PL-SD: Figure 4: Typical tokens obtained by different layers of the sifted multi-task learning method.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 962,
+      "source": "1909.01720.pdf",
+      "page": 7,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "MT-trans The only difference between MT- trans and MT-lstm is that encoder of MT-trans is composed of transformer encoder. MT-trans-G On the basis of MT-trans, MT- trans-G adds gated sharing cell behind the shared layer of MT-trans to ﬁlter shared features. MT-trans-A Unlike MT-trans-G, MT-trans-A replaces gated sharing cell with attention sharing cell for selecting shared features.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 963,
+      "source": "1909.01720.pdf",
+      "page": 7,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "MT-trans-G-A Gated sharing cell and attention sharing cell are organically combined as selected sharing layer behind the shared layer of MT-trans, called MT-trans-G-A.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 957,
+      "source": "1909.01720.pdf",
+      "page": 6,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "Taking into account the tradeoff among different perfor- mance measures, this reveals the effectiveness of our method in the task of fake news detec- tion.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 958,
+      "source": "1909.01720.pdf",
+      "page": 6,
+      "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+      "text": "4.4.1 Model Ablation To evaluate the effectiveness of different compo- nents in our method, we ablate our method into several simpliﬁed models and compare their per- formance against related methods.",
+      "kb_version": "qasper-holdout-20261025"
+    }
+  ],
+  "action_attempts": 3,
+  "feedback_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "missing",
+        "evidence": [],
+        "supported_part": "",
+        "reason": "提供的段落描述了模型结构、消融实验和结果表格，但均未说明实验所用数据集的语言或是否仅使用英文数据，无法确立该事实。",
+        "gap": "缺少论文实验所用数据集（如 RumourEval、LIAR 等）的语言信息，无法判断是否仅报告英文数据结果。"
+      }
+    ],
+    "next_action": {
+      "type": "read_neighbors",
+      "reason": "结果部分（chunk 958 附近，第6页）应包含实验数据集描述，其相邻段落可能说明数据集语言，以判断是否仅用英文数据。",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": null,
+      "source": "1909.01720.pdf",
+      "chunk_id": 958
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "仅针对 r1 的 operative need（数据集语言/是否仅英文数据）检查，未引入其他要求或额外条件。"
+    }
+  },
+  "halt_reason": "action_budget",
+  "final_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "missing",
+        "evidence": [],
+        "supported_part": "",
+        "reason": "提供的段落描述了模型结构、消融实验和结果表格，但均未说明实验所用数据集的语言或是否仅使用英文数据，无法确立该事实。",
+        "gap": "缺少论文实验所用数据集（如 RumourEval、LIAR 等）的语言信息，无法判断是否仅报告英文数据结果。"
+      }
+    ],
+    "next_action": {
+      "type": "read_neighbors",
+      "reason": "结果部分（chunk 958 附近，第6页）应包含实验数据集描述，其相邻段落可能说明数据集语言，以判断是否仅用英文数据。",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": null,
+      "source": "1909.01720.pdf",
+      "chunk_id": 958
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "仅针对 r1 的 operative need（数据集语言/是否仅英文数据）检查，未引入其他要求或额外条件。"
+    }
+  },
+  "elapsed_seconds": 48.266
+}

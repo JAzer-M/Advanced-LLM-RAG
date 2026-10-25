@@ -1,0 +1,3 @@
+For single-document summarization, each model's summary counts toward a sentence's cWeight with equal, untrained weights (Wi = 1/g for g models), where cWeight(si) = Σ B(j, si) and B(j, si) is 1 if sentence si appears in model j's summary [5][6]. For multi-document/domain-specific summarization, the weights Wi are fine-tuned via supervised learning on u domain-specific documents with gold-standard summaries, using each model's F1-score f(j,i) per document as the weighting factor, and the resulting weights are stored along with sense vectors for later reuse [2][7][8].
+
+Agent processing did not finish. This answer uses only the initial evidence.

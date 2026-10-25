@@ -1,0 +1,1 @@
+Yes. The dataset is filtered to English: the authors "focus on accounts that use English as main language" [3] and "remove from these accounts non-English tweets, and maintain only tweets that were tweeted originally by them" [7]. Since the classification results (Table 2) [10] are computed on this filtered dataset, the results are reported only on English data.

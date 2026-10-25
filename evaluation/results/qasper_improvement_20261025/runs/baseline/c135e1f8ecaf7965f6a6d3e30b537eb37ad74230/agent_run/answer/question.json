@@ -1,0 +1,145 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "For the paper \"Predicting the Role of Political Trolls in Social Media\" (arXiv: 1910.02001), answer this question: How are labels for trolls obtained?",
+  "kb_version": "qasper-holdout-20261025",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": false,
+    "drafts": [
+      "Troll labels are obtained in two ways depending on the scenario. In the fully supervised setting, the troll roles are manually assigned labels (Left Troll, Right Troll, News Feed, Commercial, Fearmonger, Hashtag Gamer, Non English, Unknown) from the dataset collected and published by Linvill and Warren (2018) [6]. In the distant supervision scenario, troll role labels are not available at training time, so labels for news media are used as a proxy, from which labels for the troll users are inferred [3]. These media labels are propagated to troll users that mention them via the mapping LEFT→left, RIGHT→right, CENTER→news feed, either by training a proxy model on media and applying it to users, or by using label propagation for semi-supervised learning [1]. By combining the media labels with the citation graph from troll accounts to news media, the final labeling of accounts can be inferred without any manual labeling [2]."
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "Troll labels are obtained in two ways depending on the scenario. In the fully supervised setting, the troll roles are manually assigned labels (Left Troll, Right Troll, News Feed, Commercial, Fearmonger, Hashtag Gamer, Non English, Unknown) from the dataset collected and published by Linvill and Warren (2018) [6]. In the distant supervision scenario, troll role labels are not available at training time, so labels for news media are used as a proxy, from which labels for the troll users are inferred [3]. These media labels are propagated to troll users that mention them via the mapping LEFT→left, RIGHT→right, CENTER→news feed, either by training a proxy model on media and applying it to users, or by using label propagation for semi-supervised learning [1]. By combining the media labels with the citation graph from troll accounts to news media, the final labeling of accounts can be inferred without any manual labeling [2].",
+              "reason": "回答完整覆盖两种情形：监督情形下标签由 Linvill 和 Warren (2018) 手工分配（各角色列举与原文一致）；远程监督情形下使用媒体标签作代理，并按 LEFT→left、RIGHT→right、CENTER→news feed 的映射传播到提及这些媒体的 troll 用户，传播方式（代理模型/标签传播）与无需人工标注的表述均有原文支持，引用位置正确且无多余断言。",
+              "citations": [
+                {
+                  "number": 6,
+                  "quote": "The data was collected and published by Linvill and Warren (2018), and then made available online.1 The time span covers the period from February 2012 to May 2018. The trolls belong to the following manually as- signed roles: Left Troll, Right Troll, News Feed, Commercial, Fearmonger, Hashtag Gamer, Non English, Unknown."
+                },
+                {
+                  "number": 3,
+                  "quote": "Then, armed with these representations, we tackle the following tasks: T1 A fully supervised learning task, where we have labeled training data with example troll and their roles; T2 A distant supervision learning task, in which labels for the troll roles are not available at training time, and thus we use labels for news media as a proxy, from which we infer labels for the troll users."
+                },
+                {
+                  "number": 1,
+                  "quote": "We propagate labels from the given media to the troll user that mentions them according to the fol- lowing media-to-user mapping: LEFT→left RIGHT→right (1) CENTER→news feed This propagation can be done in different ways: (a) by training a proxy model for media and then applying it to users, (b) by additionally using label propagation (LP) for semi-supervised learning. Let us describe the proxy model propagation for (a) ﬁrst."
+                },
+                {
+                  "number": 2,
+                  "quote": "By combining these labels with a citation graph from the troll accounts to news media, we can infer the ﬁnal labeling on the accounts them- selves without any need for manual labeling."
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            1,
+            2,
+            3,
+            6
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 1,
+              "chunk_id": 1167,
+              "source": "1910.02001.pdf",
+              "page": 5,
+              "text": "We propagate labels from the given media to the troll user that mentions them according to the fol- lowing media-to-user mapping: LEFT→left RIGHT→right (1) CENTER→news feed This propagation can be done in different ways: (a) by training a proxy model for media and then applying it to users, (b) by additionally using label propagation (LP) for semi-supervised learning. Let us describe the proxy model propagation for (a) ﬁrst."
+            },
+            {
+              "citation": 2,
+              "chunk_id": 1116,
+              "source": "1910.02001.pdf",
+              "page": 2,
+              "text": "By combining these labels with a citation graph from the troll accounts to news media, we can infer the ﬁnal labeling on the accounts them- selves without any need for manual labeling."
+            },
+            {
+              "citation": 3,
+              "chunk_id": 1152,
+              "source": "1910.02001.pdf",
+              "page": 4,
+              "text": "Then, armed with these representations, we tackle the following tasks: T1 A fully supervised learning task, where we have labeled training data with example troll and their roles; T2 A distant supervision learning task, in which labels for the troll roles are not available at training time, and thus we use labels for news media as a proxy, from which we infer labels for the troll users."
+            },
+            {
+              "citation": 6,
+              "chunk_id": 1179,
+              "source": "1910.02001.pdf",
+              "page": 6,
+              "text": "The data was collected and published by Linvill and Warren (2018), and then made available online.1 The time span covers the period from February 2012 to May 2018. The trolls belong to the following manually as- signed roles: Left Troll, Right Troll, News Feed, Commercial, Fearmonger, Hashtag Gamer, Non English, Unknown."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "Troll labels are obtained in two ways depending on the scenario. In the fully supervised setting, the troll roles are manually assigned labels (Left Troll, Right Troll, News Feed, Commercial, Fearmonger, Hashtag Gamer, Non English, Unknown) from the dataset collected and published by Linvill and Warren (2018) [6]. In the distant supervision scenario, troll role labels are not available at training time, so labels for news media are used as a proxy, from which labels for the troll users are inferred [3]. These media labels are propagated to troll users that mention them via the mapping LEFT→left, RIGHT→right, CENTER→news feed, either by training a proxy model on media and applying it to users, or by using label propagation for semi-supervised learning [1]. By combining the media labels with the citation graph from troll accounts to news media, the final labeling of accounts can be inferred without any manual labeling [2].",
+    "citation_check": {
+      "cited_numbers": [
+        1,
+        2,
+        3,
+        6
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 1167,
+          "source": "1910.02001.pdf",
+          "page": 5,
+          "text": "We propagate labels from the given media to the troll user that mentions them according to the fol- lowing media-to-user mapping: LEFT→left RIGHT→right (1) CENTER→news feed This propagation can be done in different ways: (a) by training a proxy model for media and then applying it to users, (b) by additionally using label propagation (LP) for semi-supervised learning. Let us describe the proxy model propagation for (a) ﬁrst."
+        },
+        {
+          "citation": 2,
+          "chunk_id": 1116,
+          "source": "1910.02001.pdf",
+          "page": 2,
+          "text": "By combining these labels with a citation graph from the troll accounts to news media, we can infer the ﬁnal labeling on the accounts them- selves without any need for manual labeling."
+        },
+        {
+          "citation": 3,
+          "chunk_id": 1152,
+          "source": "1910.02001.pdf",
+          "page": 4,
+          "text": "Then, armed with these representations, we tackle the following tasks: T1 A fully supervised learning task, where we have labeled training data with example troll and their roles; T2 A distant supervision learning task, in which labels for the troll roles are not available at training time, and thus we use labels for news media as a proxy, from which we infer labels for the troll users."
+        },
+        {
+          "citation": 6,
+          "chunk_id": 1179,
+          "source": "1910.02001.pdf",
+          "page": 6,
+          "text": "The data was collected and published by Linvill and Warren (2018), and then made available online.1 The time span covers the period from February 2012 to May 2018. The trolls belong to the following manually as- signed roles: Left Troll, Right Troll, News Feed, Commercial, Fearmonger, Hashtag Gamer, Non English, Unknown."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

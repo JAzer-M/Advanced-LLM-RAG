@@ -1,0 +1,383 @@
+{
+  "id": "question",
+  "query": "For the paper \"Unfolding and Shrinking Neural Machine Translation Ensembles\" (arXiv: 1704.03279), answer this question: Do they explore other language pairs?",
+  "kb_version": "qasper-holdout-20261025",
+  "status": "completed",
+  "actions_executed": 1,
+  "semantic_correctness": "requires_manual_review",
+  "plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+        "question_quote": "For the paper \"Unfolding and Shrinking Neural Machine Translation Ensembles\" (arXiv: 1704.03279), answer this question: Do they explore other language pairs?",
+        "need": "For the paper \"Unfolding and Shrinking Neural Machine Translation Ensembles\" (arXiv: 1704.03279), answer this question: Do they explore other language pairs?"
+      }
+    ]
+  },
+  "assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "missing",
+        "evidence": [],
+        "supported_part": "",
+        "reason": "The question asks whether the authors explore other language pairs beyond their main experimental setting. The supplied passages only mention the Japanese-English (Ja-En) ASPEC data set as their corpus (chunk 154) and report results on Japanese-English (chunk 193). No passage states that other language pairs were (or were not) explored. The phrase \"Our primary corpus\" in chunk 154 hints that additional corpora may exist, but it does not establish any other language pair, so it is background rather than support.",
+        "gap": "No passage establishes whether the authors explore any language pairs other than Japanese-English; the existence and identity of any additional language pairs (e.g., in a secondary/experimental corpus section) is not stated in the supplied text."
+      }
+    ],
+    "next_action": {
+      "type": "read_neighbors",
+      "reason": "The requested fact is missing, but chunk 154 from the experiments section explicitly refers to the Japanese-English ASPEC set as the 'primary corpus', which suggests nearby passages (before/after chunk 154) may list secondary corpora or additional language pairs. Reading the neighbors of this chunk is the most direct way to find the missing detail.",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": null,
+      "source": "1704.03279.pdf",
+      "chunk_id": 154
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "Each check was limited to the operative need: whether the paper explores other language pairs. Mentions of Japanese-English experiments, distillation background, or bibliography entries were not used to inflate or reinterpret the requirement, and no coordinated conditions were added."
+    }
+  },
+  "steps": [
+    {
+      "number": 1,
+      "action": {
+        "type": "read_neighbors",
+        "reason": "The requested fact is missing, but chunk 154 from the experiments section explicitly refers to the Japanese-English ASPEC set as the 'primary corpus', which suggests nearby passages (before/after chunk 154) may list secondary corpora or additional language pairs. Reading the neighbors of this chunk is the most direct way to find the missing detail.",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": null,
+        "source": "1704.03279.pdf",
+        "chunk_id": 154
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "read_neighbors",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "chunk_id": 154,
+          "source": "1704.03279.pdf",
+          "knowledge_base": {
+            "version": "qasper-holdout-20261025",
+            "chunk_count": 1459,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/manifest.json",
+            "manifest_sha256": "10bb244a150c260e5efc39b1a6ebeb939291e26f55d966ed102d27216e67718a",
+            "files": {
+              "faiss.index": "346ac08a63ebb5f367f8a886b0997c344fc084bf1fa8b27ae27de9a82be97617",
+              "chunks.json": "ef123dcc0b2180f3b957d9089c8b5207965dffb1d908fdbf348863efecdeb060"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 152,
+              "text": "However, X may be very large. Therefore, we approximate X as a product of two low rank matrices Y ∈Rmin×m′ and Z ∈Rm′×mout (X ≈Y Z) where m′ ≪m is the desired layer size. A very common way to ﬁnd such a matrix factorization is using truncated singular value decomposition (SVD). The layer is eventually shrunk by replacing U with Y and V with Z.",
+              "source": "1704.03279.pdf",
+              "page": 5,
+              "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+              "section": "3.3 Shrinking Embedding Layers with SVD",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -2
+            },
+            {
+              "chunk_id": 153,
+              "text": "4 Results The individual NMT systems we use as source for constructing the unfolded networks are trained us- ing AdaDelta (Zeiler, 2012) on the Blocks/Theano implementation (van Merri¨enboer et al., 2015; Bastien et al., 2012) of the standard attention- based NMT model (Bahdanau et al., 2015) with: 1000 dimensional GRU layers (Cho et al., 2014) in both the decoder and bidrectional encoder; a single maxout output layer (Goodfellow et al., 2013); and 620 dimensional embedding layers.",
+              "source": "1704.03279.pdf",
+              "page": 5,
+              "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+              "section": "4 Results",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -1
+            },
+            {
+              "chunk_id": 154,
+              "text": "(2016b) and use sub- word units based on byte pair encoding rather than words as modelling units. Our SGNMT de- coder (Stahlberg et al., 2017)4 with a beam size of 12 is used in all experiments. Our primary cor- pus is the Japanese-English (Ja-En) ASPEC data set (Nakazawa et al., 2016). We select a sub- set of 500K sentence pairs to train our models as suggested by Neubig et al.",
+              "source": "1704.03279.pdf",
+              "page": 5,
+              "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+              "section": "4 Results",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 0
+            },
+            {
+              "chunk_id": 155,
+              "text": "We re- port cased BLEU scores calculated with Moses’ multi-bleu.pl to be strictly comparable to the evaluation done in the Workshop of Asian Translation (WAT). We also apply our method to We the WMT data set for English-German (En-De), using the news-test2014 as a development set, and keeping news-test2015 and news-test2016 as test sets. En-De BLEU scores are computed using (6) mteval-v13a.pl as in the WMT evaluation. We set the vocabulary sizes to 30K for Ja-En and 50K for En-De.",
+              "source": "1704.03279.pdf",
+              "page": 5,
+              "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+              "section": "4 Results",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 1
+            },
+            {
+              "chunk_id": 156,
+              "text": "We also report the size factor for each model which is the total number of model parameters (sum of all weight matrix sizes) di- vided by the number of parameters in the original NMT network (86M for Ja-En and 120M for En- De). We choose a widely used, simple ensembling method (prediction averaging) as our baseline. We feel that the prevalence of this method makes it a reasonable baseline for our experiments.",
+              "source": "1704.03279.pdf",
+              "page": 5,
+              "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+              "section": "4 Results",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 2
+            }
+          ],
+          "trace": {
+            "window": 2,
+            "max_window": 2,
+            "selected_ids": [
+              152,
+              153,
+              154,
+              155,
+              156
+            ],
+            "read_chars": 2109,
+            "elapsed_seconds": 4.7e-05,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        152,
+        153,
+        155,
+        156
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          152,
+          153,
+          155,
+          156
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "supported",
+            "evidence": [
+              {
+                "chunk_id": 155,
+                "quote": "We also apply our method to We the WMT data set for English-German (En-De), using the news-test2014 as a development set, and keeping news-test2015 and news-test2016 as test sets."
+              },
+              {
+                "chunk_id": 154,
+                "quote": "Our primary cor- pus is the Japanese-English (Ja-En) ASPEC data set (Nakazawa et al., 2016)."
+              }
+            ],
+            "supported_part": "Yes, besides the primary Japanese-English (Ja-En) ASPEC corpus, they also apply their method to the English-German (En-De) WMT data set with news-test2014/2015/2016.",
+            "reason": "The passages show experiments on two language pairs: Japanese-English as the primary corpus and an additional English-German WMT setup, establishing that they explore other language pairs.",
+            "gap": ""
+          }
+        ],
+        "next_action": {
+          "type": "answer",
+          "reason": "The requirement is fully established: the paper's experiments cover Japanese-English (primary) and additionally English-German on WMT data.",
+          "requirement_ids": [],
+          "query": null,
+          "source": null,
+          "chunk_id": null
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "Checked only whether the paper explores other language pairs; no scope expansion."
+        }
+      }
+    }
+  ],
+  "evidence_after": [
+    {
+      "chunk_id": 107,
+      "source": "1704.03279.pdf",
+      "page": 1,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "1 Introduction The top systems in recent machine translation evaluation campaigns on various language pairs use ensembles of a number of NMT systems (Bo- jar et al., 2016; Sennrich et al., 2016a; Chung et al., 2016; Neubig, 2016; Wu et al., 2016; Cromieres et al., 2016; Durrani et al., 2017). En- sembling (Dietterich, 2000; Hansen and Salamon, 1990) of neural networks is a simple yet very ef- fective technique to improve the accuracy of NMT.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 154,
+      "source": "1704.03279.pdf",
+      "page": 5,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "(2016b) and use sub- word units based on byte pair encoding rather than words as modelling units. Our SGNMT de- coder (Stahlberg et al., 2017)4 with a beam size of 12 is used in all experiments. Our primary cor- pus is the Japanese-English (Ja-En) ASPEC data set (Nakazawa et al., 2016). We select a sub- set of 500K sentence pairs to train our models as suggested by Neubig et al.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 221,
+      "source": "1704.03279.pdf",
+      "page": 11,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "In NIPS, volume 2, pages 598–605. Zhiyun Lu, Vikas Sindhwani, and Tara N. 2016. Learning compact recurrent neural net- works. In Acoustics, Speech and Signal Processing (ICASSP), 2016 IEEE International Conference on, pages 5960–5964. IEEE. Bart van Merri¨enboer, Dzmitry Bahdanau, Vincent Du- moulin, Dmitriy Serdyuk, David Warde-Farley, Jan Chorowski, and Yoshua Bengio. 2015. Blocks and Fuel: Frameworks for deep learning.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 214,
+      "source": "1704.03279.pdf",
+      "page": 10,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "Association for Computational Linguistics. Fabien Cromieres, Chenhui Chu, Toshiaki Nakazawa, and Sadao Kurohashi. 2016. Kyoto university par- ticipation to WAT 2016. In Proceedings of the 3rd Workshop on Asian Translation (WAT2016), pages 166–174, Osaka, Japan. The COLING 2016 Orga- nizing Committee. Misha Denil, Babak Shakibi, Laurent Dinh, Nando de Freitas, et al. 2013. Predicting parameters in deep learning. In Advances in Neural Information Pro- cessing Systems, pages 2148–2156. Emily L.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 206,
+      "source": "1704.03279.pdf",
+      "page": 10,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "2015. Neural machine translation by jointly In ICLR, Toulon, learning to align and translate. Fr´ed´eric Bastien, Pascal Lamblin, Razvan Pascanu, James Bergstra, Ian Goodfellow, Arnaud Bergeron, Nicolas Bouchard, David Warde-Farley, and Yoshua Bengio.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 225,
+      "source": "1704.03279.pdf",
+      "page": 11,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "2016. Compression of neural machine In Proceedings translation models via pruning. of The 20th SIGNLL Conference on Computational Natural Language Learning, pages 291–301. Asso- ciation for Computational Linguistics.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 190,
+      "source": "1704.03279.pdf",
+      "page": 8,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "Another approach, known as knowledge distillation, uses the large model (the teacher) to generate soft training labels for the smaller student network (Bucilu et al., 2006; Hin- ton et al., 2014). The student network is trained by minimizing the cross-entropy to the teacher. This idea has been applied to sequence modelling tasks such as machine translation and speech recogni- tion (Wong and Gales, 2016; Kim and Rush, 2016; Freitag et al., 2017).",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 228,
+      "source": "1704.03279.pdf",
+      "page": 11,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "2017. SGNMT – A ﬂexible NMT de- coding platform for quick prototyping of new mod- els and search strategies. In Proceedings of the 2017 Conference on Empirical Methods in Natural Lan- guage Processing. Association for Computational Linguistics. Ilya Sutskever, Oriol Vinyals, and Quoc V. 2014. Sequence to sequence learning with neural net- In Proceedings of the 27th International works. Conference on Neural Information Processing Sys- tems, pages 3104–3112. MIT Press. Wong and Mark JF.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 105,
+      "source": "1704.03279.pdf",
+      "page": 1,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "En- sembling often improves the quality of the generated translations drastically. How- ever, it is not suitable for production sys- tems because it is cumbersome and slow. This work aims to reduce the runtime to be on par with a single system without com- promising the translation quality. First, we show that the ensemble can be unfolded into a single large neural network which imitates the output of the ensemble sys- tem.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 193,
+      "source": "1704.03279.pdf",
+      "page": 8,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "6 Conclusion We have described a generic method for improv- ing the decoding speed and BLEU score of single system NMT. Our approach involves unfolding an ensemble of multiple systems into a single large neural network and shrinking this network by re- moving redundant neurons. Our best results on Japanese-English either yield a gain of 2.2 BLEU compared to the original single NMT network at about the same decoding speed, or a 3.4× CPU de- coding speed up with only a minor drop in BLEU.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 152,
+      "source": "1704.03279.pdf",
+      "page": 5,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "However, X may be very large. Therefore, we approximate X as a product of two low rank matrices Y ∈Rmin×m′ and Z ∈Rm′×mout (X ≈Y Z) where m′ ≪m is the desired layer size. A very common way to ﬁnd such a matrix factorization is using truncated singular value decomposition (SVD). The layer is eventually shrunk by replacing U with Y and V with Z.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 153,
+      "source": "1704.03279.pdf",
+      "page": 5,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "4 Results The individual NMT systems we use as source for constructing the unfolded networks are trained us- ing AdaDelta (Zeiler, 2012) on the Blocks/Theano implementation (van Merri¨enboer et al., 2015; Bastien et al., 2012) of the standard attention- based NMT model (Bahdanau et al., 2015) with: 1000 dimensional GRU layers (Cho et al., 2014) in both the decoder and bidrectional encoder; a single maxout output layer (Goodfellow et al., 2013); and 620 dimensional embedding layers.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 155,
+      "source": "1704.03279.pdf",
+      "page": 5,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "We re- port cased BLEU scores calculated with Moses’ multi-bleu.pl to be strictly comparable to the evaluation done in the Workshop of Asian Translation (WAT). We also apply our method to We the WMT data set for English-German (En-De), using the news-test2014 as a development set, and keeping news-test2015 and news-test2016 as test sets. En-De BLEU scores are computed using (6) mteval-v13a.pl as in the WMT evaluation. We set the vocabulary sizes to 30K for Ja-En and 50K for En-De.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 156,
+      "source": "1704.03279.pdf",
+      "page": 5,
+      "title": "Unfolding and Shrinking Neural Machine Translation Ensembles",
+      "text": "We also report the size factor for each model which is the total number of model parameters (sum of all weight matrix sizes) di- vided by the number of parameters in the original NMT network (86M for Ja-En and 120M for En- De). We choose a widely used, simple ensembling method (prediction averaging) as our baseline. We feel that the prevalence of this method makes it a reasonable baseline for our experiments.",
+      "kb_version": "qasper-holdout-20261025"
+    }
+  ],
+  "action_attempts": 1,
+  "feedback_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 155,
+            "quote": "We also apply our method to We the WMT data set for English-German (En-De), using the news-test2014 as a development set, and keeping news-test2015 and news-test2016 as test sets."
+          },
+          {
+            "chunk_id": 154,
+            "quote": "Our primary cor- pus is the Japanese-English (Ja-En) ASPEC data set (Nakazawa et al., 2016)."
+          }
+        ],
+        "supported_part": "Yes, besides the primary Japanese-English (Ja-En) ASPEC corpus, they also apply their method to the English-German (En-De) WMT data set with news-test2014/2015/2016.",
+        "reason": "The passages show experiments on two language pairs: Japanese-English as the primary corpus and an additional English-German WMT setup, establishing that they explore other language pairs.",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "answer",
+      "reason": "The requirement is fully established: the paper's experiments cover Japanese-English (primary) and additionally English-German on WMT data.",
+      "requirement_ids": [],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "Checked only whether the paper explores other language pairs; no scope expansion."
+    }
+  },
+  "halt_reason": "answer_ready",
+  "final_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 155,
+            "quote": "We also apply our method to We the WMT data set for English-German (En-De), using the news-test2014 as a development set, and keeping news-test2015 and news-test2016 as test sets."
+          },
+          {
+            "chunk_id": 154,
+            "quote": "Our primary cor- pus is the Japanese-English (Ja-En) ASPEC data set (Nakazawa et al., 2016)."
+          }
+        ],
+        "supported_part": "Yes, besides the primary Japanese-English (Ja-En) ASPEC corpus, they also apply their method to the English-German (En-De) WMT data set with news-test2014/2015/2016.",
+        "reason": "The passages show experiments on two language pairs: Japanese-English as the primary corpus and an additional English-German WMT setup, establishing that they explore other language pairs.",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "answer",
+      "reason": "The requirement is fully established: the paper's experiments cover Japanese-English (primary) and additionally English-German on WMT data.",
+      "requirement_ids": [],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "Checked only whether the paper explores other language pairs; no scope expansion."
+    }
+  },
+  "elapsed_seconds": 22.869
+}

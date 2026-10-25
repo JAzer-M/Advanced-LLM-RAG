@@ -1,0 +1,102 @@
+[
+  {
+    "number": 1,
+    "phase": "decompose",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n   For an open-ended \"difference between X and Y\" question, retrieve each\n   entity's purpose and core approach. Do not replace it with comparisons\n   between versions of X or versions of Y, or request unasked benchmark scores.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nWhat textual features are used?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-25T03:51:46.493059+00:00",
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+      "requested_model": "cn:glm-5.3",
+      "reported_model": "glm-5.3",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 640,
+        "cached_tokens": 640,
+        "completion_thinking_tokens": 1,
+        "completion_tokens": 18,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 1,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.04,
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 33,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 673,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 640,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 691
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 4.076
+  },
+  {
+    "number": 2,
+    "phase": "probe",
+    "prompt": "You are an AI research assistant.\n\nRequired answer language: English.\nBegin with a short direct answer in its own paragraph, including any condition needed for correctness. Use Yes/No for a supported binary question, or the requested fact/keywords for a factual question. Then give only the necessary cited explanation after a blank line. A partial answer must keep the supported facts and explicitly identify the remaining gap.\n\nOnly when none of the requested facts can be supported, start with 'Insufficient evidence.' (or '当前证据不足。' when answering in Chinese). Do not use this refusal prefix for a partial answer.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in the same language as the user's question. If the question explicitly asks for a particular language, use that language instead. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported question, begin with 当前证据不足 when answering in Chinese, or with \"Insufficient evidence\" when answering in English, and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n14. Prioritize explicit subquestions, correct facts and citations, and conditions/units that change the conclusion. Add definitions or steps only when needed for the task. Optional background, stylistic preferences and unasked exceptions are not completeness requirements. Failure to retrieve a paper does not establish that the paper never reported a result.\n\n15. For a comparison, synthesize separately supported facts about the requested objects, citing each side. A literal sentence comparing both papers is NOT required. Different purposes, inputs or mechanisms can be contrasted from their respective descriptions. This does not establish causality or which method performs better. Do not call the comparison unsupported merely because no head-to-head experiment is provided.\n16. Lead with the main difference the user asked about. For a broad comparison, explain what each object does and its supported core approach; do not replace this with differences between versions of each object, benchmark tables or unasked numerical results.\n\nContext:\n[1] Source: 1910.01340.pdf | Page: 5 | Section: None\nTitle: TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\nBased on our thematic information, we model the users textual features w.r.t. each of these themes. In other words, we model a set of textual features inde- pendently for each of the former themes to capture the emotional, stance, and others changes in the users tweets. 1: (a) Supporting Trump and (b) Attacking Hillary themes words clouds.\n\n[2] Source: 1910.01340.pdf | Page: 1 | Section: None\nTitle: TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\nTherefore, in this paper, we propose a text-based approach to detect the online trolls such as those that were discovered during the US 2016 presidential elections. Our approach is mainly based on textual features which uti- lize thematic information, and proﬁling features to identify the accounts from their way of writing tweets. We deduced the thematic information in a unsupervised way and we show that coupling them with the textual features enhanced the performance of the proposed model.\n\n[3] Source: 1910.01340.pdf | Page: 8 | Section: None\nTitle: TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\nAlso, we see that the emotions performance increases with the largest amount considering F1macro value; this motivates us to analyze the emotions in IRA tweets (see the following section). The result of the NLI feature in the table is interesting; we are able to detect IRA trolls from their writing style with a F1macro value of 0.91. Considering the results in Table 2, we can notice that we are able to detect the IRA trolls eﬀectively using only textual features (RQ2).\n\n[4] Source: 1910.01340.pdf | Page: 4 | Section: None\nTitle: TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\nFrom Table 1, we can notice that the number of total tweets of the IRA trolls is similar to the one obtained from the regular users. This is due to the fact that IRA trolls were posting a lot of tweets before and during the elections in an attempt to try to make their messages reach the largest possible audience. 4 Textual Representation In order to identify IRA trolls, we use a rich set of textual features.\n\n[5] Source: 1910.01340.pdf | Page: 2 | Section: None\nTitle: TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\nWe study the eﬀect of a set of text-based features and we propose a machine learning model to detect them7. We aim to answer three research questions: RQ1. Does the thematic information improve the detection performance?, RQ2. Can we detect IRA trolls from only a textual perspective? and RQ3. How IRA campaign utilized the emotions to aﬀect the public opinions?\n\n[6] Source: 1910.01340.pdf | Page: 6 | Section: None\nTitle: TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\nThus, we use state-of-the-art NLI features to detect this unique pattern [8,23,14]; the feature set consists of bag of stopwords, Part- of-speech tags (POS), and syntactic dependency relations (DEPREL). We 9 Total pronouns, Anxiety, Cognitive processes, Insight, Causation, Discrepancy, Ten- tative, Certainty, Inhibition, and Inclusive respectively.\n\n[7] Source: 1910.01340.pdf | Page: 1 | Section: None\nTitle: TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\nIn addition, we ﬁnd that the proposed proﬁling features perform the best comparing to the textual features. Keywords: Russian Trolls · Twitter · Topic Modeling · Proﬁling.\n\n[8] Source: 1910.01340.pdf | Page: 12 | Section: None\nTitle: TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\nOur experiments showed that the extracted themes boosted the per- formance of the proposed model when coupled with other surface text features. In addition, we proposed NLI features to identify IRA trolls from their writing style, which showed to be very eﬀective. Finally, for a better understanding we analyzed the IRA accounts from emotional and linguistic perspectives. Through the manually checking of IRA accounts, we noticed that frequently irony was employed.\n\n[9] Source: 1910.01340.pdf | Page: 5 | Section: None\nTitle: TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\nFor the theme-based features, we use the following features that we believe that they change based on the themes: – Emotions: Since the results of the previous works [7,26] showed that IRA eﬀorts engineered to seed discord among individuals in US, we use emotions features to detect their emotional attempts to manipulate the public opinions (e.g. fear spreading behavior). For that, we use the NRC emotions lexicon [25] that contains ∼14K words labeled using the eight Plutchik’s emotions.\n\n[10] Source: 1910.01340.pdf | Page: 8 | Section: None\nTitle: TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\n5.3 Results Table 2 presents the classiﬁcation results showing the performance of each feature set independently. Generally, we can see that the thematic information improves the performance of the proposed features clearly (RQ1), and with the largest amount in the Emotions features (see −themes and +themes columns). This result emphasizes the importance of the thematic information.\n\nQuestion:\nFor the paper \"TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\" (arXiv: 1910.01340), answer this question: What textual features are used?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n- For a broad difference-between question with no requested aspect, use 3-5 sentences: lead with the purposes, then the supported core methods. Prefer primary-paper abstract/introductory definitions. Omit training/test hyperparameters and unasked performance caveats.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-25T03:51:55.656618+00:00",
+    "response": {
+      "answer": "The paper uses a rich set of textual features: theme-based features (modeling emotions, stance, and other changes per theme), NLI-style writing features (bag of stopwords, POS tags, syntactic dependency relations), and profiling features.\n\nThe approach is \"mainly based on textual features which utilize thematic information, and profiling features to identify the accounts from their way of writing tweets\" [2]. Textual features are modeled independently for each theme to capture emotional, stance, and other changes in users' tweets [1]. Theme-based features include emotions, computed with the NRC emotions lexicon (~14K words labeled with Plutchik's eight emotions), motivated by IRA efforts to seed discord (e.g., fear-spreading behavior) [9]. For detecting writing-style patterns, they use NLI features consisting of a bag of stopwords, part-of-speech tags (POS), and syntactic dependency relations (DEPREL) [6]. These are combined with surface text features, and the extracted themes boosted performance when coupled with them [8].",
+      "requested_model": "cn:glm-5.3",
+      "reported_model": "glm-5.3",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 704,
+        "cached_tokens": 704,
+        "completion_thinking_tokens": 212,
+        "completion_tokens": 213,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 212,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.39,
+        "prompt_cache_hit_tokens": 704,
+        "prompt_cache_miss_tokens": 1505,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2209,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 704,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2422
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 3.821
+  }
+]

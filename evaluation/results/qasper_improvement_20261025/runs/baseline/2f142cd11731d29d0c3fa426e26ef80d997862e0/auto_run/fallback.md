@@ -1,0 +1,2 @@
+Extra evidence checking did not finish. The answer below uses only the initial evidence and keeps its existing gaps:
+Insufficient evidence. The provided context describes the model's sifted multi-task architecture, selected sharing layer, and global loss, but contains no information about the languages or datasets used in the experiments, so it cannot be determined whether results were reported only on English data.

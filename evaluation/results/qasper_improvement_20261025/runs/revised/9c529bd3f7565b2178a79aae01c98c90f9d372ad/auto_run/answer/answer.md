@@ -1,0 +1,1 @@
+They use a finance-specific word2vec word embedding model, trained on 189,206 financial articles containing 161,877,425 tokens (e.g., from the Financial Times) downloaded from Factiva [4], and they released this model to aid replicability [1][2][7].

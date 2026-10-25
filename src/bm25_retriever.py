@@ -36,7 +36,7 @@ def build_bm25_index(chunks):
     return bm25
 
 # BM25 retrieval
-def retrieve_bm25(bm25, chunks, query, top_k = 5):
+def retrieve_bm25(bm25, chunks, query, top_k = 5, sources=None):
     # 对用户询问进行 Tokenization
     query_tokens = tokenize(query)
 
@@ -49,7 +49,7 @@ def retrieve_bm25(bm25, chunks, query, top_k = 5):
 
     # 剔除零分候选；真实词项匹配可能产生的负分仍保留。
     top_indices = sorted(
-        (i for i, score in enumerate(scores) if score != 0),
+        (i for i, score in enumerate(scores) if score != 0 and (not sources or chunks[i]['source'] in sources)),
         key = lambda i: scores[i],
         reverse = True
     )[:top_k]

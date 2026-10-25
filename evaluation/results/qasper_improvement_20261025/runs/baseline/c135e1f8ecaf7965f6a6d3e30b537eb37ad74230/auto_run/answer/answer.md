@@ -1,0 +1,7 @@
+In this paper, labels for trolls are obtained in two different ways depending on the scenario.
+
+In the **supervised scenario (T1)**, labeled training data with example trolls and their roles is available [3]. These roles come from the "IRA Russian Troll" dataset, collected and published by Linvill and Warren (2018), where the trolls belong to manually assigned roles such as Left Troll, Right Troll, and News Feed [6].
+
+In the **distant supervision scenario (T2)**, labels for trolls are not available at training time, so the paper uses labels for news media as a proxy, from which labels for the troll users are inferred [3][5]. This is done by propagating labels from the media to the troll users that mention them, according to the mapping LEFT→left, RIGHT→right, CENTER→news feed [1]. The propagation can be carried out in two ways: (a) training a proxy model on media and applying it to users [1], or (b) using label propagation, a transductive, graph-based, semi-supervised algorithm that assigns labels to unlabeled examples based on the labels of neighboring examples in a graph [1][8]. This works by combining the media labels with a citation graph from the troll accounts to news media, allowing the final labeling of the accounts themselves without any manual labeling [2].
+
+Additionally, the paper shows this relationship goes both ways: labels for media can be used to label users, and labels for troll users can be used to label media [9].

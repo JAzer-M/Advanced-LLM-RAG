@@ -1,0 +1,4 @@
+Extra evidence checking did not finish. The answer below uses only the initial evidence and keeps its existing gaps:
+The paper claims that its methodology improves over the state-of-the-art in the supervised scenario, and that the unsupervised (distant supervision) scenario it addresses has not been explored in the literature before [6]. In that new scenario, hiding labels from the ML algorithm still recovers 78.5% of the correct labels [2]. The approach combines embeddings from the user-to-user mention graph, the user-to-hashtag mention graph, and the text of the trolls' tweets, improving supervised classification accuracy by more than 5 percentage points [11].
+
+The context does not describe which specific prior systems or baselines constitute the state-of-the-art, so that detail is unavailable.

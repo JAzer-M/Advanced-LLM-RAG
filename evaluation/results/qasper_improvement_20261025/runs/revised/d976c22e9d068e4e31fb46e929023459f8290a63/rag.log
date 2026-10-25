@@ -1,0 +1,133 @@
+LLM: proxy API | Model: cn:glm-5.3
+Knowledge Base: qasper-holdout-20261025
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 11070.88it/s]
+Total Vectors: 1459
+Vector Dimensions: 384
+Total Chunks: 1459
+
+Original Query: For the paper "Recognizing Arrow Of Time In The Short Stories" (arXiv: 1903.10548), answer this question: Are the two paragraphs encoded independently?
+Decomposition: {'needs_decomposition': False, 'sub_queries': [], 'status': 'not_needed'}
+Additional Retrieval Lists: 0
+HyDE Enabled: False
+
+Candidate Pool Before Deduplication: 22
+Candidate Pool After Deduplication: 22
+Loading weights:   0%|          | 0/201 [00:00<?, ?it/s]Loading weights: 100%|██████████| 201/201 [00:00<00:00, 17386.16it/s]
+Selected Chunk IDs: [753, 742, 746, 750, 761, 756, 755, 747, 760, 748]
+Sub-Query Evidence Selection: {'candidate_count': 22, 'source_scope': ['1903.10548.pdf'], 'retrieval_query': 'Are the two paragraphs encoded independently?', 'dense_ids': [753, 746, 747, 750, 755, 752, 756, 761, 762, 757, 743, 749, 748, 758, 742, 759, 760, 741, 745, 744, 751, 754], 'bm25_ids': [753, 750, 746, 742, 757, 756, 752, 755, 744, 745, 760, 758, 743, 754, 748, 762, 741, 747], 'candidate_ids': [753, 746, 750, 755, 752, 756, 757, 742, 747, 743, 762, 758, 760, 748, 744, 745, 741, 754, 761, 749, 759, 751], 'global_ranking_ids': [753, 742, 746, 750, 761, 756, 755, 747, 760, 748, 757, 762, 743, 752, 754, 751, 749, 759, 745, 758, 744, 741], 'global_top_ids': [753, 742, 746, 750, 761, 756, 755, 747, 760, 748], 'protected_ids': [], 'sub_query_evidence': [], 'retrieval_anchor_ids': [753], 'evidence_completion': {'requested_sources': ['1903.10548.pdf'], 'tasks': [], 'coverage': 'heuristic_only', 'rounds': 0, 'supplement_queries': 0, 'max_rounds': 2, 'completed_passes': 0, 'round_history': [], 'selected_ids_before': [753, 742, 746, 750, 761, 756, 755, 747, 760, 748], 'retained_local_ids': [], 'stop_reason': 'not_explicit_cross_paper', 'selected_ids_after': [753, 742, 746, 750, 761, 756, 755, 747, 760, 748], 'elapsed_seconds': 0.000283}}
+
+=== Retrieved Top-10 ===
+
+Rank: 1
+Source: 1903.10548.pdf
+Page: 2
+Section: 3.1 Encoding with LSTM and Gated CNN
+Text: 3.1 Encoding with LSTM and Gated CNN In this method, paragraphs are encoded separately, and the concatenation of the resulted encoding is going through the classiﬁer. First, each paragraph is encoded with LSTM. The hidden state at the end of each sentence is extracted, and the resulting matrix is going through gated CNN (Dauphin et al., 2017) for extraction of single encoding for each paragraph.
+
+Rank: 2
+Source: 1903.10548.pdf
+Page: 1
+Section: None
+Text: i.e., given only two paragraphs, arXiv:1903.10548v1 [cs.CL] 25 Mar 2019 determining which comes ﬁrst and which comes next is a difﬁcult task even for humans. In this paper, we have collected and curated a novel dataset for tackling this challenging task. We have shown that a pre-trained BERT architecture achieves reasonable accuracy on the task, and outperforms RNN-based architectures.
+
+Rank: 3
+Source: 1903.10548.pdf
+Page: 1
+Section: 1 Introduction
+Text: Given two paragraphs, whether the second paragraph comes really after the ﬁrst one or the order has been reversed. It is the way of learning the arrow of times in the stories and can be very beneﬁcial in neural story generation tasks. Moreover, this is a self-supervised task, which means the labels come from the text itself.
+
+Rank: 4
+Source: 1903.10548.pdf
+Page: 2
+Section: 2 Paragraph Ordering Dataset
+Text: order to have the appropriate format for the deﬁned task.1 Each example contains two paragraphs and a label which determines whether the second paragraph comes really after the ﬁrst paragraph (true order with label 1) or the order has been reversed (Table 1). The detailed statistics of the data can be found in Table 2. #Train Samples #Test Samples Unique Paragraphs Average Number of Tokens Average Number of Sentences Table 2: Statistics of ParagraphOrdering dataset.
+
+Rank: 5
+Source: 1903.10548.pdf
+Page: 3
+Section: 3.2 Fine-tuning BERT
+Text: Devlin, Ming-Wei. Chang, Kenton. Lee, and Kristina. Toutanova 2018. Bert: Pre-training of deep bidirec- tional transformers for language understanding. arXiv preprint arXiv:1810.04805. Jonas. Gehring, Michael. Auli, David. Grangier, Denis. Yarats, and Yann N. Dauphin 2017. Convolutional se- quence to sequence learning. arXiv preprint arXiv:1705.03122. Sepp. Hochreiter and J¨urgen. Schmidhuber. 1997. Long short-term memory. Neural computation, 9(8):1735– 1780. Yann N.
+
+Rank: 6
+Source: 1903.10548.pdf
+Page: 2
+Section: 3.2 Fine-tuning BERT
+Text: In the case of feature extraction, the network weights freeze and CLS token are fed to the classiﬁer. In the case of ﬁne-tuning, we have used different numbers for maximum sequence length to test the capability of BERT in this task. First, just the last sentence of the ﬁrst paragraph and the beginning sentence of the second paragraph has been used for classiﬁcation. We wanted to know whether two sentences are enough for ordering classiﬁcation or not.
+
+Rank: 7
+Source: 1903.10548.pdf
+Page: 2
+Section: 3.2 Fine-tuning BERT
+Text: 3.2 Fine-tuning BERT We have used a pre-trained BERT in two different ways. First, as a feature extractor without ﬁne-tuning, and second, by ﬁne-tuning the weights during training. The classiﬁcation is completely based on the BERT paper, i.e., we represent the ﬁrst and second paragraph as a single packed sequence, with the ﬁrst paragraph using the A embedding and the second paragraph using the B embedding.
+
+Rank: 8
+Source: 1903.10548.pdf
+Page: 1
+Section: 2 Paragraph Ordering Dataset
+Text: 2 Paragraph Ordering Dataset We have prepared a dataset, ParagraphOrdreing, which consists of around 300,000 paragraph pairs. We collected our data from Project Gutenberg. We have written an API for gathering and pre-processing in Label 1 First Paragraph Now they were walking through the trees, one of them carrying him in its huge arms, quite gently. He was scarcely conscious of his surroundings. It was be- coming more and more difﬁcult to breathe.
+
+Rank: 9
+Source: 1903.10548.pdf
+Page: 3
+Section: 3.2 Fine-tuning BERT
+Text: Freeman 2018. Learning and Using the Arrow of Time The IEEE Conference on Computer Vision and Pattern Recognition (CVPR).
+
+Rank: 10
+Source: 1903.10548.pdf
+Page: 1
+Section: 2 Paragraph Ordering Dataset
+Text: Second Paragraph Then he felt himself laid down on something soft and dry. The water was not falling on him now. He opened his eyes.
+
+=== Evidence: parsed facts and source quotations ===
+- Source quotation (1903.10548.pdf, p.2): “1 Encoding with LSTM and Gated CNN In this method, paragraphs are encoded separately, and the concatenation of the resulted encoding is going through the classiﬁer.” [1]
+- Source quotation (1903.10548.pdf, p.2): “First, each paragraph is encoded with LSTM.” [1]
+- Source quotation (1903.10548.pdf, p.2): “, 2017) for extraction of single encoding for each paragraph.” [1]
+- Source quotation (1903.10548.pdf, p.1): “CL] 25 Mar 2019 determining which comes ﬁrst and which comes next is a difﬁcult task even for humans.” [2]
+- Source quotation (1903.10548.pdf, p.1): “In this paper, we have collected and curated a novel dataset for tackling this challenging task.” [2]
+- Source quotation (1903.10548.pdf, p.1): “We have shown that a pre-trained BERT architecture achieves reasonable accuracy on the task, and outperforms RNN-based architectures.” [2]
+- Source quotation (1903.10548.pdf, p.1): “Given two paragraphs, whether the second paragraph comes really after the ﬁrst one or the order has been reversed.” [3]
+- Source quotation (1903.10548.pdf, p.1): “It is the way of learning the arrow of times in the stories and can be very beneﬁcial in neural story generation tasks.” [3]
+- Source quotation (1903.10548.pdf, p.1): “Moreover, this is a self-supervised task, which means the labels come from the text itself.” [3]
+- Source quotation (1903.10548.pdf, p.2): “1 Each example contains two paragraphs and a label which determines whether the second paragraph comes really after the ﬁrst paragraph (true order with label 1) or the order has been reversed (Table 1).” [4]
+- Source quotation (1903.10548.pdf, p.2): “The detailed statistics of the data can be found in Table 2.” [4]
+- Source quotation (1903.10548.pdf, p.2): “#Train Samples #Test Samples Unique Paragraphs Average Number of Tokens Average Number of Sentences Table 2: Statistics of ParagraphOrdering dataset.” [4]
+- Source quotation (1903.10548.pdf, p.3): “Bert: Pre-training of deep bidirec- tional transformers for language understanding.” [5]
+- Source quotation (1903.10548.pdf, p.3): “Convolutional se- quence to sequence learning.” [5]
+- Source quotation (1903.10548.pdf, p.3): “Neural computation, 9(8):1735– 1780.” [5]
+- Source quotation (1903.10548.pdf, p.2): “In the case of feature extraction, the network weights freeze and CLS token are fed to the classiﬁer.” [6]
+- Source quotation (1903.10548.pdf, p.2): “In the case of ﬁne-tuning, we have used different numbers for maximum sequence length to test the capability of BERT in this task.” [6]
+- Source quotation (1903.10548.pdf, p.2): “First, just the last sentence of the ﬁrst paragraph and the beginning sentence of the second paragraph has been used for classiﬁcation.” [6]
+- Source quotation (1903.10548.pdf, p.2): “We wanted to know whether two sentences are enough for ordering classiﬁcation or not.” [6]
+- Source quotation (1903.10548.pdf, p.2): “2 Fine-tuning BERT We have used a pre-trained BERT in two different ways.” [7]
+- Source quotation (1903.10548.pdf, p.2): “First, as a feature extractor without ﬁne-tuning, and second, by ﬁne-tuning the weights during training.” [7]
+- Source quotation (1903.10548.pdf, p.2): “, we represent the ﬁrst and second paragraph as a single packed sequence, with the ﬁrst paragraph using the A embedding and the second paragraph using the B embedding.” [7]
+- Source quotation (1903.10548.pdf, p.1): “2 Paragraph Ordering Dataset We have prepared a dataset, ParagraphOrdreing, which consists of around 300,000 paragraph pairs.” [8]
+- Source quotation (1903.10548.pdf, p.1): “We collected our data from Project Gutenberg.” [8]
+- Source quotation (1903.10548.pdf, p.1): “We have written an API for gathering and pre-processing in Label 1 First Paragraph Now they were walking through the trees, one of them carrying him in its huge arms, quite gently.” [8]
+- Source quotation (1903.10548.pdf, p.1): “He was scarcely conscious of his surroundings.” [8]
+- Source quotation (1903.10548.pdf, p.1): “It was be- coming more and more difﬁcult to breathe.” [8]
+- Source quotation (1903.10548.pdf, p.3): “Learning and Using the Arrow of Time The IEEE Conference on Computer Vision and Pattern Recognition (CVPR).” [9]
+- Source quotation (1903.10548.pdf, p.1): “Second Paragraph Then he felt himself laid down on something soft and dry.” [10]
+- Source quotation (1903.10548.pdf, p.1): “The water was not falling on him now.” [10]
+
+=== Citation Sources ===
+[1] 1903.10548.pdf, p.2 (chunk 753)
+[2] 1903.10548.pdf, p.1 (chunk 742)
+[3] 1903.10548.pdf, p.1 (chunk 746)
+[4] 1903.10548.pdf, p.2 (chunk 750)
+[5] 1903.10548.pdf, p.3 (chunk 761)
+[6] 1903.10548.pdf, p.2 (chunk 756)
+[7] 1903.10548.pdf, p.2 (chunk 755)
+[8] 1903.10548.pdf, p.1 (chunk 747)
+[9] 1903.10548.pdf, p.3 (chunk 760)
+[10] 1903.10548.pdf, p.1 (chunk 748)
+
+=== Citation Structure Check (semantic support not verified) ===
+Status: not_needed
+Initial: {'has_citations': True, 'invalid_numbers': [], 'malformed_markers': []}
+Final structure passed: True
+
+=== Generated Answer (model draft; check against evidence) ===
+It depends on the method: yes, in the LSTM + Gated CNN approach each paragraph is encoded independently [1], but in the BERT approach the two paragraphs are represented as a single packed sequence (with A/B segment embeddings) rather than encoded separately [7].
+
+In the LSTM and gated CNN method, each paragraph is encoded with an LSTM, and the hidden state at the end of each sentence is extracted and passed through a gated CNN to produce a single encoding per paragraph; the paragraph encodings are then concatenated for the classifier [1]. By contrast, for fine-tuning BERT, the first and second paragraphs are represented as one packed sequence, with the first paragraph using the A embedding and the second using the B embedding [7].

@@ -1,0 +1,102 @@
+[
+  {
+    "number": 1,
+    "phase": "decompose",
+    "prompt": "\nYou are a query decomposition assistant for a scientific paper RAG system.\n\nYour task is to analyze the user's question and determine\nwhether it requires multiple independent information searches.\n\nRules:\n1. Do not answer the question.\n2. If the question has only one information need,\n   do not decompose it.\n3. If the question requires multiple distinct pieces of evidence,\n   generate between 2 and 4 sub-questions.\n\n4. The sub-questions must be a decomposition of the original question.\n   Do NOT include the original question itself as a sub-question.\n\n5. Each sub-question should answer only one distinct information need\n   required to answer the original question.\n   For comparisons with multiple entities AND multiple requested aspects,\n   split by entity and by aspect when the total fits within 4.\n   For example, comparing Method A and Method B on representation and scoring\n   requires four searches: A representation, A scoring, B representation,\n   and B scoring. Do not combine representation and scoring in one search.\n   For vector-retrieval questions, keep concrete retrieval vocabulary:\n   representation searches should explicitly ask about query/document vectors\n   or embeddings; scoring searches should ask how similarity between them is\n   computed. Do not assume or name a particular scoring function in the query.\n\n6. Preserve the exact entities, model names, paper names,\n   abbreviations, and technical terms from the original question.\n\n7. If the original question compares multiple specific models,\n   methods, or papers, create separate sub-questions for each\n   specific entity being compared.\n   For an open-ended \"difference between X and Y\" question, retrieve each\n   entity's purpose and core approach. Do not replace it with comparisons\n   between versions of X or versions of Y, or request unasked benchmark scores.\n\n8. Each sub-question must explicitly mention the relevant entity.\n   Do not replace a specific entity with a generic term.\n\n9. Preserve the factual intent of the original question.\n   Do not introduce words such as \"typical\", \"common\", \"usually\",\n   or \"in general\" unless they appear in the original question.\n\n10. Do not make the sub-question broader or more general than\n    the original question.\n\n11. Return only valid JSON, without explanations or markdown.\n\nExample:\n\nOriginal question:\nHow do VGG and DCNN differ in their use of convolutional filter sizes?\n\nCorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"According to the VGG paper, what convolutional filter sizes are used?\",\n        \"According to the DCNN paper, what convolutional filter sizes are used?\"\n    ]\n}\n\nIncorrect decomposition:\n{\n    \"needs_decomposition\": true,\n    \"sub_queries\": [\n        \"How do VGG and DCNN differ in their use of convolutional filter sizes?\",\n        \"What are the typical convolutional filter sizes used in VGG networks?\",\n        \"What are the typical convolutional filter sizes used in DCNN networks?\"\n    ]\n}\n\nOutput format:\n{\n    \"needs_decomposition\": boolean,\n    \"sub_queries\": [\"question 1\", \"question 2\"]\n}\n\nIf decomposition is unnecessary, return an empty sub_queries list.\n\nOriginal Question:\nwhat evaluation metrics are used?\n",
+    "status": "completed",
+    "started_at_utc": "2026-10-25T02:53:12.533241+00:00",
+    "response": {
+      "answer": "{\n    \"needs_decomposition\": false,\n    \"sub_queries\": []\n}",
+      "requested_model": "cn:glm-5.3-flash",
+      "reported_model": "glm-5.3-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 640,
+        "cached_tokens": 640,
+        "completion_thinking_tokens": 3,
+        "completion_tokens": 21,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 3,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0,
+        "prompt_cache_hit_tokens": 640,
+        "prompt_cache_miss_tokens": 33,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 673,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 640,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 694
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 2.09
+  },
+  {
+    "number": 2,
+    "phase": "probe",
+    "prompt": "You are an AI research assistant.\n\nRequired answer language: English.\nBegin with a short direct answer in its own paragraph, including any condition needed for correctness. Use Yes/No for a supported binary question, or the requested fact/keywords for a factual question. Then give only the necessary cited explanation after a blank line. A partial answer must keep the supported facts and explicitly identify the remaining gap.\n\nOnly when none of the requested facts can be supported, start with 'Insufficient evidence.' (or '当前证据不足。' when answering in Chinese). Do not use this refusal prefix for a partial answer.\n\nAnswer the user's question based only on the provided context.\n\nRules:\n1. Do not invent information or introduce unsupported claims.\n2. Place citations immediately after the claims they support.\n3. Cite only context chunks that directly support each claim.\n4. Every citation must directly support the exact claim it follows. Mentioning the same topic is not sufficient evidence.\n5. Do not combine separate statements into a causal relationship unless the source explicitly establishes that relationship.\n6. Do not attribute technical claims to a paper unless the context directly supports those claims.\n7. If a claim cannot be directly supported, omit it or clearly state that the evidence is insufficient.\n8. Keep the answer focused on the question.\n\n9. A source filename identifies the document, not necessarily the model described in a passage. Check named subjects and the cited surrounding text.\n10. Evidence guidance supplements the original passages. Subject hints are rule-based; check them against the sources. For kernel H x W x C, H x W is the spatial size and C is channels per kernel; a kernel count is not a spatial size. Preserve layer numbers and configuration qualifiers.\n\n11. Respond in the same language as the user's question. If the question explicitly asks for a particular language, use that language instead. Keep technical names in their original form.\n12. For unsupported parts of the question, state the missing evidence concisely. Do not substitute measurements from other hardware, datasets or settings, or append unrelated facts to a refusal. For an entirely unsupported question, begin with 当前证据不足 when answering in Chinese, or with \"Insufficient evidence\" when answering in English, and explain what is missing in only one or two sentences, without any supplementary measurements.\n13. Answer only the scope actually requested. Missing unasked details are not grounds for an insufficiency warning. When the requested main facts are supported, answer them directly.\n14. Prioritize explicit subquestions, correct facts and citations, and conditions/units that change the conclusion. Add definitions or steps only when needed for the task. Optional background, stylistic preferences and unasked exceptions are not completeness requirements. Failure to retrieve a paper does not establish that the paper never reported a result.\n\n15. For a comparison, synthesize separately supported facts about the requested objects, citing each side. A literal sentence comparing both papers is NOT required. Different purposes, inputs or mechanisms can be contrasted from their respective descriptions. This does not establish causality or which method performs better. Do not call the comparison unsupported merely because no head-to-head experiment is provided.\n16. Lead with the main difference the user asked about. For a broad comparison, explain what each object does and its supported core approach; do not replace this with differences between versions of each object, benchmark tables or unasked numerical results.\n\nContext:\nOriginal passages:\n[1] Source: 1710.07695.pdf | Page: 5 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nThe case study veriﬁed that (1) our deﬁnition of verb pattern reﬂects verb’s polysemy; (2) most verb patterns we found are meaningful. Effectiveness To evaluate the effectiveness of our pattern summarization approach, we report two metrics: (1) (coverage) how much of the verb phrases in natural language our solution can ﬁnd corresponding patterns (2) (precision) how much of the phrases and their corresponding patterns are correctly matched?\n\n[2] Source: 1710.07695.pdf | Page: 5 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nWe compute the two metrics by: coverage = n cover precision = n correct n all n cover ,where n cover is the number of phrases in the test data for which our solution ﬁnds corresponding patterns, n all is the total number of phrases, n correct is the number of phrases whose corresponding patterns are correct. To evalu- ate precision, we randomly selected 100 verb phrases from the test data and ask volunteers to label the correctness of their assigned patterns.\n\n[3] Source: 1710.07695.pdf | Page: 6 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nWe also proposed a simulated an- nealing based algorithm to extract verb patterns. We lever- age patterns’ typicality to accelerate the convergence by pattern-based candidate generation. Experiments justify the high precision and coverage of our extracted patterns. We also presented a successful application of verb patterns into context-aware conceptualization.\n\n[4] Source: 1710.07695.pdf | Page: 6 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nIf v + e is an idiom pattern, we stop the conceptualization. Settings and Results For the two datasets used in the ex- perimental section, we use both approaches to conceptual- ize objects in all verb phrases. Then, we select the concept with the highest probability as the label of the object. We randomly select 100 phrases for which the two approaches generate different labels. For each difference, we manually label if our result is better than, equal to, or worse than the competitor.\n\n[5] Source: 1710.07695.pdf | Page: 5 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nTest data We use two data sets to show our solution can achieve consistent effectiveness on both short text and long text. The short text data set contains 1.6 millions of tweets from Twitter (Go, Bhayani, and Huang 2009). The long text data set contains 21,578 news articles from Reuters (Apt´e, Damerau, and Weiss 1994).\n\n[6] Source: 1710.07695.pdf | Page: 2 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nWe use two public data sets for this purpose: Google Syntactic N-Grams (http://commondatastorage.googleapis.com/books/syntactic -ngrams/index.html) and Probase (Wu et al. Google Syntactic N-grams contains millions of verb phrases, which allows us to mine rich patterns for verbs. Probase contains rich concepts for instances, which enables the conceptualization for objects.\n\n[7] Source: 1710.07695.pdf | Page: 4 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nWe ﬁrst pick a random assignment as the initial- ization (initial temperature). Then, we generate a new as- signment and evaluate it. If it is a better assignment, we re- place the previous assignment with it; otherwise we accept it with a certain probability (temperature reduction). The gen- eration and replacement step are repeated until no change occurs in the last β iterations (termination condition).\n\n[8] Source: 1710.07695.pdf | Page: 7 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nInformation Theory, IEEE Transactions on 44(6):2743–2760. [Ferreira and Henderson 1990] Ferreira, F., and Henderson, J. 1990. Use of verb information in syntactic parsing: evidence from eye movements and word-by-word self-paced Journal of Experimental Psychology: Learning, reading. Memory, and Cognition 16(4):555. [Fillmore 1976] Fillmore, C. 1976. Frame semantics and the nature of language.\n\n[9] Source: 1710.07695.pdf | Page: 6 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\nFrameNet (Baker, Fillmore, and Lowe 1998) is built upon the idea that the meanings of most words can be best under- stood by semantic frames (Fillmore 1976). Semantic frame is a description of a type of event, relation, or entity and the participants in it. And each semantic frame uses frame ele- ments (FEs) to make simple annotations. PropBank (Kings- bury and Palmer 2002) uses manually labeled predicates and arguments of semantic roles, to capture the precise predicate-argument structure.\n\n[10] Source: 1710.07695.pdf | Page: 2 | Section: None\nTitle: Verb Pattern: A Probabilistic Semantic Representation on Verbs\n• We conducted extensive experiments. The results verify the effectiveness of our model and algorithm. We pre- sented the applications of verb patterns in context-aware conceptualization. The application justiﬁes the effective- ness of verb patterns to represent verb semantics. Problem Model In this section, we deﬁne the problem of extracting patterns for verb phrases.\n\nEvidence guidance:\n- Rule-based subject attribution: FrameNet; passage: “FrameNet (Baker, Fillmore, and Lowe 1998) is built upon the idea that the meanings of most words can be best under- stood by semantic frames (Fillmore 1976).” [9]\n- Rule-based subject attribution: FrameNet; passage: “Semantic frame is a description of a type of event, relation, or entity and the participants in it.” [9]\n- Rule-based subject attribution: FrameNet; passage: “And each semantic frame uses frame ele- ments (FEs) to make simple annotations.” [9]\n- Rule-based subject attribution: PropBank; passage: “PropBank (Kings- bury and Palmer 2002) uses manually labeled predicates and arguments of semantic roles, to capture the precise predicate-argument structure.” [9]\n\nQuestion:\nFor the paper \"Verb Pattern: A Probabilistic Semantic Representation on Verbs\" (arXiv: 1710.07695), answer this question: what evaluation metrics are used?\n\nBefore writing the final answer:\n- Synthesize the passages. Where a configuration exception is stated, describe the main pattern as mainly or predominantly and include the exception in the same sentence. Do not repeat an all/only statement that conflicts with that exception. An exception must change the same property; keep independent design choices separate.\n- For why questions, explain each supported mechanism. When comparing alternatives, explicitly state their supported equivalent property and quantities, rather than leaving the equivalence implicit in the phrase instead of.\n- Omit unnecessary background and names absent from the passages. Do not repeat the same point or list unasked ablations and implementation details.\n- For a broad difference-between question with no requested aspect, use 3-5 sentences: lead with the purposes, then the supported core methods. Prefer primary-paper abstract/introductory definitions. Omit training/test hyperparameters and unasked performance caveats.\n\nAnswer:",
+    "status": "completed",
+    "started_at_utc": "2026-10-25T02:53:19.194865+00:00",
+    "response": {
+      "answer": "The paper uses two metrics: **coverage** and **precision**.\n\nCoverage is defined as n_cover / n_all, where n_cover is the number of test-data phrases for which the solution finds corresponding patterns and n_all is the total number of phrases; precision is n_correct / n_cover, where n_correct is the number of phrases whose assigned patterns are correct [2]. Precision was evaluated by randomly selecting 100 verb phrases from the test data and having volunteers label whether the assigned patterns were correct [2].",
+      "requested_model": "cn:glm-5.3-flash",
+      "reported_model": "glm-5.3-flash",
+      "usage": {
+        "cache_creation_input_tokens": 0,
+        "cache_read_input_tokens": 2368,
+        "cached_tokens": 2368,
+        "completion_thinking_tokens": 0,
+        "completion_tokens": 104,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "credit": 0.02,
+        "prompt_cache_hit_tokens": 2368,
+        "prompt_cache_miss_tokens": 30,
+        "prompt_cache_write_tokens": 0,
+        "prompt_tokens": 2398,
+        "prompt_tokens_details": {
+          "accepted_prediction_tokens": 0,
+          "audio_tokens": 0,
+          "cached_tokens": 2368,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": 0
+        },
+        "total_tokens": 2502
+      },
+      "finish_reason": "stop",
+      "request_parameters": {
+        "model": "cn:glm-5.3-flash",
+        "stream": false,
+        "thinking": {
+          "type": "disabled"
+        },
+        "temperature": 0,
+        "max_tokens": 4096
+      }
+    },
+    "elapsed_seconds": 3.131
+  }
+]

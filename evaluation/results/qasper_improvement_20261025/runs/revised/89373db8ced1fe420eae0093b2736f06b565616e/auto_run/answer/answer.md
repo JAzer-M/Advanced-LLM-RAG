@@ -1,0 +1,1 @@
+No, the paper evaluated on existing datasets rather than collecting new data; it used a previously released Czech Facebook dataset (9752 samples after removing the bipolar category) [5] and mentions datasets released in 2012 by Veselovská et al. [4]. The context provides no evidence that the authors collected new data themselves.

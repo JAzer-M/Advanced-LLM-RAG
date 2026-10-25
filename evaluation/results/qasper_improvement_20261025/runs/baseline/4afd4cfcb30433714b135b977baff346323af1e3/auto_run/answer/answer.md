@@ -1,0 +1,1 @@
+The paper conducts experiments on two datasets: AliMe and Quora [1]. The AliMe dataset is collected from the AliMe intelligent assistant system in E-commerce, consisting of 8,004 query-bag pairs [1]. The Quora dataset is a public (composed) dataset built from the Quora Question Pairs data, with 20,354 training, 2,000 validation, and 10,000 test examples [7][10].

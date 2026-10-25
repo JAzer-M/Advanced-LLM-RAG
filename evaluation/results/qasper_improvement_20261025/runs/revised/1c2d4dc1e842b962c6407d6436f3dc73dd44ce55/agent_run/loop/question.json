@@ -1,0 +1,404 @@
+{
+  "id": "question",
+  "query": "For the paper \"Exploring Domain Shift in Extractive Text Summarization\" (arXiv: 1908.11664), answer this question: what four learning strategies are investigated?",
+  "kb_version": "qasper-holdout-20261025",
+  "status": "completed",
+  "actions_executed": 1,
+  "semantic_correctness": "requires_manual_review",
+  "plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "Exploring Domain Shift in Extractive Text Summarization",
+        "question_quote": "For the paper \"Exploring Domain Shift in Extractive Text Summarization\" (arXiv: 1908.11664), answer this question: what four learning strategies are investigated?",
+        "need": "For the paper \"Exploring Domain Shift in Extractive Text Summarization\" (arXiv: 1908.11664), answer this question: what four learning strategies are investigated?"
+      }
+    ]
+  },
+  "assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "partial",
+        "evidence": [
+          {
+            "chunk_id": 830,
+            "quote": "Domains ModelI Basic ModelII BERT ModelIII T ag ModelIV Meta IN-DOMAIN SETTING FN 49.13 49.70 49.54 49.06"
+          },
+          {
+            "chunk_id": 830,
+            "quote": "Table 3: Rouge-1 performance of our four learning ∆R = strategies on the MULTI-SUM dataset."
+          }
+        ],
+        "supported_part": "The passages establish that four learning strategies exist and correspond to four named models: ModelI Basic, ModelII BERT, ModelIII Tag, and ModelIV Meta.",
+        "reason": "Chunk 830 labels the four learning strategies and names them via the table columns, and chunks 765/807 confirm the paper investigates four learning strategies; however the passages do not describe what each strategy actually is (only ModelIV's meta-learning is hinted in chunk 819).",
+        "gap": "The actual definition/description of each of the four learning strategies (what each strategy does) is not established in the supplied passages; the section 4.1 where they are described is only introduced but not included."
+      }
+    ],
+    "next_action": {
+      "type": "read_neighbors",
+      "reason": "Section 4.1 (chunk 807) introduces the 'Four Learning Strategies' description; reading its neighboring passages should reveal the definitions of the four strategies.",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": null,
+      "source": "1908.11664.pdf",
+      "chunk_id": 807
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "Each check was limited to the single bound question excerpt asking which four learning strategies are investigated; no other requirement or comparison was projected in."
+    }
+  },
+  "steps": [
+    {
+      "number": 1,
+      "action": {
+        "type": "read_neighbors",
+        "reason": "Section 4.1 (chunk 807) introduces the 'Four Learning Strategies' description; reading its neighboring passages should reveal the definitions of the four strategies.",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": null,
+        "source": "1908.11664.pdf",
+        "chunk_id": 807
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "read_neighbors",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "chunk_id": 807,
+          "source": "1908.11664.pdf",
+          "knowledge_base": {
+            "version": "qasper-holdout-20261025",
+            "chunk_count": 1459,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/manifest.json",
+            "manifest_sha256": "10bb244a150c260e5efc39b1a6ebeb939291e26f55d966ed102d27216e67718a",
+            "files": {
+              "faiss.index": "346ac08a63ebb5f367f8a886b0997c344fc084bf1fa8b27ae27de9a82be97617",
+              "chunks.json": "ef123dcc0b2180f3b957d9089c8b5207965dffb1d908fdbf348863efecdeb060"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 805,
+              "text": "Here, we begin with sev- eral simple approaches for multi-domain summa- rization based on multi-domain learning.",
+              "source": "1908.11664.pdf",
+              "page": 4,
+              "title": "Exploring Domain Shift in Extractive Text Summarization",
+              "section": "4 Multi-domain Summarization",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -2
+            },
+            {
+              "chunk_id": 806,
+              "text": "WTP NYDN WSJ USAT TG TIME -0.27 -2.29 -0.31 -0.57 -0.27 -0.02 -1.01 -3.83 -0.55 -1.00 -0.80 -0.06 -1.45 -5.11 -0.25 -1.54 -0.17 -0.71 -0.97 -3.95 -0.33 -1.16 -0.17 -0.86 23.01 -3.28 -0.43 -0.57 -0.01 -0.28 -0.53 51.36 -0.41 -1.20 -0.36 -0.05 -1.57 -6.37 38.60 -1.71 -0.58 -1.00 -1.86 -6.09 -0.92 29.11 -0.68 -1.27 -1.74 -5.82 -1.43 -2.19 23.93 -1.66 -1.06 -4.65 -0.47 -1.05 -0.24 21.90",
+              "source": "1908.11664.pdf",
+              "page": 4,
+              "title": "Exploring Domain Shift in Extractive Text Summarization",
+              "section": "4 Multi-domain Summarization",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -1
+            },
+            {
+              "chunk_id": 807,
+              "text": "4.1 Four Learning Strategies To facilitate the following description, we ﬁrst set up mathematical notations.",
+              "source": "1908.11664.pdf",
+              "page": 4,
+              "title": "Exploring Domain Shift in Extractive Text Summarization",
+              "section": "4.1 Four Learning Strategies",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 0
+            },
+            {
+              "chunk_id": 808,
+              "text": "Assuming that there are K related domains, we refer to Dk as a dataset with Nk samples for domain k. Dk = {(S(k) , Y (k) i=1, where S(k) and Y (k) )}Nk represent i i i i a sequence of sentences and the corresponding la- bel sequence from a document of domain k, re- spectively. The goal is to estimate the conditional probability P(Y |S) by utilizing the complementar- ities among different domains.",
+              "source": "1908.11664.pdf",
+              "page": 4,
+              "title": "Exploring Domain Shift in Extractive Text Summarization",
+              "section": "4.1 Four Learning Strategies",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 1
+            },
+            {
+              "chunk_id": 809,
+              "text": "ModelI This is a simple but effective model Base for multi-domain learning, in which all domains are aggregated together and will be further used for training a set of shared parameters. Notably, domains in this model are not explicitly informed of their differences. Therefore, the loss function of each domain can be written as: L(k) = L(BASIC(S(k), θ(s)), Y(k)) (1) I where BASIC denotes our CNN-Transformer en- coder framework (As described in Section 3).",
+              "source": "1908.11664.pdf",
+              "page": 4,
+              "title": "Exploring Domain Shift in Extractive Text Summarization",
+              "section": "4.1 Four Learning Strategies",
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 2
+            }
+          ],
+          "trace": {
+            "window": 2,
+            "max_window": 2,
+            "selected_ids": [
+              805,
+              806,
+              807,
+              808,
+              809
+            ],
+            "read_chars": 1463,
+            "elapsed_seconds": 0.000164,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        805,
+        806,
+        808,
+        809
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          805,
+          806,
+          808,
+          809
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "supported",
+            "evidence": [
+              {
+                "chunk_id": 830,
+                "quote": "Domains ModelI Basic ModelII BERT ModelIII T ag ModelIV Meta"
+              },
+              {
+                "chunk_id": 833,
+                "quote": "ModelII Supported by the smaller ∆R com- BERT pared with ModelI Base, we can draw the conclu- sion that BERT shows some domain generalization ability"
+              },
+              {
+                "chunk_id": 819,
+                "quote": "Figure 1: The gradient update mechanism of the meta learning strategy of ModelIV Meta."
+              }
+            ],
+            "supported_part": "The four learning strategies investigated are ModelI Base (basic shared-parameter multi-domain training), ModelII BERT (BERT-based), ModelIII Tag (domain tag informed), and ModelIV Meta (meta-learning based).",
+            "reason": "Chunk 830's table lists the four learning strategies by name (ModelI Basic, ModelII BERT, ModelIII Tag, ModelIV Meta); chunks 833 and 819 confirm the identification of ModelII as BERT and ModelIV as the meta-learning strategy, and chunk 809 describes ModelI Base as the shared-parameter approach. Together these establish all four requested strategies.",
+            "gap": ""
+          }
+        ],
+        "next_action": {
+          "type": "answer",
+          "reason": "The only requirement r1 is fully supported: the four learning strategies (ModelI Base, ModelII BERT, ModelIII Tag, ModelIV Meta) are established by the supplied passages.",
+          "requirement_ids": [],
+          "query": null,
+          "source": null,
+          "chunk_id": null
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "The check was limited to identifying the four learning strategies investigated in the paper; no other coordinated subjects or extra conditions were evaluated."
+        }
+      }
+    }
+  ],
+  "evidence_after": [
+    {
+      "chunk_id": 765,
+      "source": "1908.11664.pdf",
+      "page": 1,
+      "title": "Exploring Domain Shift in Extractive Text Summarization",
+      "text": "Then we re-purpose a multi- domain summarization dataset and verify how the gap between different domains inﬂuences the performance of neural summarization mod- els. Furthermore, we investigate four learning strategies and examine their abilities to deal with the domain shift problem. Experimental results on three different settings show their different characteristics in our new testbed.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 844,
+      "source": "1908.11664.pdf",
+      "page": 7,
+      "title": "Exploring Domain Shift in Extractive Text Summarization",
+      "text": "5.3 Results on CNN/DailyMail Inspired by such observations, we further em- ploy our four learning strategies to the mainstream summarization dataset CNN/DailyMail (See et al., 2017), which also includes two different data sources: CNN and DailyMail. We use the publica- tion as the domain and train our models on its 28w training set.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 807,
+      "source": "1908.11664.pdf",
+      "page": 4,
+      "title": "Exploring Domain Shift in Extractive Text Summarization",
+      "text": "4.1 Four Learning Strategies To facilitate the following description, we ﬁrst set up mathematical notations.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 823,
+      "source": "1908.11664.pdf",
+      "page": 6,
+      "title": "Exploring Domain Shift in Extractive Text Summarization",
+      "text": "5 Experiment We investigate the effectiveness of the above four strategies under three evaluation settings: DOMAIN, OUT-OF-DOMAIN and CROSS-DATASET. These settings make it possible to explicitly eval- uate models both on the quality of domain-aware text representation and on their adaptation ability to derive reasonable representations in unfamiliar domains.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 860,
+      "source": "1908.11664.pdf",
+      "page": 9,
+      "title": "Exploring Domain Shift in Extractive Text Summarization",
+      "text": "Un- der these new settings, we propose four learning schemes to give a preliminary explore in character- istics of different learning strategies when dealing with multi-domain summarization tasks. Acknowledgment We thank Jackie Chi Kit Cheung for useful com- ments and discussions. The research work is sup- ported by National Natural Science Foundation of China (No.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 830,
+      "source": "1908.11664.pdf",
+      "page": 6,
+      "title": "Exploring Domain Shift in Extractive Text Summarization",
+      "text": "Domains ModelI Basic ModelII BERT ModelIII T ag ModelIV Meta IN-DOMAIN SETTING FN 49.13 49.70 49.54 49.06 IN- CNN 41.84 41.59 42.14 41.73 MA 35.40 36.46 35.51 34.85 NYT 30.68 31.92 30.70 30.20 WTP 23.88 24.47 24.02 23.51 Average 35.04 34.24 34.40 33.95 OUT-OF-DOMAIN SETTING NTDN 48.62 49.37 49.44 49.47 WSJ 38.55 39.63 39.00 38.93 USAT 28.85 29.57 29.09 28.99 TG 24.15 24.89 24.10 24.18 TIME 21.67 22.45 22.20 22.12 Average 33.68 32.78 33.17 33.24 1.47 ↓ 1.35 ↓ 1.24 ↓ 0.71 ↓ ∆R CROSS-DATASET SETTING 40.30 CNN/DM 40.11 39.82 40.28 Table 3: Rouge-1 performance of our four learning ∆R = strategies on the MULTI-SUM dataset.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 783,
+      "source": "1908.11664.pdf",
+      "page": 2,
+      "title": "Exploring Domain Shift in Extractive Text Summarization",
+      "text": "Although pre- vious works have shown that taking consideration of those distribution differences can improve sum- marization models performance (Isonuma et al., 2017; Wang et al., 2018), few related them with the concept of the domain and investigated the summa- rization tasks from a perspective of multi-domain learning.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 833,
+      "source": "1908.11664.pdf",
+      "page": 6,
+      "title": "Exploring Domain Shift in Extractive Text Summarization",
+      "text": "The excellent results under CROSS-DATASET settings further suggest the meta-learning strategy successfully improve the model transferability not only among the domains of MULTI-SUM but also across different datasets. ModelII Supported by the smaller ∆R com- BERT pared with ModelI Base, we can draw the conclu- sion that BERT shows some domain generalization ability 7 within MULTI-SUM.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 819,
+      "source": "1908.11664.pdf",
+      "page": 5,
+      "title": "Exploring Domain Shift in Extractive Text Summarization",
+      "text": "Figure 1: The gradient update mechanism of the meta learning strategy of ModelIV Meta. modify shared parameters, which makes it easier to update parameters along different directions. ModelIV In order to overcome the above lim- Meta itations, we try to bridge the communication gap between different domains when updating shared parameters via meta-learning (Finn et al., 2017; Li et al., 2017; Liu and Huang, 2018).",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 856,
+      "source": "1908.11664.pdf",
+      "page": 8,
+      "title": "Exploring Domain Shift in Extractive Text Summarization",
+      "text": "(2018) trained a selection mask for abstractive summa- rization and proved it has excellent adaptability. However, previous works just investigated mod- els trained on a single domain and did not explore multi-domain learning in summarization. Multi-domain Learning (MDL) & Domain Adaptation (DA) We focus on the testbed that requires both training and evaluating performance Base, on a set of domains.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 805,
+      "source": "1908.11664.pdf",
+      "page": 4,
+      "title": "Exploring Domain Shift in Extractive Text Summarization",
+      "text": "Here, we begin with sev- eral simple approaches for multi-domain summa- rization based on multi-domain learning.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 806,
+      "source": "1908.11664.pdf",
+      "page": 4,
+      "title": "Exploring Domain Shift in Extractive Text Summarization",
+      "text": "WTP NYDN WSJ USAT TG TIME -0.27 -2.29 -0.31 -0.57 -0.27 -0.02 -1.01 -3.83 -0.55 -1.00 -0.80 -0.06 -1.45 -5.11 -0.25 -1.54 -0.17 -0.71 -0.97 -3.95 -0.33 -1.16 -0.17 -0.86 23.01 -3.28 -0.43 -0.57 -0.01 -0.28 -0.53 51.36 -0.41 -1.20 -0.36 -0.05 -1.57 -6.37 38.60 -1.71 -0.58 -1.00 -1.86 -6.09 -0.92 29.11 -0.68 -1.27 -1.74 -5.82 -1.43 -2.19 23.93 -1.66 -1.06 -4.65 -0.47 -1.05 -0.24 21.90",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 808,
+      "source": "1908.11664.pdf",
+      "page": 4,
+      "title": "Exploring Domain Shift in Extractive Text Summarization",
+      "text": "Assuming that there are K related domains, we refer to Dk as a dataset with Nk samples for domain k. Dk = {(S(k) , Y (k) i=1, where S(k) and Y (k) )}Nk represent i i i i a sequence of sentences and the corresponding la- bel sequence from a document of domain k, re- spectively. The goal is to estimate the conditional probability P(Y |S) by utilizing the complementar- ities among different domains.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 809,
+      "source": "1908.11664.pdf",
+      "page": 4,
+      "title": "Exploring Domain Shift in Extractive Text Summarization",
+      "text": "ModelI This is a simple but effective model Base for multi-domain learning, in which all domains are aggregated together and will be further used for training a set of shared parameters. Notably, domains in this model are not explicitly informed of their differences. Therefore, the loss function of each domain can be written as: L(k) = L(BASIC(S(k), θ(s)), Y(k)) (1) I where BASIC denotes our CNN-Transformer en- coder framework (As described in Section 3).",
+      "kb_version": "qasper-holdout-20261025"
+    }
+  ],
+  "action_attempts": 1,
+  "feedback_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 830,
+            "quote": "Domains ModelI Basic ModelII BERT ModelIII T ag ModelIV Meta"
+          },
+          {
+            "chunk_id": 833,
+            "quote": "ModelII Supported by the smaller ∆R com- BERT pared with ModelI Base, we can draw the conclu- sion that BERT shows some domain generalization ability"
+          },
+          {
+            "chunk_id": 819,
+            "quote": "Figure 1: The gradient update mechanism of the meta learning strategy of ModelIV Meta."
+          }
+        ],
+        "supported_part": "The four learning strategies investigated are ModelI Base (basic shared-parameter multi-domain training), ModelII BERT (BERT-based), ModelIII Tag (domain tag informed), and ModelIV Meta (meta-learning based).",
+        "reason": "Chunk 830's table lists the four learning strategies by name (ModelI Basic, ModelII BERT, ModelIII Tag, ModelIV Meta); chunks 833 and 819 confirm the identification of ModelII as BERT and ModelIV as the meta-learning strategy, and chunk 809 describes ModelI Base as the shared-parameter approach. Together these establish all four requested strategies.",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "answer",
+      "reason": "The only requirement r1 is fully supported: the four learning strategies (ModelI Base, ModelII BERT, ModelIII Tag, ModelIV Meta) are established by the supplied passages.",
+      "requirement_ids": [],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "The check was limited to identifying the four learning strategies investigated in the paper; no other coordinated subjects or extra conditions were evaluated."
+    }
+  },
+  "halt_reason": "answer_ready",
+  "final_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 830,
+            "quote": "Domains ModelI Basic ModelII BERT ModelIII T ag ModelIV Meta"
+          },
+          {
+            "chunk_id": 833,
+            "quote": "ModelII Supported by the smaller ∆R com- BERT pared with ModelI Base, we can draw the conclu- sion that BERT shows some domain generalization ability"
+          },
+          {
+            "chunk_id": 819,
+            "quote": "Figure 1: The gradient update mechanism of the meta learning strategy of ModelIV Meta."
+          }
+        ],
+        "supported_part": "The four learning strategies investigated are ModelI Base (basic shared-parameter multi-domain training), ModelII BERT (BERT-based), ModelIII Tag (domain tag informed), and ModelIV Meta (meta-learning based).",
+        "reason": "Chunk 830's table lists the four learning strategies by name (ModelI Basic, ModelII BERT, ModelIII Tag, ModelIV Meta); chunks 833 and 819 confirm the identification of ModelII as BERT and ModelIV as the meta-learning strategy, and chunk 809 describes ModelI Base as the shared-parameter approach. Together these establish all four requested strategies.",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "answer",
+      "reason": "The only requirement r1 is fully supported: the four learning strategies (ModelI Base, ModelII BERT, ModelIII Tag, ModelIV Meta) are established by the supplied passages.",
+      "requirement_ids": [],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "The check was limited to identifying the four learning strategies investigated in the paper; no other coordinated subjects or extra conditions were evaluated."
+    }
+  },
+  "elapsed_seconds": 20.972
+}

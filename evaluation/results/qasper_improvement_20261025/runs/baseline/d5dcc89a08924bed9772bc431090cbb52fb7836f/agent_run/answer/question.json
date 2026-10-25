@@ -1,0 +1,125 @@
+{
+  "id": "question",
+  "status": "completed",
+  "query": "For the paper \"Using Statistical and Semantic Models for Multi-Document Summarization\" (arXiv: 1805.04579), answer this question: What showed to be the best performing combination of semantic and statistical model on the summarization task in terms of ROUGE score?",
+  "kb_version": "qasper-holdout-20261025",
+  "result": {
+    "status": "review_passed",
+    "repair_attempted": false,
+    "drafts": [
+      "The paper does not allow identifying the exact best combination unambiguously: it reports that mixing semantic and statistical models improves over stand-alone models, with the InferSent-based summarizer performing \"exceptionally well\" [1][3], and the highest combination ROUGE-2 scores in Table 2 are 0.03986 and 0.04003 [12]. However, the table's model-indicator markers (A→Jaccard/Cosine, B→TextRank, C→TFIDF, D→WordNet, E→Glove-vec, F→InferSent [12]) are garbled, so which exact statistical model paired with InferSent (or another semantic model) achieved these top scores cannot be established from the provided passages. What can be said is that combinations involving TF/IDF and Jaccard/Cosine similarity matrices offered nearly the same results, and the InferSent-based summarizer was the standout semantic component [1]."
+    ],
+    "reviews": [
+      {
+        "review": {
+          "requirements": [
+            {
+              "id": "r1",
+              "verdict": "pass",
+              "answer_quote": "The paper does not allow identifying the exact best combination unambiguously: it reports that mixing semantic and statistical models improves over stand-alone models, with the InferSent-based summarizer performing \"exceptionally well\" [1][3], and the highest combination ROUGE-2 scores in Table 2 are 0.03986 and 0.04003 [12]. However, the table's model-indicator markers (A→Jaccard/Cosine, B→TextRank, C→TFIDF, D→WordNet, E→Glove-vec, F→InferSent [12]) are garbled, so which exact statistical model paired with InferSent (or another semantic model) achieved these top scores cannot be established from the provided passages.",
+              "reason": "回答正确地指出:论文表明语义与统计模型混合优于单独模型[3],InferSent 表现突出[1],表2中最高组合 ROUGE-2 分数为 0.03986 与 0.04003[12];且明确承认因表2中模型指示符号(•)在提供文本中错乱,无法确定具体哪种统计模型与哪种语义模型的组合取得最佳分数。这是对可获取证据的忠实描述,并显式说明剩余缺口,引用与原文一致,无虚构内容。",
+              "citations": [
+                {
+                  "number": 1,
+                  "quote": "We also observe that combinations with TF/IDF and Similarity Matrices(Jaccard/Cosine) offer nearly same results. The InferSent based Summarizer performed exceptionally well."
+                },
+                {
+                  "number": 3,
+                  "quote": "We can see that using a mixture of Semantic and Statistical models offers an improvement over stand-alone models."
+                },
+                {
+                  "number": 12,
+                  "quote": "• • • 0.03986 0.04003"
+                }
+              ]
+            }
+          ],
+          "checks": {
+            "coverage": true,
+            "subjects": true,
+            "numbers": true,
+            "conditions": true,
+            "citations": true,
+            "unsupported_claims": true,
+            "gaps": true
+          },
+          "issues": []
+        },
+        "citation_check": {
+          "cited_numbers": [
+            1,
+            3,
+            12
+          ],
+          "invalid_numbers": [],
+          "malformed_markers": [],
+          "has_citations": true,
+          "require_citations": true,
+          "structure_passed": true,
+          "cited_sources": [
+            {
+              "citation": 1,
+              "chunk_id": 644,
+              "source": "1805.04579.pdf",
+              "page": 7,
+              "text": "We generally expected WordNet, Glove based semantic models to perform better given they better capture crux of the sentence and compute similarity using the same, but instead, they performed average. This is attributed to the fact they assigned high sim- ilarity scores to not so semantically related sen- tences. We also observe that combinations with TF/IDF and Similarity Matrices(Jaccard/Cosine) offer nearly same results. The InferSent based Summarizer performed exceptionally well."
+            },
+            {
+              "citation": 3,
+              "chunk_id": 646,
+              "source": "1805.04579.pdf",
+              "page": 7,
+              "text": "3.9 Conclusion/Future Work We can see that using a mixture of Semantic and Statistical models offers an improvement over stand-alone models. Given better training data, results can be further improved. Using domain- speciﬁc labeled data can provide a further increase in performances of Glove and WordNet Models."
+            },
+            {
+              "citation": 12,
+              "chunk_id": 642,
+              "source": "1805.04579.pdf",
+              "page": 7,
+              "text": "Models Score A B C D E F ROUGE2(95%) • • 0.03172 • • 0.03357 • • • 0.03384 • • • 0.03479 • • • 0.03572 • • • • 0.03519 • • 0.03821 • • 0.03912 • • • 0.03822 • • • 0.03986 0.04003 • • • • • • • 0.03846 • • 0.03312 • • 0.03339 • • • 0.03332 • • • 0.03532 • • • 0.03525 • • • • 0.03519 • • • 0.03721 • • • 0.03689 • • • • 0.03771 • • • • 0.03812 • • • • 0.03839 • • • • • 0.03782 • • • 0.03615 • • • 0.03598 • • • • 0.03621 • • • • 0.03803 • • • • 0.03819 • • • • • 0.03784 • • • 0.03314 • • • 0.03212 • • • • 0.03426 • • • • 0.03531 • • • • 0.03544 • • • • • 0.03529 • • • • 0.03712 • • • • 0.03713 • • • • • 0.03705 • • • • • 0.03821 • • • • • 0.03829 • • • • • • 0.03772 A→Jaccard/Cosine Similarity Matrix B→TextRank C→TFIDF D→WordNet Based Model E→Glove-vec Based Model F→InferSent Based Model TABLE 2 AVERAGE ROUGE-2 SCORES FOR BASE METH- ODS."
+            }
+          ],
+          "semantic_support": "requires_manual_review"
+        }
+      }
+    ],
+    "semantic_correctness": "requires_manual_review",
+    "answer": "The paper does not allow identifying the exact best combination unambiguously: it reports that mixing semantic and statistical models improves over stand-alone models, with the InferSent-based summarizer performing \"exceptionally well\" [1][3], and the highest combination ROUGE-2 scores in Table 2 are 0.03986 and 0.04003 [12]. However, the table's model-indicator markers (A→Jaccard/Cosine, B→TextRank, C→TFIDF, D→WordNet, E→Glove-vec, F→InferSent [12]) are garbled, so which exact statistical model paired with InferSent (or another semantic model) achieved these top scores cannot be established from the provided passages. What can be said is that combinations involving TF/IDF and Jaccard/Cosine similarity matrices offered nearly the same results, and the InferSent-based summarizer was the standout semantic component [1].",
+    "citation_check": {
+      "cited_numbers": [
+        1,
+        3,
+        12
+      ],
+      "invalid_numbers": [],
+      "malformed_markers": [],
+      "has_citations": true,
+      "require_citations": true,
+      "structure_passed": true,
+      "cited_sources": [
+        {
+          "citation": 1,
+          "chunk_id": 644,
+          "source": "1805.04579.pdf",
+          "page": 7,
+          "text": "We generally expected WordNet, Glove based semantic models to perform better given they better capture crux of the sentence and compute similarity using the same, but instead, they performed average. This is attributed to the fact they assigned high sim- ilarity scores to not so semantically related sen- tences. We also observe that combinations with TF/IDF and Similarity Matrices(Jaccard/Cosine) offer nearly same results. The InferSent based Summarizer performed exceptionally well."
+        },
+        {
+          "citation": 3,
+          "chunk_id": 646,
+          "source": "1805.04579.pdf",
+          "page": 7,
+          "text": "3.9 Conclusion/Future Work We can see that using a mixture of Semantic and Statistical models offers an improvement over stand-alone models. Given better training data, results can be further improved. Using domain- speciﬁc labeled data can provide a further increase in performances of Glove and WordNet Models."
+        },
+        {
+          "citation": 12,
+          "chunk_id": 642,
+          "source": "1805.04579.pdf",
+          "page": 7,
+          "text": "Models Score A B C D E F ROUGE2(95%) • • 0.03172 • • 0.03357 • • • 0.03384 • • • 0.03479 • • • 0.03572 • • • • 0.03519 • • 0.03821 • • 0.03912 • • • 0.03822 • • • 0.03986 0.04003 • • • • • • • 0.03846 • • 0.03312 • • 0.03339 • • • 0.03332 • • • 0.03532 • • • 0.03525 • • • • 0.03519 • • • 0.03721 • • • 0.03689 • • • • 0.03771 • • • • 0.03812 • • • • 0.03839 • • • • • 0.03782 • • • 0.03615 • • • 0.03598 • • • • 0.03621 • • • • 0.03803 • • • • 0.03819 • • • • • 0.03784 • • • 0.03314 • • • 0.03212 • • • • 0.03426 • • • • 0.03531 • • • • 0.03544 • • • • • 0.03529 • • • • 0.03712 • • • • 0.03713 • • • • • 0.03705 • • • • • 0.03821 • • • • • 0.03829 • • • • • • 0.03772 A→Jaccard/Cosine Similarity Matrix B→TextRank C→TFIDF D→WordNet Based Model E→Glove-vec Based Model F→InferSent Based Model TABLE 2 AVERAGE ROUGE-2 SCORES FOR BASE METH- ODS."
+        }
+      ],
+      "semantic_support": "requires_manual_review"
+    }
+  }
+}

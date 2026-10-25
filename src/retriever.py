@@ -3,7 +3,7 @@
 
 import numpy as np
 
-def retrieve(model, index, chunks, query, top_k = 5):
+def retrieve(model, index, chunks, query, top_k = 5, sources=None):
 
     query_embedding = model.encode(
         [query],
@@ -17,7 +17,8 @@ def retrieve(model, index, chunks, query, top_k = 5):
     )
 
     # 在FAISS中搜索最相似的向量
-    scores, indices = index.search(query_embedding, top_k)
+    # 限定来源时先取全库排名再过滤；不能把过滤后的列表当作原FAISS行号表。
+    scores, indices = index.search(query_embedding, len(chunks) if sources else top_k)
 
     # 整理结果
     results = []
@@ -28,6 +29,8 @@ def retrieve(model, index, chunks, query, top_k = 5):
             continue
 
         chunk = chunks[int(idx)]
+        if sources and chunk['source'] not in sources:
+            continue
 
         results.append({
             "chunk_id": int(idx),
@@ -38,5 +41,7 @@ def retrieve(model, index, chunks, query, top_k = 5):
             "section": chunk["section"],
             "text": chunk["text"]
         })
+        if len(results) >= top_k:
+            break
 
     return results

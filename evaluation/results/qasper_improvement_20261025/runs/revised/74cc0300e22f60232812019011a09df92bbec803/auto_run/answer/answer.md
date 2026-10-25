@@ -1,0 +1,2 @@
+Insufficient evidence to reliably answer these requirements:
+- And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue: For the paper "And That's A Fact: Distinguishing Factual and Emotional Argumentation in Online Dialogue" (arXiv: 1709.05295), answer this question: Do they report results only on English data?; Whether the reported results are on English data only (or whether any non-English data/evaluation is included) is not stated in any supplied passage.

@@ -1,0 +1,3 @@
+The paper identifies two sources of less sensitive data: derived data and surrogate data.
+
+Derived data are data that cannot be used to reconstruct the original text and, when sanitized, cannot directly re-identify the individual; examples include text fragments, various statistics, and trained models. Working on derived data is presented as a way of reducing data sensitivity and improving chances for IRB approval [3]. Surrogate data refer to health-related texts produced in social media and patient-generated data available online; the paper notes that these may not resemble clinical discourse, yet they pertain to the same individuals whose health is documented in clinical reports [4].

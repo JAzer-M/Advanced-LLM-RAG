@@ -11,12 +11,13 @@ from src.model_json import loads_model_json
 
 
 def has_source_quote(quote, passage):
-    """仅兼容原文排版：字母间连字符后的空白可忽略，保留连字符、数字和句序。"""
+    """仅兼容字母间PDF断行：保留原文和词内连字符，不修改数字、否定词或句序。"""
     def normalized(value):
-        value=re.sub(r'\s+', ' ', unicodedata.normalize('NFKC', value)).casefold().strip()
-        return re.sub(r'(?<=[a-z])-\s+(?=[a-z])', '-', value)
-    value=normalized(quote)
-    return bool(value) and value in normalized(passage)
+        value=re.sub(r'\s+', ' ', unicodedata.normalize('NFKC', value)).strip()
+        # 大写续词可能是名称/复合词（Arc- Challenge），只合并小写续词的断行。
+        return {v.casefold() for v in (value, re.sub(r'(?<=[A-Za-z])-\s+(?=[A-Za-z])', '-', value),
+                re.sub(r'(?<=[A-Za-z])-\s+(?=[a-z])', '', value))}
+    return bool(quote.strip()) and any(q in p for q in normalized(quote) for p in normalized(passage))
 
 
 # 检查引用语法和编号范围，并返回对应原文；semantic_support 固定保留人工审阅标记。

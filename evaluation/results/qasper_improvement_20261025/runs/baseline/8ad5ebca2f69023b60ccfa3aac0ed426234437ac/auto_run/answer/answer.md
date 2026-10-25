@@ -1,0 +1,1 @@
+Yes. The QBM model is compared against baselines, including Q-Q matching based baselines (Q-Q Mean and Q-Q Max) and a query-bag matching based baseline (Bag-Con) [1][5][11]. QBM performs best compared to these baselines, obtaining 0.05 and 0.03 R10@1 gains over the strongest baseline on the two datasets (AliMe and Quora) [1][2][4].

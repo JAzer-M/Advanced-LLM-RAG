@@ -1,0 +1,1 @@
+No, the authors did not collect new data for evaluation. They used two existing datasets — Facebook posts and Mall product reviews — for their experiments with various supervised learning algorithms [3].

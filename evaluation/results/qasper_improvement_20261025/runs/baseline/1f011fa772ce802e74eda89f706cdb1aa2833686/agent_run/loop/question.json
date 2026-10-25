@@ -1,0 +1,574 @@
+{
+  "id": "question",
+  "query": "For the paper \"TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\" (arXiv: 1910.01340), answer this question: What textual features are used?",
+  "kb_version": "qasper-holdout-20261025",
+  "status": "completed",
+  "actions_executed": 2,
+  "semantic_correctness": "requires_manual_review",
+  "plan": {
+    "requirements": [
+      {
+        "id": "r1",
+        "subject": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+        "question_quote": "For the paper \"TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\" (arXiv: 1910.01340), answer this question: What textual features are used?",
+        "need": "For the paper \"TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective\" (arXiv: 1910.01340), answer this question: What textual features are used?"
+      }
+    ]
+  },
+  "assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "partial",
+        "evidence": [
+          {
+            "chunk_id": 1009,
+            "quote": "Our approach is mainly based on textual features which uti- lize thematic information, and proﬁling features to identify the accounts from their way of writing tweets."
+          },
+          {
+            "chunk_id": 1047,
+            "quote": "Thus, we propose the following features to identify these users using only their tweets text: – Native Language Identiﬁcation (NLI): This feature was inspired by earlier works on identifying native language of essays writers [22]."
+          },
+          {
+            "chunk_id": 1081,
+            "quote": "In addition, we proposed NLI features to identify IRA trolls from their writing style, which showed to be very effective."
+          }
+        ],
+        "supported_part": "The paper states its approach is mainly based on textual features that utilize thematic information and profiling features, and among the proposed features it explicitly names Native Language Identification (NLI) features (plus references to 'surface text features').",
+        "reason": "The passages establish that textual features include thematic information, profiling features, and NLI features. However, chunk 1047 introduces 'the following features' as a list, of which only the first (NLI) appears in the supplied text; the remaining specific features in that list are not present in any supplied passage.",
+        "gap": "The complete list of the specific textual features proposed by the paper is missing; only the introductory NLI feature from the enumeration on page 6 is supplied, and the remaining features that follow it are not established by the supplied passages."
+      }
+    ],
+    "next_action": {
+      "type": "read_neighbors",
+      "reason": "Chunk 1047 begins the enumeration of the paper's proposed textual features ('we propose the following features'), but only the first feature (NLI) is included. Reading the neighboring passages around chunk 1047 should reveal the rest of the feature list in the Textual Representation/features section.",
+      "requirement_ids": [
+        "r1"
+      ],
+      "query": null,
+      "source": "1910.01340.pdf",
+      "chunk_id": 1047
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "The check is limited to the single requirement r1 (what textual features are used in TexTrolls, arXiv:1910.01340); all cited quotes come from that paper's supplied passages and address only this requirement's subject and predicate."
+    }
+  },
+  "steps": [
+    {
+      "number": 1,
+      "action": {
+        "type": "read_neighbors",
+        "reason": "Chunk 1047 begins the enumeration of the paper's proposed textual features ('we propose the following features'), but only the first feature (NLI) is included. Reading the neighboring passages around chunk 1047 should reveal the rest of the feature list in the Textual Representation/features section.",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": null,
+        "source": "1910.01340.pdf",
+        "chunk_id": 1047
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "read_neighbors",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "chunk_id": 1047,
+          "source": "1910.01340.pdf",
+          "knowledge_base": {
+            "version": "qasper-holdout-20261025",
+            "chunk_count": 1459,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/manifest.json",
+            "manifest_sha256": "10bb244a150c260e5efc39b1a6ebeb939291e26f55d966ed102d27216e67718a",
+            "files": {
+              "faiss.index": "346ac08a63ebb5f367f8a886b0997c344fc084bf1fa8b27ae27de9a82be97617",
+              "chunks.json": "ef123dcc0b2180f3b957d9089c8b5207965dffb1d908fdbf348863efecdeb060"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 1045,
+              "text": "Given Vi as the concatenation of the previous features vectors of a tweeti, we represent each user’s tweets by considering the average and standard deviation of her tweets’ V1,2,..N in each theme j independently and we concatenate them. Mathematically, a user x ﬁnal feature vector is deﬁned as follows:  T PNj K userx =  j=1 where given the jth theme, Nj is the total number of tweets of the user, Vij is the ith tweet feature vector, Vj is the mean of the tweets’ feature vectors.",
+              "source": "1910.01340.pdf",
+              "page": 6,
+              "title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+              "section": null,
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -2
+            },
+            {
+              "chunk_id": 1046,
+              "text": "With this representation we aim at capturing the ”Flip-Flop” behavior of IRA trolls among the themes (see Section 5.4). 4.2 Proﬁling IRA Accounts As Twitter declared, although the IRA campaign was originated in Russia, it has been found that IRA trolls concealed their identity by tweeting in English. Furthermore, for any possibility of unmasking their identity, the majority of IRA trolls changed their location to other countries and the language of the Twitter interface they use.",
+              "source": "1910.01340.pdf",
+              "page": 6,
+              "title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+              "section": null,
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -1
+            },
+            {
+              "chunk_id": 1047,
+              "text": "Thus, we propose the following features to identify these users using only their tweets text: – Native Language Identiﬁcation (NLI): This feature was inspired by earlier works on identifying native language of essays writers [22]. We aim to detect IRA trolls by identifying their way of writing English tweets. As shown in [31], English tweets generated by non-English speakers have a diﬀerent syntactic pattern .",
+              "source": "1910.01340.pdf",
+              "page": 6,
+              "title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+              "section": null,
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 0
+            },
+            {
+              "chunk_id": 1048,
+              "text": "Thus, we use state-of-the-art NLI features to detect this unique pattern [8,23,14]; the feature set consists of bag of stopwords, Part- of-speech tags (POS), and syntactic dependency relations (DEPREL). We 9 Total pronouns, Anxiety, Cognitive processes, Insight, Causation, Discrepancy, Ten- tative, Certainty, Inhibition, and Inclusive respectively.",
+              "source": "1910.01340.pdf",
+              "page": 6,
+              "title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+              "section": null,
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 1
+            },
+            {
+              "chunk_id": 1049,
+              "text": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective extract the POS and the DEPREL information using spaCy10, an oﬀ-the- shelf POS tagger11. We clean the tweets from the special characters and maintained dots, commas, and ﬁrst-letter capitalization of words.",
+              "source": "1910.01340.pdf",
+              "page": 7,
+              "title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+              "section": null,
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 2
+            }
+          ],
+          "trace": {
+            "window": 2,
+            "max_window": 2,
+            "selected_ids": [
+              1045,
+              1046,
+              1047,
+              1048,
+              1049
+            ],
+            "read_chars": 2013,
+            "elapsed_seconds": 8.1e-05,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        1045,
+        1046,
+        1048,
+        1049
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          1045,
+          1046,
+          1048,
+          1049
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "partial",
+            "evidence": [
+              {
+                "chunk_id": 1009,
+                "quote": "Our approach is mainly based on textual features which uti- lize thematic information, and proﬁling features to identify the accounts from their way of writing tweets."
+              },
+              {
+                "chunk_id": 1039,
+                "quote": "we model a set of textual features inde- pendently for each of the former themes to capture the emotional, stance, and others changes in the users tweets."
+              },
+              {
+                "chunk_id": 1048,
+                "quote": "Thus, we use state-of-the-art NLI features to detect this unique pattern [8,23,14]; the feature set consists of bag of stopwords, Part- of-speech tags (POS), and syntactic dependency relations (DEPREL)."
+              },
+              {
+                "chunk_id": 1047,
+                "quote": "Native Language Identiﬁcation (NLI): This feature was inspired by earlier works on identifying native language of essays writers [22]."
+              }
+            ],
+            "supported_part": "The paper's textual features include thematic features (modeled per theme to capture emotional, stance and other changes in tweets) and Native Language Identification (NLI) features, whose set consists of a bag of stopwords, part-of-speech tags (POS), and syntactic dependency relations (DEPREL).",
+            "reason": "The passages establish that textual features are used (thematic features and NLI features) and enumerate the NLI feature set (stopwords, POS, DEPREL). However, the excerpts reference 'the previous features vectors of a tweet' and 'other surface text features' without listing the actual surface/emotional text feature types used per tweet, so the full set of textual features is not completely enumerated.",
+            "gap": "The complete list of per-tweet surface/textual features (the 'previous features vectors' concatenated into Vi, and the 'other surface text features') is not enumerated in the supplied passages."
+          }
+        ],
+        "next_action": {
+          "type": "read_neighbors",
+          "reason": "The gap concerns the list of textual features near the feature-definition sections around chunks 1047/1048; reading neighbors may reveal the full feature enumeration.",
+          "requirement_ids": [
+            "r1"
+          ],
+          "query": null,
+          "source": "1910.01340.pdf",
+          "chunk_id": 1048
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "Checked only r1's operative need (what textual features are used in TexTrolls) against the supplied passages; no other requirement or comparison was assessed."
+        }
+      }
+    },
+    {
+      "number": 2,
+      "action": {
+        "type": "read_neighbors",
+        "reason": "The gap concerns the list of textual features near the feature-definition sections around chunks 1047/1048; reading neighbors may reveal the full feature enumeration.",
+        "requirement_ids": [
+          "r1"
+        ],
+        "query": null,
+        "source": "1910.01340.pdf",
+        "chunk_id": 1048
+      },
+      "action_origin": "model",
+      "status": "executed",
+      "execution": {
+        "type": "read_neighbors",
+        "status": "executed",
+        "query_context": "",
+        "tool_result": {
+          "chunk_id": 1048,
+          "source": "1910.01340.pdf",
+          "knowledge_base": {
+            "version": "qasper-holdout-20261025",
+            "chunk_count": 1459,
+            "dimension": 384,
+            "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/faiss.index",
+            "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/chunks.json",
+            "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/manifest.json",
+            "manifest_sha256": "10bb244a150c260e5efc39b1a6ebeb939291e26f55d966ed102d27216e67718a",
+            "files": {
+              "faiss.index": "346ac08a63ebb5f367f8a886b0997c344fc084bf1fa8b27ae27de9a82be97617",
+              "chunks.json": "ef123dcc0b2180f3b957d9089c8b5207965dffb1d908fdbf348863efecdeb060"
+            }
+          },
+          "results": [
+            {
+              "chunk_id": 1046,
+              "text": "With this representation we aim at capturing the ”Flip-Flop” behavior of IRA trolls among the themes (see Section 5.4). 4.2 Proﬁling IRA Accounts As Twitter declared, although the IRA campaign was originated in Russia, it has been found that IRA trolls concealed their identity by tweeting in English. Furthermore, for any possibility of unmasking their identity, the majority of IRA trolls changed their location to other countries and the language of the Twitter interface they use.",
+              "source": "1910.01340.pdf",
+              "page": 6,
+              "title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+              "section": null,
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -2
+            },
+            {
+              "chunk_id": 1047,
+              "text": "Thus, we propose the following features to identify these users using only their tweets text: – Native Language Identiﬁcation (NLI): This feature was inspired by earlier works on identifying native language of essays writers [22]. We aim to detect IRA trolls by identifying their way of writing English tweets. As shown in [31], English tweets generated by non-English speakers have a diﬀerent syntactic pattern .",
+              "source": "1910.01340.pdf",
+              "page": 6,
+              "title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+              "section": null,
+              "kb_version": "qasper-holdout-20261025",
+              "offset": -1
+            },
+            {
+              "chunk_id": 1048,
+              "text": "Thus, we use state-of-the-art NLI features to detect this unique pattern [8,23,14]; the feature set consists of bag of stopwords, Part- of-speech tags (POS), and syntactic dependency relations (DEPREL). We 9 Total pronouns, Anxiety, Cognitive processes, Insight, Causation, Discrepancy, Ten- tative, Certainty, Inhibition, and Inclusive respectively.",
+              "source": "1910.01340.pdf",
+              "page": 6,
+              "title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+              "section": null,
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 0
+            },
+            {
+              "chunk_id": 1049,
+              "text": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective extract the POS and the DEPREL information using spaCy10, an oﬀ-the- shelf POS tagger11. We clean the tweets from the special characters and maintained dots, commas, and ﬁrst-letter capitalization of words.",
+              "source": "1910.01340.pdf",
+              "page": 7,
+              "title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+              "section": null,
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 1
+            },
+            {
+              "chunk_id": 1050,
+              "text": "We use regular expressions to convert a sequence of dots to a single dot, and similarly for sequence of characters. – Stylistic: We extract a set of stylistic features following previous works in the authorship attribution domain [33,4,29], such as: the count of spe- cial characters, consecutive characters and letters12, URLs, hashtags, users’ mentions. In addition, we extract the uppercase ratio and the tweet length.",
+              "source": "1910.01340.pdf",
+              "page": 7,
+              "title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+              "section": null,
+              "kb_version": "qasper-holdout-20261025",
+              "offset": 2
+            }
+          ],
+          "trace": {
+            "window": 2,
+            "max_window": 2,
+            "selected_ids": [
+              1046,
+              1047,
+              1048,
+              1049,
+              1050
+            ],
+            "read_chars": 1950,
+            "elapsed_seconds": 0.000381,
+            "generation_api_calls": 0
+          }
+        }
+      },
+      "added_ids": [
+        1050
+      ],
+      "feedback_scope": {
+        "added_ids": [
+          1050
+        ],
+        "recheck_requirement_ids": [
+          "r1"
+        ],
+        "retained_requirement_ids": []
+      },
+      "assessment_after": {
+        "requirements": [
+          {
+            "id": "r1",
+            "status": "supported",
+            "evidence": [
+              {
+                "chunk_id": 1048,
+                "quote": "we use state-of-the-art NLI features to detect this unique pattern [8,23,14]; the feature set consists of bag of stopwords, Part- of-speech tags (POS), and syntactic dependency relations (DEPREL)."
+              },
+              {
+                "chunk_id": 1050,
+                "quote": "Stylistic: We extract a set of stylistic features following previous works in the authorship attribution domain [33,4,29], such as: the count of spe- cial characters, consecutive characters and letters12, URLs, hashtags, users’ mentions. In addition, we extract the uppercase ratio and the tweet length."
+              },
+              {
+                "chunk_id": 1009,
+                "quote": "Our approach is mainly based on textual features which uti- lize thematic information, and proﬁling features to identify the accounts from their way of writing tweets."
+              }
+            ],
+            "supported_part": "The paper uses textual features that utilize thematic information, NLI features (bag of stopwords, POS tags, syntactic dependency relations) to capture the writing style of non-native English speakers, and stylistic features (counts of special characters, consecutive characters and letters, URLs, hashtags, mentions, uppercase ratio, tweet length).",
+            "reason": "The passages from the paper's textual representation and profiling sections explicitly enumerate the textual features used: thematic information (chunk 1009, 1039), NLI features comprising bag of stopwords, POS, and DEPREL (chunk 1048), and stylistic features (chunk 1050). These together establish what textual features are used.",
+            "gap": ""
+          }
+        ],
+        "next_action": {
+          "type": "answer",
+          "reason": "All requirements (r1) are supported by direct quotations from the paper specifying the textual features used: thematic information, NLI features (stopwords, POS, DEPREL), and stylistic features.",
+          "requirement_ids": [],
+          "query": null,
+          "source": null,
+          "chunk_id": null
+        },
+        "scope_check": {
+          "valid": true,
+          "reason": "The check stayed within the bound question excerpt: what textual features the TexTrolls paper uses. Quoted passages enumerate those features without adding unsupported extra conditions."
+        }
+      }
+    }
+  ],
+  "evidence_after": [
+    {
+      "chunk_id": 1009,
+      "source": "1910.01340.pdf",
+      "page": 1,
+      "title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+      "text": "Therefore, in this paper, we propose a text-based approach to detect the online trolls such as those that were discovered during the US 2016 presidential elections. Our approach is mainly based on textual features which uti- lize thematic information, and proﬁling features to identify the accounts from their way of writing tweets. We deduced the thematic information in a unsupervised way and we show that coupling them with the textual features enhanced the performance of the proposed model.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1093,
+      "source": "1910.01340.pdf",
+      "page": 14,
+      "title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+      "text": "Bloomsbury Pub- lishing (2018) 19. Im, J., Chandrasekharan, E., Sargent, J., Lighthammer, P., Denby, T., Bhargava, A., Hemphill, L., Jurgens, D., Gilbert, E.: Still out there: Modeling and Identifying Russian Troll Accounts on Twitter. arXiv preprint arXiv:1901.11162 (2019) 20. Karttunen, L.: Implicative Verbs. Language pp. 340–358 (1971) 21. Kiparsky, P., Kiparsky, C.: Fact.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1039,
+      "source": "1910.01340.pdf",
+      "page": 5,
+      "title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+      "text": "Based on our thematic information, we model the users textual features w.r.t. each of these themes. In other words, we model a set of textual features inde- pendently for each of the former themes to capture the emotional, stance, and others changes in the users tweets. 1: (a) Supporting Trump and (b) Attacking Hillary themes words clouds.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1047,
+      "source": "1910.01340.pdf",
+      "page": 6,
+      "title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+      "text": "Thus, we propose the following features to identify these users using only their tweets text: – Native Language Identiﬁcation (NLI): This feature was inspired by earlier works on identifying native language of essays writers [22]. We aim to detect IRA trolls by identifying their way of writing English tweets. As shown in [31], English tweets generated by non-English speakers have a diﬀerent syntactic pattern .",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1007,
+      "source": "1910.01340.pdf",
+      "page": 1,
+      "title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+      "text": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective Bilal Ghanem1, Davide Buscaldi2, and Paolo Rosso1 1 PRHLT Research Center, Universitat Polit`ecnica de Val`encia, Spain {bigha@doctor, prosso@dsic}.upv.es 2 CNRS / Laboratoire LIPN, Universit´e Paris 13, France arXiv:1910.01340v1 [cs.CL] 3 Oct 2019 buscaldi@lipn.univ-paris13.fr Abstract.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1057,
+      "source": "1910.01340.pdf",
+      "page": 8,
+      "title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+      "text": "IRA dataset provided by Twitter contains less information about the ac- counts details, and they limited to: proﬁle description, account creation date, number of followers and followees, location, and account language. Therefore, as another baseline we use the number of followers and followees to assess their identiﬁcation ability (we will mention them as Network Features in the rest of the paper).",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1056,
+      "source": "1910.01340.pdf",
+      "page": 8,
+      "title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+      "text": "reads tweets and predicts their hashtags. We aim to assess if the tweets hashtags can help identifying the IRA tweets. The model reads the tweets in a form of character one-hot encodings and uses them for training with their hashtags as labels. To train the model, we use our collected dataset which consists of ∼3.7M tweets13. To represent the tweets in this baseline, we use the decoded embedding produced by the model and we feed them to the Logistic Regression classiﬁer.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1031,
+      "source": "1910.01340.pdf",
+      "page": 4,
+      "title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+      "text": "From Table 1, we can notice that the number of total tweets of the IRA trolls is similar to the one obtained from the regular users. This is due to the fact that IRA trolls were posting a lot of tweets before and during the elections in an attempt to try to make their messages reach the largest possible audience. 4 Textual Representation In order to identify IRA trolls, we use a rich set of textual features.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1081,
+      "source": "1910.01340.pdf",
+      "page": 12,
+      "title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+      "text": "Our experiments showed that the extracted themes boosted the per- formance of the proposed model when coupled with other surface text features. In addition, we proposed NLI features to identify IRA trolls from their writing style, which showed to be very eﬀective. Finally, for a better understanding we analyzed the IRA accounts from emotional and linguistic perspectives. Through the manually checking of IRA accounts, we noticed that frequently irony was employed.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1064,
+      "source": "1910.01340.pdf",
+      "page": 9,
+      "title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+      "text": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective Table 2: Classiﬁcation results.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1045,
+      "source": "1910.01340.pdf",
+      "page": 6,
+      "title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+      "text": "Given Vi as the concatenation of the previous features vectors of a tweeti, we represent each user’s tweets by considering the average and standard deviation of her tweets’ V1,2,..N in each theme j independently and we concatenate them. Mathematically, a user x ﬁnal feature vector is deﬁned as follows:  T PNj K userx =  j=1 where given the jth theme, Nj is the total number of tweets of the user, Vij is the ith tweet feature vector, Vj is the mean of the tweets’ feature vectors.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1046,
+      "source": "1910.01340.pdf",
+      "page": 6,
+      "title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+      "text": "With this representation we aim at capturing the ”Flip-Flop” behavior of IRA trolls among the themes (see Section 5.4). 4.2 Proﬁling IRA Accounts As Twitter declared, although the IRA campaign was originated in Russia, it has been found that IRA trolls concealed their identity by tweeting in English. Furthermore, for any possibility of unmasking their identity, the majority of IRA trolls changed their location to other countries and the language of the Twitter interface they use.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1048,
+      "source": "1910.01340.pdf",
+      "page": 6,
+      "title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+      "text": "Thus, we use state-of-the-art NLI features to detect this unique pattern [8,23,14]; the feature set consists of bag of stopwords, Part- of-speech tags (POS), and syntactic dependency relations (DEPREL). We 9 Total pronouns, Anxiety, Cognitive processes, Insight, Causation, Discrepancy, Ten- tative, Certainty, Inhibition, and Inclusive respectively.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1049,
+      "source": "1910.01340.pdf",
+      "page": 7,
+      "title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+      "text": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective extract the POS and the DEPREL information using spaCy10, an oﬀ-the- shelf POS tagger11. We clean the tweets from the special characters and maintained dots, commas, and ﬁrst-letter capitalization of words.",
+      "kb_version": "qasper-holdout-20261025"
+    },
+    {
+      "chunk_id": 1050,
+      "source": "1910.01340.pdf",
+      "page": 7,
+      "title": "TexTrolls: Identifying Russian Trolls on Twitter from a Textual Perspective",
+      "text": "We use regular expressions to convert a sequence of dots to a single dot, and similarly for sequence of characters. – Stylistic: We extract a set of stylistic features following previous works in the authorship attribution domain [33,4,29], such as: the count of spe- cial characters, consecutive characters and letters12, URLs, hashtags, users’ mentions. In addition, we extract the uppercase ratio and the tweet length.",
+      "kb_version": "qasper-holdout-20261025"
+    }
+  ],
+  "action_attempts": 2,
+  "feedback_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 1048,
+            "quote": "we use state-of-the-art NLI features to detect this unique pattern [8,23,14]; the feature set consists of bag of stopwords, Part- of-speech tags (POS), and syntactic dependency relations (DEPREL)."
+          },
+          {
+            "chunk_id": 1050,
+            "quote": "Stylistic: We extract a set of stylistic features following previous works in the authorship attribution domain [33,4,29], such as: the count of spe- cial characters, consecutive characters and letters12, URLs, hashtags, users’ mentions. In addition, we extract the uppercase ratio and the tweet length."
+          },
+          {
+            "chunk_id": 1009,
+            "quote": "Our approach is mainly based on textual features which uti- lize thematic information, and proﬁling features to identify the accounts from their way of writing tweets."
+          }
+        ],
+        "supported_part": "The paper uses textual features that utilize thematic information, NLI features (bag of stopwords, POS tags, syntactic dependency relations) to capture the writing style of non-native English speakers, and stylistic features (counts of special characters, consecutive characters and letters, URLs, hashtags, mentions, uppercase ratio, tweet length).",
+        "reason": "The passages from the paper's textual representation and profiling sections explicitly enumerate the textual features used: thematic information (chunk 1009, 1039), NLI features comprising bag of stopwords, POS, and DEPREL (chunk 1048), and stylistic features (chunk 1050). These together establish what textual features are used.",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "answer",
+      "reason": "All requirements (r1) are supported by direct quotations from the paper specifying the textual features used: thematic information, NLI features (stopwords, POS, DEPREL), and stylistic features.",
+      "requirement_ids": [],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "The check stayed within the bound question excerpt: what textual features the TexTrolls paper uses. Quoted passages enumerate those features without adding unsupported extra conditions."
+    }
+  },
+  "halt_reason": "answer_ready",
+  "final_assessment": {
+    "requirements": [
+      {
+        "id": "r1",
+        "status": "supported",
+        "evidence": [
+          {
+            "chunk_id": 1048,
+            "quote": "we use state-of-the-art NLI features to detect this unique pattern [8,23,14]; the feature set consists of bag of stopwords, Part- of-speech tags (POS), and syntactic dependency relations (DEPREL)."
+          },
+          {
+            "chunk_id": 1050,
+            "quote": "Stylistic: We extract a set of stylistic features following previous works in the authorship attribution domain [33,4,29], such as: the count of spe- cial characters, consecutive characters and letters12, URLs, hashtags, users’ mentions. In addition, we extract the uppercase ratio and the tweet length."
+          },
+          {
+            "chunk_id": 1009,
+            "quote": "Our approach is mainly based on textual features which uti- lize thematic information, and proﬁling features to identify the accounts from their way of writing tweets."
+          }
+        ],
+        "supported_part": "The paper uses textual features that utilize thematic information, NLI features (bag of stopwords, POS tags, syntactic dependency relations) to capture the writing style of non-native English speakers, and stylistic features (counts of special characters, consecutive characters and letters, URLs, hashtags, mentions, uppercase ratio, tweet length).",
+        "reason": "The passages from the paper's textual representation and profiling sections explicitly enumerate the textual features used: thematic information (chunk 1009, 1039), NLI features comprising bag of stopwords, POS, and DEPREL (chunk 1048), and stylistic features (chunk 1050). These together establish what textual features are used.",
+        "gap": ""
+      }
+    ],
+    "next_action": {
+      "type": "answer",
+      "reason": "All requirements (r1) are supported by direct quotations from the paper specifying the textual features used: thematic information, NLI features (stopwords, POS, DEPREL), and stylistic features.",
+      "requirement_ids": [],
+      "query": null,
+      "source": null,
+      "chunk_id": null
+    },
+    "scope_check": {
+      "valid": true,
+      "reason": "The check stayed within the bound question excerpt: what textual features the TexTrolls paper uses. Quoted passages enumerate those features without adding unsupported extra conditions."
+    }
+  },
+  "elapsed_seconds": 36.051
+}

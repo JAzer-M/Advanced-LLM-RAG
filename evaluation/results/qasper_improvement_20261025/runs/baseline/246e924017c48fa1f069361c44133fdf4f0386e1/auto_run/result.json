@@ -1,0 +1,1047 @@
+{
+  "query": "For the paper \"Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\" (arXiv: 1909.01720), answer this question: How is the selected sharing layer trained?",
+  "status": "degraded",
+  "decomposition": {
+    "needs_decomposition": false,
+    "sub_queries": [],
+    "status": "not_needed"
+  },
+  "knowledge_base": {
+    "version": "qasper-holdout-20261025",
+    "chunk_count": 1459,
+    "dimension": 384,
+    "index_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/faiss.index",
+    "chunks_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/chunks.json",
+    "manifest_path": "/Users/j/Desktop/Advanced-LLM-RAG/data/processed/versions/qasper-holdout-20261025/manifest.json",
+    "manifest_sha256": "10bb244a150c260e5efc39b1a6ebeb939291e26f55d966ed102d27216e67718a",
+    "files": {
+      "faiss.index": "346ac08a63ebb5f367f8a886b0997c344fc084bf1fa8b27ae27de9a82be97617",
+      "chunks.json": "ef123dcc0b2180f3b957d9089c8b5207965dffb1d908fdbf348863efecdeb060"
+    }
+  },
+  "retrieval_diagnostics": {
+    "candidate_count": 120,
+    "global_top_ids": [
+      890,
+      902,
+      917,
+      931,
+      904,
+      932,
+      939,
+      1002,
+      999,
+      963
+    ],
+    "protected_ids": [],
+    "sub_query_evidence": [],
+    "retrieval_anchor_ids": [
+      890
+    ],
+    "evidence_completion": {
+      "requested_sources": [
+        "1909.01720.pdf"
+      ],
+      "tasks": [],
+      "coverage": "heuristic_only",
+      "rounds": 0,
+      "supplement_queries": 0,
+      "max_rounds": 2,
+      "completed_passes": 0,
+      "round_history": [],
+      "selected_ids_before": [
+        890,
+        902,
+        917,
+        931,
+        904,
+        932,
+        939,
+        1002,
+        999,
+        963
+      ],
+      "retained_local_ids": [],
+      "stop_reason": "not_explicit_cross_paper",
+      "selected_ids_after": [
+        890,
+        902,
+        917,
+        931,
+        904,
+        932,
+        939,
+        1002,
+        999,
+        963
+      ],
+      "elapsed_seconds": 0.000488
+    }
+  },
+  "selected_ids": [
+    890,
+    902,
+    917,
+    931,
+    904,
+    932,
+    939,
+    1002,
+    999,
+    963
+  ],
+  "context": "[1] Source: 1909.01720.pdf | Page: 1 | Section: None\nTitle: Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\nHowever, in most of the existing approaches, the shared features are completely assigned to different tasks without selection, which may lead to some useless and even adverse fea- tures integrated into speciﬁc tasks. In this paper, we design a sifted multi-task learning method with a selected sharing layer for fake news detection. The selected sharing layer adopts gate mechanism and attention mecha- nism to ﬁlter and select shared feature ﬂows between tasks.\n\n[2] Source: 1909.01720.pdf | Page: 2 | Section: 1 Introduction\nTitle: Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\nTo address the above problems, we design a sifted multi-task learning model with ﬁltering mechanism (Figure 1(b)) to detect fake news by joining stance detection task. Speciﬁcally, we in- troduce a selected sharing layer into each task after the shared layer of the model for ﬁltering shared features. The selected sharing layer composes of two cells: gated sharing cell for discarding useless features and attention sharing cell for focusing on features that are conducive to their respective tasks.\n\n[3] Source: 1909.01720.pdf | Page: 3 | Section: 3 Method\nTitle: Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\n3 Method We propose a novel sifted multi-task learning method on the ground of shared-private model to jointly train the tasks of stance detection and fake news detection, ﬁlter original outputs of shared layer by a selected sharing layer. Our model con- sists of a 4-level hierarchical structure, as shown in Figure 2. Next, we will describe each level of our proposed model in detail.\n\n[4] Source: 1909.01720.pdf | Page: 4 | Section: 3.3 Selected Sharing Layer\nTitle: Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\nFormally, the gated sharing cell can be expressed as follows: gfake = σ(Wfake · Hshared + bfake) |G-A| G⨀A A G A G Transformer g Encoder ✔ ✘ ✔ σ 𝑯𝑠ℎ𝑎𝑟𝑒𝑑 Input Shared Shared Embeddings Features Features Attention Sharing Cell Gated Sharing Cell Figure 3: The details of selected sharing layer. R1×l(dp+dw) ∈ where Hshared denotes the ∈ outputs of shared layer upstream, Wfake Rl(dp+dw)×l(dp+dw) and bfake ∈R1×l(dp+dw) are trainable parameters.\n\n[5] Source: 1909.01720.pdf | Page: 2 | Section: 1 Introduction\nTitle: Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\nIn summary, the contributions of this paper are as follows: • We explore a selected sharing layer relying on gate mechanism and attention mechanism, which can selectively capture valuable shared features between tasks of fake news detection and stance detection for respective tasks. • The transformer encoder is introduced into our model for encoding inputs of both tasks, which enhances the performance of our method by taking advantages of its long-range dependencies and parallelism.\n\n[6] Source: 1909.01720.pdf | Page: 4 | Section: 3.3 Selected Sharing Layer\nTitle: Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\nσ is a non-linear activation - sigmoid, which makes ﬁnal choices for retaining and discarding features in shared layer. Then the shared features after ﬁltering via gated (2) sharing cell gfake for the task of fake news detec- tion are represented as: Gfake = gfake ⊙Hshared (5) where ⊙denotes element-wise multiplication.\n\n[7] Source: 1909.01720.pdf | Page: 5 | Section: 3.4 The Output Layer\nTitle: Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\n3.4 The Output Layer As the last layer, softmax functions are applied to achieve the classiﬁcation of different tasks, which emits the prediction of probability distribution for the speciﬁc task i. ˆyi = softmax(WiFi + bi) Fi = [Hi; SSLi] where ˆyi is the predictive result, Fi is the concatena- tion of private features Hi of task i and the outputs SSLi of selected sharing layer for task i. Wi and bi are trainable parameters.\n\n[8] Source: 1909.01720.pdf | Page: 10 | Section: 5 Conclusion\nTitle: Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\nIn Advances in neural information pro- cessing systems, pages 5998–6008. William Yang Wang. 2017. ” liar, liar pants on ﬁre”: A new benchmark dataset for fake news detection. arXiv preprint arXiv:1705.00648. Yilin Wang, Suhang Wang, Jiliang Tang, Huan Liu, and Baoxin Li. 2015. Unsupervised sentiment analysis for social media images. In Twenty-Fourth Interna- tional Joint Conference on Artiﬁcial Intelligence. Lianwei Wu, Yuan Rao, Hualei Yu, Yiming Wang, and Nazir Ambreen.\n\n[9] Source: 1909.01720.pdf | Page: 10 | Section: 5 Conclusion\nTitle: Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\n2018. A survey on natural language process- arXiv preprint ing for fake news detection. arXiv:1811.00770. Kashyap Popat, Subhabrata Mukherjee, Andrew Yates, and Gerhard Weikum. 2018. Declare: Debunking fake news and false claims using evidence-aware deep learning. In EMNLP, pages 22–32. Martin Potthast, Johannes Kiesel, Kevin Reinartz, Janek Bevendorff, and Benno Stein. 2017. A sty- lometric inquiry into hyperpartisan and fake news.\n\n[10] Source: 1909.01720.pdf | Page: 7 | Section: 4.4.1 Model Ablation\nTitle: Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\nMT-trans-G-A Gated sharing cell and attention sharing cell are organically combined as selected sharing layer behind the shared layer of MT-trans, called MT-trans-G-A.\n\n[11] Source: 1909.01720.pdf | Page: 4 | Section: 3.3 Selected Sharing Layer\nTitle: Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\n3.3 Selected Sharing Layer In order to select valuable and appropriate shared features for different tasks, we design a selected sharing layer following the shared layer. The se- lected sharing layer consists of two cells: gated sharing cell for ﬁltering useless features and atten- tion sharing cell for focusing on valuable shared features for speciﬁc tasks. The description of this layer is depicted in Figure 2 and Figure 3. In the following, we introduce two cells in details.\n\n[12] Source: 1909.01720.pdf | Page: 2 | Section: 1 Introduction\nTitle: Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection\nBesides, to better capture long-range dependencies and improve the parallelism of the model, we apply transformer encoder module (Vaswani et al., 2017) to our model for encoding input representations of both tasks. Experimental results reveal that the pro- posed model outperforms the compared methods and gains new benchmarks.",
+  "ledger": {
+    "records": [
+      {
+        "kind": "quotation",
+        "evidence_quote": "However, in most of the existing approaches, the shared features are completely assigned to different tasks without selection, which may lead to some useless and even adverse fea- tures integrated into speciﬁc tasks.",
+        "evidence_start": 0,
+        "evidence_end": 216,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            890,
+            889
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 890,
+        "page": 1,
+        "citations": [
+          1
+        ],
+        "record_id": "E1"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In this paper, we design a sifted multi-task learning method with a selected sharing layer for fake news detection.",
+        "evidence_start": 216,
+        "evidence_end": 332,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            890,
+            889
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 890,
+        "page": 1,
+        "citations": [
+          1
+        ],
+        "record_id": "E2"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The selected sharing layer adopts gate mechanism and attention mecha- nism to ﬁlter and select shared feature ﬂows between tasks.",
+        "evidence_start": 332,
+        "evidence_end": 462,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            890,
+            889
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 890,
+        "page": 1,
+        "citations": [
+          1
+        ],
+        "record_id": "E3"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "To address the above problems, we design a sifted multi-task learning model with ﬁltering mechanism (Figure 1(b)) to detect fake news by joining stance detection task.",
+        "evidence_start": 0,
+        "evidence_end": 167,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            902,
+            901,
+            900,
+            899,
+            898
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 902,
+        "page": 2,
+        "citations": [
+          2
+        ],
+        "record_id": "E4"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Speciﬁcally, we in- troduce a selected sharing layer into each task after the shared layer of the model for ﬁltering shared features.",
+        "evidence_start": 167,
+        "evidence_end": 301,
+        "subject": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+        "identity": {
+          "subject": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            902
+          ],
+          "identity_quote": "To address the above problems, we design a sifted multi-task learning model with ﬁltering mechanism (Figure 1(b)) to detect fake news by joining stance detection task. Speciﬁcally, we in- troduce a selected sharing layer into each task after the shared layer of the model for ﬁltering shared features. The selected sharing layer composes of two cells: gated sharing cell for discarding useless features and attention sharing cell for focusing on features that are conducive to their respective tasks.",
+          "identity_chunk_id": 902
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 902,
+        "page": 2,
+        "citations": [
+          2
+        ],
+        "record_id": "E5"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " The selected sharing layer composes of two cells: gated sharing cell for discarding useless features and attention sharing cell for focusing on features that are conducive to their respective tasks.",
+        "evidence_start": 301,
+        "evidence_end": 500,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            902,
+            901,
+            900,
+            899,
+            898
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 902,
+        "page": 2,
+        "citations": [
+          2
+        ],
+        "record_id": "E6"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "3 Method We propose a novel sifted multi-task learning method on the ground of shared-private model to jointly train the tasks of stance detection and fake news detection, ﬁlter original outputs of shared layer by a selected sharing layer.",
+        "evidence_start": 0,
+        "evidence_end": 239,
+        "subject": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+        "identity": {
+          "subject": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            917
+          ],
+          "identity_quote": "3 Method We propose a novel sifted multi-task learning method on the ground of shared-private model to jointly train the tasks of stance detection and fake news detection, ﬁlter original outputs of shared layer by a selected sharing layer. Our model con- sists of a 4-level hierarchical structure, as shown in Figure 2. Next, we will describe each level of our proposed model in detail.",
+          "identity_chunk_id": 917
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 917,
+        "page": 3,
+        "citations": [
+          3
+        ],
+        "record_id": "E7"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Our model con- sists of a 4-level hierarchical structure, as shown in Figure 2.",
+        "evidence_start": 239,
+        "evidence_end": 319,
+        "subject": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+        "identity": {
+          "subject": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            917
+          ],
+          "identity_quote": "3 Method We propose a novel sifted multi-task learning method on the ground of shared-private model to jointly train the tasks of stance detection and fake news detection, ﬁlter original outputs of shared layer by a selected sharing layer. Our model con- sists of a 4-level hierarchical structure, as shown in Figure 2. Next, we will describe each level of our proposed model in detail.",
+          "identity_chunk_id": 917
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 917,
+        "page": 3,
+        "citations": [
+          3
+        ],
+        "record_id": "E8"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Next, we will describe each level of our proposed model in detail.",
+        "evidence_start": 319,
+        "evidence_end": 386,
+        "subject": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+        "identity": {
+          "subject": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            917
+          ],
+          "identity_quote": "3 Method We propose a novel sifted multi-task learning method on the ground of shared-private model to jointly train the tasks of stance detection and fake news detection, ﬁlter original outputs of shared layer by a selected sharing layer. Our model con- sists of a 4-level hierarchical structure, as shown in Figure 2.",
+          "identity_chunk_id": 917
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 917,
+        "page": 3,
+        "citations": [
+          3
+        ],
+        "record_id": "E9"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "Formally, the gated sharing cell can be expressed as follows: gfake = σ(Wfake · Hshared + bfake) |G-A| G⨀A A G A G Transformer g Encoder ✔ ✘ ✔ σ 𝑯𝑠ℎ𝑎𝑟𝑒𝑑 Input Shared Shared Embeddings Features Features Attention Sharing Cell Gated Sharing Cell Figure 3: The details of selected sharing layer.",
+        "evidence_start": 0,
+        "evidence_end": 292,
+        "subject": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+        "identity": {
+          "subject": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            931,
+            930,
+            929,
+            928
+          ],
+          "identity_quote": "3.3 Selected Sharing Layer In order to select valuable and appropriate shared features for different tasks, we design a selected sharing layer following the shared layer. The se- lected sharing layer consists of two cells: gated sharing cell for ﬁltering useless features and atten- tion sharing cell for focusing on valuable shared features for speciﬁc tasks. The description of this layer is depicted in Figure 2 and Figure 3. In the following, we introduce two cells in details.",
+          "identity_chunk_id": 928
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 931,
+        "page": 4,
+        "citations": [
+          4,
+          11
+        ],
+        "record_id": "E10"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " R1×l(dp+dw) ∈ where Hshared denotes the ∈ outputs of shared layer upstream, Wfake Rl(dp+dw)×l(dp+dw) and bfake ∈R1×l(dp+dw) are trainable parameters.",
+        "evidence_start": 292,
+        "evidence_end": 442,
+        "subject": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+        "identity": {
+          "subject": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            931,
+            930,
+            929,
+            928
+          ],
+          "identity_quote": "3.3 Selected Sharing Layer In order to select valuable and appropriate shared features for different tasks, we design a selected sharing layer following the shared layer. The se- lected sharing layer consists of two cells: gated sharing cell for ﬁltering useless features and atten- tion sharing cell for focusing on valuable shared features for speciﬁc tasks. The description of this layer is depicted in Figure 2 and Figure 3. In the following, we introduce two cells in details.",
+          "identity_chunk_id": 928
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 931,
+        "page": 4,
+        "citations": [
+          4,
+          11
+        ],
+        "record_id": "E11"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "In summary, the contributions of this paper are as follows: • We explore a selected sharing layer relying on gate mechanism and attention mechanism, which can selectively capture valuable shared features between tasks of fake news detection and stance detection for respective tasks.",
+        "evidence_start": 0,
+        "evidence_end": 283,
+        "subject": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+        "identity": {
+          "subject": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            904,
+            903
+          ],
+          "identity_quote": "Besides, to better capture long-range dependencies and improve the parallelism of the model, we apply transformer encoder module (Vaswani et al., 2017) to our model for encoding input representations of both tasks. Experimental results reveal that the pro- posed model outperforms the compared methods and gains new benchmarks.",
+          "identity_chunk_id": 903
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 904,
+        "page": 2,
+        "citations": [
+          5,
+          12
+        ],
+        "record_id": "E12"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " • The transformer encoder is introduced into our model for encoding inputs of both tasks, which enhances the performance of our method by taking advantages of its long-range dependencies and parallelism.",
+        "evidence_start": 283,
+        "evidence_end": 487,
+        "subject": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+        "identity": {
+          "subject": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+          "basis": "explicit_author_clause",
+          "context_chunk_ids": [
+            904
+          ],
+          "identity_quote": "In summary, the contributions of this paper are as follows: • We explore a selected sharing layer relying on gate mechanism and attention mechanism, which can selectively capture valuable shared features between tasks of fake news detection and stance detection for respective tasks. • The transformer encoder is introduced into our model for encoding inputs of both tasks, which enhances the performance of our method by taking advantages of its long-range dependencies and parallelism.",
+          "identity_chunk_id": 904
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 904,
+        "page": 2,
+        "citations": [
+          5
+        ],
+        "record_id": "E13"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "σ is a non-linear activation - sigmoid, which makes ﬁnal choices for retaining and discarding features in shared layer.",
+        "evidence_start": 0,
+        "evidence_end": 119,
+        "subject": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+        "identity": {
+          "subject": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            932,
+            931,
+            930,
+            929,
+            928
+          ],
+          "identity_quote": "3.3 Selected Sharing Layer In order to select valuable and appropriate shared features for different tasks, we design a selected sharing layer following the shared layer. The se- lected sharing layer consists of two cells: gated sharing cell for ﬁltering useless features and atten- tion sharing cell for focusing on valuable shared features for speciﬁc tasks. The description of this layer is depicted in Figure 2 and Figure 3. In the following, we introduce two cells in details.",
+          "identity_chunk_id": 928
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 932,
+        "page": 4,
+        "citations": [
+          6,
+          11
+        ],
+        "record_id": "E14"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Then the shared features after ﬁltering via gated (2) sharing cell gfake for the task of fake news detec- tion are represented as: Gfake = gfake ⊙Hshared (5) where ⊙denotes element-wise multiplication.",
+        "evidence_start": 119,
+        "evidence_end": 321,
+        "subject": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+        "identity": {
+          "subject": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+          "basis": "bounded_author_anchor",
+          "context_chunk_ids": [
+            932,
+            931,
+            930,
+            929,
+            928
+          ],
+          "identity_quote": "3.3 Selected Sharing Layer In order to select valuable and appropriate shared features for different tasks, we design a selected sharing layer following the shared layer. The se- lected sharing layer consists of two cells: gated sharing cell for ﬁltering useless features and atten- tion sharing cell for focusing on valuable shared features for speciﬁc tasks. The description of this layer is depicted in Figure 2 and Figure 3. In the following, we introduce two cells in details.",
+          "identity_chunk_id": 928
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 932,
+        "page": 4,
+        "citations": [
+          6,
+          11
+        ],
+        "record_id": "E15"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "4 The Output Layer As the last layer, softmax functions are applied to achieve the classiﬁcation of different tasks, which emits the prediction of probability distribution for the speciﬁc task i.",
+        "evidence_start": 2,
+        "evidence_end": 197,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            939
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 939,
+        "page": 5,
+        "citations": [
+          7
+        ],
+        "record_id": "E16"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " ˆyi = softmax(WiFi + bi) Fi = [Hi; SSLi] where ˆyi is the predictive result, Fi is the concatena- tion of private features Hi of task i and the outputs SSLi of selected sharing layer for task i.",
+        "evidence_start": 197,
+        "evidence_end": 392,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            939
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 939,
+        "page": 5,
+        "citations": [
+          7
+        ],
+        "record_id": "E17"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Wi and bi are trainable parameters.",
+        "evidence_start": 392,
+        "evidence_end": 428,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            939
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 939,
+        "page": 5,
+        "citations": [
+          7
+        ],
+        "record_id": "E18"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "In Advances in neural information pro- cessing systems, pages 5998–6008.",
+        "evidence_start": 0,
+        "evidence_end": 72,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1002,
+            1001,
+            1000
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 1002,
+        "page": 10,
+        "citations": [
+          8
+        ],
+        "record_id": "E19"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " ” liar, liar pants on ﬁre”: A new benchmark dataset for fake news detection.",
+        "evidence_start": 97,
+        "evidence_end": 174,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1002,
+            1001,
+            1000
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 1002,
+        "page": 10,
+        "citations": [
+          8
+        ],
+        "record_id": "E20"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Yilin Wang, Suhang Wang, Jiliang Tang, Huan Liu, and Baoxin Li.",
+        "evidence_start": 207,
+        "evidence_end": 271,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1002,
+            1001,
+            1000
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 1002,
+        "page": 10,
+        "citations": [
+          8
+        ],
+        "record_id": "E21"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Unsupervised sentiment analysis for social media images.",
+        "evidence_start": 277,
+        "evidence_end": 334,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1002,
+            1001,
+            1000
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 1002,
+        "page": 10,
+        "citations": [
+          8
+        ],
+        "record_id": "E22"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " In Twenty-Fourth Interna- tional Joint Conference on Artiﬁcial Intelligence.",
+        "evidence_start": 334,
+        "evidence_end": 411,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1002,
+            1001,
+            1000
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 1002,
+        "page": 10,
+        "citations": [
+          8
+        ],
+        "record_id": "E23"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Lianwei Wu, Yuan Rao, Hualei Yu, Yiming Wang, and Nazir Ambreen.",
+        "evidence_start": 411,
+        "evidence_end": 476,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            1002,
+            1001,
+            1000
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 1002,
+        "page": 10,
+        "citations": [
+          8
+        ],
+        "record_id": "E24"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " A survey on natural language process- arXiv preprint ing for fake news detection.",
+        "evidence_start": 5,
+        "evidence_end": 87,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            999,
+            998,
+            997,
+            996,
+            995
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 999,
+        "page": 10,
+        "citations": [
+          9
+        ],
+        "record_id": "E25"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Kashyap Popat, Subhabrata Mukherjee, Andrew Yates, and Gerhard Weikum.",
+        "evidence_start": 105,
+        "evidence_end": 176,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            999,
+            998,
+            997,
+            996,
+            995
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 999,
+        "page": 10,
+        "citations": [
+          9
+        ],
+        "record_id": "E26"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Declare: Debunking fake news and false claims using evidence-aware deep learning.",
+        "evidence_start": 182,
+        "evidence_end": 264,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            999,
+            998,
+            997,
+            996,
+            995
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 999,
+        "page": 10,
+        "citations": [
+          9
+        ],
+        "record_id": "E27"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " Martin Potthast, Johannes Kiesel, Kevin Reinartz, Janek Bevendorff, and Benno Stein.",
+        "evidence_start": 287,
+        "evidence_end": 372,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            999,
+            998,
+            997,
+            996,
+            995
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 999,
+        "page": 10,
+        "citations": [
+          9
+        ],
+        "record_id": "E28"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": " A sty- lometric inquiry into hyperpartisan and fake news.",
+        "evidence_start": 378,
+        "evidence_end": 436,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "insufficient_identity_evidence",
+          "context_chunk_ids": [
+            999,
+            998,
+            997,
+            996,
+            995
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 999,
+        "page": 10,
+        "citations": [
+          9
+        ],
+        "record_id": "E29"
+      },
+      {
+        "kind": "quotation",
+        "evidence_quote": "MT-trans-G-A Gated sharing cell and attention sharing cell are organically combined as selected sharing layer behind the shared layer of MT-trans, called MT-trans-G-A.",
+        "evidence_start": 0,
+        "evidence_end": 167,
+        "subject": null,
+        "identity": {
+          "subject": null,
+          "basis": "ambiguous_previous_context",
+          "context_chunk_ids": [
+            963,
+            962,
+            961
+          ],
+          "identity_quote": null,
+          "identity_chunk_id": null
+        },
+        "source": "1909.01720.pdf",
+        "chunk_id": 963,
+        "page": 7,
+        "citations": [
+          10
+        ],
+        "record_id": "E30"
+      }
+    ],
+    "unresolved": [],
+    "citation_registry": [
+      {
+        "chunk_id": 890,
+        "text": "However, in most of the existing approaches, the shared features are completely assigned to different tasks without selection, which may lead to some useless and even adverse fea- tures integrated into speciﬁc tasks. In this paper, we design a sifted multi-task learning method with a selected sharing layer for fake news detection. The selected sharing layer adopts gate mechanism and attention mecha- nism to ﬁlter and select shared feature ﬂows between tasks.",
+        "source": "1909.01720.pdf",
+        "page": 1,
+        "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+        "section": null
+      },
+      {
+        "chunk_id": 902,
+        "text": "To address the above problems, we design a sifted multi-task learning model with ﬁltering mechanism (Figure 1(b)) to detect fake news by joining stance detection task. Speciﬁcally, we in- troduce a selected sharing layer into each task after the shared layer of the model for ﬁltering shared features. The selected sharing layer composes of two cells: gated sharing cell for discarding useless features and attention sharing cell for focusing on features that are conducive to their respective tasks.",
+        "source": "1909.01720.pdf",
+        "page": 2,
+        "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+        "section": "1 Introduction"
+      },
+      {
+        "chunk_id": 917,
+        "text": "3 Method We propose a novel sifted multi-task learning method on the ground of shared-private model to jointly train the tasks of stance detection and fake news detection, ﬁlter original outputs of shared layer by a selected sharing layer. Our model con- sists of a 4-level hierarchical structure, as shown in Figure 2. Next, we will describe each level of our proposed model in detail.",
+        "source": "1909.01720.pdf",
+        "page": 3,
+        "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+        "section": "3 Method"
+      },
+      {
+        "chunk_id": 931,
+        "text": "Formally, the gated sharing cell can be expressed as follows: gfake = σ(Wfake · Hshared + bfake) |G-A| G⨀A A G A G Transformer g Encoder ✔ ✘ ✔ σ 𝑯𝑠ℎ𝑎𝑟𝑒𝑑 Input Shared Shared Embeddings Features Features Attention Sharing Cell Gated Sharing Cell Figure 3: The details of selected sharing layer. R1×l(dp+dw) ∈ where Hshared denotes the ∈ outputs of shared layer upstream, Wfake Rl(dp+dw)×l(dp+dw) and bfake ∈R1×l(dp+dw) are trainable parameters.",
+        "source": "1909.01720.pdf",
+        "page": 4,
+        "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+        "section": "3.3 Selected Sharing Layer"
+      },
+      {
+        "chunk_id": 904,
+        "text": "In summary, the contributions of this paper are as follows: • We explore a selected sharing layer relying on gate mechanism and attention mechanism, which can selectively capture valuable shared features between tasks of fake news detection and stance detection for respective tasks. • The transformer encoder is introduced into our model for encoding inputs of both tasks, which enhances the performance of our method by taking advantages of its long-range dependencies and parallelism.",
+        "source": "1909.01720.pdf",
+        "page": 2,
+        "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+        "section": "1 Introduction"
+      },
+      {
+        "chunk_id": 932,
+        "text": "σ is a non-linear activation - sigmoid, which makes ﬁnal choices for retaining and discarding features in shared layer. Then the shared features after ﬁltering via gated (2) sharing cell gfake for the task of fake news detec- tion are represented as: Gfake = gfake ⊙Hshared (5) where ⊙denotes element-wise multiplication.",
+        "source": "1909.01720.pdf",
+        "page": 4,
+        "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+        "section": "3.3 Selected Sharing Layer"
+      },
+      {
+        "chunk_id": 939,
+        "text": "3.4 The Output Layer As the last layer, softmax functions are applied to achieve the classiﬁcation of different tasks, which emits the prediction of probability distribution for the speciﬁc task i. ˆyi = softmax(WiFi + bi) Fi = [Hi; SSLi] where ˆyi is the predictive result, Fi is the concatena- tion of private features Hi of task i and the outputs SSLi of selected sharing layer for task i. Wi and bi are trainable parameters.",
+        "source": "1909.01720.pdf",
+        "page": 5,
+        "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+        "section": "3.4 The Output Layer"
+      },
+      {
+        "chunk_id": 1002,
+        "text": "In Advances in neural information pro- cessing systems, pages 5998–6008. William Yang Wang. 2017. ” liar, liar pants on ﬁre”: A new benchmark dataset for fake news detection. arXiv preprint arXiv:1705.00648. Yilin Wang, Suhang Wang, Jiliang Tang, Huan Liu, and Baoxin Li. 2015. Unsupervised sentiment analysis for social media images. In Twenty-Fourth Interna- tional Joint Conference on Artiﬁcial Intelligence. Lianwei Wu, Yuan Rao, Hualei Yu, Yiming Wang, and Nazir Ambreen.",
+        "source": "1909.01720.pdf",
+        "page": 10,
+        "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+        "section": "5 Conclusion"
+      },
+      {
+        "chunk_id": 999,
+        "text": "2018. A survey on natural language process- arXiv preprint ing for fake news detection. arXiv:1811.00770. Kashyap Popat, Subhabrata Mukherjee, Andrew Yates, and Gerhard Weikum. 2018. Declare: Debunking fake news and false claims using evidence-aware deep learning. In EMNLP, pages 22–32. Martin Potthast, Johannes Kiesel, Kevin Reinartz, Janek Bevendorff, and Benno Stein. 2017. A sty- lometric inquiry into hyperpartisan and fake news.",
+        "source": "1909.01720.pdf",
+        "page": 10,
+        "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+        "section": "5 Conclusion"
+      },
+      {
+        "chunk_id": 963,
+        "text": "MT-trans-G-A Gated sharing cell and attention sharing cell are organically combined as selected sharing layer behind the shared layer of MT-trans, called MT-trans-G-A.",
+        "source": "1909.01720.pdf",
+        "page": 7,
+        "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+        "section": "4.4.1 Model Ablation"
+      },
+      {
+        "chunk_id": 928,
+        "text": "3.3 Selected Sharing Layer In order to select valuable and appropriate shared features for different tasks, we design a selected sharing layer following the shared layer. The se- lected sharing layer consists of two cells: gated sharing cell for ﬁltering useless features and atten- tion sharing cell for focusing on valuable shared features for speciﬁc tasks. The description of this layer is depicted in Figure 2 and Figure 3. In the following, we introduce two cells in details.",
+        "source": "1909.01720.pdf",
+        "page": 4,
+        "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+        "section": "3.3 Selected Sharing Layer"
+      },
+      {
+        "chunk_id": 903,
+        "text": "Besides, to better capture long-range dependencies and improve the parallelism of the model, we apply transformer encoder module (Vaswani et al., 2017) to our model for encoding input representations of both tasks. Experimental results reveal that the pro- posed model outperforms the compared methods and gains new benchmarks.",
+        "source": "1909.01720.pdf",
+        "page": 2,
+        "title": "Different Absorption from the Same Sharing: Sifted Multi-task Learning for Fake News Detection",
+        "section": "1 Introduction"
+      }
+    ],
+    "selected_ids": [
+      890,
+      902,
+      917,
+      931,
+      904,
+      932,
+      939,
+      1002,
+      999,
+      963
+    ]
+  },
+  "mode": "auto",
+  "answer": "Extra evidence checking did not finish. The answer below uses only the initial evidence and keeps its existing gaps:\nBased on the provided context, the selected sharing layer is trained as part of the joint multi-task training of the model: it is placed after the shared layer in each task and filters the shared features, with the gated sharing cell using a sigmoid non-linear activation to make retention/discarding choices over trainable parameters, and the filtered output computed via element-wise multiplication with the shared layer outputs [3][4][6]. The final output layer then concatenates each task's private features with the outputs of that task's selected sharing layer and applies a softmax to produce the task's prediction [7]. The context does not explicitly describe a separate training objective or optimization procedure for the selected sharing layer beyond this joint model training, so further training details are not supported by the provided passages.",
+  "run_dir": "/Users/j/Desktop/Advanced-LLM-RAG/evaluation/results/qasper_improvement_20261025/runs/baseline/246e924017c48fa1f069361c44133fdf4f0386e1/auto_run",
+  "initial_selected_ids": [
+    890,
+    902,
+    917,
+    931,
+    904,
+    932,
+    939,
+    1002,
+    999,
+    963
+  ],
+  "agent": {
+    "invoked": true,
+    "actions_executed": 0,
+    "decision_summary": {
+      "planned_cases": 1,
+      "completed_cases": 0,
+      "api_attempts": 2,
+      "failed_api_attempts": 0,
+      "automatic_retries": 0,
+      "actions_executed": 0,
+      "usage_missing_calls": [],
+      "reported_usage": {
+        "prompt_tokens": 1219,
+        "completion_tokens": 137,
+        "total_tokens": 1356
+      },
+      "proposed_actions": {
+        "question": null
+      },
+      "action_attempts": 0,
+      "reassessment_api_attempts": 0,
+      "reassessed_actions": {
+        "question": null
+      },
+      "final_answer_generations": 0,
+      "automatic_action_loop": true,
+      "validation_repair_attempts": 1,
+      "paused_cases": 0,
+      "halt_reasons": {
+        "question": null
+      }
+    },
+    "halt_reason": null
+  },
+  "routing": {
+    "route": "agent",
+    "strategy": "rag_first",
+    "trigger_signals": [
+      "explicit_evidence_gap"
+    ],
+    "gate_decision_calls": 0,
+    "reason": "原RAG回答出现明确证据缺口或引用失败。"
+  },
+  "actions": [],
+  "error": "ValueError: Requirement question_quote is not in the user question.",
+  "answer_strategy": "initial_rag_after_agent_failure",
+  "fallback": {
+    "reason": "ValueError: Requirement question_quote is not in the user question.",
+    "agent_status": "failed"
+  },
+  "answer_status": "not_reviewed",
+  "stop_reason": "initial_rag_after_agent_failure",
+  "network": {
+    "status": "not_requested",
+    "http_tool_calls": 0,
+    "papers_read": 0
+  },
+  "api_summary": {
+    "attempts": 4,
+    "failed_attempts": 0,
+    "automatic_retries": 0,
+    "usage_missing_calls": [],
+    "reported_usage": {
+      "prompt_tokens": 4488,
+      "completion_tokens": 314,
+      "total_tokens": 4802
+    }
+  }
+}
